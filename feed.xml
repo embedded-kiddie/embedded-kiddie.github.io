@@ -1,4 +1,172 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-12T11:50:25+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め</title><link href="http://localhost:4000/2024/03/12/half-scrach-dev.html" rel="alternate" type="text/html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め" /><published>2024-03-12T07:25:54+09:00</published><updated>2024-03-12T07:25:54+09:00</updated><id>http://localhost:4000/2024/03/12/half-scrach-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/12/half-scrach-dev.html"><![CDATA[<p>何かメカ的に動くものが作りたくて <a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> というのを購入しました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-13T12:22:54+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMとArduino Uno R4のマイコン比較</title><link href="http://localhost:4000/2024/03/13/micon-board-comparison.html" rel="alternate" type="text/html" title="ビュートローバーARMとArduino Uno R4のマイコン比較" /><published>2024-03-13T11:25:54+09:00</published><updated>2024-03-13T11:25:54+09:00</updated><id>http://localhost:4000/2024/03/13/micon-board-comparison</id><content type="html" xml:base="http://localhost:4000/2024/03/13/micon-board-comparison.html"><![CDATA[<p><a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて <a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/" title="SunFounder Ultimate Sensor Kit &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">日本語のチュートリアル</a> とかが整備されていそうな <a href="https://amzn.asia/d/arKrHnW" title="Amazon.co.jp: SunFounder オリジナル Arduino Uno R4 Minima 用のセンサーキット究極版、 スマート IoT および基本センサープロジェクト向けのオンラインチュートリアル（日本語）を備え、初心者向け （オリジナル Arduino Uno R4 Minima 付属） : 産業・研究開発用品">SunFounder</a> のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）</p>
+
+<p>秋月電子さんでも <a href="https://akizukidenshi.com/catalog/g/g107385/" title="Arduino Uno Rev3: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">R3</a> より <a href="https://akizukidenshi.com/catalog/g/g118114/" title="Arduino UNO R4 Minima: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">R4</a> の方が安くなっているぐらいで、今後 UNO は R4 が主流になっていくのでしょう。</p>
+
+<p>まずは MCU 自体の比較です。マイコンボードの比較ではないのでご注意下さい。それぞれのデータシートから目ぼしいところを引っ張ってみました。ただ読み間違えがあるかもしれませんので、何かするときにはそれぞれの原本をご確認ください。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>MCU（CPU コア）</th>
+      <th>LPC1343 (Cortex-M3)</th>
+      <th>RA41M (Cortex-M4)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>リリース（データシートの初版による）</td>
+      <td>2009年12月</td>
+      <td>2020年3月</td>
+    </tr>
+    <tr>
+      <td>メモリ</td>
+      <td>32KBフラッシュ／8KB SRAM</td>
+      <td>256KBフラッシュ／32KB SRAM</td>
+    </tr>
+    <tr>
+      <td>動作電圧</td>
+      <td>2〜3.6V</td>
+      <td>1.6〜5.5V</td>
+    </tr>
+    <tr>
+      <td>クロック周波数</td>
+      <td>72MHz</td>
+      <td>48MHz</td>
+    </tr>
+    <tr>
+      <td>汎用I/Oピン</td>
+      <td>42</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <td>RTC</td>
+      <td>-</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>汎用タイマ（PWM）</td>
+      <td>2チャンネル (16bit)、2チャンネル (32bit)</td>
+      <td>2チャネル (32bit) or 6チャンネル (16bit)</td>
+    </tr>
+    <tr>
+      <td>ADC</td>
+      <td>最大8チャンネル (10bit)</td>
+      <td>最大25チャンネル (14bit)</td>
+    </tr>
+    <tr>
+      <td>DAC</td>
+      <td>-</td>
+      <td>1 (12bit)</td>
+    </tr>
+    <tr>
+      <td>USB</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>UART</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>SPI</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>I2C</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>CAN</td>
+      <td>-</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>オペアンプ</td>
+      <td>-</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>FPU</td>
+      <td>-</td>
+      <td>単精度浮動小数点</td>
+    </tr>
+    <tr>
+      <td>セキュリティ</td>
+      <td>-</td>
+      <td>AES、真性乱数発生器、ハッシュ値生成</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>流石に LPC1343 の古さは隠せません。特に RA41M のオペアンプは良いですね。小出力のセンサを繋げるときに外付け回路が不要になるカモです。</p>
+
+<p>続いてマイコンボードの比較です。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ボード</th>
+      <th>VS-WRC103LV</th>
+      <th>Arduino UNO R4 Minima</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MCU</td>
+      <td>LPC1343</td>
+      <td>R7FA4M1AB3CFM#A00（RA41M グループ）</td>
+    </tr>
+    <tr>
+      <td>RAM</td>
+      <td>8KB</td>
+      <td>32KB</td>
+    </tr>
+    <tr>
+      <td>Flash</td>
+      <td>32KB</td>
+      <td>256KB (Code)、8KB (Data)</td>
+    </tr>
+    <tr>
+      <td>電源</td>
+      <td>DC 2～4V（アルカリ乾電池2本 or ニッケル水素充電池2～3本）</td>
+      <td>DC 6〜24V</td>
+    </tr>
+    <tr>
+      <td>入力</td>
+      <td>アナログセンサ入力×2（最大4）</td>
+      <td>アナログ入力 6</td>
+    </tr>
+    <tr>
+      <td>出力</td>
+      <td>DCモータ×2（連続電流2A）、LED×2（オレンジ・緑）、圧電ブザー×1、汎用I/Oピン30本程度</td>
+      <td>デジタル出力 14（最大8mA）、PWM出力 6、DAC 1、LED×3（うち2つはTX、RX）</td>
+    </tr>
+    <tr>
+      <td>インタフェース</td>
+      <td>USB（HID準拠）、シリアルポート（3.3vレベル）、I2C</td>
+      <td>USB、UART、I2C、SPI、CAN</td>
+    </tr>
+    <tr>
+      <td>寸法</td>
+      <td>W56mm × D46mm</td>
+      <td>W68.6mm × D53.4mm</td>
+    </tr>
+    <tr>
+      <td>重量</td>
+      <td>13g</td>
+      <td>???</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/2024/VSWRC103LV-ArduinoUnoR4.png" alt="VSWRC103LV-ArduinoUnoR4" title="VS-WRC103LV 対 Arduino UNO R4 Minima" /></p>
+
+<p>ポータブルにしたときに色々なバッテリーが使える Arduino UNO の電源の幅広さは特筆すべきですね。ニッケル水素乾電池の場合、例えば <a href="https://panasonic.jp/battery/charge/p-db/BK-3HCD2H.html" title="エネループプロ  単3形 2本パック(ハイエンドモデル) BK-3HCD/2H 商品概要 - ニッケル水素電池&amp;充電器 - Panasonic">Panasonic のエネループプロ単三電池</a> が１つ約 30g、<a href="https://www.toshiba-lifestyle.com/jp/batteries/tnh-1a/" title="「充電式IMPULSE」充電池 単1形/単2形/単3形/単4形/6P形 - 電池･充電器 - 東芝ライフスタイル株式会社 - 電池/充電器 - 東芝ライフスタイル株式会社">東芝 IMPULSE の 006P型電池</a> が約 40g とのことなので、電池容量の違いを別にすれば重量面でも有利かもです。</p>
+
+<p>さてさて、あまりに年代の違う２つの比較は私の自己満足でしかないですが、改めてそれぞれのスペックに興味を持ってもらえればと思います (^.^);</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="Cortex-M3" /><category term="Cortex-M4" /><summary type="html"><![CDATA[ビュートローバーARM で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて 日本語のチュートリアル とかが整備されていそうな SunFounder のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）]]></summary></entry><entry><title type="html">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め</title><link href="http://localhost:4000/2024/03/12/half-scrach-dev.html" rel="alternate" type="text/html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め" /><published>2024-03-12T07:25:54+09:00</published><updated>2024-03-12T07:25:54+09:00</updated><id>http://localhost:4000/2024/03/12/half-scrach-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/12/half-scrach-dev.html"><![CDATA[<p>何かメカ的に動くものが作りたくて <a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> というのを購入しました。</p>
 
 <p>今日日、小学生でもライントレースはプログラムするし、Arduino とかは CPU レジスタとか知らなくてもガンガンプログラムできちゃうわけだけど、やっぱ CPU のデータシートとかユーザーマニュアルとかと格闘しながらのプログラミングは楽しい！ ロボコンにハマる人の気持ちが分かります。</p>
 

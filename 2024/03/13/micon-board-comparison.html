@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ビュートローバーARMとArduino Uno R4のマイコン比較 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ビュートローバーARMとArduino Uno R4のマイコン比較" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="ビュートローバーARM で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて 日本語のチュートリアル とかが整備されていそうな SunFounder のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）" />
+<meta property="og:description" content="ビュートローバーARM で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて 日本語のチュートリアル とかが整備されていそうな SunFounder のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）" />
+<link rel="canonical" href="http://localhost:4000/2024/03/13/micon-board-comparison.html" />
+<meta property="og:url" content="http://localhost:4000/2024/03/13/micon-board-comparison.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-13T11:25:54+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ビュートローバーARMとArduino Uno R4のマイコン比較" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-03-13T11:25:54+09:00","datePublished":"2024-03-13T11:25:54+09:00","description":"ビュートローバーARM で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて 日本語のチュートリアル とかが整備されていそうな SunFounder のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）","headline":"ビュートローバーARMとArduino Uno R4のマイコン比較","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/03/13/micon-board-comparison.html"},"url":"http://localhost:4000/2024/03/13/micon-board-comparison.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Embedded Kiddie" /><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5MRMK8WL');</script>
+</head>
+<body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5MRMK8WL" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ビュートローバーARMとArduino Uno R4のマイコン比較</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-03-13T11:25:54+09:00" itemprop="datePublished">Mar 13, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて <a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/" title="SunFounder Ultimate Sensor Kit &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">日本語のチュートリアル</a> とかが整備されていそうな <a href="https://amzn.asia/d/arKrHnW" title="Amazon.co.jp: SunFounder オリジナル Arduino Uno R4 Minima 用のセンサーキット究極版、 スマート IoT および基本センサープロジェクト向けのオンラインチュートリアル（日本語）を備え、初心者向け （オリジナル Arduino Uno R4 Minima 付属） : 産業・研究開発用品">SunFounder</a> のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）</p>
+
+<p>秋月電子さんでも <a href="https://akizukidenshi.com/catalog/g/g107385/" title="Arduino Uno Rev3: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">R3</a> より <a href="https://akizukidenshi.com/catalog/g/g118114/" title="Arduino UNO R4 Minima: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">R4</a> の方が安くなっているぐらいで、今後 UNO は R4 が主流になっていくのでしょう。</p>
+
+<p>まずは MCU 自体の比較です。マイコンボードの比較ではないのでご注意下さい。それぞれのデータシートから目ぼしいところを引っ張ってみました。ただ読み間違えがあるかもしれませんので、何かするときにはそれぞれの原本をご確認ください。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>MCU（CPU コア）</th>
+      <th>LPC1343 (Cortex-M3)</th>
+      <th>RA41M (Cortex-M4)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>リリース（データシートの初版による）</td>
+      <td>2009年12月</td>
+      <td>2020年3月</td>
+    </tr>
+    <tr>
+      <td>メモリ</td>
+      <td>32KBフラッシュ／8KB SRAM</td>
+      <td>256KBフラッシュ／32KB SRAM</td>
+    </tr>
+    <tr>
+      <td>動作電圧</td>
+      <td>2〜3.6V</td>
+      <td>1.6〜5.5V</td>
+    </tr>
+    <tr>
+      <td>クロック周波数</td>
+      <td>72MHz</td>
+      <td>48MHz</td>
+    </tr>
+    <tr>
+      <td>汎用I/Oピン</td>
+      <td>42</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <td>RTC</td>
+      <td>-</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>汎用タイマ（PWM）</td>
+      <td>2チャンネル (16bit)、2チャンネル (32bit)</td>
+      <td>2チャネル (32bit) or 6チャンネル (16bit)</td>
+    </tr>
+    <tr>
+      <td>ADC</td>
+      <td>最大8チャンネル (10bit)</td>
+      <td>最大25チャンネル (14bit)</td>
+    </tr>
+    <tr>
+      <td>DAC</td>
+      <td>-</td>
+      <td>1 (12bit)</td>
+    </tr>
+    <tr>
+      <td>USB</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>UART</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>SPI</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>I2C</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>CAN</td>
+      <td>-</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>オペアンプ</td>
+      <td>-</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>FPU</td>
+      <td>-</td>
+      <td>単精度浮動小数点</td>
+    </tr>
+    <tr>
+      <td>セキュリティ</td>
+      <td>-</td>
+      <td>AES、真性乱数発生器、ハッシュ値生成</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>流石に LPC1343 の古さは隠せません。特に RA41M のオペアンプは良いですね。小出力のセンサを繋げるときに外付け回路が不要になるカモです。</p>
+
+<p>続いてマイコンボードの比較です。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ボード</th>
+      <th>VS-WRC103LV</th>
+      <th>Arduino UNO R4 Minima</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MCU</td>
+      <td>LPC1343</td>
+      <td>R7FA4M1AB3CFM#A00（RA41M グループ）</td>
+    </tr>
+    <tr>
+      <td>RAM</td>
+      <td>8KB</td>
+      <td>32KB</td>
+    </tr>
+    <tr>
+      <td>Flash</td>
+      <td>32KB</td>
+      <td>256KB (Code)、8KB (Data)</td>
+    </tr>
+    <tr>
+      <td>電源</td>
+      <td>DC 2～4V（アルカリ乾電池2本 or ニッケル水素充電池2～3本）</td>
+      <td>DC 6〜24V</td>
+    </tr>
+    <tr>
+      <td>入力</td>
+      <td>アナログセンサ入力×2（最大4）</td>
+      <td>アナログ入力 6</td>
+    </tr>
+    <tr>
+      <td>出力</td>
+      <td>DCモータ×2（連続電流2A）、LED×2（オレンジ・緑）、圧電ブザー×1、汎用I/Oピン30本程度</td>
+      <td>デジタル出力 14（最大8mA）、PWM出力 6、DAC 1、LED×3（うち2つはTX、RX）</td>
+    </tr>
+    <tr>
+      <td>インタフェース</td>
+      <td>USB（HID準拠）、シリアルポート（3.3vレベル）、I2C</td>
+      <td>USB、UART、I2C、SPI、CAN</td>
+    </tr>
+    <tr>
+      <td>寸法</td>
+      <td>W56mm × D46mm</td>
+      <td>W68.6mm × D53.4mm</td>
+    </tr>
+    <tr>
+      <td>重量</td>
+      <td>13g</td>
+      <td>???</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/2024/VSWRC103LV-ArduinoUnoR4.png" alt="VSWRC103LV-ArduinoUnoR4" title="VS-WRC103LV 対 Arduino UNO R4 Minima" /></p>
+
+<p>ポータブルにしたときに色々なバッテリーが使える Arduino UNO の電源の幅広さは特筆すべきですね。ニッケル水素乾電池の場合、例えば <a href="https://panasonic.jp/battery/charge/p-db/BK-3HCD2H.html" title="エネループプロ  単3形 2本パック(ハイエンドモデル) BK-3HCD/2H 商品概要 - ニッケル水素電池&amp;充電器 - Panasonic">Panasonic のエネループプロ単三電池</a> が１つ約 30g、<a href="https://www.toshiba-lifestyle.com/jp/batteries/tnh-1a/" title="「充電式IMPULSE」充電池 単1形/単2形/単3形/単4形/6P形 - 電池･充電器 - 東芝ライフスタイル株式会社 - 電池/充電器 - 東芝ライフスタイル株式会社">東芝 IMPULSE の 006P型電池</a> が約 40g とのことなので、電池容量の違いを別にすれば重量面でも有利かもです。</p>
+
+<p>さてさて、あまりに年代の違う２つの比較は私の自己満足でしかないですが、改めてそれぞれのスペックに興味を持ってもらえればと思います (^.^);</p>
+
+
+  </div><a class="u-url" href="/2024/03/13/micon-board-comparison.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="mailto:embeddedkiddie@gmail.com">embeddedkiddie@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
