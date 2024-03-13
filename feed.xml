@@ -1,240 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-13T12:22:54+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMとArduino Uno R4のマイコン比較</title><link href="http://localhost:4000/2024/03/13/micon-board-comparison.html" rel="alternate" type="text/html" title="ビュートローバーARMとArduino Uno R4のマイコン比較" /><published>2024-03-13T11:25:54+09:00</published><updated>2024-03-13T11:25:54+09:00</updated><id>http://localhost:4000/2024/03/13/micon-board-comparison</id><content type="html" xml:base="http://localhost:4000/2024/03/13/micon-board-comparison.html"><![CDATA[<p><a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて <a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/" title="SunFounder Ultimate Sensor Kit &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">日本語のチュートリアル</a> とかが整備されていそうな <a href="https://amzn.asia/d/arKrHnW" title="Amazon.co.jp: SunFounder オリジナル Arduino Uno R4 Minima 用のセンサーキット究極版、 スマート IoT および基本センサープロジェクト向けのオンラインチュートリアル（日本語）を備え、初心者向け （オリジナル Arduino Uno R4 Minima 付属） : 産業・研究開発用品">SunFounder</a> のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-13T16:42:17+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">タミヤのツインモーターギヤーボックス用エンコーダでモーター制御の精度を上げる</title><link href="http://localhost:4000/2024/04/30/encoder-for-tamiya-gear-box.html" rel="alternate" type="text/html" title="タミヤのツインモーターギヤーボックス用エンコーダでモーター制御の精度を上げる" /><published>2024-04-30T13:25:54+09:00</published><updated>2024-04-30T13:25:54+09:00</updated><id>http://localhost:4000/2024/04/30/encoder-for-tamiya-gear-box</id><content type="html" xml:base="http://localhost:4000/2024/04/30/encoder-for-tamiya-gear-box.html"><![CDATA[<p><a href="https://www.tamiya.com/japan/products/70097/" title="タミヤ 楽しい工作シリーズ　ツインモーターギヤーボックス - タミヤ">楽しい工作シリーズ（ユニット） No.97 ツインモーターギヤーボックス</a></p>
 
-<p>秋月電子さんでも <a href="https://akizukidenshi.com/catalog/g/g107385/" title="Arduino Uno Rev3: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">R3</a> より <a href="https://akizukidenshi.com/catalog/g/g118114/" title="Arduino UNO R4 Minima: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">R4</a> の方が安くなっているぐらいで、今後 UNO は R4 が主流になっていくのでしょう。</p>
+<p><a href="https://jp.robotshop.com/products/encoder-pair-tamiya-twin-motor-gearbox" title="Tamiyaツインモーターギヤボックス用エンコーダペア - RobotShop">Tamiyaツインモーターギヤボックス用エンコーダペア</a></p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="PWM制御" /><category term="移動推定" /><summary type="html"><![CDATA[楽しい工作シリーズ（ユニット） No.97 ツインモーターギヤーボックス]]></summary></entry><entry><title type="html">Disqusコメントシステムを動的に読み込んで広告表示を抑制する方法</title><link href="http://localhost:4000/2024/04/25/dynamic-loading-of-disqus.html" rel="alternate" type="text/html" title="Disqusコメントシステムを動的に読み込んで広告表示を抑制する方法" /><published>2024-04-25T13:25:54+09:00</published><updated>2024-04-25T13:25:54+09:00</updated><id>http://localhost:4000/2024/04/25/dynamic-loading-of-disqus</id><content type="html" xml:base="http://localhost:4000/2024/04/25/dynamic-loading-of-disqus.html"><![CDATA[<p><a href="https://diarywind.com/blog/e/disqus-ads-disgusting.html">220330 Disqusの広告欄がうざいので非表示に</a></p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tone" /><summary type="html"><![CDATA[220330 Disqusの広告欄がうざいので非表示に]]></summary></entry><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法</title><link href="http://localhost:4000/2024/04/20/ice-for-beauto-rover.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法" /><published>2024-04-20T13:25:54+09:00</published><updated>2024-04-20T13:25:54+09:00</updated><id>http://localhost:4000/2024/04/20/ice-for-beauto-rover</id><content type="html" xml:base="http://localhost:4000/2024/04/20/ice-for-beauto-rover.html"><![CDATA[<h2 id="マイコンレーサーコースセット">マイコンレーサーコースセット</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- https://www.marutsu.co.jp/pc/i/226912/
+</code></pre></div></div>
 
-<p>まずは MCU 自体の比較です。マイコンボードの比較ではないのでご注意下さい。それぞれのデータシートから目ぼしいところを引っ張ってみました。ただ読み間違えがあるかもしれませんので、何かするときにはそれぞれの原本をご確認ください。</p>
+<h2 id="トラ技2014年3月号">トラ技2014年3月号</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- https://toragi.cqpub.co.jp/magazine/magazine-2582/
+- https://toragi.cqpub.co.jp/wp-content/uploads/p099-100.pdf
+- https://shop.cqpub.co.jp/hanbai/books/MTR/MTRZ201503/MTRZ201503.pdf
+</code></pre></div></div>
 
-<table>
-  <thead>
-    <tr>
-      <th>MCU（CPU コア）</th>
-      <th>LPC1343 (Cortex-M3)</th>
-      <th>RA41M (Cortex-M4)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>リリース（データシートの初版による）</td>
-      <td>2009年12月</td>
-      <td>2020年3月</td>
-    </tr>
-    <tr>
-      <td>メモリ</td>
-      <td>32KBフラッシュ／8KB SRAM</td>
-      <td>256KBフラッシュ／32KB SRAM</td>
-    </tr>
-    <tr>
-      <td>動作電圧</td>
-      <td>2〜3.6V</td>
-      <td>1.6〜5.5V</td>
-    </tr>
-    <tr>
-      <td>クロック周波数</td>
-      <td>72MHz</td>
-      <td>48MHz</td>
-    </tr>
-    <tr>
-      <td>汎用I/Oピン</td>
-      <td>42</td>
-      <td>49</td>
-    </tr>
-    <tr>
-      <td>RTC</td>
-      <td>-</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>汎用タイマ（PWM）</td>
-      <td>2チャンネル (16bit)、2チャンネル (32bit)</td>
-      <td>2チャネル (32bit) or 6チャンネル (16bit)</td>
-    </tr>
-    <tr>
-      <td>ADC</td>
-      <td>最大8チャンネル (10bit)</td>
-      <td>最大25チャンネル (14bit)</td>
-    </tr>
-    <tr>
-      <td>DAC</td>
-      <td>-</td>
-      <td>1 (12bit)</td>
-    </tr>
-    <tr>
-      <td>USB</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>UART</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>SPI</td>
-      <td>1</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <td>I2C</td>
-      <td>1</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>CAN</td>
-      <td>-</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <td>オペアンプ</td>
-      <td>-</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>FPU</td>
-      <td>-</td>
-      <td>単精度浮動小数点</td>
-    </tr>
-    <tr>
-      <td>セキュリティ</td>
-      <td>-</td>
-      <td>AES、真性乱数発生器、ハッシュ値生成</td>
-    </tr>
-  </tbody>
-</table>
+<h2 id="mbedデバッガ一枚二役armマイコン基板">mbed×デバッガ!一枚二役ARMマイコン基板</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- https://www.marutsu.co.jp/pc/i/238834/
+- https://www.marutsu.co.jp/pc/i/232996/
+- https://toragi.cqpub.co.jp/Portals/0/backnumber/2014/03/p134.pdf
+- https://amzn.asia/d/1f2m5i6
+</code></pre></div></div>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tone" /><summary type="html"><![CDATA[マイコンレーサーコースセット - https://www.marutsu.co.jp/pc/i/226912/]]></summary></entry><entry><title type="html">Arduinoのtoneによる音楽再生をバッググラウンド化する</title><link href="http://localhost:4000/2024/04/16/arduino-background-tone.html" rel="alternate" type="text/html" title="Arduinoのtoneによる音楽再生をバッググラウンド化する" /><published>2024-04-16T13:25:54+09:00</published><updated>2024-04-16T13:25:54+09:00</updated><id>http://localhost:4000/2024/04/16/arduino-background-tone</id><content type="html" xml:base="http://localhost:4000/2024/04/16/arduino-background-tone.html"><![CDATA[]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tone" /></entry><entry><title type="html">音階周波数とPWM用タイマーの設計方法</title><link href="http://localhost:4000/2024/04/10/tone-frequency-and-pwm.html" rel="alternate" type="text/html" title="音階周波数とPWM用タイマーの設計方法" /><published>2024-04-10T13:25:54+09:00</published><updated>2024-04-10T13:25:54+09:00</updated><id>http://localhost:4000/2024/04/10/tone-frequency-and-pwm</id><content type="html" xml:base="http://localhost:4000/2024/04/10/tone-frequency-and-pwm.html"><![CDATA[<h2 id="原理">原理</h2>
 
-<p>流石に LPC1343 の古さは隠せません。特に RA41M のオペアンプは良いですね。小出力のセンサを繋げるときに外付け回路が不要になるカモです。</p>
+<h2 id="オシロスコープ計測">オシロスコープ計測</h2>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tone" /><summary type="html"><![CDATA[原理]]></summary></entry><entry><title type="html">ビュートローバーのライントレースソフト作るにあると便利な品</title><link href="http://localhost:4000/2024/04/05/items-for-beauto-rover.html" rel="alternate" type="text/html" title="ビュートローバーのライントレースソフト作るにあると便利な品" /><published>2024-04-05T13:25:54+09:00</published><updated>2024-04-05T13:25:54+09:00</updated><id>http://localhost:4000/2024/04/05/items-for-beauto-rover</id><content type="html" xml:base="http://localhost:4000/2024/04/05/items-for-beauto-rover.html"><![CDATA[<p>【永久保存版】はんだ付けのやり方を解説します
+【はんだづけの原理, DIP部品, 表面実装】【イチケン電子基礎シリーズ】RX-802AS
+https://www.youtube.com/watch?v=dQ7AUjb1tkA</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tone" /><summary type="html"><![CDATA[【永久保存版】はんだ付けのやり方を解説します 【はんだづけの原理, DIP部品, 表面実装】【イチケン電子基礎シリーズ】RX-802AS https://www.youtube.com/watch?v=dQ7AUjb1tkA]]></summary></entry><entry><title type="html">ビュートローバーのPID制御でラップタイムを縮めるめるためにやったこと</title><link href="http://localhost:4000/2024/04/02/beauto-rover-pid-control.html" rel="alternate" type="text/html" title="ビュートローバーのPID制御でラップタイムを縮めるめるためにやったこと" /><published>2024-04-02T13:25:54+09:00</published><updated>2024-04-02T13:25:54+09:00</updated><id>http://localhost:4000/2024/04/02/beauto-rover-pid-control</id><content type="html" xml:base="http://localhost:4000/2024/04/02/beauto-rover-pid-control.html"><![CDATA[<p><a href="https://vstone.co.jp/robotshop/blog/archives/1431" title="PD制御を使ったらライントレースロボットが驚きの滑らかさに！ - ロボット専門店のスタッフブログ -ロボットとの共存-">https://vstone.co.jp/robotshop/blog/archives/1431</a></p>
 
-<p>続いてマイコンボードの比較です。</p>
+<h2 id="ビュートローバーの制御モデル">ビュートローバーの制御モデル</h2>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ライントレース" /><category term="PID制御" /><summary type="html"><![CDATA[https://vstone.co.jp/robotshop/blog/archives/1431]]></summary></entry><entry><title type="html">PWM制御用タイマーの使い方を理解し、Mtr_Run_lv関数を自分流に改造する</title><link href="http://localhost:4000/2024/03/27/pwm-using-timer.html" rel="alternate" type="text/html" title="PWM制御用タイマーの使い方を理解し、Mtr_Run_lv関数を自分流に改造する" /><published>2024-03-27T13:25:54+09:00</published><updated>2024-03-27T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/27/pwm-using-timer</id><content type="html" xml:base="http://localhost:4000/2024/03/27/pwm-using-timer.html"><![CDATA[<h2 id="hブリッジ回路">Hブリッジ回路</h2>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="PWM制御" /><category term="タイマー" /><summary type="html"><![CDATA[Hブリッジ回路]]></summary></entry><entry><title type="html">Arduinoでライントレース用ラップタイマーを作る</title><link href="http://localhost:4000/2024/03/24/arduino-lap-timer.html" rel="alternate" type="text/html" title="Arduinoでライントレース用ラップタイマーを作る" /><published>2024-03-24T13:25:54+09:00</published><updated>2024-03-24T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/24/arduino-lap-timer</id><content type="html" xml:base="http://localhost:4000/2024/03/24/arduino-lap-timer.html"><![CDATA[<h2 id="lpc-linklpc-link2のこと">LPC-LINK、LPC-LINK2のこと</h2>
+<p>入手困難、違い</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>ボード</th>
-      <th>VS-WRC103LV</th>
-      <th>Arduino UNO R4 Minima</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>MCU</td>
-      <td>LPC1343</td>
-      <td>R7FA4M1AB3CFM#A00（RA41M グループ）</td>
-    </tr>
-    <tr>
-      <td>RAM</td>
-      <td>8KB</td>
-      <td>32KB</td>
-    </tr>
-    <tr>
-      <td>Flash</td>
-      <td>32KB</td>
-      <td>256KB (Code)、8KB (Data)</td>
-    </tr>
-    <tr>
-      <td>電源</td>
-      <td>DC 2～4V（アルカリ乾電池2本 or ニッケル水素充電池2～3本）</td>
-      <td>DC 6〜24V</td>
-    </tr>
-    <tr>
-      <td>入力</td>
-      <td>アナログセンサ入力×2（最大4）</td>
-      <td>アナログ入力 6</td>
-    </tr>
-    <tr>
-      <td>出力</td>
-      <td>DCモータ×2（連続電流2A）、LED×2（オレンジ・緑）、圧電ブザー×1、汎用I/Oピン30本程度</td>
-      <td>デジタル出力 14（最大8mA）、PWM出力 6、DAC 1、LED×3（うち2つはTX、RX）</td>
-    </tr>
-    <tr>
-      <td>インタフェース</td>
-      <td>USB（HID準拠）、シリアルポート（3.3vレベル）、I2C</td>
-      <td>USB、UART、I2C、SPI、CAN</td>
-    </tr>
-    <tr>
-      <td>寸法</td>
-      <td>W56mm × D46mm</td>
-      <td>W68.6mm × D53.4mm</td>
-    </tr>
-    <tr>
-      <td>重量</td>
-      <td>13g</td>
-      <td>???</td>
-    </tr>
-  </tbody>
-</table>
+<h2 id="jtagswdについて">JTAG/SWDについて</h2>
+<p>数千円〜数万円まで</p>
 
-<p><img src="/images/2024/VSWRC103LV-ArduinoUnoR4.png" alt="VSWRC103LV-ArduinoUnoR4" title="VS-WRC103LV 対 Arduino UNO R4 Minima" /></p>
+<h2 id="printf-デバッグ">printf() デバッグ</h2>
+<p>Vstoneのサイト</p>
 
-<p>ポータブルにしたときに色々なバッテリーが使える Arduino UNO の電源の幅広さは特筆すべきですね。ニッケル水素乾電池の場合、例えば <a href="https://panasonic.jp/battery/charge/p-db/BK-3HCD2H.html" title="エネループプロ  単3形 2本パック(ハイエンドモデル) BK-3HCD/2H 商品概要 - ニッケル水素電池&amp;充電器 - Panasonic">Panasonic のエネループプロ単三電池</a> が１つ約 30g、<a href="https://www.toshiba-lifestyle.com/jp/batteries/tnh-1a/" title="「充電式IMPULSE」充電池 単1形/単2形/単3形/単4形/6P形 - 電池･充電器 - 東芝ライフスタイル株式会社 - 電池/充電器 - 東芝ライフスタイル株式会社">東芝 IMPULSE の 006P型電池</a> が約 40g とのことなので、電池容量の違いを別にすれば重量面でも有利かもです。</p>
-
-<p>さてさて、あまりに年代の違う２つの比較は私の自己満足でしかないですが、改めてそれぞれのスペックに興味を持ってもらえればと思います (^.^);</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="Cortex-M3" /><category term="Cortex-M4" /><summary type="html"><![CDATA[ビュートローバーARM で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて 日本語のチュートリアル とかが整備されていそうな SunFounder のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）]]></summary></entry><entry><title type="html">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め</title><link href="http://localhost:4000/2024/03/12/half-scrach-dev.html" rel="alternate" type="text/html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め" /><published>2024-03-12T07:25:54+09:00</published><updated>2024-03-12T07:25:54+09:00</updated><id>http://localhost:4000/2024/03/12/half-scrach-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/12/half-scrach-dev.html"><![CDATA[<p>何かメカ的に動くものが作りたくて <a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> というのを購入しました。</p>
-
-<p>今日日、小学生でもライントレースはプログラムするし、Arduino とかは CPU レジスタとか知らなくてもガンガンプログラムできちゃうわけだけど、やっぱ CPU のデータシートとかユーザーマニュアルとかと格闘しながらのプログラミングは楽しい！ ロボコンにハマる人の気持ちが分かります。</p>
-
-<p>その楽しさを共有したく、<a href="https://github.com/embedded-kiddie/beauto-rover-arm" title="embedded-kiddie/beauto-rover-arm: ビュートローバーのソフトウェア">Githubに上げたソフト</a> の紹介文と一部Cソースコードの概要を <a href="https://chat.openai.com/" title="ChatGPT">ChatGPT</a> にマークダウンで書くよう指示したら、次のようになりました。
-<br /></p>
-
-<hr />
-<p><br /></p>
-
-<h2 id="beauto-rover-arm---電子工作の新たな冒険への扉">Beauto Rover ARM - 電子工作の新たな冒険への扉</h2>
-
-<p><strong>Beauto Rover ARM</strong>は、Vstone社製のハーフスクラッチ開発を奨励するライントレース用ソフトウェアです。このソフトウェアは、VstoneのビュートローバーARMに同梱されている<code class="language-plaintext highlighter-rouge">vs-wrc103.c</code>ライブラリを使わず、LPC1343のCPU依存部分を活用して、電子工作と組み込みプログラミングの楽しさを提供します。</p>
-
-<h3 id="魅力的な特徴">魅力的な特徴</h3>
-
+<h2 id="赤外線センサの特性計測">赤外線センサの特性計測</h2>
 <ul>
-  <li>
-    <p><strong>ハーフスクラッチ開発の勧め</strong>: ビュートローバーARMはセンサ入力やモーター制御をサポートする素材で、C言語初学者やロボット愛好者に最適です。しかし、このソフトウェアはさらに一歩進んで、A/D変換やPWM、割り込み、タイマー、スリープモードなどCPUの機能を学ぶ絶好の機会を提供します。</p>
-  </li>
-  <li>
-    <p><strong>広範な電子工作の知識獲得</strong>: ビュートローバーARMを用いたハードウェアの実験を通じて、PWMの活用や赤外線センサの特性など、電子工作に関する知識が深まります。デバッグも<code class="language-plaintext highlighter-rouge">printf</code>を使用して可能になっており、学習効果を最大化します。</p>
-  </li>
-  <li>
-    <p><strong>独自の開発環境</strong>: コードベースの開発において、モジュールの抽象化やアプリケーション構築の容易さを重視しています。ユーザーはハーフスクラッチ開発を通じて、自身の目的や目標に合わせた開発が可能です。</p>
-  </li>
-</ul>
+  <li>近赤外線、遠赤外線（囲み記事）</li>
+  <li>自然光による影響</li>
+  <li>キャリブレーション</li>
+</ul>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="デバッグ" /><summary type="html"><![CDATA[LPC-LINK、LPC-LINK2のこと 入手困難、違い]]></summary></entry><entry><title type="html">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</title><link href="http://localhost:4000/2024/03/17/printf-debug.html" rel="alternate" type="text/html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/17/printf-debug</id><content type="html" xml:base="http://localhost:4000/2024/03/17/printf-debug.html"><![CDATA[<h2 id="lpc-linklpc-link2のこと">LPC-LINK、LPC-LINK2のこと</h2>
+<p>入手困難、違い</p>
 
-<h3 id="学習へのサポート">学習へのサポート</h3>
+<h2 id="jtagswdについて">JTAG/SWDについて</h2>
+<p>数千円〜数万円まで</p>
 
+<h2 id="printf-デバッグ">printf() デバッグ</h2>
+<p>Vstoneのサイト
+<a href="https://vstone.co.jp/robotshop/blog/archives/1293" title="【ロボコンに最適！】ビュートローバー・パソコン間で通信すると便利すぎた！【シリアル通信】 ｜ ロボット専門店のスタッフブログ -ロボットとの共存-">【ロボコンに最適！】ビュートローバー・パソコン間で通信すると便利すぎた！【シリアル通信】</a></p>
+
+<h2 id="赤外線センサの特性計測">赤外線センサの特性計測</h2>
 <ul>
-  <li><strong>ユーザーフレンドリーなWikiページ</strong>: <a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki">Wikiページ</a>では、開発環境の準備から<code class="language-plaintext highlighter-rouge">printf()</code>デバッグのステップまでを詳細に解説。初学者から上級者まで、誰でも手軽に活用できます。</li>
-</ul>
-
-<p><strong>Beauto Rover ARM</strong>は、電子工作の新たな冒険への扉を開き、組み込みプログラミングの面白さを発見するための理想的なツールです。興味を持った方は、ぜひ詳細をチェックしてみてください！</p>
-
-<h1 id="clkc-ソースコード概要">clk.c ソースコード概要</h1>
-
-<p><code class="language-plaintext highlighter-rouge">clk.c</code> ソースコードは、マイクロコントローラ上でのクロック構成に関連する機能を実装しています。以下はコードでカバーされている主な機能の要約です：</p>
-
-<ol>
-  <li>
-    <p><strong>クロックの初期化</strong>: <code class="language-plaintext highlighter-rouge">clkInit()</code> 関数はマイクロコントローラのクロックシステムを初期化し、主システムクロック周波数、ペリフェラルクロック周波数、およびその他の関連パラメータを設定します。</p>
-  </li>
-  <li>
-    <p><strong>クロックソースの選択</strong>: マイクロコントローラのアーキテクチャと機能に応じて、クロックソース（内部発振子、外部クリスタルなど）を選択し、クロック分周器を設定するための関数やマクロが含まれる場合があります。</p>
-  </li>
-  <li>
-    <p><strong>ペリフェラルクロックの構成</strong>: コードには個々のペリフェラルクロックを設定するための関数が含まれる場合があり、電力管理や機能要件に応じてそれらを有効または無効にすることができます。</p>
-  </li>
-  <li>
-    <p><strong>クロックの監視と制御</strong>: 一部の場合、実行時にクロック周波数やソースを監視および制御する機能が含まれる場合があります。これにより、ダイナミックなクロック調整が可能になります。</p>
-  </li>
-  <li>
-    <p><strong>エラー処理</strong>: クロックの初期化や構成が失敗した場合を扱うためのエラーチェックメカニズムが含まれる場合があり、診断目的のためにエラーコードやステータスインジケータが提供されます。</p>
-  </li>
-</ol>
-
-<p>全体として、<code class="language-plaintext highlighter-rouge">clk.c</code> ソースコードは、マイクロコントローラ上のクロックシステムのセットアップと管理を容易にし、さまざまなシステムコンポーネントやペリフェラルの正確なタイミングと同期を確保します。</p>
-
-<hr />
-<p><br />
-う〜ん、言いたいことが伝わるかどうか微妙、「新たな冒険への扉」とか「魅力的な特徴」とか赤面モノだし、修正が必要な箇所も多いけど、プロンプトの工夫次第で楽できるカモと思った次第です。</p>
-
-<p>さて、恥ずかしながらデモ走行の動画です。PID 制御（実際は PD だけど）の計算部分に浮動小数点を使わず全て整数演算にしてしまったので係数の調整がイマイチですが、<a href="https://www.youtube.com/watch?v=liuNBOXGJxg" title="T-SQUARE 『Truth』 × 360 Reality Audio - スペシャルビデオ - YouTube">T-SQUARE の TRUTH</a> を奏でながら走行するローバーを見ながら F1 監督の気分を味わっています。</p>
-
-<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="ja" dir="ltr">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め<a href="https://t.co/q0I5bCi0YE">https://t.co/q0I5bCi0YE</a> <a href="https://t.co/YdKTqa6xzn">pic.twitter.com/YdKTqa6xzn</a></p>&mdash; Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1767330699332530660?ref_src=twsrc%5Etfw">March 11, 2024</a></blockquote>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<p>画面左上で「ピッ」と鳴ってるのは Arduino Uno で作ったラップタイマーです。<a href="https://amzn.asia/d/czTh7l0" title="Amazon.co.jp: OSOYOO Arduino用 Raspberry Pi 5 対応 IR赤外線障害物回避 センサモジュール アルドゥイーノ スマート カー ロボット用 10PCSセット : 産業・研究開発用品">fc-51 赤外線モジュール</a> と <a href="https://amzn.asia/d/gyudCEt" title="Amazon.co.jp: DiyStudio 2 個 0.96 OLED i2c インチ有機モジュール IIC/I2Cインターフェース LCD SSD1306ドライバー 128X64解像度ホワイトディスプレイ，適用インターフェース VCC, GND, SCL, SDA : パソコン・周辺機器">SSD1306 OLED</a> のサンプルスケッチをコピペして <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> とか呼び出せばタイマーの基本部分はアッという間に出来てしまいます。色々なモジュールを組み合わせてオリジナル作品を作るのがこの手の醍醐味ですが、そのうち物足りなくなるだろうなぁというのが個人的な感想です。</p>
-
-<p>ビュートローバーのマイコンボードには、古いとは言え 72MHz で動作する <a href="https://www.arm.com/ja/products/silicon-ip-cpu/cortex-m/cortex-m3" title="Cortex-M3 – Arm®">ARM Cortex-M3</a> という Arduino Uno R4 にも劣らない CPU（ARM では MCU と呼んでますね）が搭載されています。<a href="https://amzn.asia/d/g6Fl6fZ" title="Amazon - プログラミング教育用ロボット ビュートローバー ARM 赤外線セット [学習教材] [vstone] - プログラミング・ロボティクス - おもちゃ">Amazon で8千円近くもしたおもちゃ</a> なので、しばらくはコレで遊んでみたいと思います。</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="Cortex-M3" /><summary type="html"><![CDATA[何かメカ的に動くものが作りたくて ビュートローバーARM というのを購入しました。]]></summary></entry></feed>
+  <li>近赤外線、遠赤外線（囲み記事）</li>
+  <li>自然光による影響</li>
+  <li>キャリブレーション</li>
+</ul>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="デバッグ" /><summary type="html"><![CDATA[LPC-LINK、LPC-LINK2のこと 入手困難、違い]]></summary></entry></feed>
