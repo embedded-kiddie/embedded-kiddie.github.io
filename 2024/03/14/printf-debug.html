@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="LPC-Link について" />
+<meta property="og:description" content="LPC-Link について" />
+<link rel="canonical" href="http://localhost:4000/2024/03/14/printf-debug.html" />
+<meta property="og:url" content="http://localhost:4000/2024/03/14/printf-debug.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-14T18:09:51+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-03-14T18:09:51+09:00","datePublished":"2024-03-14T18:09:51+09:00","description":"LPC-Link について","headline":"ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/03/14/printf-debug.html"},"url":"http://localhost:4000/2024/03/14/printf-debug.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Embedded Kiddie" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-03-14T18:09:51+09:00" itemprop="datePublished">Mar 14, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="lpc-link-について">LPC-Link について</h2>
+
+<p><a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> の <a href="https://www.vstone.co.jp/products/vs_wrc103lv/download.html#02-1" title="VS-WRC103LV 取扱説明書 - ダウンロード - ヴイストン株式会社">取扱説明書</a> には、「LPC-Link接続ポート（CN12）」というデバッグ用のポートの説明があります。</p>
+
+<p><img src="/images/2024/port-LPC-LINK.png" alt="LPC-Link接続ポート（CN12）" title="LPC-Link接続ポート" /></p>
+
+<p>ザックリと言えば、LPC-LINK とは以下のようなシロモノです（情報元：<a href="https://toragi.cqpub.co.jp/Portals/0/backnumber/2014/03/p134.pdf">一人1台！全Cortex ARM マイコン対応デバッガのしくみ</a> ）。</p>
+
+<ul>
+  <li><a href="https://developer.arm.com/documentation/101636/0100/Debug-and-Trace/JTAG-SWD-Interface" title="Documentation – Arm Developer">JTAG/SWD (Serial Wire Debug)</a> のプロトコルを介してターゲットボード上の CPU 動作を制御したり状態を調べたりすることができるインサーキット・デバッガのこと</li>
+  <li>SWD とは ARM が定めた <a href="https://ja.wikipedia.org/wiki/JTAG" title="JTAG - Wikipedia">JTAG 規格</a> を利用したデバッグ・インタフェースのこと</li>
+</ul>
+
+<p>かつては NXP の評価ボードにオマケで付いてきたようですが、代替の LPC-Link2 と共に絶版 → <a href="https://www.nxp.jp/design/design-center/software/development-software/mcuxpresso-software-and-tools-/mcu-link-debug-probe:MCU-LINK" title="MCU Link JTAG/SWD Debug Probe - NXP Semiconductors">MCU-Link</a> に置き換わっていて、これがまたサポート対象に LPC1343 が入っていないのです。</p>
+
+<p>JTAG/SWD をサポートしたデバッグ・プローブと呼ばれる装置なら使えるのかもしれませんが、真偽不明なため（調査中）、ここではソフトウェアで <code class="language-plaintext highlighter-rouge">printf</code> デバッグをする方法を紹介したいと思います。</p>
+
+<h2 id="printf-デバッグ">printf デバッグ</h2>
+<p>ヴイストン社のブログ記事「<a href="https://vstone.co.jp/robotshop/blog/archives/1293" title="【ロボコンに最適！】ビュートローバー・パソコン間で通信すると便利すぎた！【シリアル通信】 ｜ ロボット専門店のスタッフブログ -ロボットとの共存-">【ロボコンに最適！】ビュートローバー・パソコン間で通信すると便利すぎた！【シリアル通信】</a>」には、シリアル通信経由でホスト PC に文字を送る例が示されています（例題3から抜粋）。</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">char</span> <span class="n">sentence</span><span class="p">[</span><span class="mi">11</span><span class="p">];</span>                  <span class="c1">// charは文字を記録することができる</span>
+<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>                         <span class="c1">// {}内を永遠に繰り返す</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>       <span class="c1">// for文 ２回くりかえす</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">ADRead</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>           <span class="c1">// 赤外線センサの値をA/D変換してdataに代入</span>
+
+        <span class="c1">// %01dにはiの値が1桁、%04にはdataの値が4桁で文字列に変換され</span>
+        <span class="c1">// まとめてsentenceに文字列として格納される</span>
+        <span class="c1">// \r\n（２文字）は改行を表す</span>
+        <span class="n">sprintf</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="s">"AN%01d=%04d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+
+        <span class="n">SciStrTx</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>     <span class="c1">// 変数sentenceに入った10文字をパソコンに送信</span>
+        <span class="n">Wait</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>                   <span class="c1">// 0.02秒待つ</span>
+    <span class="p">}</span>
+    <span class="n">sprintf</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="s">"</span><span class="se">\033</span><span class="s">[1;1H"</span><span class="p">);</span> <span class="c1">// 1行目1列目にカーソルを戻すエスケープシーケンス</span>
+    <span class="n">SciStrTx</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>          <span class="c1">// エスケープシーケンス6文字を送信</span>
+    <span class="n">Wait</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>                       <span class="c1">// 0.02秒待つ</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">SciStrTx()</code> は一回の送信が64バイトに制限されてますし、文字列用バッファ <code class="language-plaintext highlighter-rouge">sentence[]</code> の準備や <code class="language-plaintext highlighter-rouge">sprintf()</code>、<code class="language-plaintext highlighter-rouge">Wati()</code> など面倒ですよね。これを以下のように <code class="language-plaintext highlighter-rouge">printf()</code> 一発にすることがゴールです。</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>                     <span class="c1">// {}内を永遠に繰り返す</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>    <span class="c1">// for文 ２回くりかえす</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">ADRead</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>       <span class="c1">// 赤外線センサの値をA/D変換してdataに代入</span>
+
+        <span class="c1">// printf()一発で出力！！</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"AN%01d=%04d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\033</span><span class="s">[1;1H"</span><span class="p">);</span>        <span class="c1">// 1行目1列目にカーソルを戻すエスケープシーケンスの命令</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>その方法を Wiki ページ「<a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki/123_USBCDC" title="123_USBCDC · embedded-kiddie/beauto-rover-arm Wiki">1.2.3 USBシリアル通信プロジェクトのインポート</a>」にまとめたので、気に入ったらトライしてみてください。使用するのは <code class="language-plaintext highlighter-rouge">sci.c</code> と <code class="language-plaintext highlighter-rouge">sci.h</code> で、そのポイントは以下の通りです。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">printf()</code> を使うためのシステコール群を定義</li>
+  <li>一回の送信量64バイトの制限なし</li>
+  <li>残念ながら <code class="language-plaintext highlighter-rouge">scanf()</code> は使えず、代替として <code class="language-plaintext highlighter-rouge">sciScanf()</code> を定義</li>
+  <li>最適化オプションを指定した時に動作しなくなるオリジナルの不具合を修正</li>
+</ul>
+
+<h2 id="赤外線センサの特性計測">赤外線センサの特性計測</h2>
+
+<p>ヴイストン社のブログを真似て赤外線センサの出力値を観測してみました。まず白地に引いた直線の黒ライン中央にローバーを置きます。そして次のような動作</p>
+
+<ol>
+  <li>右に振り（左センサが黒ラインに近くなり、左センサの出力値が上がる）中央に戻し、 続いて</li>
+  <li>左に振り（右センサが黒ラインに近くなり、右センサの出力値が上がる）再び中央に戻す</li>
+</ol>
+
+<p>をプログラムし、<code class="language-plaintext highlighter-rouge">printf()</code> で左右のセンサ値を <a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> に出力 → テキストをコピペして CSV ファイルとして保存 → <a href="https://www.google.com/intl/ja_jp/sheets/about/" title="Google Sheets: オンライン スプレッドシート エディタ - Google Workspace">Google スプレッドシート</a> にアップロードしてグラフ化しました。</p>
+
+<p><img src="/images/2024/ir-sensor-graph1.png" alt="左右センサ値の出力特性" title="左右センサ値の出力特性" /></p>
+
+<p>このグラフから次のことが分かると思います。</p>
+
+<ul>
+  <li>左右センサ値の出力特性にバラツキがある（最大値が異なる）</li>
+  <li>車体中心に対し、センサ出力がオフセットしている</li>
+</ul>
+
+<p>左右センサ値のバラツキが大きい時は、振れ幅が等しくなるよう補正（キャリブレーション）をした方が良いでしょう。</p>
+
+<p>またセンサ出力がオフセットしている理由は、光の強さを計測するフォトセンサの位置が車体中心に対してオフセットしているためです。それぞれの最小値がほぼ同じなら、左右の差を取ることで車体中心からのズレ量に直せますが、最小値のバラツキが大きい場合には左右別々に原点までのオフセットを取り去る処理が必要になるでしょう。</p>
+
+<p><img src="/images/2024/ir-sensor-positions.png" alt="車体中心に対するフォトセンサの位置" title="車体中心に対するフォトセンサの位置" /></p>
+
+<p>またこの手のフォトセンサは赤外の中でも近赤外領域である 800nm 付近の波長に最大感度があります。太陽光や白熱電球はこの領域の波長をたっぷり含むため、フォトセンサの出力に影響を与えます。逆に蛍光灯や LED 電球には（電球色であっても）ほとんど含まれていません（出典：<a href="http://www.techno-synergy.co.jp/nkd_appli/ex-DF420.html" title="分光アプリケーション：各種照明のスペクトル比較｜テクノシナジー">各種照明のスペクトル比較</a>）。</p>
+
+<p>次のグラフは太陽光の入る窓際で同じことをした結果です。こうなるとまともにライントレースはできなくなりますネ。</p>
+
+<p><img src="/images/2024/ir-sensor-graph2.png" alt="自然光の影響がある場合" title="自然光の影響がある場合" /></p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>ソースコード上のおかしいところを見つけるにはインサーキット・デバッガには敵いませんが、LED やスイッチ待ちなどと組み合われば出費ゼロで出来る <code class="language-plaintext highlighter-rouge">printf()</code> デバッグもそれなりに役立ちます。</p>
+
+<p>また Ardiono IDE の <a href="https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-plotter/" title="Using the Serial Plotter Tool - Arduino Documentation">シリアルプロッタ</a> より手間はかかりますが、センサ値を可視化してみれば、単にハードを組み上げソフトを動かすだけより勉強になるのではと思います。</p>
+
+<p>そのうち走行させながらリアルタイムにデータの観測が出来るよう、無線化にもチャレンジしてみたいと思います (^.^)y</p>
+
+
+  </div><a class="u-url" href="/2024/03/14/printf-debug.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="mailto:embeddedkiddie@gmail.com">embeddedkiddie@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
