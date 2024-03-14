@@ -89,7 +89,7 @@
 <p><code class="language-plaintext highlighter-rouge">SciStrTx()</code> は一回の送信が64バイトに制限されてますし、文字列用バッファ <code class="language-plaintext highlighter-rouge">sentence[]</code> の準備や <code class="language-plaintext highlighter-rouge">sprintf()</code>、<code class="language-plaintext highlighter-rouge">Wati()</code> など面倒ですよね。これを以下のように <code class="language-plaintext highlighter-rouge">printf()</code> 一発にすることがゴールです。</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>                     <span class="c1">// {}内を永遠に繰り返す</span>
-    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>    <span class="c1">// for文 ２回くりかえす</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">// for文 ２回くりかえす</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">ADRead</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>       <span class="c1">// 赤外線センサの値をA/D変換してdataに代入</span>
 
         <span class="c1">// printf()一発で出力！！</span>
