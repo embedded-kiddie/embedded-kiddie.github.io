@@ -1,4 +1,304 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-15T22:56:25+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">電子工作初心者の私が買い揃えた14のアイテム</title><link href="http://localhost:4000/2024/03/15/items-for-electronic-hobbyists.html" rel="alternate" type="text/html" title="電子工作初心者の私が買い揃えた14のアイテム" /><published>2024-03-15T22:55:59+09:00</published><updated>2024-03-15T22:55:59+09:00</updated><id>http://localhost:4000/2024/03/15/items-for-electronic-hobbyists</id><content type="html" xml:base="http://localhost:4000/2024/03/15/items-for-electronic-hobbyists.html"><![CDATA[<p>普段、仕事でもハンダゴテなど握る機会もほとんどなく、ハードが苦手な私が電子工作を始めるにあたって影響を受けたのが、次の YouTube 動画です。ハンダ付けのイロハを教えてくれます。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-16T20:24:02+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduinoでライントレース用ラップタイマーを作る</title><link href="http://localhost:4000/2024/03/24/arduino-lap-timer.html" rel="alternate" type="text/html" title="Arduinoでライントレース用ラップタイマーを作る" /><published>2024-03-24T13:25:54+09:00</published><updated>2024-03-24T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/24/arduino-lap-timer</id><content type="html" xml:base="http://localhost:4000/2024/03/24/arduino-lap-timer.html"><![CDATA[<p><img src="/images/2024/03-16/arduino-and-mac.jpg" alt="Aruduino" title="Arduino UNO R4 Minima" /></p>
+
+<h3 id="ラップタイマーが欲しい">ラップタイマーが欲しい！</h3>
+
+<p>ライントレースで遊んでいると欲しくなりますよネ。どのパラメータの組みが速いかも知りたいですし。しかもブレッドボードで組むんじゃなくて、子基板（シールドって言うんですね）を載せてポータブルにしたい！ってことで作っちゃいました。</p>
+
+<figure class="float-left">
+<a href="/images/2024/03-16/arduino-lap-timer.jpg" data-lightbox="image"><img src="/images/2024/03-16/arduino-lap-timer.jpg" alt="作成したラップタイマー" /></a>
+</figure>
+
+<p>写真は <a href="https://amzn.asia/d/4USPHyq" title="Amazon.co.jp: SunFounder オリジナル Arduino Uno R4 Minima 用のセンサーキット究極版、 スマート IoT および基本センサープロジェクト向けのオンラインチュートリアル（日本語）を備え、初心者向け （オリジナル Arduino Uno R4 Minima 付属） : 産業・研究開発用品">Arduino のキット</a> についてきたセンサやディスプレイをサンハヤトのArduino用ユニバーサル基板 <a href="https://amzn.asia/d/0cvz9Qs" title="Amazon - サンハヤト Arduino用ユニバーサルキバン UB-ARD03-P - 基板 - 産業・研究開発用品 通販">UB-ARD03-P</a> の上に載せたものです。この基板は Arduino のリセットボタンが隠れず、また GND と VCC がベタで引き回されているので配線が楽でした。逆に Arduino のピンから信号を引っ張り出すにはそれらを跨がなければならず、狭い基板がますます狭くなるので、使い易さと使い難さが同居している感じです。</p>
+
+<p>さらに同梱されてるタクタイルスイッチでもリセットがかかるようパターンが引かれているので、カッターでカットしてラップのリセット用にすることにしました。</p>
+
+<p>006P 電池は東芝のニッケル水素電池 <a href="https://amzn.asia/d/g9eAoxV" title="Amazon - TOSHIBA ニッケル水素電池 充電式IMPULSE 単6P形充電池(min.200mAh) 1本 6TNH22A - 東芝(TOSHIBA) - 充電式電池">IMPULSE</a> で <a href="https://amzn.asia/d/g4qnJGo" title="Amazon - 東芝(TOSHIBA) TOSHIBA 充電式IMPULSE 6P形専用充電器 1~2個充電モデル TNHC-622SC - 東芝(TOSHIBA) - 充電式電池">充電器</a> と一緒に Amazon 購入です。容量が 200mAh なので連続で数時間遊んでいるとなくなります。充電時間は6時間です。</p>
+
+<p>圧電素子が２つついてますが、１つはアクティブタイプでラップを刻んだ時に「ピッ」と音を鳴らします。もう１つはパッシブタイプで、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> に実装した楽譜再生プログラムを Arduino に移植することを考えてます。タイムを計測しながらカッコいい曲を流す予定です！</p>
+
+<p>またセンサやディスプレイはピンソケットから引っこ抜いて再利用できるようにしています（ケチ）。</p>
+
+<h3 id="配線とプログラムはチュートリアルから">配線とプログラムはチュートリアルから！</h3>
+
+<p>SunFounder の「<a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/components_basic/00-component_list.html" title="コンポーネントの基本 &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">コンポーネントの基本</a>」ページから「<a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/components_basic/09-component_ir_obstacle.html" title="IR 赤外線障害物回避センサーモジュール &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">IR 赤外線障害物回避センサーモジュール</a>」と「<a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/components_basic/22-component_oled.html" title="OLEDディスプレイモジュール &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">OLEDディスプレイモジュール</a>」を参考に “ニコイチ” にします。</p>
+
+<figure class="float-left">
+<a href="/images/2024/03-16/line_trace_lap_timer_breadboard.png" data-lightbox="image"><img src="/images/2024/03-16/line_trace_lap_timer_breadboard.png" alt="ブレッドボード配線図" /></a>
+</figure>
+
+<figure class="float-left">
+<a href="/images/2024/03-16/line_trace_lap_timer_schematic.png" data-lightbox="image"><img src="/images/2024/03-16/line_trace_lap_timer_schematic.png" alt="回路図" /></a>
+</figure>
+
+<p>一応 <a href="https://fritzing.org/" title="Welcome to Fritzing">Fritzing</a> で配線図と回路図を引いてみました。回路図は描いた事がなかったので部品のレイアウトに苦労しました（汗;）。エキスパートの方々は <a href="https://www.kicad.org/" title="KiCad EDA - Schematic Capture &amp; PCB Design Software">KiCad</a> を使っているらしいので、いづれ習熟してオリジナル基板を発注するのが夢です。</p>
+
+<p>また Minima のパーツは <a href="https://forum.fritzing.org/t/arduino-r4-minima/20064" title="Arduino R4 Minima - parts submit - fritzing forum">Fritzing のフォーラム</a> からもらいました。ホント、ありがたいですネ。</p>
+
+<h3 id="プログラムはコピペαで">プログラムはコピペ＋αで！</h3>
+
+<p>ソースコードを <a href="https://github.com/embedded-kiddie/arduino-uno/tree/main/line_trace_lap_timer" title="arduino-uno/line_trace_lap_timer at main · embedded-kiddie/arduino-uno">Github</a> に上げてありますが、ここでも簡単に解説したいと思います。</p>
+
+<h4 id="要求">要求</h4>
+
+<ul>
+  <li>センサでロボット車の通過を検知する</li>
+  <li>コースを１周するごとにラップタイムをディスプレイに表示する</li>
+  <li>ディスプレイの上段に経過時間、下段にラップタイムを表示する</li>
+  <li>タイムは 1/100 秒まで計測する</li>
+  <li>計測の状態変化を音と表示で知らせる</li>
+</ul>
+
+<h4 id="仕様">仕様</h4>
+
+<ul>
+  <li>ロボット車の通過に伴うセンサの状態変化を割り込みで処理する</li>
+  <li>車体の凹凸などに伴うセンサ出力のチャタリングを除去する</li>
+  <li>タイマーの状態は「計測前」、「計測中」の２状態とする</li>
+  <li>表示の状態はラップタイムの「点滅開始」と「点滅終了」の２状態、点滅周期と期間を制御する</li>
+</ul>
+
+<h4 id="実装">実装</h4>
+
+<p>まずは OLED の設定です。チュートリアル「<a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/components_basic/22-component_oled.html" title="OLEDディスプレイモジュール &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">OLEDディスプレイモジュール</a>」に従い、Adafruit の SSD1306 用ライブラリとグラフィック用ライブラリが IDE にンストールされていることが前提です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*
+  This code initializes an OLED display (SSD1306) using the Adafruit SSD1306 library, 
+  and displays various text, numbers, and scroll animations on the screen.
+
+  Board: Arduino Uno R4 (or R3)
+  Component:  OLED (SSD1306)
+  Library: https://github.com/adafruit/Adafruit_SSD1306 (Adafruit SSD1306 by Adafruit)  
+           https://github.com/adafruit/Adafruit-GFX-Library (Adafruit GFX Library by Adafruit) 
+*/</span>
+<span class="c1">// Libraries in use: "Adafruit SSD1306", "Adafruit BusIO", "Adafruit GFX"</span>
+<span class="cp">#include</span> <span class="cpf">&lt;SPI.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;Wire.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;Adafruit_GFX.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;Adafruit_SSD1306.h&gt;</span><span class="cp">
+</span>
+<span class="cp">#define SCREEN_WIDTH 128  // OLED display width, in pixels
+#define SCREEN_HEIGHT 64  // OLED display height, in pixels
+</span>
+<span class="c1">// Declaration for SSD1306 display connected using I2C</span>
+<span class="cp">#define OLED_RESET      (-1)  // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS  0x3C
+</span><span class="n">Adafruit_SSD1306</span> <span class="nf">display</span><span class="p">(</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">SCREEN_HEIGHT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Wire</span><span class="p">,</span> <span class="n">OLED_RESET</span><span class="p">);</span></code></pre></figure>
+
+<p>続いてタイマーとラップ表示に関する設定です。割り込みを使わない設定もできますが、振る舞いが若干変わります。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * タイマーとラップ表示の設定
+ *--------------------------------------------------*/</span>
+<span class="cp">#define DEBUG_PRINT     0     // デバッグコンソールに出力する場合は 1
+#define USE_INTERRUPT   1     // センサモジュール FC-51 の状態変化を割り込みで処理する場合は 1
+#define IR_SENSOR_PIN   2     // センサモジュール FC-51 出力の入力ピン番号
+#define BLINK_COUNT     3     // ラップタイムの点滅回数
+#define BLINK_INTERVAL  250   // ラップタイムの点滅周期 [msec]
+#define LAP_HYSTERESIS  4000  // チャタリング除去用のヒステリシス [msec]
+#define TIMER_CURSOR_X  16    // ディスプレイ表示のX座標
+#define TIMER_CURSOR_Y  10    // ディスプレイ表示のY座標
+</span>
+<span class="cm">/*--------------------------------------------------
+ * 状態変化時の音の設定
+ *--------------------------------------------------*/</span>
+<span class="cp">#define BUZZER_PIN      8     // ブザー出力のピン番号
+#define BUZZER_DURATION 16    // 音の長さ（16分音符）
+#define BUZZER_FREQUENCY 2794 // 音階の周波数（ファ）</span></code></pre></figure>
+
+<p>割り込みハンドラには引数も戻り値のないので、メインループとはグローバル変数でやりとりします。メインループ内の処理にとっては割り込みハンドラで変数の値が変えられるため、<code class="language-plaintext highlighter-rouge">volatile</code> をつけてコンパイラに適切に扱うよう指示（＝最適化を適用しない）をしています。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * 割り込みハンドラ内で設定される変数
+ *--------------------------------------------------*/</span>
+<span class="c1">// ラップタイマー関連</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">start</span><span class="p">;</span>                 <span class="c1">// 計測開始前[false]、計測開始後[true]</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="kt">char</span> <span class="n">strLap</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"00:00:00"</span><span class="p">;</span> <span class="c1">// ディスプレイ用ラップタイム</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="n">u_int32_t</span> <span class="n">timerT0</span><span class="p">,</span> <span class="n">timerT1</span><span class="p">;</span> <span class="c1">// ラップ計測用タイム</span>
+
+<span class="c1">// ラップの点滅表示関連</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="kt">int</span> <span class="n">blinkCount</span><span class="p">;</span>             <span class="c1">// 点滅した回数</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="kt">uint32_t</span> <span class="n">blinkT0</span><span class="p">;</span>           <span class="c1">// 点滅開始時間</span></code></pre></figure>
+
+<p>次は Arduino の <code class="language-plaintext highlighter-rouge">setup()</code> で呼び出す初期化の関数群です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * OLED の設定
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">setupDisplay</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// OLED 用インスタンスの初期化</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">display</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">SSD1306_SWITCHCAPVCC</span><span class="p">,</span> <span class="n">SCREEN_ADDRESS</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// エラーが起きた場合、シリアル通信にメッセージを出し続ける</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s">"SSD1306 allocation failed"</span><span class="p">));</span>
+      <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// ディスプレイバッファをクリア</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">clearDisplay</span><span class="p">();</span>
+
+  <span class="c1">// Display Text</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>       <span class="c1">// テキストサイズの設定</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">setTextColor</span><span class="p">(</span><span class="n">WHITE</span><span class="p">);</span>  <span class="c1">// テキスト表示色の設定（黒 or 白）</span>
+<span class="p">}</span>
+
+<span class="cm">/*--------------------------------------------------
+ * 障害物センサの設定
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">setupSensor</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">IR_SENSOR_PIN</span><span class="p">,</span> <span class="n">INPUT</span><span class="p">);</span>
+
+<span class="cp">#if USE_INTERRUPT
+</span>  <span class="c1">// 障害物センサ状態が変化した時に割り込みハンドラ checkStateIR() を起動する</span>
+  <span class="kt">void</span> <span class="n">checkStateIR</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+  <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">IR_SENSOR_PIN</span><span class="p">),</span> <span class="n">checkStateIR</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
+<span class="cp">#endif
+</span><span class="p">}</span>
+
+<span class="cm">/*--------------------------------------------------
+ * タイマーとラップ表示の初期化
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">initTimer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// タイマーの初期化</span>
+  <span class="n">start</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+  <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">strcpy</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">strLap</span><span class="p">,</span> <span class="s">"00:00:00"</span><span class="p">);</span>
+
+  <span class="c1">// ラップ表示の初期化</span>
+  <span class="n">blinkT0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">blinkCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>続いて、ミリ秒を 1/100 秒単位の文字列に変換をするためのサブルーチンです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * Convert time to string (00:00:00 - 59:59:99)
+ *--------------------------------------------------*/</span>
+<span class="kt">char</span><span class="o">*</span> <span class="nf">time2str</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">msec</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">uint32_t</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">;</span>
+
+  <span class="c1">// 1/1000[sec] --&gt; 1/100[sec]</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">msec</span> <span class="o">/=</span>  <span class="mi">10UL</span><span class="p">)</span> <span class="o">%</span> <span class="mi">100UL</span><span class="p">;</span>
+  <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">msec</span> <span class="o">/=</span> <span class="mi">100UL</span><span class="p">)</span> <span class="o">%</span>  <span class="mi">60UL</span><span class="p">;</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">msec</span> <span class="o">/=</span>  <span class="mi">60UL</span><span class="p">)</span> <span class="o">%</span>  <span class="mi">60UL</span><span class="p">;</span>
+  <span class="n">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="s">"%02d:%02d:%02d"</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="n">str</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>障害物センサ FC-51 は、未検出の場合は <code class="language-plaintext highlighter-rouge">High</code>、検出した場合は <code class="language-plaintext highlighter-rouge">Low</code> を出力します。即ちエッジの立ち下がりを検知すれば通過を判定できるのですが、<a href="https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/" title="attachInterrupt() - Arduino Reference"><code class="language-plaintext highlighter-rouge">attachInterrupt()</code></a> に <code class="language-plaintext highlighter-rouge">FALLING</code> を設定しても <code class="language-plaintext highlighter-rouge">CHANGE</code> と同じ振る舞いが観測されたため <a href="https://www.arduino.cc/reference/en/language/functions/digital-io/digitalread/" title="digitalRead() - Arduino Reference"><code class="language-plaintext highlighter-rouge">digitalRead()</code></a> で状態を確認しています。</p>
+
+<p>Arduino R4 コアのソースコード には <code class="language-plaintext highlighter-rouge">HIGH</code> の場合に <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Interrupts.cpp#L136" title="ArduinoCore-renesas/cores/arduino/Interrupts.cpp at main · arduino/ArduinoCore-renesas">問題がありげ</a> なコメントが書かれているので、何かあるのかもしれません。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * 計測と表示の状態変化を判定し、アクションを実行する
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">checkStateIR</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">bool</span> <span class="n">status</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">IR_SENSOR_PIN</span><span class="p">);</span>
+
+<span class="cp">#if DEBUG_PRINT
+</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">status</span><span class="p">);</span>
+<span class="cp">#endif
+</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kt">uint32_t</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">timerT1</span> <span class="o">-</span> <span class="n">timerT0</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">delta</span> <span class="o">&gt;=</span> <span class="n">LAP_HYSTERESIS</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 計測開始後４秒以上経過していれば状態を変えても良い</span>
+        <span class="n">time2str</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">strLap</span><span class="p">);</span>
+        <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span><span class="p">;</span>
+
+        <span class="n">blinkT0</span> <span class="o">=</span> <span class="n">timerT0</span><span class="p">;</span>
+        <span class="n">blinkCount</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">tone</span><span class="p">(</span><span class="n">BUZZER_PIN</span><span class="p">,</span> <span class="n">BUZZER_FREQUENCY</span><span class="p">,</span> <span class="n">BUZZER_DURATION</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 計測開始の1回だけ実行する</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+      <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span><span class="p">;</span>
+
+      <span class="n">tone</span><span class="p">(</span><span class="n">BUZZER_PIN</span><span class="p">,</span> <span class="n">BUZZER_FREQUENCY</span><span class="p">,</span> <span class="n">BUZZER_DURATION</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Arduino お決まりの <code class="language-plaintext highlighter-rouge">setup()</code> で先に定義した関数を呼び出します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * OLED, 障害物センサ、タイマーと表示の初期化
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// OLED の設定</span>
+  <span class="n">setupDisplay</span><span class="p">();</span>
+
+  <span class="c1">// FC-51 赤外線センサモジュールの設定</span>
+  <span class="n">setupSensor</span><span class="p">();</span>
+
+  <span class="c1">// 計測と表示用のグローバル変数の初期化</span>
+  <span class="n">initTimer</span><span class="p">();</span>
+
+<span class="cp">#if DEBUG_PRINT
+</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="cp">#endif
+</span><span class="p">}</span></code></pre></figure>
+
+<p>最後はお決まりのメインループです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * メインループ
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// for timer</span>
+  <span class="kt">char</span> <span class="n">strNow</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+  <span class="kt">uint32_t</span> <span class="n">delta</span><span class="p">;</span>
+
+  <span class="n">timerT1</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+
+  <span class="c1">// 計測開始の1回だけ実行</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">delta</span> <span class="o">=</span> <span class="n">timerT1</span> <span class="o">-</span> <span class="n">timerT0</span><span class="p">;</span>
+
+<span class="cp">#if ! USE_INTERRUPT
+</span>  <span class="n">checkStateIR</span><span class="p">();</span> <span class="c1">// 割り込みを使わない場合は、ここで状態変化を判定する</span>
+<span class="cp">#endif
+</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">clearDisplay</span><span class="p">();</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">setCursor</span><span class="p">(</span><span class="n">TIMER_CURSOR_X</span><span class="p">,</span> <span class="n">TIMER_CURSOR_Y</span><span class="p">);</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">time2str</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">strNow</span><span class="p">));</span>
+
+  <span class="c1">// ラップ表示の点滅が開始されたら点滅周期ごとに点滅回数を更新する</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">blinkCount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">timerT1</span> <span class="o">-</span> <span class="n">blinkT0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">BLINK_INTERVAL</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">blinkT0</span> <span class="o">=</span> <span class="n">timerT1</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">blinkCount</span><span class="o">++</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">BLINK_COUNT</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">blinkCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">blinkCount</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 2回に1回、点灯と消灯の状態を変えて表示する</span>
+    <span class="n">display</span><span class="p">.</span><span class="n">setCursor</span><span class="p">(</span><span class="n">TIMER_CURSOR_X</span><span class="p">,</span> <span class="n">TIMER_CURSOR_Y</span> <span class="o">+</span> <span class="mi">32</span><span class="p">);</span>
+    <span class="n">display</span><span class="p">.</span><span class="n">println</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">strLap</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">display</span><span class="p">.</span><span class="n">display</span><span class="p">();</span> <span class="c1">// ディスプレイバッファを反映する</span>
+
+<span class="cp">#if DEBUG_PRINT
+</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">strNow</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"</span><span class="se">\t</span><span class="s">"</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">strLap</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="cp">#endif
+</span><span class="p">}</span></code></pre></figure>
+
+<h3 id="以上">以上！</h3>
+
+<p>ライントレースで楽しんでもらえたら嬉しいです ^.^)y</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">電子工作初心者の私が買い揃えた14のアイテム</title><link href="http://localhost:4000/2024/03/15/items-for-electronic-hobbyists.html" rel="alternate" type="text/html" title="電子工作初心者の私が買い揃えた14のアイテム" /><published>2024-03-15T22:55:59+09:00</published><updated>2024-03-15T22:55:59+09:00</updated><id>http://localhost:4000/2024/03/15/items-for-electronic-hobbyists</id><content type="html" xml:base="http://localhost:4000/2024/03/15/items-for-electronic-hobbyists.html"><![CDATA[<p>普段、仕事でもハンダゴテなど握る機会もほとんどなく、ハードが苦手な私が電子工作を始めるにあたって影響を受けたのが、次の YouTube 動画です。ハンダ付けのイロハを教えてくれます。</p>
 
 <ul>
   <li><a href="https://www.youtube.com/watch?v=dQ7AUjb1tkA">【永久保存版】はんだ付けのやり方を解説します【はんだづけの原理, DIP部品, 表面実装】【イチケン電子基礎シリーズ】RX-802AS</a></li>
