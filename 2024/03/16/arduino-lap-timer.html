@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-DLMCZ884M2');</script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.css" crossorigin="anonymous" referrerpolicy="no-referrer" /><script async src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /><script async src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
@@ -120,7 +120,8 @@
   <li>ロボット車の通過に伴うセンサの状態変化を割り込みで処理する</li>
   <li>車体の凹凸などに伴うセンサ出力のチャタリングを除去する</li>
   <li>タイマーの状態は「計測前」、「計測中」の２状態とする</li>
-  <li>表示の状態はラップタイムの「点滅開始」と「点滅終了」の２状態、点滅周期と期間を制御する</li>
+  <li>ラップタイム更新時に音を鳴らし、点滅表示させる</li>
+  <li>更新時の状態を「点滅開始」と「点滅終了」の２状態とし、点滅の周期と期間を制御する</li>
 </ul>
 
 <h4 id="実装">実装</h4>

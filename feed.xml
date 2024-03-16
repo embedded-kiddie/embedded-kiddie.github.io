@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-17T07:45:58+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduinoでライントレース用ラップタイマーを作る</title><link href="http://localhost:4000/2024/03/16/arduino-lap-timer.html" rel="alternate" type="text/html" title="Arduinoでライントレース用ラップタイマーを作る" /><published>2024-03-16T20:31:10+09:00</published><updated>2024-03-16T20:31:10+09:00</updated><id>http://localhost:4000/2024/03/16/arduino-lap-timer</id><content type="html" xml:base="http://localhost:4000/2024/03/16/arduino-lap-timer.html"><![CDATA[<p><img src="/images/2024/03-16/arduino-and-mac.jpg" alt="Aruduino" title="Arduino UNO R4 Minima" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-17T08:35:07+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduinoでライントレース用ラップタイマーを作る</title><link href="http://localhost:4000/2024/03/16/arduino-lap-timer.html" rel="alternate" type="text/html" title="Arduinoでライントレース用ラップタイマーを作る" /><published>2024-03-16T20:31:10+09:00</published><updated>2024-03-16T20:31:10+09:00</updated><id>http://localhost:4000/2024/03/16/arduino-lap-timer</id><content type="html" xml:base="http://localhost:4000/2024/03/16/arduino-lap-timer.html"><![CDATA[<p><img src="/images/2024/03-16/arduino-and-mac.jpg" alt="Aruduino" title="Arduino UNO R4 Minima" /></p>
 
 <h3 id="ラップタイマーが欲しい">ラップタイマーが欲しい！</h3>
 
@@ -67,7 +67,8 @@
   <li>ロボット車の通過に伴うセンサの状態変化を割り込みで処理する</li>
   <li>車体の凹凸などに伴うセンサ出力のチャタリングを除去する</li>
   <li>タイマーの状態は「計測前」、「計測中」の２状態とする</li>
-  <li>表示の状態はラップタイムの「点滅開始」と「点滅終了」の２状態、点滅周期と期間を制御する</li>
+  <li>ラップタイム更新時に音を鳴らし、点滅表示させる</li>
+  <li>更新時の状態を「点滅開始」と「点滅終了」の２状態とし、点滅の周期と期間を制御する</li>
 </ul>
 
 <h4 id="実装">実装</h4>
