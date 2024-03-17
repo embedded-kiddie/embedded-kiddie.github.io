@@ -243,6 +243,10 @@ img {
   margin-bottom: 15px;
 }
 
+blockquote.twitter-tweet {
+  margin-bottom: 15px;
+}
+
 /**
  * Site header
  */
