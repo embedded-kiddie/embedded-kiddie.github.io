@@ -135,7 +135,7 @@
   <li>制約条件
     <ul>
       <li>コースを１周するのに４秒以上であること</li>
-      <li>黒色の車体は対象外</li>
+      <li>黒色の車体は計測の対象外とする</li>
       <li>…</li>
     </ul>
   </li>
@@ -148,7 +148,7 @@
   <li>車体の凹凸などに伴うセンサ出力のチャタリングを除去する</li>
   <li>タイマーの状態は「計測前」、「計測中」の２状態とする</li>
   <li>ラップタイム更新時には音を鳴らし、表示を点滅させる</li>
-  <li>ラップタイムの点滅は、周期と期間を制御する</li>
+  <li>ラップタイムの点滅は、点滅周期と点滅時間で制御する</li>
 </ul>
 
 <h3 id="実装">実装</h3>
@@ -266,7 +266,7 @@
 <p>続いて、ミリ秒を 1/100 秒単位の文字列に変換をするためのサブルーチンです。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
- * Convert time to string (00:00:00 - 59:59:99)
+ * ミリ秒文字列に変換する (00:00:00 - 59:59:99)
  *--------------------------------------------------*/</span>
 <span class="kt">char</span><span class="o">*</span> <span class="nf">time2str</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">msec</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
   <span class="kt">uint32_t</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">;</span>

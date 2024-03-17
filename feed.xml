@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-18T00:17:42+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ライントレースのプログラム開発を楽しむためのアイテム</title><link href="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html" rel="alternate" type="text/html" title="ライントレースのプログラム開発を楽しむためのアイテム" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/17/items-for-line-trace-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html"><![CDATA[<p><img src="/images/2024/03-17/beauto-rover-and-mac.jpg" alt="ビュートローバーとMac" title="ビュートローバーとMac" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-18T00:27:38+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ライントレースのプログラム開発を楽しむためのアイテム</title><link href="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html" rel="alternate" type="text/html" title="ライントレースのプログラム開発を楽しむためのアイテム" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/17/items-for-line-trace-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html"><![CDATA[<p><img src="/images/2024/03-17/beauto-rover-and-mac.jpg" alt="ビュートローバーとMac" title="ビュートローバーとMac" /></p>
 
 <h2 id="プログラムは思った通りに動かず書いた通りに動く">プログラムは思った通りに動かず、書いた通りに動く！</h2>
 
@@ -161,7 +161,7 @@
   <li>制約条件
     <ul>
       <li>コースを１周するのに４秒以上であること</li>
-      <li>黒色の車体は対象外</li>
+      <li>黒色の車体は計測の対象外とする</li>
       <li>…</li>
     </ul>
   </li>
@@ -174,7 +174,7 @@
   <li>車体の凹凸などに伴うセンサ出力のチャタリングを除去する</li>
   <li>タイマーの状態は「計測前」、「計測中」の２状態とする</li>
   <li>ラップタイム更新時には音を鳴らし、表示を点滅させる</li>
-  <li>ラップタイムの点滅は、周期と期間を制御する</li>
+  <li>ラップタイムの点滅は、点滅周期と点滅時間で制御する</li>
 </ul>
 
 <h3 id="実装">実装</h3>
@@ -292,7 +292,7 @@
 <p>続いて、ミリ秒を 1/100 秒単位の文字列に変換をするためのサブルーチンです。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
- * Convert time to string (00:00:00 - 59:59:99)
+ * ミリ秒文字列に変換する (00:00:00 - 59:59:99)
  *--------------------------------------------------*/</span>
 <span class="kt">char</span><span class="o">*</span> <span class="nf">time2str</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">msec</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
   <span class="kt">uint32_t</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">;</span>
