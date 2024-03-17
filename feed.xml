@@ -1,4 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-17T13:51:53+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduinoでライントレース用ラップタイマーを作る</title><link href="http://localhost:4000/2024/03/16/arduino-lap-timer.html" rel="alternate" type="text/html" title="Arduinoでライントレース用ラップタイマーを作る" /><published>2024-03-16T20:31:10+09:00</published><updated>2024-03-16T20:31:10+09:00</updated><id>http://localhost:4000/2024/03/16/arduino-lap-timer</id><content type="html" xml:base="http://localhost:4000/2024/03/16/arduino-lap-timer.html"><![CDATA[<p><img src="/images/2024/03-16/arduino-and-mac.jpg" alt="Aruduino" title="Arduino UNO R4 Minima" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-17T21:44:47+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々を過ごしてます。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ライントレースのプログラム開発を楽しむためのアイテム</title><link href="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html" rel="alternate" type="text/html" title="ライントレースのプログラム開発を楽しむためのアイテム" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/17/items-for-line-trace-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html"><![CDATA[<p><img src="/images/2024/03-17/beauto-rover-and-mac.jpg" alt="ビュートローバーとMac" title="ビュートローバーとMac" /></p>
+
+<h2 id="プログラムは思った通りに動かず書いた通りに動く">プログラムは思った通りに動かず、書いた通りに動く！</h2>
+
+<p>たとえ半完成品であっても、自分がプログラムしたロボットカーが健気にコース上を動く様を見ると、可愛くなってきます。どうやったら早く滑らかにそして正確にトレースできるか工夫を凝らすのも、また楽しです。</p>
+
+<h3 id="ライントレースのコース">ライントレースのコース</h3>
+<p>「<a href="https://www.google.com/search?q=%E3%83%A9%E3%82%A4%E3%83%B3%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B9+%E3%82%B3%E3%83%BC%E3%82%B9+%E4%BD%9C%E6%88%90&amp;tbm=isch" title="ライントレースのコース作成 - Google 画像検索">ライントレース+コース+作成</a>」でググると、小Rや鋭角なカーブ、スラロームにジグザグコース、マーカー認識や車線変更など、巷では様々なお題がチャレンジされている様子がうかがえます。</p>
+
+<p><img src="/images/2024/03-17/line-trace-course.jpg" alt="ライントレースのコース" title="ライントレースのコース作成 Google 検索" /></p>
+
+<p>僕もホームセンターで大きめの白のプラ板を購入し、黒テープでコースを作成しています。テープは普通のビニールテープより、ちょっとお高いですが厚みが 0.1mm 程度の <a href="https://amzn.asia/d/aKtVJKp" title="Amazon - デンカ #246W 難燃ハーネステープ 黒 0.11mm×19mm×25m - 絶縁テープ - 産業・研究開発用品 通販">ハーネステープ</a> が柔らかくカーブが作り易くお勧めです。</p>
+
+<p><img src="/images/2024/03-17/my-course.jpg" alt="自作のコース" title="自作のライントレースコース" /></p>
+
+<p>またマルツオンラインで購入できる <a href="https://www.marutsu.co.jp/pc/i/226912/" title="マイコンレーサーコースセット MMCR-CC03 マルツエレック製 - 電子部品・半導体通販のマルツ">マイコンレーサーコースセット</a> も価格が税込￥664 とお手頃です。</p>
+
+<figure class="float-left">
+  <a href="/images/2024/03-17/MMCR-CC03.png" data-lightbox="image" title="マイコンレーサーコースセット MMCR-CC03 マルツエレック製 - 電子部品・半導体通販のマルツ">
+    <img src="/images/2024/03-17/MMCR-CC03.png" alt="マイコンレーサーコースセット MMCR-CC03 マルツエレック製 - 電子部品・半導体通販のマルツ" />
+  </a>
+</figure>
+
+<p>ただ細長い段ボールに卒業証書みたいに綺麗に丸められて届くので、平たく伸ばすのにちょっと苦労します。僕は「<a href="https://www.google.com/search?q=%E4%B8%B8%E3%81%BE%E3%81%A3%E3%81%9F%E7%B4%99%E3%82%92%E4%BC%B8%E3%81%B0%E3%81%99%E6%96%B9%E6%B3%95" title="丸まった紙を伸ばす方法 - Google 検索">丸まった紙を伸ばす方法</a>」の検索結果を参考にしました。</p>
+
+<p>硬く絞った雑巾（湿らせすぎると皺になるので注意！）で紙の裏を軽くなぞり、上から段ボールで抑えて伸ばすのが効果的です。</p>
+
+<h3 id="ラップタイマー">ラップタイマー</h3>
+
+<p><a href="/2024/03/16/arduino-lap-timer.html" title="Arduinoでライントレース用ラップタイマーを作る">前の記事</a> で紹介しましたが、Must アイテムでしょう！僕はほぼ既製品で作りましたが、LED や フォトトランジスタで回路を組んだり、カメラと画像処理を駆使したりと、楽しみ方も色々あると思います。</p>
+
+<figure>
+  <video src="" controls=""></video>
+</figure>
+
+<h3 id="プログラム開発のお供">プログラム開発のお供</h3>
+
+<p>あると便利なグッズを紹介します。</p>
+
+<h4 id="ミニコース">ミニコース</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/03-17/mini-course.jpg" data-lightbox="image" title="机上のミニコース">
+    <img src="/images/2024/03-17/mini-course.jpg" alt="机上のミニコース" />
+  </a>
+</figure>
+
+<p>ちゃんとラインを検出できるかを机上でテストするため、プラスチック段ボールの端材で作りました。特に開発の初期段階で活躍しました。</p>
+
+<p>黒字に白ラインの方ですが、黒画用紙だと意外に反射率が高く、いくつか試した中で最終的に厚さ 1mm のゴムシートに落ち着きました。</p>
+
+<p>写真にしてお披露目すると、雑な作りがよく分かっちゃいますネ。</p>
+
+<h4 id="スイッチ付き-usb-ケーブル">スイッチ付き USB ケーブル</h4>
+
+<p>プログラムを書き込む仕掛けに ISP（<a href="https://ja.wikipedia.org/wiki/In-System_Programming" title="In-System Programming - Wikipedia">In-System Programming</a>、Arduino の <a href="https://docs.arduino.cc/built-in-examples/arduino-isp/ArduinoISP/" title="Arduino as ISP and Arduino Bootloaders">ブートローダー書き込みにも使わている</a> ）というのがあり、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> の場合、リセットスイッチを押しながら USB ケーブルを接続すると <a href="https://ja.wikipedia.org/wiki/File_Allocation_Table" title="File Allocation Table - Wikipedia">FAT12</a> のファイルシステムとして認識されます。</p>
+
+<figure class="float-left">
+  <a href="/images/2024/03-17/usb-switch.jpg" data-lightbox="image" title="スイッチ付き USB ケーブル">
+    <img src="/images/2024/03-17/usb-switch.jpg" alt="スイッチ付き USB ケーブル" />
+  </a>
+</figure>
+
+<p>で、開発中には何度も USB ケーブルを抜き差しすることになるわけですが、この <a href="https://amzn.asia/d/dhRLasU" title="Amazon.co.jp: KAUMO スイッチ付き USBケーブル データOK 28cm データ結線済み (USBオス/USBメス) シーソースイッチ ロッカースイッチ (ブラック) : パソコン・周辺機器">スイッチ付き USB ケーブル</a> があれば抜き差しが不要になるという、とっても便利なシロモノです。</p>
+
+<p>中には充電用に電源系しか結線されていない商品もあるので、必ずデータ線が結線されているものを選んでください。</p>
+
+<h4 id="デバッガ">デバッガ</h4>
+
+<figure class="float-left">
+  <img src="/images/2024/03-17/unknown.png" alt="？" />
+</figure>
+
+<p><a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る"><code class="language-plaintext highlighter-rouge">printf()</code> でデバッグする仕組み</a> は出来たのですが、やっぱりソースコードデバッグがしたい！ということで現在調査中です。</p>
+
+<p><a href="https://os.mbed.com/users/ytsuboi/notebook/ja-cmsis-dap/" title="[lang:ja] CMSIS-DAP - Mbed">CMSIS-DAP(Cortex Microcontroller Software Interface Standard - Debug Access Port)</a> をサポートしているデバッガなら OK だと思うのですが…。分かったら報告するので楽しみにていて下さい！</p>
+
+<h4 id="その他">その他</h4>
+
+<p>車輪にエンコーダーを付けたり、Bluetooth 通信を載せてみたり、やってみたいことはまだまだあるので、これからが楽しみです！</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="グッズ" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Arduinoでライントレース用ラップタイマーを作る</title><link href="http://localhost:4000/2024/03/16/arduino-lap-timer.html" rel="alternate" type="text/html" title="Arduinoでライントレース用ラップタイマーを作る" /><published>2024-03-16T20:31:10+09:00</published><updated>2024-03-16T20:31:10+09:00</updated><id>http://localhost:4000/2024/03/16/arduino-lap-timer</id><content type="html" xml:base="http://localhost:4000/2024/03/16/arduino-lap-timer.html"><![CDATA[<p><img src="/images/2024/03-16/arduino-and-mac.jpg" alt="Aruduino" title="Arduino UNO R4 Minima" /></p>
 
 <h2 id="ラップタイマーが欲しい">ラップタイマーが欲しい！</h2>
 
