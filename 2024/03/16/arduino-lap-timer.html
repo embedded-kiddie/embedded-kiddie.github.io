@@ -284,7 +284,7 @@
 
 <p>Arduino R4 コアのソースコード には <code class="language-plaintext highlighter-rouge">HIGH</code> の場合に <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Interrupts.cpp#L136" title="ArduinoCore-renesas/cores/arduino/Interrupts.cpp at main · arduino/ArduinoCore-renesas">問題がありげ</a> なコメントが書かれているので、何かあるのかもしれません。</p>
 
-<p>またアクションとして状態変化に伴う音を <code class="language-plaintext highlighter-rouge">tone()</code> で鳴らしています。音の長さを <code class="language-plaintext highlighter-rouge">BUZZER_DURATION</code> （16[msec]）で指定していますが、鳴り終わるまでここで待っているわけではなく、タイマーにサクッと指示するだけです。</p>
+<p>またアクションとして状態変化に伴う音を <code class="language-plaintext highlighter-rouge">tone()</code> で鳴らしています。音の長さを <code class="language-plaintext highlighter-rouge">BUZZER_DURATION</code> （16[msec]）で指定していますが、鳴り終わるまでここで待っているわけではなく、タイマーに「指定した周波数で指定時間分だけアナログ出力せよ」と指示してすぐに戻ってきます。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
  * 計測と表示の状態変化を判定し、アクションを実行する
