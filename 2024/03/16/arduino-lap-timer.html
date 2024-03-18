@@ -338,7 +338,7 @@
 <span class="cp">#endif
 </span><span class="p">}</span></code></pre></figure>
 
-<p>最後はお決まりのメインループです。上段の経過時間と下段のラップタイムの表示を担当しています。</p>
+<p>最後はお決まりのメインループです。<code class="language-plaintext highlighter-rouge">millis()</code> で最新の経過時間を読み込み、その表示とラップタイムの表示を担当しています。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
  * メインループ
