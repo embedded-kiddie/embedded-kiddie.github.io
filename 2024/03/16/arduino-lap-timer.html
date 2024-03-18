@@ -320,7 +320,7 @@
   <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Arduino お決まりの <code class="language-plaintext highlighter-rouge">setup()</code> で先に定義した関数を呼び出します。</p>
+<p>続いて Arduino お約束の <code class="language-plaintext highlighter-rouge">setup()</code> で先に定義した初期化の関数群を呼び出します。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
  * OLED, 障害物センサ、タイマーと表示の初期化
@@ -340,7 +340,7 @@
 <span class="cp">#endif
 </span><span class="p">}</span></code></pre></figure>
 
-<p>最後はお決まりのメインループです。<code class="language-plaintext highlighter-rouge">millis()</code> で最新の経過時間を読み込み、その表示とラップタイムの表示を担当しています。</p>
+<p>最後はメインループです。<code class="language-plaintext highlighter-rouge">millis()</code> で最新の経過時間を読み込み、その表示とラップタイムの表示を担当しています。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
  * メインループ
