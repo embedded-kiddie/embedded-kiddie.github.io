@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-18T09:28:37+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ライントレースのプログラム開発を楽しむためのアイテム</title><link href="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html" rel="alternate" type="text/html" title="ライントレースのプログラム開発を楽しむためのアイテム" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/17/items-for-line-trace-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html"><![CDATA[<p><img src="/images/2024/03-17/beauto-rover-and-mac.jpg" alt="ビュートローバーとMac" title="ビュートローバーとMac" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-18T10:12:09+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ライントレースのプログラム開発を楽しむためのアイテム</title><link href="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html" rel="alternate" type="text/html" title="ライントレースのプログラム開発を楽しむためのアイテム" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/17/items-for-line-trace-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html"><![CDATA[<p><img src="/images/2024/03-17/beauto-rover-and-mac.jpg" alt="ビュートローバーとMac" title="ビュートローバーとMac" /></p>
 
 <h2 id="プログラムは思った通りに動かず書いた通りに動く">プログラムは思った通りに動かず、書いた通りに動く！</h2>
 
@@ -31,7 +31,6 @@
 
 <blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="ja" dir="ltr">ライントレースのプログラム開発を楽しむためのアイテム<a href="https://t.co/7nq74B7GzK">https://t.co/7nq74B7GzK</a> <a href="https://t.co/Cyq1cVRSXF">pic.twitter.com/Cyq1cVRSXF</a></p>&mdash; Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1769345823538831451?ref_src=twsrc%5Etfw">March 17, 2024</a></blockquote>
 <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<p><br /></p>
 
 <h3 id="プログラム開発のお供">プログラム開発のお供</h3>
 
@@ -439,8 +438,8 @@
 <p>で、デジタル表示のカッコ良い goot の 「<a href="https://amzn.asia/d/cq2BQXh" title="Amazon - goot(グット) デジタル温調はんだごて PX-280 温度調節 【約30秒で350℃まで到達】 【200℃~500℃まで1℃単位の温度設定】 【手に持つだけでスリープ解除】 ハンダゴテ 半田ごて 精密基盤 電気修理 日本製【福山ブランド認定品】 - ハンダゴテパーツ">PX-280</a>」を入手（購入時 5,806円）。数万円するステーション型にも迫る機能を持つ。</p>
 
 <p>・電源投入後、約30秒で350℃に到達<br />
-・標準でC型（丸棒を斜めにカットした形状）のコテ先<br />
-・コテ台に置くとスリープ（コテ先の空焼き防止）、持ち上げれば解除し、すぐに設定温度まで上昇</p>
+・コテ先の空焼き防止（コテ台に置くとスリープ、持ち上げれば即解除）<br />
+・標準でC型（丸棒を斜めにカットした形状）のコテ先</p>
 
 <p>ついでにK型（ナイフのような形状）のコテ先 「<a href="https://amzn.asia/d/jk3cF4T" title="Amazon - goot(グット) 替こて先 K型 PX-280/E用 日本製 PX-28RT-3K - ハンダゴテパーツ">PX-28RT-3K</a>」 も同時購入（購入時 1,032円）。</p>
 
@@ -474,7 +473,7 @@
 
 <p>優れた工具を作っている ENGINEER の「<a href="https://amzn.asia/d/2QSWfMv" title="Amazon - ENGINEER エンジニア ハンダ吸取器 SS-02 - ハンダゴテパーツ">SS-02</a>」（購入時 1,991円）という製品。</p>
 
-<p>アルミ製で、カッコ良いだけじゃなく、よく見かける水色のプラスチック製とは一線を画す吸い取り性能に驚いた。ポイントは吸い取り口の耐熱性シリコンチューブ。対象とコテ先にピッタリと密着可。替えのシリコンチューブ付き。片手でピストンを押し込みづらいのがたまにきず。</p>
+<p>アルミ製で、カッコ良いだけじゃなく、よく見かける水色のプラスチック製とは一線を画す吸い取り性能に驚いた。ポイントは吸い取り口の耐熱性シリコンチューブ。対象とコテ先にピッタリと密着可。替えのシリコンチューブ付き。片手ではピストンを押し込みづらい。</p>
 
 <h3 id="5-マイクロニッパー">5. マイクロニッパー</h3>
 
