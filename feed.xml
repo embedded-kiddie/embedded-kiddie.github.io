@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-18T15:50:37+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ライントレースのプログラム開発を楽しむためのアイテム</title><link href="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html" rel="alternate" type="text/html" title="ライントレースのプログラム開発を楽しむためのアイテム" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/17/items-for-line-trace-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html"><![CDATA[<p><img src="/images/2024/03-17/beauto-rover-and-mac.jpg" alt="ビュートローバーとMac" title="ビュートローバーとMac" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-18T17:46:02+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ライントレースのプログラム開発を楽しむためのアイテム</title><link href="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html" rel="alternate" type="text/html" title="ライントレースのプログラム開発を楽しむためのアイテム" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>http://localhost:4000/2024/03/17/items-for-line-trace-dev</id><content type="html" xml:base="http://localhost:4000/2024/03/17/items-for-line-trace-dev.html"><![CDATA[<p><img src="/images/2024/03-17/beauto-rover-and-mac.jpg" alt="ビュートローバーとMac" title="ビュートローバーとMac" /></p>
 
 <h2 id="プログラムは思った通りに動かず書いた通りに動く">プログラムは思った通りに動かず、書いた通りに動く！</h2>
 
@@ -277,7 +277,7 @@
 <span class="cm">/*--------------------------------------------------
  * タイマーとラップ表示の初期化
  *--------------------------------------------------*/</span>
-<span class="kt">void</span> <span class="nf">initTimer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="nf">resetTimer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// タイマーの初期化</span>
   <span class="n">start</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
   <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -358,7 +358,7 @@
   <span class="n">setupSensor</span><span class="p">();</span>
 
   <span class="c1">// 計測と表示用のグローバル変数の初期化</span>
-  <span class="n">initTimer</span><span class="p">();</span>
+  <span class="n">resetTimer</span><span class="p">();</span>
 
 <span class="cp">#if DEBUG_PRINT
 </span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
