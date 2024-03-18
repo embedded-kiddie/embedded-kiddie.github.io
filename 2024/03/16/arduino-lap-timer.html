@@ -199,7 +199,7 @@
 #define BUZZER_DURATION 16    // 音の長さ（16分音符）
 #define BUZZER_FREQUENCY 2794 // 音階の周波数（ファ）</span></code></pre></figure>
 
-<p>割り込みハンドラには引数も戻り値も無いので、メインループとはグローバル変数でやりとりします。メインループ内の処理にとっては知らない所（＝割り込みハンドラ）で変数の値が変更されるため、<code class="language-plaintext highlighter-rouge">volatile</code> をつけてコンパイラに適切に扱うよう指示（＝最適化を適用しない）しています。</p>
+<p>割り込みハンドラには引数も戻り値も無いので、メインループとはグローバル変数でやりとりします。メインループ内の処理にとっては知らない所（＝割り込みハンドラ）で変数の値が変更されるため、<a href="https://tool-support.renesas.com/autoupdate/support/onlinehelp/ja-JP/csp/V4.01.00/CS+.chm/Compiler-CCRH.chm/Output/ccrh11c0100y.html" title="volatile修飾子 - CS+ V4.01.00"><code class="language-plaintext highlighter-rouge">volatile</code></a> をつけてコンパイラに適切に扱うよう指示（＝最適化を適用しない）しています。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
  * 割り込みハンドラ内で設定される変数
