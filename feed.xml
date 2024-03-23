@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-23T15:38:30+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</title><link href="http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編" /><published>2024-03-23T11:43:21+09:00</published><updated>2024-03-23T11:43:21+09:00</updated><id>http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover</id><content type="html" xml:base="http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover.html"><![CDATA[<p><img src="/images/2024/03-23/desktop.jpg" alt="ビュートローバーARMでソースコードデバッグする" title="ビュートローバーARMでソースコードデバッグする" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-03-23T15:59:55+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</title><link href="http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編" /><published>2024-03-23T11:43:21+09:00</published><updated>2024-03-23T11:43:21+09:00</updated><id>http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover</id><content type="html" xml:base="http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover.html"><![CDATA[<p><img src="/images/2024/03-23/desktop.jpg" alt="ビュートローバーARMでソースコードデバッグする" title="ビュートローバーARMでソースコードデバッグする" /></p>
 
 <p><a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る">以前の記事</a> で <a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> に <code class="language-plaintext highlighter-rouge">printf</code> を導入する方法を紹介しましたが、やはり1行1行ソースコードを追いかけてデバッグしたいことってありますよね？ せっかく LPC-Link へのインターフェースが付いているのに、なんとか利用できないものか… と、ここ数週間の間、せっせと情報集めをしていました。</p>
 
@@ -90,27 +90,27 @@
 
 <p>Amazon で書籍として購入できる他、マルツオンラインでボード＋付属品が購入できます。断片的にでもネットに情報が公開されているので、デバッガとして使うだけなら後者が良いでしょう。回路図も特設ページ <a href="https://toragi.cqpub.co.jp/tabid/735/Default.html" title="mbedの部屋">mbedの部屋</a> 中の <a href="https://toragi.cqpub.co.jp/Portals/0/support/2014/mbed/TG-LPC11U35-501.pdf">TG-LPC11U35-501の回路図</a> から入手できます。</p>
 
-<h4 id="amazon版">Amazon版</h4>
+<h4 id="書籍版">書籍版</h4>
 <figure class="float-left">
   <a href="/images/2024/03-23/toragi-cover.jpg" title="トランジスタ技術・トライアルシリーズ" data-lightbox="image">
     <img src="/images/2024/03-23/toragi-cover-small.jpg" alt="トランジスタ技術・トライアルシリーズ" />
   </a>
 </figure>
 
-<p><a href="https://amzn.asia/d/0Mr7E8Y" title="mbed×デバッガ!一枚二役ARMマイコン基板: WEBブラウザで即席プログラミング!サクッと動かしてバッチリ仕上がる (トライアルシリーズ)">mbed×デバッガ!一枚二役ARMマイコン基板: WEBブラウザで即席プログラミング!サクッと動かしてバッチリ仕上がる (トライアルシリーズ)</a></p>
+<p>Amazonへのリンク：<a href="https://amzn.asia/d/0Mr7E8Y" title="mbed×デバッガ!一枚二役ARMマイコン基板: WEBブラウザで即席プログラミング!サクッと動かしてバッチリ仕上がる (トライアルシリーズ)">mbed×デバッガ!一枚二役ARMマイコン基板: WEBブラウザで即席プログラミング!サクッと動かしてバッチリ仕上がる (トライアルシリーズ)</a></p>
 
 <p>雑誌の中身に一部が <a href="https://shop.cqpub.co.jp/hanbai/books/MTR/MTRZ201503/MTRZ201503.pdf">コチラのPDF</a> に紹介されています。mbed に興味があればどうぞ。</p>
 
 <p>付録にはピンソケットやスイッチ、USB コネクタなどが付いていて、基板へのハンダ付けが必要です。</p>
 
-<h4 id="マルツオンライン版">マルツオンライン版</h4>
+<h4 id="単体版">単体版</h4>
 <figure class="float-left">
   <a href="/images/2024/03-23/toragi-set.jpg" title="トラ技ARMライタ" data-lightbox="image">
     <img src="/images/2024/03-23/toragi-set-small.jpg" alt="トラ技ARMライタ" />
   </a>
 </figure>
 
-<p><a href="https://www.marutsu.co.jp/pc/i/238834/" title="トラ技ARMライタ【TG-LPC11U35-501】">トラ技ARMライタ【TG-LPC11U35-501】</a></p>
+<p>マルツオンラインへのリンク：<a href="https://www.marutsu.co.jp/pc/i/238834/" title="トラ技ARMライタ【TG-LPC11U35-501】">トラ技ARMライタ【TG-LPC11U35-501】</a></p>
 
 <p>こちらは価格も安く必要なモノ一式がセットになっているのでオススメです（私はコチラを購入しました）。</p>
 
