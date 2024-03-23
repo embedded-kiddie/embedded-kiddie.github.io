@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>if(window.location.hostname!='127.0.0.1'){var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2';document.head.appendChild(s);}window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DLMCZ884M2');</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /><script async src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover.html" />
+<meta property="og:url" content="http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-23T11:43:21+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-03-23T11:43:21+09:00","datePublished":"2024-03-23T11:43:21+09:00","description":"自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover.html"},"url":"http://localhost:4000/2024/03/23/debug-probe-for-beauto-rover.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Embedded Kiddie" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-03-23T11:43:21+09:00" itemprop="datePublished">Mar 23, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/images/2024/03-23/desktop.jpg" alt="ビュートローバーARMでソースコードデバッグする" title="ビュートローバーARMでソースコードデバッグする"></p>
+
+<p><a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る">以前の記事</a> で <a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> に <code class="language-plaintext highlighter-rouge">printf</code> を導入する方法を紹介しましたが、やはり1行1行ソースコードを追いかけてデバッグしたいことってありますよね？ せっかく LPC-Link へのインターフェースが付いているのに、なんとか利用できないものか… と、ここ数週間の間、せっせと情報集めをしていました。</p>
+
+<h2 id="arm-マイコンのデバッグの仕組み">ARM マイコンのデバッグの仕組み</h2>
+<p>ARM Cortex-M マイコンには、CoreSight というオンチップのデバッグ・ハードウェアが載っていて、DAP（Debug Access Port）を介してプロセッサの動作をトレースしたりメモリを覗いたりすることができるようになっています（出典：<a href="https://shop.cqpub.co.jp/hanbai/books/36/36491.html" title="ARM Cortex-M3システム開発ガイド">ARM Cortex-M3 システム開発ガイド</a>）。</p>
+
+<p>さらに ARM 社はこの DAP に <a href="https://ja.wikipedia.org/wiki/JTAG" title="JTAG - Wikipedia">JTAG</a> の一部を流用した <a href="https://developer.arm.com/documentation/ihi0031/a/The-Serial-Wire-Debug-Port--SW-DP-" title="Documentation – Arm Developer">SWD（Serial Wire Debug）</a> を介して接続するインターフェース <a href="https://www.arm.com/ja/technologies/cmsis#:~:text=CMSIS%2DDAP%E3%81%AF%E3%80%81Cortex%E3%83%87%E3%83%90%E3%83%83%E3%82%B0,%E3%83%8D%E3%83%83%E3%83%88%E3%83%AF%E3%83%BC%E3%82%AF%E3%82%AB%E3%83%BC%E3%83%8D%E3%83%AB%E3%81%AE%E3%82%B3%E3%83%AC%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%A7%E3%81%99%E3%80%82" title="CMSIS – Arm®">CMSIS-DAP</a> を標準仕様として定めました。</p>
+
+<p>ARM マイコンを製造する NXP 社の古いマイコンボードには、このインターフェースを搭載した LPC-Link というオマケのボードが付いていました。現在は <a href="https://www.nxp.jp/design/design-center/software/development-software/mcuxpresso-software-and-tools-/mcu-link-debug-probe:MCU-LINK" title="MCU Link JTAG/SWD Debug Probe - NXP Semiconductors">MCU-Link</a> にとって変わりましたが、LPC-Link を単体化した <a href="https://www.nxp.jp/design/design-center/software/development-software/mcuxpresso-software-and-tools-/lpc-link2:OM13054" title="LPC-Link2 - NXP Semiconductors">LPC-Link2</a> というデバッガも発売しています。（出典：<a href="https://toragi.cqpub.co.jp/Portals/0/backnumber/2014/03/p134.pdf" title="一人１台！全Cortex ARMマイコン対応デバッガの仕組み">一人１台！全Cortex ARMマイコン対応デバッガの仕組み</a>）。</p>
+
+<p>と言うことで、JTAG/SWD で CMSIS-DAP をサポートしたお手頃価格のデバッガとして以下の２つを購入し動作確認しました。</p>
+
+<ul>
+  <li>古い LPC 評価ボードの在庫処分品</li>
+  <li>これまた古い <a href="https://toragi.cqpub.co.jp/tabid/707/Default.html" title="2014年2月号3月号連続企画 - トランジスタ技術">トラ技ARMライタ</a>
+</li>
+</ul>
+
+<p>結論から言えば、前者はデバッガとしての起動に失敗、後者は成功し使えています。一応記録として前者の経緯を残しますが、興味がなければ読み飛ばしてください。</p>
+
+<h2 id="準備するもの">準備するもの</h2>
+<h3 id="ビュートローバーarmとの接続用ピンソケットとケーブル">ビュートローバーARMとの接続用ピンソケットとケーブル</h3>
+<p>どちらも秋月電子で購入しました。</p>
+
+<figure class="float-left">
+  <a href="/images/2024/03-23/pin-and-cable.jpg" title="準備するもの" data-lightbox="image">
+    <img src="/images/2024/03-23/pin-and-cable-small.jpg" alt="準備するもの">
+  </a>
+</figure>
+
+<ul>
+  <li>
+<a href="https://akizukidenshi.com/catalog/g/g103785/">ピンソケット(メス) 1×8(8P)</a> … ビュートローバーARMの基板にハンダ付けします</li>
+  <li>
+<a href="https://akizukidenshi.com/catalog/g/g115869/">コネクタ付ケーブル 20cm 40P オスオス</a> … 8ピン分を分離して使います</li>
+</ul>
+
+<p>LPC 評価ボードの場合は、LPC-Link 側に取り付ける 1×8 のピンソケットがもう１つ必要です。</p>
+
+<h2 id="デバッグプローブの入手と設定">デバッグ・プローブの入手と設定</h2>
+
+<h3 id="lpcxpresso-board-の場合">LPCXpresso Board の場合</h3>
+<p>僕が購入したのは <a href="https://akizukidenshi.com/catalog/g/g106588/">LPC1104評価ボード</a> で価格は税込 ¥1,000 でした。ちなみに最後の１枚だったので販売終了となっていますが、他にも多数が在庫処分品となっています（在庫数と価格は記事執筆時点のものです）。</p>
+
+<h4 id="秋月電子">秋月電子</h4>
+<ul>
+  <li><a href="https://akizukidenshi.com/catalog/g/g105089/">LPC1227評価ボードLPCXpressoBoard OM13008（在庫数 4、税込 ￥1,000）</a></li>
+  <li><a href="https://akizukidenshi.com/catalog/g/g106453/">LPC812評価ボードLPCXpressoBoard OM13053（在庫数 39、税込 ￥2,000）</a></li>
+</ul>
+
+<h4 id="マルツオンライン">マルツオンライン</h4>
+<ul>
+  <li><a href="https://www.marutsu.co.jp/pc/i/224678/">XpressoLPC1104搭載ボード【OM13047-598】（在庫数 62、税込 ￥2,198）</a></li>
+  <li><a href="https://www.marutsu.co.jp/pc/i/224677/">XpressoLPC812搭載ボード【OM13053-598】（在庫数 21、税込 ￥2,178）</a></li>
+</ul>
+
+<figure class="float-left">
+  <a href="/images/2024/03-23/LPC1104-schematic.jpg" title="LPC1104回路図" data-lightbox="image">
+    <img src="/images/2024/03-23/LPC1104-schematic-small.jpg" alt="LPC1104回路図">
+  </a>
+  <a href="/images/2024/03-23/LPC1104-LPC-Link.jpg" title="カットしたLPC-Link" data-lightbox="image">
+    <img src="/images/2024/03-23/LPC1104-LPC-Link-small.jpg" alt="カットしたLPC-Link">
+  </a>
+</figure>
+
+<p>使うのはオマケの LPC-Link の方で、回路図にも「パターンカットしてコネクタつけられるヨ」と書いてあるので、切り離します。</p>
+
+<p>ガラスエポキシ基板は「超音波カッター」で切るのが良いのですが、普通のカッターの歯を何度も交換し、部品保護用の発泡ポリエチレンシートをうまく使いながら根気よく、指で押せば「パキッ」と割れるぐらいまで十分に基板の表裏に切り込みを入れていきます。</p>
+
+<p>最後に 1×8 のピンソケットをハンダ付けします。改めて両者をケーブルで接続し、PC と USB で繋げた時に LPC1104 側の赤い LED が点滅すれば切り離し成功です。</p>
+
+<h4 id="デバイスドライバのインストール">デバイスドライバのインストール</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-23/device-driver-LPC-Link.jpg" title="LPC-Link デバイスドライバ" data-lightbox="image">
+    <img src="/images/2024/03-23/device-driver-LPC-Link-small.jpg" alt="LPC-Link デバイスドライバ">
+  </a>
+  <a href="/images/2024/03-23/LPC-Link-HID.jpg" title="LPCXpressoとの接続で失敗" data-lightbox="image">
+    <img src="/images/2024/03-23/LPC-Link-HID-small.jpg" alt="LPCXpressoとの接続で失敗">
+  </a>
+</figure>
+
+<p>初めて PC と接続した時にデバイスドライバがインストールされます。Windows の「デバイスマネージャー」で「USB デバイス」クラスに「USB Device with DFU Capabilites」が見つかれば一応は成功のようですが、LPCXpresso との接続で失敗します。<a href="https://community.nxp.com/t5/LPCXpresso-IDE/LPC-LINK-USB-Driver-Install-Problem/m-p/576642" title="LPC-LINK USB Driver Install Problem - NXP Community">フォーラムで同様の問題が議論</a> されているのを見つけましたが、僕は解決に至っていません。</p>
+
+<p>僕の環境は Mac から VM（Parallels Desktop）を通して Windows を起動しているのですが、時々 Mac 側から「”LPC-Link Probe v1.3” を “Windows 7” に接続できません」と警告されるので、これが原因かもです。</p>
+
+<p>もしかしたらネイティブの Windows なら成功するのかもしれませんが、一旦この問題は棚上げにしたいと思います（オィ）。</p>
+
+<h3 id="トラ技armライタの場合">トラ技ARMライタの場合</h3>
+<p>さて、気を取り直して成功例の方を紹介します。</p>
+
+<p>トラ技ARMライタは、<a href="https://www.google.com/search?q=mbed%E3%81%AF+%22%E3%82%AA%E3%83%AF%E3%82%B3%E3%83%B3%22" title="mbedはオワコン - Google 検索">WEBブラウザでプログラミングができると話題</a> だった <a href="https://os.mbed.com/" title="Free open source IoT OS and development tools from Arm - Mbed">mbed</a> 対応のマイコンボードで、トラ技の付録だったボードで、全 Cortex-M シリーズがデバッグできる CMSIS-DAP 対応のデバッガにもなると言うシロモノです。</p>
+
+<p>Amazon で書籍として購入できる他、マルツオンラインでボード＋付属品が購入できます。断片的にでもネットに情報が公開されているので、デバッガとして使うだけなら後者が良いでしょう。回路図も特設ページ <a href="https://toragi.cqpub.co.jp/tabid/735/Default.html" title="mbedの部屋">mbedの部屋</a> 中の <a href="https://toragi.cqpub.co.jp/Portals/0/support/2014/mbed/TG-LPC11U35-501.pdf">TG-LPC11U35-501の回路図</a> から入手できます。</p>
+
+<h4 id="amazon版">Amazon版</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-23/toragi-cover.jpg" title="トランジスタ技術・トライアルシリーズ" data-lightbox="image">
+    <img src="/images/2024/03-23/toragi-cover-small.jpg" alt="トランジスタ技術・トライアルシリーズ">
+  </a>
+</figure>
+
+<p><a href="https://amzn.asia/d/0Mr7E8Y" title="mbed×デバッガ!一枚二役ARMマイコン基板: WEBブラウザで即席プログラミング!サクッと動かしてバッチリ仕上がる (トライアルシリーズ)">mbed×デバッガ!一枚二役ARMマイコン基板: WEBブラウザで即席プログラミング!サクッと動かしてバッチリ仕上がる (トライアルシリーズ)</a></p>
+
+<p>雑誌の中身に一部が <a href="https://shop.cqpub.co.jp/hanbai/books/MTR/MTRZ201503/MTRZ201503.pdf">コチラのPDF</a> に紹介されています。mbed に興味があればどうぞ。</p>
+
+<p>付録にはピンソケットやスイッチ、USB コネクタなどが付いていて、基板へのハンダ付けが必要です。</p>
+
+<h4 id="マルツオンライン版">マルツオンライン版</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-23/toragi-set.jpg" title="トラ技ARMライタ" data-lightbox="image">
+    <img src="/images/2024/03-23/toragi-set-small.jpg" alt="トラ技ARMライタ">
+  </a>
+</figure>
+
+<p><a href="https://www.marutsu.co.jp/pc/i/238834/" title="トラ技ARMライタ【TG-LPC11U35-501】">トラ技ARMライタ【TG-LPC11U35-501】</a></p>
+
+<p>こちらは価格も安く必要なモノ一式がセットになっているのでオススメです（私はコチラを購入しました）。</p>
+
+<h4 id="ファームウェアの書き換え">ファームウェアの書き換え</h4>
+<p><a href="https://toragi.cqpub.co.jp/tabid/707/Default.html" title="2014年2月号3月号連続企画 - トランジスタ技術">トラ技の特設ページ</a> から <a href="https://toragi.cqpub.co.jp/Portals/0/download/2014/TR1403N.zip">トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア</a> をダウンロードし、中の <code class="language-plaintext highlighter-rouge">README.TXT</code> に従い <code class="language-plaintext highlighter-rouge">firmware.bin</code> を書き込みます。ビュートローバーARM の「リセットボタンを押しながら USB ケーブルをつなぐ」とウィンドーが開くアレと同じ仕掛けです。</p>
+
+<p>ただしリセットボタンではなく <a href="https://ja.wikipedia.org/wiki/In-System_Programming" title="In-System Programming - Wikipedia">ISP（In-System Programming）</a> ボタンを押しながら USB ケーブルを接続するか、接続済みであればリセットと ISP の同時押しからリセットボタンを離し、次いで ISP ボタンを離すという手順になります。</p>
+
+<h4 id="デバイスドライバのインストール-1">デバイスドライバのインストール</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-23/toragi-rover-connect.jpg" title="ビュートローバーとトラ技ARMライタの接続" data-lightbox="image">
+    <img src="/images/2024/03-23/toragi-rover-connect-small.jpg" alt="ビュートローバーとトラ技ARMライタの接続">
+  </a>
+  <a href="/images/2024/03-23/HID-toragi.jpg" title="HID準拠デバイス" data-lightbox="image">
+    <img src="/images/2024/03-23/HID-toragi-small.jpg" alt="HID準拠デバイス">
+  </a>
+</figure>
+
+<p>デバッガ単体で PC と接続しても Windows は認識してくれず、デバイスドライバがインストールできませんでした。</p>
+
+<p>そこでまずはビュートローバーARMとトラ技ARMライタをケーブルで接続します。ビュートローバー側に挿していた USB ケーブルをトラ技ARMライタ側に挿し替え PC と接続します。</p>
+
+<p>デバイスドライバのインストールが成功すると デバイスマネージャーの「ヒューマンインターフェースデバイス」に「HID準拠」のデバイスが見つかります。もしうまくいかない場合はトラ技ARMライタのリセットスイッチを押してみてください。また僕の環境ではドライバのインストール時に「ドライバーソフトウェアの最新版を自動検索します」を選択しないとダメでした。</p>
+
+<h2 id="いよいよデバッガを起動">いよいよデバッガを起動！</h2>
+
+<h3 id="デバッグ対象の設定">デバッグ対象の設定</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-23/debug-config-start.jpg" title="実行ファイルの選択" data-lightbox="image">
+    <img src="/images/2024/03-23/debug-config-start-small.jpg" alt="実行ファイルの選択">
+  </a>
+  <a href="/images/2024/03-23/debug-config-afx.jpg" title="実行ファイルの選択" data-lightbox="image">
+    <img src="/images/2024/03-23/debug-config-afx-small.jpg" alt="実行ファイルの選択">
+  </a>
+</figure>
+
+<p>LPCXpresso IDE の「Quickstart Panel」から「Debug」を選択するか、メニューから「Run → Debug Configurations…」を選択します。</p>
+
+<p>特に後者の場合は「実行ファイルの選択画面」が出るので、ターゲットとなる axf（<a href="https://developer.arm.com/documentation/dui0101/latest/" title="Documentation – Arm Developer">ARM ELF File Format</a>）ファイルを指定します。</p>
+
+<p>続いて「Apply」し「Debug」ボタンを押してしばらくするとデバッグ・プローブとの接続画面に遷移します。</p>
+
+<h3 id="デバッグプローブとの接続">デバッグ・プローブとの接続</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-23/connect-probe.jpg" title="デバッグ・プローブとの接続" data-lightbox="image">
+    <img src="/images/2024/03-23/connect-probe-small.jpg" alt="デバッグ・プローブとの接続">
+  </a>
+</figure>
+
+<p>ここまで順調にくれば、リストに「Toragi-LPC Writer CMSIS-DAP」が選択可能になっていると思います。万が一リストが空の場合には、改めてトラ技ARMライタのリセットボタンを押し「Search」ボタンを押してみます。<a href="https://www.nxp.jp/design/design-center/software/development-software/mcuxpresso-software-and-tools-/linkserver-for-microcontrollers:LINKERSERVER" title="マイクロコントローラ用Linkserver - NXP Semiconductors">LinkServer</a> が良きに計らってくれるハズです。</p>
+
+<h2 id="デバッガの詳しい使い方はlpcxpresso編で">デバッガの詳しい使い方は「LPCXpresso編」で！</h2>
+<p>Windows XP 時代のものを引っ張り出して遊ぶのにはそれなりの苦労がありますネ。でもあらためてトラ技ARMライタに感謝です <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20"></p>
+
+
+  </div>
+<a class="u-url" href="/2024/03/23/debug-probe-for-beauto-rover.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="mailto:embeddedkiddie@gmail.com">embeddedkiddie@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+<ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
