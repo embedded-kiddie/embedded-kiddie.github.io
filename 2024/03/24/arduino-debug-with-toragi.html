@@ -86,6 +86,7 @@
 
 <p>で、<a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_validate_file_pg.html" title="CMSIS-SVD: SVD File Validation and Usage">SVDファイルとは何ぞや？</a> を調べてみると “System View Description”、つまり MCU のレジスタや周辺装置の仕様を XML で記述したものとのこと。そこで <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を覗いて <code class="language-plaintext highlighter-rouge">P100PFS</code> を探してみましたが見つかりません。にもかかわらず別なところから <code class="language-plaintext highlighter-rouge">derivedFrom</code> で継承されてるじゃないですか！ しかもコレだけじゃなく <code class="language-plaintext highlighter-rouge">P100PFS_HA</code> とか <code class="language-plaintext highlighter-rouge">P100PFS_BY</code> も未定義なことが分かりました。</p>
 
+<h3 id="p100pfs-って何">P100PFS って何？</h3>
 <figure class="float-left">
   <a href="/images/2024/03-24/P100PFS.jpg" title="P100PFS" data-lightbox="image">
     <img src="/images/2024/03-24/P100PFS-small.jpg" alt="P100PFS">
@@ -109,9 +110,10 @@
   <li><a href="https://gist.github.com/embedded-kiddie/48b388515ce280cc496fe6ef5ddb625f" title="R7FA4M1AB.svd改">Gist: R7FA4M1AB.svd</a></li>
 </ul>
 
-<p>一応、ユーザーズマニュアルに照らして正しそうなことは確認しましたが、もちろん無保証なので扱いは自己責任でお願いします。</p>
-
 <p><img src="/images/2024/03-24/arduino-debugger.jpg" alt="トラ技ARMライタで動作する Arduino debugger" title="トラ技ARMライタで動作する Arduino debugger"></p>
+
+<h3 id="注意事項">注意事項！</h3>
+<p>一応、SVD ファイルはユーザーズマニュアルに照らして正しそうなことは確認しましたが、もちろん無保証なので扱いは自己責任でお願いします。</p>
 
 <p>また先にブレークポイントを設定しておかないとどこにも止まらないですし、デバッグを終了するとブートローダーが壊れるようで、MINIMA のリセットボタンをダブルクリックしてから「→」ボタンで書き込まないと復活しません。</p>
 
