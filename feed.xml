@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-26T22:16:41+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-27T00:19:13+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
 
 <p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
 
@@ -315,7 +315,7 @@
 <p>トラ技ARMライタの <code class="language-plaintext highlighter-rouge">SJ7</code> は基板の裏側で繋がってない、ってことは Arduino 側から +5V が供給されないので、とりあえず後で繋げるとして、トラ技側も USB から供給。</p>
 
 <h2 id="デバッグ開始">デバッグ開始！</h2>
-<p>Arduino IDE で Blinky をロード → コンパイル → デバッグ！ っと… あれれっ？</p>
+<p>Arduino IDE で Blinky をロード → コンパイル → デバッグ！ っと… あれれっ？ <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> ファイルの読み込みで失敗しているみたいです。</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unable to parse SVD file /Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/svd/R7FA4M1AB.svd: Error: SVD error: Invalid 'derivedFrom' "P100PFS" for register "P30%sPFS"
 </code></pre></div></div>
@@ -324,7 +324,16 @@
 
 <p><code class="language-plaintext highlighter-rouge">R7FA4M1AB</code> といえば、UNO R4 に載っている Renesus 製 ARM MCU の型番です。そこでこのエラーを Google 検索してみると、Arduino 公式の Github にも <a href="https://github.com/arduino/ArduinoCore-renesas/issues/276" title="&quot;Unable to parse SVD file&quot; error when starting debugger · Issue #276 · arduino/ArduinoCore-renesas">issue</a> が上がっていました。</p>
 
-<p>で、<a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_validate_file_pg.html" title="CMSIS-SVD: SVD File Validation and Usage">SVDファイルとは何ぞや？</a> を調べてみると “System View Description”、つまり MCU のレジスタや周辺装置の仕様を XML で記述したものとのこと。そこで <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を覗いて <code class="language-plaintext highlighter-rouge">P100PFS</code> を探してみましたが見つかりません。にもかかわらず別なところから <code class="language-plaintext highlighter-rouge">derivedFrom</code> で継承されてるじゃないですか！ しかもコレだけじゃなく <code class="language-plaintext highlighter-rouge">P100PFS_HA</code> とか <code class="language-plaintext highlighter-rouge">P100PFS_BY</code> も未定義なことが分かりました。</p>
+<h2 id="svdファイルとは何者">SVDファイルとは何者？</h2>
+<p><a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_validate_file_pg.html" title="CMSIS-SVD: SVD File Validation and Usage">SVDファイルの正体</a> を調べてみると “System View Description”、つまり MCU のレジスタや周辺装置の仕様を XML で記述したものとのこと。<a href="https://arm-software.github.io/CMSIS_5/General/html/index.html" title="CMSIS: Introduction">CMSISのサイト</a> に載っている全体像からすると、MCU の仕様違いを吸収する層に位置付けられているものであることが分かります。</p>
+
+<p><img src="/images/2024/03-24/CMSIS-overview.png" alt="CMSISの全体像とデバッガの位置付け" title="CMSISの全体像とデバッガの位置付け" /></p>
+
+<p>もう少し具体的に描くと、こんな感じでしょうか。よく出来ています。</p>
+
+<p><img src="/images/2024/03-24/block-diagram.jpg" alt="ARM MCUからArduino IDEまでのブロック図" title="ARM MCUからArduino IDEまでのブロック図" /></p>
+
+<p>正体が分かったところで Arduino IDE に添付された <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を覗き <code class="language-plaintext highlighter-rouge">P100PFS</code> を探してみましたが見つかりません。にもかかわらず別なところから <code class="language-plaintext highlighter-rouge">derivedFrom</code> で継承されてるじゃないですか！ しかもコレだけじゃなく <code class="language-plaintext highlighter-rouge">P100PFS_HA</code> とか <code class="language-plaintext highlighter-rouge">P100PFS_BY</code> も未定義なことが分かりました。</p>
 
 <h3 id="p100pfs-って何">P100PFS って何？</h3>
 <figure class="float-left">
@@ -339,12 +348,8 @@
   <p>ポート mn 端子機能選択レジスタ(PmnPFS/PmnPFS_HA/PmnPFS_BY)は、32 ビット、16 ビットおよび 8 ビットの読み出し/書き込み可能なコントロールレジスタです。PmnPFS はポート mn 機能の選択を制御し、 32 ビット単位で設定されます。PmnPFS_HA(PmnPFS のビット [15:0])は 16 ビット単位でアクセスされま す。PmnPFS_BY(ビット [7:0])は 8 ビット単位でアクセスされます。</p>
 </blockquote>
 
-<h2 id="svdファイルの修正">SVDファイルの修正</h2>
-<p>デバッガが ARM チップ上の CoreSight にアクセスするまでのアーキテクチャが <a href="https://arm-software.github.io/CMSIS_5/General/html/index.html" title="CMSIS: Introduction">CMSISのサイト</a> に載っています。</p>
-
-<p><img src="/images/2024/03-24/CMSIS-overview.png" alt="CMSISの全体像とデバッガの位置付け" title="CMSISの全体像とデバッガの位置付け" /></p>
-
-<p>そもそも SVD ファイルを生成するには <a href="https://github.com/Open-CMSIS-Pack/cmsis-toolbox?tab=readme-ov-file" title="Open-CMSIS-Pack/cmsis-toolbox: CMSIS-Toolbox">CMSIS-Toolbox</a> で色々やらなくちゃならないようです。コレを読みこなして習熟するには時間がかかりそうなので、さらに調べてみると Github に <a href="https://github.com/tinygo-org/renesas-svd" title="tinygo-org/renesas-svd: SVD fiies for Renesas MCU mirrored from Keil drivers release">renesas-svd</a> を上げている人を見つけました。</p>
+<h3 id="svdファイルの修正">SVDファイルの修正</h3>
+<p>さて SVD ファイルの生成には <a href="https://github.com/Open-CMSIS-Pack/cmsis-toolbox?tab=readme-ov-file" title="Open-CMSIS-Pack/cmsis-toolbox: CMSIS-Toolbox">CMSIS-Toolbox</a> で色々とやらなくちゃならないようです。コレを読みこなして習熟するには時間がかかりそうなので、さらに調べてみると Github に <a href="https://github.com/tinygo-org/renesas-svd" title="tinygo-org/renesas-svd: SVD fiies for Renesas MCU mirrored from Keil drivers release">renesas-svd</a> を上げている人を見つけました。</p>
 
 <p>で、<a href="https://github.com/tinygo-org/renesas-svd/blob/main/R7FA4M1AB.svd" title="renesas-svd/R7FA4M1AB.svd at main · tinygo-org/renesas-svd">R7FA4M1AB.svd</a> を調べてみると、Arduino IDE に添付されたものと完全に一致します。<a href="https://github.com/tinygo-org/renesas-svd/blob/main/README.md" title="renesas-svd/README.md at main · tinygo-org/renesas-svd">README.md</a> によると <code class="language-plaintext highlighter-rouge">Renesas.RA_DFP.4.4.0.pack</code> を元にしているとのことで、<a href="https://www.keil.arm.com/packs/ra_dfp-renesas/devices/" title="Arm Keil - Renesas RA_DFP">最新版（5.2.0）</a> の <a href="https://www.keil.arm.com/devices/renesas-r7fa4m1ab/features/" title="Arm Keil - Renesas R7FA4M1AB">R7FA4M1AB</a> に更新する必要がありそうです。</p>
 
@@ -357,7 +362,7 @@
 <p><img src="/images/2024/03-24/arduino-debugger.jpg" alt="トラ技ARMライタで動作する Arduino debugger" title="トラ技ARMライタで動作する Arduino debugger" /></p>
 
 <h3 id="注意事項">注意事項！</h3>
-<p>一応、コピーした <code class="language-plaintext highlighter-rouge">P100PFS</code> などのレジスタ定義はユーザーズマニュアルに照らして正しそうなことは確認しましたが、もちろん無保証なので扱いは自己責任でお願いします。</p>
+<p>一応コピーした <code class="language-plaintext highlighter-rouge">P100PFS</code> 等のレジスタ定義はユーザーズマニュアルに照らして正しそうなことは確認しましたが、もちろん無保証なので扱いは自己責任でお願いします。</p>
 
 <p>また先にブレークポイントを設定しておかないとどこにも止まらないですし、デバッグを終了するとブートローダーが壊れるようで、MINIMA のリセットボタンをダブルクリックしてから「→」ボタンで書き込まないと復活しません。</p>
 
