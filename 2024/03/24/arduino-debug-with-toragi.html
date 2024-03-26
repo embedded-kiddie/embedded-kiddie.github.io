@@ -85,7 +85,7 @@
 <p><code class="language-plaintext highlighter-rouge">R7FA4M1AB</code> といえば、UNO R4 に載っている Renesus 製 ARM MCU の型番です。そこでこのエラーを Google 検索してみると、Arduino 公式の Github にも <a href="https://github.com/arduino/ArduinoCore-renesas/issues/276" title='"Unable to parse SVD file" error when starting debugger · Issue #276 · arduino/ArduinoCore-renesas'>issue</a> が上がっていました。</p>
 
 <h2 id="svdファイルとは何者">SVDファイルとは何者？</h2>
-<p><a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_validate_file_pg.html" title="CMSIS-SVD: SVD File Validation and Usage">SVDファイルの正体</a> を調べてみると “System View Description”、つまり MCU のレジスタや周辺装置の仕様を XML で記述したものとのこと。<a href="https://arm-software.github.io/CMSIS_5/General/html/index.html" title="CMSIS: Introduction">CMSISのサイト</a> に載っている全体像からすると、MCU の仕様違いを吸収する層に位置付けられているものであることが分かります。</p>
+<p><a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_validate_file_pg.html" title="CMSIS-SVD: SVD File Validation and Usage">SVDファイルの正体</a> を調べてみると “System View Description”、つまり MCU のレジスタや周辺装置の仕様を XML で記述したものとのこと。<a href="https://arm-software.github.io/CMSIS_5/General/html/index.html" title="CMSIS: Introduction">CMSISのサイト</a> に載っている全体像からすると、MCU の仕様違いを吸収する層に位置付けられていることが分かります。</p>
 
 <p><img src="/images/2024/03-24/CMSIS-overview.png" alt="CMSISの全体像とデバッガの位置付け" title="CMSISの全体像とデバッガの位置付け"></p>
 
