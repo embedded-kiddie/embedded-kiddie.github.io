@@ -100,6 +100,8 @@
 </blockquote>
 
 <h2 id="svdファイルの修正">SVDファイルの修正</h2>
+<p>デバッガが ARM チップ上の CoreSight にアクセスするまでのアーキテクチャが <a href="https://arm-software.github.io/CMSIS_5/General/html/index.html" title="CMSIS: Introduction">CMSISのサイト</a> に載っています。</p>
+
 <p><img src="/images/2024/03-24/CMSIS-overview.png" alt="CMSISの全体像とデバッガの位置付け" title="CMSISの全体像とデバッガの位置付け"></p>
 
 <p>そもそも SVD ファイルを生成するには <a href="https://github.com/Open-CMSIS-Pack/cmsis-toolbox?tab=readme-ov-file" title="Open-CMSIS-Pack/cmsis-toolbox: CMSIS-Toolbox">CMSIS-Toolbox</a> で色々やらなくちゃならないようです。コレを読みこなして習熟するには時間がかかりそうなので、さらに調べてみると Github に <a href="https://github.com/tinygo-org/renesas-svd" title="tinygo-org/renesas-svd: SVD fiies for Renesas MCU mirrored from Keil drivers release">renesas-svd</a> を上げている人を見つけました。</p>
