@@ -1,4 +1,299 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-25T12:50:19+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</title><link href="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html" rel="alternate" type="text/html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?" /><published>2024-03-24T23:53:41+09:00</published><updated>2024-03-24T23:53:41+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"><![CDATA[<p>Arduino UNO R4 でソースコードデバッグするには、公式サイト <a href="https://docs.arduino.cc/tutorials/uno-r4-minima/debugger/">Debugging the Arduino UNO R4 Minima</a> に <a href="https://www.segger.com/products/debug-probes/j-link/" title="SEGGER J-Link debug probes">Segger J-Link</a> と <a href="https://www.segger.com/products/development-tools/ozone-j-link-debugger/" title="Ozone – The Performance Analyzer">Ozone</a> を使えって書いてあるけど、Arduino IDE でデバッグできないし、Segger のヤツって高額で買う気になりません。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-26T20:48:16+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
+
+<p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
+
+<p>そこで本記事では「これだけ知っていれば、大抵のソースコードデバッグはOK」な項目に絞って解説をします。逆に「オンチップのトレースバッファを活用したアセンブリ言語レベルのデバッグ」や「SWO（Serial Wire Output）によるトレース」には触れていません。これらについては「LPCXpresso IDE Instruction - Trace Guide」や「LPCXpresso IDE SWO - Trace Guide」を参照してください（僕も使いこなせていませんので…）</p>
+
+<h2 id="全体構成">全体構成</h2>
+<p>まずは IDE の全体像を掴み、どこに何が表示されるかを把握してこそ効率的なデバッグができると僕は思うので、少し長くなりますが、１つ１つ解説したいと思います。</p>
+
+<figure class="float-left">
+  <a href="/images/2024/03-26/01.jpg" data-lightbox="image" title="全体構成">
+      <img src="/images/2024/03-26/01-small.jpg" alt="全体構成" />
+  </a>
+  <a href="/images/2024/03-26/06.png" data-lightbox="image" title="ビューのレイアウト変更">
+    <img src="/images/2024/03-26/06.png" alt="ビューのレイアウト変更" />
+  </a>
+</figure>
+
+<p>デバッグを開始すると、コンパイルだけしていた時より１つ増えて５つの “ビュー” が開きます。この時、右上の <span class="inline" title="Open Perspective"><img src="/images/2024/03-26/button-open-perspective.png" alt="Open Perspective" /></span>（Open Perspective）ボタンを押すといくつかの選択肢が出てくるので「Debug」を選びます。すると外観がデバッグに適した “ビュー” の配置に変更されます。</p>
+
+<p>このように “Open Perspective” ボタンでその時々の作業内容に合わせて外観を変更できるので、好みで使い分けると良いでしょう（以下の解説は「Develop」を元にしています）。</p>
+
+<h3 id="-アプリケーション全体のリソース情報を表示するビュー">① アプリケーション全体のリソース情報を表示するビュー</h3>
+<p>どのビューに特定の名前がついているワケではないのですが… 集められたタブからするとタイトルのような位置付けと思われます。</p>
+
+<h4 id="project-explore-タブ">Project Explore タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/01-01.png" data-lightbox="image" title="Project Explore">
+      <img src="/images/2024/03-26/01-01.png" alt="Project Explore" />
+  </a>
+</figure>
+<p>プロジェクト、あるいはワークスペース全体のファイル構成をツリー形式で参照することができます。お馴染みだとは思いますが、ソースコードを選択し、エディタに表示することができるタブです。</p>
+
+<h4 id="peripherals-タブ">Peripherals タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/01-02.png" data-lightbox="image" title="Peripherals">
+    <img src="/images/2024/03-26/01-02.png" alt="Peripherals" />
+  </a>
+</figure>
+<p>ADC やタイマーなど、オンチップの周辺機能が一覧で表示されます。左側のチェックボックスを選択すると、<a href="#memory-タブ">③ Memory タブ</a> にレジスタの内容を表示することができます。</p>
+
+<h4 id="registers-タブ">Registers タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/01-03.png" data-lightbox="image" title="Registers">
+    <img src="/images/2024/03-26/01-03.png" alt="Registers" />
+  </a>
+</figure>
+<p>CPU のレジスタやスタックポインタ、プログラムカウンタなどを参照できます。<a href="#debug-タブ">⑤ デバッグタブ</a> 右上の <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンによるアセンブリ言語のステップ実行モード選択時に役立ちます。</p>
+
+<h4 id="symbol-viewer-タブ">Symbol Viewer タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/01-04.png" data-lightbox="image" title="Symbol Viewer">
+    <img src="/images/2024/03-26/01-04.png" alt="Symbol Viewer" />
+  </a>
+</figure>
+<p><span class="inline" title="Browse for a file with symbol table"><img src="/images/2024/03-26/button-browse.png" alt="Browse for a file with symbol table" /></span>（Browse for a file with symbol table）ボタンで実行ファイル <code class="language-plaintext highlighter-rouge">*.axf</code> を指定すると、テキストやデータ、<a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss</a> など各セクションのメモリ配置情報を参照することができます。</p>
+
+<h3 id="-エディタ-ビュー">② エディタ ビュー</h3>
+<p>お馴染みの各種ファイルを編集したり表示したりする役割を持ったビューです。</p>
+
+<h4 id="ブレーク停止中の行">ブレーク（停止）中の行</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/02-01.png" data-lightbox="image" title="現在ブレーク（停止）中の行">
+    <img src="/images/2024/03-26/02-01.png" alt="現在ブレーク（停止）中の行" />
+  </a>
+</figure>
+<p>現在停止中で、これから実行される行が若草色にハイライトされます。</p>
+
+<h4 id="カーソル位置の情報表示">カーソル位置の情報表示</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/02-02.png" data-lightbox="image" title="カーソル位置の情報表示">
+    <img src="/images/2024/03-26/02-02.png" alt="カーソル位置の情報表示" />
+  </a>
+</figure>
+<p>関数や変数、シンボルなどにカーソルを合わせると、その定義内容や変数の値を参照することができます。</p>
+
+<h4 id="右クリックでコンテキストメニューを表示">右クリックでコンテキストメニューを表示</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/02-03.png" data-lightbox="image" title="右クリックでコンテキストメニューを表示">
+    <img src="/images/2024/03-26/02-03.png" alt="右クリックでコンテキストメニューを表示" />
+  </a>
+</figure>
+<p>特定の行で右クリックをするとコンテキストメニューが開きます。多くのメニューがありますが、デバッグに役立つのは次の４つでしょう。<br class="clear-both" /></p>
+<ul>
+  <li><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" alt="Run to line" /></span> Run to line<br />
+カーソルのある行まで実行します。</li>
+  <li><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" alt="Move to line" /></span> Move to line<br />
+現在停止中の行からカーソルのある行にジャンプします。プログラムカウンタが直接書き換えられ、その間のコードは実行されません。実行したくない行がある場合に使うのだと思います。</li>
+  <li><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" alt="Resume at line" /></span> Resume at line<br />
+カーソルのある行から実行を再開します。<a href="#variables-タブ">④ Variables タブ</a> で変数の値を書き換えた後に、再評価したい場合に用います。</li>
+  <li><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
+選択された変数や式を <a href="#expressions-タブ">④ Expressions タブ</a> に追加します。</li>
+</ul>
+
+<h4 id="ブレークポイントの設定">ブレークポイントの設定</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/02-04.png" data-lightbox="image" title="ブレークポイントの設定">
+    <img src="/images/2024/03-26/02-04.png" alt="ブレークポイントの設定" />
+  </a>
+</figure>
+<p>行番号をダブルクリックするか、カーソルのある行で右クリックしてコンテキストメニューを開き「Add Breakpoint…」を選択してブレークポイントを設定します。ブレークポイントの一覧は、<a href="#breakpoints-タブ">④ Breakpoints タブ</a> で確認することが出来ます。</p>
+
+<h3 id="-実行中のリソース情報を表示するビュー">③ 実行中のリソース情報を表示するビュー</h3>
+<p>高度なトレースを行う “Instruction Trace” タブと “SWO Trace Config” タブ、LPC1343 で対象外の “Power Measurement Tool” タブ以外を解説します。</p>
+
+<h4 id="console-タブ">Console タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-01.png" data-lightbox="image" title="Console">
+    <img src="/images/2024/03-26/03-01.png" alt="Console" />
+  </a>
+</figure>
+<p>コンパイルの実行結果が表示される以外に、<code class="language-plaintext highlighter-rouge">printf()</code> の出力がここに表示されます。「<a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</a>」との競合については後述します。</p>
+
+<h4 id="problems-タブ">Problems タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-02.png" data-lightbox="image" title="Problems">
+    <img src="/images/2024/03-26/03-02.png" alt="Problems" />
+  </a>
+</figure>
+<p>実行中に起きた問題に関するリソース情報がここに表示されるのだと思います。実際に何か表示されたことがないのであくまでも想像ですが…</p>
+
+<h4 id="memory-タブ">Memory タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-03.png" data-lightbox="image" title="Memory">
+    <img src="/images/2024/03-26/03-03.png" alt="Memory" />
+  </a>
+</figure>
+<p>直接メモリのアドレスを指定（→ <a href="/images/2024/03-26/03-03-memory.png" data-lightbox="image" title="LPC13XXのメモリマップ">メモリマップ</a>）するか、<a href="#peripherals-タブ">① Peripherals タブ</a> でチェックを入れたレジスタの情報がここに表示されます。メモリ中の値を直接編集することも可能です。</p>
+
+<h4 id="properties-タブ">Properties タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-04.png" data-lightbox="image" title="Properties">
+    <img src="/images/2024/03-26/03-04.png" alt="Properties" />
+  </a>
+</figure>
+<p>実行オブジェクトのサイズなど、実行中のリソースに関する情報がここに示されます。</p>
+
+<h4 id="navigator-タブ">Navigator タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-05.png" data-lightbox="image" title="Navigator">
+    <img src="/images/2024/03-26/03-05.png" alt="Navigator" />
+  </a>
+</figure>
+<p><a href="#project-explore-タブ">① Project Explore タブ</a> と同じなので、邪魔なら閉じちゃって良いと思います。</p>
+
+<h3 id="-ショートカットおよびデバッグ情報を表示するビュー">④ ショートカット、およびデバッグ情報を表示するビュー</h3>
+<p>一貫した名前が付けられそうもないビューですが、デバッグ中は頻繁に見ることになると思います。</p>
+
+<h4 id="quickstart-panel-タブ">Quickstart Panel タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-01.png" data-lightbox="image" title="Quickstart Panel">
+    <img src="/images/2024/03-26/04-01.png" alt="Quickstart Panel" />
+  </a>
+</figure>
+<p>色々なタスクのショートカットが集められたタブです。デバッグも一発で開始できて便利です。</p>
+
+<h4 id="variables-タブ">Variables タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-02.png" data-lightbox="image" title="Variables">
+    <img src="/images/2024/03-26/04-02.png" alt="Variables" />
+  </a>
+</figure>
+<p>実行中の関数内ローカル変数は、ここで参照できます。またセルをクリックして変数の値を直接変更することもできます。</p>
+
+<h4 id="breakpoints-タブ">Breakpoints タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-03.png" data-lightbox="image" title="Breakpoints">
+    <img src="/images/2024/03-26/04-03.png" alt="Breakpoints" />
+  </a>
+</figure>
+<p><a href="#-エディタ-ビュー">② エディタビュー</a> で設定されたブレークポイントの一覧が表示されます。各ブレークポイントを一時的に無効にしたり有効にしたりするのもこのタブで行います。</p>
+
+<h4 id="outlines-タブ">Outlines タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-04.png" data-lightbox="image" title="Outlines">
+    <img src="/images/2024/03-26/04-04.png" alt="Outlines" />
+  </a>
+</figure>
+<p>実行中のソースコードに定義されたシンボルや関数、グローバル変数の一覧が参照できます。各項目をクリックするとその箇所をエディタで示してくれるので、何気に便利なタブです。</p>
+
+<h4 id="expressions-タブ">Expressions タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-05.png" data-lightbox="image" title="Expressions">
+    <img src="/images/2024/03-26/04-05.png" alt="Expressions" />
+  </a>
+</figure>
+<p>変数や式を <a href="#-エディタ-ビュー">② エディタビュー</a> で選択したり、直接セルに入力することで、それらの値を参照することが出来ます。当然、実行中のスコープ外にある変数や式などは無視されます。</p>
+
+<h3 id="-デバッグ-ビュー">⑤ デバッグ ビュー</h3>
+<p>デバッグは “セッション” という形で管理され、実行中のセッションに関する情報がここに表示されます。</p>
+
+<h4 id="debug-タブ">Debug タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/05.png" data-lightbox="image" title="Debug">
+    <img src="/images/2024/03-26/05.png" alt="Debug" />
+  </a>
+</figure>
+<p>実行中の <a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF" title="コールスタック - Wikipedia">スタックフレーム</a> が表示されます。特に便利な機能として <span class="inline" title="View menu"><img src="/images/2024/03-26/button-view-menu.png" alt="View menu" /></span>（View menu）ボタンを押すとデバッグ制御用のボタンが表示されるので、このタブで集中的に実行をコントロールできるようになります。</p>
+
+<p>また <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンで <a href="#-エディタ-ビュー">② エディタビュー</a> に逆アセンブルされたコードを表示することができ、アセンブリ言語レベルでのステップ実行が可能になります。</p>
+
+<h3 id="ビューのレイアウト変更について">ビューのレイアウト変更について</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-26/07.png" data-lightbox="image" title="レイアウトをリセットする">
+    <img src="/images/2024/03-26/07.png" alt="レイアウトをリセットする" />
+  </a>
+</figure>
+<p>“Open Perspective” ボタンを使う以外にも、マニュアルで各ビューの配置を変更したり、独立させたりすることが出来ますが、弄り過ぎて元に戻したくなることがあります。そんな時はメニューから「Window → Perspective → Reset Perspective…」を選びましょう。元の配置に戻してくれます。</p>
+
+<h2 id="デバッグ制御用アイコン">デバッグ制御用アイコン</h2>
+<p><img src="/images/2024/03-26/08-01.png" alt="デバッグ制御用アイコン" title="デバッグ制御用アイコン" /></p>
+
+<p>全体像が把握できたところで、いよいよデバッグ制御用のボタンを駆使してデバッグするワケですが、各ボタンの機能は全然難しくありません。</p>
+
+<p>以下に、”高度なトレース機能” を使う以外のボタンを示します。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>アイコン</th>
+      <th>名称</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/images/2024/03-26/08-02.png" alt="全ブレークポイントをスキップ" /></td>
+      <td>Skip All Breakpoints</td>
+      <td>全ブレークポイントをスキップする／しないを制御するトグルボタン</td>
+    </tr>
+    <tr>
+      <td><img src="/images/2024/03-26/08-03.png" alt="続行（Resume）" /></td>
+      <td>Resume</td>
+      <td>停止中の実行を再開するボタン</td>
+    </tr>
+    <tr>
+      <td><img src="/images/2024/03-26/08-04.png" alt="一時停止（Suspend）" /></td>
+      <td>Suspend</td>
+      <td>実行中のプログラムを停止（ブレーク）させるボタン</td>
+    </tr>
+    <tr>
+      <td><img src="/images/2024/03-26/08-05.png" alt="終了（Terminate）" /></td>
+      <td>Terminate</td>
+      <td>デバッグを終了させるボタン</td>
+    </tr>
+    <tr>
+      <td><img src="/images/2024/03-26/08-06.png" alt="ステップ・イン（Step In）" /></td>
+      <td>Step In</td>
+      <td>最小の実行単位で、１行ごとの実行、または関数呼び出しであればその中に入って実行する</td>
+    </tr>
+    <tr>
+      <td><img src="/images/2024/03-26/08-07.png" alt="ステップ・オーバー（Step Over）" /></td>
+      <td>Step Over</td>
+      <td>関数呼び出しであってもその中には入らず1行ごとに実行する</td>
+    </tr>
+    <tr>
+      <td><img src="/images/2024/03-26/08-08.png" alt="ステップ・リターン（Step Return）" /></td>
+      <td>Step Return</td>
+      <td>Step In で関数内に入った場合、その関数の終了まで実行し呼び出し元に戻る</td>
+    </tr>
+    <tr>
+      <td><img src="/images/2024/03-26/08-09.png" alt="再スタート（Restart）" /></td>
+      <td>Restart</td>
+      <td>もう一度初めからスタートする</td>
+    </tr>
+    <tr>
+      <td><img src="/images/2024/03-26/08-10.png" alt="再デバッグ（Debug）" /></td>
+      <td>Debug</td>
+      <td>デバッグ途中でソースコードを変更した時など、再度コンパイルからやり直してデバッグを開始する</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="最後にコンソールに-printf-出力する方法">最後に、コンソールに printf() 出力する方法</h2>
+<p><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> で <a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki/123_USBCDC" title="123_USBCDC · embedded-kiddie/beauto-rover-arm Wiki">USB CDC（Communication Device Class）をインストール</a> し、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> などのターミナル・ソフトウェアに <code class="language-plaintext highlighter-rouge">printf()</code> 出力する方法を解説しましたが、<a href="#console-タブ">③ コンソール</a> に出力するためには LPCXpresso 側の設定が必要です。</p>
+
+<p>以下にその方法を示し、本記事の〆としたいと思います。</p>
+
+<h3 id="usb-cdc-をインストールした場合">USB CDC をインストールした場合</h3>
+<p><a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm"><code class="language-plaintext highlighter-rouge">sci.c</code></a> の25行目あたりの定義 <code class="language-plaintext highlighter-rouge">SYSTEM_CALL</code> を無効化し、代わりに <code class="language-plaintext highlighter-rouge">__sys_write()</code> など Redlib のシステムコール関数群がリンクされるようにします。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------------------------------
+ * CMSISのstdio系関数がリンクされる場合は、重複するシステムコールの定義を無効にする
+ *--------------------------------------------------------------------------*/</span>
+<span class="cp">#define	SYSTEM_CALL	0	// 有効化=1、無効化=0</span></code></pre></figure>
+
+<h3 id="redlib-semihost-の設定">Redlib (semihost) の設定</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-26/redlib-semihost.jpg" title="Redlib(semihost)の設定" data-lightbox="image">
+    <img src="/images/2024/03-26/redlib-semihost-small.jpg" alt="Redlib(semihost)の設定" />
+  </a>
+</figure>
+
+<p>LPCXpresso のメニューから「Project → Properties」を開き、「C/C++ Build → Settings → MCU Linker → Managed Linker Script」をたどり、「Library」に <a href="https://community.nxp.com/t5/LPCXpresso-IDE-FAQs/What-are-none-nohost-and-semihost-libraries/m-p/475327" title="What are none, nohost and semihost libraries? - NXP Community"><code class="language-plaintext highlighter-rouge">Redlib (semihost)</code></a> を選択します。そして再コンパイルすれば <code class="language-plaintext highlighter-rouge">printf()</code> の出力先がコンソールになります。</p>
+
+<p>以上！</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ARM" /><category term="デバッグ" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</title><link href="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html" rel="alternate" type="text/html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?" /><published>2024-03-24T23:53:41+09:00</published><updated>2024-03-24T23:53:41+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"><![CDATA[<p>Arduino UNO R4 でソースコードデバッグするには、公式サイト <a href="https://docs.arduino.cc/tutorials/uno-r4-minima/debugger/">Debugging the Arduino UNO R4 Minima</a> に <a href="https://www.segger.com/products/debug-probes/j-link/" title="SEGGER J-Link debug probes">Segger J-Link</a> と <a href="https://www.segger.com/products/development-tools/ozone-j-link-debugger/" title="Ozone – The Performance Analyzer">Ozone</a> を使えって書いてあるけど、Arduino IDE でデバッグできないし、Segger のヤツって高額で買う気になりません。</p>
 
 <p>でもって先日、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> に載っている <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">古い LPC1343 ボードがトラ技ARMライタと繋がった</a> のに気を良くしたのに加え、Arduino IDE の “書き込み装置” に <a href="https://openocd.org/" title="Open On-Chip Debugger">OpenOCD</a>（<a href="https://interface.cqpub.co.jp/wp-content/uploads/interface/2015/03/if03_096.pdf" title="プロなみJTAGデバッグを個人でも! オープンソースOpenOCD入門">コチラの記事</a> が分かり易いです）があったのを思い出し、もしかしたらトラ技ARMライタで Arduino UNO R4 のデバッグができるんじゃね？ と。</p>
 
@@ -52,7 +347,7 @@
 <p>ただ <code class="language-plaintext highlighter-rouge">.pack</code> の扱い方が分からないので、乱暴にも他の Cortex-M4 の <code class="language-plaintext highlighter-rouge">.svd</code> ファイルから <code class="language-plaintext highlighter-rouge">P100PFS</code>、<code class="language-plaintext highlighter-rouge">P100PFS_HA</code>、<code class="language-plaintext highlighter-rouge">P100PFS_BY</code> の定義を Arduino IDE の <code class="language-plaintext highlighter-rouge">.svd</code> ファイルにコピーしてみたところ、うっ…動きました。</p>
 
 <ul>
-  <li><a href="https://gist.github.com/embedded-kiddie/48b388515ce280cc496fe6ef5ddb625f" title="R7FA4M1AB.svd改">Gist: R7FA4M1AB.svd</a></li>
+  <li><a href="https://gist.github.com/embedded-kiddie/48b388515ce280cc496fe6ef5ddb625f" title="R7FA4M1AB.svd改">Gist: R7FA4M1AB.svd</a>（63712行あります）</li>
 </ul>
 
 <p><img src="/images/2024/03-24/arduino-debugger.jpg" alt="トラ技ARMライタで動作する Arduino debugger" title="トラ技ARMライタで動作する Arduino debugger" /></p>
@@ -64,7 +359,7 @@
 
 <p><img src="/images/2024/03-24/error-status-74.jpg" alt="error: exit status 74" title="error: exit status 74" /></p>
 
-<h2 id="他力本願な希望">他力本願な希望</h2>
+<h2 id="他力本願な願望">他力本願な願望</h2>
 <p>と言うことで、とりあえずトラ技ARMライタが Arduino IDE 上のデバッグに使えそうだと言うことまでは分かりました。残念ですが、あとはエキスパートの方にお任せしたいと思います（オィ）。</p>
 
 <p>それにしても10年ほど前に作られたトラ技ARMライタにつくづく感謝です :bowing_man:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino-Uno-R4" /><category term="デバッグ" /><summary type="html"><![CDATA[Arduino UNO R4 でソースコードデバッグするには、公式サイト Debugging the Arduino UNO R4 Minima に Segger J-Link と Ozone を使えって書いてあるけど、Arduino IDE でデバッグできないし、Segger のヤツって高額で買う気になりません。]]></summary></entry><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</title><link href="https://embedded-kiddie.github.io/2024/03/23/debug-probe-for-beauto-rover.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編" /><published>2024-03-23T11:43:21+09:00</published><updated>2024-03-23T11:43:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/23/debug-probe-for-beauto-rover</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/23/debug-probe-for-beauto-rover.html"><![CDATA[<p><img src="/images/2024/03-23/desktop.jpg" alt="ビュートローバーARMでソースコードデバッグする" title="ビュートローバーARMでソースコードデバッグする" /></p>
