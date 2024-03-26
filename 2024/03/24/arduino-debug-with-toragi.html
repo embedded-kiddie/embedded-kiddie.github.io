@@ -10,8 +10,8 @@
 <meta property="og:title" content="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?" />
 <meta name="author" content="Kingsman" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Arduino UNO R4 でソースコードデバッグするには、公式サイト Debugging the Arduino UNO R4 Minima に Segger J-Link と Ozone を使えって書いてあるけど、Arduino IDE でデバッグできないし、Segger のヤツって高額で買う気になりません。" />
-<meta property="og:description" content="Arduino UNO R4 でソースコードデバッグするには、公式サイト Debugging the Arduino UNO R4 Minima に Segger J-Link と Ozone を使えって書いてあるけど、Arduino IDE でデバッグできないし、Segger のヤツって高額で買う気になりません。" />
+<meta name="description" content="Arduino UNO R4 でソースコードデバッグするには、公式サイト Debugging the Arduino UNO R4 Minima に Segger J-Link と Ozone を使えって書いてあるけど、Arduino IDE でデバッグできないし、激安の怪しい奴は不安だし、かと言って Segger は高くて買う気になりません。" />
+<meta property="og:description" content="Arduino UNO R4 でソースコードデバッグするには、公式サイト Debugging the Arduino UNO R4 Minima に Segger J-Link と Ozone を使えって書いてあるけど、Arduino IDE でデバッグできないし、激安の怪しい奴は不安だし、かと言って Segger は高くて買う気になりません。" />
 <link rel="canonical" href="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html" />
 <meta property="og:url" content="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html" />
 <meta property="og:site_name" content="Embedded Kiddie" />
@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-03-24T23:53:41+09:00","datePublished":"2024-03-24T23:53:41+09:00","description":"Arduino UNO R4 でソースコードデバッグするには、公式サイト Debugging the Arduino UNO R4 Minima に Segger J-Link と Ozone を使えって書いてあるけど、Arduino IDE でデバッグできないし、Segger のヤツって高額で買う気になりません。","headline":"Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"},"url":"https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-03-24T23:53:41+09:00","datePublished":"2024-03-24T23:53:41+09:00","description":"Arduino UNO R4 でソースコードデバッグするには、公式サイト Debugging the Arduino UNO R4 Minima に Segger J-Link と Ozone を使えって書いてあるけど、Arduino IDE でデバッグできないし、激安の怪しい奴は不安だし、かと言って Segger は高くて買う気になりません。","headline":"Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"},"url":"https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="icon" href="/assets/favicon.ico" />
   <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" /></head>
@@ -53,7 +53,7 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p>Arduino UNO R4 でソースコードデバッグするには、公式サイト <a href="https://docs.arduino.cc/tutorials/uno-r4-minima/debugger/">Debugging the Arduino UNO R4 Minima</a> に <a href="https://www.segger.com/products/debug-probes/j-link/" title="SEGGER J-Link debug probes">Segger J-Link</a> と <a href="https://www.segger.com/products/development-tools/ozone-j-link-debugger/" title="Ozone – The Performance Analyzer">Ozone</a> を使えって書いてあるけど、Arduino IDE でデバッグできないし、Segger のヤツって高額で買う気になりません。</p>
+    <p>Arduino UNO R4 でソースコードデバッグするには、公式サイト <a href="https://docs.arduino.cc/tutorials/uno-r4-minima/debugger/">Debugging the Arduino UNO R4 Minima</a> に <a href="https://www.segger.com/products/debug-probes/j-link/" title="SEGGER J-Link debug probes">Segger J-Link</a> と <a href="https://www.segger.com/products/development-tools/ozone-j-link-debugger/" title="Ozone – The Performance Analyzer">Ozone</a> を使えって書いてあるけど、Arduino IDE でデバッグできないし、激安の怪しい奴は不安だし、かと言って Segger は高くて買う気になりません。</p>
 
 <p>でもって先日、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> に載っている <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">古い LPC1343 ボードがトラ技ARMライタと繋がった</a> のに気を良くしたのに加え、Arduino IDE の “書き込み装置” に <a href="https://openocd.org/" title="Open On-Chip Debugger">OpenOCD</a>（<a href="https://interface.cqpub.co.jp/wp-content/uploads/interface/2015/03/if03_096.pdf" title="プロなみJTAGデバッグを個人でも! オープンソースOpenOCD入門">コチラの記事</a> が分かり易いです）があったのを思い出し、もしかしたらトラ技ARMライタで Arduino UNO R4 のデバッグができるんじゃね？ と。</p>
 
@@ -104,7 +104,7 @@
 
 <p>で、<a href="https://github.com/tinygo-org/renesas-svd/blob/main/R7FA4M1AB.svd" title="renesas-svd/R7FA4M1AB.svd at main · tinygo-org/renesas-svd">R7FA4M1AB.svd</a> を調べてみると、Arduino IDE に添付されたものと完全に一致します。<a href="https://github.com/tinygo-org/renesas-svd/blob/main/README.md" title="renesas-svd/README.md at main · tinygo-org/renesas-svd">README.md</a> によると <code class="language-plaintext highlighter-rouge">Renesas.RA_DFP.4.4.0.pack</code> を元にしているとのことで、<a href="https://www.keil.arm.com/packs/ra_dfp-renesas/devices/" title="Arm Keil - Renesas RA_DFP">最新版（5.2.0）</a> の <a href="https://www.keil.arm.com/devices/renesas-r7fa4m1ab/features/" title="Arm Keil - Renesas R7FA4M1AB">R7FA4M1AB</a> に更新する必要がありそうです。</p>
 
-<p>ただ <code class="language-plaintext highlighter-rouge">.pack</code> の扱い方が分からないので、乱暴にも他の Cortex-M4 の <code class="language-plaintext highlighter-rouge">.svd</code> ファイルから <code class="language-plaintext highlighter-rouge">P100PFS</code>、<code class="language-plaintext highlighter-rouge">P100PFS_HA</code>、<code class="language-plaintext highlighter-rouge">P100PFS_BY</code> の定義を Arduino IDE の <code class="language-plaintext highlighter-rouge">.svd</code> ファイルにコピーしてみたところ、うっ…動きました。</p>
+<p>ただ <code class="language-plaintext highlighter-rouge">.pack</code> の扱い方が分からないので、乱暴にも他の Cortex-M4 の <code class="language-plaintext highlighter-rouge">.svd</code> ファイルから <code class="language-plaintext highlighter-rouge">P100PFS</code>、<code class="language-plaintext highlighter-rouge">P100PFS_HA</code>、<code class="language-plaintext highlighter-rouge">P100PFS_BY</code> の定義を Arduino IDE の <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> ファイルにコピーしてみたところ、うっ…動きました。やったゼ〜 <img class="emoji" title=":+1:" alt=":+1:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png" height="20" width="20"></p>
 
 <ul>
   <li>
