@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-27T11:52:37+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-27T17:36:52+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
 
 <p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
 
@@ -323,7 +323,22 @@
 
 <p>UNO R4 Minima の場合、両者の接続には <a href="/2024/03/23/debug-probe-for-beauto-rover.html#単体版" title="マルツオンラインのトラ技ARMライタ">マルツオンラインのトラ技ARMライタ</a> に付属の <a href="https://www.google.com/search?q=1.27mm(%E3%83%8F%E3%83%BC%E3%83%95%E3%83%94%E3%83%83%E3%83%81)+2%C3%975(10P)+%E3%83%94%E3%83%B3%E3%83%98%E3%83%83%E3%83%80%E4%BB%98%E3%81%8D%E3%83%95%E3%83%A9%E3%83%83%E3%83%88%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB" title="Google 検索">1.27mm(ハーフピッチ) 2×5(10P) ピンヘッダ付きフラットケーブル</a> が使えます。電源は Minima 側から +5V が供給されますが、トラ技ARMライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> が繋がってないため（とりあえず後で繋げるとして）、トラ技側も USB に接続します。</p>
 
-<p>一方 UNO R4 WiFi の場合は JTAG/SWD コネクタがなく、ARM MCU からの <code class="language-plaintext highlighter-rouge">SWCLK</code>、<code class="language-plaintext highlighter-rouge">SWDIO</code> の出力がレベル変換回路を通って <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> 無線モジュールに入っちゃってるので接続は無理かもです。残念… LED のギミックいらないから開発環境を充実させてくれた方が有難いのに… と思うのは僕だけでしょうか？</p>
+<p>一方 UNO R4 WiFi の場合は JTAG/SWD コネクタがなく、ARM MCU からの <code class="language-plaintext highlighter-rouge">SWCLK</code>（P300）、<code class="language-plaintext highlighter-rouge">SWDIO</code>（P108）が内部でレベル変換回路を通って <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> 無線モジュールに入っちゃってるので接続は無理かもです。残念… LED のギミックいらないから開発環境を充実させてくれた方が有難いのに… と思うのは僕だけでしょうか？</p>
+
+<!--
+#### 参考情報（2024年3月27日 追記）
+- [Will the UNO R4 Minima & WiFi going to support debug?](https://forum.arduino.cc/t/will-the-uno-r4-minima-wifi-going-to-support-debug/1146373 "Will the UNO R4 Minima &amp; WiFi going to support debug? - IDE 2.x - Arduino Forum")  
+  「対応する予定は？ いつ？」の問いかけに対し、2023年11月時点で「気配はあるが…」でクローズ。
+
+- [Arduino UNO R4 Minima Cheat Sheet](https://docs.arduino.cc/tutorials/uno-r4-minima/cheat-sheet/#swd-connector)  
+  SWD コネクタが載っている。
+
+- [Arduino UNO R4 WiFi Cheat Sheet](https://docs.arduino.cc/tutorials/uno-r4-wifi/cheat-sheet/)  
+  デバッガに関するI/Fの言及なし。唯一考えられるのが ARM MCU と USB シリアルをブリッジしてるという ESP32。いずれかのプローブと電気的に接続するのではなく、ESP32 のファームを書き換えてオンボードのデバッガにするしかないのでは？ という気がしてきた。
+
+- [Debug runtime errors on UNO R4 WiFi using stack trace](https://support.arduino.cc/hc/en-us/articles/10531097579548-Debug-runtime-errors-on-UNO-R4-WiFi-using-stack-trace "Debug runtime errors on UNO R4 WiFi using stack trace &ndash; Arduino Help Center")  
+  う〜ん、エラーが起きた時だけ。初心者にはハードル高し。
+-->
 
 <h2 id="デバッグ開始">デバッグ開始！</h2>
 <p>Arduino IDE で Blinky をロード → コンパイル → デバッグ！ っと… あれれっ？ <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> ファイルの読み込みで失敗しているみたいです。</p>
