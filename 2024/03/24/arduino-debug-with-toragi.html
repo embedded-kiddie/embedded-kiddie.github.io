@@ -74,7 +74,7 @@
 
 <p>UNO R4 Minima の場合、両者の接続には <a href="/2024/03/23/debug-probe-for-beauto-rover.html#%E5%8D%98%E4%BD%93%E7%89%88" title="マルツオンラインのトラ技ARMライタ">マルツオンラインのトラ技ARMライタ</a> に付属の <a href="https://www.google.com/search?q=1.27mm(%E3%83%8F%E3%83%BC%E3%83%95%E3%83%94%E3%83%83%E3%83%81)+2%C3%975(10P)+%E3%83%94%E3%83%B3%E3%83%98%E3%83%83%E3%83%80%E4%BB%98%E3%81%8D%E3%83%95%E3%83%A9%E3%83%83%E3%83%88%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB" title="Google 検索">1.27mm(ハーフピッチ) 2×5(10P) ピンヘッダ付きフラットケーブル</a> が使えます。電源は Minima 側から +5V が供給されますが、トラ技ARMライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> が繋がってないため（とりあえず後で繋げるとして）、トラ技側も USB に接続します。</p>
 
-<p>一方 UNO R4 WiFi の場合は JTAG/SWD コネクタがなく、ARM MCU からの <code class="language-plaintext highlighter-rouge">SWCLK</code>、<code class="language-plaintext highlighter-rouge">SWDIO</code> の出力がレベル変換回路を通って <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> 無線モジュールに入っちゃってるので接続は無理かもです。残念…</p>
+<p>一方 UNO R4 WiFi の場合は JTAG/SWD コネクタがなく、ARM MCU からの <code class="language-plaintext highlighter-rouge">SWCLK</code>、<code class="language-plaintext highlighter-rouge">SWDIO</code> の出力がレベル変換回路を通って <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> 無線モジュールに入っちゃってるので接続は無理かもです。残念… LED のギミックいらないから開発環境を充実させてくれた方が有難いのにね。</p>
 
 <h2 id="デバッグ開始">デバッグ開始！</h2>
 <p>Arduino IDE で Blinky をロード → コンパイル → デバッグ！ っと… あれれっ？ <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> ファイルの読み込みで失敗しているみたいです。</p>

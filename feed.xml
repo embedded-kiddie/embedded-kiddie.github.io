@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-27T11:23:16+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-27T11:32:06+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
 
 <p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
 
@@ -81,15 +81,24 @@
   </a>
 </figure>
 <p>特定の行で右クリックをするとコンテキストメニューが開きます。多くのメニューがありますが、デバッグに役立つのは次の４つでしょう。<br class="clear-both" /></p>
+
 <ul>
-  <li><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" alt="Run to line" /></span> Run to line<br />
-カーソルのある行まで実行します。</li>
-  <li><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" alt="Move to line" /></span> Move to line<br />
-現在停止中の行からカーソルのある行にジャンプします。プログラムカウンタが直接書き換えられ、その間のコードは実行されません。実行したくない行がある場合に使うのだと思います。</li>
-  <li><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" alt="Resume at line" /></span> Resume at line<br />
-カーソルのある行から実行を再開します。<a href="#variables-タブ">④ Variables タブ</a> で変数の値を書き換えた後に、再評価したい場合に用います。</li>
-  <li><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
-選択された変数や式を <a href="#expressions-タブ">④ Expressions タブ</a> に追加します。</li>
+  <li>
+    <p><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" alt="Run to line" /></span> Run to line<br />
+カーソルのある行まで実行します。</p>
+  </li>
+  <li>
+    <p><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" alt="Move to line" /></span> Move to line<br />
+現在停止中の行からカーソルのある行にジャンプします。プログラムカウンタが直接書き換えられ、その間のコードは実行されません。問題のある箇所をすっ飛ばして処理を継続させたいと時に使います。</p>
+  </li>
+  <li>
+    <p><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" alt="Resume at line" /></span> Resume at line<br />
+カーソルのある行から実行を再開します。<a href="#variables-タブ">④ Variables タブ</a> で変数の値を書き換えた後に、再評価したい場合に用います。</p>
+  </li>
+  <li>
+    <p><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
+選択された変数や式を <a href="#expressions-タブ">④ Expressions タブ</a> に追加します。</p>
+  </li>
 </ul>
 
 <h4 id="ブレークポイントの設定">ブレークポイントの設定</h4>
@@ -274,7 +283,7 @@
 <h2 id="最後にコンソールに-printf-出力する方法">最後に、コンソールに printf() 出力する方法</h2>
 <p><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> で <a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki/123_USBCDC" title="123_USBCDC · embedded-kiddie/beauto-rover-arm Wiki">USB CDC（Communication Device Class）をインストール</a> し、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> などのターミナル・ソフトウェアに <code class="language-plaintext highlighter-rouge">printf()</code> 出力する方法を解説しましたが、<a href="#console-タブ">③ コンソール</a> に出力するためには LPCXpresso 側の設定が必要です。</p>
 
-<p>以下にその方法を示し、本記事の〆としたいと思います。</p>
+<p>以下にその方法を示し、本記事を〆たいと思います。</p>
 
 <h3 id="usb-cdc-をインストールした場合">USB CDC をインストールした場合</h3>
 <p><a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm"><code class="language-plaintext highlighter-rouge">sci.c</code></a> の25行目あたりの定義 <code class="language-plaintext highlighter-rouge">SYSTEM_CALL</code> を無効化し、代わりに <code class="language-plaintext highlighter-rouge">__sys_write()</code> など Redlib のシステムコール関数群がリンクされるようにします。</p>
@@ -314,7 +323,7 @@
 
 <p>UNO R4 Minima の場合、両者の接続には <a href="/2024/03/23/debug-probe-for-beauto-rover.html#単体版" title="マルツオンラインのトラ技ARMライタ">マルツオンラインのトラ技ARMライタ</a> に付属の <a href="https://www.google.com/search?q=1.27mm(%E3%83%8F%E3%83%BC%E3%83%95%E3%83%94%E3%83%83%E3%83%81)+2%C3%975(10P)+%E3%83%94%E3%83%B3%E3%83%98%E3%83%83%E3%83%80%E4%BB%98%E3%81%8D%E3%83%95%E3%83%A9%E3%83%83%E3%83%88%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB" title="Google 検索">1.27mm(ハーフピッチ) 2×5(10P) ピンヘッダ付きフラットケーブル</a> が使えます。電源は Minima 側から +5V が供給されますが、トラ技ARMライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> が繋がってないため（とりあえず後で繋げるとして）、トラ技側も USB に接続します。</p>
 
-<p>一方 UNO R4 WiFi の場合は JTAG/SWD コネクタがなく、ARM MCU からの <code class="language-plaintext highlighter-rouge">SWCLK</code>、<code class="language-plaintext highlighter-rouge">SWDIO</code> の出力がレベル変換回路を通って <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> 無線モジュールに入っちゃってるので接続は無理かもです。残念…</p>
+<p>一方 UNO R4 WiFi の場合は JTAG/SWD コネクタがなく、ARM MCU からの <code class="language-plaintext highlighter-rouge">SWCLK</code>、<code class="language-plaintext highlighter-rouge">SWDIO</code> の出力がレベル変換回路を通って <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> 無線モジュールに入っちゃってるので接続は無理かもです。残念… LED のギミックいらないから開発環境を充実させてくれた方が有難いのにね。</p>
 
 <h2 id="デバッグ開始">デバッグ開始！</h2>
 <p>Arduino IDE で Blinky をロード → コンパイル → デバッグ！ っと… あれれっ？ <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> ファイルの読み込みで失敗しているみたいです。</p>
