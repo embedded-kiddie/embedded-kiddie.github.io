@@ -76,20 +76,25 @@
 
 <p>一方 UNO R4 WiFi の場合は JTAG/SWD コネクタがなく、ARM MCU からの <code class="language-plaintext highlighter-rouge">SWCLK</code>（P300）、<code class="language-plaintext highlighter-rouge">SWDIO</code>（P108）が内部でレベル変換回路を通って <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> 無線モジュールに入っちゃってるので接続は無理かもです。残念… LED のギミックいらないから開発環境を充実させてくれた方が有難いのに… と思うのは僕だけでしょうか？</p>
 
-<!--
-#### 参考情報（2024年3月27日 追記）
-- [Will the UNO R4 Minima & WiFi going to support debug?](https://forum.arduino.cc/t/will-the-uno-r4-minima-wifi-going-to-support-debug/1146373 "Will the UNO R4 Minima &amp; WiFi going to support debug? - IDE 2.x - Arduino Forum")  
-  「対応する予定は？ いつ？」の問いかけに対し、2023年11月時点で「気配はあるが…」でクローズ。
-
-- [Arduino UNO R4 Minima Cheat Sheet](https://docs.arduino.cc/tutorials/uno-r4-minima/cheat-sheet/#swd-connector)  
-  SWD コネクタが載っている。
-
-- [Arduino UNO R4 WiFi Cheat Sheet](https://docs.arduino.cc/tutorials/uno-r4-wifi/cheat-sheet/)  
-  デバッガに関するI/Fの言及なし。唯一考えられるのが ARM MCU と USB シリアルをブリッジしてるという ESP32。いずれかのプローブと電気的に接続するのではなく、ESP32 のファームを書き換えてオンボードのデバッガにするしかないのでは？ という気がしてきた。
-
-- [Debug runtime errors on UNO R4 WiFi using stack trace](https://support.arduino.cc/hc/en-us/articles/10531097579548-Debug-runtime-errors-on-UNO-R4-WiFi-using-stack-trace "Debug runtime errors on UNO R4 WiFi using stack trace &ndash; Arduino Help Center")  
-  う〜ん、エラーが起きた時だけ。初心者にはハードル高し。
--->
+<h4 id="参考情報2024年3月27日-追記">参考情報（2024年3月27日 追記）</h4>
+<ul>
+  <li>
+    <p><a href="https://forum.arduino.cc/t/will-the-uno-r4-minima-wifi-going-to-support-debug/1146373" title="Will the UNO R4 Minima &amp; WiFi going to support debug? - IDE 2.x - Arduino Forum">Will the UNO R4 Minima &amp; WiFi going to support debug?</a><br>
+「対応する予定は？ いつ？」の問いかけに対し、2023年11月時点で「気配はあるが…」でクローズ。</p>
+  </li>
+  <li>
+    <p><a href="https://docs.arduino.cc/tutorials/uno-r4-minima/cheat-sheet/#swd-connector">Arduino UNO R4 Minima Cheat Sheet</a><br>
+SWD コネクタが載っている。</p>
+  </li>
+  <li>
+    <p><a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/cheat-sheet/">Arduino UNO R4 WiFi Cheat Sheet</a><br>
+デバッガに関するI/Fの言及なし。唯一考えられるのが ARM MCU と USB シリアルをブリッジしてるという ESP32。いずれかのプローブと電気的に接続するのではなく、ESP32 のファームを書き換えてオンボードのデバッガにするしかないのでは？ という気がしてきた。</p>
+  </li>
+  <li>
+    <p><a href="https://support.arduino.cc/hc/en-us/articles/10531097579548-Debug-runtime-errors-on-UNO-R4-WiFi-using-stack-trace" title="Debug runtime errors on UNO R4 WiFi using stack trace – Arduino Help Center">Debug runtime errors on UNO R4 WiFi using stack trace</a><br>
+う〜ん、エラーが起きた時だけ。初心者にはハードル高し。</p>
+  </li>
+</ul>
 
 <h2 id="デバッグ開始">デバッグ開始！</h2>
 <p>Arduino IDE で Blinky をロード → コンパイル → デバッグ！ っと… あれれっ？ <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> ファイルの読み込みで失敗しているみたいです。</p>
