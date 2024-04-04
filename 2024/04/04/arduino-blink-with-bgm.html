@@ -201,6 +201,11 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p><a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、実験するとおよそ2秒以上はダメでした。またご自身でも書かれてますが、動作にデリケートなところがあって使用を断念した次第です。</p>
 
+<h3 id="で結局どうしたか">で、結局どうしたか？</h3>
+<p>オーバーフローフラグによる割り込みを模擬しました。</p>
+
+<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、ゼロになるまでこれを繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みが追加されるだけとなります。AGT だった場合の追加の割り込みは90回となりますが、それでも（2000回に比べたら）激減させられます。</p>
+
 <h2 id="謝辞と予告">謝辞と予告</h2>
 <p>ここまで読んで頂き、ありがとうございます。長くなったのでライブラリの解説はまたの機会にします。また最近購入した RIGOL のオシロスコープで、習熟も兼ねて音階の周波数再現性を測定してみたいと思います <img class="emoji" title=":sunglasses:" alt=":sunglasses:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f60e.png" height="20" width="20">。</p>
 
