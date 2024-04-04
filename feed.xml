@@ -1,4 +1,144 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-03-28T23:18:28+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-04T18:12:19+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</title><link href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" rel="alternate" type="text/html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" /><published>2024-04-04T13:25:54+09:00</published><updated>2024-04-04T13:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"><![CDATA[<p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a><br />
+指定したサイクルで割り込みを生成し、タイマー イベントが発生とともに登録した関数を呼び出すことができるライブラリです。</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a><br />
+Arduinoに何かをさせながらtone()でBGMを流すことができるライブラリです。</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/embedded-kiddie/arduino-uno/tree/main/background_music" title="arduino-uno/background_music at main · embedded-kiddie/arduino-uno"><code class="language-plaintext highlighter-rouge">arduino-uno/background_music</code></a><br />
+Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOXGJxg" title="T-SQUARE 『Truth』 × 360 Reality Audio - スペシャルビデオ - YouTube">TRUTH</a> を奏でるデモプログラムです。</p>
+  </li>
+</ul>
+
+<p>映像は「<a href="/2024/03/16/arduino-lap-timer.html" title="Arduinoでライントレース用ラップタイマーを作る">Arduinoでライントレース用ラップタイマーを作る</a>」で紹介したラップタイマに移植した時の動作の様子です。</p>
+
+<p>【ここにXの映像！】</p>
+
+<p>以降は、表題に関する調査と学習の結果報告になります :v:</p>
+
+<h2 id="tone関数の問題点と対策">tone()関数の問題点と対策</h2>
+<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/">チュートリアル</a> にあるノンブロッキングな関数 <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の典型的な使い方は、直後に <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を呼び出しブロックする、次のようなパターン。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">tone</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">duration</span><span class="p">);</span>
+<span class="n">delay</span><span class="p">(</span><span class="n">duration</span><span class="p">);</span></code></pre></figure>
+
+<p>これを楽譜に合わせて次々に音符を再生するワケですが、これだと音を鳴らす以外に何も出来ません。</p>
+
+<p>作成したライブラリの仕組み自体はすごく簡単で、<code class="language-plaintext highlighter-rouge">delay()</code> の代わりに 音符の長さだけ時間が経過したら割り込みをかけ、<code class="language-plaintext highlighter-rouge">noTone()</code> で音を止めた後、音符の配列データから次の音符（周波数と音符長）を読み込み、次の割り込みを設定する - この繰り返しです。</p>
+
+<p>まずはこの動作を実現できる Arduino ライブラリの調査から始めました。</p>
+
+<h2 id="arduino-uno-r4-のタイマ系ライブラリの状況">Arduino UNO R4 のタイマ系ライブラリの状況</h2>
+<p>Arduino のタイマ系ライブラリを大きく分けると、<a href="https://playground.arduino.cc/Main/MsTimer2/" title="Arduino Playground - MsTimer2"><code class="language-plaintext highlighter-rouge">MsTimer2</code></a> などハードウェア・タイマを利用するタイプと、<a href="https://github.com/Aasim-A/AsyncTimer" title="Aasim-A/AsyncTimer: JavaScript-like Async timing functions (setTimeout, setInterval) for Arduino, ESP8266, ESP32 and other compatible boards"><code class="language-plaintext highlighter-rouge">AsyncTimer</code></a> の様に <code class="language-plaintext highlighter-rouge">loop()</code> 中で <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> や <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> でタスクの起動するタイミングを管理するタイプがあります。</p>
+
+<p>両者とも IDE からインストールできるものをいくつかトライしましたが、前者は ARV 系でないと動作しないものしか見つからず、後者は CPU やボードに依存しないものの、タイマの学習にはならないので見送りです。</p>
+
+<p>また <a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> が Github 上で <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> を公開されていて、「これだ！」と思い実装を進めていったのですが、要件に合わなかったり（後述）多少動作が不安定なところがあったため、最終的に自作するハメとなりました。</p>
+
+<h2 id="arduino-uno-r4-ハードウェアタイマの仕組み">Arduino UNO R4 ハードウェア・タイマの仕組み</h2>
+<p>ということで、あらためてルネサス R7FA4M1AB（RA4M1 グループ）が持つタイマの仕組みから紐解きたいと思います。あくまで初心者目線ですので、よくご存知の方はスッ飛ばしてください。まずは一般論から。</p>
+
+<h3 id="マイコン内蔵タイマの仕組み">マイコン内蔵タイマの仕組み</h3>
+<p>マイコン内蔵のタイマには、CPU コアと密に関係するシステムタイマ（SysTickタイマ）や USB や UART、SPI などの I/F で同期やタイミングを制御するためのタイマ、RTC（リアルタイムクロック）、WDT（ウォッチドッグタイマ）など、周辺回路に専用のタイマがありますが、ここでは PWM 制御などに使えるなど汎用的なタイマについて見ていきたいと思います。</p>
+
+<p>汎用タイマの仕組みを理解するには、ストップウォッチを想定すると良いです。ザックリですが、この種のタイマは次の図のような幾つかの基本要素で構成されてます。</p>
+
+<p><img src="/images/2024/04-04/timer-overview.jpg" alt="タイマを構成する要素" title="タイマを構成する要素" /></p>
+
+<p><strong>1.</strong> 秒針１周分に相当する <strong>総カウント数</strong><br />
+  <strong>8ビットから32ビット</strong> まで、マイコンの種類と用途に応じて色々あります。</p>
+
+<p><strong>2.</strong> １目盛分の <strong>刻み幅</strong> を設定するレジスタ<br />
+  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。</p>
+
+<p>さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> が設定できたりします。 <img src="/images/2024/04-04/clock-source-selecter.png" alt="クロックソース選択ブロック図" title="クロックソース選択ブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" /></p>
+
+<p><strong>3.</strong> 秒針の進みを数える <strong>カウンタ</strong>・レジスタ<br />
+  １目盛１カウントとして刻むカウンタです。例えば16ビットタイマは 0 〜 65535 まで、32ビットタイマは 0 〜 4294967295 まで数えられます。</p>
+
+<p>秒針が１周すると 0 に戻る、即ちオーバーフローするので、アプリケーション側で適切に扱えるようオーバーフローを知らせるための割り込みを発生させる機能があったりします。</p>
+
+<p><strong>4.</strong> <strong>タイミング</strong> を決めるレジスタと <strong>動作</strong> を制御するレジスタ<br />
+  秒針の進みに応じてイベントを発生させるタイミングを設定するレジスタと、その時の動作を制御するレジスタがあります。イベントの発生により、割り込みを発生させたり、汎用出力ポートに HIGH または LOW の信号を出力したりすることが出来ます。</p>
+
+<p>イベント発生用のレジスタは、3. のカウンタ・レジスタとの比較でタイミングを決めるため、「<strong>コンペア・レジスタ</strong>」とか「<strong>マッチ・レジスタ</strong>」と呼ばれます。<br />
+  <br />例えば、レジスタ A で汎用出力ポートを HIGH に、レジスタ B で LOW に、またレジスタ C でリセットする設定では、１目盛分の刻み幅と A、B、C から <strong>周波数</strong> と <strong>デューティ比</strong> が決まる PWM 出力を作り出せることになります。<br />
+  <br /><img src="/images/2024/04-04/counter-duty-pwm.jpg" alt="タイマレジスタとPWM出力の関係" title="タイマレジスタとPWM出力の関係" /></p>
+
+<h3 id="ra4m1-のタイマ">RA4M1 のタイマ</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-04/RA4M1-block-diagram.png" title="RA4M1のブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" data-lightbox="image">
+    <img src="/images/2024/04-04/RA4M1-block-diagram-small.png" alt="RA4M1のブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" />
+  </a>
+</figure>
+
+<p>一般論のお次は、ルネサスのマイコン R7FA4M1AB（RA4M1 グループ）のタイマです。関係する要素をブロック図中の赤線で囲んでみました。</p>
+
+<p>特に２つの汎用タイマで、32ビットが2個、16ビットが6個ある「GPT」と、16ビットが2個の「AGT」が今回のお題です。</p>
+
+<h4 id="gpt-とは">GPT とは</h4>
+<p><strong>G</strong>eneral <strong>P</strong>ulse width modulation <strong>T</strong>imer、即ち汎用の PWM 用タイマです。<a href="#マイコン内蔵タイマの仕組み" title="マイコン内蔵タイマの仕組み">前章</a> でタイマの基本要素をいくつか紹介しましたが、実際のレジスタは11種類、235個もあり、矩形波やノコギリ波、三角波の生成や、単純な DC モータのデューティ制御から三相モーター用の出力まで、多様なニーズに応える動作モードの設定ができるようになっています。</p>
+
+<h4 id="agt-とは">AGT とは</h4>
+<p><a href="https://www.renesas.com/jp/ja/blogs/asynchronous-general-purpose-timer-providing-ra-microcontrollers-low-power-timing-solutions" title="The Asynchronous General Purpose Timer, Providing RA Microcontrollers with Low Power Timing Solutions - Renesas"><strong>A</strong>synchronous <strong>G</strong>eneral purpose <strong>T</strong>imer</a> の略で、ユーザーズマニュアルによると「低消費電力非同期汎用タイマ」とのことです。クロック発信源の１つとして 32.768KHz という「低速オンチップ オシレータ」が選択でき、汎用タイマ機能のほか「外部パルスの幅または周期の測定、および外部イベントのカウントに利用可能」で、低消費電力モードから復帰する際の外部信号の監視役の１つとして機能させることが出来ます。</p>
+
+<p>GPTと比較すると関連するレジスタも少なく、5種類、10個です。</p>
+
+<h3 id="arduino-uno-r4-のタイマ事情">Arduino UNO R4 のタイマ事情</h3>
+<p>GPT や AGT を汎用タイマとして機能させるには、次のようなステップが必要です。</p>
+<ol>
+  <li>クロック発信源（ソース）の選択と分周比の設定</li>
+  <li>動作モードの設定</li>
+  <li>コンペアマッチレジスタの設定</li>
+  <li>割り込みの許可と優先度の設定</li>
+  <li>カウンタレジスタのクリア</li>
+  <li>タイマのスタート</li>
+</ol>
+
+<p>Arduino UNO R4 ではこのようなウザい詳細を隠蔽し、使われていないタイマを引き当て、周波数とデューティー比（あるいはクロック周期と分周比）を指定すれば後は良しなにやってくれる関数が <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer.cpp</code></a> に定義されています。</p>
+
+<p>FSP（<a href="https://www.renesas.com/us/en/software-tool/flexible-software-package-fsp" title="Flexible Software Package (FSP) - Renesas">Flexible Software Package</a>）はルネサス製 ARM マイコンのソフトウェア群で、<a href="https://qiita.com/yasuhiro-k/items/93efb640aa12f3db9086" title="Arduino UNO R4のFspTimerライブラリの使い方 #Arduino - Qiita">Qiita の記事</a> を参考に、実際に動作させてみて分かったことを紹介します。</p>
+
+<h4 id="汎用タイマの空き状況">汎用タイマの空き状況</h4>
+<p>全部で10個ある汎用タイマのうち、GPT は32ビットが２個、16ビットが１個、AGT は16ビット１個が既に Arduino 側で使用済みです。残りの５個は全て16ビットで、GPT が４個、AGT が１個という状況です。</p>
+
+<p>使用済みのうち <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で AGT が <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/time.cpp" title="ArduinoCore-renesas/cores/arduino/time.cpp at main · arduino/ArduinoCore-renesas">使われています</a>。</p>
+
+<h4 id="割り込みハンドラの怪">割り込みハンドラの怪？</h4>
+<p><a href="https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/" title="attachInterrupt() - Arduino Reference"><code class="language-plaintext highlighter-rouge">attachInterrupt()</code></a> の解説によると、ユーザ側による割り込みのハンドラ関数内では多重割り込みが禁止されていて、故に <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> がインクリメントされず <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> が機能しない旨の記述がありますが、UNO R4 の場合、タイマや外部入力ピンへの割り込みハンドラ内で <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> も<strong>使えます</strong>。</p>
+
+<p>おそらく NVIC（Nested Vector Interrupt Controller、多重型ベクタ割り込みコントローラ）が活きているのだと思いますが（でなければ何らかのトリックか？）、ユーザ側で複数の割り込みを使う場合、優先順位の調査が必要かと思われます（未調査です、スミマセン…）。</p>
+
+<h4 id="クロック周波数">クロック周波数</h4>
+<p>前述の通り、どちらも空きが16ビット長のタイプしかありません。PWM 出力の場合、12ビットD/Aコンバータがあるにもかかわらず <a href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogwriteresolution/" title="analogWriteResolution() - Arduino Reference"><code class="language-plaintext highlighter-rouge">analogWriteResolution()</code></a> に UNO の記述はなく、<a href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogwrite/" title="analogWrite() - Arduino Reference"><code class="language-plaintext highlighter-rouge">analogWrite()</code></a> にある通りとすると、周波数が 490Hz、分解能が 8ビットと、他に比べて低い設定となってます。</p>
+
+<ul>
+  <li>
+    <p>GPT<br />
+サブクロックの <code class="language-plaintext highlighter-rouge">PCLKD</code> が発信源で、48MHz がデフォルト。分周比は 1、4、16、64、256、1024 が選択可能。</p>
+  </li>
+  <li>
+    <p>AGT<br />
+サブクロックの <code class="language-plaintext highlighter-rouge">PCLKD</code> が発信源で、24MHz がデフォルト。分周比は 1、2、8 のみが選択可能。</p>
+  </li>
+</ul>
+
+<h2 id="自作のタイマ系ライブラリと-bgm-再生ライブラリ">自作のタイマ系ライブラリと BGM 再生ライブラリ</h2>
+<p>さて、楽譜にはという同じ高さの音を繋げて１つの音として演奏する <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> という記号が出てきます。例えば、速さが<span class="inline"><img src="/images/2024/04-04/tempo-155.png" title="テンポ=155" alt="テンポ=155" /></span> で4分音符に16分音符が続くタイ<span class="inline"><img class="inline" src="/images/2024/04-04/tie-quater-16th.png" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>では484ミリ秒鳴らし続けなければなりませんし、長いと数秒間続くことも。</p>
+
+<p>このために1ミリ秒刻みの割り込みで484回を数えたり、数千回を数えたりするのは CPU リソースの無駄使いで、数えるのはタイマに任せるのが得策です。</p>
+
+<p>ここで問題なのは長い周期の場合で、GPT では <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式" /></span> より1398ミリ秒、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)" /></span> より約22ミリ秒までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータで分周比を最大の 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)" /></span> より約127秒計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからでは出来ません。またオーバーフロー割り込みを設定するメソッド <code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code> を試してみましたが、うまく動きませんでした。</p>
+
+<p><a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、実験するとおよそ2秒以上はダメでしたし、ご自分でも書かれてますが、動作にデリケートなところがあって使用を断念した次第です。</p>
+
+<h2 id="謝辞と予告">謝辞と予告</h2>
+<p>ここまで読んで頂き、ありがとうございます。長くなったのでライブラリの解説や、最近購入した RIGOL のオシロスコープで、習熟も兼ねて音階の周波数再現性を測定してみたいと思います :sunglasses:。</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tone" /><summary type="html"><![CDATA[このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！]]></summary></entry><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
 
 <p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
 
