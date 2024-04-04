@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-04T18:19:27+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</title><link href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" rel="alternate" type="text/html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" /><published>2024-04-04T13:25:54+09:00</published><updated>2024-04-04T13:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"><![CDATA[<p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-04T18:44:09+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</title><link href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" rel="alternate" type="text/html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" /><published>2024-04-04T13:25:54+09:00</published><updated>2024-04-04T13:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"><![CDATA[<p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
 
 <ul>
   <li>
@@ -35,9 +35,9 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p>まずはこの動作を実現できる Arduino ライブラリの調査から始めました。</p>
 
 <h2 id="arduino-uno-r4-のタイマ系ライブラリの状況">Arduino UNO R4 のタイマ系ライブラリの状況</h2>
-<p>Arduino のタイマ系ライブラリを大きく分けると、<a href="https://playground.arduino.cc/Main/MsTimer2/" title="Arduino Playground - MsTimer2"><code class="language-plaintext highlighter-rouge">MsTimer2</code></a> などハードウェア・タイマを利用するタイプと、<a href="https://github.com/Aasim-A/AsyncTimer" title="Aasim-A/AsyncTimer: JavaScript-like Async timing functions (setTimeout, setInterval) for Arduino, ESP8266, ESP32 and other compatible boards"><code class="language-plaintext highlighter-rouge">AsyncTimer</code></a> の様に <code class="language-plaintext highlighter-rouge">loop()</code> 中で <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> や <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> でタスクの起動するタイミングを管理するタイプがあります。</p>
+<p>Arduino のタイマ系ライブラリを大きく分けると、<a href="https://playground.arduino.cc/Main/MsTimer2/" title="Arduino Playground - MsTimer2"><code class="language-plaintext highlighter-rouge">MsTimer2</code></a> などハードウェア・タイマを利用するタイプと、<a href="https://github.com/Aasim-A/AsyncTimer" title="Aasim-A/AsyncTimer: JavaScript-like Async timing functions (setTimeout, setInterval) for Arduino, ESP8266, ESP32 and other compatible boards"><code class="language-plaintext highlighter-rouge">AsyncTimer</code></a> の様に <code class="language-plaintext highlighter-rouge">loop()</code> 中に <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> や <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> でタスク起動のタイミングを管理するコードを埋め込むタイプとがあります。</p>
 
-<p>両者とも IDE からインストールできるものをいくつかトライしましたが、前者は ARV 系でないと動作しないものしか見つからず、後者は CPU やボードに依存しないものの、タイマの学習にはならないので見送りです。</p>
+<p>両者とも IDE からインストールできるものをいくつかトライしましたが、前者は ARV 系でないと動作しないものしか見つからず、後者は CPU やボードに依存しないものの、タイマの学習にはならないので今回は見送りです。</p>
 
 <p>また <a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> が Github 上で <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> を公開されていて、「これだ！」と思い実装を進めていったのですが、要件に合わなかったり（後述）多少動作が不安定なところがあったため、最終的に自作するハメとなりました。</p>
 
@@ -51,25 +51,29 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p><img src="/images/2024/04-04/timer-overview.jpg" alt="タイマを構成する要素" title="タイマを構成する要素" /></p>
 
-<p><strong>1.</strong> 秒針１周分に相当する <strong>総カウント数</strong><br />
+<ol>
+  <li>
+    <p>秒針１周分に相当する <strong>総カウント数</strong><br />
   <strong>8ビットから32ビット</strong> まで、マイコンの種類と用途に応じて色々あります。</p>
-
-<p><strong>2.</strong> １目盛分の <strong>刻み幅</strong> を設定するレジスタ<br />
-  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。</p>
-
-<p>さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> が設定できたりします。 <img src="/images/2024/04-04/clock-source-selecter.png" alt="クロックソース選択ブロック図" title="クロックソース選択ブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" /></p>
-
-<p><strong>3.</strong> 秒針の進みを数える <strong>カウンタ</strong>・レジスタ<br />
-  １目盛１カウントとして刻むカウンタです。例えば16ビットタイマは 0 〜 65535 まで、32ビットタイマは 0 〜 4294967295 まで数えられます。</p>
-
-<p>秒針が１周すると 0 に戻る、即ちオーバーフローするので、アプリケーション側で適切に扱えるようオーバーフローを知らせるための割り込みを発生させる機能があったりします。</p>
-
-<p><strong>4.</strong> <strong>タイミング</strong> を決めるレジスタと <strong>動作</strong> を制御するレジスタ<br />
-  秒針の進みに応じてイベントを発生させるタイミングを設定するレジスタと、その時の動作を制御するレジスタがあります。イベントの発生により、割り込みを発生させたり、汎用出力ポートに HIGH または LOW の信号を出力したりすることが出来ます。</p>
-
-<p>イベント発生用のレジスタは、3. のカウンタ・レジスタとの比較でタイミングを決めるため、「<strong>コンペア・レジスタ</strong>」とか「<strong>マッチ・レジスタ</strong>」と呼ばれます。<br />
+  </li>
+  <li>
+    <p>１目盛分の <strong>刻み幅</strong> を設定するレジスタ<br />
+  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。<br />
+  <br />さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> が設定できたりします。 <img src="/images/2024/04-04/clock-source-selecter.png" alt="クロックソース選択ブロック図" title="クロックソース選択ブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" /></p>
+  </li>
+  <li>
+    <p>秒針の進みを数える <strong>カウンタ</strong>・レジスタ<br />
+  １目盛１カウントとして刻むカウンタです。例えば16ビットタイマは 0 〜 65535 まで、32ビットタイマは 0 〜 4294967295 まで数えられます。<br />
+  <br />秒針が１周すると 0 に戻る、即ちオーバーフローするので、アプリケーション側で適切に扱えるようオーバーフローを知らせるための割り込みを発生させる機能があったりします。</p>
+  </li>
+  <li>
+    <p><strong>タイミング</strong> を決めるレジスタと <strong>動作</strong> を制御するレジスタ<br />
+  秒針の進みに応じてイベントを発生させるタイミングを設定するレジスタと、その時の動作を制御するレジスタがあります。イベントの発生により、割り込みを発生させたり、汎用出力ポートに HIGH または LOW の信号を出力したりすることが出来ます。<br />
+  <br />イベント発生用のレジスタは、3. のカウンタ・レジスタとの比較でタイミングを決めるため、「<strong>コンペア・レジスタ</strong>」とか「<strong>マッチ・レジスタ</strong>」と呼ばれます。<br />
   <br />例えば、レジスタ A で汎用出力ポートを HIGH に、レジスタ B で LOW に、またレジスタ C でリセットする設定では、１目盛分の刻み幅と A、B、C から <strong>周波数</strong> と <strong>デューティ比</strong> が決まる PWM 出力を作り出せることになります。<br />
   <br /><img src="/images/2024/04-04/counter-duty-pwm.jpg" alt="タイマレジスタとPWM出力の関係" title="タイマレジスタとPWM出力の関係" /></p>
+  </li>
+</ol>
 
 <h3 id="ra4m1-のタイマ">RA4M1 のタイマ</h3>
 <figure class="float-left">
