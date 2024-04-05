@@ -12,18 +12,18 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！" />
 <meta property="og:description" content="このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！" />
-<link rel="canonical" href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" />
-<meta property="og:url" content="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" />
+<link rel="canonical" href="http://localhost:4000/2024/04/04/arduino-blink-with-bgm.html" />
+<meta property="og:url" content="http://localhost:4000/2024/04/04/arduino-blink-with-bgm.html" />
 <meta property="og:site_name" content="Embedded Kiddie" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2024-04-04T13:25:54+09:00" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-04-04T13:25:54+09:00","datePublished":"2024-04-04T13:25:54+09:00","description":"このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！","headline":"Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"},"url":"https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-04-04T13:25:54+09:00","datePublished":"2024-04-04T13:25:54+09:00","description":"このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！","headline":"Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/04/04/arduino-blink-with-bgm.html"},"url":"http://localhost:4000/2024/04/04/arduino-blink-with-bgm.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="icon" href="/assets/favicon.ico" />
-  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" /></head>
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Embedded Kiddie" /></head>
 <body><header class="site-header" role="banner">
 
   <div class="wrapper">
@@ -197,14 +197,14 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>ここで問題なのは長い周期の場合で、GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式"></span> より約 1398ミリ秒、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)"></span> ≒ 22ミリ秒までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータで最大の分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)"></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからではこれが出来ません。</p>
 
-<p>またオーバーフロー割り込みを設定するメソッド <code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code> を試してみましたが、うまく動かすことができませんでした。</p>
+<p>またオーバーフロー割り込みを設定するメソッド <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp#L770" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code></a> を試してみましたが、うまく動かすことができませんでした。</p>
 
-<p><a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、実験するとおよそ2秒以上はダメでした。またご自身でも書かれてますが、動作にデリケートなところがあって使用を断念した次第です。</p>
+<p><a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうだったかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、実験するとおよそ2秒以上はダメでした。またご自身でも書かれてますが、動作にデリケートなところがあって使用を断念した次第です。</p>
 
 <h3 id="で結局どうしたか">で、結局どうしたか？</h3>
 <p>オーバーフローフラグによる割り込みを模擬しました。</p>
 
-<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、ゼロになるまでこれを繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みが追加さます。AGT の場合は追加の割り込みが90回となりますが、それでも（2000回に比べたら）激減できます。</p>
+<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、残りがゼロになるまでこれを繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みが追加されます。AGT の場合は追加の割り込みが90回となりますが、それでも（2000回に比べたら）激減できます。</p>
 
 <p>これで、どんなに長い音符も再生できるようになりました。メデタシ メデタシ。</p>
 
