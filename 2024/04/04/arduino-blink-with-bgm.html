@@ -195,7 +195,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>これを1ミリ秒刻みの割り込みで484回を数えたり、数千回を数えたりするのは CPU リソースの無駄使いで、数えるのはタイマに任せるのが得策です。</p>
 
-<p>ここで問題なのは長い周期の場合で、GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式"></span> より1398ミリ秒、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)"></span> より約22ミリ秒までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータで最大の分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)"></span> より約127秒計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからではこれが出来ません。</p>
+<p>ここで問題なのは長い周期の場合で、GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式"></span> より約 1398ミリ秒、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)"></span> ≒ 22ミリ秒までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータで最大の分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)"></span> ≒ 127秒計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからではこれが出来ません。</p>
 
 <p>またオーバーフロー割り込みを設定するメソッド <code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code> を試してみましたが、うまく動かすことができませんでした。</p>
 
@@ -204,7 +204,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h3 id="で結局どうしたか">で、結局どうしたか？</h3>
 <p>オーバーフローフラグによる割り込みを模擬しました。</p>
 
-<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、ゼロになるまでこれを繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みが追加さます。AGT の場合、追加の割り込みは90回となりますが、それでも（2000回に比べたら）激減させられます。</p>
+<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、ゼロになるまでこれを繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みが追加さます。AGT の場合は追加の割り込みが90回となりますが、それでも（2000回に比べたら）激減できます。</p>
 
 <p>これで、どんなに長い音符も再生できるようになりました。メデタシ メデタシ。</p>
 
