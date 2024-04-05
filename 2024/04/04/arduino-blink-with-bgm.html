@@ -177,6 +177,8 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p>おそらく ARM の NVIC（Nested Vector Interrupt Controller、多重型ベクタ割り込みコントローラ）が活きているのだと思いますが（でなければ何らかのトリックか？）、ユーザ側で複数の割り込みを使う場合、優先順位の調査が必要かと思います（未調査です、スミマセン…）。</p>
 
 <h4 id="クロック周波数">クロック周波数</h4>
+<p><a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer.cpp</code></a> で設定可能なクロックです。</p>
+
 <ul>
   <li>
     <p>GPT<br>
