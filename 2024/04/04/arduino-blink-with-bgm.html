@@ -197,7 +197,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>これを1ミリ秒刻みの割り込みで484回を数えたり、数千回を数えたりするのは CPU リソースの無駄使いで、数えるのはタイマに任せるのが得策です。</p>
 
-<p>ここで問題なのは長い周期の場合で、GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式"></span> より約 1398ミリ秒、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)"></span> ≒ 22ミリ秒までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータで最大の分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)"></span> ≒ 127秒計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからではこれが出来ません。</p>
+<p>ここで問題なのは長い周期の場合で、GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式"></span> より約 1398ミリ秒、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)"></span> ≒ 22ミリ秒までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータで最大の分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)"></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからではこれが出来ません。</p>
 
 <p>またオーバーフロー割り込みを設定するメソッド <code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code> を試してみましたが、うまく動かすことができませんでした。</p>
 
