@@ -12,18 +12,18 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！" />
 <meta property="og:description" content="このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！" />
-<link rel="canonical" href="http://localhost:4000/2024/04/04/arduino-blink-with-bgm.html" />
-<meta property="og:url" content="http://localhost:4000/2024/04/04/arduino-blink-with-bgm.html" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" />
 <meta property="og:site_name" content="Embedded Kiddie" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2024-04-04T13:25:54+09:00" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-04-04T13:25:54+09:00","datePublished":"2024-04-04T13:25:54+09:00","description":"このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！","headline":"Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2024/04/04/arduino-blink-with-bgm.html"},"url":"http://localhost:4000/2024/04/04/arduino-blink-with-bgm.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-04-04T13:25:54+09:00","datePublished":"2024-04-04T13:25:54+09:00","description":"このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！","headline":"Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"},"url":"https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="icon" href="/assets/favicon.ico" />
-  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Embedded Kiddie" /></head>
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" /></head>
 <body><header class="site-header" role="banner">
 
   <div class="wrapper">
@@ -147,7 +147,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p><strong>G</strong>eneral <strong>P</strong>ulse width modulation <strong>T</strong>imer、即ち汎用の PWM 用タイマです。<a href="#%E3%83%9E%E3%82%A4%E3%82%B3%E3%83%B3%E5%86%85%E8%94%B5%E3%82%BF%E3%82%A4%E3%83%9E%E3%81%AE%E4%BB%95%E7%B5%84%E3%81%BF" title="マイコン内蔵タイマの仕組み">前章</a> でタイマの基本要素をいくつか紹介しましたが、実際のレジスタは11種類、235個もあり、矩形波やノコギリ波、三角波の生成や、単純な DC モータのデューティ制御から三相モーター用の出力まで、多様なニーズに応える動作モードの設定ができるようになっています。</p>
 
 <h4 id="agt-とは">AGT とは</h4>
-<p><a href="https://www.renesas.com/jp/ja/blogs/asynchronous-general-purpose-timer-providing-ra-microcontrollers-low-power-timing-solutions" title="The Asynchronous General Purpose Timer, Providing RA Microcontrollers with Low Power Timing Solutions - Renesas"><strong>A</strong>synchronous <strong>G</strong>eneral purpose <strong>T</strong>imer</a> の略で、ユーザーズマニュアルによると「低消費電力非同期汎用タイマ」とのことです。クロック発信源の１つとして 32.768KHz の「低速オンチップ オシレータ」が選択でき、汎用タイマ機能のほか、低消費電力モードから復帰する際の外部信号のフィルタとして機能する「外部パルスの幅または周期の測定、および外部イベントのカウントが利用可能」です。</p>
+<p><a href="https://www.renesas.com/jp/ja/blogs/asynchronous-general-purpose-timer-providing-ra-microcontrollers-low-power-timing-solutions" title="The Asynchronous General Purpose Timer, Providing RA Microcontrollers with Low Power Timing Solutions - Renesas"><strong>A</strong>synchronous <strong>G</strong>eneral purpose <strong>T</strong>imer</a> の略で、ユーザーズマニュアルによると「低消費電力非同期汎用タイマ」とのことです。クロック発信源の１つとして 32.768KHz の「低速オンチップ オシレータ」が選択でき、汎用タイマ機能のほか、外部信号により低消費電力モードから復帰する際のフィルタ機能として「外部パルスの幅または周期の測定、および外部イベントのカウントが利用可能」とのことです。</p>
 
 <p>GPTと比較すると関連するレジスタも少なく、5種類、10個です。</p>
 
@@ -169,7 +169,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="汎用タイマの空き状況">汎用タイマの空き状況</h4>
 <p>全部で10個ある汎用タイマのうち、GPT は32ビットが２個と16ビットが１個、AGT は16ビット１個が既に Arduino 側で使用済みです。残りの５個は全て16ビットで、GPT が４個、AGT が１個という状況です。</p>
 
-<p>使用済みのうち <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で AGT が <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/time.cpp" title="ArduinoCore-renesas/cores/arduino/time.cpp at main · arduino/ArduinoCore-renesas">使われています</a>。</p>
+<p>使用済みタイマのうち <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で AGT が <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/time.cpp" title="ArduinoCore-renesas/cores/arduino/time.cpp at main · arduino/ArduinoCore-renesas">使われています</a>。</p>
 
 <h4 id="割り込みハンドラの怪">割り込みハンドラの怪？</h4>
 <p><a href="https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/" title="attachInterrupt() - Arduino Reference"><code class="language-plaintext highlighter-rouge">attachInterrupt()</code></a> の解説によると、ユーザ側の割り込みハンドラ関数内では多重割り込みが禁止されていて、故に <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> がインクリメントされず <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> が機能しない旨の記述があります。が、UNO R4 の場合、タイマや外部入力ピンへの割り込みハンドラ内で <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> も<strong>使えます</strong>。</p>
@@ -195,7 +195,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>これを1ミリ秒刻みの割り込みで484回を数えたり、数千回を数えたりするのは CPU リソースの無駄使いで、数えるのはタイマに任せるのが得策です。</p>
 
-<p>ここで問題なのは長い周期の場合で、GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式"></span> より約 1398ミリ秒、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)"></span> ≒ 22ミリ秒までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータで最大の分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)"></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからではこれが出来ません。</p>
+<p>ここで問題なのは長い周期の場合で、16ビットを目一杯使い分周比を最大にしても GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式"></span> より約 1398ミリ秒（小数点以下切り捨て）、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)"></span> ≒ 21ミリ秒（同）までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータと分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)"></span> = 128秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからではこれが出来ません。</p>
 
 <p>またオーバーフロー割り込みを設定するメソッド <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp#L770" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code></a> を試してみましたが、うまく動かすことができませんでした。</p>
 
@@ -204,7 +204,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h3 id="で結局どうしたか">で、結局どうしたか？</h3>
 <p>オーバーフローフラグによる割り込みを模擬しました。</p>
 
-<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、残りがゼロになるまでこれを繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みが追加されます。AGT の場合は追加の割り込みが90回となりますが、それでも（2000回に比べたら）激減できます。</p>
+<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、これを残り時間がゼロになるまで繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みが追加されます。AGT の場合は追加の割り込みが90回となりますが、それでも（2000回に比べたら）激減できます。</p>
 
 <p>これで、どんなに長い音符も再生できるようになりました。メデタシ メデタシ。</p>
 
