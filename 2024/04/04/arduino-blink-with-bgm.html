@@ -177,10 +177,6 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p>おそらく ARM の NVIC（Nested Vector Interrupt Controller、多重型ベクタ割り込みコントローラ）が活きているのだと思いますが（でなければ何らかのトリックか？）、ユーザ側で複数の割り込みを使う場合、優先順位の調査が必要かと思います（未調査です、スミマセン…）。</p>
 
 <h4 id="クロック周波数">クロック周波数</h4>
-<p>前述の通り、空きが16ビット長のタイプしか空きがありません。<del>これらを PWM 出力で使う場合、12ビットD/Aコンバータがあるにもかかわらず <a href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogwriteresolution/" title="analogWriteResolution() - Arduino Reference"><code class="language-plaintext highlighter-rouge">analogWriteResolution()</code></a> に UNO の記述はなく、<a href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogwrite/" title="analogWrite() - Arduino Reference"><code class="language-plaintext highlighter-rouge">analogWrite()</code></a> の記述通りとすると、周波数が 490Hz、分解能が 8ビットと、他に比べて低い設定となってます。</del></p>
-
-<p>UNO の記述こそありませんが、<a href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogwriteresolution/" title="analogWriteResolution() - Arduino Reference"><code class="language-plaintext highlighter-rouge">analogWriteResolution()</code></a> に12ビットを指定すれば、正しく <a href="https://www.arduino.cc/reference/en/language/functions/analog-io/analogwrite/" title="analogWrite() - Arduino Reference"><code class="language-plaintext highlighter-rouge">analogWrite()</code></a> が動作することが確認できました。記述が無いってことは、ちゃんと使えるってことですネ。未確認、反省します <img class="emoji" title=":bowing_man:" alt=":bowing_man:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f647-2642.png" height="20" width="20"></p>
-
 <ul>
   <li>
     <p>GPT<br>
