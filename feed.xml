@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-09T20:06:42+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</title><link href="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html" rel="alternate" type="text/html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説" /><published>2024-04-09T17:43:21+09:00</published><updated>2024-04-09T17:43:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html"><![CDATA[<p><a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">前回の記事</a> で、<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> による楽譜再生の課題と <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> や既存ライブラリの調査結果について書きました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-09T22:43:28+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</title><link href="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html" rel="alternate" type="text/html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説" /><published>2024-04-09T17:43:21+09:00</published><updated>2024-04-09T17:43:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html"><![CDATA[<p><a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">前回の記事</a> で、<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> による楽譜再生の課題と <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> や既存ライブラリの調査結果について書きました。</p>
 
 <p>今回は、前回調査を元にバックグラウンドで動作するライブラリ <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> 用に作成したタイマライブラリ <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> を解説したいと思います。</p>
 
@@ -47,7 +47,7 @@
 
 <h3 id="メンバ関数の説明">メンバ関数の説明</h3>
 <h4 id="コンストラクタ">コンストラクタ</h4>
-<p>明示的にコンストラクタは実装していませんげ、クラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> で宣言してインスタンス化するのが Arduino 的かと思います。</p>
+<p><code class="language-plaintext highlighter-rouge">new</code> とかを使わずにクラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> で宣言してインスタンス化するのが Arduino 的かと思います。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名</span><span class="p">;</span></code></pre></figure>
 
@@ -57,7 +57,7 @@
 
 <h4 id="初期化">初期化</h4>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="err">変数名</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
 
 <ul>
   <li>
@@ -72,18 +72,22 @@
     <p><code class="language-plaintext highlighter-rouge">bool start</code><br />
 すぐにタイマのカウントを開始する場合は <code class="language-plaintext highlighter-rouge">true</code>（デフォルト、省略可能）を指定します。</p>
   </li>
+  <li>
+    <p>戻り値<br />
+初期化に成功すれば <code class="language-plaintext highlighter-rouge">true</code> が、失敗すれば <code class="language-plaintext highlighter-rouge">false</code> を返します。</p>
+  </li>
 </ul>
 
 <p>また次の様に <code class="language-plaintext highlighter-rouge">timer_mode</code> を指定することもできます。</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="err">変数名</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">timer_mode_t</span> <span class="n">timer_mode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="n">timer_mode_t</span> <span class="n">timer_mode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">timer_mode_t</code><br />
 タイマイベントを周期的に発火させるには列挙定数の <code class="language-plaintext highlighter-rouge">TIMER_MODE_PERIODIC</code> を、1回限りの場合は <code class="language-plaintext highlighter-rouge">TIMER_MODE_ONE_SHOT</code> を指定します。列挙定数 <code class="language-plaintext highlighter-rouge">timer_mode_t</code> は階層の深いところ（<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 Minima</a>、<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 WiFi</a>）で定義されています。</li>
 </ul>
 
-<p>その他のパラメータは前項と同じです。</p>
+<p>その他のパラメータと戻り値は前項と同じです。</p>
 
 <h4 id="コールバック関数">コールバック関数</h4>
 <p>タイマイベントの発火と共に呼び出すコールバック関数ですが、「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">割り込みハンドラの怪</a>」にも書いた通り、少なくとも UNO R4 Minima と UNO R4 WiFi では <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> も使えちゃいます。</p>

@@ -102,7 +102,7 @@
 
 <h3 id="メンバ関数の説明">メンバ関数の説明</h3>
 <h4 id="コンストラクタ">コンストラクタ</h4>
-<p>明示的にコンストラクタは実装していませんげ、クラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> で宣言してインスタンス化するのが Arduino 的かと思います。</p>
+<p><code class="language-plaintext highlighter-rouge">new</code> とかを使わずにクラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> で宣言してインスタンス化するのが Arduino 的かと思います。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名</span><span class="p">;</span></code></pre></figure>
 
@@ -112,7 +112,7 @@
 
 <h4 id="初期化">初期化</h4>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="err">変数名</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
 
 <ul>
   <li>
@@ -127,11 +127,15 @@
     <p><code class="language-plaintext highlighter-rouge">bool start</code><br>
 すぐにタイマのカウントを開始する場合は <code class="language-plaintext highlighter-rouge">true</code>（デフォルト、省略可能）を指定します。</p>
   </li>
+  <li>
+    <p>戻り値<br>
+初期化に成功すれば <code class="language-plaintext highlighter-rouge">true</code> が、失敗すれば <code class="language-plaintext highlighter-rouge">false</code> を返します。</p>
+  </li>
 </ul>
 
 <p>また次の様に <code class="language-plaintext highlighter-rouge">timer_mode</code> を指定することもできます。</p>
 
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="err">変数名</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">timer_mode_t</span> <span class="n">timer_mode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="n">timer_mode_t</span> <span class="n">timer_mode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
 
 <ul>
   <li>
@@ -139,7 +143,7 @@
 タイマイベントを周期的に発火させるには列挙定数の <code class="language-plaintext highlighter-rouge">TIMER_MODE_PERIODIC</code> を、1回限りの場合は <code class="language-plaintext highlighter-rouge">TIMER_MODE_ONE_SHOT</code> を指定します。列挙定数 <code class="language-plaintext highlighter-rouge">timer_mode_t</code> は階層の深いところ（<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 Minima</a>、<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 WiFi</a>）で定義されています。</li>
 </ul>
 
-<p>その他のパラメータは前項と同じです。</p>
+<p>その他のパラメータと戻り値は前項と同じです。</p>
 
 <h4 id="コールバック関数">コールバック関数</h4>
 <p>タイマイベントの発火と共に呼び出すコールバック関数ですが、「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">割り込みハンドラの怪</a>」にも書いた通り、少なくとも UNO R4 Minima と UNO R4 WiFi では <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> も使えちゃいます。</p>
