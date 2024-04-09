@@ -204,7 +204,7 @@
 <span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">60000</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">interrupts</span> <span class="o">=</span> <span class="mi">6000</span></code></pre></figure>
 
-<p>またこのスケッチ単体では GPT と AGT のうち前者が割り当てられるハズですが、下記のように <code class="language-plaintext highlighter-rouge">#include "CBTimer.h</code> 直前に <code class="language-plaintext highlighter-rouge">#deifne CBTIMER_FORCE_AGT</code> を挿入することで、強制的に AGT を割り当てて観測することが可能です。</p>
+<p>またこのスケッチ単体では GPT と AGT のうち前者が割り当てられるハズですが、下記のようにライブラリフォルダにある <code class="language-plaintext highlighter-rouge">CBTimer.cpp</code> の<code class="language-plaintext highlighter-rouge">#include "CBTimer.h</code> 直前に <code class="language-plaintext highlighter-rouge">#deifne CBTIMER_FORCE_AGT</code> を挿入することで、強制的に AGT を割り当てて観測することが可能です。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define CBTIMER_FORCE_AGT
 #include</span> <span class="cpf">"CBTimer.h"</span></code></pre></figure>
