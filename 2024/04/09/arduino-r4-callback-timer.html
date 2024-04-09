@@ -84,7 +84,7 @@
   <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
   <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
 
-  <span class="n">CBTimer</span> <span class="n">timer</span><span class="p">;</span>
+  <span class="k">static</span> <span class="n">CBTimer</span> <span class="n">timer</span><span class="p">;</span>
   <span class="n">timer</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">callback_func</span><span class="p">);</span>
 <span class="p">}</span>
 
