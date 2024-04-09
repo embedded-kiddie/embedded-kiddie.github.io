@@ -80,7 +80,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p>以降は、表題に関する調査と学習の結果報告になります <img class="emoji" title=":v:" alt=":v:" src="https://github.githubassets.com/images/icons/emoji/unicode/270c.png" height="20" width="20"></p>
 
 <h2 id="tone関数の問題点と対策">tone()関数の問題点と対策</h2>
-<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/">チュートリアル</a> にあるノンブロッキングな関数 <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の典型的な使い方は、直後に <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を呼び出しブロックする、次のようなパターン。</p>
+<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> にあるノンブロッキングな関数 <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の典型的な使い方は、直後に <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を呼び出しブロックする、次のようなパターン。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">tone</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">duration</span><span class="p">);</span>
 <span class="n">delay</span><span class="p">(</span><span class="n">duration</span><span class="p">);</span></code></pre></figure>
@@ -96,7 +96,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>両者とも IDE からインストールできるものをいくつかトライしましたが、前者は ARV 系でないと動作しないものしか見つからず、後者は CPU やボードに依存しないものの、タイマの学習にはならないので今回は見送りです。</p>
 
-<p>また <a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> が Github 上で <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> を公開されていて、「これだ！」と思い実装を進めていったのですが、要件に合わなかったり（後述）多少動作が不安定なところがあったため、最終的に自作するハメとなりました。</p>
+<p>また <a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> が Github 上で <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> を公開されていて、「これだ！」と思い実装を進めていったのですが、要件に合わなかったり（<a href="#AGTimer_R4_Library">後述</a>）多少動作が不安定なところがあったため、最終的に自作するハメとなりました。</p>
 
 <h2 id="arduino-uno-r4-ハードウェアタイマの仕組み">Arduino UNO R4 ハードウェア・タイマの仕組み</h2>
 <p>ということで、あらためてルネサス R7FA4M1AB（RA4M1 グループ）が持つタイマの仕組みから紐解きたいと思います。あくまで初心者目線ですので、よくご存知の方はスッ飛ばしてください。まずは一般論から。</p>
@@ -199,7 +199,8 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>またオーバーフロー割り込みを設定するメソッド <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp#L770" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code></a> を試してみましたが、うまく動かすことができませんでした。</p>
 
-<p><a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうだったかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、実験するとおよそ2秒以上はダメでした。またご自身でも書かれてますが、動作にデリケートなところがあって使用を断念した次第です。</p>
+<p><span id="AGTimer_R4_Library"></span>
+<a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうだったかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、およそ2秒を超えると想定通りに動作しません。ご自身でも書かれてますが、長周期の動作にデリケートなところがありそうで使用を断念しました。</p>
 
 <h3 id="で結局どうしたか">で、結局どうしたか？</h3>
 <p>オーバーフローフラグによる割り込みを模擬しました。</p>

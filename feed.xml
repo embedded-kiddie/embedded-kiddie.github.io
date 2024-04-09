@@ -1,4 +1,168 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-05T21:28:48+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</title><link href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" rel="alternate" type="text/html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" /><published>2024-04-04T13:25:54+09:00</published><updated>2024-04-04T13:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"><![CDATA[<p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-09T17:56:41+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</title><link href="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html" rel="alternate" type="text/html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説" /><published>2024-04-09T17:43:21+09:00</published><updated>2024-04-09T17:43:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html"><![CDATA[<p><a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">前回の記事</a> で、<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> による楽譜再生の課題と <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> や既存ライブラリの調査結果について書きました。</p>
+
+<p>今回は、前回調査を元にバックグラウンドで動作するライブラリ <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> 用に作成したタイマライブラリ <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> を解説したいと思います。</p>
+
+<h2 id="callbacktimerr4">CallbackTimerR4</h2>
+<p>楽譜中には全音符以外にも、数秒間同じ音を繋げて鳴らす記号 <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> が度々現れます。例えば <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> の例題に添付の <a href="https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E3%83%96%E3%82%B9" title="グリーンスリーブス - Wikipedia">イングランド民謡</a> <a href="https://github.com/robsoncouto/arduino-songs/tree/master/greensleeves" title="arduino-songs/greensleeves at master · robsoncouto/arduino-songs">Greensleeves</a> には最長 2571msec の音符が現れます。この時間をきっちり計り、なおかつ CPU リソースの使用を小さく抑えたのがこのライブラリの特徴です。</p>
+
+<p>仕組みの大雑把な話は「<a href="/2024/04/04/arduino-blink-with-bgm.html#自作のタイマ系ライブラリと-bgm-再生ライブラリ" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">自作のタイマ系ライブラリと BGM 再生ライブラリ</a>」を見てもらうとして、ここでは使い方をとインストール方法、および正確性を確認する方法について説明します。</p>
+
+<h3 id="スケッチのサンプル">スケッチのサンプル</h3>
+<p>Arduino UNO R4 の LED をフワッとさせながら TX、RX を Lチカさせるサンプルです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
+#include</span> <span class="cpf">"CBTimer.h"</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">callback_func</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">static</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">++</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span>  <span class="n">LOW</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span>  <span class="n">LOW</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+
+  <span class="n">CBTimer</span> <span class="n">timer</span><span class="p">;</span>
+  <span class="n">timer</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">callback_func</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">analogWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">255</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">analogWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="メンバ関数の説明">メンバ関数の説明</h3>
+<h4 id="コンストラクタ">コンストラクタ</h4>
+<p>明示的にコンストラクタは実装していませんげ、クラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> で宣言してインスタンス化するのが Arduino 的かと思います。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名</span><span class="p">;</span></code></pre></figure>
+
+<p>クラス内で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> のインスタンスを静的に確保しているため、残念ながら（というか、敢えて）次のように複数の変数を宣言しても１つしか動作しません。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名１</span><span class="p">,</span> <span class="err">変数名２</span><span class="p">;</span> <span class="c1">// 変数名１と変数名２でFspTimerのインスタンスが共通となってしまう</span></code></pre></figure>
+
+<h4 id="初期化">初期化</h4>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="err">変数名</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">int period_ms</code><br />
+タイマによるイベントの発火周期をミリ秒単位で指定します。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">void (*callback)(void)</code><br />
+タイマイベントの発火周期ごとに呼び出すコールバック関数を指定します。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">bool start</code><br />
+すぐにタイマのカウントを開始する場合は <code class="language-plaintext highlighter-rouge">true</code>（デフォルト、省略可能）を指定します。</p>
+  </li>
+</ul>
+
+<p>また次の様に <code class="language-plaintext highlighter-rouge">timer_mode</code> を指定することもできます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="err">変数名</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">timer_mode_t</span> <span class="n">timer_mode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">timer_mode_t</code><br />
+タイマイベントを周期的に発火させるには列挙定数の <code class="language-plaintext highlighter-rouge">TIMER_MODE_PERIODIC</code> を、1回限りの場合は <code class="language-plaintext highlighter-rouge">TIMER_MODE_ONE_SHOT</code> を指定します。列挙定数 <code class="language-plaintext highlighter-rouge">timer_mode_t</code> は階層の深いところ（<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 Minima</a>、<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 WiFi</a>）で定義されています。</li>
+</ul>
+
+<p>その他のパラメータは前項と同じです。</p>
+
+<h4 id="コールバック関数">コールバック関数</h4>
+<p>タイマイベントの発火と共に呼び出すコールバック関数ですが、「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">割り込みハンドラの怪</a>」にも書いた通り、少なくとも UNO R4 Minima と UNO R4 WiFi では <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> も使えちゃいます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">callback_func</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">uint32_t</span> <span class="n">time</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+  <span class="p">...</span>
+<span class="p">}</span></code></pre></figure>
+
+<h4 id="開始停止終了のメソッド">開始、停止、終了のメソッド</h4>
+<p>初期化関数 <code class="language-plaintext highlighter-rouge">begin()</code> の <code class="language-plaintext highlighter-rouge">start</code> に <code class="language-plaintext highlighter-rouge">false</code> を指定した場合は <code class="language-plaintext highlighter-rouge">start()</code> でタイマのカウントを開始できます。また <code class="language-plaintext highlighter-rouge">stop()</code> はカウントの停止、<code class="language-plaintext highlighter-rouge">end()</code> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> 中の <a href="/2024/04/04/arduino-blink-with-bgm.html#gpt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">GPT</a> もしくは <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">AGT</a> インスタンスを解放します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="err">変数名</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+<span class="err">変数名</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="err">変数名</span><span class="p">.</span><span class="n">end</span><span class="p">();</span></code></pre></figure>
+
+<h3 id="インストール方法">インストール方法</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-09/download-library.jpg" title="CallbackTimerR4-main.zipのダウンロード" data-lightbox="image">
+    <img src="/images/2024/04-09/download-library-small.jpg" alt="CallbackTimerR4-main.zipのダウンロード" />
+  </a>
+  <a href="/images/2024/04-09/include-library.jpg" title="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" data-lightbox="image">
+    <img src="/images/2024/04-09/include-library-small.jpg" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" />
+  </a>
+</figure>
+
+<p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
+
+<p>続いて Arduino IDE メニューの「スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…」からダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
+
+<h3 id="examples-の説明">Examples の説明</h3>
+<p>ライブラリのインストール後は、メニューの「ファイル → スケッチ例 → カスタムライブラリのスケッチ例」から例題のスケッチを参照することができます。</p>
+
+<p>例題 <a href="https://github.com/embedded-kiddie/CallbackTimerR4/tree/main/examples/dimming_and_blinking" title="CallbackTimerR4/examples/dimming_and_blinking at main · embedded-kiddie/CallbackTimerR4"><code class="language-plaintext highlighter-rouge">dimming_and_blinking</code></a> は上記 <a href="#スケッチのサンプル">スケッチのサンプル</a> と同じなので、ここではもう１つの例題 <a href="https://github.com/embedded-kiddie/CallbackTimerR4/tree/main/examples/check-timer-accuracy" title="CallbackTimerR4/examples/check-timer-accuracy at main · embedded-kiddie/CallbackTimerR4"><code class="language-plaintext highlighter-rouge">check-timer-accuracy</code></a> について説明します。</p>
+
+<h4 id="check-timer-accuracy">check-timer-accuracy</h4>
+<p>タイマイベント発火周期の正確性（精度）をソフトウェアで観測するスケッチです。ライブラリがちゃんと働いているかを確認するために作ったスケッチで、正確性の基準はあくまで <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> や <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> ですので、参考程度のものです。</p>
+
+<p>実行時はシリアルモニタを開き、ボーレートを 115200bps に設定してください。</p>
+
+<p>スケッチ中の下記定義で、観測の基準を <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> か <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> かを切り替えます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#if 1
+#define TIME_FUNCTION millis  // Check in milliseconds
+#define TIME_SCALE    1
+#else
+#define TIME_FUNCTION micros  // Check in microseconds
+#define TIME_SCALE    1000
+#endif</span></code></pre></figure>
+
+<p>また <code class="language-plaintext highlighter-rouge">TIME_PERIOD_MS</code> でタイマ周期を、<code class="language-plaintext highlighter-rouge">TIME_MEASUREMENT</code> で観測時間を設定します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define TIME_PERIOD_MS    10 // 10, 50, 100, 500, 1000, 1500, 2000, 3000, ...[msec]
+#define TIME_MEASUREMENT  (60000 * TIME_SCALE)  // measurement for 1 minute</span></code></pre></figure>
+
+<p>実行結果はシリアルモニタに出力されます。下の例は、<code class="language-plaintext highlighter-rouge">TIME_PERIOD_MS</code> を 10ms に、<code class="language-plaintext highlighter-rouge">TIME_MEASUREMENT</code> を1分に設定した時の結果で、タイマの開始から <code class="language-plaintext highlighter-rouge">user_callback</code> で観測された <strong>経過時間</strong> と <strong>周期</strong>、および <strong>割り込み回数の総計</strong> を出力します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="p">...</span>
+<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">59970</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">59980</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">59990</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">60000</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">interrupts</span> <span class="o">=</span> <span class="mi">6000</span></code></pre></figure>
+
+<p>またこのスケッチ単体では GPT と AGT のうち前者が割り当てられるハズですが、下記のように <code class="language-plaintext highlighter-rouge">#include "CBTimer.h</code> 直前に <code class="language-plaintext highlighter-rouge">#deifne CBTIMER_FORCE_AGT</code> を挿入することで、強制的に AGT を割り当てて観測することが可能です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define CBTIMER_FORCE_AGT
+#include</span> <span class="cpf">"CBTimer.h"</span></code></pre></figure>
+
+<h2 id="あとがきという名の言い訳">あとがき（という名の言い訳…）</h2>
+<p>今回作成したライブラリは単に <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> をラップしているに過ぎませんが、長周期のタイマを少ない割り込みのフットプリントで実行させられるのが特徴です（もっとも、数時間おきに何かさせたいならリアルタイムクロック（RTC）を使うべきですが…）</p>
+
+<p>ただしインスタンスは１個限りという制約があります。僕の目的からすればこれで十分というのが理由ですが、通常はタイマ１つで複数のイベントを発火させることができるので、これを使わずして貴重なタイマ資源を消費するプログラムを作るのをためらったというのがもう一つの理由です。</p>
+
+<p>複数のタスクをキックしたいなら「<a href="https://garchiving.com/interrupt-without-timer/" title="ArduinoでTimerを使わずに割り込み処理をする  &#8211;  imo Lab.">ArduinoでTimerを使わずに割り込み処理をする</a>」で紹介されている方法が、直感的かつシンプルで良いと思います。</p>
+
+<p>むしろ次に紹介予定の <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> のように、何かと組み合わせて内部に隠蔽してしまうのが適した使い方でしょう。</p>
+
+<p>ということで、次回はその <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を紹介したいと思います :love_you_gesture:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[前回の記事 で、tone() と delay() による楽譜再生の課題と FspTimer クラス や既存ライブラリの調査結果について書きました。]]></summary></entry><entry><title type="html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</title><link href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" rel="alternate" type="text/html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" /><published>2024-04-04T13:25:54+09:00</published><updated>2024-04-04T13:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"><![CDATA[<p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
 
 <ul>
   <li>
@@ -23,7 +187,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p>以降は、表題に関する調査と学習の結果報告になります :v:</p>
 
 <h2 id="tone関数の問題点と対策">tone()関数の問題点と対策</h2>
-<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/">チュートリアル</a> にあるノンブロッキングな関数 <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の典型的な使い方は、直後に <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を呼び出しブロックする、次のようなパターン。</p>
+<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> にあるノンブロッキングな関数 <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の典型的な使い方は、直後に <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を呼び出しブロックする、次のようなパターン。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">tone</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">duration</span><span class="p">);</span>
 <span class="n">delay</span><span class="p">(</span><span class="n">duration</span><span class="p">);</span></code></pre></figure>
@@ -39,7 +203,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>両者とも IDE からインストールできるものをいくつかトライしましたが、前者は ARV 系でないと動作しないものしか見つからず、後者は CPU やボードに依存しないものの、タイマの学習にはならないので今回は見送りです。</p>
 
-<p>また <a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> が Github 上で <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> を公開されていて、「これだ！」と思い実装を進めていったのですが、要件に合わなかったり（後述）多少動作が不安定なところがあったため、最終的に自作するハメとなりました。</p>
+<p>また <a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> が Github 上で <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> を公開されていて、「これだ！」と思い実装を進めていったのですが、要件に合わなかったり（<a href="#AGTimer_R4_Library">後述</a>）多少動作が不安定なところがあったため、最終的に自作するハメとなりました。</p>
 
 <h2 id="arduino-uno-r4-ハードウェアタイマの仕組み">Arduino UNO R4 ハードウェア・タイマの仕組み</h2>
 <p>ということで、あらためてルネサス R7FA4M1AB（RA4M1 グループ）が持つタイマの仕組みから紐解きたいと思います。あくまで初心者目線ですので、よくご存知の方はスッ飛ばしてください。まずは一般論から。</p>
@@ -142,7 +306,8 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>またオーバーフロー割り込みを設定するメソッド <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp#L770" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code></a> を試してみましたが、うまく動かすことができませんでした。</p>
 
-<p><a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうだったかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、実験するとおよそ2秒以上はダメでした。またご自身でも書かれてますが、動作にデリケートなところがあって使用を断念した次第です。</p>
+<p><span id="AGTimer_R4_Library"></span>
+<a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうだったかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、およそ2秒を超えると想定通りに動作しません。ご自身でも書かれてますが、長周期の動作にデリケートなところがありそうで使用を断念しました。</p>
 
 <h3 id="で結局どうしたか">で、結局どうしたか？</h3>
 <p>オーバーフローフラグによる割り込みを模擬しました。</p>
@@ -152,7 +317,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p>これで、どんなに長い音符も再生できるようになりました。メデタシ メデタシ。</p>
 
 <h2 id="次回は">次回は…</h2>
-<p>ハナシが長くなったので、ライブラリの解説は次回以降にさせていただきます :ghost:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tone" /><summary type="html"><![CDATA[このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！]]></summary></entry><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
+<p>ハナシが長くなったので、ライブラリの解説は次回以降にさせていただきます :ghost:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！]]></summary></entry><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
 
 <p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
 
@@ -1566,75 +1731,4 @@ SWD コネクタが載っている。</p>
 
 <p>ポータブルにしたときに色々なバッテリーが使える Arduino UNO の電源の幅広さは特筆すべきですね。ニッケル水素乾電池の場合、例えば <a href="https://panasonic.jp/battery/charge/p-db/BK-3HCD2H.html" title="エネループプロ  単3形 2本パック(ハイエンドモデル) BK-3HCD/2H 商品概要 - ニッケル水素電池&amp;充電器 - Panasonic">Panasonic のエネループプロ単三電池</a> が１つ約 30g、<a href="https://www.toshiba-lifestyle.com/jp/batteries/tnh-1a/" title="「充電式IMPULSE」充電池 単1形/単2形/単3形/単4形/6P形 - 電池･充電器 - 東芝ライフスタイル株式会社 - 電池/充電器 - 東芝ライフスタイル株式会社">東芝 IMPULSE の 006P型電池</a> が約 40g とのことなので、電池容量の違いを別にすれば重量面でも有利かもです。</p>
 
-<p>さてさて、あまりに年代の違う２つの比較は私の自己満足でしかないですが、改めてそれぞれのスペックに興味を持ってもらえればと思います (^.^);</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="Cortex-M3" /><category term="Cortex-M4" /><summary type="html"><![CDATA[ビュートローバーARM で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて 日本語のチュートリアル とかが整備されていそうな SunFounder のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）]]></summary></entry><entry><title type="html">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め</title><link href="https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev.html" rel="alternate" type="text/html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め" /><published>2024-03-12T07:25:54+09:00</published><updated>2024-03-12T07:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev.html"><![CDATA[<p>何かメカ的に動くものが作りたくて <a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> というのを購入しました。</p>
-
-<p>今日日、小学生でもライントレースはプログラムするし、Arduino とかは CPU レジスタとか知らなくてもガンガンプログラムできちゃうわけだけど、やっぱ CPU のデータシートとかユーザーマニュアルとかと格闘しながらのプログラミングは楽しい！ ロボコンにハマる人の気持ちが分かります。</p>
-
-<p>その楽しさを共有したく、<a href="https://github.com/embedded-kiddie/beauto-rover-arm" title="embedded-kiddie/beauto-rover-arm: ビュートローバーのソフトウェア">Githubに上げたソフト</a> の紹介文と一部Cソースコードの概要を <a href="https://chat.openai.com/" title="ChatGPT">ChatGPT</a> にマークダウンで書くよう指示したら、次のようになりました。
-<br /></p>
-
-<hr />
-<p><br /></p>
-
-<h2 id="beauto-rover-arm---電子工作の新たな冒険への扉">Beauto Rover ARM - 電子工作の新たな冒険への扉</h2>
-
-<p><strong>Beauto Rover ARM</strong>は、Vstone社製のハーフスクラッチ開発を奨励するライントレース用ソフトウェアです。このソフトウェアは、VstoneのビュートローバーARMに同梱されている<code class="language-plaintext highlighter-rouge">vs-wrc103.c</code>ライブラリを使わず、LPC1343のCPU依存部分を活用して、電子工作と組み込みプログラミングの楽しさを提供します。</p>
-
-<h3 id="魅力的な特徴">魅力的な特徴</h3>
-
-<ul>
-  <li>
-    <p><strong>ハーフスクラッチ開発の勧め</strong>: ビュートローバーARMはセンサ入力やモーター制御をサポートする素材で、C言語初学者やロボット愛好者に最適です。しかし、このソフトウェアはさらに一歩進んで、A/D変換やPWM、割り込み、タイマー、スリープモードなどCPUの機能を学ぶ絶好の機会を提供します。</p>
-  </li>
-  <li>
-    <p><strong>広範な電子工作の知識獲得</strong>: ビュートローバーARMを用いたハードウェアの実験を通じて、PWMの活用や赤外線センサの特性など、電子工作に関する知識が深まります。デバッグも<code class="language-plaintext highlighter-rouge">printf</code>を使用して可能になっており、学習効果を最大化します。</p>
-  </li>
-  <li>
-    <p><strong>独自の開発環境</strong>: コードベースの開発において、モジュールの抽象化やアプリケーション構築の容易さを重視しています。ユーザーはハーフスクラッチ開発を通じて、自身の目的や目標に合わせた開発が可能です。</p>
-  </li>
-</ul>
-
-<h3 id="学習へのサポート">学習へのサポート</h3>
-
-<ul>
-  <li><strong>ユーザーフレンドリーなWikiページ</strong>: <a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki">Wikiページ</a>では、開発環境の準備から<code class="language-plaintext highlighter-rouge">printf()</code>デバッグのステップまでを詳細に解説。初学者から上級者まで、誰でも手軽に活用できます。</li>
-</ul>
-
-<p><strong>Beauto Rover ARM</strong>は、電子工作の新たな冒険への扉を開き、組み込みプログラミングの面白さを発見するための理想的なツールです。興味を持った方は、ぜひ詳細をチェックしてみてください！</p>
-
-<h1 id="clkc-ソースコード概要">clk.c ソースコード概要</h1>
-
-<p><code class="language-plaintext highlighter-rouge">clk.c</code> ソースコードは、マイクロコントローラ上でのクロック構成に関連する機能を実装しています。以下はコードでカバーされている主な機能の要約です：</p>
-
-<ol>
-  <li>
-    <p><strong>クロックの初期化</strong>: <code class="language-plaintext highlighter-rouge">clkInit()</code> 関数はマイクロコントローラのクロックシステムを初期化し、主システムクロック周波数、ペリフェラルクロック周波数、およびその他の関連パラメータを設定します。</p>
-  </li>
-  <li>
-    <p><strong>クロックソースの選択</strong>: マイクロコントローラのアーキテクチャと機能に応じて、クロックソース（内部発振子、外部クリスタルなど）を選択し、クロック分周器を設定するための関数やマクロが含まれる場合があります。</p>
-  </li>
-  <li>
-    <p><strong>ペリフェラルクロックの構成</strong>: コードには個々のペリフェラルクロックを設定するための関数が含まれる場合があり、電力管理や機能要件に応じてそれらを有効または無効にすることができます。</p>
-  </li>
-  <li>
-    <p><strong>クロックの監視と制御</strong>: 一部の場合、実行時にクロック周波数やソースを監視および制御する機能が含まれる場合があります。これにより、ダイナミックなクロック調整が可能になります。</p>
-  </li>
-  <li>
-    <p><strong>エラー処理</strong>: クロックの初期化や構成が失敗した場合を扱うためのエラーチェックメカニズムが含まれる場合があり、診断目的のためにエラーコードやステータスインジケータが提供されます。</p>
-  </li>
-</ol>
-
-<p>全体として、<code class="language-plaintext highlighter-rouge">clk.c</code> ソースコードは、マイクロコントローラ上のクロックシステムのセットアップと管理を容易にし、さまざまなシステムコンポーネントやペリフェラルの正確なタイミングと同期を確保します。</p>
-
-<hr />
-<p><br />
-う〜ん、言いたいことが伝わるかどうか微妙、「新たな冒険への扉」とか「魅力的な特徴」とか赤面モノだし、修正が必要な箇所も多いけど、プロンプトの工夫次第で楽できるカモと思った次第です。</p>
-
-<p>さて、恥ずかしながらデモ走行の動画です。PID 制御（実際は PD だけど）の計算部分に浮動小数点を使わず全て整数演算にしてしまったので係数の調整がイマイチですが、<a href="https://www.youtube.com/watch?v=liuNBOXGJxg" title="T-SQUARE 『Truth』 × 360 Reality Audio - スペシャルビデオ - YouTube">T-SQUARE の TRUTH</a> を奏でながら走行するローバーを見ながら F1 監督の気分を味わっています。</p>
-
-<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="ja" dir="ltr">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め<a href="https://t.co/q0I5bCi0YE">https://t.co/q0I5bCi0YE</a> <a href="https://t.co/YdKTqa6xzn">pic.twitter.com/YdKTqa6xzn</a></p>&mdash; Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1767330699332530660?ref_src=twsrc%5Etfw">March 11, 2024</a></blockquote>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<p>画面左上で「ピッ」と鳴ってるのは Arduino Uno で作ったラップタイマーです。<a href="https://amzn.asia/d/czTh7l0" title="Amazon.co.jp: OSOYOO Arduino用 Raspberry Pi 5 対応 IR赤外線障害物回避 センサモジュール アルドゥイーノ スマート カー ロボット用 10PCSセット : 産業・研究開発用品">fc-51 赤外線モジュール</a> と <a href="https://amzn.asia/d/gyudCEt" title="Amazon.co.jp: DiyStudio 2 個 0.96 OLED i2c インチ有機モジュール IIC/I2Cインターフェース LCD SSD1306ドライバー 128X64解像度ホワイトディスプレイ，適用インターフェース VCC, GND, SCL, SDA : パソコン・周辺機器">SSD1306 OLED</a> のサンプルスケッチをコピペして <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> とか呼び出せばタイマーの基本部分はアッという間に出来てしまいます。色々なモジュールを組み合わせてオリジナル作品を作るのがこの手の醍醐味ですが、そのうち物足りなくなるだろうなぁというのが個人的な感想です。</p>
-
-<p>ビュートローバーのマイコンボードには、古いとは言え 72MHz で動作する <a href="https://www.arm.com/ja/products/silicon-ip-cpu/cortex-m/cortex-m3" title="Cortex-M3 – Arm®">ARM Cortex-M3</a> という Arduino Uno R4 にも劣らない CPU（ARM では MCU と呼んでますね）が搭載されています。<a href="https://amzn.asia/d/g6Fl6fZ" title="Amazon - プログラミング教育用ロボット ビュートローバー ARM 赤外線セット [学習教材] [vstone] - プログラミング・ロボティクス - おもちゃ">Amazon で8千円近くもしたおもちゃ</a> なので、しばらくはコレで遊んでみたいと思います。</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="Cortex-M3" /><summary type="html"><![CDATA[何かメカ的に動くものが作りたくて ビュートローバーARM というのを購入しました。]]></summary></entry></feed>
+<p>さてさて、あまりに年代の違う２つの比較は私の自己満足でしかないですが、改めてそれぞれのスペックに興味を持ってもらえればと思います (^.^);</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="Cortex-M3" /><category term="Cortex-M4" /><summary type="html"><![CDATA[ビュートローバーARM で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて 日本語のチュートリアル とかが整備されていそうな SunFounder のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）]]></summary></entry></feed>
