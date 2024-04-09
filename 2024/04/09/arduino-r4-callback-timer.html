@@ -129,7 +129,7 @@
   </li>
   <li>
     <p>戻り値<br>
-初期化に成功すれば <code class="language-plaintext highlighter-rouge">true</code> が、失敗すれば <code class="language-plaintext highlighter-rouge">false</code> を返します。</p>
+初期化に成功、即ち <code class="language-plaintext highlighter-rouge">FspTimer</code> が確保できれば <code class="language-plaintext highlighter-rouge">true</code> が、出来なければ <code class="language-plaintext highlighter-rouge">false</code> を返します。</p>
   </li>
 </ul>
 
@@ -145,6 +145,13 @@
 
 <p>その他のパラメータと戻り値は前項と同じです。</p>
 
+<h4 id="開始停止終了">開始、停止、終了</h4>
+<p>初期化関数 <code class="language-plaintext highlighter-rouge">begin()</code> の <code class="language-plaintext highlighter-rouge">start</code> に <code class="language-plaintext highlighter-rouge">false</code> を指定した場合は <code class="language-plaintext highlighter-rouge">start()</code> でタイマのカウントを開始できます。また <code class="language-plaintext highlighter-rouge">stop()</code> はカウントの停止、<code class="language-plaintext highlighter-rouge">end()</code> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> 中の <a href="/2024/04/04/arduino-blink-with-bgm.html#gpt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">GPT</a> もしくは <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">AGT</a> インスタンスを解放します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">start</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">bool</span> <span class="nf">stop</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">end</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></code></pre></figure>
+
 <h4 id="コールバック関数">コールバック関数</h4>
 <p>タイマイベントの発火と共に呼び出すコールバック関数ですが、「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">割り込みハンドラの怪</a>」にも書いた通り、少なくとも UNO R4 Minima と UNO R4 WiFi では <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> も使えちゃいます。</p>
 
@@ -152,13 +159,6 @@
   <span class="kt">uint32_t</span> <span class="n">time</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
   <span class="p">...</span>
 <span class="p">}</span></code></pre></figure>
-
-<h4 id="開始停止終了のメソッド">開始、停止、終了のメソッド</h4>
-<p>初期化関数 <code class="language-plaintext highlighter-rouge">begin()</code> の <code class="language-plaintext highlighter-rouge">start</code> に <code class="language-plaintext highlighter-rouge">false</code> を指定した場合は <code class="language-plaintext highlighter-rouge">start()</code> でタイマのカウントを開始できます。また <code class="language-plaintext highlighter-rouge">stop()</code> はカウントの停止、<code class="language-plaintext highlighter-rouge">end()</code> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> 中の <a href="/2024/04/04/arduino-blink-with-bgm.html#gpt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">GPT</a> もしくは <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">AGT</a> インスタンスを解放します。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="err">変数名</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
-<span class="err">変数名</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
-<span class="err">変数名</span><span class="p">.</span><span class="n">end</span><span class="p">();</span></code></pre></figure>
 
 <h3 id="インストール方法">インストール方法</h3>
 <figure class="float-left">
