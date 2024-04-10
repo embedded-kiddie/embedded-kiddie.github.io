@@ -101,12 +101,14 @@
 <span class="p">}</span></code></pre></figure>
 
 <h3 id="メンバ関数の説明">メンバ関数の説明</h3>
-<h4 id="コンストラクタ">コンストラクタ</h4>
+<h4 id="コンストラクタデストラクタ">コンストラクタ／デストラクタ</h4>
 <p><code class="language-plaintext highlighter-rouge">new</code> とかを使わずにクラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> で宣言してインスタンス化するのが Arduino 的かと思います。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名</span><span class="p">;</span></code></pre></figure>
 
-<p>クラス内で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> のインスタンスを静的に確保しているため、残念ながら（というか、敢えて）次のように複数の変数を宣言しても１つしか動作しません。</p>
+<p>コンストラクタは特に何もしていません。デストラクタは <code class="language-plaintext highlighter-rouge">begin()</code> で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> のインスタンスが確保したタイマを解放し再利用可能にします。</p>
+
+<p>またそのインスタンス自体は <code class="language-plaintext highlighter-rouge">CBTimer</code> クラス内で静的に保持されているため、残念ながら（というか、敢えて）次のように複数を宣言しても１つしか動作しません。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名１</span><span class="p">,</span> <span class="err">変数名２</span><span class="p">;</span> <span class="c1">// 変数名１と変数名２でFspTimerのインスタンスが共通となってしまう</span></code></pre></figure>
 
@@ -146,7 +148,7 @@
 <p>その他のパラメータと戻り値は前項と同じです。</p>
 
 <h4 id="開始停止終了">開始、停止、終了</h4>
-<p>初期化関数 <code class="language-plaintext highlighter-rouge">begin()</code> の <code class="language-plaintext highlighter-rouge">start</code> に <code class="language-plaintext highlighter-rouge">false</code> を指定した場合は <code class="language-plaintext highlighter-rouge">start()</code> でタイマのカウントを開始できます。また <code class="language-plaintext highlighter-rouge">stop()</code> はカウントの停止、<code class="language-plaintext highlighter-rouge">end()</code> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> 中の <a href="/2024/04/04/arduino-blink-with-bgm.html#gpt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">GPT</a> もしくは <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">AGT</a> インスタンスを解放します。</p>
+<p>初期化関数 <code class="language-plaintext highlighter-rouge">begin()</code> の <code class="language-plaintext highlighter-rouge">start</code> に <code class="language-plaintext highlighter-rouge">false</code> を指定した場合は <code class="language-plaintext highlighter-rouge">start()</code> でタイマのカウントを開始できます。また <code class="language-plaintext highlighter-rouge">stop()</code> はカウントの停止、<code class="language-plaintext highlighter-rouge">end()</code> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> 中の <a href="/2024/04/04/arduino-blink-with-bgm.html#gpt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">GPT</a> もしくは <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">AGT</a> インスタンスを解放し再利用可能にします。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">start</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 <span class="kt">bool</span> <span class="nf">stop</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
