@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
   <script>if(window.location.hostname!='127.0.0.1'){var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2';document.head.appendChild(s);}window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DLMCZ884M2');</script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /><script async src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
@@ -202,13 +201,7 @@
 
 <p>これを <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の <a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> に当てはめると、４分音符の長さを数値 <code class="language-plaintext highlighter-rouge">4</code> で表し、その時間を <code class="language-plaintext highlighter-rouge">1000 ÷ 4 = 250[msec]</code> としているので、１分間のテンポ数に換算すると <code class="language-plaintext highlighter-rouge">60000 ÷ 250 = 240</code>、つまり<span class="inline"><img src="/images/2024/04-10/quarter-note.png" title="４分音符" alt="４分音符"></span>= 240 ということになります。</p>
 
-<p>そこで音の長さを表す数値を
-<span class="inline"><img src="/images/2024/04-10/n.png" alt="n"></span>、
-テンポを
-<span class="inline"><img src="/images/2024/04-10/quarter-note.png" title="４分音符" alt="４分音符"></span>=<span class="inline"><img src="/images/2024/04-10/tempo.png" alt="tempo"></span> 
-とすると、音符の長さ（時間）を求める式は 
-<span class="inline"><img src="/images/2024/04-10/duration-equation.png" style="height:3.5em" alt="４分音符一拍分の長さ（時間）"></span> 
-となります。</p>
+<p>そこで音の長さを表す数値を<span class="inline"><img src="/images/2024/04-10/n.png" alt="n"></span>、テンポを<span class="inline"><img src="/images/2024/04-10/quarter-note.png" title="４分音符" alt="４分音符"></span>=<span class="inline"><img src="/images/2024/04-10/tempo.png" alt="tempo"></span> とすると、音符の長さ（時間）を求める式は<span class="inline"><img src="/images/2024/04-10/duration-equation.png" style="height:3.5em" alt="４分音符一拍分の長さ（時間）"></span>となります。</p>
 
 <p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> では互換性を考慮し、この式を元に音符長を決めています。</p>
 
@@ -406,6 +399,8 @@
   </div>
 
 </footer>
-</body>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"><script async src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  </body>
 
 </html>
