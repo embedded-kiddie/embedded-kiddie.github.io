@@ -1,311 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-11T15:14:19+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介</title><link href="https://embedded-kiddie.github.io/2024/04/11/background-tone-player.html" rel="alternate" type="text/html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介" /><published>2024-04-11T09:40:37+09:00</published><updated>2024-04-11T09:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/11/background-tone-player</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/11/background-tone-player.html"><![CDATA[<p>BGM 再生といっても <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> のことです、悪しからず。</p>
-
-<p>あまり実用的な使い道は思いつかないですが（目覚まし時計ぐらいかな？）、折角作ったので PR しちゃいます。興味のある方は「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</a>」に貼った動画を見てくれれば喜びます :grin:</p>
-
-<h2 id="backgroundmusicr4-の特徴">BackgroundMusicR4 の特徴</h2>
-<p>仕組みは至って簡単。<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> とセットで使われる <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> の代わりに <a href="/2024/04/09/arduino-r4-callback-timer.html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説 - Embedded Kiddie">前回紹介した</a> <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> で音符の長さだけ待機して、次々に音符を再生します。<a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> に記載のスケッチ例では演奏出来なかった<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>や<span class="inline"><img src="/images/2024/04-10/triplet.png" title="３連符" alt="３連符" /></span>といった音符も再現できるので、レパートリーの幅がグッと広がります。</p>
-
-<h2 id="インストール方法">インストール方法</h2>
-<h3 id="callbacktimerr4-のインストール">CallbackTimerR4 のインストール</h3>
-<p>タイマ系ライブラリ <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> が必要です。<a href="/2024/04/09/arduino-r4-callback-timer.html#インストール方法" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説 - Embedded Kiddie">コチラ</a> を参照の上、インストールしてください。</p>
-
-<h3 id="backgroundmusicr4-のインストール">BackgroundMusicR4 のインストール</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-10/download-library.jpg" title="CallbackTimerR4-main.zipのダウンロード" data-lightbox="image">
-    <img src="/images/2024/04-10/download-library-small.jpg" alt="CallbackTimerR4-main.zipのダウンロード" />
-  </a>
-  <a href="/images/2024/04-09/include-library.jpg" title="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" data-lightbox="image">
-    <img src="/images/2024/04-09/include-library-small.jpg" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" />
-  </a>
-</figure>
-
-<p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library.">Github の BackgroundMusicR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/BackgroundMusicR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
-
-<p>続いて Arduino IDE メニューの「スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…」からダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
-
-<h2 id="使い方">使い方</h2>
-<h3 id="スケッチのサンプル">スケッチのサンプル</h3>
-<p>ライブラリのインストール後、IDE メニューの「ファイル → スケッチ例 → カスタムライブラリのスケッチ例」から、曲を再生しながら Lチカする <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/tree/main/examples/blink_and_music" title="BackgroundMusicR4/examples/blink_and_music at main · embedded-kiddie/BackgroundMusicR4"><code class="language-plaintext highlighter-rouge">blink_and_music</code></a> を開くことができます。添付の曲は <a href="https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E3%83%96%E3%82%B9" title="グリーンスリーブス - Wikipedia">イングランド民謡</a> の <a href="https://github.com/robsoncouto/arduino-songs/tree/master/greensleeves" title="arduino-songs/greensleeves at master · robsoncouto/arduino-songs">Greensleeves</a> です。</p>
-
-<p><code class="language-plaintext highlighter-rouge">Arduino.h</code> に続けて <code class="language-plaintext highlighter-rouge">BGMusic.h</code> をインクルードすれば <code class="language-plaintext highlighter-rouge">CBTimer.h</code> も読み込みます。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
-#include</span> <span class="cpf">"BGMusic.h"</span><span class="cp">
-</span>
-<span class="c1">// pitch and duration pairs in the melody:</span>
-<span class="c1">// duration: 4 = quarter note, 8 = eighth note, etc.</span>
-<span class="cp">#include</span> <span class="cpf">"pitches.h"</span><span class="cp">
-</span><span class="k">static</span> <span class="kt">int</span> <span class="n">melody</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-<span class="c1">// Special thanks for the memody data from: https://github.com/robsoncouto/arduino-songs</span>
-<span class="cp">#include</span> <span class="cpf">"Greensleeves.h"</span><span class="cp">
-</span><span class="p">};</span>
-
-<span class="cp">#define BUZZER_PIN  9     // pin number connected to the buzzer
-#define TEMPO       70    // change this to make the song slower or faster
-#define REPEAT      true  // playback repeatedly
-#define N_NOTES(s)  (sizeof(s) / sizeof((s)[0]) / 2)  // number of notes in musical score.
-</span>
-<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// initialize digital pin LED_BUILTIN as an output.</span>
-  <span class="n">pinMode</span><span class="p">(</span><span class="n">BUZZER_PIN</span><span class="p">,</span>  <span class="n">OUTPUT</span><span class="p">);</span>
-  <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
-
-  <span class="c1">// initialize and start the BGM player</span>
-  <span class="k">static</span> <span class="n">BGMusic</span> <span class="n">music</span><span class="p">;</span>
-  <span class="n">music</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">BUZZER_PIN</span><span class="p">,</span> <span class="n">melody</span><span class="p">,</span> <span class="n">N_NOTES</span><span class="p">(</span><span class="n">melody</span><span class="p">),</span> <span class="n">TEMPO</span><span class="p">,</span> <span class="n">REPEAT</span><span class="p">);</span>
-  <span class="n">music</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// blink LED</span>
-  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>  <span class="c1">// turn the LED on (HIGH is the voltage level)</span>
-  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                      <span class="c1">// wait for a second</span>
-  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>   <span class="c1">// turn the LED off by making the voltage LOW</span>
-  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                      <span class="c1">// wait for a second</span>
-<span class="p">}</span></code></pre></figure>
-
-<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> と少し違うのは、音符と音符長のデータを１つの <code class="language-plaintext highlighter-rouge">int</code> 型配列にフラットに格納しているところで、<a href="https://github.com/robsoncouto/arduino-songs" title="robsoncouto/arduino-songs">Robson Couto さん</a> のアイディアです。音符を定義した <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/blob/main/examples/blink_and_music/Greensleeves.h" title="BackgroundMusicR4/examples/blink_and_music/Greensleeves.h at main · embedded-kiddie/BackgroundMusicR4"><code class="language-plaintext highlighter-rouge">Greensleeves.h</code></a> の中身はザッとこんな感じです。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++">  <span class="n">NOTE_G4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
-  <span class="n">NOTE_AS4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">NOTE_C5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_D5</span><span class="p">,</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_DS5</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span> <span class="n">NOTE_D5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
-  <span class="n">NOTE_C5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">NOTE_A4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_F4</span><span class="p">,</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_G4</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span> <span class="n">NOTE_A4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
-  <span class="n">NOTE_AS4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">NOTE_G4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_G4</span><span class="p">,</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_FS4</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span> <span class="n">NOTE_G4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
-  <span class="n">NOTE_A4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">NOTE_FS4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_D4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">NOTE_G4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
-  <span class="p">...</span></code></pre></figure>
-
-<p>ヘッダファイルとしてはイレギュラーですが、Arduino IDE が <code class="language-plaintext highlighter-rouge">.txt</code> とか <code class="language-plaintext highlighter-rouge">.dat</code> とかの拡張子を許してくれず、仕方なく <code class="language-plaintext highlighter-rouge">.h</code> としています。当たり前ですが、この楽譜データを差し替えれば色々な曲に対応できます。</p>
-
-<h3 id="メンバ関数の説明">メンバ関数の説明</h3>
-<h4 id="コンストラクタデストラクタ">コンストラクタ／デストラクタ</h4>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">BGMusic</span> <span class="err">変数名</span><span class="p">;</span></code></pre></figure>
-
-<p>コンストラクタは特に何もしていません。一方、デストラクタは 依存するライブラリ <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> の <a href="/2024/04/09/arduino-r4-callback-timer.html#開始停止終了" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説 - Embedded Kiddie"><code class="language-plaintext highlighter-rouge">end()</code></a> を呼び出して後始末をします。</p>
-
-<p>例えば上記 <a href="#スケッチのサンプル">スケッチのサンプル</a> で、変数 <code class="language-plaintext highlighter-rouge">music</code> を <code class="language-plaintext highlighter-rouge">static</code> に確保するか、<code class="language-plaintext highlighter-rouge">setup()</code> の外でグローバル変数化しないと音が鳴らなくなるので要注意です。</p>
-
-<p>また <a href="/2024/04/09/arduino-r4-callback-timer.html#コンストラクタデストラクタ" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説 - Embedded Kiddie"><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code> の都合により</a>、残念ながら次のように複数の変数を宣言しても一方しか動作しません。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">BGMusic</span> <span class="err">変数名１</span><span class="p">,</span> <span class="err">変数名２</span><span class="p">;</span> <span class="c1">// 変数名１と変数名２でFspTimerのインスタンスが共通となってしまう</span></code></pre></figure>
-
-<h4 id="初期化">初期化</h4>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="kt">int</span> <span class="n">pin</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">notes</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n_notes</span><span class="p">,</span> <span class="kt">int</span> <span class="n">tempo</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">loop</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">false</span><span class="p">);</span></code></pre></figure>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">int pin</code><br />
-ブザー（自励式、ピエゾタイプ）など <code class="language-plaintext highlighter-rouge">tone()</code> の出力ピンを指定します。</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">const int notes[]</code><br />
-音符の周波数と長さを並べた <code class="language-plaintext highlighter-rouge">int</code> 型の配列を指定します。配列の中身は変更されることがない想定のため、<code class="language-plaintext highlighter-rouge">const</code> 修飾子を付けて宣言してください。</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">int n_notes</code><br />
-音符の周波数と長さを１組と数えた時の総数を指定します。<a href="#スケッチのサンプル">スケッチのサンプル</a> にあるマクロ <code class="language-plaintext highlighter-rouge">N_NOTES()</code> を使うと楽チンです。</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">int tempo</code><br />
-<a href="https://ja.wikipedia.org/wiki/%E3%83%86%E3%83%B3%E3%83%9D#%E3%83%A1%E3%83%88%E3%83%AD%E3%83%8E%E3%83%BC%E3%83%A0%E8%A8%98%E5%8F%B7" title="テンポ - Wikipedia">メトロノーム記号</a> で表される曲の速さを指定します。例えば<span class="inline"><img src="/images/2024/04-04/tempo-155.png" title="テンポ=155" alt="テンポ=155" /></span> は「４分音符を１分間に 155 回刻む速さ」を表します。</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">bool loop</code><br />
-<code class="language-plaintext highlighter-rouge">true</code> を指定すると曲の終了後、直ちに再生を繰り返します。<code class="language-plaintext highlighter-rouge">false</code> が省略時のデフォルトです。</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">bool start</code><br />
-<code class="language-plaintext highlighter-rouge">true</code> を指定すると初期化後、直ちに再生を開始します。省略時は <code class="language-plaintext highlighter-rouge">false</code> がデフォルトなので、別途 <code class="language-plaintext highlighter-rouge">start()</code> で再生を開始する必要があります。</p>
-  </li>
-</ul>
-
-<h4 id="開始停止終了のメソッド">開始、停止、終了のメソッド</h4>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">start</span><span class="p">();</span>
-<span class="kt">bool</span> <span class="nf">stop</span><span class="p">();</span>
-<span class="kt">void</span> <span class="nf">end</span><span class="p">();</span></code></pre></figure>
-
-<p><code class="language-plaintext highlighter-rouge">start()</code> は曲の再生を開始、<code class="language-plaintext highlighter-rouge">stop()</code> は停止です。<code class="language-plaintext highlighter-rouge">end()</code> は確保していたリソースを解放します。</p>
-
-<h4 id="音符長計算関数の登録">音符長計算関数の登録</h4>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="n">set_duration_function</span><span class="p">(</span><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">calc_duration_function</span><span class="p">)(</span><span class="kt">int</span> <span class="n">duration</span><span class="p">))</span></code></pre></figure>
-
-<p>音符長をミリ秒単位で返す関数を登録する関数ですが、少々ややこしいので <a href="#音符長計算関数について">後述</a> することにします :sweat_smile:。</p>
-
-<h2 id="曲のテンポと音符長の関係">曲のテンポと音符長の関係</h2>
-<p><a href="https://www.sii.co.jp/music/try/metronome/01.html" title="やってみよう・メトロノーム記号の読み方｜メトロノーム／チューナー｜セイコーインスツル株式会社">このページ</a> を参考にまとめると、テンポと音符長の関係は次の様になります。</p>
-
-<ul>
-  <li>曲のテンポは、１分間に刻むことができる４分音符の拍数で表す</li>
-  <li>例えば <span class="inline"><img src="/images/2024/04-10/quarter-note.png" title="４分音符" alt="４分音符" /></span>= 60 は、１分間に４分音符を60回を数える速さを表す</li>
-</ul>
-
-<p>このテンポと４分音符一拍分の長さ（時間）を式で表すと以下となります。</p>
-
-<p><span class="inline"><img src="/images/2024/04-10/quarter-note-duration.png" style="height:auto" alt="４分音符一拍分の長さ（時間）" /></span></p>
-
-<p>これを <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の <a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> に当てはめると、４分音符の長さを数値 <code class="language-plaintext highlighter-rouge">4</code> で表し、その時間を <code class="language-plaintext highlighter-rouge">1000 ÷ 4 = 250[msec]</code> としているので、１分間のテンポ数に換算すると <code class="language-plaintext highlighter-rouge">60000 ÷ 250 = 240</code>、つまり<span class="inline"><img src="/images/2024/04-10/quarter-note.png" title="４分音符" alt="４分音符" /></span>= 240 ということになります。</p>
-
-<p>そこで音の長さを表す数値を<span class="inline"><img src="/images/2024/04-10/n.png" alt="n" /></span>、テンポを<span class="inline"><img src="/images/2024/04-10/quarter-note.png" title="４分音符" alt="４分音符" /></span>=<span class="inline"><img src="/images/2024/04-10/tempo.png" alt="tempo" /></span> とすると、音符の長さ（時間）を求める式は<span class="inline"><img src="/images/2024/04-10/duration-equation.png" style="height:3.5em" alt="４分音符一拍分の長さ（時間）" /></span>となります。</p>
-
-<p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> では互換性を考慮し、この式を元に音符長を決めています。</p>
-
-<h2 id="音符長計算関数について">音符長計算関数について</h2>
-<p>さて上記方式の問題点は、「・」のついた付点音符（元の音符の1.5倍の長さ）や、4分音符＋16分音符を表す<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>などの音符長が整数で表せないことです。</p>
-
-<p><code class="language-plaintext highlighter-rouge">float</code> を使えば <code class="language-plaintext highlighter-rouge">int</code> とデータサイズこそ同じになりますが、浮動小数点演算が必要になります。UNO R4 のマイコンは FPU を持っているので実際にはそれほど問題にならないかも知れませんが、できれば整数演算で済ませたいところです。</p>
-
-<p>ということで「音符長計算関数」の登場です。</p>
-
-<h3 id="音符長の計算式">音符長の計算式</h3>
-<p>まずは <a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> の音符長表現のおさらいです。</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">N分音符</th>
-      <th style="text-align: center">16分音符</th>
-      <th style="text-align: center">8分音符</th>
-      <th style="text-align: center">4分音符</th>
-      <th style="text-align: center">2分音符</th>
-      <th style="text-align: center">全音符</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">音符長</td>
-      <td style="text-align: center">16</td>
-      <td style="text-align: center">8</td>
-      <td style="text-align: center">4</td>
-      <td style="text-align: center">2</td>
-      <td style="text-align: center">1</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>直感的に分かり易さを優先させたのだと思いますが、短い音符ほど音符長を表現する数値が大きくなってます。</p>
-
-<p>一方、４分音符一拍分の長さを <code class="language-plaintext highlighter-rouge">4</code> を基準に（ここまでは <a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> と同じ）、各音符の長さの比と、それを表すシンボルに割り当ててみます。直感的な分かり易さはそのままに、数値ではなく <code class="language-plaintext highlighter-rouge">N4</code> などのシンボルを使う様にするワケです。</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">N分音符</th>
-      <th style="text-align: center">16分音符</th>
-      <th style="text-align: center">8分音符</th>
-      <th style="text-align: center">4分音符</th>
-      <th style="text-align: center">2分音符</th>
-      <th style="text-align: center">全音符</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">音符長比</td>
-      <td style="text-align: center">1</td>
-      <td style="text-align: center">2</td>
-      <td style="text-align: center">4</td>
-      <td style="text-align: center">8</td>
-      <td style="text-align: center">16</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">シンボル</td>
-      <td style="text-align: center">N16</td>
-      <td style="text-align: center">N8</td>
-      <td style="text-align: center">N4</td>
-      <td style="text-align: center">N2</td>
-      <td style="text-align: center">N1</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>ここで N 分音符の音符長比を表す数値を<span class="inline"><img src="/images/2024/04-10/n.png" alt="n" /></span>、曲の速さを<span class="inline"><img src="/images/2024/04-10/tempo.png" alt="テンポ" /></span>とすれば、音の長さ（時間）を求める式は<span class="inline"><img src="/images/2024/04-10/duration_equation-new.png" style="height:2.5em" alt="４分音符一拍分の長さ（時間）" /></span>となります。</p>
-
-<p>この方式であれば、4分音符と16分音符を <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> で１つに繋げた<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>の音符長は整数演算が可能な <code class="language-plaintext highlighter-rouge">N4 + N16</code>、即ち <code class="language-plaintext highlighter-rouge">5</code> で表せることになります。</p>
-
-<p>また４分音符一拍中に３音を鳴らす３連符（Triplet）<span class="inline"><img src="/images/2024/04-10/triplet.png" title="３連符" alt="３連符" /></span>も怖くありません。音符長比をそれぞれ３倍したシンボルを定義すれば良いだけです。</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">N分音符</th>
-      <th style="text-align: center">16分音符</th>
-      <th style="text-align: center">3連符</th>
-      <th style="text-align: center">8分音符</th>
-      <th style="text-align: center">4分音符</th>
-      <th style="text-align: center">2分音符</th>
-      <th style="text-align: center">全音符</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">音符長比</td>
-      <td style="text-align: center">1 × 3 = 3</td>
-      <td style="text-align: center">4</td>
-      <td style="text-align: center">2 × 3 = 6</td>
-      <td style="text-align: center">4 × 3 = 12</td>
-      <td style="text-align: center">8 × 3 = 24</td>
-      <td style="text-align: center">16 × 3 = 48</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">シンボル</td>
-      <td style="text-align: center">N16</td>
-      <td style="text-align: center">NT</td>
-      <td style="text-align: center">N8</td>
-      <td style="text-align: center">N4</td>
-      <td style="text-align: center">N2</td>
-      <td style="text-align: center">N1</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>これで再現できる曲がグッと増えること間違いなしです！</p>
-
-<h3 id="音符長計算関数の登録-1">音符長計算関数の登録</h3>
-<p>ということで、前述のメンバ関数 <code class="language-plaintext highlighter-rouge">set_duration_function()</code> は以下の様に使います。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define BUZZER_PIN    9     // pin number connected to the buzzer
-#define TEMPO         155   // change this to make the song slower or faster
-#define REPEAT        true  // playback repeatedly
-#define N_NOTES(s)    (sizeof(s) / sizeof((s)[0]) / 2)  // number of notes in musical score.
-#define QUARTER_NOTE  ((60000 / N4) / TEMPO)  // ratio of the duration for one quarter note per beat
-</span>
-<span class="c1">// Calculate note length from note length symbol</span>
-<span class="kt">int</span> <span class="nf">calc_duration</span><span class="p">(</span><span class="kt">int</span> <span class="n">duration</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="n">QUARTER_NOTE</span> <span class="o">*</span> <span class="n">duration</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// initialize digital pin LED_BUILTIN as an output.</span>
-  <span class="n">pinMode</span><span class="p">(</span><span class="n">BUZZER_PIN</span><span class="p">,</span>  <span class="n">OUTPUT</span><span class="p">);</span>
-  <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
-
-  <span class="c1">// initialize and start the BGM player</span>
-  <span class="k">static</span> <span class="n">BGMusic</span> <span class="n">music</span><span class="p">;</span>
-  <span class="n">music</span><span class="p">.</span><span class="n">set_duration_function</span><span class="p">(</span><span class="n">calc_duration</span><span class="p">);</span>
-  <span class="n">music</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">BUZZER_PIN</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">N_NOTES</span><span class="p">(</span><span class="n">score</span><span class="p">),</span> <span class="n">TEMPO</span><span class="p">,</span> <span class="n">REPEAT</span><span class="p">);</span>
-  <span class="n">music</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
-<span class="p">}</span></code></pre></figure>
-
-<p><code class="language-plaintext highlighter-rouge">QUARTER_NOTE</code> は「４分音符一拍分当たりの長さの比率」です。<code class="language-plaintext highlighter-rouge">calc_duration()</code> に渡される <code class="language-plaintext highlighter-rouge">int duration</code> は <code class="language-plaintext highlighter-rouge">N4</code> とか <code class="language-plaintext highlighter-rouge">N8</code> とか <code class="language-plaintext highlighter-rouge">N4 + N16</code> などの値となります。</p>
-
-<p>上記のコードは <a href="https://github.com/embedded-kiddie/arduino-uno/tree/main/background_music" title="arduino-uno/background_music at main · embedded-kiddie/arduino-uno"><code class="language-plaintext highlighter-rouge">background_music</code></a> からの抜粋です。大好きな <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を収録してあるので、よかったら聞いてみてください。</p>
-
-<h2 id="あとがき">あとがき</h2>
-<p>バックグラウンドで音を鳴らすだけで、<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> で１個、<a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> ライブラリで１個、合計２個のタイマを使っちゃてるんですよね。</p>
-
-<p>今回はかつて <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc1300-arm-cortex-m3/entry-level-32-bit-microcontroller-mcu-based-on-arm-cortex-m3-core:LPC1343FBD48" title="LPC1343FBD48 - Arm Cortex-M3 - 32-bit MCU - NXP Semiconductors">Cortex-M3 の LPC1343</a> が載ったボードで作った機能（ご参考：<a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/play.c" title="beauto-rover-arm/src/play.c at main · embedded-kiddie/beauto-rover-arm"><code class="language-plaintext highlighter-rouge">play.c</code></a>）の移植を目指してきましたが、当初移植に際し２つの案がありました。</p>
-
-<ul>
-  <li><a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Tone.cpp" title="ArduinoCore-renesas/cores/arduino/Tone.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">Tone.cpp</code></a> を丸っとコピーし、そこにミュージックシーケンサ的機能を組み込む</li>
-  <li><a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> はそのまま活かし、ミュージックシーケンサ的機能でラップする</li>
-</ul>
-
-<p>前者であればタイマは１個で済んだハズですが、<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">勉強も兼ねて</a> 後者を選びました。</p>
-
-<p>その上での感想ですが、まず第１に Cortex-M3 のレジスタに比べ Cortex-M4 のそれは何倍も難しくなっていること、そして第２に Arduino のプログラミングはライブラリのお陰で楽な反面、うまく折り合いを付けなきゃならない（コメントの少ないコードをリーディングするという）苦労があり、なかなかに手強いぞ！と感じてます。</p>
-
-<p>ともあれ、豊富な情報と関連モジュールとの組み合わせが Arduino を楽しむコツと分かってきた今日この頃です :man_shrugging:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[BGM 再生といっても tone() のことです、悪しからず。]]></summary></entry><entry><title type="html">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</title><link href="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html" rel="alternate" type="text/html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説" /><published>2024-04-09T17:43:21+09:00</published><updated>2024-04-09T17:43:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html"><![CDATA[<p><a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">前回の記事</a> で、<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> による楽譜再生の課題と <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> や既存ライブラリの調査結果について書きました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-11T16:19:07+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>自動車系の組み込みエンジニア、かつては趣味でWordPressプラグインなどリリース。 最近は興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</title><link href="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html" rel="alternate" type="text/html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説" /><published>2024-04-09T17:43:21+09:00</published><updated>2024-04-09T17:43:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html"><![CDATA[<p><a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">前回の記事</a> で、<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> による楽譜再生の課題と <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> や既存ライブラリの調査結果について書きました。</p>
 
 <p>今回は、前回調査を元にバックグラウンドで動作するライブラリ <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> 用に作成したタイマライブラリ <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> を解説したいと思います。</p>
 
@@ -1877,4 +1570,172 @@ SWD コネクタが載っている。</p>
 
 <p>また Ardiono IDE の <a href="https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-plotter/" title="Using the Serial Plotter Tool - Arduino Documentation">シリアルプロッタ</a> より手間はかかりますが、センサ値を可視化してみれば、単にハードを組み上げソフトを動かすだけより勉強になるのではと思います。</p>
 
-<p>そのうち走行させながらリアルタイムにデータの観測が出来るよう、無線化にもチャレンジしてみたいと思います (^.^)y</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="デバッグ" /><summary type="html"><![CDATA[LPC-Link について]]></summary></entry></feed>
+<p>そのうち走行させながらリアルタイムにデータの観測が出来るよう、無線化にもチャレンジしてみたいと思います (^.^)y</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="デバッグ" /><summary type="html"><![CDATA[LPC-Link について]]></summary></entry><entry><title type="html">ビュートローバーARMとArduino Uno R4のマイコン比較</title><link href="https://embedded-kiddie.github.io/2024/03/13/micon-board-comparison.html" rel="alternate" type="text/html" title="ビュートローバーARMとArduino Uno R4のマイコン比較" /><published>2024-03-13T11:25:54+09:00</published><updated>2024-03-13T11:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/13/micon-board-comparison</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/13/micon-board-comparison.html"><![CDATA[<p><a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて <a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/" title="SunFounder Ultimate Sensor Kit &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">日本語のチュートリアル</a> とかが整備されていそうな <a href="https://amzn.asia/d/arKrHnW" title="Amazon.co.jp: SunFounder オリジナル Arduino Uno R4 Minima 用のセンサーキット究極版、 スマート IoT および基本センサープロジェクト向けのオンラインチュートリアル（日本語）を備え、初心者向け （オリジナル Arduino Uno R4 Minima 付属） : 産業・研究開発用品">SunFounder</a> のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）</p>
+
+<p>秋月電子さんでも <a href="https://akizukidenshi.com/catalog/g/g107385/" title="Arduino Uno Rev3: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">R3</a> より <a href="https://akizukidenshi.com/catalog/g/g118114/" title="Arduino UNO R4 Minima: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">R4</a> の方が安くなっているぐらいで、今後 UNO は R4 が主流になっていくのでしょう。</p>
+
+<p>まずは MCU 自体の比較です。マイコンボードの比較ではないのでご注意下さい。それぞれのデータシートから目ぼしいところを引っ張ってみました。ただ読み間違えがあるかもしれませんので、何かするときにはそれぞれの原本をご確認ください。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>MCU（CPU コア）</th>
+      <th>LPC1343 (Cortex-M3)</th>
+      <th>RA41M (Cortex-M4)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>リリース（データシートの初版による）</td>
+      <td>2009年12月</td>
+      <td>2020年3月</td>
+    </tr>
+    <tr>
+      <td>メモリ</td>
+      <td>32KBフラッシュ／8KB SRAM</td>
+      <td>256KBフラッシュ／32KB SRAM</td>
+    </tr>
+    <tr>
+      <td>動作電圧</td>
+      <td>2〜3.6V</td>
+      <td>1.6〜5.5V</td>
+    </tr>
+    <tr>
+      <td>クロック周波数</td>
+      <td>72MHz</td>
+      <td>48MHz</td>
+    </tr>
+    <tr>
+      <td>汎用I/Oピン</td>
+      <td>42</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <td>RTC</td>
+      <td>-</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>汎用タイマ（PWM）</td>
+      <td>2チャンネル (16bit)、2チャンネル (32bit)</td>
+      <td>2チャネル (32bit) or 6チャンネル (16bit)</td>
+    </tr>
+    <tr>
+      <td>ADC</td>
+      <td>最大8チャンネル (10bit)</td>
+      <td>最大25チャンネル (14bit)</td>
+    </tr>
+    <tr>
+      <td>DAC</td>
+      <td>-</td>
+      <td>1 (12bit)</td>
+    </tr>
+    <tr>
+      <td>USB</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>UART</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>SPI</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>I2C</td>
+      <td>1</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>CAN</td>
+      <td>-</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>オペアンプ</td>
+      <td>-</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>FPU</td>
+      <td>-</td>
+      <td>単精度浮動小数点</td>
+    </tr>
+    <tr>
+      <td>セキュリティ</td>
+      <td>-</td>
+      <td>AES、真性乱数発生器、ハッシュ値生成</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>流石に LPC1343 の古さは隠せません。特に RA41M のオペアンプは良いですね。小出力のセンサを繋げるときに外付け回路が不要になるカモです。</p>
+
+<p>続いてマイコンボードの比較です。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ボード</th>
+      <th>VS-WRC103LV</th>
+      <th>Arduino UNO R4 Minima</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MCU</td>
+      <td>LPC1343</td>
+      <td>R7FA4M1AB3CFM#A00（RA41M グループ）</td>
+    </tr>
+    <tr>
+      <td>RAM</td>
+      <td>8KB</td>
+      <td>32KB</td>
+    </tr>
+    <tr>
+      <td>Flash</td>
+      <td>32KB</td>
+      <td>256KB (Code)、8KB (Data)</td>
+    </tr>
+    <tr>
+      <td>電源</td>
+      <td>DC 2～4V（アルカリ乾電池2本 or ニッケル水素充電池2～3本）</td>
+      <td>DC 6〜24V</td>
+    </tr>
+    <tr>
+      <td>入力</td>
+      <td>アナログセンサ入力×2（最大4）</td>
+      <td>アナログ入力 6</td>
+    </tr>
+    <tr>
+      <td>出力</td>
+      <td>DCモータ×2（連続電流2A）、LED×2（オレンジ・緑）、圧電ブザー×1、汎用I/Oピン30本程度</td>
+      <td>デジタル出力 14（最大8mA）、PWM出力 6、DAC 1、LED×3（うち2つはTX、RX）</td>
+    </tr>
+    <tr>
+      <td>インタフェース</td>
+      <td>USB（HID準拠）、シリアルポート（3.3vレベル）、I2C</td>
+      <td>USB、UART、I2C、SPI、CAN</td>
+    </tr>
+    <tr>
+      <td>寸法</td>
+      <td>W56mm × D46mm</td>
+      <td>W68.6mm × D53.4mm</td>
+    </tr>
+    <tr>
+      <td>重量</td>
+      <td>13g</td>
+      <td>???</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/2024/03-13/VSWRC103LV-ArduinoUnoR4.png" alt="VSWRC103LV-ArduinoUnoR4" title="VS-WRC103LV 対 Arduino UNO R4 Minima" /></p>
+
+<p>ポータブルにしたときに色々なバッテリーが使える Arduino UNO の電源の幅広さは特筆すべきですね。ニッケル水素乾電池の場合、例えば <a href="https://panasonic.jp/battery/charge/p-db/BK-3HCD2H.html" title="エネループプロ  単3形 2本パック(ハイエンドモデル) BK-3HCD/2H 商品概要 - ニッケル水素電池&amp;充電器 - Panasonic">Panasonic のエネループプロ単三電池</a> が１つ約 30g、<a href="https://www.toshiba-lifestyle.com/jp/batteries/tnh-1a/" title="「充電式IMPULSE」充電池 単1形/単2形/単3形/単4形/6P形 - 電池･充電器 - 東芝ライフスタイル株式会社 - 電池/充電器 - 東芝ライフスタイル株式会社">東芝 IMPULSE の 006P型電池</a> が約 40g とのことなので、電池容量の違いを別にすれば重量面でも有利かもです。</p>
+
+<p>さてさて、あまりに年代の違う２つの比較は私の自己満足でしかないですが、改めてそれぞれのスペックに興味を持ってもらえればと思います (^.^);</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="Cortex-M3" /><category term="Cortex-M4" /><summary type="html"><![CDATA[ビュートローバーARM で作ったライントレースのラップタイムを測りたくて、Arduino UNO R4 Minima を購入しました。これが初 Arduino で何ができるのか不安だったので、大枚をはたいてセンサ類がセットになっていて 日本語のチュートリアル とかが整備されていそうな SunFounder のキットを購入しました。（人気商品？のようで、Amazon では今日現在在庫切れですネ）]]></summary></entry></feed>
