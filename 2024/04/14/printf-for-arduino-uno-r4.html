@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>if(window.location.hostname!='127.0.0.1'){var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2';document.head.appendChild(s);}window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DLMCZ884M2');</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="printf 使える？" />
+<meta property="og:description" content="printf 使える？" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-04-14T20:49:21+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-04-14T20:49:21+09:00","datePublished":"2024-04-14T20:49:21+09:00","description":"printf 使える？","headline":"Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"},"url":"https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-04-14T20:49:21+09:00" itemprop="datePublished">Apr 14, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="printf-使える">printf 使える？</h2>
+
+<p>とりあえず乱暴にもこんなコードを試してみました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Hello World</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>コンパイルは…OK、おぉ、ってことは <code class="language-plaintext highlighter-rouge">printf()</code> あるんだ！ ダウンロードも OK だ。
+シリアルモニタを確認っと…</p>
+
+<p>あれっ…出ない！？…おかしいなぁ…。</p>
+
+<p>念の為、オマジナイ <code class="language-plaintext highlighter-rouge">Serial.begin(9600); while (!Serial);</code> を入れてみましたが、変わりません。
+一体全体 <code class="language-plaintext highlighter-rouge">printf()</code> の出力はどこに行っちゃったんでしょう？</p>
+
+<h3 id="デバッガで確認">デバッガで確認</h3>
+
+<p><code class="language-plaintext highlighter-rouge">printf()</code> の行方を探すため、<a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">トラ技ライタ</a> でステップインしてみると、スカッ！と次の行に移動しちゃいます。どうやら空の関数っぽい挙動です。う〜ん…</p>
+
+<p><img src="/images/2024/04-14/debug-printf.jpg" alt="printf()をデバッグ" title="printf()をデバッグ"></p>
+
+<h3 id="ライブラリを試す">ライブラリを試す</h3>
+
+<p>気を取り直し、IDE のライブラリマネージャーで「printf」を検索。シンプルなものから重厚なものまで工夫を凝らしたものが色々出てきます。大抵の場合は良く出来ていて、<code class="language-plaintext highlighter-rouge">Sirial</code> 以外のデバイスにもバインドできる感じに作られています。</p>
+
+<p>でも僕には帯にも襷にも長い感じ。</p>
+
+<p>で、一番しっくりきたのが <a href="https://qiita.com/teddokano/items/9afc45bb1beab9b7af4f" title="Arduinoで`printf()` #Arduino - Qiita">Qiita の記事</a> のコードですが、きっとどこかで <code class="language-plaintext highlighter-rouge">printf()</code> が <a href="https://syohex.hatenablog.com/entry/20100610/1276180481" title="weakシンボル - Shohei Yoshida's Diary">weak シンボル</a> で定義されているに違いないと睨み、<code class="language-plaintext highlighter-rouge">stdio.h</code> の標準仕様で試したところ、案の定コンパイル（リンク）はエラーなく完了しました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define PRINTF_BUF_SIZE  256
+</span>
+<span class="kt">int</span> <span class="nf">printf</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fmt</span><span class="p">,</span> <span class="p">...)</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">PRINTF_BUF_SIZE</span><span class="p">];</span>
+
+  <span class="kt">va_list</span> <span class="n">arg_ptr</span><span class="p">;</span>
+  <span class="n">va_start</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">,</span> <span class="n">fmt</span><span class="p">);</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">vsnprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">PRINTF_BUF_SIZE</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">arg_ptr</span><span class="p">);</span>
+  <span class="n">va_end</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">);</span>
+
+  <span class="c1">// output to the serial console through the 'Serial'</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">,</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">len</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>このコードはかつて <a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm">LPC-1343 ボードで実装した sci.c</a> からの移植です。<code class="language-plaintext highlighter-rouge">Serial</code> 専用だけど、僕的にはこれで十分です。</p>
+
+<h3 id="printfの書式と動作確認">printfの書式と動作確認</h3>
+
+<p><code class="language-plaintext highlighter-rouge">printf()</code> や <code class="language-plaintext highlighter-rouge">scanf()</code> の書式指定の厳密な仕様はそれなりのボリュームになるので、僕も詳しくありません。忘れた頃に次のようなサイトにお世話になってます。</p>
+
+<ul>
+  <li><a href="https://www.k-cube.co.jp/wakaba/server/format.html" title="若葉プログラミング塾 &gt; 知識の玉手箱 &gt; ワンポイントTips &gt; フォーマット指定子一覧">フォーマット指定子一覧</a></li>
+  <li><a href="https://qiita.com/keitean/items/7cd52af571d27a1173d0" title="C言語 printfのフォーマット指定子 #C - Qiita">C言語 printfのフォーマット指定子</a></li>
+</ul>
+
+<p>今回は特に出力を検証するために後者のサンプルコードを使わせてもらいました。また浮動小数点もそれなりに（厳密に仕様通りか未検証という意味）フォーマットしてくれてます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+
+<span class="cp">#define EPSILON 0.00001
+</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">EPSILON</span><span class="p">;</span> <span class="n">f</span> <span class="o">+=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"f = %5.3f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"e = %5.3e</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="p">...</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.980</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">9.800e-01</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.990</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">9.900e-01</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">1.000</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">1.000e+00</span></code></pre></figure>
+
+<h3 id="エスケープシーケンスのテスト">エスケープシーケンスのテスト</h3>
+<p>ついでにシリアルモニタ側のテストとして <a href="https://qiita.com/PruneMazui/items/8a023347772620025ad6" title="ANSIエスケープシーケンス チートシート #Bash - Qiita">エスケープシーケンス</a> も試してみました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">printf</span><span class="p">(</span><span class="s">"%s%s"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[2J"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[0;0H"</span><span class="p">);</span> <span class="c1">// 画面クリア＋原点に移動</span></code></pre></figure>
+
+<p><a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> 並の動作を期待したのですが、これはダメでした。不可視文字も含めてそのまま出てきちゃいます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="mi">20</span><span class="o">:</span><span class="mi">44</span><span class="o">:</span><span class="mf">40.763</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="mi">2</span><span class="n">J</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="n">H</span></code></pre></figure>
+
+<p>VSCode のターミナルなら<a href="https://code.visualstudio.com/docs/terminal/advanced" title="Advanced Terminal Usage in Visual Studio Code">対応している気もします</a>が、僕の Mac が古いためか（Late 2013）、環境構築がうまくいかず未確認です。せめて画面クリアや文字色の変更か反転ぐらいできると助かるんですけどネ <img class="emoji" title=":woozy_face:" alt=":woozy_face:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f974.png" height="20" width="20"></p>
+
+<h3 id="ライブラリ化">ライブラリ化</h3>
+
+<p>デバッグのたびにコピペするのも面倒なので、ライブラリ化しちゃいました。UNO R4 以外の動作確認ができないので R4 用としています → <a href="https://github.com/embedded-kiddie/Printf/releases" title="Releases · embedded-kiddie/Printf · GitHub">Printf v0.1</a></p>
+
+<p>よかったら使ってやってください。</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Assets</code> から <a href="https://github.com/embedded-kiddie/Printf/archive/refs/tags/v0.1.zip" title="Releases · embedded-kiddie/Printf"><span class="inline"><img src="/images/2024/04-09/download-zip.png" alt="zip ファイル">Source code (zip)</span></a> をクリックしてダウンロードします。</p>
+  </li>
+  <li>
+    <p>Arduino IDE メニューの「スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…」からダウンロードした .zip ファイルを読み込みます。</p>
+  </li>
+  <li>
+    <p>IDE メニューの「ファイル → スケッチ例 → カスタムライブラリのスケッチ例」からサンプル <code class="language-plaintext highlighter-rouge">printf</code> を試せます。</p>
+  </li>
+</ul>
+
+<h2 id="serialprintln-の小技">Serial.println() の小技</h2>
+
+<p><a href="https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/" title="String() - Arduino Reference"><code class="language-plaintext highlighter-rouge">String</code> クラス</a> は <a href="https://docs.arduino.cc/built-in-examples/strings/StringConstructors/" title="Home / Programming / Built-in Examples / String Object Constructors">数値を文字列に変換</a> したり <a href="https://docs.arduino.cc/built-in-examples/strings/StringAdditionOperator/" title="Home / Programming / Built-in Examples / String Addition Operator">他の文字列との足し算</a> ができるので、<code class="language-plaintext highlighter-rouge">println()</code> との組み合わせがイイ感じです。僕はもっぱらコレですネ。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">float</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1415926</span><span class="p">;</span>
+<span class="kt">uint32_t</span> <span class="n">ul</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">;</span>
+<span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"pi = "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">ul</span><span class="p">)</span> <span class="o">+</span> <span class="s">" = 0x"</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">ul</span><span class="p">,</span> <span class="n">HEX</span><span class="p">));</span></code></pre></figure>
+
+<p><a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/String.cpp" title="ArduinoCore-API/api/String.cpp at master · arduino/ArduinoCore-API">クラス内部</a> で引数（コンストラクタ）に応じて <a href="https://qiita.com/xxpisu/items/2c68722d7f1e38f7a4d0" title="dtostrf関数の使い方 #Arduino - Qiita"><code class="language-plaintext highlighter-rouge">dtostrf()</code></a> や <code class="language-plaintext highlighter-rouge">ultoa()</code> を選り分けているのでオーバーヘッドやメモリへのフットプリントもそれなりと思いますが、小数点以下の桁数指定や基数変換ができたりする多才な奴です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="mo">02</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mf">19.513</span> <span class="o">-&gt;</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1416</span><span class="p">,</span> <span class="mi">1234</span> <span class="o">=</span> <span class="mh">0x4d2</span></code></pre></figure>
+
+<p>Arduino の <a href="https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/" title="String() - Arduino Reference"><code class="language-plaintext highlighter-rouge">String</code> クラス</a> は <a href="https://cpprefjp.github.io/international-standard.html" title="C++国際標準規格 - cpprefjp C++日本語リファレンス">C++ の標準規格</a> に比べてメソッド数が少ないものの、ハードウェアに依存しない <a href="https://github.com/arduino/ArduinoCore-API" title="arduino/ArduinoCore-API: Hardware independent layer of the Arduino cores defining the official API">ArduinoCore-API</a> レイヤに属しているので、どのアーキテクチャのボードでもそれなりに動くハズです。</p>
+
+<h2 id="printfの行方は">printfの行方は？</h2>
+
+<p>さて冒頭の件に戻りますが、以下の２つの疑問が湧いてきます。</p>
+
+<ul>
+  <li>なぜ空の <code class="language-plaintext highlighter-rouge">printf()</code> が定義されているのか</li>
+  <li>どこで定義されているのか</li>
+</ul>
+
+<p>Arduino 新参者で UNO R4 しか持ってない僕には歴史的な経緯はわかりませんが、<a href="https://playground.arduino.cc/Main/Printf/" title="Arduino Playground - Printf">Arduino Playground - Printf</a> の冒頭には「stdio および（それを出力先とする）printf() は Arduino 環境に組み込まれていません…」とハッキリ書かれています。</p>
+
+<p>メモリが少なく、また多くのアーキテクチャを抱える Arduino が <code class="language-plaintext highlighter-rouge">printf()</code> ではなく、より単純な <code class="language-plaintext highlighter-rouge">print()</code> と <code class="language-plaintext highlighter-rouge">println()</code> をベースラインにしたことは理解できます。</p>
+
+<p>では「stdio を組み込んでいない」のはなぜか？ 以下は私の勝手な解釈です。</p>
+
+<p>OS が載るシステムでは、システムをオペレートするための標準 I/F として <code class="language-plaintext highlighter-rouge">stdin</code> や <code class="language-plaintext highlighter-rouge">stdout</code>、<code class="language-plaintext highlighter-rouge">stderr</code> という抽象化された仮想の標準端末を必要とします。</p>
+
+<p>一方デフォルトで OS が載らない Arduino ですが、<a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" title="Serial - Arduino Reference">Serial</a>、<a href="https://reference.arduino.cc/reference/en/libraries/liquidcrystal/" title="LiquidCrystal - Arduino Reference">LiquidCrystal</a>、<a href="https://www.arduino.cc/reference/en/libraries/ethernet/" title="Ethernet - Arduino Reference">Ethernet</a> や <a href="https://reference.arduino.cc/reference/en/libraries/wifi/wificlient/" title="WiFi - WiFiClient() - Arduino Reference">WiFi</a> といったデバイスクラスは、<a href="https://www.arduino.cc/reference/en/language/functions/communication/stream/" title="Stream - Arduino Reference">Stream クラス</a> から <a href="https://www.arduino.cc/reference/en/language/functions/communication/print/" title="Print - Arduino Reference">Print クラス</a> を継承しているので、これらを元にすれば stdio を <code class="language-plaintext highlighter-rouge">Serial</code> に決めることも可能だったハズです。</p>
+
+<p>それでも stdio を一意に決めていないのは、「決めるのはアプリケーションを作るお前だゾ」と暗に言われているように僕には思えます。生粋の組込系的発想ですかね。</p>
+
+<p>とはいえ、単純に未定義にしないのは親切心か、はたまた余計なお世話か？… 未だに見つからない定義箇所と共に謎は残ります。まぁ、どうでもイイことですが…</p>
+
+<p>以上、中途半ばな謎解きと小技でした <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20"></p>
+
+
+  </div>
+<a class="u-url" href="/2024/04/14/printf-for-arduino-uno-r4.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="mailto:embeddedkiddie@gmail.com">embeddedkiddie@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+<ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'" /><noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /></noscript><script async src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </html>

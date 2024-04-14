@@ -1,4 +1,159 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-12T13:07:22+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介</title><link href="https://embedded-kiddie.github.io/2024/04/12/background-tone-player.html" rel="alternate" type="text/html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介" /><published>2024-04-12T13:02:37+09:00</published><updated>2024-04-12T13:02:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/12/background-tone-player</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/12/background-tone-player.html"><![CDATA[<p>BGM 再生といっても <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> のことです、悪しからず。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-14T21:07:07+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</title><link href="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" rel="alternate" type="text/html" title="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" /><published>2024-04-14T20:49:21+09:00</published><updated>2024-04-14T20:49:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"><![CDATA[<h2 id="printf-使える">printf 使える？</h2>
+
+<p>とりあえず乱暴にもこんなコードを試してみました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Hello World</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>コンパイルは…OK、おぉ、ってことは <code class="language-plaintext highlighter-rouge">printf()</code> あるんだ！ ダウンロードも OK だ。
+シリアルモニタを確認っと…</p>
+
+<p>あれっ…出ない！？…おかしいなぁ…。</p>
+
+<p>念の為、オマジナイ <code class="language-plaintext highlighter-rouge">Serial.begin(9600); while (!Serial);</code> を入れてみましたが、変わりません。
+一体全体 <code class="language-plaintext highlighter-rouge">printf()</code> の出力はどこに行っちゃったんでしょう？</p>
+
+<h3 id="デバッガで確認">デバッガで確認</h3>
+
+<p><code class="language-plaintext highlighter-rouge">printf()</code> の行方を探すため、<a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">トラ技ライタ</a> でステップインしてみると、スカッ！と次の行に移動しちゃいます。どうやら空の関数っぽい挙動です。う〜ん…</p>
+
+<p><img src="/images/2024/04-14/debug-printf.jpg" alt="printf()をデバッグ" title="printf()をデバッグ" /></p>
+
+<h3 id="ライブラリを試す">ライブラリを試す</h3>
+
+<p>気を取り直し、IDE のライブラリマネージャーで「printf」を検索。シンプルなものから重厚なものまで工夫を凝らしたものが色々出てきます。大抵の場合は良く出来ていて、<code class="language-plaintext highlighter-rouge">Sirial</code> 以外のデバイスにもバインドできる感じに作られています。</p>
+
+<p>でも僕には帯にも襷にも長い感じ。</p>
+
+<p>で、一番しっくりきたのが <a href="https://qiita.com/teddokano/items/9afc45bb1beab9b7af4f" title="Arduinoで`printf()` #Arduino - Qiita">Qiita の記事</a> のコードですが、きっとどこかで <code class="language-plaintext highlighter-rouge">printf()</code> が <a href="https://syohex.hatenablog.com/entry/20100610/1276180481" title="weakシンボル - Shohei Yoshida&#39;s Diary">weak シンボル</a> で定義されているに違いないと睨み、<code class="language-plaintext highlighter-rouge">stdio.h</code> の標準仕様で試したところ、案の定コンパイル（リンク）はエラーなく完了しました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define PRINTF_BUF_SIZE  256
+</span>
+<span class="kt">int</span> <span class="nf">printf</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fmt</span><span class="p">,</span> <span class="p">...)</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">PRINTF_BUF_SIZE</span><span class="p">];</span>
+
+  <span class="kt">va_list</span> <span class="n">arg_ptr</span><span class="p">;</span>
+  <span class="n">va_start</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">,</span> <span class="n">fmt</span><span class="p">);</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">vsnprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">PRINTF_BUF_SIZE</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">arg_ptr</span><span class="p">);</span>
+  <span class="n">va_end</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">);</span>
+
+  <span class="c1">// output to the serial console through the 'Serial'</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">,</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">len</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>このコードはかつて <a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm">LPC-1343 ボードで実装した sci.c</a> からの移植です。<code class="language-plaintext highlighter-rouge">Serial</code> 専用だけど、僕的にはこれで十分です。</p>
+
+<h3 id="printfの書式と動作確認">printfの書式と動作確認</h3>
+
+<p><code class="language-plaintext highlighter-rouge">printf()</code> や <code class="language-plaintext highlighter-rouge">scanf()</code> の書式指定の厳密な仕様はそれなりのボリュームになるので、僕も詳しくありません。忘れた頃に次のようなサイトにお世話になってます。</p>
+
+<ul>
+  <li><a href="https://www.k-cube.co.jp/wakaba/server/format.html" title="若葉プログラミング塾 &gt; 知識の玉手箱 &gt; ワンポイントTips &gt; フォーマット指定子一覧">フォーマット指定子一覧</a></li>
+  <li><a href="https://qiita.com/keitean/items/7cd52af571d27a1173d0" title="C言語 printfのフォーマット指定子 #C - Qiita">C言語 printfのフォーマット指定子</a></li>
+</ul>
+
+<p>今回は特に出力を検証するために後者のサンプルコードを使わせてもらいました。また浮動小数点もそれなりに（厳密に仕様通りか未検証という意味）フォーマットしてくれてます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+
+<span class="cp">#define EPSILON 0.00001
+</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">EPSILON</span><span class="p">;</span> <span class="n">f</span> <span class="o">+=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"f = %5.3f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"e = %5.3e</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="p">...</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.980</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">9.800e-01</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.990</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">9.900e-01</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">1.000</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">1.000e+00</span></code></pre></figure>
+
+<h3 id="エスケープシーケンスのテスト">エスケープシーケンスのテスト</h3>
+<p>ついでにシリアルモニタ側のテストとして <a href="https://qiita.com/PruneMazui/items/8a023347772620025ad6" title="ANSIエスケープシーケンス チートシート #Bash - Qiita">エスケープシーケンス</a> も試してみました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">printf</span><span class="p">(</span><span class="s">"%s%s"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[2J"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[0;0H"</span><span class="p">);</span> <span class="c1">// 画面クリア＋原点に移動</span></code></pre></figure>
+
+<p><a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> 並の動作を期待したのですが、これはダメでした。不可視文字も含めてそのまま出てきちゃいます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="mi">20</span><span class="o">:</span><span class="mi">44</span><span class="o">:</span><span class="mf">40.763</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="mi">2</span><span class="n">J</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="n">H</span></code></pre></figure>
+
+<p>VSCode のターミナルなら<a href="https://code.visualstudio.com/docs/terminal/advanced" title="Advanced Terminal Usage in Visual Studio Code">対応している気もします</a>が、僕の Mac が古いためか（Late 2013）、環境構築がうまくいかず未確認です。せめて画面クリアや文字色の変更か反転ぐらいできると助かるんですけどネ :woozy_face:</p>
+
+<h3 id="ライブラリ化">ライブラリ化</h3>
+
+<p>デバッグのたびにコピペするのも面倒なので、ライブラリ化しちゃいました。UNO R4 以外の動作確認ができないので R4 用としています → <a href="https://github.com/embedded-kiddie/Printf/releases" title="Releases · embedded-kiddie/Printf · GitHub">Printf v0.1</a></p>
+
+<p>よかったら使ってやってください。</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Assets</code> から <a href="https://github.com/embedded-kiddie/Printf/archive/refs/tags/v0.1.zip" title="Releases · embedded-kiddie/Printf"><span class="inline"><img src="/images/2024/04-09/download-zip.png" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
+  </li>
+  <li>
+    <p>Arduino IDE メニューの「スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…」からダウンロードした .zip ファイルを読み込みます。</p>
+  </li>
+  <li>
+    <p>IDE メニューの「ファイル → スケッチ例 → カスタムライブラリのスケッチ例」からサンプル <code class="language-plaintext highlighter-rouge">printf</code> を試せます。</p>
+  </li>
+</ul>
+
+<h2 id="serialprintln-の小技">Serial.println() の小技</h2>
+
+<p><a href="https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/" title="String() - Arduino Reference"><code class="language-plaintext highlighter-rouge">String</code> クラス</a> は <a href="https://docs.arduino.cc/built-in-examples/strings/StringConstructors/" title="Home / Programming / Built-in Examples / String Object Constructors">数値を文字列に変換</a> したり <a href="https://docs.arduino.cc/built-in-examples/strings/StringAdditionOperator/" title="Home / Programming / Built-in Examples / String Addition Operator">他の文字列との足し算</a> ができるので、<code class="language-plaintext highlighter-rouge">println()</code> との組み合わせがイイ感じです。僕はもっぱらコレですネ。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">float</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1415926</span><span class="p">;</span>
+<span class="kt">uint32_t</span> <span class="n">ul</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">;</span>
+<span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"pi = "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">ul</span><span class="p">)</span> <span class="o">+</span> <span class="s">" = 0x"</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">ul</span><span class="p">,</span> <span class="n">HEX</span><span class="p">));</span></code></pre></figure>
+
+<p><a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/String.cpp" title="ArduinoCore-API/api/String.cpp at master · arduino/ArduinoCore-API">クラス内部</a> で引数（コンストラクタ）に応じて <a href="https://qiita.com/xxpisu/items/2c68722d7f1e38f7a4d0" title="dtostrf関数の使い方 #Arduino - Qiita"><code class="language-plaintext highlighter-rouge">dtostrf()</code></a> や <code class="language-plaintext highlighter-rouge">ultoa()</code> を選り分けているのでオーバーヘッドやメモリへのフットプリントもそれなりと思いますが、小数点以下の桁数指定や基数変換ができたりする多才な奴です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="mo">02</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mf">19.513</span> <span class="o">-&gt;</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1416</span><span class="p">,</span> <span class="mi">1234</span> <span class="o">=</span> <span class="mh">0x4d2</span></code></pre></figure>
+
+<p>Arduino の <a href="https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/" title="String() - Arduino Reference"><code class="language-plaintext highlighter-rouge">String</code> クラス</a> は <a href="https://cpprefjp.github.io/international-standard.html" title="C++国際標準規格 - cpprefjp C++日本語リファレンス">C++ の標準規格</a> に比べてメソッド数が少ないものの、ハードウェアに依存しない <a href="https://github.com/arduino/ArduinoCore-API" title="arduino/ArduinoCore-API: Hardware independent layer of the Arduino cores defining the official API">ArduinoCore-API</a> レイヤに属しているので、どのアーキテクチャのボードでもそれなりに動くハズです。</p>
+
+<h2 id="printfの行方は">printfの行方は？</h2>
+
+<p>さて冒頭の件に戻りますが、以下の２つの疑問が湧いてきます。</p>
+
+<ul>
+  <li>なぜ空の <code class="language-plaintext highlighter-rouge">printf()</code> が定義されているのか</li>
+  <li>どこで定義されているのか</li>
+</ul>
+
+<p>Arduino 新参者で UNO R4 しか持ってない僕には歴史的な経緯はわかりませんが、<a href="https://playground.arduino.cc/Main/Printf/" title="Arduino Playground - Printf">Arduino Playground - Printf</a> の冒頭には「stdio および（それを出力先とする）printf() は Arduino 環境に組み込まれていません…」とハッキリ書かれています。</p>
+
+<p>メモリが少なく、また多くのアーキテクチャを抱える Arduino が <code class="language-plaintext highlighter-rouge">printf()</code> ではなく、より単純な <code class="language-plaintext highlighter-rouge">print()</code> と <code class="language-plaintext highlighter-rouge">println()</code> をベースラインにしたことは理解できます。</p>
+
+<p>では「stdio を組み込んでいない」のはなぜか？ 以下は私の勝手な解釈です。</p>
+
+<p>OS が載るシステムでは、システムをオペレートするための標準 I/F として <code class="language-plaintext highlighter-rouge">stdin</code> や <code class="language-plaintext highlighter-rouge">stdout</code>、<code class="language-plaintext highlighter-rouge">stderr</code> という抽象化された仮想の標準端末を必要とします。</p>
+
+<p>一方デフォルトで OS が載らない Arduino ですが、<a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" title="Serial - Arduino Reference">Serial</a>、<a href="https://reference.arduino.cc/reference/en/libraries/liquidcrystal/" title="LiquidCrystal - Arduino Reference">LiquidCrystal</a>、<a href="https://www.arduino.cc/reference/en/libraries/ethernet/" title="Ethernet - Arduino Reference">Ethernet</a> や <a href="https://reference.arduino.cc/reference/en/libraries/wifi/wificlient/" title="WiFi - WiFiClient() - Arduino Reference">WiFi</a> といったデバイスクラスは、<a href="https://www.arduino.cc/reference/en/language/functions/communication/stream/" title="Stream - Arduino Reference">Stream クラス</a> から <a href="https://www.arduino.cc/reference/en/language/functions/communication/print/" title="Print - Arduino Reference">Print クラス</a> を継承しているので、これらを元にすれば stdio を <code class="language-plaintext highlighter-rouge">Serial</code> に決めることも可能だったハズです。</p>
+
+<p>それでも stdio を一意に決めていないのは、「決めるのはアプリケーションを作るお前だゾ」と暗に言われているように僕には思えます。生粋の組込系的発想ですかね。</p>
+
+<p>とはいえ、単純に未定義にしないのは親切心か、はたまた余計なお世話か？… 未だに見つからない定義箇所と共に謎は残ります。まぁ、どうでもイイことですが…</p>
+
+<p>以上、中途半ばな謎解きと小技でした :grin:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tips" /><category term="printf" /><summary type="html"><![CDATA[printf 使える？]]></summary></entry><entry><title type="html">Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介</title><link href="https://embedded-kiddie.github.io/2024/04/12/background-tone-player.html" rel="alternate" type="text/html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介" /><published>2024-04-12T13:02:37+09:00</published><updated>2024-04-12T13:02:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/12/background-tone-player</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/12/background-tone-player.html"><![CDATA[<p>BGM 再生といっても <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> のことです、悪しからず。</p>
 
 <p>あまり実用的な使い道は思いつかないですが、折角作ったので PR しちゃいます。興味のある方は「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</a>」に貼った動画を見てくれれば喜びます :grin:</p>
 
@@ -966,11 +1121,11 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
   </li>
   <li>
     <p><a href="https://docs.arduino.cc/tutorials/uno-r4-minima/cheat-sheet/#swd-connector">Arduino UNO R4 Minima Cheat Sheet</a><br />
-SWD コネクタが載っている。</p>
+SWD コネクタが載ってます。</p>
   </li>
   <li>
     <p><a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/cheat-sheet/">Arduino UNO R4 WiFi Cheat Sheet</a><br />
-デバッガに関するI/Fの言及なし。唯一考えられるのが ARM MCU と USB をブリッジしてるという ESP32。ただいずれかのプローブと電気的に接続するのではなく、ESP32 のファームを書き換えてオンボードのデバッガにするしかないのでは？ という気がしてきた。</p>
+デバッガに関するI/Fの言及なし。回路図を見てみて唯一考えられるのが ARM MCU と USB をブリッジしてる ESP32。ただ SWD の信号が外に出ていないので、デバッグプローブと電気的に接続するのではなく、ESP32 のファームを書き換えてオンボードのデバッガにするしかないのでは？ という気がしてます。</p>
   </li>
   <li>
     <p><a href="https://support.arduino.cc/hc/en-us/articles/10531097579548-Debug-runtime-errors-on-UNO-R4-WiFi-using-stack-trace" title="Debug runtime errors on UNO R4 WiFi using stack trace &ndash; Arduino Help Center">Debug runtime errors on UNO R4 WiFi using stack trace</a><br />
@@ -1778,103 +1933,4 @@ SWD コネクタが載っている。</p>
 <img src="/images/2024/03-15/03-15-11.jpg" alt="ジャンプワイヤキット" />
 </figure>
 
-<p>こちらは主にユニバーサル基板の表面用。ブレッドボード用は購入してあったが、短いジャンパ線をよく使うので（失敗も含めてね）サンハヤトの「<a href="https://amzn.asia/d/0hYcUCY" title="Amazon - サンハヤト ジャンプワイヤキット SKS-100 単線タイプでよく使用する短めジャンプワイヤのセット品 - ジャンプワイヤ - 産業・研究開発用品 通販">SKS-100</a>」（購入時 856円）を別途購入。</p>]]></content><author><name>Kingsman</name></author><category term="電子工作" /><summary type="html"><![CDATA[普段、仕事でもハンダゴテなど握る機会もほとんどなく、ハードが苦手な私が電子工作を始めるにあたって影響を受けたのが、次の YouTube 動画です。ハンダ付けのイロハを教えてくれます。]]></summary></entry><entry><title type="html">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</title><link href="https://embedded-kiddie.github.io/2024/03/14/printf-debug.html" rel="alternate" type="text/html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る" /><published>2024-03-14T18:09:51+09:00</published><updated>2024-03-14T18:09:51+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/14/printf-debug</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/14/printf-debug.html"><![CDATA[<h2 id="lpc-link-について">LPC-Link について</h2>
-
-<p><a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> の <a href="https://www.vstone.co.jp/products/vs_wrc103lv/download.html#02-1" title="VS-WRC103LV 取扱説明書 - ダウンロード - ヴイストン株式会社">取扱説明書</a> には、「LPC-Link接続ポート（CN12）」というデバッグ用のポートの説明があります。</p>
-
-<p><img src="/images/2024/03-14/port-LPC-LINK.png" alt="LPC-Link接続ポート（CN12）" title="LPC-Link接続ポート" /></p>
-
-<p>ザックリと言えば、LPC-LINK とは以下のようなシロモノです（情報元：<a href="https://toragi.cqpub.co.jp/Portals/0/backnumber/2014/03/p134.pdf">一人1台！全Cortex ARM マイコン対応デバッガのしくみ</a> ）。</p>
-
-<ul>
-  <li><a href="https://developer.arm.com/documentation/101636/0100/Debug-and-Trace/JTAG-SWD-Interface" title="Documentation – Arm Developer">JTAG/SWD (Serial Wire Debug)</a> のプロトコルを介してターゲットボード上の CPU 動作を制御したり状態を調べたりすることができるインサーキット・デバッガのこと</li>
-  <li>SWD とは ARM が定めた <a href="https://ja.wikipedia.org/wiki/JTAG" title="JTAG - Wikipedia">JTAG 規格</a> を利用したデバッグ・インタフェースのこと</li>
-</ul>
-
-<p>かつては NXP の評価ボードにオマケで付いてきたようですが、代替の LPC-Link2 と共に絶版 → <a href="https://www.nxp.jp/design/design-center/software/development-software/mcuxpresso-software-and-tools-/mcu-link-debug-probe:MCU-LINK" title="MCU Link JTAG/SWD Debug Probe - NXP Semiconductors">MCU-Link</a> に置き換わっていて、これがまたサポート対象に LPC1343 が入っていないのです。</p>
-
-<p>JTAG/SWD をサポートしたデバッグ・プローブと呼ばれる装置なら使えるのかもしれませんが、真偽不明なため（調査中）、ここではソフトウェアで <code class="language-plaintext highlighter-rouge">printf</code> デバッグをする方法を紹介したいと思います。</p>
-
-<h2 id="printf-デバッグ">printf デバッグ</h2>
-<p>ヴイストン社のブログ記事「<a href="https://vstone.co.jp/robotshop/blog/archives/1293" title="【ロボコンに最適！】ビュートローバー・パソコン間で通信すると便利すぎた！【シリアル通信】 ｜ ロボット専門店のスタッフブログ -ロボットとの共存-">【ロボコンに最適！】ビュートローバー・パソコン間で通信すると便利すぎた！【シリアル通信】</a>」には、シリアル通信経由でホスト PC に文字を送る例が示されています（例題3から抜粋）。</p>
-
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">char</span> <span class="n">sentence</span><span class="p">[</span><span class="mi">11</span><span class="p">];</span>                  <span class="c1">// charは文字を記録することができる</span>
-<span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>                         <span class="c1">// {}内を永遠に繰り返す</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>       <span class="c1">// for文 ２回くりかえす</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">ADRead</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>           <span class="c1">// 赤外線センサの値をA/D変換してdataに代入</span>
-
-        <span class="c1">// %01dにはiの値が1桁、%04にはdataの値が4桁で文字列に変換され</span>
-        <span class="c1">// まとめてsentenceに文字列として格納される</span>
-        <span class="c1">// \r\n（２文字）は改行を表す</span>
-        <span class="n">sprintf</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="s">"AN%01d=%04d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-
-        <span class="n">SciStrTx</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>     <span class="c1">// 変数sentenceに入った10文字をパソコンに送信</span>
-        <span class="n">Wait</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>                   <span class="c1">// 0.02秒待つ</span>
-    <span class="p">}</span>
-    <span class="n">sprintf</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="s">"</span><span class="se">\033</span><span class="s">[1;1H"</span><span class="p">);</span> <span class="c1">// 1行目1列目にカーソルを戻すエスケープシーケンス</span>
-    <span class="n">SciStrTx</span><span class="p">(</span><span class="n">sentence</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>          <span class="c1">// エスケープシーケンス6文字を送信</span>
-    <span class="n">Wait</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>                       <span class="c1">// 0.02秒待つ</span>
-<span class="p">}</span></code></pre></figure>
-
-<p><code class="language-plaintext highlighter-rouge">SciStrTx()</code> は一回の送信が64バイトに制限されてますし、文字列用バッファ <code class="language-plaintext highlighter-rouge">sentence[]</code> の準備や <code class="language-plaintext highlighter-rouge">sprintf()</code>、<code class="language-plaintext highlighter-rouge">Wati()</code> など面倒ですよね。これを以下のように <code class="language-plaintext highlighter-rouge">printf()</code> 一発にすることがゴールです。</p>
-
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>                     <span class="c1">// {}内を永遠に繰り返す</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">// for文 ２回くりかえす</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">ADRead</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>       <span class="c1">// 赤外線センサの値をA/D変換してdataに代入</span>
-
-        <span class="c1">// printf()一発で出力！！</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">"AN%01d=%04d</span><span class="se">\r\n</span><span class="s">"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\033</span><span class="s">[1;1H"</span><span class="p">);</span>        <span class="c1">// 1行目1列目にカーソルを戻すエスケープシーケンスの命令</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>その方法を Wiki ページ「<a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki/123_USBCDC" title="123_USBCDC · embedded-kiddie/beauto-rover-arm Wiki">1.2.3 USBシリアル通信プロジェクトのインポート</a>」にまとめたので、気に入ったらトライしてみてください。使用するのは <code class="language-plaintext highlighter-rouge">sci.c</code> と <code class="language-plaintext highlighter-rouge">sci.h</code> で、そのポイントは以下の通りです。</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">printf()</code> を使うためのシステコール群を定義</li>
-  <li>一回の送信量64バイトの制限なし</li>
-  <li>残念ながら <code class="language-plaintext highlighter-rouge">scanf()</code> は使えず、代替として <code class="language-plaintext highlighter-rouge">sciScanf()</code> を定義</li>
-  <li>最適化オプションを指定した時に動作しなくなるオリジナルの不具合を修正</li>
-</ul>
-
-<h2 id="赤外線センサの特性計測">赤外線センサの特性計測</h2>
-
-<p>ヴイストン社のブログを真似て赤外線センサの出力値を観測してみました。まず白地に引いた直線の黒ライン中央にローバーを置きます。そして次のような動作</p>
-
-<ol>
-  <li>右に振り（左センサが黒ラインに近くなり、左センサの出力値が上がる）中央に戻し、 続いて</li>
-  <li>左に振り（右センサが黒ラインに近くなり、右センサの出力値が上がる）再び中央に戻す</li>
-</ol>
-
-<p>をプログラムし、<code class="language-plaintext highlighter-rouge">printf()</code> で左右のセンサ値を <a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> に出力 → テキストをコピペして CSV ファイルとして保存 → <a href="https://www.google.com/intl/ja_jp/sheets/about/" title="Google Sheets: オンライン スプレッドシート エディタ - Google Workspace">Google スプレッドシート</a> にアップロードしてグラフ化しました。</p>
-
-<p><img src="/images/2024/03-14/ir-sensor-graph1.png" alt="左右センサ値の出力特性" title="左右センサ値の出力特性" /></p>
-
-<p>このグラフから次のことが分かると思います。</p>
-
-<ul>
-  <li>左右センサ値の出力特性にバラツキがある（最大値が異なる）</li>
-  <li>車体中心に対し、センサ出力がオフセットしている</li>
-</ul>
-
-<p>左右センサ値のバラツキが大きい時は、振れ幅が等しくなるよう補正（キャリブレーション）をした方が良いでしょう。</p>
-
-<p>そしてフォトセンサの位置が車体中心に対して左右非対称なのも気になります。車体を黒ラインの中心に置いた時のセンサ値（あるいは左右の差）がゼロになるよう、原点補正をした方が良い結果が得られると思います。</p>
-
-<p><img src="/images/2024/03-14/ir-sensor-positions.png" alt="車体中心に対するフォトセンサの位置" title="車体中心に対するフォトセンサの位置" /></p>
-
-<p>またこの手のフォトセンサは赤外の中でも近赤外領域である 800nm 付近の波長に最大感度があり、また発光 LED 側の発光ピーク波長とも若干ずれています（参考情報：<a href="https://www.rohm.co.jp/products/optical-sensors/reflective-type-photosensors/rpr-220-product" title="RPR-220 - データシートと製品詳細 - ローム株式会社 - ROHM Semiconductor">RPR-220 反射型フォトセンサ(フォトリフレクタ)</a>）。</p>
-
-<p>太陽光や白熱電球はこの領域の波長をたっぷり含むため、フォトセンサの出力に影響を与えます。逆に蛍光灯や LED 電球には（電球色であっても）ほとんど含まれていません（出典：<a href="http://www.techno-synergy.co.jp/nkd_appli/ex-DF420.html" title="分光アプリケーション：各種照明のスペクトル比較｜テクノシナジー">各種照明のスペクトル比較</a>）。</p>
-
-<p>次のグラフは太陽光の入る窓際で同じことをした結果です。こうなるとまともにライントレースはできなくなりますネ。</p>
-
-<p><img src="/images/2024/03-14/ir-sensor-graph2.png" alt="自然光の影響がある場合" title="自然光の影響がある場合" /></p>
-
-<h2 id="まとめ">まとめ</h2>
-
-<p>ソースコード上のおかしいところを見つけるにはインサーキット・デバッガには敵いませんが、LED やスイッチ待ちなどと組み合われば出費ゼロで出来る <code class="language-plaintext highlighter-rouge">printf()</code> デバッグもそれなりに役立ちます。</p>
-
-<p>また Ardiono IDE の <a href="https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-plotter/" title="Using the Serial Plotter Tool - Arduino Documentation">シリアルプロッタ</a> より手間はかかりますが、センサ値を可視化してみれば、単にハードを組み上げソフトを動かすだけより勉強になるのではと思います。</p>
-
-<p>そのうち走行させながらリアルタイムにデータの観測が出来るよう、無線化にもチャレンジしてみたいと思います (^.^)y</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="デバッグ" /><summary type="html"><![CDATA[LPC-Link について]]></summary></entry></feed>
+<p>こちらは主にユニバーサル基板の表面用。ブレッドボード用は購入してあったが、短いジャンパ線をよく使うので（失敗も含めてね）サンハヤトの「<a href="https://amzn.asia/d/0hYcUCY" title="Amazon - サンハヤト ジャンプワイヤキット SKS-100 単線タイプでよく使用する短めジャンプワイヤのセット品 - ジャンプワイヤ - 産業・研究開発用品 通販">SKS-100</a>」（購入時 856円）を別途購入。</p>]]></content><author><name>Kingsman</name></author><category term="電子工作" /><summary type="html"><![CDATA[普段、仕事でもハンダゴテなど握る機会もほとんどなく、ハードが苦手な私が電子工作を始めるにあたって影響を受けたのが、次の YouTube 動画です。ハンダ付けのイロハを教えてくれます。]]></summary></entry></feed>
