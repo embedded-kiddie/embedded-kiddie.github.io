@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-15T09:40:40+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</title><link href="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" rel="alternate" type="text/html" title="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" /><published>2024-04-14T20:49:21+09:00</published><updated>2024-04-14T20:49:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"><![CDATA[<h2 id="printf-使える">printf 使える？</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-15T10:08:42+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</title><link href="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" rel="alternate" type="text/html" title="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" /><published>2024-04-14T20:49:21+09:00</published><updated>2024-04-14T20:49:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"><![CDATA[<h2 id="printf-使える">printf 使える？</h2>
 
 <p>とりあえず乱暴にもこんなコードを試してみました。</p>
 
@@ -32,9 +32,11 @@
 
 <p>気を取り直し、IDE のライブラリマネージャーで「printf」を検索。シンプルなものから重厚なものまで工夫を凝らしたものが色々出てきます。大抵の場合は良く出来ていて、<code class="language-plaintext highlighter-rouge">Sirial</code> 以外のデバイスにもバインドできる感じに作られています。</p>
 
+<p>1番シッカリしてそうなのは、公式サイトにも上がっている <a href="https://www.arduino.cc/reference/en/libraries/libprintf/" title="LibPrintf - Arduino Reference">LibPrintf</a> でしょうか。<code class="language-plaintext highlighter-rouge">snprintf()</code> や <code class="language-plaintext highlighter-rouge">vsnprintf()</code> も再現されています。</p>
+
 <p>でも僕には帯にも襷にも長い感じ。</p>
 
-<p>で、一番しっくりきたのが <a href="https://qiita.com/teddokano/items/9afc45bb1beab9b7af4f" title="Arduinoで`printf()` #Arduino - Qiita">Qiita の記事</a> のコードです。ただ僕は、きっとどこかで <code class="language-plaintext highlighter-rouge">printf()</code> が <a href="https://syohex.hatenablog.com/entry/20100610/1276180481" title="weakシンボル - Shohei Yoshida&#39;s Diary">weak シンボル</a> として定義されているに違いないと睨み、<code class="language-plaintext highlighter-rouge">stdio.h</code> の標準仕様でコーディング＆試したところ、案の定エラーも無く動きました。</p>
+<p>で、一番しっくりきたのが <a href="https://qiita.com/teddokano/items/9afc45bb1beab9b7af4f" title="Arduinoで`printf()` #Arduino - Qiita">Qiita の記事</a> のコードです。ただ僕は、きっとどこかで <code class="language-plaintext highlighter-rouge">printf()</code> が <a href="https://syohex.hatenablog.com/entry/20100610/1276180481" title="weakシンボル - Shohei Yoshida&#39;s Diary">weak シンボル</a> として定義されているに違いないと読んで、<code class="language-plaintext highlighter-rouge">stdio.h</code> の標準仕様でコーディング＆試したところ、案の定エラーも無く動きました。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define PRINTF_BUF_SIZE  256
 </span>
@@ -54,6 +56,10 @@
 <span class="p">}</span></code></pre></figure>
 
 <p>このコードはかつて <a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm">LPC-1343 ボードで実装した sci.c</a> からの移植です。<code class="language-plaintext highlighter-rouge">Serial</code> 専用だけど、僕的にはこれで十分です。</p>
+
+<p>当然ですが、<code class="language-plaintext highlighter-rouge">printf()</code> にステップイン出来ました。読みは正しかった様です :+1:</p>
+
+<p><img src="/images/2024/04-14/debug-printf-again.jpg" alt="再びprintf()をデバッグ" title="再びprintf()をデバッグ" /></p>
 
 <h3 id="printfの書式と動作確認">printfの書式と動作確認</h3>
 
