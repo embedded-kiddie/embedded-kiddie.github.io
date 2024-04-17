@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-17T23:05:07+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-04-17T18:45:26+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-18T00:12:53+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-04-17T18:45:26+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
 
 <ul>
   <li><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編 - Embedded Kiddie">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a></li>
@@ -217,7 +217,11 @@
 <p>僕の場合、トラ技 ARM ライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> をハンダで繋ぎ、Minima 側に電源を供給するようにしていた際、アップロードも CMSIS-DAP からできるものと思い込み、Minima 側の USB を接続してなかった時に発生してました。今では両基板とも USB 接続することで事なきを得ています。</p>
 
 <h3 id="何をやっても-crp-disabled-が出現する">何をやっても CRP DISABLED が出現する</h3>
-<p>Mac で CMSIS-DAP ファームウェアを書き込む際にドラッグ＆ドロップしてませんか？ <a href="#ターミナルapp-からのコピー方法">ターミナルapp からのコピー方法</a> の手順に従ってください。</p>
+<p>たまにトラ技 ARM ライタの電源投入時（USB ケーブル接続時）に赤と緑の LED ランプが点灯せず ISP モードで立ち上がることがあります。特に Arduino が OFF の場合に起きることが多い様です。</p>
+
+<p>一方何をやっても ISP モードとなってしまう場合には、CMSIS-DAP ファームウェアが正しく書き込めていないことが考えられます。</p>
+
+<p>特に Mac の場合、CMSIS-DAP ファームウェアを書き込む際にドラッグ＆ドロップしてませんか？ <a href="#ターミナルapp-からのコピー方法">ターミナルapp からのコピー方法</a> の手順に従ってください。</p>
 
 <h2 id="最後に">最後に…</h2>
 
