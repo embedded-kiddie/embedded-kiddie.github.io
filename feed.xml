@@ -1,4 +1,224 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-15T10:08:42+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</title><link href="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" rel="alternate" type="text/html" title="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" /><published>2024-04-14T20:49:21+09:00</published><updated>2024-04-14T20:49:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"><![CDATA[<h2 id="printf-使える">printf 使える？</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-17T18:46:12+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-04-17T18:45:26+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
+
+<ul>
+  <li><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編 - Embedded Kiddie">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a></li>
+  <li><a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</a></li>
+</ul>
+
+<p>前者は <a href="https://www.vstone.co.jp/products/vs_wrc103lv/index.html" title="ARMマイコン搭載CPUボード「VS-WRC103LV」 - ヴイストン株式会社">LPC1343 ボード</a> のことになるので、Arduino UNO R4 Minima でトラ技 ARM ライタを動かすには両記事の拾い読みが必要でした。また幾つかノウハウも溜まってきたので改めて本記事にまとめます。</p>
+
+<h2 id="本記事の元となる開発環境について">本記事の元となる開発環境について</h2>
+<p>最初のお断りとして、僕の開発環境は以下のようにとても古いです。幸い Mac 上で Arduino IDE 2.x は動作しますが、仮想マシン上の Widnows7 では動作しないので、IDE の動作例は全て Mac 版となります。</p>
+
+<h3 id="pc-環境">PC 環境</h3>
+<ul>
+  <li>MacOS バージョン 11.7.10 (Big Sur on MacBook Pro Late 2013)</li>
+  <li>Window 7 (MacOS 上の仮想マシン環境にて動作)</li>
+</ul>
+
+<p>ただし以下は <a href="https://www.vstone.co.jp/products/vs_wrc103lv/index.html" title="ARMマイコン搭載CPUボード「VS-WRC103LV」 - ヴイストン株式会社">LPC1343 ボード</a> での実績により、Windows 上でも動作するハズです。</p>
+
+<ul>
+  <li>ISP モードによる トラ技 ARM ライタのファームウェア書き換え</li>
+  <li>ヒューマン インターフェース デバイス（HID）ドライバのインストール</li>
+  <li>CMSIS-DAP（デバイス名：<code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code>）によるデバッグ</li>
+</ul>
+
+<p>また本記事内の Windows7 スクリーンキャプチャ画像は、最新機種のものに読み替えてご覧ください。</p>
+
+<h3 id="arduino-ide">Arduino IDE</h3>
+<ul>
+  <li>バージョン：2.3.2</li>
+  <li>CLIバージョン：0.35.3</li>
+</ul>
+
+<h2 id="必要なもの">必要なもの</h2>
+
+<h3 id="トラ技-arm-ライタ">トラ技 ARM ライタ</h3>
+<p>購入は、CQ 出版社から出ている書籍版とマルツオンラインで販売されている単体版の２択です。</p>
+
+<ul>
+  <li>
+    <p>書籍版<br />
+<a href="https://amzn.asia/d/81bPDyE" title="Amazon - マルツ トラ技ARMライタ TG-LPC11U35-501 - マイクロプロセッサ - 産業・研究開発用品 通販">Amazon</a> あるいは <a href="https://www.kinokuniya.co.jp/f/dsg-01-9784789848138" title="ｍｂｅｄ×デバッガ！一枚二役ＡＲＭマイコン基板 / 島田 義人/白阪 一郎/渡會 豊政/大中 邦彦/辰岡 鉄郎【ほか著】 - 紀伊國屋書店ウェブストア｜オンライン書店｜本、雑誌の通販、電子書籍ストア">紀伊國屋書店</a> から購入可能です。<a href="https://shop.cqpub.co.jp/hanbai/books/MTR/MTRZ201503/MTRZ201503.pdf" title="マイコン開発入門の新定番!? トラ技ARMライタ誕生!">mbedやデバッガ関連の記事</a>、トラ技 ARM ライタ基板、ピンヘッダやスイッチ類、CD-ROM のセットからなり、ピンヘッダやスイッチ類のハンダ付けが必要です。逆に USB-miniB ケーブルとフラットケーブルは別途準備が必要です。</p>
+  </li>
+  <li>
+    <p>単体版<br />
+<a href="https://amzn.asia/d/3WgLsWc" title="Amazon - マルツ トラ技ARMライタ TG-LPC11U35-501 - マイクロプロセッサ - 産業・研究開発用品 通販">Amazon でも購入可能</a> ですが、<a href="https://www.marutsu.co.jp/pc/i/238834/" title="トラ技ARMライタ TG-LPC11U35-501 マルツエレック製｜電子部品・半導体通販のマルツ">マルツオンライン</a> の方が安価です。ハンダ付けが不要で、USB-miniB ケーブル、2×5 ハーフピッチのフラットケーブルが付属します。簡単な取説がついていますが、基本オンライン情報のみです。価格が安く接続に必要な品が揃っているので <strong>オススメ</strong> です。</p>
+  </li>
+</ul>
+
+<h3 id="あると便利なもの">あると便利なもの</h3>
+<ul>
+  <li>
+    <p><a href="https://akizukidenshi.com/catalog/g/g106776/" title="2&#215;5(10P)両端コネクタ付IDCリボンケーブル(フラットケーブル ハーフピッチ): ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">2×5(10P)両端コネクタ付IDCリボンケーブル(フラットケーブル ハーフピッチ)</a><br />
+書籍版には必要ですし、単体版のケーブルは 10cm と短く取り回しの自由度が少ないため、あると便利と思います。</p>
+  </li>
+  <li>
+    <p><a href="https://amzn.asia/d/3K9emQP" title="Amazon.co.jp: KAUMO スイッチ付き USBケーブル データOK 28cm データ結線済み (USBオス/USBメス) シーソースイッチ ロッカースイッチ (ブラック) : パソコン・周辺機器">スイッチ付き USB ケーブル</a><br />
+なくても大丈夫だと思いますが、開発中に USB 電源を OFF に出来た方が安心（?）な場面があり、回路図を読めない僕は利用しています。必ず <strong>データ線が結線されているタイプ</strong> を選んでください。</p>
+  </li>
+</ul>
+
+<h2 id="cmsis-dap-用ファームウェアの書き込み">CMSIS-DAP 用ファームウェアの書き込み</h2>
+<h3 id="ファームウェアのダウンロードと解凍">ファームウェアのダウンロードと解凍</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/toragi-firmware.png" title="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア" data-lightbox="image">
+    <img src="/images/2024/04-18/toragi-firmware-small.jpg" alt="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア" />
+  </a>
+</figure>
+
+<p>購入時は単にマイコン基板として動作するだけなので、CMSIS-DAP 用ファームウェアへの書き換えが必要です。</p>
+
+<p>過去ログ <a href="https://toragi.cqpub.co.jp/tabid/707/Default.html" title="2014年2月号3月号連続企画 - トランジスタ技術">2014年2月号3月号連続企画</a> のページから <a href="https://toragi.cqpub.co.jp/tabid/707/Default.html#dnn_ctr1684_dnnTITLE_lblTitle" title="3月号付録基板関連ファイル - 2014年2月号3月号連続企画 - トランジスタ技術">3月号付録基板関連ファイル</a> にあるトラ技ARMライタのファームウェア <a href="https://toragi.cqpub.co.jp/Portals/0/download/2014/TR1403N.zip">TR1403N.zip</a> をダウンロードし解凍します。</p>
+
+<h3 id="ファームウェアの書き込み">ファームウェアの書き込み</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/CRP-DISABLE.jpg" title="CRP DISABLE" data-lightbox="image">
+    <img src="/images/2024/04-18/CRP-DISABLE-small.jpg" alt="CRP DISABLE" />
+  </a>
+  <a href="/images/2024/04-18/toragi-button.jpg" title="トラ技ARMライタ基板上のタクトスイッチ" data-lightbox="image">
+    <img src="/images/2024/04-18/toragi-button-small.jpg" alt="トラ技ARMライタ基板上のタクトスイッチ" />
+  </a>
+</figure>
+
+<p>トラ技 ARM ライタを ISP ボタンを押しながら USB miniB ケーブルで PC に接続するか、接続済みなら ISP ボタンを押しながらリセットすると、<a href="https://ja.wikipedia.org/wiki/File_Allocation_Table#FAT12" title="File Allocation Table - Wikipedia">FAT12</a> の USB ストレージ <code class="language-plaintext highlighter-rouge">CRP DISABLE</code>（物理デバイス名は <code class="language-plaintext highlighter-rouge">LPC1XXX IFLASH</code>）が現れます。</p>
+
+<p>中の <code class="language-plaintext highlighter-rouge">firmware.bin</code> を削除し、替わりにダウンロードした <code class="language-plaintext highlighter-rouge">firmware.bin</code> をコピーします。</p>
+
+<div class="quote clear-both">
+
+<p>ISP は <a href="ttps://ja.wikipedia.org/wiki/In-System_Programming" title="In-System Programming - Wikipedia">In-System Programming</a> の略で、製品になってからも PC などからファームウェアの書き込みができる機能です。また CRP は <a href="https://edn.itmedia.co.jp/edn/articles/1805/25/news022_3.html" title="マイコンのセキュリティ機能を詳細解説 ～ハードウェア編">Code Read Protection</a> の略で、内蔵メモリの読み出しを防止する機能です。<code class="language-plaintext highlighter-rouge">CRP DISABLE</code> はこの機能を「無効」にしていることを表しています。</p>
+
+</div>
+
+<p>この時、Windows であればドラッグ＆ドロップで OK ですが、Mac の場合は nxpfan﻿ の Facebookページ <a href="https://www.facebook.com/notes/344084236658509/" title="Facebook">「USB経由ISP書き込み」をMacで行う</a> を参考にターミナル.appからコピーしないとうまくいきません。</p>
+
+<div class="quote clear-both">
+
+<h4 id="ターミナルapp-からのコピー方法">ターミナル.app からのコピー方法</h4>
+<p><span class="inline"><img src="/images/2024/04-18/terminal-app.png" title="ターミナル.app" alt="ターミナル.app" /></span> を起動し、<code class="language-plaintext highlighter-rouge">cp -X</code> と打ち込みます。続いてそこに <code class="language-plaintext highlighter-rouge">firmware.bin</code> をドラッグ＆ドロップし、さらに <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> をドラッグ＆ドロップすると、<code class="language-plaintext highlighter-rouge">cp -X</code> の後ろにコピー元のファイルとコピー先が入力されるので、リターンキーを押せば、Mac 特有の拡張属性が付かずにコピーが完了します。</p>
+
+</div>
+
+<h3 id="デバイスドライバの確認">デバイスドライバの確認</h3>
+<p>コピー後は通常の USB ドライブ同様 <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> を取り外す（Windows の場合）か、ゴミ箱にドラッグ＆ドロップする（Mac の場合）します。リセットボタンか電源を入れ直し、赤と緑の LED が点灯 → 消灯が確認できれば成功です。</p>
+
+<h4 id="mac-の場合">Mac の場合</h4>
+<figure class="float-left">
+  <a href="/images/2024/04-18/usb-mac.png" title="MacのUSBドライバ" data-lightbox="image">
+    <img src="/images/2024/04-18/usb-mac-small.jpg" alt="MacのUSBドライバ" />
+  </a>
+</figure>
+
+<p>アップルメニューから「<strong>この Mac について</strong> → <strong>システムレポート</strong> → <strong>ハードウェア</strong> → <strong>USB</strong>」をたどり <code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code> が確認できれば OK です。</p>
+
+<h4 id="windows-の場合">Windows の場合</h4>
+<figure class="float-left">
+  <a href="/images/2024/04-18/usb-windows.jpg" title="WindowsのUSBドライバ" data-lightbox="image">
+    <img src="/images/2024/04-18/usb-windows-small.jpg" alt="WindowsのUSBドライバ" />
+  </a>
+</figure>
+
+<p>デバイスマネージャから「<strong>ヒューマン インターフェース デバイス</strong> → <strong>HID 準拠デバイス</strong> → <strong>詳細</strong> → <strong>ハードウェア ID</strong>」とたどり、値が <code class="language-plaintext highlighter-rouge">HID¥VID_0D28&amp;PID_0019&amp;REV_0100</code> であることを確認できれば OK です。</p>
+
+<h2 id="設定と接続">設定と接続</h2>
+<h3 id="トラ技-arm-ライタと-arduino-uno-r4-minima-の接続">トラ技 ARM ライタと Arduino UNO R4 Minima の接続</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/connection.jpg" title="トラ技 ARM ライタと Arduino UNO R4 Minima の接続" data-lightbox="image">
+    <img src="/images/2024/04-18/connection-small.jpg" alt="トラ技 ARM ライタと Arduino UNO R4 Minima の接続" />
+  </a>
+</figure>
+
+<p>コネクタのピン配列は <a href="/2024/03/24/arduino-debug-with-toragi.html#arm-cmsis-dap-compatible" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">以前の記事</a> を参照してください。フラットケーブルを、トラ技 ARM ライタ側は <code class="language-plaintext highlighter-rouge">CN4</code> に、Minima 側は <code class="language-plaintext highlighter-rouge">SWD</code> に接続します。画像を参考に、接続の向きには十分注意してください。逆挿はヤバいです。</p>
+
+<h3 id="pc-との接続と設定">PC との接続と設定</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-24/CMSIS-DAP.jpg" title="書き込み装置に ARM CMSIS-DAP Compatible を選択" data-lightbox="image">
+    <img src="/images/2024/03-24/CMSIS-DAP-small.jpg" alt="書き込み装置に ARM CMSIS-DAP Compatible を選択" />
+  </a>
+  <a href="/images/2024/04-18/usb-devices.png" title="MacOS 上 の USB デバイスドライバ" data-lightbox="image">
+    <img src="/images/2024/04-18/usb-devices-small.png" alt="MacOS 上の USB デバイスドライバ" />
+  </a>
+</figure>
+
+<p>まず Arduino IDE メニューの「<strong>ツール</strong> → <strong>書き込み装置</strong>」を <code class="language-plaintext highlighter-rouge">ARM CMSIS-DAP compatible</code> に設定します。でも実際には CMSIS-DAP で書き込みは行いません。</p>
+
+<p>Arduino IDE では プログラムの書き込みを USB ドライバ <code class="language-plaintext highlighter-rouge">UNO R4 Minima</code> から <a href="https://dfu-util.sourceforge.net/" title="dfu-util Homepage">dfu-util（Device Firmware Upgrade Utilities）</a> で、デバッグを <code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code> から <a href="https://openocd.org/" title="Open On-Chip Debugger">openocd（Open On-Chip Debugger）</a> で行います。</p>
+
+<p>これが意味するのは Minima とトラ技 ARM ライタの両方を PC と繋がなくちゃならないということです。</p>
+
+<div class="quote clear-both">
+
+<p>書き込みも openocd で出来れば、USB ケーブルはトラ技 ARM ライタ側だけで OK なハズですが、現状は <code class="language-plaintext highlighter-rouge">launch.json</code> などで変えられそうにないんですよね。</p>
+
+<p>ちなみに、どんな都合か分かりませんが UNO R4 WiFi は <a href="https://github.com/shumatech/BOSSA" title="shumatech/BOSSA: BOSSA is a flash programming utility for Atmel&#39;s SAM family of flash-based ARM microcontrollers.  The motivation behind BOSSA is to create a simple, easy-to-use, open source utility to replace Atmel&#39;s SAM-BA software.  BOSSA is an acronym for Basic Open Source SAM-BA Application to reflect that goal.">BOSSA</a> という、また違った書き込みソフトを使っています。</p>
+
+</div>
+
+<h3 id="コンパイルオプションの設定">コンパイルオプションの設定</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/compile-option.png" title="デバッグに最適化" data-lightbox="image">
+    <img src="/images/2024/04-18/compile-option-small.jpg" alt="デバッグに最適化" />
+  </a>
+</figure>
+
+<p>IED メニューから「<strong>スケッチ</strong> → <strong>デバッグに最適化</strong>」を選択しチェックをつけます。これを設定しておかないとまともにソースコードデバッグができません。</p>
+
+<h2 id="デバッガの起動と-svd-ファイルの更新">デバッガの起動と SVD ファイルの更新</h2>
+<figure class="float-left">
+  <a href="/images/2024/04-18/svd-error.jpg" title="Unable to parse SVD file" data-lightbox="image">
+    <img src="/images/2024/04-18/svd-error-small.jpg" alt="Unable to parse SVD file" />
+  </a>
+</figure>
+
+<p>適当なスケッチを準備し、デバッグ情報が付加されたオブジェクトを生成するため <span class="inline"><img src="/images/2024/04-18/button-compile.png" title="コンパイルボタン" alt="コンパイルボタン" /></span> で再コンパイルします。</p>
+
+<p>次に <span class="inline"><img src="/images/2024/04-18/button-debug.png" title="デバッグボタン" alt="デバッグボタン" /></span> でデバッグを開始すると <code class="language-plaintext highlighter-rouge">Unable to parse SVD file</code> エラーが発生するので、SVD ファイルへのパスを記録しておきます。</p>
+
+<p>またデバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> であることを確認しておきます。</p>
+
+<h3 id="svd-ファイルの差し替え">SVD ファイルの差し替え</h3>
+<p>まず <a href="https://gist.github.com/embedded-kiddie/48b388515ce280cc496fe6ef5ddb625f" title="R7FA4M1AB.svd改">SVD ファイルの更新版</a> をダウンロードしてください。次に、先に記録したフォルダを開き、<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を <code class="language-plaintext highlighter-rouge">R7FA4M1AB-.svd</code> にリネームするなどして退避した後、ダウンロードした <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> に差し替えます。</p>
+
+<h3 id="デバッグの開始と終了">デバッグの開始と終了</h3>
+<p>これでデバッグができる準備が整ったハズです。行番号の左側をクリックするとブレークポイントが設定できるので、止めたいところをマーキングします。</p>
+
+<p><img src="/images/2024/04-18/break-point.png" alt="ブレークポイントの設定" title="ブレークポイントの設定" /></p>
+
+<p>デバッグの終了は <span class="inline"><img src="/images/2024/04-18/button-end-debug.png" title="デバッグの終了" alt="" /></span> ボタンで可能ですが、Minima は停止したままなので、リセットボタンで再起動してください。</p>
+
+<h2 id="トラブルシューティング">トラブルシューティング</h2>
+<p>ここに辿り着くまでに出会ったエラーを載せておきます。</p>
+
+<h3 id="upload-error-failed-uploading-unloading-error-exit-status-74">Upload error: Failed uploading: unloading error: exit status 74</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/error-exit-status-74.jpg" title="Upload error: Failed uploading: unloading error: exit status 74" data-lightbox="image">
+    <img src="/images/2024/04-18/error-exit-status-74-small.jpg" alt="Upload error: Failed uploading: unloading error: exit status 74" />
+  </a>
+</figure>
+
+<p>IDE が Arduino ボードにアクセス出来ない時に起こります。電源、コネクタはもちろんですが、デバイスドライバが認識されているかを確認します。</p>
+
+<h3 id="openocd-gdb-server-quit-unexpectedly-see-dbg-server-output-for-more-details">OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details.</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/error-openocd.jpg" title="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details." data-lightbox="image">
+    <img src="/images/2024/04-18/error-openocd-small.jpg" alt="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details." />
+  </a>
+</figure>
+
+<p>トラ技 ARM ライタと通信ができない時に発生します。USB コネクタがキツかったりするので確認します。また電源を入れた時やリセット時など、赤色と緑色の LED が点灯 → 消灯するか確認します。症状が改善しない時は、<a href="#ファームウェアの書き込み">ファームウェアの書き込み</a> から再構築してみます。</p>
+
+<h3 id="dfu-util-no-dfu-capable-usb-device-available">dfu-util: No DFU capable USB device available</h3>
+<p>コレ、結構ナゾのエラーで悩まされました。公式サイト <a href="https://support.arduino.cc/hc/en-us/articles/11011849739804-dfu-util-errors-when-uploading-exit-status-74" title="dfu-util errors when uploading (exit status 74) &ndash; Arduino Help Center">dfu-util errors when uploading (exit status 74)</a> によるとお決まりの「ケーブルを確認せよ」なのですが、Windows であれば <a href="https://roboin.io/article/2023/12/11/arduino-dfu-error/" title="Arduinoで「No DFU capable USB device available」エラーが出たときの対処法 - ろぼいんブログ">Arduinoで「No DFU capable USB device available」エラーが出たときの対処法</a> が参考になりかもしれません。</p>
+
+<p>僕の場合、トラ技 ARM ライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> をハンダで繋ぎ、Minima 側に電源を供給するようにしていた際、アップロードも CMSIS-DAP からできるものと思い込み、Minima 側の USB を接続してなかった時に発生してました。今では両基板とも USB 接続することで事なきを得ています。</p>
+
+<h2 id="最後に">最後に…</h2>
+
+<p>Arduino IDE のデバッガはとても使い難いです。VSCode + <a href="https://platformio.org/" title="Your Gateway to Embedded Software Development Excellence · PlatformIO">PlatformIO</a> に乗り換えようと奮闘中ですが、同様の SVD ファイルエラーを抱えていますね。</p>
+
+<p>またトラ技 ARM ライタより安価にできるプローブも模索中です :love_you_gesture:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino-Uno-R4" /><category term="デバッグ" /><summary type="html"><![CDATA[本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。]]></summary></entry><entry><title type="html">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</title><link href="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" rel="alternate" type="text/html" title="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" /><published>2024-04-14T20:49:21+09:00</published><updated>2024-04-14T20:49:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"><![CDATA[<h2 id="printf-使える">printf 使える？</h2>
 
 <p>とりあえず乱暴にもこんなコードを試してみました。</p>
 
@@ -1793,150 +2013,4 @@ SWD コネクタが載ってます。</p>
 
 <h2 id="以上">以上！</h2>
 
-<p>ライントレースで楽しんでもらえたら嬉しいです ^.^)y</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">電子工作初心者の私が買い揃えた14のアイテム</title><link href="https://embedded-kiddie.github.io/2024/03/15/items-for-electronic-hobbyists.html" rel="alternate" type="text/html" title="電子工作初心者の私が買い揃えた14のアイテム" /><published>2024-03-15T22:55:59+09:00</published><updated>2024-03-15T22:55:59+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/15/items-for-electronic-hobbyists</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/15/items-for-electronic-hobbyists.html"><![CDATA[<p>普段、仕事でもハンダゴテなど握る機会もほとんどなく、ハードが苦手な私が電子工作を始めるにあたって影響を受けたのが、次の YouTube 動画です。ハンダ付けのイロハを教えてくれます。</p>
-
-<ul>
-  <li><a href="https://www.youtube.com/watch?v=dQ7AUjb1tkA">【永久保存版】はんだ付けのやり方を解説します【はんだづけの原理, DIP部品, 表面実装】【イチケン電子基礎シリーズ】RX-802AS</a></li>
-</ul>
-
-<p>で、何事も道具から入ってしまう私が買い揃えたモノたちを紹介します。笑ってやってください (^,^;)</p>
-
-<p>１点だけ秋月電子、あとは全て Amazon で購入しました。アフィリエイトしてないので著作権の関係上 Amazon の画像が使えず、ほとんどが自前の写真です。疲れました…</p>
-
-<h3 id="1-ハンダゴテ">1. ハンダゴテ</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-01.jpg" alt="gootハンダゴテ" />
-</figure>
-
-<p>ハンダの融点は、鉛入りが約 183℃、鉛フリーが約 217℃で、くっつける対象との間に合金層が形成されるのが約 250℃とのことで、熱が対象を通して逃げるのを考慮するとコテ先はそれぞれ 330℃、350℃が適温だそう。</p>
-
-<p>で、デジタル表示のカッコ良い goot の 「<a href="https://amzn.asia/d/cq2BQXh" title="Amazon - goot(グット) デジタル温調はんだごて PX-280 温度調節 【約30秒で350℃まで到達】 【200℃~500℃まで1℃単位の温度設定】 【手に持つだけでスリープ解除】 ハンダゴテ 半田ごて 精密基盤 電気修理 日本製【福山ブランド認定品】 - ハンダゴテパーツ">PX-280</a>」を入手（購入時 5,806円）。数万円するステーション型にも迫る機能を持つ。</p>
-
-<ul>
-  <li>電源投入後、約30秒で350℃に到達</li>
-  <li>コテ先の空焼き防止（コテ台に置くとスリープ、持ち上げれば即解除）</li>
-  <li>標準でC型（丸棒を斜めにカットした形状）のコテ先</li>
-</ul>
-
-<p>ついでにK型（ナイフのような形状）のコテ先 「<a href="https://amzn.asia/d/jk3cF4T" title="Amazon - goot(グット) 替こて先 K型 PX-280/E用 日本製 PX-28RT-3K - ハンダゴテパーツ">PX-28RT-3K</a>」 も同時購入（購入時 1,032円）。</p>
-
-<h3 id="2-コテ台">2. コテ台</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-02.jpg" alt="gootコテ台" />
-</figure>
-
-<p>コテ台も同じく goot の「<a href="https://amzn.asia/d/hZqzkNu" title="Amazon.co.jp: goot(グット) はんだこて台 セラミックヒーターはんだごて専用 こて先クリーナー2種類付き ST27 日本製 : DIY・工具・ガーデン">ST27</a>」（購入時 2,911円）。セラミックヒーターはんだごて専用とのこと。</p>
-
-<p>コテ先が汚れたら金属製のタワシでワシワシと拭う。水を染み込ませたスポンジでサッと一拭きしたら、すぐにコテ先にハンダを溶かしつけて酸化を防止する癖をつけているところ。</p>
-
-<h3 id="3-ハンダ付け補助スタンド">3. ハンダ付け補助スタンド</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-12.jpg" alt="ハンダ付け補助スタンド" />
-</figure>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-13.jpg" alt="関節部を拡大" />
-</figure>
-
-<p>“クリップ・サポ” という名前の goot の <a href="https://amzn.asia/d/hxKFLgL" title="Amazon.co.jp: goot(グット) 作業ヘルパー 拡大率2倍のΦ60mmガラス製レンズ・カバー付きクリップ クリップ幅目安:5-145mm クリップ・サポ ST-94 銀 黒: 文房具・オフィス用品">ハンダ付け補助スタンド</a>（購入時 1550円）。Amazon に寄せられている評価コメント通り、少し力を加えると関節部が耐えきれずに曲がってしまう。ネジを強く締めても抑えの板がたわむだけ（拡大写真）。強度の問題というより構造上の問題と思われる。強力接着剤で固定してなんとか使える状態に。</p>
-
-<h3 id="4-ハンダ吸引器">4. ハンダ吸引器</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-03.jpg" alt="ハンダ吸引器" />
-</figure>
-
-<p>優れた工具を作っている ENGINEER の「<a href="https://amzn.asia/d/2QSWfMv" title="Amazon - ENGINEER エンジニア ハンダ吸取器 SS-02 - ハンダゴテパーツ">SS-02</a>」（購入時 1,991円）という製品。</p>
-
-<p>アルミ製で、カッコ良いだけじゃなく、よく見かける水色のプラスチック製とは一線を画す吸い取り性能に驚いた。ポイントは吸い取り口の耐熱性シリコンチューブ。対象とコテ先にピッタリと密着可。替えのシリコンチューブ付き。片手ではピストンを押し込みづらい。</p>
-
-<h3 id="5-マイクロニッパー">5. マイクロニッパー</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-04.jpg" alt="マイクロニッパー" />
-</figure>
-
-<p>同じく ENGINEER の「<a href="https://amzn.asia/d/gVc8ctf" title="Amazon - ENGINEER エンジニア マイクロニッパー ESD120㎜ NS-04【静電気対策】 【強力】【精密】 - 小型ニッパ">NS-04</a>」（購入時 1,859円）という製品。ラジオペンチとワイヤーストリッパーは持っていたので、これだけ購入。</p>
-
-<p>刃の先端まで噛み合わせがよく、ユニバーサール基板上でハンダ付け後の抵抗の足やジャンパー線の余りを切るのに最適。握りも軽くバネで開くので使い心地が良い。</p>
-
-<h3 id="6-ピンセット">6. ピンセット</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-05.jpg" alt="ピンセット" />
-</figure>
-
-<p>ホーザンのピン先が 1.2mm の「<a href="https://amzn.asia/d/dCb8bXs" title="Amazon - ホーザン(HOZAN) ピンセット(強力型) ツイーザー 厚肉、高耐久仕様 材質ステンレス 全長125mm 先端幅1.2mm P-892 - ピンセット">P-892</a>」（購入時 1,345円）というステンレス製ピンセット。</p>
-
-<p>基板上のジャンパー線を扱う時に必須。正直ここまで高価なピンセットはどうかと思ったが… もう一回り細い 0.6mm の方が細かい作業に向いているかもしれない。</p>
-
-<h3 id="7-ヒートクリップ">7. ヒートクリップ</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-14.jpg" alt="ヒートクリップ" />
-</figure>
-
-<p>goot(グット)の <a href="https://amzn.asia/d/iPIWJks" title="Amazon - goot(グット) ヒートクリップ 放熱用クリップ 2種類セット H-2SL - ハンダゴテ">ヒートクリップ</a>（購入時 244円）。</p>
-
-<p>転ばぬ先の杖。「物事が始まる前から余計な準備に手間や時間を費やすのは無駄である」という意味もあるという…</p>
-
-<h3 id="8-フラックス9-フラックスクリーナー">8. フラックス、9. フラックスクリーナー</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-06.jpg" alt="フラックス、フラックスクリーナー" />
-</figure>
-
-<p>フラックス、いわゆるヤニは、それがないと「<a href="https://toragi.cqpub.co.jp/tabid/713/Default.html" title="第5回　手はんだなら無洗浄タイプのフラックスがお勧め - はんだ付けワンポイント講座 - 記事サポート - トランジスタ技術">はんだ付けはできないといっても過言ではない</a>」とのこと。ただし電子工作レベルでクリーナーは不要だったかもしれない。ま、何事も経験。</p>
-
-<p>コテ当て → 温度上昇とともにハンダが溶けてフラックスが活性化 → 金属皮膜ができる化学反応を想像しながらハンダ付けができれば一人前かも。</p>
-
-<p><a href="https://amzn.asia/d/2PaLqni" title="Amazon - ホーザン(HOZAN) フラックス 鉛フリーハンダ対応 便利なハケ付きキャップ付 容量30mL H-722 - ハンダゴテパーツ">ホーザン(HOZAN) H-722</a> (購入時 327円）、<a href="https://amzn.asia/d/5fchEve" title="Amazon - サンハヤト フラックスクリーナー 15ml FL-L15 - 工業用潤滑剤 - 産業・研究開発用品 通販">サンハヤト フラックスクリーナー FL-L15</a> （購入時 610円）</p>
-
-<h3 id="10-ハンダ吸取線">10. ハンダ吸取線</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-07.jpg" alt="ハンダ吸取線" />
-</figure>
-
-<p>ハンダ吸引器にそれほど期待していなかったので「<a href="https://amzn.asia/d/9Ag0Vc7" title="Amazon - 白光(HAKKO) はんだ吸取線 ウィック ノークリーン 2.5mm×2m 袋入り FR150-88 - ハンダゴテパーツ">FR150-88</a>」（購入時 485円）も購入。<a href="https://www.hakko.com/japan/products/hakko_wick.html" title="HAKKO - 白光株式会社">HAKKO の製品ページ</a> にフラックスとの合わせ技が紹介されていて、こちらもよく吸い取れる。</p>
-
-<p>よく配線を間違えるので、これも必需品。</p>
-
-<h3 id="11-コテ先ポリッシャー">11. コテ先ポリッシャー</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-08.jpg" alt="ハンダ吸取線" />
-</figure>
-
-<p>電子工作を始めるにあたり、いろいろ調べてコテ先の重要性を改めて認識。HAKKO の「<a href="https://amzn.asia/d/758ChWA" title="Amazon - 白光(HAKKO) こて先ポリッシャー ケミカルペースト FS100-01 - ハンダゴテパーツ">FS100-01</a>」を購入（購入時 498円）。</p>
-
-<p>コテ先は酸化を防ぐため常にハンダで覆っておくのが鉄則だが、酸化してしまったらコレ。</p>
-
-<h3 id="12-スズメッキ線">12. スズメッキ線</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-09.jpg" alt="スズメッキ線" />
-</figure>
-
-<p>ユニバーサル基板の裏面配線用に <a href="https://amzn.asia/d/fwOuNMF" title="Amazon.co.jp: エルパ (ELPA) スズメッキ線 ジャンパー線 配線 0.6mm 5m HK-SM06H: DIY・工具・ガーデン">スズメッキ線</a>（購入時 186円）を購入。0.5〜0.6mm ぐらいが使い易い。</p>
-
-<h3 id="13-ポリウレタン銅線">13. ポリウレタン銅線</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-10.jpg" alt="ポリウレタン銅線" />
-</figure>
-
-<p>ポリウレタン銅線（UEW線）はニクロム線の一種。同じくユニバーサル基板の裏面用に<a href="https://akizukidenshi.com/catalog/g/g113709/" title="2種ポリウレタン銅線 2UEW 0.4mm 10m: 工具・工作用品 秋月電子通商-電子部品・ネット通販">2種ポリウレタン銅線</a>（購入時 220円）を秋月電子で購入。</p>
-
-<p>2種 UEW（E種）の耐熱は 120℃。380℃ で被覆が解けるため、サンドペーパーで被覆を剥がさなくてもハンダ付けができるという（情報元：<a href="https://www.marutsu.co.jp/GoodsListNavi.jsp?path=170009" title="ポリウレタン銅線/電線・配線部材の通販 マルツオンライン">マルツオンライン</a>）。まだ未使用。0.4mm を購入したが、もう一回り太い方が使いやすそう。</p>
-
-<h3 id="14-ジャンプワイヤ">14. ジャンプワイヤ</h3>
-
-<figure class="float-left">
-<img src="/images/2024/03-15/03-15-11.jpg" alt="ジャンプワイヤキット" />
-</figure>
-
-<p>こちらは主にユニバーサル基板の表面用。ブレッドボード用は購入してあったが、短いジャンパ線をよく使うので（失敗も含めてね）サンハヤトの「<a href="https://amzn.asia/d/0hYcUCY" title="Amazon - サンハヤト ジャンプワイヤキット SKS-100 単線タイプでよく使用する短めジャンプワイヤのセット品 - ジャンプワイヤ - 産業・研究開発用品 通販">SKS-100</a>」（購入時 856円）を別途購入。</p>]]></content><author><name>Kingsman</name></author><category term="電子工作" /><summary type="html"><![CDATA[普段、仕事でもハンダゴテなど握る機会もほとんどなく、ハードが苦手な私が電子工作を始めるにあたって影響を受けたのが、次の YouTube 動画です。ハンダ付けのイロハを教えてくれます。]]></summary></entry></feed>
+<p>ライントレースで楽しんでもらえたら嬉しいです ^.^)y</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[]]></summary></entry></feed>

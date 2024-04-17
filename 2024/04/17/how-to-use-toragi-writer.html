@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>if(window.location.hostname!='127.0.0.1'){var s=document.createElement('script');s.src='https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2';document.head.appendChild(s);}window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DLMCZ884M2');</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。" />
+<meta property="og:description" content="本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-04-17T18:45:26+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-04-17T18:45:26+09:00","datePublished":"2024-04-17T18:45:26+09:00","description":"本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。","headline":"トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"},"url":"https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="/assets/favicon.ico" />
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-04-17T18:45:26+09:00" itemprop="datePublished">Apr 17, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
+
+<ul>
+  <li><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編 - Embedded Kiddie">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a></li>
+  <li><a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</a></li>
+</ul>
+
+<p>前者は <a href="https://www.vstone.co.jp/products/vs_wrc103lv/index.html" title="ARMマイコン搭載CPUボード「VS-WRC103LV」 - ヴイストン株式会社">LPC1343 ボード</a> のことになるので、Arduino UNO R4 Minima でトラ技 ARM ライタを動かすには両記事の拾い読みが必要でした。また幾つかノウハウも溜まってきたので改めて本記事にまとめます。</p>
+
+<h2 id="本記事の元となる開発環境について">本記事の元となる開発環境について</h2>
+<p>最初のお断りとして、僕の開発環境は以下のようにとても古いです。幸い Mac 上で Arduino IDE 2.x は動作しますが、仮想マシン上の Widnows7 では動作しないので、IDE の動作例は全て Mac 版となります。</p>
+
+<h3 id="pc-環境">PC 環境</h3>
+<ul>
+  <li>MacOS バージョン 11.7.10 (Big Sur on MacBook Pro Late 2013)</li>
+  <li>Window 7 (MacOS 上の仮想マシン環境にて動作)</li>
+</ul>
+
+<p>ただし以下は <a href="https://www.vstone.co.jp/products/vs_wrc103lv/index.html" title="ARMマイコン搭載CPUボード「VS-WRC103LV」 - ヴイストン株式会社">LPC1343 ボード</a> での実績により、Windows 上でも動作するハズです。</p>
+
+<ul>
+  <li>ISP モードによる トラ技 ARM ライタのファームウェア書き換え</li>
+  <li>ヒューマン インターフェース デバイス（HID）ドライバのインストール</li>
+  <li>CMSIS-DAP（デバイス名：<code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code>）によるデバッグ</li>
+</ul>
+
+<p>また本記事内の Windows7 スクリーンキャプチャ画像は、最新機種のものに読み替えてご覧ください。</p>
+
+<h3 id="arduino-ide">Arduino IDE</h3>
+<ul>
+  <li>バージョン：2.3.2</li>
+  <li>CLIバージョン：0.35.3</li>
+</ul>
+
+<h2 id="必要なもの">必要なもの</h2>
+
+<h3 id="トラ技-arm-ライタ">トラ技 ARM ライタ</h3>
+<p>購入は、CQ 出版社から出ている書籍版とマルツオンラインで販売されている単体版の２択です。</p>
+
+<ul>
+  <li>
+    <p>書籍版<br>
+<a href="https://amzn.asia/d/81bPDyE" title="Amazon - マルツ トラ技ARMライタ TG-LPC11U35-501 - マイクロプロセッサ - 産業・研究開発用品 通販">Amazon</a> あるいは <a href="https://www.kinokuniya.co.jp/f/dsg-01-9784789848138" title="ｍｂｅｄ×デバッガ！一枚二役ＡＲＭマイコン基板 / 島田 義人/白阪 一郎/渡會 豊政/大中 邦彦/辰岡 鉄郎【ほか著】 - 紀伊國屋書店ウェブストア｜オンライン書店｜本、雑誌の通販、電子書籍ストア">紀伊國屋書店</a> から購入可能です。<a href="https://shop.cqpub.co.jp/hanbai/books/MTR/MTRZ201503/MTRZ201503.pdf" title="マイコン開発入門の新定番!? トラ技ARMライタ誕生!">mbedやデバッガ関連の記事</a>、トラ技 ARM ライタ基板、ピンヘッダやスイッチ類、CD-ROM のセットからなり、ピンヘッダやスイッチ類のハンダ付けが必要です。逆に USB-miniB ケーブルとフラットケーブルは別途準備が必要です。</p>
+  </li>
+  <li>
+    <p>単体版<br>
+<a href="https://amzn.asia/d/3WgLsWc" title="Amazon - マルツ トラ技ARMライタ TG-LPC11U35-501 - マイクロプロセッサ - 産業・研究開発用品 通販">Amazon でも購入可能</a> ですが、<a href="https://www.marutsu.co.jp/pc/i/238834/" title="トラ技ARMライタ TG-LPC11U35-501 マルツエレック製｜電子部品・半導体通販のマルツ">マルツオンライン</a> の方が安価です。ハンダ付けが不要で、USB-miniB ケーブル、2×5 ハーフピッチのフラットケーブルが付属します。簡単な取説がついていますが、基本オンライン情報のみです。価格が安く接続に必要な品が揃っているので <strong>オススメ</strong> です。</p>
+  </li>
+</ul>
+
+<h3 id="あると便利なもの">あると便利なもの</h3>
+<ul>
+  <li>
+    <p><a href="https://akizukidenshi.com/catalog/g/g106776/" title="2×5(10P)両端コネクタ付IDCリボンケーブル(フラットケーブル ハーフピッチ): ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">2×5(10P)両端コネクタ付IDCリボンケーブル(フラットケーブル ハーフピッチ)</a><br>
+書籍版には必要ですし、単体版のケーブルは 10cm と短く取り回しの自由度が少ないため、あると便利と思います。</p>
+  </li>
+  <li>
+    <p><a href="https://amzn.asia/d/3K9emQP" title="Amazon.co.jp: KAUMO スイッチ付き USBケーブル データOK 28cm データ結線済み (USBオス/USBメス) シーソースイッチ ロッカースイッチ (ブラック) : パソコン・周辺機器">スイッチ付き USB ケーブル</a><br>
+なくても大丈夫だと思いますが、開発中に USB 電源を OFF に出来た方が安心（?）な場面があり、回路図を読めない僕は利用しています。必ず <strong>データ線が結線されているタイプ</strong> を選んでください。</p>
+  </li>
+</ul>
+
+<h2 id="cmsis-dap-用ファームウェアの書き込み">CMSIS-DAP 用ファームウェアの書き込み</h2>
+<h3 id="ファームウェアのダウンロードと解凍">ファームウェアのダウンロードと解凍</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/toragi-firmware.png" title="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア" data-lightbox="image">
+    <img src="/images/2024/04-18/toragi-firmware-small.jpg" alt="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア">
+  </a>
+</figure>
+
+<p>購入時は単にマイコン基板として動作するだけなので、CMSIS-DAP 用ファームウェアへの書き換えが必要です。</p>
+
+<p>過去ログ <a href="https://toragi.cqpub.co.jp/tabid/707/Default.html" title="2014年2月号3月号連続企画 - トランジスタ技術">2014年2月号3月号連続企画</a> のページから <a href="https://toragi.cqpub.co.jp/tabid/707/Default.html#dnn_ctr1684_dnnTITLE_lblTitle" title="3月号付録基板関連ファイル - 2014年2月号3月号連続企画 - トランジスタ技術">3月号付録基板関連ファイル</a> にあるトラ技ARMライタのファームウェア <a href="https://toragi.cqpub.co.jp/Portals/0/download/2014/TR1403N.zip">TR1403N.zip</a> をダウンロードし解凍します。</p>
+
+<h3 id="ファームウェアの書き込み">ファームウェアの書き込み</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/CRP-DISABLE.jpg" title="CRP DISABLE" data-lightbox="image">
+    <img src="/images/2024/04-18/CRP-DISABLE-small.jpg" alt="CRP DISABLE">
+  </a>
+  <a href="/images/2024/04-18/toragi-button.jpg" title="トラ技ARMライタ基板上のタクトスイッチ" data-lightbox="image">
+    <img src="/images/2024/04-18/toragi-button-small.jpg" alt="トラ技ARMライタ基板上のタクトスイッチ">
+  </a>
+</figure>
+
+<p>トラ技 ARM ライタを ISP ボタンを押しながら USB miniB ケーブルで PC に接続するか、接続済みなら ISP ボタンを押しながらリセットすると、<a href="https://ja.wikipedia.org/wiki/File_Allocation_Table#FAT12" title="File Allocation Table - Wikipedia">FAT12</a> の USB ストレージ <code class="language-plaintext highlighter-rouge">CRP DISABLE</code>（物理デバイス名は <code class="language-plaintext highlighter-rouge">LPC1XXX IFLASH</code>）が現れます。</p>
+
+<p>中の <code class="language-plaintext highlighter-rouge">firmware.bin</code> を削除し、替わりにダウンロードした <code class="language-plaintext highlighter-rouge">firmware.bin</code> をコピーします。</p>
+
+<div class="quote clear-both">
+
+<p>ISP は <a href="ttps://ja.wikipedia.org/wiki/In-System_Programming" title="In-System Programming - Wikipedia">In-System Programming</a> の略で、製品になってからも PC などからファームウェアの書き込みができる機能です。また CRP は <a href="https://edn.itmedia.co.jp/edn/articles/1805/25/news022_3.html" title="マイコンのセキュリティ機能を詳細解説 ～ハードウェア編">Code Read Protection</a> の略で、内蔵メモリの読み出しを防止する機能です。<code class="language-plaintext highlighter-rouge">CRP DISABLE</code> はこの機能を「無効」にしていることを表しています。</p>
+
+</div>
+
+<p>この時、Windows であればドラッグ＆ドロップで OK ですが、Mac の場合は nxpfan﻿ の Facebookページ <a href="https://www.facebook.com/notes/344084236658509/" title="Facebook">「USB経由ISP書き込み」をMacで行う</a> を参考にターミナル.appからコピーしないとうまくいきません。</p>
+
+<div class="quote clear-both">
+
+<h4 id="ターミナルapp-からのコピー方法">ターミナル.app からのコピー方法</h4>
+<p><span class="inline"><img src="/images/2024/04-18/terminal-app.png" title="ターミナル.app" alt="ターミナル.app"></span> を起動し、<code class="language-plaintext highlighter-rouge">cp -X</code> と打ち込みます。続いてそこに <code class="language-plaintext highlighter-rouge">firmware.bin</code> をドラッグ＆ドロップし、さらに <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> をドラッグ＆ドロップすると、<code class="language-plaintext highlighter-rouge">cp -X</code> の後ろにコピー元のファイルとコピー先が入力されるので、リターンキーを押せば、Mac 特有の拡張属性が付かずにコピーが完了します。</p>
+
+</div>
+
+<h3 id="デバイスドライバの確認">デバイスドライバの確認</h3>
+<p>コピー後は通常の USB ドライブ同様 <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> を取り外す（Windows の場合）か、ゴミ箱にドラッグ＆ドロップする（Mac の場合）します。リセットボタンか電源を入れ直し、赤と緑の LED が点灯 → 消灯が確認できれば成功です。</p>
+
+<h4 id="mac-の場合">Mac の場合</h4>
+<figure class="float-left">
+  <a href="/images/2024/04-18/usb-mac.png" title="MacのUSBドライバ" data-lightbox="image">
+    <img src="/images/2024/04-18/usb-mac-small.jpg" alt="MacのUSBドライバ">
+  </a>
+</figure>
+
+<p>アップルメニューから「<strong>この Mac について</strong> → <strong>システムレポート</strong> → <strong>ハードウェア</strong> → <strong>USB</strong>」をたどり <code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code> が確認できれば OK です。</p>
+
+<h4 id="windows-の場合">Windows の場合</h4>
+<figure class="float-left">
+  <a href="/images/2024/04-18/usb-windows.jpg" title="WindowsのUSBドライバ" data-lightbox="image">
+    <img src="/images/2024/04-18/usb-windows-small.jpg" alt="WindowsのUSBドライバ">
+  </a>
+</figure>
+
+<p>デバイスマネージャから「<strong>ヒューマン インターフェース デバイス</strong> → <strong>HID 準拠デバイス</strong> → <strong>詳細</strong> → <strong>ハードウェア ID</strong>」とたどり、値が <code class="language-plaintext highlighter-rouge">HID¥VID_0D28&amp;PID_0019&amp;REV_0100</code> であることを確認できれば OK です。</p>
+
+<h2 id="設定と接続">設定と接続</h2>
+<h3 id="トラ技-arm-ライタと-arduino-uno-r4-minima-の接続">トラ技 ARM ライタと Arduino UNO R4 Minima の接続</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/connection.jpg" title="トラ技 ARM ライタと Arduino UNO R4 Minima の接続" data-lightbox="image">
+    <img src="/images/2024/04-18/connection-small.jpg" alt="トラ技 ARM ライタと Arduino UNO R4 Minima の接続">
+  </a>
+</figure>
+
+<p>コネクタのピン配列は <a href="/2024/03/24/arduino-debug-with-toragi.html#arm-cmsis-dap-compatible" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">以前の記事</a> を参照してください。フラットケーブルを、トラ技 ARM ライタ側は <code class="language-plaintext highlighter-rouge">CN4</code> に、Minima 側は <code class="language-plaintext highlighter-rouge">SWD</code> に接続します。画像を参考に、接続の向きには十分注意してください。逆挿はヤバいです。</p>
+
+<h3 id="pc-との接続と設定">PC との接続と設定</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-24/CMSIS-DAP.jpg" title="書き込み装置に ARM CMSIS-DAP Compatible を選択" data-lightbox="image">
+    <img src="/images/2024/03-24/CMSIS-DAP-small.jpg" alt="書き込み装置に ARM CMSIS-DAP Compatible を選択">
+  </a>
+  <a href="/images/2024/04-18/usb-devices.png" title="MacOS 上 の USB デバイスドライバ" data-lightbox="image">
+    <img src="/images/2024/04-18/usb-devices-small.png" alt="MacOS 上の USB デバイスドライバ">
+  </a>
+</figure>
+
+<p>まず Arduino IDE メニューの「<strong>ツール</strong> → <strong>書き込み装置</strong>」を <code class="language-plaintext highlighter-rouge">ARM CMSIS-DAP compatible</code> に設定します。でも実際には CMSIS-DAP で書き込みは行いません。</p>
+
+<p>Arduino IDE では プログラムの書き込みを USB ドライバ <code class="language-plaintext highlighter-rouge">UNO R4 Minima</code> から <a href="https://dfu-util.sourceforge.net/" title="dfu-util Homepage">dfu-util（Device Firmware Upgrade Utilities）</a> で、デバッグを <code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code> から <a href="https://openocd.org/" title="Open On-Chip Debugger">openocd（Open On-Chip Debugger）</a> で行います。</p>
+
+<p>これが意味するのは Minima とトラ技 ARM ライタの両方を PC と繋がなくちゃならないということです。</p>
+
+<div class="quote clear-both">
+
+<p>書き込みも openocd で出来れば、USB ケーブルはトラ技 ARM ライタ側だけで OK なハズですが、現状は <code class="language-plaintext highlighter-rouge">launch.json</code> などで変えられそうにないんですよね。</p>
+
+<p>ちなみに、どんな都合か分かりませんが UNO R4 WiFi は <a href="https://github.com/shumatech/BOSSA" title="shumatech/BOSSA: BOSSA is a flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers.  The motivation behind BOSSA is to create a simple, easy-to-use, open source utility to replace Atmel's SAM-BA software.  BOSSA is an acronym for Basic Open Source SAM-BA Application to reflect that goal.">BOSSA</a> という、また違った書き込みソフトを使っています。</p>
+
+</div>
+
+<h3 id="コンパイルオプションの設定">コンパイルオプションの設定</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/compile-option.png" title="デバッグに最適化" data-lightbox="image">
+    <img src="/images/2024/04-18/compile-option-small.jpg" alt="デバッグに最適化">
+  </a>
+</figure>
+
+<p>IED メニューから「<strong>スケッチ</strong> → <strong>デバッグに最適化</strong>」を選択しチェックをつけます。これを設定しておかないとまともにソースコードデバッグができません。</p>
+
+<h2 id="デバッガの起動と-svd-ファイルの更新">デバッガの起動と SVD ファイルの更新</h2>
+<figure class="float-left">
+  <a href="/images/2024/04-18/svd-error.jpg" title="Unable to parse SVD file" data-lightbox="image">
+    <img src="/images/2024/04-18/svd-error-small.jpg" alt="Unable to parse SVD file">
+  </a>
+</figure>
+
+<p>適当なスケッチを準備し、デバッグ情報が付加されたオブジェクトを生成するため <span class="inline"><img src="/images/2024/04-18/button-compile.png" title="コンパイルボタン" alt="コンパイルボタン"></span> で再コンパイルします。</p>
+
+<p>次に <span class="inline"><img src="/images/2024/04-18/button-debug.png" title="デバッグボタン" alt="デバッグボタン"></span> でデバッグを開始すると <code class="language-plaintext highlighter-rouge">Unable to parse SVD file</code> エラーが発生するので、SVD ファイルへのパスを記録しておきます。</p>
+
+<p>またデバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> であることを確認しておきます。</p>
+
+<h3 id="svd-ファイルの差し替え">SVD ファイルの差し替え</h3>
+<p>まず <a href="https://gist.github.com/embedded-kiddie/48b388515ce280cc496fe6ef5ddb625f" title="R7FA4M1AB.svd改">SVD ファイルの更新版</a> をダウンロードしてください。次に、先に記録したフォルダを開き、<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を <code class="language-plaintext highlighter-rouge">R7FA4M1AB-.svd</code> にリネームするなどして退避した後、ダウンロードした <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> に差し替えます。</p>
+
+<h3 id="デバッグの開始と終了">デバッグの開始と終了</h3>
+<p>これでデバッグができる準備が整ったハズです。行番号の左側をクリックするとブレークポイントが設定できるので、止めたいところをマーキングします。</p>
+
+<p><img src="/images/2024/04-18/break-point.png" alt="ブレークポイントの設定" title="ブレークポイントの設定"></p>
+
+<p>デバッグの終了は <span class="inline"><img src="/images/2024/04-18/button-end-debug.png" title="デバッグの終了" alt=""></span> ボタンで可能ですが、Minima は停止したままなので、リセットボタンで再起動してください。</p>
+
+<h2 id="トラブルシューティング">トラブルシューティング</h2>
+<p>ここに辿り着くまでに出会ったエラーを載せておきます。</p>
+
+<h3 id="upload-error-failed-uploading-unloading-error-exit-status-74">Upload error: Failed uploading: unloading error: exit status 74</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/error-exit-status-74.jpg" title="Upload error: Failed uploading: unloading error: exit status 74" data-lightbox="image">
+    <img src="/images/2024/04-18/error-exit-status-74-small.jpg" alt="Upload error: Failed uploading: unloading error: exit status 74">
+  </a>
+</figure>
+
+<p>IDE が Arduino ボードにアクセス出来ない時に起こります。電源、コネクタはもちろんですが、デバイスドライバが認識されているかを確認します。</p>
+
+<h3 id="openocd-gdb-server-quit-unexpectedly-see-dbg-server-output-for-more-details">OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details.</h3>
+<figure class="float-left">
+  <a href="/images/2024/04-18/error-openocd.jpg" title="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details." data-lightbox="image">
+    <img src="/images/2024/04-18/error-openocd-small.jpg" alt="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details.">
+  </a>
+</figure>
+
+<p>トラ技 ARM ライタと通信ができない時に発生します。USB コネクタがキツかったりするので確認します。また電源を入れた時やリセット時など、赤色と緑色の LED が点灯 → 消灯するか確認します。症状が改善しない時は、<a href="#%E3%83%95%E3%82%A1%E3%83%BC%E3%83%A0%E3%82%A6%E3%82%A7%E3%82%A2%E3%81%AE%E6%9B%B8%E3%81%8D%E8%BE%BC%E3%81%BF">ファームウェアの書き込み</a> から再構築してみます。</p>
+
+<h3 id="dfu-util-no-dfu-capable-usb-device-available">dfu-util: No DFU capable USB device available</h3>
+<p>コレ、結構ナゾのエラーで悩まされました。公式サイト <a href="https://support.arduino.cc/hc/en-us/articles/11011849739804-dfu-util-errors-when-uploading-exit-status-74" title="dfu-util errors when uploading (exit status 74) – Arduino Help Center">dfu-util errors when uploading (exit status 74)</a> によるとお決まりの「ケーブルを確認せよ」なのですが、Windows であれば <a href="https://roboin.io/article/2023/12/11/arduino-dfu-error/" title="Arduinoで「No DFU capable USB device available」エラーが出たときの対処法 - ろぼいんブログ">Arduinoで「No DFU capable USB device available」エラーが出たときの対処法</a> が参考になりかもしれません。</p>
+
+<p>僕の場合、トラ技 ARM ライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> をハンダで繋ぎ、Minima 側に電源を供給するようにしていた際、アップロードも CMSIS-DAP からできるものと思い込み、Minima 側の USB を接続してなかった時に発生してました。今では両基板とも USB 接続することで事なきを得ています。</p>
+
+<h2 id="最後に">最後に…</h2>
+
+<p>Arduino IDE のデバッガはとても使い難いです。VSCode + <a href="https://platformio.org/" title="Your Gateway to Embedded Software Development Excellence · PlatformIO">PlatformIO</a> に乗り換えようと奮闘中ですが、同様の SVD ファイルエラーを抱えていますね。</p>
+
+<p>またトラ技 ARM ライタより安価にできるプローブも模索中です <img class="emoji" title=":love_you_gesture:" alt=":love_you_gesture:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f91f.png" height="20" width="20"></p>
+
+
+  </div>
+<a class="u-url" href="/2024/04/17/how-to-use-toragi-writer.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="mailto:embeddedkiddie@gmail.com">embeddedkiddie@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+<ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'" /><noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /></noscript><script async src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </html>
