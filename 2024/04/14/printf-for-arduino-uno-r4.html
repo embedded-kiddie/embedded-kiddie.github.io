@@ -90,7 +90,7 @@
 
 <p>でも僕には帯にも襷にも長い感じ。</p>
 
-<p>で、一番しっくりきたのが <a href="https://qiita.com/teddokano/items/9afc45bb1beab9b7af4f" title="Arduinoで`printf()` #Arduino - Qiita">Qiita の記事</a> のコードです。ただ僕は、きっとどこかで <code class="language-plaintext highlighter-rouge">printf()</code> が <a href="https://syohex.hatenablog.com/entry/20100610/1276180481" title="weakシンボル - Shohei Yoshida's Diary">weak シンボル</a> として定義されているに違いないと読んで、<code class="language-plaintext highlighter-rouge">stdio.h</code> の標準仕様でコーディング＆試したところ、案の定エラーも無く動きました。</p>
+<p>で、一番しっくりきたのが <a href="https://qiita.com/teddokano/items/9afc45bb1beab9b7af4f" title="Arduinoで`printf()` #Arduino - Qiita">Qiita の記事</a> のコードです。ただ僕は、きっとどこかで <code class="language-plaintext highlighter-rouge">printf()</code> が <a href="https://syohex.hatenablog.com/entry/20100610/1276180481" title="weakシンボル - Shohei Yoshida's Diary">weak シンボル</a> として定義されているに違いないと読んで、<code class="language-plaintext highlighter-rouge">stdio.h</code> の I/F 仕様でコーディング＆試したところ、案の定エラーも無く動きました。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define PRINTF_BUF_SIZE  256
 </span>
