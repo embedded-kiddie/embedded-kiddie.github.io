@@ -251,7 +251,45 @@
 </footer>
 
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" as="style" onload="this.onload=null;this.rel='stylesheet'" /><noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" /></noscript><script async src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script id="dsq-count-scr" src="https://embedded-kiddie.disqus.com/count.js" async></script>
-  <script>window.onload=function(){$("#js-pagetop").on("click",function(){$("html,body").animate({scrollTop:0},300)}),$(window).scroll(function(){1<$(window).scrollTop()?$("#js-pagetop").fadeIn(300).css("display","flex"):$("#js-pagetop").fadeOut(300)}),$("#disqus_thread_link").on("click",function(){var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/03/13/micon-board-comparison.html",this.page.identifier="/2024/03/13/micon-board-comparison.html"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();})};</script>
+<!--  <script id="dsq-count-scr" src="https://embedded-kiddie.disqus.com/count.js" async></script>-->
+<script>
+window.onload = function() {
+  $(function () {
+    $("#js-pagetop").click(function () {
+      $('html, body').animate({
+        scrollTop: 0
+      }, 300);
+    });
+    $(window).scroll(function () {
+      if ($(window).scrollTop() > 1) {
+        $('#js-pagetop').fadeIn(300).css('display', 'flex')
+      } else {
+        $('#js-pagetop').fadeOut(300)
+      }
+    });
+  });
+
+  $("#disqus_thread_link").on("click", function() {
+    var disqus_config = function () {
+      this.page.url = "https://embedded-kiddie.github.io/2024/03/13/micon-board-comparison.html";
+      this.page.identifier = "/2024/03/13/micon-board-comparison.html";
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = "https://embedded-kiddie.disqus.com/embed.js";
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  });
+
+  (function() {
+    var d = document, s = d.createElement('script');
+    s.setAttribute('id', "dsq-count-scr");
+    s.src = "https://embedded-kiddie.disqus.com/count.js";
+    (d.body).appendChild(s);
+  })();
+};
+</script>
 </body>
 </html>
