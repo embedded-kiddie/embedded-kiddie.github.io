@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-22T08:55:30+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-04-17T18:45:26+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-04-22T09:04:44+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-04-17T18:45:26+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
 
 <ul>
   <li><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編 - Embedded Kiddie">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a></li>
@@ -497,7 +497,7 @@
   </li>
   <li>
     <p><code class="language-plaintext highlighter-rouge">int tempo</code><br />
-<a href="https://ja.wikipedia.org/wiki/%E3%83%86%E3%83%B3%E3%83%9D#%E3%83%A1%E3%83%88%E3%83%AD%E3%83%8E%E3%83%BC%E3%83%A0%E8%A8%98%E5%8F%B7" title="テンポ - Wikipedia">メトロノーム記号</a> で表される曲の速さを指定します。例えば<span class="inline"><img src="/images/2024/04-04/tempo-155.png" width="60" height="27" title="テンポ=155" alt="テンポ=155" /></span> は「４分音符を１分間に 155 回刻む速さ」を表します。</p>
+<a href="https://ja.wikipedia.org/wiki/%E3%83%86%E3%83%B3%E3%83%9D#%E3%83%A1%E3%83%88%E3%83%AD%E3%83%8E%E3%83%BC%E3%83%A0%E8%A8%98%E5%8F%B7" title="テンポ - Wikipedia">メトロノーム記号</a> で表される曲の速さを指定します。例えば<span class="inline"><img src="/images/2024/04-04/tempo-155.png" width="60" height="27" loading="lazy" title="テンポ=155" alt="テンポ=155" /></span> は「４分音符を１分間に 155 回刻む速さ」を表します。</p>
   </li>
   <li>
     <p><code class="language-plaintext highlighter-rouge">bool loop</code><br />
@@ -528,21 +528,21 @@
 
 <ul>
   <li>曲のテンポは、１分間に刻むことができる４分音符の拍数で表す</li>
-  <li>例えば <span class="inline"><img src="/images/2024/04-10/quarter-note.png" width="22" height="27" title="４分音符" alt="４分音符" /></span>= 60 は、１分間に４分音符を60回を数える速さを表す</li>
+  <li>例えば <span class="inline"><img src="/images/2024/04-10/quarter-note.png" width="22" height="27" loading="lazy" title="４分音符" alt="４分音符" /></span>= 60 は、１分間に４分音符を60回を数える速さを表す</li>
 </ul>
 
 <p>このテンポと４分音符一拍分の長さ（時間）を式で表すと以下となります。</p>
 
-<p><span class="inline"><img src="/images/2024/04-10/quarter-note-duration.png" width="768" height="75" style="height:auto" alt="４分音符一拍分の長さ（時間）" /></span></p>
+<p><span class="inline"><img src="/images/2024/04-10/quarter-note-duration.png" width="768" height="75" loading="lazy" style="height:auto" alt="４分音符一拍分の長さ（時間）" /></span></p>
 
-<p>これを <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の <a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> に当てはめると、４分音符の長さを数値 <code class="language-plaintext highlighter-rouge">4</code> で表し、その時間を <code class="language-plaintext highlighter-rouge">1000 ÷ 4 = 250[msec]</code> としているので、１分間のテンポ数に換算すると <code class="language-plaintext highlighter-rouge">60000 ÷ 250 = 240</code>、つまり<span class="inline"><img src="/images/2024/04-10/quarter-note.png" width="22" height="27" title="４分音符" alt="４分音符" /></span>= 240 ということになります。</p>
+<p>これを <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の <a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> に当てはめると、４分音符の長さを数値 <code class="language-plaintext highlighter-rouge">4</code> で表し、その時間を <code class="language-plaintext highlighter-rouge">1000 ÷ 4 = 250[msec]</code> としているので、１分間のテンポ数に換算すると <code class="language-plaintext highlighter-rouge">60000 ÷ 250 = 240</code>、つまり<span class="inline"><img src="/images/2024/04-10/quarter-note.png" width="22" height="27" loading="lazy" title="４分音符" alt="４分音符" /></span>= 240 ということになります。</p>
 
-<p>そこで音の長さを表す数値を<span class="inline"><img src="/images/2024/04-10/n.png" width="27" height="27" alt="n" /></span>、テンポを<span class="inline"><img src="/images/2024/04-10/quarter-note.png" width="22" height="27" title="４分音符" alt="４分音符" /></span>=<span class="inline"><img src="/images/2024/04-10/tempo.png" width="51" height="27" alt="tempo" /></span> とすると、音符の長さ（時間）を求める式は<span class="inline"><img src="/images/2024/04-10/duration-equation.png" width="149" height="63" style="height:3.5em" alt="４分音符一拍分の長さ（時間）" /></span>となります。</p>
+<p>そこで音の長さを表す数値を<span class="inline"><img src="/images/2024/04-10/n.png" width="27" height="27" loading="lazy" alt="n" /></span>、テンポを<span class="inline"><img src="/images/2024/04-10/quarter-note.png" width="22" height="27" loading="lazy" title="４分音符" alt="４分音符" /></span>=<span class="inline"><img src="/images/2024/04-10/tempo.png" width="51" height="27" loading="lazy" alt="tempo" /></span> とすると、音符の長さ（時間）を求める式は<span class="inline"><img src="/images/2024/04-10/duration-equation.png" width="149" height="63" loading="lazy" style="height:3.5em" alt="４分音符一拍分の長さ（時間）" /></span>となります。</p>
 
 <p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> では互換性を考慮し、この式を元に音符長を決めています。</p>
 
 <h2 id="音符長計算関数について">音符長計算関数について</h2>
-<p>さて上記方式の問題点は、「・」のついた付点音符（元の音符の1.5倍の長さ）や、4分音符＋16分音符を表す<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>などの音符長が整数で表せないことです。</p>
+<p>さて上記方式の問題点は、「・」のついた付点音符（元の音符の1.5倍の長さ）や、4分音符＋16分音符を表す<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" loading="lazy" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>などの音符長が整数で表せないことです。</p>
 
 <p><code class="language-plaintext highlighter-rouge">float</code> を使えば <code class="language-plaintext highlighter-rouge">int</code> とデータサイズこそ同じになりますが、浮動小数点演算が必要になります。UNO R4 のマイコンは FPU を持っているので実際にはそれほど問題にならないかも知れませんが、できれば整数演算で済ませたいところです。</p>
 
@@ -609,11 +609,11 @@
   </tbody>
 </table>
 
-<p>ここで N 分音符の音符長比を表す数値を<span class="inline"><img src="/images/2024/04-10/n.png" width="27" height="27" alt="n" /></span>、曲の速さを<span class="inline"><img src="/images/2024/04-10/tempo.png" width="51" height="27" alt="テンポ" /></span>とすれば、音の長さ（時間）を求める式は<span class="inline"><img src="/images/2024/04-10/duration_equation-new.png" width="173" height="45" style="height:2.5em" alt="４分音符一拍分の長さ（時間）" /></span>となります。</p>
+<p>ここで N 分音符の音符長比を表す数値を<span class="inline"><img src="/images/2024/04-10/n.png" width="27" height="27" alt="n" /></span>、曲の速さを<span class="inline"><img src="/images/2024/04-10/tempo.png" width="51" height="27" loading="lazy" alt="テンポ" /></span>とすれば、音の長さ（時間）を求める式は<span class="inline"><img src="/images/2024/04-10/duration_equation-new.png" width="173" height="45" loading="lazy" style="height:2.5em" alt="４分音符一拍分の長さ（時間）" /></span>となります。</p>
 
-<p>この方式であれば、4分音符と16分音符を <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> で１つに繋げた<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>の音符長は整数演算が可能な <code class="language-plaintext highlighter-rouge">N4 + N16</code>、即ち <code class="language-plaintext highlighter-rouge">5</code> で表せることになります。</p>
+<p>この方式であれば、4分音符と16分音符を <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> で１つに繋げた<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" loading="lazy" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>の音符長は整数演算が可能な <code class="language-plaintext highlighter-rouge">N4 + N16</code>、即ち <code class="language-plaintext highlighter-rouge">5</code> で表せることになります。</p>
 
-<p>また４分音符一拍中に３音を鳴らす３連符（Triplet）<span class="inline"><img src="/images/2024/04-10/triplet.png" width="73" height="27" title="３連符" alt="３連符" /></span>も怖くありません。音符長比をそれぞれ３倍したシンボルを定義すれば良いだけです。</p>
+<p>また４分音符一拍中に３音を鳴らす３連符（Triplet）<span class="inline"><img src="/images/2024/04-10/triplet.png" width="73" height="27" loading="lazy" title="３連符" alt="３連符" /></span>も怖くありません。音符長比をそれぞれ３倍したシンボルを定義すれば良いだけです。</p>
 
 <table>
   <thead>
