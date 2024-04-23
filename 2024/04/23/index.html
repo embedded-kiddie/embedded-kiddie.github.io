@@ -87,9 +87,11 @@
   sample.addEventListener('click', () => {
     var d = document, s = d.createElement('script');
     s.src = "https://cusdis.com/js/cusdis.es.js";
+    s.onload = function() {
+      sample.removeAttribute('id');
+      sample.innerHTML = '';
+    };
     sample.parentNode.appendChild(s);
-    sample.removeAttribute('id');
-    sample.innerHTML = '';
   });
 })();
 </script>
@@ -132,10 +134,11 @@
       talktype(function() {
         talktype.commentWidgetIframe(metypeContainer);
       });
+
+      sample.removeAttribute('id');
+      sample.innerHTML = '';
     };
     sample.parentNode.appendChild(s);
-    sample.removeAttribute('id');
-    sample.innerHTML = '';
   });
 })();
 </script>
@@ -174,9 +177,11 @@
     s.setAttribute("label", "utterances");
     s.setAttribute("theme", "github-light");
     s.setAttribute("crossorigin", "anonymous");
+    s.onload = function() {
+      sample.removeAttribute('id');
+      sample.innerHTML = '';
+    };
     sample.parentNode.appendChild(s);
-    sample.removeAttribute('id');
-    sample.innerHTML = '';
   });
 })();
 </script>
