@@ -88,6 +88,7 @@
     var d = document, s = d.createElement('script');
     s.src = "https://cusdis.com/js/cusdis.es.js";
     sample.parentNode.appendChild(s);
+    sample.removeAttribute('id');
     sample.innerHTML = '';
   });
 })();
@@ -129,6 +130,7 @@
       });
     };
     sample.parentNode.appendChild(s);
+    sample.removeAttribute('id');
     sample.innerHTML = '';
   });
 })();
@@ -169,6 +171,7 @@
     s.setAttribute("theme", "github-light");
     s.setAttribute("crossorigin", "anonymous");
     sample.parentNode.appendChild(s);
+    sample.removeAttribute('id');
     sample.innerHTML = '';
   });
 })();
