@@ -161,6 +161,8 @@
 
 <p><a href="https://miyauchi.dev/ja/posts/comment-system/" title="技術ブログのコメントシステムはutterancesがいい感じ - miyauchi.me">Tomoki Miyauci さんの「技術ブログのコメントシステムはutterancesがいい感じ」</a> の詳しい解説がとても参考になります。</p>
 
+<p>なお類似の GitHub App に、使用する JavaScript のフレームワークがそれぞれ異なる <a href="https://github.com/gitalk/gitalk" title="gitalk/gitalk: Gitalk is a modern comment component based on Github Issue and Preact.">gitalk</a>、<a href="https://github.com/imsun/gitment" title="imsun/gitment: A comment system based on GitHub Issues.">gitment</a>、<a href="https://github.com/meteorlxy/vssue" title="meteorlxy/vssue: :mailbox: A Vue-powered Issue-based Comment Plugin">vssue</a> がありますが、issues を詳しくみていくとどれも <a href="https://github.com/gitalk/gitalk/issues/550">セキュリティ</a> 上の <a href="https://github.com/imsun/gitment/issues/185">問題</a> が <a href="https://github.com/meteorlxy/vssue/issues/16">指摘</a> されているので、使用は控えるべきと思います。</p>
+
 <h4 id="サンプル-2">サンプル</h4>
 <div>
 <button id="utterances-sample" class="simple" title="utterances サンプル画像"><img src="/images/2024/04-23/comment-utterances.png" alt="utterances サンプル画像"></button>
@@ -190,7 +192,7 @@
 
 <p><a href="https://github.com/giscus/giscus" title="giscus/giscus: A comment system powered by GitHub Discussions. :speech_balloon: :gem:">giscus</a> は <a href="https://utteranc.es/" title="utterances">utterances</a> にインスパイアされて開発されました。utterances の開発が 2022年2月 を最後に停滞しているのに対し、giscus は現在も活発に開発が続けられています。</p>
 
-<p>何より1番の違いは、utterances が issues を使うにに対し giscus は discussions を使用します。これにより投稿を新着順に表示することが可能となっています。</p>
+<p>何より1番の違いは、utterances が issues を使うのに対し giscus は discussions を使用します。これにより投稿を新着順に表示することが可能となっています。</p>
 
 <p>設置方法は utterances とほぼ同じで、<a href="https://giscus.app/ja" title="giscus">https://giscus.app/ja のページ</a> に従って必要事項を入力し、また <a href="https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository" title="リポジトリの GitHub Discussions を有効化または無効化する - GitHub Docs">リポジトリの discussins を有効化</a> すれば、埋め込むべきタグを生成してくれます。</p>
 
