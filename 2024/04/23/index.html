@@ -9,8 +9,8 @@
 <meta property="og:title" content="サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集" />
 <meta name="author" content="Kingsman" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、４つのホスティングサービスを実際に試してみました。全て フリーミアム なサービスです。" />
-<meta property="og:description" content="GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、４つのホスティングサービスを実際に試してみました。全て フリーミアム なサービスです。" />
+<meta name="description" content="GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。" />
+<meta property="og:description" content="GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。" />
 <link rel="canonical" href="https://embedded-kiddie.github.io/2024/04/23/" />
 <meta property="og:url" content="https://embedded-kiddie.github.io/2024/04/23/" />
 <meta property="og:site_name" content="Embedded Kiddie" />
@@ -19,7 +19,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-04-23T17:40:28+09:00","datePublished":"2024-04-23T17:40:28+09:00","description":"GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、４つのホスティングサービスを実際に試してみました。全て フリーミアム なサービスです。","headline":"サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/04/23/"},"url":"https://embedded-kiddie.github.io/2024/04/23/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-04-23T17:40:28+09:00","datePublished":"2024-04-23T17:40:28+09:00","description":"GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。","headline":"サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/04/23/"},"url":"https://embedded-kiddie.github.io/2024/04/23/"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="icon" href="/assets/favicon.ico" />
   <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" /></head>
@@ -54,7 +54,7 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p>GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、４つのホスティングサービスを実際に試してみました。全て <a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%83%AA%E3%83%BC%E3%83%9F%E3%82%A2%E3%83%A0" title="フリーミアム - Wikipedia">フリーミアム</a> なサービスです。</p>
+    <p>GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て <a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%83%AA%E3%83%BC%E3%83%9F%E3%82%A2%E3%83%A0" title="フリーミアム - Wikipedia">フリーミアム</a> もしくは無料で設置できます。</p>
 
 <p>フォームのサンプル画像をクリックすると実際に試すことができますが、良識あるテストをお願いします。サンプル画像をクリックしてから表示されるまでの時間もまた設置の重要な要素と思います。</p>
 
@@ -175,6 +175,47 @@
     s.setAttribute("issue-term", "pathname");
     s.setAttribute("label", "utterances");
     s.setAttribute("theme", "github-light");
+    s.setAttribute("crossorigin", "anonymous");
+    s.onload = function() {
+      sample.removeAttribute('id');
+      sample.innerHTML = '';
+    };
+    sample.parentNode.appendChild(s);
+  });
+})();
+</script>
+
+<h2 id="giscus">giscus</h2>
+<p><img src="/images/2024/04-23/giscus.jpg" alt="giscus" title="giscus"></p>
+
+<p><a href="https://github.com/giscus/giscus" title="giscus/giscus: A comment system powered by GitHub Discussions. :speech_balloon: :gem:">giscus</a> は <a href="https://utteranc.es/" title="utterances">utterances</a> にインスパイアされて開発されました。utterances の開発が 2022年2月 を最後に停滞しているのに対し、giscus は現在も活発に開発が続けられています。</p>
+
+<p>何より1番の違いは、utterances が issues を使うにに対し giscus は discussions を使用します。これにより投稿を新着順に表示することが可能となっています。</p>
+
+<p>設置方法は utterances とほぼ同じで、<a href="https://giscus.app/ja" title="giscus">https://giscus.app/ja のページ</a> に従って必要事項を入力し、また <a href="https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository" title="リポジトリの GitHub Discussions を有効化または無効化する - GitHub Docs">リポジトリの discussins を有効化</a> すれば、埋め込むべきタグを生成してくれます。</p>
+
+<h4 id="サンプル-3">サンプル</h4>
+<div>
+<button id="giscus-sample" class="simple" title="giscus サンプル画像"><img src="/images/2024/04-23/comment-giscus.jpg" alt="giscus サンプル画像"></button>
+</div>
+<script>
+(function() {
+  var sample = document.getElementById('giscus-sample');
+  sample.addEventListener('click', () => {
+    var s = document.createElement('script');
+    s.src = "https://giscus.app/client.js";
+    s.setAttribute("data-repo", "embedded-kiddie/utterances-comments");
+    s.setAttribute("data-repo-id", "R_kgDOLxnHWw");
+    s.setAttribute("data-category", "Announcements");
+    s.setAttribute("data-category-id", "DIC_kwDOLxnHW84Ce60g");
+    s.setAttribute("data-mapping", "pathname");
+    s.setAttribute("data-strict", "0");
+    s.setAttribute("data-reactions-enabled", "1");
+    s.setAttribute("data-emit-metadata", "1");
+    s.setAttribute("data-input-position", "top");
+    s.setAttribute("data-theme", "light");
+    s.setAttribute("data-lang", "ja");
+    s.setAttribute("data-loading", "lazy");
     s.setAttribute("crossorigin", "anonymous");
     s.onload = function() {
       sample.removeAttribute('id');
