@@ -104,10 +104,10 @@
     var s = document.createElement('script');
     s.src = "https://unpkg.com/commentbox.io/dist/commentBox.min.js";
     s.onload = function() {
-      sample.removeAttribute('id');
-      sample.innerHTML = '';
       commentBox('5636928644841472-proj');
     };
+    sample.innerHTML = '';
+    sample.removeAttribute('id');
     sample.parentNode.appendChild(s);
   });
 })();
