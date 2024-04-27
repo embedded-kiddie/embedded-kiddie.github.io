@@ -94,10 +94,24 @@
   <li>X: <a href="https://www.twitter.com/EmbeddedKiddie">Kingsman@EmbeddedKiddie</a></li>
 </ul>
 
-<div class="commentbox"></div>
-<script src="https://unpkg.com/commentbox.io/dist/commentBox.min.js"></script>
-
-<script>commentBox('5636928644841472-proj')</script>
+<div class="commentbox">
+<button id="commentbox-sample" class="simple" title="CommentBox サンプル画像"><img src="/images/2024/04-23/comment-commentbox.jpg" alt="CommentBox サンプル画像" /></button>
+</div>
+<script>
+(function() {
+  var sample = document.getElementById('commentbox-sample');
+  sample.addEventListener('click', function() {
+    var s = document.createElement('script');
+    s.src = "https://unpkg.com/commentbox.io/dist/commentBox.min.js";
+    s.onload = function() {
+      commentBox('5636928644841472-proj');
+      sample.removeAttribute('id');
+      sample.innerHTML = '';
+    };
+    sample.parentNode.appendChild(s);
+  });
+})();
+</script>
 
 
   </div>
