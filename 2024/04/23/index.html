@@ -113,6 +113,34 @@
 <h4 id="サンプル-1">サンプル</h4>
 <p><img class="simple" src="/images/2024/04-23/comment-metype.png" title="Metype サンプル画像" alt="Metype サンプル画像"></p>
 
+<h2 id="commentboxio">CommentBox.io</h2>
+<p><img src="/images/2024/04-23/commentbox.jpg" alt="CommentBox.io" title="CommentBox.io"></p>
+
+<p><a href="https://commentbox.io/" title="CommentBox.io - No ads. No Tracking. Just comments.">CommentBox.io</a> は、「広告なし、トラッキングなし」を謳い文句にしています。実際 <a href="https://commentbox-io.translate.goog/privacy?_x_tr_sl=auto&amp;_x_tr_tl=ja&amp;_x_tr_hl=ja&amp;_x_tr_pto=wapp&amp;_x_tr_hist=true" title="プライバシーポリシー">プライバシーポリシー</a> には、運営な必要な情報として収集される情報とその使用目的が具体的に規定されています。</p>
+
+<p>投稿には Google や Apple のソーシャルアカウントによるログイン（または電子メール）が必要ですが（Facebook と X からのログインは機能していません）、匿名での投稿も可能です。</p>
+
+<p>また1ヶ月100コメントまで無料のパーソナルプランがあり、クレジットカードの登録なしに始められます。100件を超えたら $15 と記載されてますが、まぁ、炎上でもしない限り個人のサイトでは超えることはないでしょう!?（無責任 <img class="emoji" title=":sweat_smile:" alt=":sweat_smile:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png" height="20" width="20">）</p>
+
+<h4 id="サンプル-2">サンプル</h4>
+<div class="commentbox">
+<button id="commentbox-sample" class="simple" title="CommentBox サンプル画像"><img src="/images/2024/04-23/comment-commentbox.jpg" alt="CommentBox サンプル画像"></button>
+</div>
+<script>
+(function() {
+  var sample = document.getElementById('commentbox-sample');
+  sample.addEventListener('click', function() {
+    var s = document.createElement('script');
+    s.src = "https://unpkg.com/commentbox.io/dist/commentBox.min.js";
+    s.onload = function() {
+      commentBox('5636928644841472-proj');
+    };
+    sample.closest("div").innerHTML = '';
+  	document.head.appendChild(s);
+  });
+})();
+</script>
+
 <h2 id="utterances">utterances</h2>
 <p><img src="/images/2024/04-23/utterances.jpg" alt="utterances" title="utterances"></p>
 
@@ -134,7 +162,7 @@
 
 <p>なお類似の GitHub App に JavaScript フレームワークがそれぞれ異なる <a href="https://github.com/gitalk/gitalk" title="gitalk/gitalk: Gitalk is a modern comment component based on Github Issue and Preact.">gitalk</a>、<a href="https://github.com/imsun/gitment" title="imsun/gitment: A comment system based on GitHub Issues.">gitment</a>、<a href="https://github.com/meteorlxy/vssue" title="meteorlxy/vssue: :mailbox: A Vue-powered Issue-based Comment Plugin">vssue</a> がありますが、issues を詳しく調べるとどれも <a href="https://github.com/gitalk/gitalk/issues/550">セキュリティ上の</a> <a href="https://github.com/imsun/gitment/issues/185">問題が</a> <a href="https://github.com/meteorlxy/vssue/issues/16">指摘されている</a> ので、使用は控えるべきと思います。</p>
 
-<h4 id="サンプル-2">サンプル</h4>
+<h4 id="サンプル-3">サンプル</h4>
 <div>
 <button id="utterances-sample" class="simple" title="utterances サンプル画像"><img src="/images/2024/04-23/comment-utterances.png" alt="utterances サンプル画像"></button>
 </div>
@@ -167,7 +195,7 @@
 
 <p>設置方法は utterances とほぼ同じで、<a href="https://giscus.app/ja" title="giscus">https://giscus.app/ja のページ</a> に従って必要事項を入力し、また <a href="https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository" title="リポジトリの GitHub Discussions を有効化または無効化する - GitHub Docs">リポジトリの discussions を有効化</a> すれば、埋め込むべきタグを生成してくれます。</p>
 
-<h4 id="サンプル-3">サンプル</h4>
+<h4 id="サンプル-4">サンプル</h4>
 <div>
 <button id="giscus-sample" class="simple" title="giscus サンプル画像"><img src="/images/2024/04-23/comment-giscus.jpg" alt="giscus サンプル画像"></button>
 </div>
