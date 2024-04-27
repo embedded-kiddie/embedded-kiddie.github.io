@@ -99,50 +99,19 @@
 <h2 id="metype">Metype</h2>
 <p><img src="/images/2024/04-23/metype.png" alt="Metype" title="Metype"></p>
 
-<p><a href="https://www.metype.com/" title="Metype - User Engagement Tool &amp; Comment System for Websites">Metype</a> は、AI による荒らし行為の排除やスタイルと機能の拡張性の高さを特徴に謳うコメントシステムです。</p>
+<p><del>Metype は、AI による荒らし行為の排除やスタイルと機能の拡張性の高さを特徴に謳うコメントシステムです。</del></p>
 
-<p><code class="language-plaintext highlighter-rouge">GET STARTED</code> ボタンから、名前、メールアドレス、パスワードを入力しアカウントを作成するか、Facebook、Google アカウントでログインし（X や Linked In との連携はユーザー側での実装が必要そうです）、設置するサイトの URL を登録すればアカウント ID が発行されるので、埋め込み用のコードをサイトの設置したい場所にコピペすれば準備 OK です。</p>
+<p><del><code class="language-plaintext highlighter-rouge">GET STARTED</code> ボタンから、名前、メールアドレス、パスワードを入力しアカウントを作成するか、Facebook、Google アカウントでログインし（X や Linked In との連携はユーザー側での実装が必要そうです）、設置するサイトの URL を登録すればアカウント ID が発行されるので、埋め込み用のコードをサイトの設置したい場所にコピペすれば準備 OK です。</del></p>
 
-<p>設定画面では、ゲスト投稿や事前承認の可否、画像やリンクの投稿可否、禁止用語の設定などができます。またモデレーターの複数登録が可能で、１つのアカウントで複数サイトのコメントを URL で区別して管理できるよう設計されています。</p>
+<p><del>設定画面では、ゲスト投稿や事前承認の可否、画像やリンクの投稿可否、禁止用語の設定などができます。またモデレーターの複数登録が可能で、１つのアカウントで複数サイトのコメントを URL で区別して管理できるよう設計されています。</del></p>
 
-<p>ただ、設定が反映されるまでのタイムラグが若干気になるところです。</p>
+<p><del>ただ、設定が反映されるまでのタイムラグが若干気になるところです。</del></p>
 
-<p>※ Privacy Policy や Terms &amp; Conditions がリンク切れなので、収集された情報がどのように活用されるか不明確な点、要注意です → <strong>現在、リンク切れについてコンタクトフォームから問い合わせ中です。果たして返信があるのか…</strong></p>
+<p>※ Privacy Policy や Terms &amp; Conditions がリンク切れなので、収集された情報がどのように活用されるか不明確な点、要注意です<br>
+→ <strong>2024年4月27日：リンク切れについてコンタクトフォームとメールで問い合わせましたが、返答がないため試用を中止しました。</strong></p>
 
 <h4 id="サンプル-1">サンプル</h4>
-<div id="metype-container" class="iframe-container" data-metype-account-id="1004011" data-metype-host="https://www.metype.com/" data-metype-primary-color="#0000ff" data-metype-bg-color="#ffffff" data-metype-font-color="#4a4a4a">
-<button id="metype-sample" class="simple" title="Metype サンプル画像"><img src="/images/2024/04-23/comment-metype.png" alt="Metype サンプル画像"></button>
-</div>
-<script>
-(function() {
-  window.talktype = window.talktype || function(f) {
-    if (talktype.loaded)
-      f();
-    else
-      (talktype.q = talktype.q || []).push(arguments);
-  };
-
-  var sample = document.getElementById('metype-sample');
-  sample.addEventListener('click', function() {
-    var s = document.createElement('script');
-    s.src = "https://www.metype.com/quintype-metype/assets/metype.js";
-    s.onload = function() {
-      var metypeContainer = document.getElementById('metype-container'),
-      page_url = metypeContainer.getAttribute('data-metype-page-url');
-      metypeContainer.setAttribute('data-metype-page-url', "https://embedded-kiddie.github.io/2024/04/23/index.html");
-      metypeContainer.setAttribute('data-metype-window-height', window.innerHeight);
-      metypeContainer.setAttribute('data-metype-screen-width', window.screen.width);
-      talktype(function() {
-        talktype.commentWidgetIframe(metypeContainer);
-      });
-
-      sample.removeAttribute('id');
-      sample.innerHTML = '';
-    };
-    sample.parentNode.appendChild(s);
-  });
-})();
-</script>
+<div class="simple"><img src="/images/2024/04-23/comment-metype.png" alt="Metype サンプル画像"></div>
 
 <h2 id="utterances">utterances</h2>
 <p><img src="/images/2024/04-23/utterances.jpg" alt="utterances" title="utterances"></p>
