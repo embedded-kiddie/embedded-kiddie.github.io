@@ -88,7 +88,7 @@
 (function() {
   const sample = document.getElementById('cusdus-sample');
   sample.addEventListener('click', function() {
-    let s = document.createElement('script');
+    const s = document.createElement('script');
     s.src = "https://cusdis.com/js/cusdis.es.js";
     s.onload = function() {
       sample.removeAttribute('id');
@@ -136,7 +136,7 @@
 (function() {
   const sample = document.getElementById('commentbox-sample');
   sample.addEventListener('click', function() {
-    let s = document.createElement('script');
+    const s = document.createElement('script');
     s.src = "https://unpkg.com/commentbox.io/dist/commentBox.min.js";
     s.onload = function() {
       commentBox('5636928644841472-proj');
@@ -176,7 +176,7 @@
 (function() {
   const sample = document.getElementById('utterances-sample');
   sample.addEventListener('click', function() {
-    let s = document.createElement('script');
+    const s = document.createElement('script');
     s.src = "https://utteranc.es/client.js";
     s.setAttribute("repo", "embedded-kiddie/utterances-comments");
     s.setAttribute("issue-term", "pathname");
@@ -209,7 +209,7 @@
 (function() {
   const sample = document.getElementById('giscus-sample');
   sample.addEventListener('click', function() {
-    let s = document.createElement('script');
+    const s = document.createElement('script');
     s.src = "https://giscus.app/client.js";
     s.setAttribute("data-repo", "embedded-kiddie/utterances-comments");
     s.setAttribute("data-repo-id", "R_kgDOLxnHWw");
@@ -257,7 +257,7 @@
 
   </div>
 <div id="disqus_thread">
-<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/04/23/index.html"></span><button id="disqus_thread_link" class="simple"><img id="disqus_thread_img" src="/images/disqus.png" width="768" height="433"></button>
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/04/23/index.html"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="768" height="433" alt="Disqus コメントフォーム"></button>
 </div>
 <a class="u-url" href="/2024/04/23/index.html" hidden></a>
 </article>
@@ -293,7 +293,7 @@
   <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
 </footer>
 
-<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});const k=document.querySelector("#disqus_thread_link");k.addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/04/23/index.html";this.page.identifier="/2024/04/23/index.html"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/04/23/index.html";this.page.identifier="/2024/04/23/index.html"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/luminous-lightbox/2.4.0/luminous.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script async src="/assets/luminous-config.min.js"></script>
 </body>
