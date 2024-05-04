@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-02T15:32:59+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集</title><link href="https://embedded-kiddie.github.io/2024/04/23/index.html" rel="alternate" type="text/html" title="サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集" /><published>2024-04-23T17:40:28+09:00</published><updated>2024-04-23T17:40:28+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/23/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/23/index.html"><![CDATA[<p>GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て <a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%83%AA%E3%83%BC%E3%83%9F%E3%82%A2%E3%83%A0" title="フリーミアム - Wikipedia">フリーミアム</a> もしくは無料で設置できます。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-04T10:01:25+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集</title><link href="https://embedded-kiddie.github.io/2024/04/23/index.html" rel="alternate" type="text/html" title="サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集" /><published>2024-04-23T17:40:28+09:00</published><updated>2024-04-23T17:40:28+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/23/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/23/index.html"><![CDATA[<p>GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て <a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%83%AA%E3%83%BC%E3%83%9F%E3%82%A2%E3%83%A0" title="フリーミアム - Wikipedia">フリーミアム</a> もしくは無料で設置できます。</p>
 
 <p>フォームのサンプル画像をクリックすると実際に試すことができますが、良識あるテストをお願いします。サンプル画像をクリックしてから表示されるまでの時間や、<a href="https://developer.mozilla.org/ja/docs/Learn/Common_questions/Tools_and_setup/What_are_browser_developer_tools" title="ブラウザーの開発者ツールとは - ウェブ開発を学ぶ - MDN">ブラウザの開発ツール</a> で検知されるエラーの確認もまた設置の重要な要件になると思います。</p>
 
@@ -372,7 +372,7 @@
 <p>またデバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> になっていることを確認してください。</p>
 
 <h3 id="svd-ファイルの差し替え">SVD ファイルの差し替え</h3>
-<p>まず <a href="https://gist.github.com/embedded-kiddie/48b388515ce280cc496fe6ef5ddb625f" title="R7FA4M1AB.svd改">SVD ファイルの更新版</a> をダウンロードしてください。次に、先に記録した SVD ファイルのあるフォルダを開き、<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を <code class="language-plaintext highlighter-rouge">R7FA4M1AB-.svd</code> にリネームするなどして退避した後、ダウンロードした <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> に差し替えます。</p>
+<p>まず <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">SVD ファイルの更新版</a> をダウンロードしてください。次に、先に記録した SVD ファイルのあるフォルダを開き、<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を <code class="language-plaintext highlighter-rouge">R7FA4M1AB-.svd</code> にリネームするなどして退避した後、ダウンロードした <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> に差し替えます。</p>
 
 <h3 id="デバッグの開始と終了">デバッグの開始と終了</h3>
 <p>これでデバッグができる準備が整ったハズです。行番号の左側をクリックするとブレークポイントが設定できるので、止めたいところをマーキングします。</p>
@@ -1176,7 +1176,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="割り込みハンドラの怪">割り込みハンドラの怪？</h4>
 <p><a href="https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/" title="attachInterrupt() - Arduino Reference"><code class="language-plaintext highlighter-rouge">attachInterrupt()</code></a> の解説によると、ユーザ側の割り込みハンドラ関数内では多重割り込みが禁止されていて、故に <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> がインクリメントされず <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> が機能しない旨の記述があります。が、UNO R4 の場合、タイマや外部入力ピンへの割り込みハンドラ内で <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> も<strong>使えます</strong>。</p>
 
-<p>おそらく ARM の NVIC（Nested Vector Interrupt Controller、多重型ベクタ割り込みコントローラ）が活きているのだと思いますが（でなければ何らかのトリックか？）、ユーザ側で複数の割り込みを使う場合、優先順位の調査が必要かと思います（未調査です、スミマセン…）。</p>
+<p>おそらく ARM の NVIC（Nested Vector Interrupt Controller、多重型ベクタ割り込みコントローラ）の効果だと思いますが、ユーザ側で複数の割り込みを使う場合、優先順位の調査が必要かと思います（未調査です、スミマセン…）。</p>
 
 <h4 id="クロック周波数">クロック周波数</h4>
 <p><a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer.cpp</code></a> で設定可能なクロックです。</p>
@@ -1197,7 +1197,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>これを1ミリ秒刻みの割り込みで484回を数えたり、数千回を数えたりするのは CPU リソースの無駄使いで、数えるのはタイマに任せるのが得策です。</p>
 
-<p>ここで問題なのは長い周期の場合で、16ビットを目一杯使い分周比を最大にしても GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式" /></span> より約 1398ミリ秒（小数点以下切り捨て）、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)" /></span> ≒ 21ミリ秒（同）までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータと分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)" /></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスからではこれが出来ません。</p>
+<p>ここで問題なのは長い周期の場合で、16ビットを目一杯使い分周比を最大にしても GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式" /></span> より約 1398ミリ秒（小数点以下切り捨て）、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)" /></span> ≒ 21ミリ秒（同）までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータと分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)" /></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスではこれが出来ません。</p>
 
 <p>またオーバーフロー割り込みを設定するメソッド <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp#L770" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code></a> を試してみましたが、うまく動かすことができませんでした。</p>
 
@@ -1551,7 +1551,7 @@ SWD コネクタが載ってます。</p>
   </li>
   <li>
     <p><a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/cheat-sheet/">Arduino UNO R4 WiFi Cheat Sheet</a><br />
-デバッガに関するI/Fの言及なし。回路図を見てみて唯一考えられるのが ARM MCU と USB をブリッジしてる ESP32。ただ SWD の信号が外に出ていないので、デバッグプローブと電気的に接続するのではなく、ESP32 のファームを書き換えてオンボードのデバッガにするしかないのでは？ という気がしてます。</p>
+デバッガに関するI/Fの言及なし。回路図を見てみて唯一考えられるのが ARM MCU と USB をブリッジしてる ESP32。ただ SWD の信号が外に出ていないので、デバッグプローブと電気的に接続するのではなく、ESP32 のファームを書き換えてオンボードのデバッガにするしかない <del>のでは？ という気がしてます。</del>（→ 2024年5月3日 修正：UNO R4 WiFi は ESP32 がオンボードデバッガの役割を果たすようで、トラ技 ARM ライタは不要です。）</p>
   </li>
   <li>
     <p><a href="https://support.arduino.cc/hc/en-us/articles/10531097579548-Debug-runtime-errors-on-UNO-R4-WiFi-using-stack-trace" title="Debug runtime errors on UNO R4 WiFi using stack trace &ndash; Arduino Help Center">Debug runtime errors on UNO R4 WiFi using stack trace</a><br />
@@ -1601,7 +1601,8 @@ SWD コネクタが載ってます。</p>
 <p>ただ <code class="language-plaintext highlighter-rouge">.pack</code> の扱い方が分からないので、乱暴にも他の Cortex-M4 の <code class="language-plaintext highlighter-rouge">.svd</code> ファイルから <code class="language-plaintext highlighter-rouge">P100PFS</code>、<code class="language-plaintext highlighter-rouge">P100PFS_HA</code>、<code class="language-plaintext highlighter-rouge">P100PFS_BY</code> の定義を <a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/svd" title="ArduinoCore-renesas/svd at main · arduino/ArduinoCore-renesas · GitHub">Arduino IDE の <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code></a> ファイルにコピーしてみたところ、うっ…動きました。やったゼ〜 :+1:</p>
 
 <ul>
-  <li><a href="https://gist.github.com/embedded-kiddie/48b388515ce280cc496fe6ef5ddb625f" title="R7FA4M1AB.svd改">Gist: R7FA4M1AB.svd</a>（63712行あります）</li>
+  <li><del>Gist: R7FA4M1AB.svd（63712行あります）</del>
+→ 2024年5月3日：Gist は削除しました。<a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">こちらのリポジトリ</a> からダウンロードして下さい。</li>
 </ul>
 
 <p><img src="/images/2024/03-24/arduino-debugger.jpg" alt="トラ技ARMライタで動作する Arduino debugger" title="トラ技ARMライタで動作する Arduino debugger" /></p>
