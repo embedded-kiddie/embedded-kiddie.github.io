@@ -272,9 +272,9 @@
 <p>トラ技 ARM ライタと通信ができない時に発生します。USB コネクタがキツかったりするので確認します。また電源を入れた時やリセット時など、赤と緑の LED が点灯 → 消灯するか確認します。症状が改善しない時は、<a href="#%E3%83%95%E3%82%A1%E3%83%BC%E3%83%A0%E3%82%A6%E3%82%A7%E3%82%A2%E3%81%AE%E6%9B%B8%E3%81%8D%E8%BE%BC%E3%81%BF">ファームウェアの書き込み</a> から再構築してみます。</p>
 
 <h3 id="dfu-util-no-dfu-capable-usb-device-available">dfu-util: No DFU capable USB device available</h3>
-<p>コレ、結構ナゾのエラーで悩まされました。公式サイト <a href="https://support.arduino.cc/hc/en-us/articles/11011849739804-dfu-util-errors-when-uploading-exit-status-74" title="dfu-util errors when uploading (exit status 74) – Arduino Help Center">dfu-util errors when uploading (exit status 74)</a> によるとお決まりの「ケーブルを確認せよ」なのですが、Windows であれば <a href="https://roboin.io/article/2023/12/11/arduino-dfu-error/" title="Arduinoで「No DFU capable USB device available」エラーが出たときの対処法 - ろぼいんブログ">Arduinoで「No DFU capable USB device available」エラーが出たときの対処法</a> が参考になるかもしれません。</p>
+<p>基本は公式サイト <a href="https://support.arduino.cc/hc/en-us/articles/11011849739804-dfu-util-errors-when-uploading-exit-status-74" title="dfu-util errors when uploading (exit status 74) – Arduino Help Center">dfu-util errors when uploading (exit status 74)</a> の「ケーブルを確認せよ」です。Windows であれば <a href="https://roboin.io/article/2023/12/11/arduino-dfu-error/" title="Arduinoで「No DFU capable USB device available」エラーが出たときの対処法 - ろぼいんブログ">Arduinoで「No DFU capable USB device available」エラーが出たときの対処法</a> が参考になるかもしれません。</p>
 
-<p>僕の場合、トラ技 ARM ライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> をハンダで繋ぎ、Minima 側に電源を供給するようにしていた際、アップロードも CMSIS-DAP からできるものと思い込み、Minima 側の USB を接続してなかった時に発生してました。今では両基板とも USB 接続することで事なきを得ています。</p>
+<p>僕の場合、アップロードも CMSIS-DAP からできるものと思い込み、Minima 側の USB を接続してなかった時に発生してました（トラ技 ARM ライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> をショートされれば Minima に電源供給できる）。今では両基板とも USB 接続することで事なきを得ています。</p>
 
 <h3 id="何をやっても-crp-disabled-が出現する">何をやっても CRP DISABLED が出現する</h3>
 <p>トラ技 ARM ライタを単独で電源投入すると、赤と緑の LED ランプが点灯せず ISP モードで立ち上がることがあります。先に Minima を ON していればこの事象は発生しないようです。</p>
