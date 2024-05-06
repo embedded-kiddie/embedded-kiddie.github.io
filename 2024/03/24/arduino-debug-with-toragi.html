@@ -121,17 +121,7 @@ SWD コネクタが載ってます。</p>
 <p>正体が分かったところで Arduino IDE に添付された <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を覗き <code class="language-plaintext highlighter-rouge">P100PFS</code> を探してみましたが見つかりません。にもかかわらず別なところから <code class="language-plaintext highlighter-rouge">derivedFrom</code> で継承されてるじゃないですか！ しかもコレだけじゃなく <code class="language-plaintext highlighter-rouge">P100PFS_HA</code> とか <code class="language-plaintext highlighter-rouge">P100PFS_BY</code> も未定義なことが分かりました。</p>
 
 <h3 id="p100pfs-って何">P100PFS って何？</h3>
-<figure class="float-left">
-  <a href="/images/2024/03-24/P100PFS.jpg" title="P100PFS" data-lightbox="image">
-    <img src="/images/2024/03-24/P100PFS-small.jpg" alt="P100PFS">
-  </a>
-</figure>
-
-<p><a href="https://www.renesas.com/jp/ja/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ra4m1-32-bit-microcontrollers-48mhz-arm-cortex-m4-and-lcd-controller-and-cap-touch-hmi?documents-type-filter=%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB%EF%BC%8D%E3%83%8F%E3%83%BC%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2#documents">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> によると、これらはポート0の入出力を決める大事なレジスタです。これは何とかしないといけません。</p>
-
-<blockquote>
-  <p>ポート mn 端子機能選択レジスタ(PmnPFS/PmnPFS_HA/PmnPFS_BY)は、32 ビット、16 ビットおよび 8 ビットの読み出し/書き込み可能なコントロールレジスタです。PmnPFS はポート mn 機能の選択を制御し、 32 ビット単位で設定されます。PmnPFS_HA(PmnPFS のビット [15:0])は 16 ビット単位でアクセスされま す。PmnPFS_BY(ビット [7:0])は 8 ビット単位でアクセスされます。</p>
-</blockquote>
+<p><a href="https://www.renesas.com/jp/ja/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ra4m1-32-bit-microcontrollers-48mhz-arm-cortex-m4-and-lcd-controller-and-cap-touch-hmi?documents-type-filter=%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB%EF%BC%8D%E3%83%8F%E3%83%BC%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2#documents">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> によると、「ポート mn 端子機能選択レジスタ（Port Function Select）」の１つで、<code class="language-plaintext highlighter-rouge">P100PFS</code> はポート 1 の入出力方向やプルアップの有無などを決める大事なレジスタです。これは何とかしないといけません。</p>
 
 <h3 id="svdファイルの修正">SVDファイルの修正</h3>
 <p>さて SVD ファイルの生成には <a href="https://github.com/Open-CMSIS-Pack/cmsis-toolbox?tab=readme-ov-file" title="Open-CMSIS-Pack/cmsis-toolbox: CMSIS-Toolbox">CMSIS-Toolbox</a> で色々とやらなくちゃならないようです。コレを読みこなして習熟するには時間がかかりそうなので、さらに調べてみると Github に <a href="https://github.com/tinygo-org/renesas-svd" title="tinygo-org/renesas-svd: SVD fiies for Renesas MCU mirrored from Keil drivers release">renesas-svd</a> を上げている人を見つけました。</p>
