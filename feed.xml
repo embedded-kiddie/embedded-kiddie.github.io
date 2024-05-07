@@ -1,4 +1,844 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-07T01:13:00+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集</title><link href="https://embedded-kiddie.github.io/2024/04/23/index.html" rel="alternate" type="text/html" title="サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集" /><published>2024-04-23T17:40:28+09:00</published><updated>2024-04-23T17:40:28+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/23/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/23/index.html"><![CDATA[<p>GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て <a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%83%AA%E3%83%BC%E3%83%9F%E3%82%A2%E3%83%A0" title="フリーミアム - Wikipedia">フリーミアム</a> もしくは無料で設置できます。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-07T18:02:56+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</title><link href="https://embedded-kiddie.github.io/2024/05/07/index.html" rel="alternate" type="text/html" title="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！" /><published>2024-05-07T18:02:39+09:00</published><updated>2024-05-07T18:02:39+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/07/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/07/index.html"><![CDATA[<p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ" /></p>
+
+<p>この度、次の２つの記事で紹介してきた <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の修正版</a> が、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">取り込まれることになりました</a>。</p>
+
+<ul>
+  <li><a href="/2024/04/17/how-to-use-toragi-writer.html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</a></li>
+  <li><a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</a></li>
+</ul>
+
+<p>おそらく UNO R4 用ボードマネージャーの更新（本記事執筆時点のバージョンは <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a>）という形で配信されると思います。</p>
+
+<p>この修正により、UNO R4 Minima は <a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> をサポートした <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブ）で、UNO R4 WiFi は ESP32 を介したオンボードデバッガで、それぞれソースコードデバッグが可能になります。</p>
+
+<p>本来は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> の仕様と対比して修正内容を提示したいところですが、Renesas の文書による許諾が必要なため、<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="CC BY-SA 4.0 Deed - Attribution-ShareAlike 4.0 International - Creative Commons">CC BY-SA</a> の元に公開されている <a href="https://docs.arduino.cc/resources/pinouts/ABX00080-full-pinout.pdf">Arduino UNO R4 Minima のピン配図</a> と MIT ライセンスの元に公開されている <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を用いて説明を試みます。</p>
+
+<p>とても退屈な話になりますが…、苦労話を書きたくなる気持ちを察してやって下さい :pensive:</p>
+
+<h2 id="r7fa4m1absvd-とは">R7FA4M1AB.svd とは</h2>
+<p>SVD は <a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/index.html" title="CMSIS-SVD: System View Description">System View Description</a> の略で、Arm Cortex-M の持つ機能を XML で記述したものになります。また <code class="language-plaintext highlighter-rouge">R7FA4M1AB</code> は UNO R4 に搭載された Renesas MCU の型番の一部です。</p>
+
+<p>例えば、僕らがプロセッサやその周辺回路の使い方をマニュアルで調べるのと同様、Arduino IDE のデバッガは、どのレジスタが何処のアドレスにマッピングされているかを知るために SVD ファイルを参照します。</p>
+
+<p>つまり Arduino IDE にとって <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code>は、人間にとっての <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> に相当し、そのフォーマットは <a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/schema_1_2_gr.html" title="CMSIS-SVD: CMSIS-SVD Schema File">CMSIS-SVD スキーマ</a> として定められています。</p>
+
+<p>人用のマニュアルが 1700 ページほどあるのに対し、<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> は６万数千行もあります。その中身は共通部分も多く、親とその派生で定義が可能な感じですが、仮に手作業でこれを作成するとしたら、間違えも起きるよネというのが正直な感想です。</p>
+
+<p>ちなみに <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の原版は、Arm のサイトに公開されています。</p>
+
+<ul>
+  <li><a href="https://www.keil.arm.com/devices/renesas-r7fa4m1ab/features/" title="Arm Keil - Renesas R7FA4M1AB">R7FA4M1AB</a></li>
+  <li><a href="https://www.keil.arm.com/packs/ra_dfp-renesas/devices/" title="Arm Keil - Renesas RA_DFP">RA_DFP</a></li>
+</ul>
+
+<h2 id="問題点の分析と修正方針">問題点の分析と修正方針</h2>
+<p>UNO R4 用オンボードマネージャのバージョン <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a> では、<span class="inline"><img src="/images/2024/04-18/button-debug.png" title="デバッグボタン" alt="デバッグボタン" /> でデバッガを起動すると、以下のエラーが起きます。</span></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unable to parse SVD file /Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/svd/R7FA4M1AB.svd: Error: SVD error: Invalid 'derivedFrom' "P100PFS" for register "P30%sPFS"
+</code></pre></div></div>
+
+<figure class="float-left">
+  <a href="/images/2024/05-07/minima-schematics.jpg" title="Unable to parse SVD file" data-lightbox="image">
+    <img src="/images/2024/05-07/minima-schematics-small.jpg" alt="Unable to parse SVD file" />
+  </a>
+</figure>
+
+<p>この問題は、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> にも「<a href="https://github.com/arduino/ArduinoCore-renesas/issues/276" title="&quot;Unable to parse SVD file&quot; error when starting debugger · Issue #276 · arduino/ArduinoCore-renesas">“Unable to parse SVD file” error when starting debugger #276</a>」として挙がっていますが、「無効な <code class="language-plaintext highlighter-rouge">P100PFS</code> から <code class="language-plaintext highlighter-rouge">P30xPFS</code> を派生させている」ことを訴えています。</p>
+
+<p><code class="language-plaintext highlighter-rouge">P100PFS</code> の <code class="language-plaintext highlighter-rouge">PFS</code> は Port Function Select の略で、汎用 I/O 端子 <code class="language-plaintext highlighter-rouge">P000</code> 〜 <code class="language-plaintext highlighter-rouge">P915</code> の入出力方向の切り替えや、プルアップ抵抗や割り込み有無の設定など、汎用 I/O 端子の機能を選択するレジスタ群になります。</p>
+
+<p>ちなみにこのエラーによりプログラムが暴走したりすることはなく、単に IDE の UI を通してレジスタの内容を表示したり書き換えたりする機能に影響があるだけです。</p>
+
+<div class="clear-both"><br /></div>
+
+<p>さて、エラーを手掛かりに <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を精査すると、次の２つの問題があることが判明しました。</p>
+
+<ul>
+  <li><a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/schema_1_2_gr.html" title="CMSIS-SVD: CMSIS-SVD Schema File">CMSIS-SVD スキーマ</a> 上 <code class="language-plaintext highlighter-rouge">P100PFS</code> の定義は正しいが、派生元の親として定義されてない</li>
+  <li><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> 上、幾つかの I/O 端子は派生元の親を間違えて定義されている</li>
+</ul>
+
+<p>従って修正方針はこれらの裏返しです。</p>
+
+<ul>
+  <li>派生元の親となり得るよう <code class="language-plaintext highlighter-rouge">P100PFS</code> を再定義する</li>
+  <li>派生元の親を間違えている I/O 端子を抽出し、正しい親を定義し直す</li>
+</ul>
+
+<p>何せ行数が多いため、汎用 I/O 端子ごとにチェックリストを作成しながら進めました。</p>
+
+<h2 id="svd-ファイルの修正内容">SVD ファイルの修正内容</h2>
+<p>ここからは以下の章立てにより、修正内容の説明を試みます。</p>
+
+<ul>
+  <li>
+    <p><a href="#pfs-レジスタの概要">PFS レジスタの概要</a><br />
+Arduino IDE のデバッガを通して、<code class="language-plaintext highlighter-rouge">PFS</code> レジスタの全体像を把握します。</p>
+  </li>
+  <li>
+    <p><a href="#p100pfs-の再定義">P100PFS の再定義</a><br />
+<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> の定義に基づき、<code class="language-plaintext highlighter-rouge">P100PFS</code> を再定義した内容を提示します。</p>
+  </li>
+  <li>
+    <p><a href="#派生に関する修正">派生に関する修正</a><br />
+派生元となる親を間違えているレジスタの修正内容を提示します。</p>
+  </li>
+</ul>
+
+<h3 id="pfs-レジスタの概要">PFS レジスタの概要</h3>
+<figure class="float-left">
+  <a href="/images/2024/05-07/cortex-peripherals.jpg" title="CORTEX PERIPHERALS" data-lightbox="image">
+    <img src="/images/2024/05-07/cortex-peripherals-small.jpg" alt="CORTEX PERIPHERALS" />
+  </a>
+</figure>
+
+<p>Arduino IDE でデバッガを起動すると、MCU に内蔵された周辺装置のレジスタを「CORTEX PERIPHERALS」で参照または編集ができるようになります。</p>
+
+<p>詳細は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> を参照してもらうとして、IDE で表示された <code class="language-plaintext highlighter-rouge">P100PFS</code> の内容と SVD ファイルの定義を一覧にすると、次のようになります。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PODR</code></td>
+      <td>[0:0]</td>
+      <td>Port Output Data</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PIDR</code></td>
+      <td>[1:1]</td>
+      <td>Port Input Data</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PDR</code></td>
+      <td>[2:2]</td>
+      <td>Port Direction</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[3:3]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PCR</code></td>
+      <td>[4:4]</td>
+      <td>Pull-up Control</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[5:5]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NCODR</code></td>
+      <td>[6:6]</td>
+      <td>N-Channel Open Drain Control</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[9:7]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">DSCR</code></td>
+      <td>[10:10]</td>
+      <td>Port Drive Capability</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[11:11]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EOR</code></td>
+      <td>[12:12]</td>
+      <td>Event on Rising</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EOF</code></td>
+      <td>[13:13]</td>
+      <td>Event on Falling</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ISEL</code></td>
+      <td>[14:14]</td>
+      <td>IRQ input enable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ASEL</code></td>
+      <td>[15:15]</td>
+      <td>Analog Input enable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PMR</code></td>
+      <td>[16:16]</td>
+      <td>Port Mode Control</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[23:17]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PSEL</code></td>
+      <td>[28:24]</td>
+      <td>Port Function Select</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[31:29]</td>
+      <td>予約ビット</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ここでのポイントは、汎用 I/O 端子は <code class="language-plaintext highlighter-rouge">P000</code> から <code class="language-plaintext highlighter-rouge">P915</code> まで多数あり、USB や シリアル通信など特定用途で使われる端子の仕様が他とは微妙に異なるという点です。</p>
+
+<p>言い換えれば、これらの仕様違いを正しく XML で記述する必要があるという事です。</p>
+
+<div class="quote clear-both">
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> の P.430 には、但し書きで仕様違いをを規定していますが、この規定と SVD ファイルとの相違が <a href="#問題点と修正方針のサマリ">Arduino IDE でのエラー</a> につながっていました。</p>
+
+<p>中でも「P408 は DSCR1 ビットだけを持ちます」という記述は<strong>誤訳</strong>なので要注意です。原文は「P408 only has DSCR1 bit」であり、「<strong>P408 だけが DSCR1 ビットを持ちます</strong>」と訳すのが正解です（Renesas に確認済み）。</p>
+
+</div>
+
+<h3 id="p100pfs-の再定義">P100PFS の再定義</h3>
+<p>修正前は <code class="language-plaintext highlighter-rouge">P000PFS</code> を派生の親とする子の位置付けで定義されていましたが、他の親となり得るよう、次のように再定義しました（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382R16083" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">diff で確認</a>）</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;register&gt;</span>
+  <span class="nt">&lt;name&gt;</span>P100PFS<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;description&gt;</span>P100 Pin Function Control Register<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;addressOffset&gt;</span>0x040<span class="nt">&lt;/addressOffset&gt;</span>
+  <span class="nt">&lt;size&gt;</span>32<span class="nt">&lt;/size&gt;</span>
+  <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+  <span class="nt">&lt;resetValue&gt;</span>0x00000000<span class="nt">&lt;/resetValue&gt;</span>
+  <span class="nt">&lt;resetMask&gt;</span>0xFFFFFFFD<span class="nt">&lt;/resetMask&gt;</span></code></pre></figure>
+
+<div class="quote clear-both">
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> のメモリマップによると、汎用 I/O 関連のレジスタは <code class="language-plaintext highlighter-rouge">0x40000000</code> 〜 <code class="language-plaintext highlighter-rouge">0x40100000</code> 番地にマッピングされています。</p>
+
+<p>このうち PFS (Pin Function Select) は、下記 XML の通り <code class="language-plaintext highlighter-rouge">0x40040800</code> から始まると定義されていて、<code class="language-plaintext highlighter-rouge">P100PFS</code> はこのセクションに属しています。</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;peripheral&gt;</span>
+  <span class="nt">&lt;name&gt;</span>PFS<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;description&gt;</span>Pmn Pin Function Control Register<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;baseAddress&gt;</span>0x40040800<span class="nt">&lt;/baseAddress&gt;</span>
+  ...
+<span class="nt">&lt;/peripheral&gt;</span></code></pre></figure>
+
+<p>即ち <code class="language-plaintext highlighter-rouge">P100PFS</code> は、<code class="language-plaintext highlighter-rouge">baseAddress</code> の <code class="language-plaintext highlighter-rouge">0x4004 0800</code> に <code class="language-plaintext highlighter-rouge">addressOffset</code> の <code class="language-plaintext highlighter-rouge">0x040</code> を加えた <code class="language-plaintext highlighter-rouge">0x4004 0840</code> 番地にマッピングされています。</p>
+
+<p>また <code class="language-plaintext highlighter-rouge">resetValue</code> は各レジスタで異なる値を取り、特にリセット後の値が不定なビットがあるため <code class="language-plaintext highlighter-rouge">resetMask</code> でマスクする定義となっています。</p>
+
+</div>
+
+<p>以下、予約ビットを除き、<code class="language-plaintext highlighter-rouge">P100PFS</code> の修正済み定義を示します。</p>
+
+<h4 id="podr">PODR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PODR</code></td>
+      <td>[0:0]</td>
+      <td>Port Output Data</td>
+      <td>0: Low output<br />1: High output</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PODR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Output Data<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>0<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>0<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Low output<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>High output<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span>
+  <span class="nt">&lt;/fields&gt;</span>
+<span class="nt">&lt;/register&gt;</span></code></pre></figure>
+
+<h4 id="pidr">PIDR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PIDR</code></td>
+      <td>[1:1]</td>
+      <td>Port Input Data</td>
+      <td>0: Low input<br />1: High input</td>
+      <td>R</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PIDR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Input Data<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>1<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>1<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-only<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Low input<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>High input<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="pdr">PDR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PDR</code></td>
+      <td>[2:2]</td>
+      <td>Port Direction</td>
+      <td>0: Input (Functions as an input pin)<br />1: Output (Functions as an output pin)</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PDR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Direction<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>2<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>2<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Input (Functions as an input pin.)<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Output (Functions as an output pin.)<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="pcr">PCR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PCR</code></td>
+      <td>[4:4]</td>
+      <td>Pull-up Control</td>
+      <td>0: Disables an input pull-up<br />1: Enables an input pull-up</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PCR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Pull-up Control<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>4<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>4<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Disables an input pull-up.<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Enables an input pull-up.<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="ncodr">NCODR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NCODR</code></td>
+      <td>[6:6]</td>
+      <td>N-Channel Open Drain Control</td>
+      <td>0: CMOS output<br />1: NMOS open-drain output</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>NCODR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>N-Channel Open Drain Control<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>6<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>6<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>CMOS output<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>NMOS open-drain output<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="dscr">DSCR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">DSCR</code></td>
+      <td>[10:10]</td>
+      <td>Port Drive Capability</td>
+      <td>0: Low drive<br />1: Middle drive</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="quote clear-both">
+
+<p>先に示した通り、「<strong>P408 だけが DSCR1 ビットを持ちます</strong>」。それ以外の端子で <code class="language-plaintext highlighter-rouge">DSCR1</code>（ビットレンジ  [11:11]）は予約ビットとなります。</p>
+
+</div>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">  <span class="nt">&lt;field&gt;</span>
+    <span class="nt">&lt;name&gt;</span>DSCR<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Port Drive Capability<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;lsb&gt;</span>10<span class="nt">&lt;/lsb&gt;</span>
+    <span class="nt">&lt;msb&gt;</span>10<span class="nt">&lt;/msb&gt;</span>
+    <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+    <span class="nt">&lt;enumeratedValues&gt;</span>
+      <span class="nt">&lt;enumeratedValue&gt;</span>
+        <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Low drive<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+      <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;enumeratedValue&gt;</span>
+        <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Middle drive.<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+      <span class="nt">&lt;/enumeratedValue&gt;</span>
+    <span class="nt">&lt;/enumeratedValues&gt;</span>
+  <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="eor">EOR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EOR</code></td>
+      <td>[12:12]</td>
+      <td>Event on Rising</td>
+      <td>0: Do not care<br />1: Detect rising edge</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>EOR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Event on Rising<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>12<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>12<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Do not care<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Detect rising edge<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="eof">EOF</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EOF</code></td>
+      <td>[13:13]</td>
+      <td>Event on Falling</td>
+      <td>0: Do not care<br />1: Detect falling edge</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="quote clear-both">
+
+<p><code class="language-plaintext highlighter-rouge">EOR</code>、<code class="language-plaintext highlighter-rouge">EOF</code> は、<code class="language-plaintext highlighter-rouge">P100PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P415PFS</code> にだけ定義されています。修正前の <code class="language-plaintext highlighter-rouge">P100PFS</code> は、<code class="language-plaintext highlighter-rouge">P000PFS</code> を継承し予約ビットとなっていたため、あらためて <code class="language-plaintext highlighter-rouge">P100PFS</code> を派生元の親として再定義し、<code class="language-plaintext highlighter-rouge">P200PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P415PFS</code> がこれを継承するように修正しました。</p>
+
+</div>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>EOF<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Event on Falling<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>13<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>13<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Do not care<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Detect falling edge<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="isel">ISEL</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ISEL</code></td>
+      <td>[14:14]</td>
+      <td>IRQ input enable</td>
+      <td>0: Not used as IRQn input pin<br />1: Used as IRQn input pin</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>ISEL<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>IRQ input enable<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>14<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>14<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Not used as IRQn input pin<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Used as IRQn input pin<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="asel">ASEL</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ASEL</code></td>
+      <td>[15:15]</td>
+      <td>Analog Input enable</td>
+      <td>0: Used other than as analog pin<br />1: Used as analog pin</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>ASEL<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Analog Input enable<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>15<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>15<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Used other than as analog pin<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Used as analog pin<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="pmr">PMR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PMR</code></td>
+      <td>[16:16]</td>
+      <td>Port Mode Control</td>
+      <td>0: Uses the pin as a general I/O pin<br />1: Uses the pin as an I/O port<br /> for peripheral functions</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PMR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Mode Control<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>16<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>16<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Uses the pin as a general I/O pin.<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Uses the pin as an I/O port for peripheral functions.<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="psel">PSEL</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PSEL</code></td>
+      <td>[28:24]</td>
+      <td>Port Function Select</td>
+      <td>These bits select the peripheral function</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">  <span class="nt">&lt;fields&gt;</span>
+    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PSEL<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Function Select
+      These bits select the peripheral function. For individual pin functions, see the MPC table<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>24<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>28<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<p>以上が修正した <code class="language-plaintext highlighter-rouge">P100PFS</code> の全てです。</p>
+
+<h3 id="派生に関する修正">派生に関する修正</h3>
+<p>例えば修正前の <code class="language-plaintext highlighter-rouge">P101PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P107PFS</code> は、次のように <code class="language-plaintext highlighter-rouge">P100PFS</code> もろとも <code class="language-plaintext highlighter-rouge">P000PFS</code> の派生として定義されていました。</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;register</span> <span class="na">derivedFrom=</span><span class="s">"P000PFS"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;dim&gt;</span>8<span class="nt">&lt;/dim&gt;</span>
+  <span class="nt">&lt;dimIncrement&gt;</span>0x4<span class="nt">&lt;/dimIncrement&gt;</span>
+  <span class="nt">&lt;dimIndex&gt;</span>0-7<span class="nt">&lt;/dimIndex&gt;</span>
+  <span class="nt">&lt;name&gt;</span>P10%sPFS<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;description&gt;</span>P10%s Pin Function Control Register<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;addressOffset&gt;</span>0x040<span class="nt">&lt;/addressOffset&gt;</span>
+  <span class="nt">&lt;size&gt;</span>32<span class="nt">&lt;/size&gt;</span>
+  <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+  <span class="nt">&lt;resetValue&gt;</span>0x00000000<span class="nt">&lt;/resetValue&gt;</span>
+  <span class="nt">&lt;resetMask&gt;</span>0xFFFFFFFD<span class="nt">&lt;/resetMask&gt;</span>
+<span class="nt">&lt;/register&gt;</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">P101PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P107PFS</code> を <code class="language-plaintext highlighter-rouge">P100PFS</code> の派生とするため、次のように修正しました。（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16086" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">差分</a>）</p>
+
+<figure class="highlight"><pre><code class="language-diff" data-lang="diff"><span class="gd">- &lt;register derivedFrom="P000PFS"&gt;
+</span><span class="gi">+ &lt;register derivedFrom="P100PFS"&gt;
+</span><span class="gd">-   &lt;dim&gt;8&lt;/dim&gt;
+</span><span class="gi">+   &lt;dim&gt;7&lt;/dim&gt;
+</span>    &lt;dimIncrement&gt;0x4&lt;/dimIncrement&gt;
+<span class="gd">-   &lt;dimIndex&gt;0-7&lt;/dimIndex&gt;
+</span><span class="gi">+   &lt;dimIndex&gt;1-7&lt;/dimIndex&gt;
+</span>    &lt;name&gt;P10%sPFS&lt;/name&gt;
+    &lt;description&gt;P10%s Pin Function Control Register&lt;/description&gt;
+<span class="gd">-   &lt;addressOffset&gt;0x040&lt;/addressOffset&gt;
+</span><span class="gi">+   &lt;addressOffset&gt;0x044&lt;/addressOffset&gt;
+</span>    &lt;size&gt;32&lt;/size&gt;
+    &lt;access&gt;read-write&lt;/access&gt;
+    &lt;resetValue&gt;0x00000000&lt;/resetValue&gt;
+    &lt;resetMask&gt;0xFFFFFFFD&lt;/resetMask&gt;
+  &lt;/register&gt;</code></pre></figure>
+
+<p>また <code class="language-plaintext highlighter-rouge">P200PFS</code>、<code class="language-plaintext highlighter-rouge">P400PFS</code> も同様に修正しています。以下は <code class="language-plaintext highlighter-rouge">P200PFS</code> の例です。(→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L17444" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">差分</a>）</p>
+
+<figure class="highlight"><pre><code class="language-diff" data-lang="diff"><span class="gd">- &lt;register derivedFrom="P000PFS"&gt;
+</span><span class="gi">+ &lt;register derivedFrom="P100PFS"&gt;
+</span>    &lt;name&gt;P200PFS&lt;/name&gt;
+    &lt;description&gt;P200 Pin Function Control Register&lt;/description&gt;
+    &lt;addressOffset&gt;0x080&lt;/addressOffset&gt;
+    &lt;size&gt;32&lt;/size&gt;
+    &lt;access&gt;read-write&lt;/access&gt;
+    &lt;resetValue&gt;0x00000000&lt;/resetValue&gt;
+    &lt;resetMask&gt;0xFFFFFFFD&lt;/resetMask&gt;
+  &lt;/register&gt;</code></pre></figure>
+
+<p>ここまで <code class="language-plaintext highlighter-rouge">P100PFS</code> を例に 32ビット幅のフィールド定義だけを示してきましたが、全ての汎用 I/O 端子に <code class="language-plaintext highlighter-rouge">PxxxPFS_HA</code>（16ビット）、<code class="language-plaintext highlighter-rouge">PxxxPFS_BY</code>（8ビット）が割り当てられており、これら全てについても仕様に基づく検査と修正を行っています。</p>
+
+<p>以上が修正の全容です。</p>
+
+<p>いつの日か、こういう地味な作業を AI に任せられる日が来ると良いですネ。</p>
+
+<h2 id="svdconv-utility-による検査">SVDConv utility による検査</h2>
+<p><a href="https://github.com/Open-CMSIS-Pack/cmsis-toolbox/" title="Open-CMSIS-Pack/cmsis-toolbox: CMSIS-Toolbox">CMSIS-Toolbox</a> には、<a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/schema_1_2_gr.html" title="CMSIS-SVD: CMSIS-SVD Schema File">CMSIS-SVD スキーマ</a> に従い SVD ファイルを検査するコマンド <a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_SVDConv_pg.html" title="CMSIS-SVD: SVDConv utility">svdconv</a> が含まれています。そこで修正前の <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> をこのコマンドにかけてみましたが、Arduino IDE で見られたようなエラーは検出できませんでした。つまり、文法上は合っていても MCU の機能が正しく定義されているとは限らないと言うことです。</p>
+
+<p>代わりに次のようなエラーが３つ検出されました。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Expression marker found but no &lt;dim&gt; specified: 'P00 Pin Function Control Register'
+</code></pre></div></div>
+
+<p>ここで言う <code class="language-plaintext highlighter-rouge">&lt;dim&gt;</code> とは配列などの要素数を示すと思われますが、何をどう修正すれば良いのか分かりません。まぁ、Arduino IDE には影響が無さそうなので今のところは放置です :relieved:</p>
+
+<h2 id="あとがき">あとがき</h2>
+<p>最初は UNO R4 と同じ Cortex-M4 アーキテクチャの <code class="language-plaintext highlighter-rouge">R7FA6M1AD.svd</code> から <code class="language-plaintext highlighter-rouge">P100PSF</code> の定義をまるっとコピーし、「とりあえずエラーが出なくなったので OK！」とはしゃぎ、あとは「エキスパートによる修正を待つ」気でいました。</p>
+
+<p>ところがどっこい、GitHub に上げてしまったところからプルリクのハナシが飛び出し、急遽再チェックしたところ初版の間違いに気づき、また日本語 <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> の誤訳に惑わされ、Renesas に真偽を問い合わせたり…と。</p>
+
+<p>結局最後は自分で自分のケツを拭かざるを得なくなり、5000 行弱の該当部分をマニュアル片手に 1 行ずつチェックすると言う、実に地味な作業を強いられる羽目となりました。</p>
+
+<p>でもまぁ、それもこれも UNO R4 ユーザーの皆さんの役に立てると思えばハッピーです！ :beer:</p>
+
+<!-------------------------------------------------------------------------------------->]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集</title><link href="https://embedded-kiddie.github.io/2024/04/23/index.html" rel="alternate" type="text/html" title="サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集" /><published>2024-04-23T17:40:28+09:00</published><updated>2024-04-23T17:40:28+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/23/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/23/index.html"><![CDATA[<p>GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て <a href="https://ja.wikipedia.org/wiki/%E3%83%95%E3%83%AA%E3%83%BC%E3%83%9F%E3%82%A2%E3%83%A0" title="フリーミアム - Wikipedia">フリーミアム</a> もしくは無料で設置できます。</p>
 
 <p>フォームのサンプル画像をクリックすると実際に試すことができますが、良識あるテストをお願いします。サンプル画像をクリックしてから表示されるまでの時間や、<a href="https://developer.mozilla.org/ja/docs/Learn/Common_questions/Tools_and_setup/What_are_browser_developer_tools" title="ブラウザーの開発者ツールとは - ウェブ開発を学ぶ - MDN">ブラウザの開発ツール</a> で検知されるエラーの確認もまた設置の重要な要件になると思います。</p>
 
@@ -1775,89 +2615,4 @@ SWD コネクタが載ってます。</p>
 <p>ここまで順調にくれば、リストに「Toragi-LPC Writer CMSIS-DAP」が選択可能になっていると思います。万が一リストが空の場合には、改めてトラ技ARMライタのリセットボタンを押し「Search」ボタンを押してみます。<a href="https://www.nxp.jp/design/design-center/software/development-software/mcuxpresso-software-and-tools-/linkserver-for-microcontrollers:LINKERSERVER" title="マイクロコントローラ用Linkserver - NXP Semiconductors">LinkServer</a> が良きに計らってくれるハズです。</p>
 
 <h2 id="デバッガの詳しい使い方はlpcxpresso編で">デバッガの詳しい使い方は「LPCXpresso編」で！</h2>
-<p>Windows XP 時代のものを引っ張り出して遊ぶのにはそれなりの苦労がありますネ。僕の Mac も2013年製だし。でもあらためてトラ技ARMライタに感謝です :wink:</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ARM" /><category term="デバッグ" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">ライントレースのプログラム開発を楽しむためのアイテム</title><link href="https://embedded-kiddie.github.io/2024/03/17/items-for-line-trace-dev.html" rel="alternate" type="text/html" title="ライントレースのプログラム開発を楽しむためのアイテム" /><published>2024-03-17T13:25:54+09:00</published><updated>2024-03-17T13:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/17/items-for-line-trace-dev</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/17/items-for-line-trace-dev.html"><![CDATA[<p><img src="/images/2024/03-17/beauto-rover-and-mac.jpg" alt="ビュートローバーとMac" title="ビュートローバーとMac" /></p>
-
-<h2 id="プログラムは思った通りに動かず書いた通りに動く">プログラムは思った通りに動かず、書いた通りに動く！</h2>
-
-<p>たとえ半完成品であっても、自分がプログラムしたロボットカーが健気にコース上を動く様を見ると、可愛くなってきます。どうやったら早く滑らかにそして正確にトレースできるか工夫を凝らすのも、また楽しです。</p>
-
-<h3 id="ライントレースのコース">ライントレースのコース</h3>
-<p>「<a href="https://www.google.com/search?q=%E3%83%A9%E3%82%A4%E3%83%B3%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B9+%E3%82%B3%E3%83%BC%E3%82%B9+%E4%BD%9C%E6%88%90&amp;tbm=isch" title="ライントレースのコース作成 - Google 画像検索">ライントレース+コース+作成</a>」でググると、小Rや鋭角なカーブ、スラロームにジグザグコース、マーカー認識や車線変更など、巷では様々なお題がチャレンジされている様子がうかがえます。</p>
-
-<p><img src="/images/2024/03-17/line-trace-course.jpg" alt="ライントレースのコース" title="ライントレースのコース作成 Google 検索" /></p>
-
-<p>僕もホームセンターで大きめの白のプラ板を購入し、黒テープでコースを作成しています。テープは普通のビニールテープより、ちょっとお高いですが厚みが 0.1mm 程度の <a href="https://amzn.asia/d/aKtVJKp" title="Amazon - デンカ #246W 難燃ハーネステープ 黒 0.11mm×19mm×25m - 絶縁テープ - 産業・研究開発用品 通販">ハーネステープ</a> が柔らかくカーブが作り易くお勧めです。</p>
-
-<p><img src="/images/2024/03-17/my-course.jpg" alt="自作のコース" title="自作のライントレースコース" /></p>
-
-<p>またマルツオンラインで購入できる <a href="https://www.marutsu.co.jp/pc/i/226912/" title="マイコンレーサーコースセット MMCR-CC03 マルツエレック製 - 電子部品・半導体通販のマルツ">マイコンレーサーコースセット</a> も価格が税込￥664 とお手頃です。</p>
-
-<figure class="float-left">
-  <a href="/images/2024/03-17/MMCR-CC03.png" data-lightbox="image" title="マイコンレーサーコースセット MMCR-CC03 マルツエレック製 - 電子部品・半導体通販のマルツ">
-    <img src="/images/2024/03-17/MMCR-CC03.png" alt="マイコンレーサーコースセット MMCR-CC03 マルツエレック製 - 電子部品・半導体通販のマルツ" />
-  </a>
-</figure>
-
-<p>ただ細長い段ボールに卒業証書みたいに綺麗に丸められて届くので、平たく伸ばすのにちょっと苦労します。僕は「<a href="https://www.google.com/search?q=%E4%B8%B8%E3%81%BE%E3%81%A3%E3%81%9F%E7%B4%99%E3%82%92%E4%BC%B8%E3%81%B0%E3%81%99%E6%96%B9%E6%B3%95" title="丸まった紙を伸ばす方法 - Google 検索">丸まった紙を伸ばす方法</a>」の検索結果を参考にしました。</p>
-
-<p>硬く絞った雑巾（湿らせすぎると皺になるので注意！）で紙の裏を軽くなぞり、上から段ボールで抑えて伸ばすのが効果的です。</p>
-
-<h3 id="ラップタイマー">ラップタイマー</h3>
-
-<p><a href="/2024/03/16/arduino-lap-timer.html" title="Arduinoでライントレース用ラップタイマーを作る">前の記事</a> で紹介しましたが、Must アイテムでしょう！僕はほぼ既製品で作りましたが、LED や フォトトランジスタで回路を組んだり、カメラと画像処理を駆使したりと、楽しみ方も色々あると思います。</p>
-
-<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="ja" dir="ltr">ライントレースのプログラム開発を楽しむためのアイテム<a href="https://t.co/7nq74B7GzK">https://t.co/7nq74B7GzK</a> <a href="https://t.co/Cyq1cVRSXF">pic.twitter.com/Cyq1cVRSXF</a></p>&mdash; Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1769345823538831451?ref_src=twsrc%5Etfw">March 17, 2024</a></blockquote>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<h3 id="プログラム開発のお供">プログラム開発のお供</h3>
-
-<p>あると便利なグッズを紹介します。</p>
-
-<h4 id="ミニコース">ミニコース</h4>
-
-<figure class="float-left">
-  <a href="/images/2024/03-17/mini-course.jpg" data-lightbox="image" title="机上のミニコース">
-    <img src="/images/2024/03-17/mini-course.jpg" alt="机上のミニコース" />
-  </a>
-</figure>
-
-<p>ちゃんとラインを検出できるかを机上でテストするため、プラスチック段ボールの端材で作りました。特に開発の初期段階で活躍しました。</p>
-
-<p>黒字に白ラインの方ですが、黒画用紙だと意外に反射率が高く、いくつか試した中で最終的に厚さ 1mm のゴムシートに落ち着きました。</p>
-
-<p>写真にしてお披露目すると、雑な作りがよく分かっちゃいますネ。</p>
-
-<h4 id="スイッチ付き-usb-ケーブル">スイッチ付き USB ケーブル</h4>
-
-<p>プログラムを書き込む仕掛けに ISP（<a href="https://ja.wikipedia.org/wiki/In-System_Programming" title="In-System Programming - Wikipedia">In-System Programming</a>、Arduino の <a href="https://docs.arduino.cc/built-in-examples/arduino-isp/ArduinoISP/" title="Arduino as ISP and Arduino Bootloaders">ブートローダー書き込みにも使わている</a> ）というのがあり、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> の場合、リセットスイッチを押しながら USB ケーブルを接続すると <a href="https://ja.wikipedia.org/wiki/File_Allocation_Table" title="File Allocation Table - Wikipedia">FAT12</a> のファイルシステムとして認識されます。</p>
-
-<figure class="float-left">
-  <a href="/images/2024/03-17/usb-switch.jpg" data-lightbox="image" title="スイッチ付き USB ケーブル">
-    <img src="/images/2024/03-17/usb-switch.jpg" alt="スイッチ付き USB ケーブル" />
-  </a>
-</figure>
-
-<p>で、開発中には何度も USB ケーブルを抜き差しすることになるわけですが、この <a href="https://amzn.asia/d/dhRLasU" title="Amazon.co.jp: KAUMO スイッチ付き USBケーブル データOK 28cm データ結線済み (USBオス/USBメス) シーソースイッチ ロッカースイッチ (ブラック) : パソコン・周辺機器">スイッチ付き USB ケーブル</a> があれば抜き差しが不要になるという、とっても便利なシロモノです。</p>
-
-<p>中には充電用に電源系しか結線されていない商品もあるので、必ずデータ線が結線されているものを選んでください。</p>
-
-<h4 id="デバッガ">デバッガ</h4>
-
-<figure class="float-left">
-  <img src="/images/2024/03-24/arduino-toragi-small.jpg" alt="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?
-" />
-</figure>
-
-<p><a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る"><code class="language-plaintext highlighter-rouge">printf()</code> でデバッグする仕組み</a> は出来たのですが、やっぱりソースコードデバッグがしたい！ということで現在調査中です。</p>
-
-<p><a href="https://os.mbed.com/users/ytsuboi/notebook/ja-cmsis-dap/" title="[lang:ja] CMSIS-DAP - Mbed">CMSIS-DAP(Cortex Microcontroller Software Interface Standard - Debug Access Port)</a> をサポートしているデバッガなら OK だと思うのですが…。<del>分かったら報告するので楽しみにていて下さい！</del>
-→ 以下に書きました！</p>
-
-<ul>
-  <li><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a></li>
-  <li><a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</a></li>
-</ul>
-
-<h4 id="その他">その他</h4>
-
-<p>車輪にエンコーダーを付けたり、Bluetooth 通信を載せてみたり、やってみたいことはまだまだあるので、これからが楽しみです！</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="グッズ" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>Windows XP 時代のものを引っ張り出して遊ぶのにはそれなりの苦労がありますネ。僕の Mac も2013年製だし。でもあらためてトラ技ARMライタに感謝です :wink:</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ARM" /><category term="デバッグ" /><summary type="html"><![CDATA[]]></summary></entry></feed>
