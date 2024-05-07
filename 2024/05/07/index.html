@@ -104,7 +104,7 @@
 
 <p>この問題は、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> にも「<a href="https://github.com/arduino/ArduinoCore-renesas/issues/276" title='"Unable to parse SVD file" error when starting debugger · Issue #276 · arduino/ArduinoCore-renesas'>“Unable to parse SVD file” error when starting debugger #276</a>」として挙がっていますが、「無効な <code class="language-plaintext highlighter-rouge">P100PFS</code> から <code class="language-plaintext highlighter-rouge">P30xPFS</code> を派生させている」ことを訴えています。</p>
 
-<p><code class="language-plaintext highlighter-rouge">P100PFS</code> の <code class="language-plaintext highlighter-rouge">PFS</code> は Port Function Select の略で、汎用 I/O 端子 <code class="language-plaintext highlighter-rouge">P000</code> 〜 <code class="language-plaintext highlighter-rouge">P915</code> の入出力方向の切り替えや、プルアップ抵抗や割り込み有無の設定など、汎用 I/O 端子の機能を選択するレジスタ群になります。</p>
+<p><code class="language-plaintext highlighter-rouge">P100PFS</code> の <code class="language-plaintext highlighter-rouge">PFS</code> は Port Function Select の略で、汎用 I/O 端子 <code class="language-plaintext highlighter-rouge">P000</code> 〜 <code class="language-plaintext highlighter-rouge">P915</code> の入出力方向の切り替え、プルアップ抵抗や割り込み有無の設定など、汎用 I/O 端子の機能を選択するレジスタ群になります。</p>
 
 <p>ちなみにこのエラーによりプログラムが暴走したりすることはなく、単に IDE の UI を通してレジスタの内容を表示したり書き換えたりする機能に影響があるだけです。</p>
 
