@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-08T02:19:46+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</title><link href="https://embedded-kiddie.github.io/2024/05/07/index.html" rel="alternate" type="text/html" title="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！" /><published>2024-05-07T18:02:39+09:00</published><updated>2024-05-07T18:02:39+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/07/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/07/index.html"><![CDATA[<p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-08T07:44:41+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</title><link href="https://embedded-kiddie.github.io/2024/05/07/index.html" rel="alternate" type="text/html" title="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！" /><published>2024-05-07T18:02:39+09:00</published><updated>2024-05-07T18:02:39+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/07/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/07/index.html"><![CDATA[<p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ" /></p>
 
 <p>この度、次の２つの記事で紹介してきた <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の修正版</a> が、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">取り込まれることになりました</a>。</p>
 
@@ -1958,8 +1958,8 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
   </li>
   <li>
     <p>１目盛分の <strong>刻み幅</strong> を設定するレジスタ<br />
-  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。<br />
-  <br />さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> が設定できたりします。 <img src="/images/2024/04-04/clock-source-selecter.png" alt="クロックソース選択ブロック図" title="クロックソース選択ブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" /></p>
+  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。<br /><br />
+さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> が設定が可能です。</p>
   </li>
   <li>
     <p>秒針の進みを数える <strong>カウンタ</strong>・レジスタ<br />
@@ -1976,13 +1976,15 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 </ol>
 
 <h3 id="ra4m1-のタイマ">RA4M1 のタイマ</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-04/RA4M1-block-diagram.png" title="RA4M1のブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" data-lightbox="image">
-    <img src="/images/2024/04-04/RA4M1-block-diagram-small.png" alt="RA4M1のブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" />
-  </a>
-</figure>
+<p>一般論の次は、ルネサスのマイコン R7FA4M1AB のタイマです。Arm Cortex-M4 コアの直近で一定の時を刻む 24 ビットの <code class="language-plaintext highlighter-rouge">SysTick</code> タイマ（システムタイマ）のほか、アプリケーション用の高機能なタイマとして以下が備わっています。</p>
 
-<p>一般論のお次は、ルネサスのマイコン R7FA4M1AB（RA4M1 グループ）のタイマです。関係する要素をブロック図中の赤線で囲んでみました。</p>
+<ul>
+  <li>GPT32 × 2</li>
+  <li>GPT16 × 6</li>
+  <li>AGT × 2</li>
+  <li>RTC</li>
+  <li>WDT / IWDT</li>
+</ul>
 
 <p>特に２つの汎用タイマ 〜 GPT（32ビットが2個、16ビットが６個）と AGT（16ビットが２個）〜 が今回の調査のお題です。</p>
 

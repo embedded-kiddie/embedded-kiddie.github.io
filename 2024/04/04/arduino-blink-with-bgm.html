@@ -119,8 +119,8 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
   </li>
   <li>
     <p>１目盛分の <strong>刻み幅</strong> を設定するレジスタ<br>
-  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。<br>
-  <br>さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> が設定できたりします。 <img src="/images/2024/04-04/clock-source-selecter.png" alt="クロックソース選択ブロック図" title="クロックソース選択ブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より"></p>
+  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。<br><br>
+さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> が設定が可能です。</p>
   </li>
   <li>
     <p>秒針の進みを数える <strong>カウンタ</strong>・レジスタ<br>
@@ -137,13 +137,15 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 </ol>
 
 <h3 id="ra4m1-のタイマ">RA4M1 のタイマ</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-04/RA4M1-block-diagram.png" title="RA4M1のブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より" data-lightbox="image">
-    <img src="/images/2024/04-04/RA4M1-block-diagram-small.png" alt="RA4M1のブロック図 -「Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編」より">
-  </a>
-</figure>
+<p>一般論の次は、ルネサスのマイコン R7FA4M1AB のタイマです。Arm Cortex-M4 コアの直近で一定の時を刻む 24 ビットの <code class="language-plaintext highlighter-rouge">SysTick</code> タイマ（システムタイマ）のほか、アプリケーション用の高機能なタイマとして以下が備わっています。</p>
 
-<p>一般論のお次は、ルネサスのマイコン R7FA4M1AB（RA4M1 グループ）のタイマです。関係する要素をブロック図中の赤線で囲んでみました。</p>
+<ul>
+  <li>GPT32 × 2</li>
+  <li>GPT16 × 6</li>
+  <li>AGT × 2</li>
+  <li>RTC</li>
+  <li>WDT / IWDT</li>
+</ul>
 
 <p>特に２つの汎用タイマ 〜 GPT（32ビットが2個、16ビットが６個）と AGT（16ビットが２個）〜 が今回の調査のお題です。</p>
 
