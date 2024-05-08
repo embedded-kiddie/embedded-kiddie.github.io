@@ -57,7 +57,7 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ"></p>
+    <p><img src="/images/2024/05-07/PR305.jpg" alt='Update "Port mn Pin Function Select Register" in SVD file. #305' title='Update "Port mn Pin Function Select Register" in SVD file. #305'></p>
 
 <p>この度、次の２つの記事で紹介してきた <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の修正版</a> が、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>取り込まれることになりました</a>。</p>
 
@@ -68,7 +68,16 @@
 
 <p>おそらく UNO R4 用ボードマネージャーの更新（本記事執筆時点のバージョンは <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a>）という形で配信されると思います。</p>
 
+<figure class="float-left">
+  <a href="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" title="Arduino UNO R4 WiFi のソースコードデバッグ" data-lightbox="image">
+    <img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi-small.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ">
+  </a>
+  <figcaption></figcaption>
+</figure>
+
 <p>この修正により、UNO R4 Minima は <a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> をサポートした <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブ）で、UNO R4 WiFi は ESP32 を介したオンボードデバッガで、それぞれソースコードデバッグが可能になります。</p>
+
+<div class="clear-both"></div>
 
 <p>本来は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> の仕様と対比して修正内容を提示したいところですが、Renesas の文書による許諾が必要なため、<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="CC BY-SA 4.0 Deed - Attribution-ShareAlike 4.0 International - Creative Commons">CC BY-SA</a> の元に公開されている <a href="https://docs.arduino.cc/resources/pinouts/ABX00080-full-pinout.pdf">Arduino UNO R4 Minima のピン配図</a> と MIT ライセンスの元に公開されている <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を用いて説明を試みます。</p>
 
