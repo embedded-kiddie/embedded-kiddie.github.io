@@ -46,7 +46,8 @@
 
 <h2 id="mathjax">MathJax</h2>
 
-<h3 id="ディスプレイスタイル">ディスプレイスタイル</h3>
+<h3><code>$$...$$</code></h3>
+<h4 id="ディスプレイスタイル">ディスプレイスタイル</h4>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
 s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
@@ -54,7 +55,7 @@ s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span
 
 \[s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\]
 
-<h3 id="テキストスタイル">テキストスタイル</h3>
+<h4 id="テキストスタイル">テキストスタイル</h4>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
 s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
@@ -63,41 +64,86 @@ s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span
 \[\textstyle
 s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\]
 
-<h3 id="インライン">インライン</h3>
+<h3 id="-1"><code>\[...\]</code></h3>
+<h4 id="ディスプレイスタイル-1">ディスプレイスタイル</h4>
 
-<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト <span class="p">$$</span><span class="nb">
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">{</span>::nomarkdown<span class="p">}</span>
+<span class="p">\[</span><span class="nb">
 s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
-</span><span class="p">$$</span></code></pre></figure>
-
-<p>テキスト \(s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\)</p>
-
-<p>テキスト
+</span><span class="p">\]</span>
+<span class="p">{</span>:/<span class="p">}</span></code></pre></figure>
 
 \[
 s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 \]
-</p>
 
-<h3 id="複数行">複数行</h3>
+<h4 id="テキストスタイル-1">テキストスタイル</h4>
 
-<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
-</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="o">*</span><span class="p">}</span><span class="nb">
-</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\theta</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb">
-</span><span class="nv">\left</span><span class="o">[</span><span class="nb"> K</span><span class="o">(</span><span class="nv">\theta</span><span class="o">)</span><span class="nb"> </span><span class="nv">\left</span><span class="nb"> </span><span class="o">(</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\psi</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="nv">\right</span><span class="o">]</span><span class="nv">\
-\end</span><span class="p">{</span><span class="nb">equation</span><span class="o">*</span><span class="p">}</span><span class="nb">
-</span><span class="p">$$</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">{</span>::nomarkdown<span class="p">}</span>
+<span class="p">\[</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
+s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
+</span><span class="p">\]</span>
+<span class="p">{</span>:/<span class="p">}</span></code></pre></figure>
 
-\[\begin{equation*}
+\[ \textstyle
+s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
+\]
+
+<h3 id="beginend"><code>\begin{}...\end{}</code></h3>
+<h4 id="ディスプレイスタイル-2">ディスプレイスタイル</h4>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">{</span>::nomarkdown<span class="p">}</span>
+<span class="nt">\begin{equation*}</span>
+<span class="k">\frac</span><span class="p">{</span><span class="k">\partial</span> <span class="k">\theta</span><span class="p">}{</span><span class="k">\partial</span> t<span class="p">}</span>= <span class="k">\frac</span><span class="p">{</span><span class="k">\partial</span><span class="p">}{</span><span class="k">\partial</span> z<span class="p">}</span>
+<span class="k">\left</span><span class="na">[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]</span><span class="k">\
+</span><span class="nt">\end{equation*}</span>
+<span class="p">{</span>:/<span class="p">}</span></code></pre></figure>
+
+\begin{equation*}
 \frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
 \left[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]\
-\end{equation*}\]
+\end{equation*}
 
-<h3 id="複数行-インライン">複数行 インライン</h3>
-<p>テキスト \(\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
+<h4 id="テキストスタイル-2">テキストスタイル</h4>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">{</span>::nomarkdown<span class="p">}</span>
+<span class="nt">\begin{equation*}</span> <span class="k">\textstyle</span>
+<span class="k">\frac</span><span class="p">{</span><span class="k">\partial</span> <span class="k">\theta</span><span class="p">}{</span><span class="k">\partial</span> t<span class="p">}</span>= <span class="k">\frac</span><span class="p">{</span><span class="k">\partial</span><span class="p">}{</span><span class="k">\partial</span> z<span class="p">}</span>
+<span class="k">\left</span><span class="na">[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]</span><span class="k">\
+</span><span class="nt">\end{equation*}</span>
+<span class="p">{</span>:/<span class="p">}</span></code></pre></figure>
+
+\begin{equation*} \textstyle
+\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
+\left[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]\
+\end{equation*}
+
+<h3 id="インライン">インライン</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">インラインテキスト
+<span class="p">$$</span><span class="nb">
+s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span></code></pre></figure>
+
+<p>インラインテキスト
+\(s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\)</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">インラインテキスト
+<span class="p">$$</span><span class="nb">
+</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\theta</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\left</span><span class="o">[</span><span class="nb"> K</span><span class="o">(</span><span class="nv">\theta</span><span class="o">)</span><span class="nb"> </span><span class="nv">\left</span><span class="nb"> </span><span class="o">(</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\psi</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="nv">\right</span><span class="o">]</span><span class="nv">\
+</span><span class="p">{}</span><span class="nb">
+</span><span class="p">$$</span></code></pre></figure>
+
+<p>インラインテキスト
+\(\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
 \left[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]\
 {}\)</p>
 
-<p>When \(a \ne 0\), there are two solutions to (ax^2 + bx + c = 0) and they are
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">When <span class="p">$$</span><span class="nb"> a </span><span class="nv">\ne</span><span class="nb"> </span><span class="m">0</span><span class="nb"> </span><span class="p">$$</span>, there are two solutions to <span class="p">$$</span><span class="nb"> ax</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">+</span><span class="nb"> bx </span><span class="o">+</span><span class="nb"> c </span><span class="o">=</span><span class="nb"> </span><span class="m">0</span><span class="nb"> </span><span class="p">$$</span> and they are
+<span class="p">$$</span><span class="nb"> x </span><span class="o">=</span><span class="nb"> </span><span class="p">{</span><span class="o">-</span><span class="nb">b </span><span class="nv">\pm</span><span class="nb"> </span><span class="nv">\sqrt</span><span class="p">{</span><span class="nb">b</span><span class="p">^</span><span class="m">2</span><span class="o">-</span><span class="m">4</span><span class="nb">ac</span><span class="p">}</span><span class="nb"> </span><span class="nv">\over</span><span class="nb"> </span><span class="m">2</span><span class="nb">a</span><span class="p">}</span><span class="nb"> </span><span class="p">$$</span></code></pre></figure>
+
+<p>When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
 \(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</p>
 
       </div>
