@@ -48,7 +48,13 @@
 <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha512-LQNxIMR5rXv7o+b1l8+N1EZMfhG7iFZ9HhnbJkTp4zjNr5Wvst75AqUeFDxeRUa7l5vEDyUiAip//r+EFLLCyA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!-- To automatically render math in text elements, include the auto-render extension: -->
-<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin="anonymous" referrerpolicy="no-referrer" onload="renderMathInElement(document.body);"></script>
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  renderMathInElement(document.body);
+});
+</script>
 
 <h2 id="katex">KaTeX</h2>
 
@@ -93,14 +99,15 @@ s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 \end</span><span class="p">{</span><span class="nb">equation</span><span class="o">*</span><span class="p">}</span><span class="nb">
 </span><span class="p">$$</span></code></pre></figure>
 
-\[\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
+\[\begin{equation*}
+\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
 \left[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]\
-{}\]
+\end{equation*}\]
 
 <h3 id="複数行-インライン">複数行 インライン</h3>
-<p>テキスト \(\frac{60000\;[msec]}{tempo}
-\;\times\;
-\frac{n}{N4}\)</p>
+<p>テキスト \(\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
+\left[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]\
+{}\)</p>
 
 <p>When \(a \ne 0\), there are two solutions to (ax^2 + bx + c = 0) and they are
 \(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</p>
