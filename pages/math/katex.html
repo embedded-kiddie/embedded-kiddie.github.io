@@ -5,9 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>jekyllで数式のまとめ | Embedded Kiddie</title>
+<title>KaTeX | Embedded Kiddie</title>
 <meta name="generator" content="Jekyll v4.3.3" />
-<meta property="og:title" content="jekyllで数式のまとめ" />
+<meta property="og:title" content="KaTeX" />
 <meta name="author" content="Kingsman" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
@@ -17,9 +17,9 @@
 <meta property="og:site_name" content="Embedded Kiddie" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="jekyllで数式のまとめ" />
+<meta property="twitter:title" content="KaTeX" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Kingsman"},"description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"jekyllで数式のまとめ","url":"https://embedded-kiddie.github.io/pages/math/katex.html"}</script>
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Kingsman"},"description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"KaTeX","url":"https://embedded-kiddie.github.io/pages/math/katex.html"}</script>
 <!-- End Jekyll SEO tag -->
 
   <style>body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle}figure>img{display:block}figcaption{font-size:14px}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#828282;border-left:4px solid #e8e8e8;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #e8e8e8;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#828282;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #e8e8e8}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#f0f0f0;border:1px solid #dedede;border-bottom-color:#c9c9c9}table td{border:1px solid #e8e8e8}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}img{margin-bottom:1em;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}.twitter-tweet{padding-bottom:.5em}.quote{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border:solid 3px #6091d3;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child{margin:0;padding:0}footer.site-footer div{font-size:16px !important}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}img.simple{box-shadow:none;width:100%;height:auto}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}header h1,footer div{line-height:1.5}.lum-open .lum-img{margin:0 !important}.site-header{border-top:5px solid #424242;border-bottom:1px solid #e8e8e8;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:61.2px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#424242}.site-nav{float:right;line-height:61.2px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:1.7}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #e8e8e8;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#424242}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #e8e8e8;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#828282;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(30% - (1em / 2));width:calc(30% - 1em/2)}.footer-col-2{width:-webkit-calc(23% - (1em / 2));width:calc(23% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#828282}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
@@ -43,28 +43,39 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <h2 id="katex">KaTeX</h2>
+        <article class="post">
 
-<h3><code>$$...$$</code></h3>
-<h4 id="ディスプレイスタイル">ディスプレイスタイル</h4>
+  <header class="post-header">
+    <h1 class="post-title">KaTeX</h1>
+  </header>
 
-<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
+  <div class="post-content">
+    <h2 id="ディスプレイスタイル別行立ての数式">ディスプレイスタイル（別行立ての数式）</h2>
+<h3>・<code>$$...$$</code></h3>
+
+<p>文章とは別行で表示するには、前後を空行で囲みます。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"> 
+<span class="p">$$</span><span class="nb">
 s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
-</span><span class="p">$$</span></code></pre></figure>
+</span><span class="p">$$</span>
+ </code></pre></figure>
 
 \[s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\]
 
-<h4 id="テキストスタイル">テキストスタイル</h4>
+<p><code class="language-plaintext highlighter-rouge">\textstyle</code> を追加すると、テキストスタイルになります。</p>
 
-<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"> 
+<span class="p">$$</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
 s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
-</span><span class="p">$$</span></code></pre></figure>
+</span><span class="p">$$</span>
+ </code></pre></figure>
 
 \[\textstyle
 s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\]
 
-<h3 id="-1"><code>\[...\]</code></h3>
-<h4 id="ディスプレイスタイル-1">ディスプレイスタイル</h4>
+<h3 id="-1">・<code>\[...\]</code></h3>
+<p>jekyll で <code class="language-plaintext highlighter-rouge">\[...\]</code> が解釈されないように <code class="language-plaintext highlighter-rouge">{::nomarkdown}...{:/}</code> で囲む必要があります。</p>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">{</span>::nomarkdown<span class="p">}</span>
 <span class="p">\[</span><span class="nb">
@@ -75,8 +86,7 @@ s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span
 \[
 s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 \]
-
-<h4 id="テキストスタイル-1">テキストスタイル</h4>
+<p><code class="language-plaintext highlighter-rouge">\textstyle</code> を追加すると、テキストスタイルになります。</p>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">{</span>::nomarkdown<span class="p">}</span>
 <span class="p">\[</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
@@ -88,62 +98,153 @@ s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span
 s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 \]
 
-<h3 id="beginend"><code>\begin{}...\end{}</code></h3>
-<h4 id="ディスプレイスタイル-2">ディスプレイスタイル</h4>
+<h3 id="beginend">・<code>\begin{}...\end{}</code></h3>
+<p><code class="language-plaintext highlighter-rouge">{::nomarkdown}...{:/}</code> で囲んでもダメで、<code class="language-plaintext highlighter-rouge">$$...$$</code> で囲む必要があります。</p>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
-</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="o">*</span><span class="p">}</span><span class="nb">
-</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\theta</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb">
-</span><span class="nv">\left</span><span class="o">[</span><span class="nb"> K</span><span class="o">(</span><span class="nv">\theta</span><span class="o">)</span><span class="nb"> </span><span class="nv">\left</span><span class="nb"> </span><span class="o">(</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\psi</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="nv">\right</span><span class="o">]</span><span class="nv">\
-\end</span><span class="p">{</span><span class="nb">equation</span><span class="o">*</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
+  </span><span class="nv">\begin</span><span class="p">{</span><span class="nb">split</span><span class="p">}</span><span class="nb"> 
+    a </span><span class="p">&amp;</span><span class="o">=</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\cos</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx </span><span class="nv">\\</span><span class="nb">
+      </span><span class="p">&amp;</span><span class="nv">\quad</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(-</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\log</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx 
+  </span><span class="nv">\end</span><span class="p">{</span><span class="nb">split</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\end</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
 </span><span class="p">$$</span></code></pre></figure>
 
-\[\begin{equation*}
-\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
-\left[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]\
-\end{equation*}\]
+\[\begin{equation}
+  \begin{split} 
+    a &amp;= \int_0^\infty f(x) \sin x \cos x \, dx \\
+      &amp;\quad + \int_0^\infty f(-x) \sin x \log x \, dx 
+  \end{split}
+\end{equation}\]
 
-<h4 id="テキストスタイル-2">テキストスタイル</h4>
+<p>ただし <code class="language-plaintext highlighter-rouge">\textstyle</code> は、どこに追加しても効きません。</p>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
-</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="o">*</span><span class="p">}</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
-</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\theta</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb">
-</span><span class="nv">\left</span><span class="o">[</span><span class="nb"> K</span><span class="o">(</span><span class="nv">\theta</span><span class="o">)</span><span class="nb"> </span><span class="nv">\left</span><span class="nb"> </span><span class="o">(</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\psi</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="nv">\right</span><span class="o">]</span><span class="nv">\
-\end</span><span class="p">{</span><span class="nb">equation</span><span class="o">*</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
+  </span><span class="nv">\begin</span><span class="p">{</span><span class="nb">split</span><span class="p">}</span><span class="nb">
+    a </span><span class="p">&amp;</span><span class="o">=</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\cos</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx </span><span class="nv">\\</span><span class="nb">
+      </span><span class="p">&amp;</span><span class="nv">\quad</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(-</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\log</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx 
+  </span><span class="nv">\end</span><span class="p">{</span><span class="nb">split</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\end</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
 </span><span class="p">$$</span></code></pre></figure>
 
-\[\begin{equation*} \textstyle
-\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
-\left[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]\
-\end{equation*}\]
+\[\begin{equation} \textstyle
+  \begin{split}
+    a &amp;= \int_0^\infty f(x) \sin x \cos x \, dx \\
+      &amp;\quad + \int_0^\infty f(-x) \sin x \log x \, dx 
+  \end{split}
+\end{equation}\]
 
-<h3 id="インライン">インライン</h3>
+<p>単純な式なら <code class="language-plaintext highlighter-rouge">\textstyle</code> が効きます。</p>
 
-<figure class="highlight"><pre><code class="language-tex" data-lang="tex">インラインテキスト
-<span class="p">$$</span><span class="nb">
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
 s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\end</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
 </span><span class="p">$$</span></code></pre></figure>
 
-<p>インラインテキスト
-\(s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\)</p>
+\[\begin{equation} \textstyle
+s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
+\end{equation}\]
 
-<figure class="highlight"><pre><code class="language-tex" data-lang="tex">インラインテキスト
+<h2 id="数式モード文中の数式">数式モード（文中の数式）</h2>
+<h3 id="-2">・<code>$...$</code></h3>
+<p>MathJax 同様 <code class="language-plaintext highlighter-rouge">$...$</code> は使えず、<code class="language-plaintext highlighter-rouge">$$ \textstyle...$$</code> とする必要があります。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="p">$$</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
+s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span>
+テキスト</code></pre></figure>
+
+<p>テキスト
+\(\textstyle
+s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\)
+テキスト</p>
+
+<h3 id="-3">・<code>\(...\)</code></h3>
+<p>jekyll で <code class="language-plaintext highlighter-rouge">\(...\)</code> が解釈されないように <code class="language-plaintext highlighter-rouge">{::nomarkdown}...{:/}</code> で囲む必要があります。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="p">{</span>::nomarkdown<span class="p">}</span>
+<span class="p">\(</span><span class="nb">
+s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">}</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">i</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n </span><span class="p">{</span><span class="o">(</span><span class="nb">x</span><span class="p">_</span><span class="nb">i </span><span class="o">-</span><span class="nb"> </span><span class="nv">\overline</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb">
+</span><span class="p">\)</span>
+<span class="p">{</span>:/<span class="p">}</span>
+テキスト</code></pre></figure>
+
+<p>テキスト
+
+\(
+s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
+\)
+
+テキスト</p>
+
+<h3 id="beginend-1">・<code>\begin{}...\end{}</code></h3>
+<p>MathJax とは異なり、<code class="language-plaintext highlighter-rouge">align</code> や <code class="language-plaintext highlighter-rouge">equation</code>、<code class="language-plaintext highlighter-rouge">split</code> は別行でしか使えません。文章中に表示させたいなら <code class="language-plaintext highlighter-rouge">aligned</code> や <code class="language-plaintext highlighter-rouge">gathered</code> を使います。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
 <span class="p">$$</span><span class="nb">
-</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\theta</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb">
-</span><span class="nv">\left</span><span class="o">[</span><span class="nb"> K</span><span class="o">(</span><span class="nv">\theta</span><span class="o">)</span><span class="nb"> </span><span class="nv">\left</span><span class="nb"> </span><span class="o">(</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\psi</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> z</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="nv">\right</span><span class="o">]</span><span class="nv">\
-</span><span class="p">{}</span><span class="nb">
-</span><span class="p">$$</span></code></pre></figure>
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">gathered</span><span class="p">}</span><span class="nb">
+  a </span><span class="p">&amp;</span><span class="o">=</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\cos</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx </span><span class="nv">\\</span><span class="nb">
+    </span><span class="p">&amp;</span><span class="nv">\quad</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(-</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\log</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx 
+</span><span class="nv">\end</span><span class="p">{</span><span class="nb">gathered</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span>
+テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト</code></pre></figure>
 
-<p>インラインテキスト
-\(\frac{\partial \theta}{\partial t}= \frac{\partial}{\partial z}
-\left[ K(\theta) \left (\frac{\partial \psi}{\partial z} + 1 \right) \right]\
-{}\)</p>
+<p>テキスト
+\(\begin{gathered}
+  a &amp;= \int_0^\infty f(x) \sin x \cos x \, dx \\
+    &amp;\quad + \int_0^\infty f(-x) \sin x \log x \, dx 
+\end{gathered}\)
+テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト</p>
+
+<h2 id="様々な数式">様々な数式</h2>
+<h3 id="二次方程式の解">二次方程式の解</h3>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex">When <span class="p">$$</span><span class="nb"> a </span><span class="nv">\ne</span><span class="nb"> </span><span class="m">0</span><span class="nb"> </span><span class="p">$$</span>, there are two solutions to <span class="p">$$</span><span class="nb"> ax</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">+</span><span class="nb"> bx </span><span class="o">+</span><span class="nb"> c </span><span class="o">=</span><span class="nb"> </span><span class="m">0</span><span class="nb"> </span><span class="p">$$</span> and they are
 <span class="p">$$</span><span class="nb"> x </span><span class="o">=</span><span class="nb"> </span><span class="p">{</span><span class="o">-</span><span class="nb">b </span><span class="nv">\pm</span><span class="nb"> </span><span class="nv">\sqrt</span><span class="p">{</span><span class="nb">b</span><span class="p">^</span><span class="m">2</span><span class="o">-</span><span class="m">4</span><span class="nb">ac</span><span class="p">}</span><span class="nb"> </span><span class="nv">\over</span><span class="nb"> </span><span class="m">2</span><span class="nb">a</span><span class="p">}</span><span class="nb"> </span><span class="p">$$</span></code></pre></figure>
 
 <p>When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
 \(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</p>
+
+<h3 id="ローレンツ方程式">ローレンツ方程式</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">align</span><span class="p">}</span><span class="nb">
+  </span><span class="nv">\dot</span><span class="p">{</span><span class="nb">x</span><span class="p">}</span><span class="nb"> </span><span class="p">&amp;</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\sigma</span><span class="o">(</span><span class="nb">y</span><span class="o">-</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\\</span><span class="nb">
+  </span><span class="nv">\dot</span><span class="p">{</span><span class="nb">y</span><span class="p">}</span><span class="nb"> </span><span class="p">&amp;</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\rho</span><span class="nb"> x </span><span class="o">-</span><span class="nb"> y </span><span class="o">-</span><span class="nb"> xz </span><span class="nv">\\</span><span class="nb">
+  </span><span class="nv">\dot</span><span class="p">{</span><span class="nb">z</span><span class="p">}</span><span class="nb"> </span><span class="p">&amp;</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="o">-</span><span class="nv">\beta</span><span class="nb"> z </span><span class="o">+</span><span class="nb"> xy
+</span><span class="nv">\end</span><span class="p">{</span><span class="nb">align</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span></code></pre></figure>
+
+\[\begin{align}
+  \dot{x} &amp; = \sigma(y-x) \\
+  \dot{y} &amp; = \rho x - y - xz \\
+  \dot{z} &amp; = -\beta z + xy
+\end{align}\]
+
+<h3 id="テキスト">テキスト</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">このテンポと４分音符一拍分の長さ（時間）は
+<span class="p">$$</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
+</span><span class="nv">\frac</span><span class="p">{</span><span class="m">60000</span><span class="nv">\;</span><span class="o">[</span><span class="nb">msec</span><span class="o">]</span><span class="p">}{</span><span class="nv">\text</span><span class="p">{</span><span class="m">1</span><span class="nb">分間に数える回数</span><span class="p">}}</span><span class="nb">
+</span><span class="nv">\;\times\;</span><span class="nb">
+</span><span class="nv">\frac</span><span class="p">{</span><span class="nb">n</span><span class="p">}{</span><span class="nb">N</span><span class="m">4</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span>
+となります。</code></pre></figure>
+
+<p>このテンポと４分音符一拍分の長さ（時間）は
+\(\textstyle
+\frac{60000\;[msec]}{\text{1分間に数える回数}}
+\;\times\;
+\frac{n}{N4}\)
+となります。</p>
+
+  </div>
+
+</article>
 
       </div>
     </main>
@@ -173,6 +274,11 @@ s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span
 
 <script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});})();</script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" onload="renderMathInElement(document.body);"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" onload="renderMathInElement(document.body);console.log(Date.now());"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("DOMContentLoaded" + Date.now());
+});
+</script>
 </body>
 </html>
