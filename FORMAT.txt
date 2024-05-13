@@ -29,11 +29,3 @@ plugins:
     - jektex
 ＼
 
-
-var onload = function() {
-    const d = document;
-    d.addEventListener("DOMContentLoaded", (event) => {
-	    d.body.classList.remove("hideBody");
-	    d.body.classList.add("fadeInBody");
-    });
-}
