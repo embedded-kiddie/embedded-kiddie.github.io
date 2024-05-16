@@ -328,14 +328,14 @@
 
 <h4 id="mathjax-vs-katex">MathJax vs KaTeX</h4>
 
-<p>MathJax と KaTeX とでは、それぞれの多少の方言があり、どちらも一長一短あります。次の表は、サンプルページの作成で判明した差異へのリンクです。</p>
+<p>MathJax と KaTeX とでは、それぞれの多少の方言があり、どちらも一長一短あります。次の表は、サンプルページの作成で判明した相違へのリンクです。</p>
 
 <table>
   <thead>
     <tr>
       <th>スクリプト</th>
-      <th style="text-align: center">差異１</th>
-      <th style="text-align: center">差異２</th>
+      <th style="text-align: center">相違１</th>
+      <th style="text-align: center">相違２</th>
     </tr>
   </thead>
   <tbody>
@@ -366,15 +366,15 @@
 
 <h4 id="katex-vs-jektex">KaTeX vs JekTex</h4>
 
-<p>同じ KaTeX 系の JekTex ですが、以下の点でスクリプト版の KaTeX との差異が生じています。</p>
+<p>同じ KaTeX 系の JekTex ですが、以下の点でスクリプト版の KaTeX との相違が生じています。</p>
 
 <ul>
   <li>
-    <p><strong><code class="language-plaintext highlighter-rouge">&lt;code&gt;</code> タグ内の <code class="language-plaintext highlighter-rouge">\［...\］</code> や <code class="language-plaintext highlighter-rouge">\（...\）</code> を数式に変換してしまう</strong>（差異１、差異２）<br>
+    <p><strong><code class="language-plaintext highlighter-rouge">&lt;code&gt;</code> タグ内の <code class="language-plaintext highlighter-rouge">\［...\］</code> や <code class="language-plaintext highlighter-rouge">\（...\）</code> を数式に変換してしまう</strong>（相違１、相違２）<br>
 この問題を <a href="https://github.com/yagarea/jektex/issues/5" title="Rendering in pre or code tags · Issue #5 · yagarea/jektex">issue</a> に上げたところ、<a href="https://kramdown.gettalong.org/" title="Home - kramdown">kramdown</a> との関係で正規表現の組み立てに苦労しているものの、解決に向けた検討をしてくれることになりました。期待しましょう。</p>
   </li>
   <li>
-    <p><strong><code class="language-plaintext highlighter-rouge">\begin{}...\end{}</code> は <code class="language-plaintext highlighter-rouge">$$...$$</code> で囲う必要がある</strong>（差異３）<br>
+    <p><strong><code class="language-plaintext highlighter-rouge">\begin{}...\end{}</code> は <code class="language-plaintext highlighter-rouge">$$...$$</code> で囲う必要がある</strong>（相違３）<br>
 スクリプト版 KaTeX の場合、<code class="language-plaintext highlighter-rouge">\begin{}...\end{}</code> を「空行と <code class="language-plaintext highlighter-rouge">$$...$$</code> で囲む必要がある場合」（<a href="#mathjax-vs-katex">MathJax vs KaTeX</a> 参照）と「必要ない場合」があり、一貫性に欠けますが、JekTex の場合、<code class="language-plaintext highlighter-rouge">\begin{}...\end{}</code> は必ず <code class="language-plaintext highlighter-rouge">$$...$$</code> で囲う必要があります。</p>
   </li>
 </ul>
@@ -383,9 +383,9 @@
   <thead>
     <tr>
       <th>スクリプト</th>
-      <th style="text-align: center">差異１</th>
-      <th style="text-align: center">差異２</th>
-      <th style="text-align: center">差異３</th>
+      <th style="text-align: center">相違１</th>
+      <th style="text-align: center">相違２</th>
+      <th style="text-align: center">相違３</th>
     </tr>
   </thead>
   <tbody>
