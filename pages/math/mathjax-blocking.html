@@ -105,30 +105,36 @@ s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 <h3 id="beginend">・<code>\begin{}...\end{}</code></h3>
 <p>KaTex と異なり、空行と<code class="language-plaintext highlighter-rouge">$$...$$</code> で囲む必要がありませんが、<code class="language-plaintext highlighter-rouge">split</code> が効きません。</p>
 
-<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="nt">\begin{equation}</span>
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="nt">\begin{equation}</span>
   <span class="nt">\begin{split}</span> 
     a <span class="p">&amp;</span>= <span class="k">\int</span><span class="p">_</span>0<span class="p">^</span><span class="k">\infty</span> f(x) <span class="k">\sin</span> x <span class="k">\cos</span> x <span class="k">\,</span> dx <span class="k">\\</span>
       <span class="p">&amp;</span><span class="k">\quad</span> + <span class="k">\int</span><span class="p">_</span>0<span class="p">^</span><span class="k">\infty</span> f(-x) <span class="k">\sin</span> x <span class="k">\log</span> x <span class="k">\,</span> dx 
   <span class="nt">\end{split}</span>
-<span class="nt">\end{equation}</span></code></pre></figure>
+<span class="nt">\end{equation}</span>
+テキスト</code></pre></figure>
 
-<p>\begin{equation}
+<p>テキスト
+\begin{equation}
   \begin{split} 
     a &amp;= \int_0^\infty f(x) \sin x \cos x \, dx <br />
       &amp;\quad + \int_0^\infty f(-x) \sin x \log x \, dx 
   \end{split}
-\end{equation}</p>
+\end{equation}
+テキスト</p>
 
-<p><code class="language-plaintext highlighter-rouge">split</code> を効かせるためには <code class="language-plaintext highlighter-rouge">$$...$$</code> が必要です。</p>
+<p>ディスプレイ数式のまま <code class="language-plaintext highlighter-rouge">split</code> を効かせるためには 前後の空行と <code class="language-plaintext highlighter-rouge">$$...$$</code> が必要です。</p>
 
-<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"> 
+<span class="p">$$</span><span class="nb">
 </span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
   </span><span class="nv">\begin</span><span class="p">{</span><span class="nb">split</span><span class="p">}</span><span class="nb">
     a </span><span class="p">&amp;</span><span class="o">=</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\cos</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx </span><span class="nv">\\</span><span class="nb">
       </span><span class="p">&amp;</span><span class="nv">\quad</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(-</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\log</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx 
   </span><span class="nv">\end</span><span class="p">{</span><span class="nb">split</span><span class="p">}</span><span class="nb">
 </span><span class="nv">\end</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
-</span><span class="p">$$</span></code></pre></figure>
+</span><span class="p">$$</span>
+ </code></pre></figure>
 
 \[\begin{equation} \textstyle
   \begin{split}
@@ -182,7 +188,7 @@ s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 テキスト</p>
 
 <h3 id="beginend-1">・<code>\begin{}...\end{}</code></h3>
-<p>KaTeX と異なり、前後を空行なしにテキストで挟むと、文章中にディスプレイスタイルを入れ込む事が可能です。</p>
+<p>KaTeX と異なり、<code class="language-plaintext highlighter-rouge">align</code> や <code class="language-plaintext highlighter-rouge">equation</code>、<code class="language-plaintext highlighter-rouge">split</code> もインライン数式（文章中の数式）で表示することができます（LaTeX ではエラーと定義されているパターンです）。</p>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
 <span class="p">$$</span><span class="nb">
