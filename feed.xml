@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-18T14:01:51+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-18T18:37:59+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> も含めて比較をしてみました。<a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -7,7 +7,7 @@
 
 <figure class="float-left">
   <a href="/images/2024/05-16/chrome-FOUC.gif" title="FOUCの例" data-lightbox="image">
-    <img src="/images/2024/05-16/chrome-FOUC.gif" alt="FOUCの例" width="230" height="172" />
+    <img src="/images/2024/05-16/chrome-FOUC.gif" alt="FOUCの例" width="580" height="434" />
   </a>
   <figcaption>FOUC - Flash Of Unstyled Content</figcaption>
 </figure>
@@ -120,13 +120,13 @@
 <details>
 <figure class="flex">
   <a href="/images/2024/05-16/mathjax-network.jpg" title="MathJaxの読み込みタイムライン" data-lightbox="image">
-    <img src="/images/2024/05-16/mathjax-network-small.jpg" alt="MathJaxの読み込みタイムライン" width="247" height="206" />
+    <img src="/images/2024/05-16/mathjax-network-small.jpg" alt="MathJaxの読み込みタイムライン" width="459" height="383" />
   </a>
   <a href="/images/2024/05-16/mathjax-pagespeed1.jpg" title="MathJaxのページスピード結果（指標）" data-lightbox="image">
-    <img src="/images/2024/05-16/mathjax-pagespeed1-small.jpg" alt="MathJaxのページスピード結果（指標）" width="247" height="206" />
+    <img src="/images/2024/05-16/mathjax-pagespeed1-small.jpg" alt="MathJaxのページスピード結果（指標）" width="460" height="384" />
   </a>
   <a href="/images/2024/05-16/mathjax-pagespeed2.jpg" title="MathJaxのページスピード結果（診断）" data-lightbox="image">
-    <img src="/images/2024/05-16/mathjax-pagespeed2-small.jpg" alt="MathJaxのページスピード結果（診断）" width="247" height="206" />
+    <img src="/images/2024/05-16/mathjax-pagespeed2-small.jpg" alt="MathJaxのページスピード結果（診断）" width="460" height="384" />
   </a>
 </figure>
 </details>
@@ -145,13 +145,13 @@
 <details>
 <figure class="flex">
   <a href="/images/2024/05-16/mathjax-blocking-network.jpg" title="MathJax-blockingの読み込みタイムライン" data-lightbox="image">
-    <img src="/images/2024/05-16/mathjax-blocking-network-small.jpg" alt="MathJax-blockingの読み込みタイムライン" width="246" height="211" />
+    <img src="/images/2024/05-16/mathjax-blocking-network-small.jpg" alt="MathJax-blockingの読み込みタイムライン" width="457" height="391" />
   </a>
   <a href="/images/2024/05-16/mathjax-blocking-pagespeed1.jpg" title="MathJax-blockingのページスピード結果（指標）" data-lightbox="image">
-    <img src="/images/2024/05-16/mathjax-blocking-pagespeed1-small.jpg" alt="MathJax-blockingのページスピード結果（指標）" width="248" height="212" />
+    <img src="/images/2024/05-16/mathjax-blocking-pagespeed1-small.jpg" alt="MathJax-blockingのページスピード結果（指標）" width="460" height="393" />
   </a>
   <a href="/images/2024/05-16/mathjax-blocking-pagespeed2.jpg" title="MathJax-blockingのページスピード結果（診断）" data-lightbox="image">
-    <img src="/images/2024/05-16/mathjax-blocking-pagespeed2-small.jpg" alt="MathJax-blockingのページスピード結果（診断）" width="247" height="212" />
+    <img src="/images/2024/05-16/mathjax-blocking-pagespeed2-small.jpg" alt="MathJax-blockingのページスピード結果（診断）" width="458" height="393" />
   </a>
 </figure>
 </details>
@@ -172,13 +172,13 @@
 <details>
 <figure class="flex">
   <a href="/images/2024/05-16/katex-network.jpg" title="KaTeXの読み込みタイムライン" data-lightbox="image">
-    <img src="/images/2024/05-16/katex-network-small.jpg" alt="KaTeXの読み込みタイムライン" width="246" height="206" />
+    <img src="/images/2024/05-16/katex-network-small.jpg" alt="KaTeXの読み込みタイムライン" width="457" height="382" />
   </a>
   <a href="/images/2024/05-16/katex-pagespeed1.jpg" title="KaTeXのページスピード結果（指標）" data-lightbox="image">
-    <img src="/images/2024/05-16/katex-pagespeed1-small.jpg" alt="KaTeXのページスピード結果（指標）" width="248" height="207" />
+    <img src="/images/2024/05-16/katex-pagespeed1-small.jpg" alt="KaTeXのページスピード結果（指標）" width="460" height="394" />
   </a>
   <a href="/images/2024/05-16/katex-pagespeed2.jpg" title="KaTeXのページスピード結果（診断）" data-lightbox="image">
-    <img src="/images/2024/05-16/katex-pagespeed2-small.jpg" alt="KaTeXのページスピード結果（診断）" width="248" height="207" />
+    <img src="/images/2024/05-16/katex-pagespeed2-small.jpg" alt="KaTeXのページスピード結果（診断）" width="460" height="394" />
   </a>
 </figure>
 </details>
@@ -204,13 +204,13 @@
 <details>
 <figure class="flex">
   <a href="/images/2024/05-16/katex-preload-network.jpg" title="KaTeX-preloadの読み込みタイムライン" data-lightbox="image">
-    <img src="/images/2024/05-16/katex-preload-network-small.jpg" alt="KaTeX-preloadの読み込みタイムライン" width="246" height="206" />
+    <img src="/images/2024/05-16/katex-preload-network-small.jpg" alt="KaTeX-preloadの読み込みタイムライン" width="457" height="382" />
   </a>
   <a href="/images/2024/05-16/katex-preload-pagespeed1.jpg" title="KaTeX-preloadのページスピード結果（指標）" data-lightbox="image">
-    <img src="/images/2024/05-16/katex-preload-pagespeed1-small.jpg" alt="KaTeX-preloadのページスピード結果（指標）" width="248" height="207" />
+    <img src="/images/2024/05-16/katex-preload-pagespeed1-small.jpg" alt="KaTeX-preloadのページスピード結果（指標）" width="460" height="384" />
   </a>
   <a href="/images/2024/05-16/katex-preload-pagespeed2.jpg" title="KaTeX-preloadのページスピード結果（診断）" data-lightbox="image">
-    <img src="/images/2024/05-16/katex-preload-pagespeed2-small.jpg" alt="KaTeX-preloadのページスピード結果（診断）" width="248" height="207" />
+    <img src="/images/2024/05-16/katex-preload-pagespeed2-small.jpg" alt="KaTeX-preloadのページスピード結果（診断）" width="460" height="384" />
   </a>
 </figure>
 </details>
@@ -243,13 +243,13 @@
 <details>
 <figure class="flex">
   <a href="/images/2024/05-16/jektex-network.jpg" title="JekTexの読み込みタイムライン" data-lightbox="image">
-    <img src="/images/2024/05-16/jektex-network-small.jpg" alt="JekTexの読み込みタイムライン" width="246" height="206" />
+    <img src="/images/2024/05-16/jektex-network-small.jpg" alt="JekTexの読み込みタイムライン" width="457" height="382" />
   </a>
   <a href="/images/2024/05-16/jektex-pagespeed1.jpg" title="JekTexのページスピード結果（指標）" data-lightbox="image">
-    <img src="/images/2024/05-16/jektex-pagespeed1-small.jpg" alt="JekTexのページスピード結果（指標）" width="248" height="210" />
+    <img src="/images/2024/05-16/jektex-pagespeed1-small.jpg" alt="JekTexのページスピード結果（指標）" width="460" height="390" />
   </a>
   <a href="/images/2024/05-16/jektex-pagespeed2.jpg" title="JekTexのページスピード結果（診断）" data-lightbox="image">
-    <img src="/images/2024/05-16/jektex-pagespeed2-small.jpg" alt="JekTexのページスピード結果（診断）" width="248" height="210" />
+    <img src="/images/2024/05-16/jektex-pagespeed2-small.jpg" alt="JekTexのページスピード結果（診断）" width="460" height="390" />
   </a>
 </figure>
 </details>
@@ -292,7 +292,7 @@
 
 <figure class="float-left">
   <a href="/images/2024/05-16/context-menu.png" title="MathJaxのコンテキストメニュー" data-lightbox="image">
-    <img src="/images/2024/05-16/context-menu-small.jpg" alt="MathJaxのコンテキストメニュー" width="230" height="134" />
+    <img src="/images/2024/05-16/context-menu-small.jpg" alt="MathJaxのコンテキストメニュー" width="459" height="266" />
   </a>
 </figure>
 
@@ -353,7 +353,7 @@
 
 <h3 id="用語について">用語について</h3>
 
-<p>Web サイトによって、単独の段落として表示される数式と文章中に表示される数式を識別する用語にゆらぎが見られたので、本サイトでは、<a href="https://www.latex-project.org/" title="LaTeX - A document preparation system">LaTeX project <span class="inline"><img src="/images/2024/05-16/latex-project-logo.svg" alt="The LaTeX Project logo" /></span></a> に掲載された、以下の文献中の用語「文章中の数式（インライン数式）と数式だけの行（ディスプレイ数式）」を参考にしました。</p>
+<p>Web サイトによって、単独の段落として表示される数式と文章中に表示される数式を識別する用語にゆらぎが見られたので、本サイトでは、<a href="https://www.latex-project.org/" title="LaTeX - A document preparation system">LaTeX project <span class="inline"><img src="/images/2024/05-16/latex-project-logo.svg" width="71" height="27" alt="The LaTeX Project logo" /></span></a> に掲載された、以下の文献中の用語「文章中の数式（インライン数式）と数式だけの行（ディスプレイ数式）」を参考にしました。</p>
 
 <ul>
   <li><a href="https://www.latex-project.org/help/documentation/short-math-guide_jpn.pdf">はやわかり LaTeX で数式組版 (Short Math Guide for LaTeX)</a></li>
