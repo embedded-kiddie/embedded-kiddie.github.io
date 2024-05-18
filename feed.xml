@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-18T19:18:44+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-19T06:34:51+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> も含めて比較をしてみました。<a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -1458,7 +1458,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
     sample.parentNode.appendChild(s);
   });
 })();
-</script>]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。]]></summary></entry><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-04-17T18:45:26+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
+</script>]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。]]></summary></entry><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-05-18T20:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
 
 <ul>
   <li><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編 - Embedded Kiddie">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a></li>
@@ -1527,7 +1527,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="ファームウェアのダウンロードと解凍">ファームウェアのダウンロードと解凍</h3>
 <figure class="float-left">
   <a href="/images/2024/04-18/toragi-firmware.png" title="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア" data-lightbox="image">
-    <img src="/images/2024/04-18/toragi-firmware-small.jpg" alt="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア" />
+    <img src="/images/2024/04-18/toragi-firmware-small.jpg" width="460" height="351" alt="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア" />
   </a>
 </figure>
 
@@ -1538,10 +1538,10 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="ファームウェアの書き込み">ファームウェアの書き込み</h3>
 <figure class="float-left">
   <a href="/images/2024/04-18/CRP-DISABLE.jpg" title="CRP DISABLE" data-lightbox="image">
-    <img src="/images/2024/04-18/CRP-DISABLE-small.jpg" alt="CRP DISABLE" />
+    <img src="/images/2024/04-18/CRP-DISABLE-small.jpg" width="457" height="163" alt="CRP DISABLE" />
   </a>
   <a href="/images/2024/04-18/toragi-button.jpg" title="トラ技ARMライタ基板上のタクトスイッチ" data-lightbox="image">
-    <img src="/images/2024/04-18/toragi-button-small.jpg" alt="トラ技ARMライタ基板上のタクトスイッチ" />
+    <img src="/images/2024/04-18/toragi-button-small.jpg" width="458" height="242" alt="トラ技ARMライタ基板上のタクトスイッチ" />
   </a>
 </figure>
 
@@ -1560,7 +1560,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <div class="quote clear-both">
 
 <h4 id="ターミナルapp-からのコピー方法">ターミナル.app からのコピー方法</h4>
-<p><span class="inline"><img src="/images/2024/04-18/terminal-app.png" title="ターミナル.app" alt="ターミナル.app" /></span> を起動し、<code class="language-plaintext highlighter-rouge">cp -X</code> とスペースを打ち込みます。続いてそこに <code class="language-plaintext highlighter-rouge">firmware.bin</code> をドラッグ＆ドロップし、さらに <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> をドラッグ＆ドロップすると、<code class="language-plaintext highlighter-rouge">cp -X</code> の後ろにコピー元のファイルとコピー先が入力されるので、リターンキーを押せば Mac 特有の拡張属性が付かずにコピーが完了します。</p>
+<p><span class="inline"><img src="/images/2024/04-18/terminal-app.png" width="108" height="27" title="ターミナル.app" alt="ターミナル.app" /></span> を起動し、<code class="language-plaintext highlighter-rouge">cp -X</code> とスペースを打ち込みます。続いてそこに <code class="language-plaintext highlighter-rouge">firmware.bin</code> をドラッグ＆ドロップし、さらに <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> をドラッグ＆ドロップすると、<code class="language-plaintext highlighter-rouge">cp -X</code> の後ろにコピー元のファイルとコピー先が入力されるので、リターンキーを押せば Mac 特有の拡張属性が付かずにコピーが完了します。</p>
 
 </div>
 
@@ -1570,7 +1570,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h4 id="mac-の場合">Mac の場合</h4>
 <figure class="float-left">
   <a href="/images/2024/04-18/usb-mac.png" title="MacのUSBドライバ" data-lightbox="image">
-    <img src="/images/2024/04-18/usb-mac-small.jpg" alt="MacのUSBドライバ" />
+    <img src="/images/2024/04-18/usb-mac-small.jpg" width="458" height="276" alt="MacのUSBドライバ" />
   </a>
 </figure>
 
@@ -1579,7 +1579,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h4 id="windows-の場合">Windows の場合</h4>
 <figure class="float-left">
   <a href="/images/2024/04-18/usb-windows.jpg" title="WindowsのUSBドライバ" data-lightbox="image">
-    <img src="/images/2024/04-18/usb-windows-small.jpg" alt="WindowsのUSBドライバ" />
+    <img src="/images/2024/04-18/usb-windows-small.jpg" width="460" height="299" alt="WindowsのUSBドライバ" />
   </a>
 </figure>
 
@@ -1589,7 +1589,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="トラ技-arm-ライタと-arduino-uno-r4-minima-の接続">トラ技 ARM ライタと Arduino UNO R4 Minima の接続</h3>
 <figure class="float-left">
   <a href="/images/2024/04-18/connection.jpg" title="トラ技 ARM ライタと Arduino UNO R4 Minima の接続" data-lightbox="image">
-    <img src="/images/2024/04-18/connection-small.jpg" alt="トラ技 ARM ライタと Arduino UNO R4 Minima の接続" />
+    <img src="/images/2024/04-18/connection-small.jpg" width="460" height="170" alt="トラ技 ARM ライタと Arduino UNO R4 Minima の接続" />
   </a>
 </figure>
 
@@ -1598,10 +1598,10 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="pc-との接続と設定">PC との接続と設定</h3>
 <figure class="float-left">
   <a href="/images/2024/03-24/CMSIS-DAP.jpg" title="書き込み装置に ARM CMSIS-DAP Compatible を選択" data-lightbox="image">
-    <img src="/images/2024/03-24/CMSIS-DAP-small.jpg" alt="書き込み装置に ARM CMSIS-DAP Compatible を選択" />
+    <img src="/images/2024/03-24/CMSIS-DAP-small.jpg" width="460" height="298" alt="書き込み装置に ARM CMSIS-DAP Compatible を選択" />
   </a>
   <a href="/images/2024/04-18/usb-devices.png" title="MacOS 上 の USB デバイスドライバ" data-lightbox="image">
-    <img src="/images/2024/04-18/usb-devices-small.png" alt="MacOS 上の USB デバイスドライバ" />
+    <img src="/images/2024/04-18/usb-devices-small.png" width="459" height="384" alt="MacOS 上の USB デバイスドライバ" />
   </a>
 </figure>
 
@@ -1622,7 +1622,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="コンパイルオプションの設定">コンパイルオプションの設定</h3>
 <figure class="float-left">
   <a href="/images/2024/04-18/compile-option.png" title="デバッグに最適化" data-lightbox="image">
-    <img src="/images/2024/04-18/compile-option-small.jpg" alt="デバッグに最適化" />
+    <img src="/images/2024/04-18/compile-option-small.jpg" width="459" height="320" alt="デバッグに最適化" />
   </a>
 </figure>
 
@@ -1631,13 +1631,13 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h2 id="デバッガの起動と-svd-ファイルの更新">デバッガの起動と SVD ファイルの更新</h2>
 <figure class="float-left">
   <a href="/images/2024/04-18/svd-error.jpg" title="Unable to parse SVD file" data-lightbox="image">
-    <img src="/images/2024/04-18/svd-error-small.jpg" alt="Unable to parse SVD file" />
+    <img src="/images/2024/04-18/svd-error-small.jpg" width="460" height="287" alt="Unable to parse SVD file" />
   </a>
 </figure>
 
-<p>適当なスケッチを準備し、デバッグ情報が付加されたオブジェクトを生成するため <span class="inline"><img src="/images/2024/04-18/button-compile.png" title="コンパイルボタン" alt="コンパイルボタン" /></span> で再コンパイルします。</p>
+<p>適当なスケッチを準備し、デバッグ情報が付加されたオブジェクトを生成するため <span class="inline"><img src="/images/2024/04-18/button-compile.png" width="27" height="27" title="コンパイルボタン" alt="コンパイルボタン" /></span> で再コンパイルします。</p>
 
-<p>次に <span class="inline"><img src="/images/2024/04-18/button-debug.png" title="デバッグボタン" alt="デバッグボタン" /></span> でデバッグを開始すると <code class="language-plaintext highlighter-rouge">Unable to parse SVD file</code> のエラーが発生するので、SVD ファイルへのパスを記録しておきます。</p>
+<p>次に <span class="inline"><img src="/images/2024/04-18/button-debug.png" width="27" height="27" title="デバッグボタン" alt="デバッグボタン" /></span> でデバッグを開始すると <code class="language-plaintext highlighter-rouge">Unable to parse SVD file</code> のエラーが発生するので、SVD ファイルへのパスを記録しておきます。</p>
 
 <p>またデバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> になっていることを確認してください。</p>
 
@@ -1647,9 +1647,9 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="デバッグの開始と終了">デバッグの開始と終了</h3>
 <p>これでデバッグができる準備が整ったハズです。行番号の左側をクリックするとブレークポイントが設定できるので、止めたいところをマーキングします。</p>
 
-<p><img src="/images/2024/04-18/break-point.png" alt="ブレークポイントの設定" title="ブレークポイントの設定" /></p>
+<p><img src="/images/2024/04-18/break-point.png" alt="ブレークポイントの設定" title="ブレークポイントの設定" width="1400" height="250" /></p>
 
-<p>デバッグの終了は <span class="inline"><img src="/images/2024/04-18/button-end-debug.png" title="デバッグの終了" alt="" /></span> ボタンで可能ですが、Minima はデバッガからの指示待ちで停止したままなので、リセットボタンで再起動してください。</p>
+<p>デバッグの終了は <span class="inline"><img src="/images/2024/04-18/button-end-debug.png" width="27" height="27" title="デバッグの終了" alt="" /></span> ボタンで可能ですが、Minima はデバッガからの指示待ちで停止したままなので、リセットボタンで再起動してください。</p>
 
 <h2 id="トラブルシューティング">トラブルシューティング</h2>
 <p>ここに辿り着くまでに出会ったエラーを載せておきます。</p>
@@ -1657,7 +1657,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="upload-error-failed-uploading-unloading-error-exit-status-74">Upload error: Failed uploading: unloading error: exit status 74</h3>
 <figure class="float-left">
   <a href="/images/2024/04-18/error-exit-status-74.jpg" title="Upload error: Failed uploading: unloading error: exit status 74" data-lightbox="image">
-    <img src="/images/2024/04-18/error-exit-status-74-small.jpg" alt="Upload error: Failed uploading: unloading error: exit status 74" />
+    <img src="/images/2024/04-18/error-exit-status-74-small.jpg" width="457" height="125" alt="Upload error: Failed uploading: unloading error: exit status 74" />
   </a>
 </figure>
 
@@ -1666,7 +1666,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="openocd-gdb-server-quit-unexpectedly-see-dbg-server-output-for-more-details">OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details.</h3>
 <figure class="float-left">
   <a href="/images/2024/04-18/error-openocd.jpg" title="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details." data-lightbox="image">
-    <img src="/images/2024/04-18/error-openocd-small.jpg" alt="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details." />
+    <img src="/images/2024/04-18/error-openocd-small.jpg" width="458" height="125" alt="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details." />
   </a>
 </figure>
 
@@ -1716,7 +1716,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <p><code class="language-plaintext highlighter-rouge">printf()</code> の行方を探すため、<a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">トラ技 ARM ライタ</a> でステップインしてみると、スカッ！と次の行に移動しちゃいます。どうやら空の関数っぽい挙動です。う〜ん…</p>
 
-<p><img src="/images/2024/04-14/debug-printf.jpg" alt="printf()をデバッグ" title="printf()をデバッグ" /></p>
+<p><img src="/images/2024/04-14/debug-printf.jpg" alt="printf()をデバッグ" title="printf()をデバッグ" width="1380" height="862" /></p>
 
 <ul>
   <li>Arduino UNO R4 のソースコードデバッグは、以下をご参照ください。
@@ -1757,7 +1757,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <p>当然ですが、<code class="language-plaintext highlighter-rouge">printf()</code> にステップイン出来ました。読みは正しかった様です :+1:</p>
 
-<p><img src="/images/2024/04-14/debug-printf-again.jpg" alt="再びprintf()をデバッグ" title="再びprintf()をデバッグ" /></p>
+<p><img src="/images/2024/04-14/debug-printf-again.jpg" alt="再びprintf()をデバッグ" title="再びprintf()をデバッグ" width="1379" height="862" /></p>
 
 <h3 id="printfの書式と動作確認">printfの書式と動作確認</h3>
 
@@ -1857,7 +1857,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <p>とはいえ、単純に未定義にしないのは親切心か、はたまた余計なお世話か？… 未だに見つからない定義箇所と共に謎は残ります。まぁ、どうでもイイことですが…</p>
 
-<p>以上、中途半ばな謎解きと小技でした :grin:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tips" /><category term="printf" /><summary type="html"><![CDATA[printf 使える？]]></summary></entry><entry><title type="html">Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介</title><link href="https://embedded-kiddie.github.io/2024/04/12/background-tone-player.html" rel="alternate" type="text/html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介" /><published>2024-04-12T13:02:37+09:00</published><updated>2024-04-12T13:02:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/12/background-tone-player</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/12/background-tone-player.html"><![CDATA[<p>BGM 再生といっても <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> のことです、悪しからず。</p>
+<p>以上、中途半ばな謎解きと小技でした :grin:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tips" /><category term="printf" /><summary type="html"><![CDATA[printf 使える？]]></summary></entry><entry><title type="html">Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介</title><link href="https://embedded-kiddie.github.io/2024/04/12/background-tone-player.html" rel="alternate" type="text/html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介" /><published>2024-04-12T13:02:37+09:00</published><updated>2024-05-18T20:44:14+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/12/background-tone-player</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/12/background-tone-player.html"><![CDATA[<p>BGM 再生といっても <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> のことです、悪しからず。</p>
 
 <p>あまり実用的な使い道は思いつかないですが、折角作ったので PR しちゃいます。興味のある方は「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</a>」に貼った動画を見てくれれば喜びます :grin:</p>
 
@@ -1871,10 +1871,10 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="backgroundmusicr4-のインストール">BackgroundMusicR4 のインストール</h3>
 <figure class="float-left">
   <a href="/images/2024/04-10/download-library.jpg" title="CallbackTimerR4-main.zipのダウンロード" data-lightbox="image">
-    <img src="/images/2024/04-10/download-library-small.jpg" alt="CallbackTimerR4-main.zipのダウンロード" />
+    <img src="/images/2024/04-10/download-library-small.jpg" width="457" height="276" alt="CallbackTimerR4-main.zipのダウンロード" />
   </a>
   <a href="/images/2024/04-09/include-library.jpg" title="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" data-lightbox="image">
-    <img src="/images/2024/04-09/include-library-small.jpg" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" />
+    <img src="/images/2024/04-09/include-library-small.jpg" width="459" height="205" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" />
   </a>
 </figure>
 
@@ -2276,14 +2276,14 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="インストール方法">インストール方法</h3>
 <figure class="float-left">
   <a href="/images/2024/04-09/download-library.jpg" title="CallbackTimerR4-main.zipのダウンロード" data-lightbox="image">
-    <img src="/images/2024/04-09/download-library-small.jpg" alt="CallbackTimerR4-main.zipのダウンロード" />
+    <img src="/images/2024/04-09/download-library-small.jpg" width="457" height="276" alt="CallbackTimerR4-main.zipのダウンロード" />
   </a>
   <a href="/images/2024/04-09/include-library.jpg" title="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" data-lightbox="image">
-    <img src="/images/2024/04-09/include-library-small.jpg" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" />
+    <img src="/images/2024/04-09/include-library-small.jpg" width="459" height="205" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" />
   </a>
 </figure>
 
-<p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
+<p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
 
 <p>続いて Arduino IDE メニューの「スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…」からダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
 
@@ -2335,7 +2335,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <p>むしろ次に紹介予定の <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> のように、何かと組み合わせて内部に隠蔽してしまうのが適した使い方でしょう。</p>
 
-<p>ということで、次回はその <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を紹介したいと思います :love_you_gesture:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[前回の記事 で、tone() と delay() による楽譜再生の課題と FspTimer クラス や既存ライブラリの調査結果について書きました。]]></summary></entry><entry><title type="html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</title><link href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" rel="alternate" type="text/html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" /><published>2024-04-04T13:25:54+09:00</published><updated>2024-04-04T13:25:54+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"><![CDATA[<p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
+<p>ということで、次回はその <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を紹介したいと思います :love_you_gesture:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[前回の記事 で、tone() と delay() による楽譜再生の課題と FspTimer クラス や既存ライブラリの調査結果について書きました。]]></summary></entry><entry><title type="html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</title><link href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" rel="alternate" type="text/html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" /><published>2024-04-04T13:25:54+09:00</published><updated>2024-05-18T20:52:23+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"><![CDATA[<p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
 
 <ul>
   <li>
@@ -2386,7 +2386,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>汎用タイマの仕組みを理解するには、ストップウォッチを想定すると良いです。ザックリですが、この種のタイマは次の図のような幾つかの基本要素で構成されてます。</p>
 
-<p><img src="/images/2024/04-04/timer-overview.jpg" alt="タイマを構成する要素" title="タイマを構成する要素" /></p>
+<p><img src="/images/2024/04-04/timer-overview.jpg" alt="タイマを構成する要素" title="タイマを構成する要素" width="1379" height="718" /></p>
 
 <ol>
   <li>
@@ -2408,7 +2408,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
   秒針の進みに応じてイベントを発生させるタイミングを設定するレジスタと、その時の動作を制御するレジスタがあります。イベントの発生により、割り込みを発生させたり、汎用出力ポートに HIGH または LOW の信号を出力したりすることが出来ます。<br />
   <br />イベント発生用のレジスタは、3. のカウンタ・レジスタとの比較でタイミングを決めるため、「<strong>コンペア・レジスタ</strong>」とか「<strong>マッチ・レジスタ</strong>」と呼ばれます。<br />
   <br />例えば、レジスタ A で汎用出力ポートを HIGH に、レジスタ B で LOW に、またレジスタ C でリセットする設定では、１目盛分の刻み幅と A、B、C から <strong>周波数</strong> と <strong>デューティ比</strong> が決まる PWM 出力を作り出せることになります。<br />
-  <br /><img src="/images/2024/04-04/counter-duty-pwm.jpg" alt="タイマレジスタとPWM出力の関係" title="タイマレジスタとPWM出力の関係" /></p>
+  <br /><img src="/images/2024/04-04/counter-duty-pwm.jpg" alt="タイマレジスタとPWM出力の関係" title="タイマレジスタとPWM出力の関係" width="1377" height="540" /></p>
   </li>
 </ol>
 
@@ -2473,11 +2473,11 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 </ul>
 
 <h2 id="自作のタイマ系ライブラリと-bgm-再生ライブラリ">自作のタイマ系ライブラリと BGM 再生ライブラリ</h2>
-<p>さて、楽譜には同じ高さの音を繋げて１つの音として演奏する <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> という記号が出てきます。例えば曲の速さが<span class="inline"><img src="/images/2024/04-04/tempo-155.png" title="テンポ=155" alt="テンポ=155" /></span> で、4分音符に16分音符が続くタイ<span class="inline"><img class="inline" src="/images/2024/04-04/tie-quater-16th.png" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>では484ミリ秒鳴らし続けなければなりません。また数秒間続く全音符のタイも度々登場します。</p>
+<p>さて、楽譜には同じ高さの音を繋げて１つの音として演奏する <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> という記号が出てきます。例えば曲の速さが<span class="inline"><img src="/images/2024/04-04/tempo-155.png" width="60" height="27" title="テンポ=155" alt="テンポ=155" /></span> で、4分音符に16分音符が続くタイ<span class="inline"><img class="inline" src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>では484ミリ秒鳴らし続けなければなりません。また数秒間続く全音符のタイも度々登場します。</p>
 
 <p>これを1ミリ秒刻みの割り込みで484回を数えたり、数千回を数えたりするのは CPU リソースの無駄使いで、数えるのはタイマに任せるのが得策です。</p>
 
-<p>ここで問題なのは長い周期の場合で、16ビットを目一杯使い分周比を最大にしても GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" alt="GPTの計算式" /></span> より約 1398ミリ秒（小数点以下切り捨て）、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" alt="AGTの計算式(1)" /></span> ≒ 21ミリ秒（同）までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータと分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" title="AGTの計算式(2)" alt="AGTの計算式(2)" /></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスではこれが出来ません。</p>
+<p>ここで問題なのは長い周期の場合で、16ビットを目一杯使い分周比を最大にしても GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" width="67.5" height="27" alt="GPTの計算式" /></span> より約 1398ミリ秒（小数点以下切り捨て）、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" width="65.57" height="27" alt="AGTの計算式(1)" /></span> ≒ 21ミリ秒（同）までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータと分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" width="84.852" height="27" title="AGTの計算式(2)" alt="AGTの計算式(2)" /></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスではこれが出来ません。</p>
 
 <p>またオーバーフロー割り込みを設定するメソッド <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp#L770" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code></a> を試してみましたが、うまく動かすことができませんでした。</p>
 
@@ -2492,7 +2492,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p>これで、どんなに長い音符も再生できるようになりました。メデタシ メデタシ。</p>
 
 <h2 id="次回は">次回は…</h2>
-<p>ハナシが長くなったので、ライブラリの解説は次回以降にさせていただきます :ghost:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！]]></summary></entry><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-03-26T20:45:16+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
+<p>ハナシが長くなったので、ライブラリの解説は次回以降にさせていただきます :ghost:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！]]></summary></entry><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" width="1600" height="1033" /></p>
 
 <p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
 
@@ -2503,14 +2503,14 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <figure class="float-left">
   <a href="/images/2024/03-26/01.jpg" data-lightbox="image" title="全体構成">
-      <img src="/images/2024/03-26/01-small.jpg" alt="全体構成" />
+      <img src="/images/2024/03-26/01-small.jpg" width="460" height="297" alt="全体構成" />
   </a>
   <a href="/images/2024/03-26/06.png" data-lightbox="image" title="ビューのレイアウト変更">
-    <img src="/images/2024/03-26/06.png" alt="ビューのレイアウト変更" />
+    <img src="/images/2024/03-26/06.png" width="1008" height="558" alt="ビューのレイアウト変更" />
   </a>
 </figure>
 
-<p>デバッグを開始すると、コンパイルだけしていた時より１つ増えて５つの “ビュー” が開きます。この時、右上の <span class="inline" title="Open Perspective"><img src="/images/2024/03-26/button-open-perspective.png" alt="Open Perspective" /></span>（Open Perspective）ボタンを押すといくつかの選択肢が出てくるので「Debug」を選びます。すると外観がデバッグに適した “ビュー” の配置に変更されます。</p>
+<p>デバッグを開始すると、コンパイルだけしていた時より１つ増えて５つの “ビュー” が開きます。この時、右上の <span class="inline" title="Open Perspective"><img src="/images/2024/03-26/button-open-perspective.png" width="27" height="27" alt="Open Perspective" /></span>（Open Perspective）ボタンを押すといくつかの選択肢が出てくるので「Debug」を選びます。すると外観がデバッグに適した “ビュー” の配置に変更されます。</p>
 
 <p>このように “Open Perspective” ボタンでその時々の作業内容に合わせて外観を変更できるので、好みで使い分けると良いでしょう（以下の解説は「Develop」を元にしています）。</p>
 
@@ -2520,7 +2520,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="project-explore-タブ">Project Explore タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/01-01.png" data-lightbox="image" title="Project Explore">
-      <img src="/images/2024/03-26/01-01.png" alt="Project Explore" />
+      <img src="/images/2024/03-26/01-01.png" width="750" height="390" alt="Project Explore" />
   </a>
 </figure>
 <p>プロジェクト、あるいはワークスペース全体のファイル構成をツリー形式で参照することができます。お馴染みだとは思いますが、ソースコードを選択し、エディタに表示することができるタブです。</p>
@@ -2528,7 +2528,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="peripherals-タブ">Peripherals タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/01-02.png" data-lightbox="image" title="Peripherals">
-    <img src="/images/2024/03-26/01-02.png" alt="Peripherals" />
+    <img src="/images/2024/03-26/01-02.png" width="750" height="390" alt="Peripherals" />
   </a>
 </figure>
 <p>ADC やタイマーなど、オンチップの周辺機能が一覧で表示されます。左側のチェックボックスを選択すると、<a href="#memory-タブ">③ Memory タブ</a> にレジスタの内容を表示することができます。</p>
@@ -2536,18 +2536,18 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="registers-タブ">Registers タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/01-03.png" data-lightbox="image" title="Registers">
-    <img src="/images/2024/03-26/01-03.png" alt="Registers" />
+    <img src="/images/2024/03-26/01-03.png" width="750" height="390" alt="Registers" />
   </a>
 </figure>
-<p>CPU のレジスタやスタックポインタ、プログラムカウンタなどを参照できます。<a href="#debug-タブ">⑤ デバッグタブ</a> 右上の <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンによるアセンブリ言語のステップ実行モード選択時に役立ちます。</p>
+<p>CPU のレジスタやスタックポインタ、プログラムカウンタなどを参照できます。<a href="#debug-タブ">⑤ デバッグタブ</a> 右上の <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" width="27" height="27" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンによるアセンブリ言語のステップ実行モード選択時に役立ちます。</p>
 
 <h4 id="symbol-viewer-タブ">Symbol Viewer タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/01-04.png" data-lightbox="image" title="Symbol Viewer">
-    <img src="/images/2024/03-26/01-04.png" alt="Symbol Viewer" />
+    <img src="/images/2024/03-26/01-04.png" width="750" height="390" alt="Symbol Viewer" />
   </a>
 </figure>
-<p><span class="inline" title="Browse for a file with symbol table"><img src="/images/2024/03-26/button-browse.png" alt="Browse for a file with symbol table" /></span>（Browse for a file with symbol table）ボタンで実行ファイル <code class="language-plaintext highlighter-rouge">*.axf</code> を指定すると、テキストやデータ、<a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss</a> など各セクションのメモリ配置情報を参照することができます。</p>
+<p><span class="inline" title="Browse for a file with symbol table"><img src="/images/2024/03-26/button-browse.png" width="27" height="27" alt="Browse for a file with symbol table" /></span>（Browse for a file with symbol table）ボタンで実行ファイル <code class="language-plaintext highlighter-rouge">*.axf</code> を指定すると、テキストやデータ、<a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss</a> など各セクションのメモリ配置情報を参照することができます。</p>
 
 <h3 id="-エディタ-ビュー">② エディタ ビュー</h3>
 <p>お馴染みの各種ファイルを編集したり表示したりする役割を持ったビューです。</p>
@@ -2555,7 +2555,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="ブレーク停止中の行">ブレーク（停止）中の行</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/02-01.png" data-lightbox="image" title="現在ブレーク（停止）中の行">
-    <img src="/images/2024/03-26/02-01.png" alt="現在ブレーク（停止）中の行" />
+    <img src="/images/2024/03-26/02-01.png" width="930" height="454" alt="現在ブレーク（停止）中の行" />
   </a>
 </figure>
 <p>現在停止中で、これから実行される行が若草色にハイライトされます。</p>
@@ -2563,7 +2563,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="カーソル位置の情報表示">カーソル位置の情報表示</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/02-02.png" data-lightbox="image" title="カーソル位置の情報表示">
-    <img src="/images/2024/03-26/02-02.png" alt="カーソル位置の情報表示" />
+    <img src="/images/2024/03-26/02-02.png" width="930" height="630" alt="カーソル位置の情報表示" />
   </a>
 </figure>
 <p>関数や変数、シンボルなどにカーソルを合わせると、その定義内容や変数の値を参照することができます。</p>
@@ -2571,26 +2571,26 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="右クリックでコンテキストメニューを表示">右クリックでコンテキストメニューを表示</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/02-03.png" data-lightbox="image" title="右クリックでコンテキストメニューを表示">
-    <img src="/images/2024/03-26/02-03.png" alt="右クリックでコンテキストメニューを表示" />
+    <img src="/images/2024/03-26/02-03.png" width="930" height="454" alt="右クリックでコンテキストメニューを表示" />
   </a>
 </figure>
 <p>特定の行で右クリックをするとコンテキストメニューが開きます。多くのメニューがありますが、デバッグに役立つのは次の４つでしょう。<br class="clear-both" /></p>
 
 <ul>
   <li>
-    <p><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" alt="Run to line" /></span> Run to line<br />
+    <p><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" width="27" height="27" alt="Run to line" /></span> Run to line<br />
 カーソルのある行まで実行します。</p>
   </li>
   <li>
-    <p><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" alt="Move to line" /></span> Move to line<br />
+    <p><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" width="27" height="27" alt="Move to line" /></span> Move to line<br />
 現在停止中の行からカーソルのある行にジャンプします。プログラムカウンタが直接書き換えられ、その間のコードは実行されません。問題のある箇所をすっ飛ばして処理を継続させたいと時に使います。</p>
   </li>
   <li>
-    <p><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" alt="Resume at line" /></span> Resume at line<br />
+    <p><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" width="27" height="27" alt="Resume at line" /></span> Resume at line<br />
 カーソルのある行から実行を再開します。<a href="#variables-タブ">④ Variables タブ</a> で変数の値を書き換えた後に、再評価したい場合に用います。</p>
   </li>
   <li>
-    <p><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
+    <p><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" width="27" height="27" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
 選択された変数や式を <a href="#expressions-タブ">④ Expressions タブ</a> に追加します。</p>
   </li>
 </ul>
@@ -2598,7 +2598,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="ブレークポイントの設定">ブレークポイントの設定</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/02-04.png" data-lightbox="image" title="ブレークポイントの設定">
-    <img src="/images/2024/03-26/02-04.png" alt="ブレークポイントの設定" />
+    <img src="/images/2024/03-26/02-04.png" width="930" height="594" alt="ブレークポイントの設定" />
   </a>
 </figure>
 <p>行番号をダブルクリックするか、カーソルのある行で右クリックしてコンテキストメニューを開き「Add Breakpoint…」を選択してブレークポイントを設定します。ブレークポイントの一覧は、<a href="#breakpoints-タブ">④ Breakpoints タブ</a> で確認することが出来ます。</p>
@@ -2609,7 +2609,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="console-タブ">Console タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-01.png" data-lightbox="image" title="Console">
-    <img src="/images/2024/03-26/03-01.png" alt="Console" />
+    <img src="/images/2024/03-26/03-01.png" width="952" height="504" alt="Console" />
   </a>
 </figure>
 <p>コンパイルの実行結果が表示される以外に、<code class="language-plaintext highlighter-rouge">printf()</code> の出力がここに表示されます。「<a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</a>」との競合については後述します。</p>
@@ -2617,7 +2617,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="problems-タブ">Problems タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-02.png" data-lightbox="image" title="Problems">
-    <img src="/images/2024/03-26/03-02.png" alt="Problems" />
+    <img src="/images/2024/03-26/03-02.png" width="800" height="192" alt="Problems" />
   </a>
 </figure>
 <p>実行中に起きた問題に関するリソース情報がここに表示されるのだと思います。実際に何か表示されたことがないのであくまでも想像ですが…</p>
@@ -2625,7 +2625,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="memory-タブ">Memory タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-03.png" data-lightbox="image" title="Memory">
-    <img src="/images/2024/03-26/03-03.png" alt="Memory" />
+    <img src="/images/2024/03-26/03-03.png" width="795" height="176" alt="Memory" />
   </a>
 </figure>
 <p>直接メモリのアドレスを指定（→ <a href="/images/2024/03-26/03-03-memory.png" data-lightbox="image" title="LPC13XXのメモリマップ">メモリマップ</a>）するか、<a href="#peripherals-タブ">① Peripherals タブ</a> でチェックを入れたレジスタの情報がここに表示されます。メモリ中の値を直接編集することも可能です。</p>
@@ -2633,7 +2633,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="properties-タブ">Properties タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-04.png" data-lightbox="image" title="Properties">
-    <img src="/images/2024/03-26/03-04.png" alt="Properties" />
+    <img src="/images/2024/03-26/03-04.png" width="793" height="176" alt="Properties" />
   </a>
 </figure>
 <p>実行オブジェクトのサイズなど、実行中のリソースに関する情報がここに示されます。</p>
@@ -2641,7 +2641,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="navigator-タブ">Navigator タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-05.png" data-lightbox="image" title="Navigator">
-    <img src="/images/2024/03-26/03-05.png" alt="Navigator" />
+    <img src="/images/2024/03-26/03-05.png" width="795" height="177" alt="Navigator" />
   </a>
 </figure>
 <p><a href="#project-explore-タブ">① Project Explore タブ</a> と同じなので、邪魔なら閉じちゃって良いと思います。</p>
@@ -2652,7 +2652,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="quickstart-panel-タブ">Quickstart Panel タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-01.png" data-lightbox="image" title="Quickstart Panel">
-    <img src="/images/2024/03-26/04-01.png" alt="Quickstart Panel" />
+    <img src="/images/2024/03-26/04-01.png" width="542" height="307" alt="Quickstart Panel" />
   </a>
 </figure>
 <p>色々なタスクのショートカットが集められたタブです。デバッグも一発で開始できて便利です。</p>
@@ -2660,7 +2660,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="variables-タブ">Variables タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-02.png" data-lightbox="image" title="Variables">
-    <img src="/images/2024/03-26/04-02.png" alt="Variables" />
+    <img src="/images/2024/03-26/04-02.png" width="678" height="384" alt="Variables" />
   </a>
 </figure>
 <p>実行中の関数内ローカル変数は、ここで参照できます。またセルをクリックして変数の値を直接変更することもできます。</p>
@@ -2668,7 +2668,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="breakpoints-タブ">Breakpoints タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-03.png" data-lightbox="image" title="Breakpoints">
-    <img src="/images/2024/03-26/04-03.png" alt="Breakpoints" />
+    <img src="/images/2024/03-26/04-03.png" width="678" height="384" alt="Breakpoints" />
   </a>
 </figure>
 <p><a href="#-エディタ-ビュー">② エディタビュー</a> で設定されたブレークポイントの一覧が表示されます。各ブレークポイントを一時的に無効にしたり有効にしたりするのもこのタブで行います。</p>
@@ -2676,7 +2676,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="outlines-タブ">Outlines タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-04.png" data-lightbox="image" title="Outlines">
-    <img src="/images/2024/03-26/04-04.png" alt="Outlines" />
+    <img src="/images/2024/03-26/04-04.png" width="676" height="386" alt="Outlines" />
   </a>
 </figure>
 <p>実行中のソースコードに定義されたシンボルや関数、グローバル変数の一覧が参照できます。各項目をクリックするとその箇所をエディタで示してくれるので、何気に便利なタブです。</p>
@@ -2684,7 +2684,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="expressions-タブ">Expressions タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-05.png" data-lightbox="image" title="Expressions">
-    <img src="/images/2024/03-26/04-05.png" alt="Expressions" />
+    <img src="/images/2024/03-26/04-05.png" width="676" height="386" alt="Expressions" />
   </a>
 </figure>
 <p>変数や式を <a href="#-エディタ-ビュー">② エディタビュー</a> で選択したり、直接セルに入力することで、それらの値を参照することが出来ます。当然、実行中のスコープ外にある変数や式などは無視されます。</p>
@@ -2695,23 +2695,23 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h4 id="debug-タブ">Debug タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/05.png" data-lightbox="image" title="Debug">
-    <img src="/images/2024/03-26/05.png" alt="Debug" />
+    <img src="/images/2024/03-26/05.png" width="1000" height="548" alt="Debug" />
   </a>
 </figure>
-<p>実行中の <a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF" title="コールスタック - Wikipedia">スタックフレーム</a> が表示されます。特に便利な機能として <span class="inline" title="View menu"><img src="/images/2024/03-26/button-view-menu.png" alt="View menu" /></span>（View menu）ボタンを押すとデバッグ制御用のボタンが表示されるので、このタブで集中的に実行をコントロールできるようになります。</p>
+<p>実行中の <a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF" title="コールスタック - Wikipedia">スタックフレーム</a> が表示されます。特に便利な機能として <span class="inline" title="View menu"><img src="/images/2024/03-26/button-view-menu.png" width="27" height="27" alt="View menu" /></span>（View menu）ボタンを押すとデバッグ制御用のボタンが表示されるので、このタブで集中的に実行をコントロールできるようになります。</p>
 
-<p>また <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンで <a href="#-エディタ-ビュー">② エディタビュー</a> に逆アセンブルされたコードを表示することができ、アセンブリ言語レベルでのステップ実行が可能になります。</p>
+<p>また <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" width="27" height="27" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンで <a href="#-エディタ-ビュー">② エディタビュー</a> に逆アセンブルされたコードを表示することができ、アセンブリ言語レベルでのステップ実行が可能になります。</p>
 
 <h3 id="ビューのレイアウト変更について">ビューのレイアウト変更について</h3>
 <figure class="float-left">
   <a href="/images/2024/03-26/07.png" data-lightbox="image" title="レイアウトをリセットする">
-    <img src="/images/2024/03-26/07.png" alt="レイアウトをリセットする" />
+    <img src="/images/2024/03-26/07.png" width="556" height="373" alt="レイアウトをリセットする" />
   </a>
 </figure>
 <p>“Open Perspective” ボタンを使う以外にも、マニュアルで各ビューの配置を変更したり、独立させたりすることが出来ますが、弄り過ぎて元に戻したくなることがあります。そんな時はメニューから「Window → Perspective → Reset Perspective…」を選びましょう。元の配置に戻してくれます。</p>
 
 <h2 id="デバッグ制御用アイコン">デバッグ制御用アイコン</h2>
-<p><img src="/images/2024/03-26/08-01.png" alt="デバッグ制御用アイコン" title="デバッグ制御用アイコン" /></p>
+<p><img src="/images/2024/03-26/08-01.png" alt="デバッグ制御用アイコン" title="デバッグ制御用アイコン" width="1148" height="92" /></p>
 
 <p>全体像が把握できたところで、いよいよデバッグ制御用のボタンを駆使してデバッグするワケですが、各ボタンの機能は全然難しくありません。</p>
 
@@ -2727,47 +2727,47 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
   </thead>
   <tbody>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-02.png" alt="全ブレークポイントをスキップ" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-02.png" width="50" height="50" alt="全ブレークポイントをスキップ" /></td>
       <td>Skip All Breakpoints</td>
       <td>全ブレークポイントをスキップする／しないを制御するトグルボタン</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-03.png" alt="続行（Resume）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-03.png" width="120" height="50" alt="続行（Resume）" /></td>
       <td>Resume</td>
       <td>停止中の実行を再開するボタン</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-04.png" alt="一時停止（Suspend）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-04.png" width="120" height="50" alt="一時停止（Suspend）" /></td>
       <td>Suspend</td>
       <td>実行中のプログラムを停止（ブレーク）させるボタン</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-05.png" alt="終了（Terminate）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-05.png" width="113" height="50" alt="終了（Terminate）" /></td>
       <td>Terminate</td>
       <td>デバッグを終了させるボタン</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-06.png" alt="ステップ・イン（Step In）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-06.png" width="50" height="50" alt="ステップ・イン（Step In）" /></td>
       <td>Step In</td>
       <td>最小の実行単位で、１行ごとの実行、または関数呼び出しであればその中に入って実行する</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-07.png" alt="ステップ・オーバー（Step Over）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-07.png" width="50" height="50" alt="ステップ・オーバー（Step Over）" /></td>
       <td>Step Over</td>
       <td>関数呼び出しであってもその中には入らず1行ごとに実行する</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-08.png" alt="ステップ・リターン（Step Return）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-08.png" width="50" height="50" alt="ステップ・リターン（Step Return）" /></td>
       <td>Step Return</td>
       <td>Step In で関数内に入った場合、その関数の終了まで実行し呼び出し元に戻る</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-09.png" alt="再スタート（Restart）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-09.png" width="50" height="50" alt="再スタート（Restart）" /></td>
       <td>Restart</td>
       <td>もう一度初めからスタートする</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-10.png" alt="再デバッグ（Debug）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-10.png" width="100" height="50" alt="再デバッグ（Debug）" /></td>
       <td>Debug</td>
       <td>デバッグ途中でソースコードを変更した時など、再度コンパイルからやり直してデバッグを開始する</td>
     </tr>
@@ -2790,30 +2790,30 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <h3 id="redlib-semihost-の設定">Redlib (semihost) の設定</h3>
 <figure class="float-left">
   <a href="/images/2024/03-26/redlib-semihost.jpg" title="Redlib(semihost)の設定" data-lightbox="image">
-    <img src="/images/2024/03-26/redlib-semihost-small.jpg" alt="Redlib(semihost)の設定" />
+    <img src="/images/2024/03-26/redlib-semihost-small.jpg" width="460" height="255" alt="Redlib(semihost)の設定" />
   </a>
 </figure>
 
 <p>LPCXpresso のメニューから「Project → Properties」を開き、「C/C++ Build → Settings → MCU Linker → Managed Linker Script」をたどり、「Library」に <a href="https://community.nxp.com/t5/LPCXpresso-IDE-FAQs/What-are-none-nohost-and-semihost-libraries/m-p/475327" title="What are none, nohost and semihost libraries? - NXP Community"><code class="language-plaintext highlighter-rouge">Redlib (semihost)</code></a> を選択します。そして再コンパイルすれば <code class="language-plaintext highlighter-rouge">printf()</code> の出力先がコンソールになります。</p>
 
-<p>以上！</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ARM" /><category term="デバッグ" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</title><link href="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html" rel="alternate" type="text/html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?" /><published>2024-03-24T23:53:41+09:00</published><updated>2024-03-24T23:53:41+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"><![CDATA[<p>Arduino UNO R4 でソースコードデバッグするには、<a href="https://www.segger.com/products/debug-probes/j-link/" title="SEGGER J-Link debug probes">Segger J-Link</a> と <a href="https://www.segger.com/products/development-tools/ozone-j-link-debugger/" title="Ozone – The Performance Analyzer">Ozone</a> を使えって公式サイトの <a href="https://docs.arduino.cc/tutorials/uno-r4-minima/debugger/">Debugging the Arduino UNO R4 Minima</a> には書いてあるけど、Arduino IDE でデバッグできないし、激安の怪しい奴は不安だし、かと言って Segger は高くて買う気になりません。</p>
+<p>以上！</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ARM" /><category term="デバッグ" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</title><link href="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html" rel="alternate" type="text/html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?" /><published>2024-03-24T23:53:41+09:00</published><updated>2024-05-19T05:09:49+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"><![CDATA[<p>Arduino UNO R4 でソースコードデバッグするには、<a href="https://www.segger.com/products/debug-probes/j-link/" title="SEGGER J-Link debug probes">Segger J-Link</a> と <a href="https://www.segger.com/products/development-tools/ozone-j-link-debugger/" title="Ozone – The Performance Analyzer">Ozone</a> を使えって公式サイトの <a href="https://docs.arduino.cc/tutorials/uno-r4-minima/debugger/">Debugging the Arduino UNO R4 Minima</a> には書いてあるけど、Arduino IDE でデバッグできないし、激安の怪しい奴は不安だし、かと言って Segger は高くて買う気になりません。</p>
 
 <p>でもって先日、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> に載っている <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">古い LPC1343 ボードがトラ技ARMライタと繋がった</a> のに気を良くしたのに加え、Arduino IDE の “書き込み装置” に <a href="https://openocd.org/" title="Open On-Chip Debugger">OpenOCD</a>（<a href="https://interface.cqpub.co.jp/wp-content/uploads/interface/2015/03/if03_096.pdf" title="プロなみJTAGデバッグを個人でも! オープンソースOpenOCD入門">コチラの記事</a> が分かり易いです）があったのを思い出し、もしかしたらトラ技ARMライタで Arduino UNO R4 のデバッグができるんじゃね？ と。</p>
 
 <p>ってことで、繋いじゃいました！</p>
 
-<p><img src="/images/2024/03-24/arduino-toragi.jpg" alt="Arduino UNO Minimaに繋いだトラ技ARMライタ" title="Arduino UNO Minimaに繋いだトラ技ARMライタ" /></p>
+<p><img src="/images/2024/03-24/arduino-toragi.jpg" alt="Arduino UNO Minimaに繋いだトラ技ARMライタ" title="Arduino UNO Minimaに繋いだトラ技ARMライタ" width="1380" height="792" /></p>
 
 <h2 id="arm-cmsis-dap-compatible">ARM CMSIS-DAP Compatible</h2>
 <figure class="float-left">
   <a href="/images/2024/03-24/CMSIS-DAP.jpg" title="ARM CMSIS-DAP Compatible" data-lightbox="image">
-    <img src="/images/2024/03-24/CMSIS-DAP-small.jpg" alt="ARM CMSIS-DAP Compatible" />
+    <img src="/images/2024/03-24/CMSIS-DAP-small.jpg" width="460" height="298" alt="ARM CMSIS-DAP Compatible" />
   </a>
 </figure>
 
 <p>今朝 Arduino IDE（バージョン：2.3.2）の「ツール → 書き込み装置」をみたら “ARM CMSIS-DAP Compatible” になってました。そう言えば何かアップデートされたような… まッ、細かいことは気にせず、まずは双方の JTAG/SWD コネクタの確認から。</p>
 
-<p><img src="/images/2024/03-24/arduino-toragi-pin.jpg" alt="Arduino UNO Minimaとトラ技ARMライタのピン配" title="Arduino UNO Minimaとトラ技ARMライタのピン配" /></p>
+<p><img src="/images/2024/03-24/arduino-toragi-pin.jpg" alt="Arduino UNO Minimaとトラ技ARMライタのピン配" title="Arduino UNO Minimaとトラ技ARMライタのピン配" width="1380" height="580" /></p>
 
 <p>UNO R4 Minima の場合、両者の接続には <a href="/2024/03/23/debug-probe-for-beauto-rover.html#単体版" title="マルツオンラインのトラ技ARMライタ">マルツオンラインのトラ技ARMライタ</a> に付属の <a href="https://www.google.com/search?q=1.27mm(%E3%83%8F%E3%83%BC%E3%83%95%E3%83%94%E3%83%83%E3%83%81)+2%C3%975(10P)+%E3%83%94%E3%83%B3%E3%83%98%E3%83%83%E3%83%80%E4%BB%98%E3%81%8D%E3%83%95%E3%83%A9%E3%83%83%E3%83%88%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB" title="Google 検索">1.27mm(ハーフピッチ) 2×5(10P) ピンヘッダ付きフラットケーブル</a> が使えます。電源は Minima 側から +5V が供給されますが、トラ技ARMライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> が繋がってないため（とりあえず後で繋げるとして）、トラ技側も USB に接続します。</p>
 
@@ -2845,18 +2845,18 @@ SWD コネクタが載ってます。</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unable to parse SVD file /Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/svd/R7FA4M1AB.svd: Error: SVD error: Invalid 'derivedFrom' "P100PFS" for register "P30%sPFS"
 </code></pre></div></div>
 
-<p><img src="/images/2024/03-24/SVD-file-error.jpg" alt="Unable to parse SVD file" title="Unable to parse SVD file" /></p>
+<p><img src="/images/2024/03-24/SVD-file-error.jpg" alt="Unable to parse SVD file" title="Unable to parse SVD file" width="1254" height="785" /></p>
 
 <p><code class="language-plaintext highlighter-rouge">R7FA4M1AB</code> といえば、UNO R4 に載っている Renesus 製 ARM MCU の型番です。そこでこのエラーを Google 検索してみると、Arduino 公式の Github にも <a href="https://github.com/arduino/ArduinoCore-renesas/issues/276" title="&quot;Unable to parse SVD file&quot; error when starting debugger · Issue #276 · arduino/ArduinoCore-renesas">issue</a> が上がっていました。</p>
 
 <h2 id="svdファイルとは何者">SVDファイルとは何者？</h2>
 <p><a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_validate_file_pg.html" title="CMSIS-SVD: SVD File Validation and Usage">SVDファイルの正体</a> を調べてみると “System View Description”、つまり MCU のレジスタや周辺装置の仕様を XML で記述したものとのこと。<a href="https://arm-software.github.io/CMSIS_5/General/html/index.html" title="CMSIS: Introduction">CMSISのサイト</a> に載っている全体像からすると、MCU の仕様違いを吸収する層に位置付けられていることが分かります。</p>
 
-<p><img src="/images/2024/03-24/CMSIS-overview.png" alt="CMSISの全体像とデバッガの位置付け" title="CMSISの全体像とデバッガの位置付け" /></p>
+<p><img src="/images/2024/03-24/CMSIS-overview.png" alt="CMSISの全体像とデバッガの位置付け" title="CMSISの全体像とデバッガの位置付け" width="886" height="325" /></p>
 
 <p>もう少し具体的に描くと、こんな感じでしょうか。よく出来ています。</p>
 
-<p><img src="/images/2024/03-24/block-diagram.jpg" alt="ARM MCUからArduino IDEまでのブロック図" title="ARM MCUからArduino IDEまでのブロック図" /></p>
+<p><img src="/images/2024/03-24/block-diagram.jpg" alt="ARM MCUからArduino IDEまでのブロック図" title="ARM MCUからArduino IDEまでのブロック図" width="1380" height="483" /></p>
 
 <p>正体が分かったところで Arduino IDE に添付された <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を覗き <code class="language-plaintext highlighter-rouge">P100PFS</code> を探してみましたが見つかりません。にもかかわらず別なところから <code class="language-plaintext highlighter-rouge">derivedFrom</code> で継承されてるじゃないですか！ しかもコレだけじゃなく <code class="language-plaintext highlighter-rouge">P100PFS_HA</code> とか <code class="language-plaintext highlighter-rouge">P100PFS_BY</code> も未定義なことが分かりました。</p>
 
@@ -2875,14 +2875,14 @@ SWD コネクタが載ってます。</p>
 → 2024年5月3日：Gist は削除しました。<a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">こちらのリポジトリ</a> からダウンロードして下さい。</li>
 </ul>
 
-<p><img src="/images/2024/03-24/arduino-debugger.jpg" alt="トラ技ARMライタで動作する Arduino debugger" title="トラ技ARMライタで動作する Arduino debugger" /></p>
+<p><img src="/images/2024/03-24/arduino-debugger.jpg" alt="トラ技ARMライタで動作する Arduino debugger" title="トラ技ARMライタで動作する Arduino debugger" width="2240" height="1400" /></p>
 
 <h3 id="注意事項">注意事項！</h3>
 <p>一応コピーした <code class="language-plaintext highlighter-rouge">P100PFS</code> 等のレジスタ定義はユーザーズマニュアルに照らして正しそうなことは確認しましたが、もちろん無保証なので扱いは自己責任でお願いします。</p>
 
 <p>また先にブレークポイントを設定しておかないとどこにも止まらないですし、デバッグを終了すると<del>ブートローダーが壊れるようで、</del> Minima のリセットボタンを<del>ダブル</del>クリックしてから「→」ボタンで書き込まないと復活しません。（2024/4/18 修正：単にデバッガからの指示待ちで停止しているだけなので、リセットするだけで OK でした）</p>
 
-<p><img src="/images/2024/03-24/error-status-74.jpg" alt="error: exit status 74" title="error: exit status 74" /></p>
+<p><img src="/images/2024/03-24/error-status-74.jpg" alt="error: exit status 74" title="error: exit status 74" width="1380" height="863" /></p>
 
 <h2 id="他力本願な願望">他力本願な願望</h2>
 <p>と言うことで、とりあえずトラ技ARMライタが Arduino IDE 上のデバッグに使えそうだと言うことまでは分かりました。残念ですが、あとはエキスパートの方にお任せしたいと思います（オィ）。</p>

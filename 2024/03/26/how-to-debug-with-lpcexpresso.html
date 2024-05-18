@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-03-26T20:45:16+09:00","datePublished":"2024-03-26T20:45:16+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"},"url":"https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-05-18T05:30:21+09:00","datePublished":"2024-03-26T20:45:16+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"},"url":"https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"}</script>
 <!-- End Jekyll SEO tag -->
 
   <style>body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#828282;border-left:4px solid #e8e8e8;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #e8e8e8;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#828282;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #e8e8e8}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#f0f0f0;border:1px solid #dedede;border-bottom-color:#c9c9c9}table td{border:1px solid #e8e8e8}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}.twitter-tweet{padding-bottom:.5em}.quote{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border:solid 3px #6091d3;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child{margin:0;padding:0}figcaption{margin-bottom:2em}footer.site-footer div{font-size:16px !important}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}img.simple{box-shadow:none;width:100%;height:auto}details:hover{cursor:pointer}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}header h1,footer div{line-height:1.5}.lum-open .lum-img{margin:0 !important}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.site-header{border-top:5px solid #424242;border-bottom:1px solid #e8e8e8;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#424242}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #e8e8e8;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#424242}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #e8e8e8;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#828282;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#828282}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
@@ -53,7 +53,7 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" /></p>
+    <p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" width="1600" height="1033" /></p>
 
 <p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
 
@@ -64,14 +64,14 @@
 
 <figure class="float-left">
   <a href="/images/2024/03-26/01.jpg" data-lightbox="image" title="全体構成">
-      <img src="/images/2024/03-26/01-small.jpg" alt="全体構成" />
+      <img src="/images/2024/03-26/01-small.jpg" width="460" height="297" alt="全体構成" />
   </a>
   <a href="/images/2024/03-26/06.png" data-lightbox="image" title="ビューのレイアウト変更">
-    <img src="/images/2024/03-26/06.png" alt="ビューのレイアウト変更" />
+    <img src="/images/2024/03-26/06.png" width="1008" height="558" alt="ビューのレイアウト変更" />
   </a>
 </figure>
 
-<p>デバッグを開始すると、コンパイルだけしていた時より１つ増えて５つの “ビュー” が開きます。この時、右上の <span class="inline" title="Open Perspective"><img src="/images/2024/03-26/button-open-perspective.png" alt="Open Perspective" /></span>（Open Perspective）ボタンを押すといくつかの選択肢が出てくるので「Debug」を選びます。すると外観がデバッグに適した “ビュー” の配置に変更されます。</p>
+<p>デバッグを開始すると、コンパイルだけしていた時より１つ増えて５つの “ビュー” が開きます。この時、右上の <span class="inline" title="Open Perspective"><img src="/images/2024/03-26/button-open-perspective.png" width="27" height="27" alt="Open Perspective" /></span>（Open Perspective）ボタンを押すといくつかの選択肢が出てくるので「Debug」を選びます。すると外観がデバッグに適した “ビュー” の配置に変更されます。</p>
 
 <p>このように “Open Perspective” ボタンでその時々の作業内容に合わせて外観を変更できるので、好みで使い分けると良いでしょう（以下の解説は「Develop」を元にしています）。</p>
 
@@ -81,7 +81,7 @@
 <h4 id="project-explore-タブ">Project Explore タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/01-01.png" data-lightbox="image" title="Project Explore">
-      <img src="/images/2024/03-26/01-01.png" alt="Project Explore" />
+      <img src="/images/2024/03-26/01-01.png" width="750" height="390" alt="Project Explore" />
   </a>
 </figure>
 <p>プロジェクト、あるいはワークスペース全体のファイル構成をツリー形式で参照することができます。お馴染みだとは思いますが、ソースコードを選択し、エディタに表示することができるタブです。</p>
@@ -89,7 +89,7 @@
 <h4 id="peripherals-タブ">Peripherals タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/01-02.png" data-lightbox="image" title="Peripherals">
-    <img src="/images/2024/03-26/01-02.png" alt="Peripherals" />
+    <img src="/images/2024/03-26/01-02.png" width="750" height="390" alt="Peripherals" />
   </a>
 </figure>
 <p>ADC やタイマーなど、オンチップの周辺機能が一覧で表示されます。左側のチェックボックスを選択すると、<a href="#memory-タブ">③ Memory タブ</a> にレジスタの内容を表示することができます。</p>
@@ -97,18 +97,18 @@
 <h4 id="registers-タブ">Registers タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/01-03.png" data-lightbox="image" title="Registers">
-    <img src="/images/2024/03-26/01-03.png" alt="Registers" />
+    <img src="/images/2024/03-26/01-03.png" width="750" height="390" alt="Registers" />
   </a>
 </figure>
-<p>CPU のレジスタやスタックポインタ、プログラムカウンタなどを参照できます。<a href="#debug-タブ">⑤ デバッグタブ</a> 右上の <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンによるアセンブリ言語のステップ実行モード選択時に役立ちます。</p>
+<p>CPU のレジスタやスタックポインタ、プログラムカウンタなどを参照できます。<a href="#debug-タブ">⑤ デバッグタブ</a> 右上の <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" width="27" height="27" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンによるアセンブリ言語のステップ実行モード選択時に役立ちます。</p>
 
 <h4 id="symbol-viewer-タブ">Symbol Viewer タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/01-04.png" data-lightbox="image" title="Symbol Viewer">
-    <img src="/images/2024/03-26/01-04.png" alt="Symbol Viewer" />
+    <img src="/images/2024/03-26/01-04.png" width="750" height="390" alt="Symbol Viewer" />
   </a>
 </figure>
-<p><span class="inline" title="Browse for a file with symbol table"><img src="/images/2024/03-26/button-browse.png" alt="Browse for a file with symbol table" /></span>（Browse for a file with symbol table）ボタンで実行ファイル <code class="language-plaintext highlighter-rouge">*.axf</code> を指定すると、テキストやデータ、<a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss</a> など各セクションのメモリ配置情報を参照することができます。</p>
+<p><span class="inline" title="Browse for a file with symbol table"><img src="/images/2024/03-26/button-browse.png" width="27" height="27" alt="Browse for a file with symbol table" /></span>（Browse for a file with symbol table）ボタンで実行ファイル <code class="language-plaintext highlighter-rouge">*.axf</code> を指定すると、テキストやデータ、<a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss</a> など各セクションのメモリ配置情報を参照することができます。</p>
 
 <h3 id="-エディタ-ビュー">② エディタ ビュー</h3>
 <p>お馴染みの各種ファイルを編集したり表示したりする役割を持ったビューです。</p>
@@ -116,7 +116,7 @@
 <h4 id="ブレーク停止中の行">ブレーク（停止）中の行</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/02-01.png" data-lightbox="image" title="現在ブレーク（停止）中の行">
-    <img src="/images/2024/03-26/02-01.png" alt="現在ブレーク（停止）中の行" />
+    <img src="/images/2024/03-26/02-01.png" width="930" height="454" alt="現在ブレーク（停止）中の行" />
   </a>
 </figure>
 <p>現在停止中で、これから実行される行が若草色にハイライトされます。</p>
@@ -124,7 +124,7 @@
 <h4 id="カーソル位置の情報表示">カーソル位置の情報表示</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/02-02.png" data-lightbox="image" title="カーソル位置の情報表示">
-    <img src="/images/2024/03-26/02-02.png" alt="カーソル位置の情報表示" />
+    <img src="/images/2024/03-26/02-02.png" width="930" height="630" alt="カーソル位置の情報表示" />
   </a>
 </figure>
 <p>関数や変数、シンボルなどにカーソルを合わせると、その定義内容や変数の値を参照することができます。</p>
@@ -132,26 +132,26 @@
 <h4 id="右クリックでコンテキストメニューを表示">右クリックでコンテキストメニューを表示</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/02-03.png" data-lightbox="image" title="右クリックでコンテキストメニューを表示">
-    <img src="/images/2024/03-26/02-03.png" alt="右クリックでコンテキストメニューを表示" />
+    <img src="/images/2024/03-26/02-03.png" width="930" height="454" alt="右クリックでコンテキストメニューを表示" />
   </a>
 </figure>
 <p>特定の行で右クリックをするとコンテキストメニューが開きます。多くのメニューがありますが、デバッグに役立つのは次の４つでしょう。<br class="clear-both" /></p>
 
 <ul>
   <li>
-    <p><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" alt="Run to line" /></span> Run to line<br />
+    <p><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" width="27" height="27" alt="Run to line" /></span> Run to line<br />
 カーソルのある行まで実行します。</p>
   </li>
   <li>
-    <p><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" alt="Move to line" /></span> Move to line<br />
+    <p><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" width="27" height="27" alt="Move to line" /></span> Move to line<br />
 現在停止中の行からカーソルのある行にジャンプします。プログラムカウンタが直接書き換えられ、その間のコードは実行されません。問題のある箇所をすっ飛ばして処理を継続させたいと時に使います。</p>
   </li>
   <li>
-    <p><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" alt="Resume at line" /></span> Resume at line<br />
+    <p><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" width="27" height="27" alt="Resume at line" /></span> Resume at line<br />
 カーソルのある行から実行を再開します。<a href="#variables-タブ">④ Variables タブ</a> で変数の値を書き換えた後に、再評価したい場合に用います。</p>
   </li>
   <li>
-    <p><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
+    <p><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" width="27" height="27" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
 選択された変数や式を <a href="#expressions-タブ">④ Expressions タブ</a> に追加します。</p>
   </li>
 </ul>
@@ -159,7 +159,7 @@
 <h4 id="ブレークポイントの設定">ブレークポイントの設定</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/02-04.png" data-lightbox="image" title="ブレークポイントの設定">
-    <img src="/images/2024/03-26/02-04.png" alt="ブレークポイントの設定" />
+    <img src="/images/2024/03-26/02-04.png" width="930" height="594" alt="ブレークポイントの設定" />
   </a>
 </figure>
 <p>行番号をダブルクリックするか、カーソルのある行で右クリックしてコンテキストメニューを開き「Add Breakpoint…」を選択してブレークポイントを設定します。ブレークポイントの一覧は、<a href="#breakpoints-タブ">④ Breakpoints タブ</a> で確認することが出来ます。</p>
@@ -170,7 +170,7 @@
 <h4 id="console-タブ">Console タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-01.png" data-lightbox="image" title="Console">
-    <img src="/images/2024/03-26/03-01.png" alt="Console" />
+    <img src="/images/2024/03-26/03-01.png" width="952" height="504" alt="Console" />
   </a>
 </figure>
 <p>コンパイルの実行結果が表示される以外に、<code class="language-plaintext highlighter-rouge">printf()</code> の出力がここに表示されます。「<a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</a>」との競合については後述します。</p>
@@ -178,7 +178,7 @@
 <h4 id="problems-タブ">Problems タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-02.png" data-lightbox="image" title="Problems">
-    <img src="/images/2024/03-26/03-02.png" alt="Problems" />
+    <img src="/images/2024/03-26/03-02.png" width="800" height="192" alt="Problems" />
   </a>
 </figure>
 <p>実行中に起きた問題に関するリソース情報がここに表示されるのだと思います。実際に何か表示されたことがないのであくまでも想像ですが…</p>
@@ -186,7 +186,7 @@
 <h4 id="memory-タブ">Memory タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-03.png" data-lightbox="image" title="Memory">
-    <img src="/images/2024/03-26/03-03.png" alt="Memory" />
+    <img src="/images/2024/03-26/03-03.png" width="795" height="176" alt="Memory" />
   </a>
 </figure>
 <p>直接メモリのアドレスを指定（→ <a href="/images/2024/03-26/03-03-memory.png" data-lightbox="image" title="LPC13XXのメモリマップ">メモリマップ</a>）するか、<a href="#peripherals-タブ">① Peripherals タブ</a> でチェックを入れたレジスタの情報がここに表示されます。メモリ中の値を直接編集することも可能です。</p>
@@ -194,7 +194,7 @@
 <h4 id="properties-タブ">Properties タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-04.png" data-lightbox="image" title="Properties">
-    <img src="/images/2024/03-26/03-04.png" alt="Properties" />
+    <img src="/images/2024/03-26/03-04.png" width="793" height="176" alt="Properties" />
   </a>
 </figure>
 <p>実行オブジェクトのサイズなど、実行中のリソースに関する情報がここに示されます。</p>
@@ -202,7 +202,7 @@
 <h4 id="navigator-タブ">Navigator タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/03-05.png" data-lightbox="image" title="Navigator">
-    <img src="/images/2024/03-26/03-05.png" alt="Navigator" />
+    <img src="/images/2024/03-26/03-05.png" width="795" height="177" alt="Navigator" />
   </a>
 </figure>
 <p><a href="#project-explore-タブ">① Project Explore タブ</a> と同じなので、邪魔なら閉じちゃって良いと思います。</p>
@@ -213,7 +213,7 @@
 <h4 id="quickstart-panel-タブ">Quickstart Panel タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-01.png" data-lightbox="image" title="Quickstart Panel">
-    <img src="/images/2024/03-26/04-01.png" alt="Quickstart Panel" />
+    <img src="/images/2024/03-26/04-01.png" width="542" height="307" alt="Quickstart Panel" />
   </a>
 </figure>
 <p>色々なタスクのショートカットが集められたタブです。デバッグも一発で開始できて便利です。</p>
@@ -221,7 +221,7 @@
 <h4 id="variables-タブ">Variables タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-02.png" data-lightbox="image" title="Variables">
-    <img src="/images/2024/03-26/04-02.png" alt="Variables" />
+    <img src="/images/2024/03-26/04-02.png" width="678" height="384" alt="Variables" />
   </a>
 </figure>
 <p>実行中の関数内ローカル変数は、ここで参照できます。またセルをクリックして変数の値を直接変更することもできます。</p>
@@ -229,7 +229,7 @@
 <h4 id="breakpoints-タブ">Breakpoints タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-03.png" data-lightbox="image" title="Breakpoints">
-    <img src="/images/2024/03-26/04-03.png" alt="Breakpoints" />
+    <img src="/images/2024/03-26/04-03.png" width="678" height="384" alt="Breakpoints" />
   </a>
 </figure>
 <p><a href="#-エディタ-ビュー">② エディタビュー</a> で設定されたブレークポイントの一覧が表示されます。各ブレークポイントを一時的に無効にしたり有効にしたりするのもこのタブで行います。</p>
@@ -237,7 +237,7 @@
 <h4 id="outlines-タブ">Outlines タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-04.png" data-lightbox="image" title="Outlines">
-    <img src="/images/2024/03-26/04-04.png" alt="Outlines" />
+    <img src="/images/2024/03-26/04-04.png" width="676" height="386" alt="Outlines" />
   </a>
 </figure>
 <p>実行中のソースコードに定義されたシンボルや関数、グローバル変数の一覧が参照できます。各項目をクリックするとその箇所をエディタで示してくれるので、何気に便利なタブです。</p>
@@ -245,7 +245,7 @@
 <h4 id="expressions-タブ">Expressions タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/04-05.png" data-lightbox="image" title="Expressions">
-    <img src="/images/2024/03-26/04-05.png" alt="Expressions" />
+    <img src="/images/2024/03-26/04-05.png" width="676" height="386" alt="Expressions" />
   </a>
 </figure>
 <p>変数や式を <a href="#-エディタ-ビュー">② エディタビュー</a> で選択したり、直接セルに入力することで、それらの値を参照することが出来ます。当然、実行中のスコープ外にある変数や式などは無視されます。</p>
@@ -256,23 +256,23 @@
 <h4 id="debug-タブ">Debug タブ</h4>
 <figure class="float-left">
   <a href="/images/2024/03-26/05.png" data-lightbox="image" title="Debug">
-    <img src="/images/2024/03-26/05.png" alt="Debug" />
+    <img src="/images/2024/03-26/05.png" width="1000" height="548" alt="Debug" />
   </a>
 </figure>
-<p>実行中の <a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF" title="コールスタック - Wikipedia">スタックフレーム</a> が表示されます。特に便利な機能として <span class="inline" title="View menu"><img src="/images/2024/03-26/button-view-menu.png" alt="View menu" /></span>（View menu）ボタンを押すとデバッグ制御用のボタンが表示されるので、このタブで集中的に実行をコントロールできるようになります。</p>
+<p>実行中の <a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF" title="コールスタック - Wikipedia">スタックフレーム</a> が表示されます。特に便利な機能として <span class="inline" title="View menu"><img src="/images/2024/03-26/button-view-menu.png" width="27" height="27" alt="View menu" /></span>（View menu）ボタンを押すとデバッグ制御用のボタンが表示されるので、このタブで集中的に実行をコントロールできるようになります。</p>
 
-<p>また <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンで <a href="#-エディタ-ビュー">② エディタビュー</a> に逆アセンブルされたコードを表示することができ、アセンブリ言語レベルでのステップ実行が可能になります。</p>
+<p>また <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" width="27" height="27" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンで <a href="#-エディタ-ビュー">② エディタビュー</a> に逆アセンブルされたコードを表示することができ、アセンブリ言語レベルでのステップ実行が可能になります。</p>
 
 <h3 id="ビューのレイアウト変更について">ビューのレイアウト変更について</h3>
 <figure class="float-left">
   <a href="/images/2024/03-26/07.png" data-lightbox="image" title="レイアウトをリセットする">
-    <img src="/images/2024/03-26/07.png" alt="レイアウトをリセットする" />
+    <img src="/images/2024/03-26/07.png" width="556" height="373" alt="レイアウトをリセットする" />
   </a>
 </figure>
 <p>“Open Perspective” ボタンを使う以外にも、マニュアルで各ビューの配置を変更したり、独立させたりすることが出来ますが、弄り過ぎて元に戻したくなることがあります。そんな時はメニューから「Window → Perspective → Reset Perspective…」を選びましょう。元の配置に戻してくれます。</p>
 
 <h2 id="デバッグ制御用アイコン">デバッグ制御用アイコン</h2>
-<p><img src="/images/2024/03-26/08-01.png" alt="デバッグ制御用アイコン" title="デバッグ制御用アイコン" /></p>
+<p><img src="/images/2024/03-26/08-01.png" alt="デバッグ制御用アイコン" title="デバッグ制御用アイコン" width="1148" height="92" /></p>
 
 <p>全体像が把握できたところで、いよいよデバッグ制御用のボタンを駆使してデバッグするワケですが、各ボタンの機能は全然難しくありません。</p>
 
@@ -288,47 +288,47 @@
   </thead>
   <tbody>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-02.png" alt="全ブレークポイントをスキップ" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-02.png" width="50" height="50" alt="全ブレークポイントをスキップ" /></td>
       <td>Skip All Breakpoints</td>
       <td>全ブレークポイントをスキップする／しないを制御するトグルボタン</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-03.png" alt="続行（Resume）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-03.png" width="120" height="50" alt="続行（Resume）" /></td>
       <td>Resume</td>
       <td>停止中の実行を再開するボタン</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-04.png" alt="一時停止（Suspend）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-04.png" width="120" height="50" alt="一時停止（Suspend）" /></td>
       <td>Suspend</td>
       <td>実行中のプログラムを停止（ブレーク）させるボタン</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-05.png" alt="終了（Terminate）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-05.png" width="113" height="50" alt="終了（Terminate）" /></td>
       <td>Terminate</td>
       <td>デバッグを終了させるボタン</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-06.png" alt="ステップ・イン（Step In）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-06.png" width="50" height="50" alt="ステップ・イン（Step In）" /></td>
       <td>Step In</td>
       <td>最小の実行単位で、１行ごとの実行、または関数呼び出しであればその中に入って実行する</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-07.png" alt="ステップ・オーバー（Step Over）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-07.png" width="50" height="50" alt="ステップ・オーバー（Step Over）" /></td>
       <td>Step Over</td>
       <td>関数呼び出しであってもその中には入らず1行ごとに実行する</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-08.png" alt="ステップ・リターン（Step Return）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-08.png" width="50" height="50" alt="ステップ・リターン（Step Return）" /></td>
       <td>Step Return</td>
       <td>Step In で関数内に入った場合、その関数の終了まで実行し呼び出し元に戻る</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-09.png" alt="再スタート（Restart）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-09.png" width="50" height="50" alt="再スタート（Restart）" /></td>
       <td>Restart</td>
       <td>もう一度初めからスタートする</td>
     </tr>
     <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-10.png" alt="再デバッグ（Debug）" /></td>
+      <td><img loading="lazy" src="/images/2024/03-26/08-10.png" width="100" height="50" alt="再デバッグ（Debug）" /></td>
       <td>Debug</td>
       <td>デバッグ途中でソースコードを変更した時など、再度コンパイルからやり直してデバッグを開始する</td>
     </tr>
@@ -351,7 +351,7 @@
 <h3 id="redlib-semihost-の設定">Redlib (semihost) の設定</h3>
 <figure class="float-left">
   <a href="/images/2024/03-26/redlib-semihost.jpg" title="Redlib(semihost)の設定" data-lightbox="image">
-    <img src="/images/2024/03-26/redlib-semihost-small.jpg" alt="Redlib(semihost)の設定" />
+    <img src="/images/2024/03-26/redlib-semihost-small.jpg" width="460" height="255" alt="Redlib(semihost)の設定" />
   </a>
 </figure>
 
