@@ -57,7 +57,9 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ">この度、次の２つの記事で紹介してきた <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の修正版</a> が、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>取り込まれることになりました</a>。</p>
+    <p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ" width="1380" height="892"></p>
+
+<p>この度、次の２つの記事で紹介してきた <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の修正版</a> が、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>取り込まれることになりました</a>。</p>
 
 <ul>
   <li><a href="/2024/04/17/how-to-use-toragi-writer.html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</a></li>
@@ -68,9 +70,10 @@
 
 <figure class="float-left">
   <a href="/images/2024/05-07/PR305.jpg" title="Port mn Pin Function Select Register in SVD file. #305" data-lightbox="image">
-    <img src="/images/2024/05-07/PR305-small.jpg" alt="Port mn Pin Function Select Register in SVD file. #305">
+    <img src="/images/2024/05-07/PR305-small.jpg" width="458" height="228" alt="Port mn Pin Function Select Register in SVD file. #305">
   </a>
 </figure>
+
 <p>この修正により、UNO R4 Minima は <a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> をサポートした <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブ）で、UNO R4 WiFi は ESP32 を介したオンボードデバッガで、それぞれソースコードデバッグが可能になります。</p>
 
 <div class="clear-both"></div>
@@ -96,14 +99,14 @@
 </ul>
 
 <h2 id="問題点の分析と修正方針">問題点の分析と修正方針</h2>
-<p>UNO R4 用オンボードマネージャのバージョン <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a> では、<span class="inline"><img src="/images/2024/04-18/button-debug.png" title="デバッグボタン" alt="デバッグボタン"> でデバッガを起動すると、以下のエラーが起きます。</span></p>
+<p>UNO R4 用オンボードマネージャのバージョン <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a> では、<span class="inline"><img src="/images/2024/04-18/button-debug.png" width="60" height="60" title="デバッグボタン" alt="デバッグボタン"> でデバッガを起動すると、以下のエラーが起きます。</span></p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unable to parse SVD file /Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/svd/R7FA4M1AB.svd: Error: SVD error: Invalid 'derivedFrom' "P100PFS" for register "P30%sPFS"
 </code></pre></div></div>
 
 <figure class="float-left">
   <a href="/images/2024/05-07/minima-schematics.jpg" title="Unable to parse SVD file" data-lightbox="image">
-    <img src="/images/2024/05-07/minima-schematics-small.jpg" alt="Unable to parse SVD file">
+    <img src="/images/2024/05-07/minima-schematics-small.jpg" width="459" height="293" alt="Unable to parse SVD file">
   </a>
 </figure>
 
@@ -154,7 +157,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="pfs-レジスタの概要">PFS レジスタの概要</h3>
 <figure class="float-left">
   <a href="/images/2024/05-07/cortex-peripherals.jpg" title="CORTEX PERIPHERALS" data-lightbox="image">
-    <img src="/images/2024/05-07/cortex-peripherals-small.jpg" alt="CORTEX PERIPHERALS">
+    <img src="/images/2024/05-07/cortex-peripherals-small.jpg" width="459" height="417" alt="CORTEX PERIPHERALS">
   </a>
 </figure>
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-18T18:37:59+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-18T19:18:44+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> も含めて比較をしてみました。<a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -373,7 +373,9 @@
   <li><a href="https://www.fourier.jp/techblog/articles/blocking-render/" title="JavaScriptの読み込み時にblocking=&quot;render&quot;でFOUC対策 - FOURIER TECH BLOG 〜 IT技術ブログ 〜">JavaScriptの読み込み時にblocking=”render”でFOUC対策</a></li>
   <li><a href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/script#blocking" title="&lt;script&gt;: スクリプト要素 - HTML: ハイパーテキストマークアップ言語 - MDN">&lt;script&gt;: スクリプト要素</a></li>
   <li><a href="https://daringfireball.net/projects/markdown/syntax#backslash" title="Daring Fireball: Markdown Syntax Documentation">Daring Fireball: Markdown Syntax Documentation</a></li>
-</ul>]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[MathJaxとKaTeXのページ表示速度とFOUCを評価していたら、JekTexというJekyllプラグインが爆速ということが分かりました。]]></summary></entry><entry><title type="html">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</title><link href="https://embedded-kiddie.github.io/2024/05/07/index.html" rel="alternate" type="text/html" title="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！" /><published>2024-05-07T18:02:39+09:00</published><updated>2024-05-10T18:39:39+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/07/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/07/index.html"><![CDATA[<p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ" />この度、次の２つの記事で紹介してきた <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の修正版</a> が、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">取り込まれることになりました</a>。</p>
+</ul>]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[MathJaxとKaTeXのページ表示速度とFOUCを評価していたら、JekTexというJekyllプラグインが爆速ということが分かりました。]]></summary></entry><entry><title type="html">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</title><link href="https://embedded-kiddie.github.io/2024/05/07/index.html" rel="alternate" type="text/html" title="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！" /><published>2024-05-07T18:02:39+09:00</published><updated>2024-05-10T18:39:39+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/07/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/07/index.html"><![CDATA[<p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ" width="1380" height="892" /></p>
+
+<p>この度、次の２つの記事で紹介してきた <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の修正版</a> が、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">取り込まれることになりました</a>。</p>
 
 <ul>
   <li><a href="/2024/04/17/how-to-use-toragi-writer.html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</a></li>
@@ -384,9 +386,10 @@
 
 <figure class="float-left">
   <a href="/images/2024/05-07/PR305.jpg" title="Port mn Pin Function Select Register in SVD file. #305" data-lightbox="image">
-    <img src="/images/2024/05-07/PR305-small.jpg" alt="Port mn Pin Function Select Register in SVD file. #305" />
+    <img src="/images/2024/05-07/PR305-small.jpg" width="458" height="228" alt="Port mn Pin Function Select Register in SVD file. #305" />
   </a>
 </figure>
+
 <p>この修正により、UNO R4 Minima は <a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> をサポートした <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブ）で、UNO R4 WiFi は ESP32 を介したオンボードデバッガで、それぞれソースコードデバッグが可能になります。</p>
 
 <div class="clear-both"></div>
@@ -412,14 +415,14 @@
 </ul>
 
 <h2 id="問題点の分析と修正方針">問題点の分析と修正方針</h2>
-<p>UNO R4 用オンボードマネージャのバージョン <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a> では、<span class="inline"><img src="/images/2024/04-18/button-debug.png" title="デバッグボタン" alt="デバッグボタン" /> でデバッガを起動すると、以下のエラーが起きます。</span></p>
+<p>UNO R4 用オンボードマネージャのバージョン <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a> では、<span class="inline"><img src="/images/2024/04-18/button-debug.png" width="60" height="60" title="デバッグボタン" alt="デバッグボタン" /> でデバッガを起動すると、以下のエラーが起きます。</span></p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unable to parse SVD file /Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/svd/R7FA4M1AB.svd: Error: SVD error: Invalid 'derivedFrom' "P100PFS" for register "P30%sPFS"
 </code></pre></div></div>
 
 <figure class="float-left">
   <a href="/images/2024/05-07/minima-schematics.jpg" title="Unable to parse SVD file" data-lightbox="image">
-    <img src="/images/2024/05-07/minima-schematics-small.jpg" alt="Unable to parse SVD file" />
+    <img src="/images/2024/05-07/minima-schematics-small.jpg" width="459" height="293" alt="Unable to parse SVD file" />
   </a>
 </figure>
 
@@ -468,7 +471,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h3 id="pfs-レジスタの概要">PFS レジスタの概要</h3>
 <figure class="float-left">
   <a href="/images/2024/05-07/cortex-peripherals.jpg" title="CORTEX PERIPHERALS" data-lightbox="image">
-    <img src="/images/2024/05-07/cortex-peripherals-small.jpg" alt="CORTEX PERIPHERALS" />
+    <img src="/images/2024/05-07/cortex-peripherals-small.jpg" width="459" height="417" alt="CORTEX PERIPHERALS" />
   </a>
 </figure>
 
@@ -1225,7 +1228,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <p>ただし、いつまでも無料に甘えているわけにはいかないので、突然閉じるカモです。</p>
 
 <h2 id="cusdis">Cusdis</h2>
-<p><img src="/images/2024/04-23/cusdis.jpg" alt="Cusdis" title="Cusdis" /></p>
+<p><img src="/images/2024/04-23/cusdis.jpg" alt="Cusdis" title="Cusdis" width="2000" height="1000" /></p>
 
 <p><a href="https://cusdis.com/" title="Cusdis - Lightweight, privacy-first, open-source comment system">Cusdis</a>（カスディス）は、Disqus の代替として開発されたオープンソースのコメントプラットフォームです。軽量かつプライバシーを最優先し、ユーザーをトラッキングしないことがウリです。</p>
 
@@ -1233,7 +1236,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <figure class="float-left">
   <a href="/images/2024/04-23/cusdis-create-new-site.png" title="新しくサイト名を入力" data-lightbox="image">
-    <img src="/images/2024/04-23/cusdis-create-new-site-small.jpg" alt="新しくサイト名を入力" />
+    <img src="/images/2024/04-23/cusdis-create-new-site-small.jpg" width="458" height="189" alt="新しくサイト名を入力" />
   </a>
 </figure>
 
@@ -1244,9 +1247,109 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <h4 id="サンプル">サンプル</h4>
 <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="46d191ea-3d38-45c9-b540-1a4ff42333b3" data-page-id="/2024/04/23/index" data-page-url="https://embedded-kiddie.github.io/2024/04/23/" data-page-title="サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集">
   <button id="cusdus-sample" class="simple" title="Cusdis サンプル画像">
-    <img src="/images/2024/04-23/comment-cusdis.png" alt="Cusdis サンプル画像" />
+    <img src="/images/2024/04-23/comment-cusdis.png" width="1530" height="640" alt="Cusdis サンプル画像" />
   </button>
 </div>
+
+<h2 id="metype">Metype</h2>
+<p><img src="/images/2024/04-23/metype.png" alt="Metype" title="Metype" width="1380" height="690" /></p>
+
+<p>Metype は、AI による荒らし行為の排除やスタイルと機能の拡張性の高さを特徴に謳うコメントシステムです。</p>
+
+<p>クレジットカードの登録なしで始められますが、無料枠では、コメントが1000件まで、かつ広告の提供（現在は 3rd パーティ Cookie のようです）という制限があります。</p>
+
+<p><a href="metype.com" title="Metype - User Engagement Tool &amp; Comment System for Websites">metype.com</a> もしくは <a href="https://www.quintype.com/products/engagement-platform" title="I-powered Audience Engagement Platform - Quintype">quintype.com の製品ページ</a> にある <code class="language-plaintext highlighter-rouge">GET STARTED</code> ボタンから、名前、メールアドレス、パスワードを入力しアカウントを作成するか、Facebook、Google アカウントでログインし、設置するサイトの URL を登録すればアカウント ID が発行されるので、管理画面の埋め込み用のコードをサイトの設置したい場所にコピペすれば準備 OK です。</p>
+
+<p>管理画面からは、ゲスト投稿や事前承認の可否、画像やリンクの投稿可否、禁止用語の設定などができます。それ以外は有料のようです。</p>
+
+<h4 id="サンプル-1">サンプル</h4>
+
+<div id="metype-container" class="iframe-container" data-metype-account-id="1004011" data-metype-host="https://www.metype.com/" data-metype-primary-color="#0000ff" data-metype-bg-color="#ffffff" data-metype-font-color="#4a4a4a">
+  <button id="metype-sample" class="simple" title="Metype サンプル画像">
+    <img class="simple" src="/images/2024/04-23/comment-metype.png" width="1380" height="540" title="Metype サンプル画像" alt="Metype サンプル画像" />
+  </button>
+</div>
+
+<h2 id="commentboxio">CommentBox.io</h2>
+<p><img src="/images/2024/04-23/commentbox.jpg" alt="CommentBox.io" title="CommentBox.io" width="1377" height="567" /></p>
+
+<p><a href="https://commentbox.io/" title="CommentBox.io - No ads. No Tracking. Just comments.">CommentBox.io</a> は、「広告なし、トラッキングなし」を謳い文句にしています。実際 <a href="https://commentbox-io.translate.goog/privacy?_x_tr_sl=auto&amp;_x_tr_tl=ja&amp;_x_tr_hl=ja&amp;_x_tr_pto=wapp&amp;_x_tr_hist=true" title="プライバシーポリシー">プライバシーポリシー</a> には、運営な必要な情報として収集される情報とその使用目的が具体的に規定されています。</p>
+
+<p>投稿には Google や Apple のソーシャルアカウントによるログイン（または電子メール）が必要ですが（Facebook と X からのログインは機能していません）、匿名での投稿も可能です。</p>
+
+<p>また1ヶ月100コメントまで無料のパーソナルプランがあり、クレジットカードの登録なしに始められます。100件を超えたら $15 と記載されてますが、まぁ、炎上でもしない限り個人のサイトでは超えることはないでしょう!?（無責任 :sweat_smile:）</p>
+
+<h4 id="サンプル-2">サンプル</h4>
+<div class="commentbox">
+  <button id="commentbox-sample" class="simple" title="CommentBox サンプル画像">
+    <img src="/images/2024/04-23/comment-commentbox.jpg" width="1377" height="567" alt="CommentBox サンプル画像" />
+  </button>
+</div>
+
+<h2 id="utterances">utterances</h2>
+<p><img src="/images/2024/04-23/utterances.jpg" alt="utterances" title="utterances" width="1378" height="648" /></p>
+
+<p><a href="https://utteranc.es/" title="utterances">utterances</a>（意味や発音は <a href="https://www.ei-navi.jp/dictionary/content/utterance/" title="utteranceとは・意味・使い方・読み方・例文 - 英ナビ!辞書 英和辞典">辞書</a> を引いてください）は、GitHub issues への投稿を仲立ちするユニークなコメントシステムです。投稿には GitHub アカウントが必要ですが、マークダウンや emoji が使えて GitHub ユーザーからのフィードバックも期待でき、技術ブログであれば良い選択肢でしょう。</p>
+
+<p>また通常、投稿内容の修正や削除は管理者に依頼するよりほかありませんが、リポジトリのアリカさえわかれば自身で修正や削除やができるのも何気にありがたかったりすると思います。</p>
+
+<p>立ち上げも以下のようにとても簡単です。</p>
+
+<ol>
+  <li>GitHub ページか、または新規に作成したパブリックなリポジトリを準備</li>
+  <li><a href="https://github.com/apps/utterances" title="GitHub Apps - utterances">GitHub App のインストールページ</a> からリポジトリを指定、OAuth による連携を許可</li>
+  <li><a href="https://utteranc.es/#configuration" title="utterances">configuration のページ</a> で、指定したリポジトリ、投稿と issue の紐付け方、テーマカラーなどを選択し、出来上がったコードをコメントフォームの設置箇所に貼り付ける</li>
+</ol>
+
+<p><a href="https://miyauchi.dev/ja/posts/comment-system/" title="技術ブログのコメントシステムはutterancesがいい感じ - miyauchi.me">Tomoki Miyauci さんの「技術ブログのコメントシステムはutterancesがいい感じ」</a> の詳しい解説がとても参考になります。</p>
+
+<p>なお類似の GitHub App に JavaScript フレームワークがそれぞれ異なる <a href="https://github.com/gitalk/gitalk" title="gitalk/gitalk: Gitalk is a modern comment component based on Github Issue and Preact.">gitalk</a>、<a href="https://github.com/imsun/gitment" title="imsun/gitment: A comment system based on GitHub Issues.">gitment</a>、<a href="https://github.com/meteorlxy/vssue" title="meteorlxy/vssue: :mailbox: A Vue-powered Issue-based Comment Plugin">vssue</a> がありますが、issues を詳しく調べるとどれも <a href="https://github.com/gitalk/gitalk/issues/550">セキュリティ上の</a> <a href="https://github.com/imsun/gitment/issues/185">問題が</a> <a href="https://github.com/meteorlxy/vssue/issues/16">指摘されている</a> ので、使用は控えるべきと思います。</p>
+
+<h4 id="サンプル-3">サンプル</h4>
+<div>
+  <button id="utterances-sample" class="simple" title="utterances サンプル画像">
+    <img src="/images/2024/04-23/comment-utterances.png" width="1380" height="425" alt="utterances サンプル画像" />
+  </button>
+</div>
+
+<h2 id="giscus">giscus</h2>
+<p><img src="/images/2024/04-23/giscus.jpg" alt="giscus" title="giscus" width="1378" height="629" /></p>
+
+<p><a href="https://github.com/giscus/giscus" title="giscus/giscus: A comment system powered by GitHub Discussions. :speech_balloon: :gem:">giscus</a> は <a href="https://utteranc.es/" title="utterances">utterances</a> にインスパイアされて開発されました。utterances の開発が 2022年2月 を最後に停滞しているのに対し、giscus は現在も活発に開発が続けられていて、多言語対応や lazy loading などの進化を続けています。</p>
+
+<p>何より1番の違いは、utterances が issues を使うのに対し giscus は discussions を使用します。これにより投稿を新着順に表示することが可能となっています。</p>
+
+<p>設置方法は utterances とほぼ同じで、<a href="https://giscus.app/ja" title="giscus">https://giscus.app/ja のページ</a> に従って必要事項を入力し、<a href="https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository" title="リポジトリの GitHub Discussions を有効化または無効化する - GitHub Docs">リポジトリの discussions を有効化</a> すれば、埋め込むべきタグを生成してくれます。</p>
+
+<h4 id="サンプル-4">サンプル</h4>
+<div>
+  <button id="giscus-sample" class="simple" title="giscus サンプル画像">
+    <img src="/images/2024/04-23/comment-giscus.jpg" width="1379" height="660" alt="giscus サンプル画像" />
+  </button>
+</div>
+
+<h2 id="disqus">Disqus</h2>
+<p><img src="/images/2024/04-23/disqus.jpg" alt="Disqus" title="Disqus" width="2000" height="900" /></p>
+
+<p><a href="https://disqus.com/" title="&num;1 in audience engagement and community growth &vert; Disqus">Disqus</a> は、コメントシステムのホスティングサービスでは最大手でしょう。10数年前、幾つか運営していたサイトで採用していたので、馴染みがあります。が、当時からサイトを重たくする凶悪なヤツでした。「Disqus 設置しました！」という類のタイトル記事を見つけてサイトを訪問してみても、半数近くが採用を取りやめている感じです。</p>
+
+<p>また一見するとシンプルな UI に見えますが、ゲスト投稿の際、うっかりユーザー登録しそうになったり、<a href="https://www.google.com/recaptcha/" title="reCAPTCHA">reCAPTCHA</a> の挙動にイラッときたり、意図せず投稿してしまったりなど、何気に手間取ります。</p>
+
+<p>良い点はコメントスパムの防御がしっかりしているところだと思います。また設置するなら設定をデフォルトのままにせず、ユーザーのトラッキング機能や広告表示の設定などを最小限にすることをお勧めします。それだけで 3rd パーティ Cookie が 1/3 ほど減ります。それでも 100 以上は食らいますが… Google 囲い込み策の <a href="https://blog.google/intl/ja-jp/company-news/technology/chrome-cookie/" title="Chrome ブラウザでのサードパーティ Cookie の段階的廃止に向けた次のステップ">3rd パーティ Cookie 廃止</a> にどう対応するのでしょうか。</p>
+
+<p>当サイトでは現在、コメントフォームは単なる画像で Disqus の凶悪な読み込み量からサイト訪問者を守りつつ、コメント数だけ動的に拾うようにしています。</p>
+
+<h2 id="コメントは何のため">コメントは何のため？</h2>
+
+<p>コメント機能のホスティングサービスプロバイダーはどこも「コミュニティの形成」を謳っています。でも、そもそも「ブログ」の語源が「ウェッブ ログ」で、本サイトのように単なる「技術的記録」の周りにコミュニティはできづらいと思います。<a href="https://qiita.com/" title="Qiita">Qiita</a> や <a href="https://zenn.dev/" title="Zenn｜エンジニアのための情報共有コミュニティ">Zenn</a> のコメント欄でも 「Let’s build from here」を謳う <a href="https://github.com/" title="GitHub: Let’s build from here · GitHub">GitHub</a> issues や pull requests ほどの活況はありません。</p>
+
+<p>それでも僕が（年に1回あるかないかの）コメントを欲するのは（多くの技術系ブログがそうではないかと思うのですが）、記事中の誤解や間違いを指摘してもらい、また判りにくいところを質問してもらうことで、より正確で役に立つ情報を発信するサイトにすることが目的です。</p>
+
+<p>「<a href="https://capitalp.jp/2017/02/18/disqus-ads-not-welcomed/" title="Disqusが広告サービスを展開するも反発を受けている様子 &#8211; Capital P &#8211; WordPressメディア">Disqusが広告サービスを展開するも反発を受けている様子</a>」に述べられているように、SNS で単にイイねをもらうだけじゃないんですよね。</p>
+
+<p>…ということで、同じ思いでコメントフォームを設置したい方のお役に立てれば幸いです :relieved:</p>
+
+<!-- Cusdis -->
 <script>
 (function() {
   const sample = document.getElementById('cusdus-sample');
@@ -1262,24 +1365,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 })();
 </script>
 
-<h2 id="metype">Metype</h2>
-<p><img src="/images/2024/04-23/metype.png" alt="Metype" title="Metype" /></p>
-
-<p>Metype は、AI による荒らし行為の排除やスタイルと機能の拡張性の高さを特徴に謳うコメントシステムです。</p>
-
-<p>クレジットカードの登録なしで始められますが、無料枠では、コメントが1000件まで、かつ広告の提供（現在は 3rd パーティ Cookie のようです）という制限があります。</p>
-
-<p><a href="metype.com" title="Metype - User Engagement Tool &amp; Comment System for Websites">metype.com</a> もしくは <a href="https://www.quintype.com/products/engagement-platform" title="I-powered Audience Engagement Platform - Quintype">quintype.com の製品ページ</a> にある <code class="language-plaintext highlighter-rouge">GET STARTED</code> ボタンから、名前、メールアドレス、パスワードを入力しアカウントを作成するか、Facebook、Google アカウントでログインし、設置するサイトの URL を登録すればアカウント ID が発行されるので、管理画面の埋め込み用のコードをサイトの設置したい場所にコピペすれば準備 OK です。</p>
-
-<p>管理画面からは、ゲスト投稿や事前承認の可否、画像やリンクの投稿可否、禁止用語の設定などができます。それ以外は有料のようです。</p>
-
-<h4 id="サンプル-1">サンプル</h4>
-
-<div id="metype-container" class="iframe-container" data-metype-account-id="1004011" data-metype-host="https://www.metype.com/" data-metype-primary-color="#0000ff" data-metype-bg-color="#ffffff" data-metype-font-color="#4a4a4a">
-  <button id="metype-sample" class="simple" title="Metype サンプル画像">
-    <img class="simple" src="/images/2024/04-23/comment-metype.png" title="Metype サンプル画像" alt="Metype サンプル画像" />
-  </button>
-</div>
+<!-- Metype -->
 <script>
 (function() {
   const sample = document.getElementById('metype-sample');
@@ -1308,21 +1394,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 })();
 </script>
 
-<h2 id="commentboxio">CommentBox.io</h2>
-<p><img src="/images/2024/04-23/commentbox.jpg" alt="CommentBox.io" title="CommentBox.io" /></p>
-
-<p><a href="https://commentbox.io/" title="CommentBox.io - No ads. No Tracking. Just comments.">CommentBox.io</a> は、「広告なし、トラッキングなし」を謳い文句にしています。実際 <a href="https://commentbox-io.translate.goog/privacy?_x_tr_sl=auto&amp;_x_tr_tl=ja&amp;_x_tr_hl=ja&amp;_x_tr_pto=wapp&amp;_x_tr_hist=true" title="プライバシーポリシー">プライバシーポリシー</a> には、運営な必要な情報として収集される情報とその使用目的が具体的に規定されています。</p>
-
-<p>投稿には Google や Apple のソーシャルアカウントによるログイン（または電子メール）が必要ですが（Facebook と X からのログインは機能していません）、匿名での投稿も可能です。</p>
-
-<p>また1ヶ月100コメントまで無料のパーソナルプランがあり、クレジットカードの登録なしに始められます。100件を超えたら $15 と記載されてますが、まぁ、炎上でもしない限り個人のサイトでは超えることはないでしょう!?（無責任 :sweat_smile:）</p>
-
-<h4 id="サンプル-2">サンプル</h4>
-<div class="commentbox">
-  <button id="commentbox-sample" class="simple" title="CommentBox サンプル画像">
-    <img src="/images/2024/04-23/comment-commentbox.jpg" alt="CommentBox サンプル画像" />
-  </button>
-</div>
+<!-- CommentBox -->
 <script>
 (function() {
   const sample = document.getElementById('commentbox-sample');
@@ -1338,31 +1410,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 })();
 </script>
 
-<h2 id="utterances">utterances</h2>
-<p><img src="/images/2024/04-23/utterances.jpg" alt="utterances" title="utterances" /></p>
-
-<p><a href="https://utteranc.es/" title="utterances">utterances</a>（意味や発音は <a href="https://www.ei-navi.jp/dictionary/content/utterance/" title="utteranceとは・意味・使い方・読み方・例文 - 英ナビ!辞書 英和辞典">辞書</a> を引いてください）は、GitHub issues への投稿を仲立ちするユニークなコメントシステムです。投稿には GitHub アカウントが必要ですが、マークダウンや emoji が使えて GitHub ユーザーからのフィードバックも期待でき、技術ブログであれば良い選択肢でしょう。</p>
-
-<p>また通常、投稿内容の修正や削除は管理者に依頼するよりほかありませんが、リポジトリのアリカさえわかれば自身で修正や削除やができるのも何気にありがたかったりすると思います。</p>
-
-<p>立ち上げも以下のようにとても簡単です。</p>
-
-<ol>
-  <li>GitHub ページか、または新規に作成したパブリックなリポジトリを準備</li>
-  <li><a href="https://github.com/apps/utterances" title="GitHub Apps - utterances">GitHub App のインストールページ</a> からリポジトリを指定、OAuth による連携を許可</li>
-  <li><a href="https://utteranc.es/#configuration" title="utterances">configuration のページ</a> で、指定したリポジトリ、投稿と issue の紐付け方、テーマカラーなどを選択し、出来上がったコードをコメントフォームの設置箇所に貼り付ける</li>
-</ol>
-
-<p><a href="https://miyauchi.dev/ja/posts/comment-system/" title="技術ブログのコメントシステムはutterancesがいい感じ - miyauchi.me">Tomoki Miyauci さんの「技術ブログのコメントシステムはutterancesがいい感じ」</a> の詳しい解説がとても参考になります。</p>
-
-<p>なお類似の GitHub App に JavaScript フレームワークがそれぞれ異なる <a href="https://github.com/gitalk/gitalk" title="gitalk/gitalk: Gitalk is a modern comment component based on Github Issue and Preact.">gitalk</a>、<a href="https://github.com/imsun/gitment" title="imsun/gitment: A comment system based on GitHub Issues.">gitment</a>、<a href="https://github.com/meteorlxy/vssue" title="meteorlxy/vssue: :mailbox: A Vue-powered Issue-based Comment Plugin">vssue</a> がありますが、issues を詳しく調べるとどれも <a href="https://github.com/gitalk/gitalk/issues/550">セキュリティ上の</a> <a href="https://github.com/imsun/gitment/issues/185">問題が</a> <a href="https://github.com/meteorlxy/vssue/issues/16">指摘されている</a> ので、使用は控えるべきと思います。</p>
-
-<h4 id="サンプル-3">サンプル</h4>
-<div>
-  <button id="utterances-sample" class="simple" title="utterances サンプル画像">
-    <img src="/images/2024/04-23/comment-utterances.png" alt="utterances サンプル画像" />
-  </button>
-</div>
+<!-- utterances -->
 <script>
 (function() {
   const sample = document.getElementById('utterances-sample');
@@ -1383,21 +1431,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 })();
 </script>
 
-<h2 id="giscus">giscus</h2>
-<p><img src="/images/2024/04-23/giscus.jpg" alt="giscus" title="giscus" /></p>
-
-<p><a href="https://github.com/giscus/giscus" title="giscus/giscus: A comment system powered by GitHub Discussions. :speech_balloon: :gem:">giscus</a> は <a href="https://utteranc.es/" title="utterances">utterances</a> にインスパイアされて開発されました。utterances の開発が 2022年2月 を最後に停滞しているのに対し、giscus は現在も活発に開発が続けられていて、多言語対応や lazy loading などの進化を続けています。</p>
-
-<p>何より1番の違いは、utterances が issues を使うのに対し giscus は discussions を使用します。これにより投稿を新着順に表示することが可能となっています。</p>
-
-<p>設置方法は utterances とほぼ同じで、<a href="https://giscus.app/ja" title="giscus">https://giscus.app/ja のページ</a> に従って必要事項を入力し、<a href="https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository" title="リポジトリの GitHub Discussions を有効化または無効化する - GitHub Docs">リポジトリの discussions を有効化</a> すれば、埋め込むべきタグを生成してくれます。</p>
-
-<h4 id="サンプル-4">サンプル</h4>
-<div>
-  <button id="giscus-sample" class="simple" title="giscus サンプル画像">
-    <img src="/images/2024/04-23/comment-giscus.jpg" alt="giscus サンプル画像" />
-  </button>
-</div>
+<!-- giscus -->
 <script>
 (function() {
   const sample = document.getElementById('giscus-sample');
@@ -1424,28 +1458,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
     sample.parentNode.appendChild(s);
   });
 })();
-</script>
-
-<h2 id="disqus">Disqus</h2>
-<p><img src="/images/2024/04-23/disqus.jpg" alt="Disqus" title="Disqus" /></p>
-
-<p><a href="https://disqus.com/" title="&num;1 in audience engagement and community growth &vert; Disqus">Disqus</a> は、コメントシステムのホスティングサービスでは最大手でしょう。10数年前、幾つか運営していたサイトで採用していたので、馴染みがあります。が、当時からサイトを重たくする凶悪なヤツでした。「Disqus 設置しました！」という類のタイトル記事を見つけてサイトを訪問してみても、半数近くが採用を取りやめている感じです。</p>
-
-<p>また一見するとシンプルな UI に見えますが、ゲスト投稿の際、うっかりユーザー登録しそうになったり、<a href="https://www.google.com/recaptcha/" title="reCAPTCHA">reCAPTCHA</a> の挙動にイラッときたり、意図せず投稿してしまったりなど、何気に手間取ります。</p>
-
-<p>良い点はコメントスパムの防御がしっかりしているところだと思います。また設置するなら設定をデフォルトのままにせず、ユーザーのトラッキング機能や広告表示の設定などを最小限にすることをお勧めします。それだけで 3rd パーティ Cookie が 1/3 ほど減ります。それでも 100 以上は食らいますが… Google 囲い込み策の <a href="https://blog.google/intl/ja-jp/company-news/technology/chrome-cookie/" title="Chrome ブラウザでのサードパーティ Cookie の段階的廃止に向けた次のステップ">3rd パーティ Cookie 廃止</a> にどう対応するのでしょうか。</p>
-
-<p>当サイトでは現在、コメントフォームは単なる画像で Disqus の凶悪な読み込み量からサイト訪問者を守りつつ、コメント数だけ動的に拾うようにしています。</p>
-
-<h2 id="コメントは何のため">コメントは何のため？</h2>
-
-<p>コメント機能のホスティングサービスプロバイダーはどこも「コミュニティの形成」を謳っています。でも、そもそも「ブログ」の語源が「ウェッブ ログ」で、本サイトのように単なる「技術的記録」の周りにコミュニティはできづらいと思います。<a href="https://qiita.com/" title="Qiita">Qiita</a> や <a href="https://zenn.dev/" title="Zenn｜エンジニアのための情報共有コミュニティ">Zenn</a> のコメント欄でも 「Let’s build from here」を謳う <a href="https://github.com/" title="GitHub: Let’s build from here · GitHub">GitHub</a> issues や pull requests ほどの活況はありません。</p>
-
-<p>それでも僕が（年に1回あるかないかの）コメントを欲するのは（多くの技術系ブログがそうではないかと思うのですが）、記事中の誤解や間違いを指摘してもらい、また判りにくいところを質問してもらうことで、より正確で役に立つ情報を発信するサイトにすることが目的です。</p>
-
-<p>「<a href="https://capitalp.jp/2017/02/18/disqus-ads-not-welcomed/" title="Disqusが広告サービスを展開するも反発を受けている様子 &#8211; Capital P &#8211; WordPressメディア">Disqusが広告サービスを展開するも反発を受けている様子</a>」に述べられているように、SNS で単にイイねをもらうだけじゃないんですよね。</p>
-
-<p>…ということで、同じ思いでコメントフォームを設置したい方のお役に立てれば幸いです :relieved:</p>]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。]]></summary></entry><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-04-17T18:45:26+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
+</script>]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。]]></summary></entry><entry><title type="html">トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="トラ技ARMライタでArduino UNO R4 Minimaをソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-04-17T18:45:26+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
 
 <ul>
   <li><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編 - Embedded Kiddie">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a></li>
