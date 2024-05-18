@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-18T10:11:23+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-18T13:42:50+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> も含めて比較をしてみました。<a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -1243,7 +1243,9 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <h4 id="サンプル">サンプル</h4>
 <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="46d191ea-3d38-45c9-b540-1a4ff42333b3" data-page-id="/2024/04/23/index" data-page-url="https://embedded-kiddie.github.io/2024/04/23/" data-page-title="サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集">
-<button id="cusdus-sample" class="simple" title="Cusdis サンプル画像"><img src="/images/2024/04-23/comment-cusdis.png" alt="Cusdis サンプル画像" /></button>
+  <button id="cusdus-sample" class="simple" title="Cusdis サンプル画像">
+    <img src="/images/2024/04-23/comment-cusdis.png" alt="Cusdis サンプル画像" />
+  </button>
 </div>
 <script>
 (function() {
@@ -1317,7 +1319,9 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <h4 id="サンプル-2">サンプル</h4>
 <div class="commentbox">
-<button id="commentbox-sample" class="simple" title="CommentBox サンプル画像"><img src="/images/2024/04-23/comment-commentbox.jpg" alt="CommentBox サンプル画像" /></button>
+  <button id="commentbox-sample" class="simple" title="CommentBox サンプル画像">
+    <img src="/images/2024/04-23/comment-commentbox.jpg" alt="CommentBox サンプル画像" />
+  </button>
 </div>
 <script>
 (function() {
@@ -1354,7 +1358,10 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <p>なお類似の GitHub App に JavaScript フレームワークがそれぞれ異なる <a href="https://github.com/gitalk/gitalk" title="gitalk/gitalk: Gitalk is a modern comment component based on Github Issue and Preact.">gitalk</a>、<a href="https://github.com/imsun/gitment" title="imsun/gitment: A comment system based on GitHub Issues.">gitment</a>、<a href="https://github.com/meteorlxy/vssue" title="meteorlxy/vssue: :mailbox: A Vue-powered Issue-based Comment Plugin">vssue</a> がありますが、issues を詳しく調べるとどれも <a href="https://github.com/gitalk/gitalk/issues/550">セキュリティ上の</a> <a href="https://github.com/imsun/gitment/issues/185">問題が</a> <a href="https://github.com/meteorlxy/vssue/issues/16">指摘されている</a> ので、使用は控えるべきと思います。</p>
 
 <h4 id="サンプル-3">サンプル</h4>
-<div><button id="utterances-sample" class="simple" title="utterances サンプル画像"><img src="/images/2024/04-23/comment-utterances.png" alt="utterances サンプル画像" /></button>
+<div>
+  <button id="utterances-sample" class="simple" title="utterances サンプル画像">
+    <img src="/images/2024/04-23/comment-utterances.png" alt="utterances サンプル画像" />
+  </button>
 </div>
 <script>
 (function() {
@@ -1386,7 +1393,10 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <p>設置方法は utterances とほぼ同じで、<a href="https://giscus.app/ja" title="giscus">https://giscus.app/ja のページ</a> に従って必要事項を入力し、<a href="https://docs.github.com/ja/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/enabling-or-disabling-github-discussions-for-a-repository" title="リポジトリの GitHub Discussions を有効化または無効化する - GitHub Docs">リポジトリの discussions を有効化</a> すれば、埋め込むべきタグを生成してくれます。</p>
 
 <h4 id="サンプル-4">サンプル</h4>
-<div><button id="giscus-sample" class="simple" title="giscus サンプル画像"><img src="/images/2024/04-23/comment-giscus.jpg" alt="giscus サンプル画像" /></button>
+<div>
+  <button id="giscus-sample" class="simple" title="giscus サンプル画像">
+    <img src="/images/2024/04-23/comment-giscus.jpg" alt="giscus サンプル画像" />
+  </button>
 </div>
 <script>
 (function() {
