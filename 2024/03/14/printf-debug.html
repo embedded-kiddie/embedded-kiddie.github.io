@@ -66,7 +66,7 @@
   <li>SWD とは ARM が定めた <a href="https://ja.wikipedia.org/wiki/JTAG" title="JTAG - Wikipedia">JTAG 規格</a> を利用したデバッグ・インタフェースのこと</li>
 </ul>
 
-<p>かつては NXP の評価ボードにオマケで付いてきたようですが、代替の LPC-Link2 と共に絶版 → <a href="https://www.nxp.jp/design/design-center/software/development-software/mcuxpresso-software-and-tools-/mcu-link-debug-probe:MCU-LINK" title="MCU Link JTAG/SWD Debug Probe - NXP Semiconductors">MCU-Link</a> に置き換わっていて、これがまたサポート対象に LPC1343 が入っていないのです。</p>
+<p>昔は NXP の評価ボードにオマケで付いてきたようですが、代替の LPC-Link2 と共に絶版 → <a href="https://www.nxp.jp/design/design-center/software/development-software/mcuxpresso-software-and-tools-/mcu-link-debug-probe:MCU-LINK" title="MCU Link JTAG/SWD Debug Probe - NXP Semiconductors">MCU-Link</a> に置き換わり、これがまたサポート対象に LPC1343 が入っていないのです。</p>
 
 <p>JTAG/SWD をサポートしたデバッグ・プローブと呼ばれる装置なら使えるのかもしれませんが、真偽不明なため（調査中）、ここではソフトウェアで <code class="language-plaintext highlighter-rouge">printf</code> デバッグをする方法を紹介したいと思います。</p>
 
@@ -117,11 +117,11 @@
 <p>ヴイストン社のブログを真似て赤外線センサの出力値を観測してみました。まず白地に引いた直線の黒ライン中央にローバーを置きます。そして次のような動作</p>
 
 <ol>
-  <li>右に振り（左センサが黒ラインに近くなり、左センサの出力値が上がる）中央に戻し、 続いて</li>
-  <li>左に振り（右センサが黒ラインに近くなり、右センサの出力値が上がる）再び中央に戻す</li>
+  <li>右に振る（左センサが黒ラインに近くなり、左センサの出力値が上がる）→ 中央に戻す →</li>
+  <li>左に振り（右センサが黒ラインに近くなり、右センサの出力値が上がる）→ 再び中央に戻す</li>
 </ol>
 
-<p>をプログラムし、<code class="language-plaintext highlighter-rouge">printf()</code> で左右のセンサ値を <a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> に出力 → テキストをコピペして CSV ファイルとして保存 → <a href="https://www.google.com/intl/ja_jp/sheets/about/" title="Google Sheets: オンライン スプレッドシート エディタ - Google Workspace">Google スプレッドシート</a> にアップロードしてグラフ化しました。</p>
+<p>をプログラムします。この時の左右のセンサ値を <code class="language-plaintext highlighter-rouge">printf()</code> で <a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> に出力 → テキストをコピペして CSV ファイルとして保存 → <a href="https://www.google.com/intl/ja_jp/sheets/about/" title="Google Sheets: オンライン スプレッドシート エディタ - Google Workspace">Google スプレッドシート</a> にアップロードしてグラフ化しました。</p>
 
 <p><img src="/images/2024/03-14/ir-sensor-graph1.png" alt="左右センサ値の出力特性" title="左右センサ値の出力特性" width="1211" height="537" /></p>
 
