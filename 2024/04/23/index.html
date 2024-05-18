@@ -102,29 +102,6 @@
 <h2 id="metype">Metype</h2>
 <p><img src="/images/2024/04-23/metype.png" alt="Metype" title="Metype"></p>
 
-<div id="metype-container" class="iframe-container" data-metype-account-id="1004011" data-metype-host="https://www.metype.com/" data-metype-primary-color="#0000ff" data-metype-bg-color="#ffffff" data-metype-font-color="#4a4a4a"></div>
-<script>
-  window.talktype = window.talktype || function(f) {
-    if (talktype.loaded)
-      f();
-    else
-      (talktype.q = talktype.q || []).push(arguments);
-  };
-</script>
-
-<script src="https://www.metype.com/quintype-metype/assets/metype.js"></script>
-
-<script>
-  var metypeContainer = document.getElementById("metype-container"),
-    page_url = metypeContainer.getAttribute("data-metype-page-url");
-  metypeContainer.setAttribute('data-metype-page-url', page_url || window.location.href);
-  metypeContainer.setAttribute('data-metype-window-height', window.innerHeight);
-  metypeContainer.setAttribute('data-metype-screen-width', window.screen.width);
-  talktype(function() {
-    talktype.commentWidgetIframe(metypeContainer);
-  });
-</script>
-
 <p><del>Metype は、AI による荒らし行為の排除やスタイルと機能の拡張性の高さを特徴に謳うコメントシステムです。</del></p>
 
 <p><del><code class="language-plaintext highlighter-rouge">GET STARTED</code> ボタンから、名前、メールアドレス、パスワードを入力しアカウントを作成するか、Facebook、Google アカウントでログインし（X や Linked In との連携はユーザー側での実装が必要そうです）、設置するサイトの URL を登録すればアカウント ID が発行されるので、埋め込み用のコードをサイトの設置したい場所にコピペすれば準備 OK です。</del></p>
@@ -140,7 +117,44 @@
 <p>→ <strong>2024年4月29日：プロダクトマネージャーから Privacy Policy と Terms &amp; Conditions を修復中との連絡</strong> と <a href="https://www.quintype.com/products/engagement-platform" title="AI-powered Audience Engagement Platform - Quintype">Metype の紹介ページのリンク</a> をもらいました。</p>
 
 <h4 id="サンプル-1">サンプル</h4>
-<p><img class="simple" src="/images/2024/04-23/comment-metype.png" title="Metype サンプル画像" alt="Metype サンプル画像"></p>
+
+<div id="metype-container" class="iframe-container" data-metype-account-id="1004011" data-metype-host="https://www.metype.com/" data-metype-primary-color="#0000ff" data-metype-bg-color="#ffffff" data-metype-font-color="#4a4a4a">
+  <button id="metype-sample" class="simple" title="Metype サンプル画像">
+    <img class="simple" src="/images/2024/04-23/comment-metype.png" title="Metype サンプル画像" alt="Metype サンプル画像">
+  </button>
+</div>
+<script>
+(function() {
+  const sample = document.getElementById('metype-sample');
+  sample.addEventListener('click', function() {
+    window.talktype = window.talktype || function(f) {
+      if (talktype.loaded)
+        f();
+      else
+        (talktype.q = talktype.q || []).push(arguments);
+    };
+    const s = document.createElement('script');
+    s.src = "https://www.metype.com/quintype-metype/assets/metype.js";
+    s.onload = function() {
+      var metypeContainer = document.getElementById("metype-container"),
+      page_url = "https://embedded-kiddie.github.io/2024/04/23/"; /* metypeContainer.getAttribute("data-metype-page-url");*/
+      metypeContainer.setAttribute('data-metype-page-url', page_url || window.location.href);
+      metypeContainer.setAttribute('data-metype-window-height', window.innerHeight);
+      metypeContainer.setAttribute('data-metype-screen-width', window.screen.width);
+      talktype(function() {
+        talktype.commentWidgetIframe(metypeContainer);
+      });
+    };
+    sample.closest("div").innerHTML = '';
+  	document.head.appendChild(s);
+  });
+})();
+</script>
+
+<script src=""></script>
+
+<script>
+</script>
 
 <h2 id="commentboxio">CommentBox.io</h2>
 <p><img src="/images/2024/04-23/commentbox.jpg" alt="CommentBox.io" title="CommentBox.io"></p>
