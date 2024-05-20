@@ -222,7 +222,7 @@
 
 <p>では「stdio を組み込んでいない」のはなぜか？ 以下は私の勝手な解釈です。</p>
 
-<p>OS が載るシステムでは、システムを操作するための標準入出力 I/F として <code class="language-plaintext highlighter-rouge">stdin</code> や <code class="language-plaintext highlighter-rouge">stdout</code>、<code class="language-plaintext highlighter-rouge">stderr</code> という抽象化された仮想の標準端末を必要とします。組み込み系では、を規定できない</p>
+<p>OS が載るシステムでは、システムをオペレートするための標準入出力 I/F として、<code class="language-plaintext highlighter-rouge">stdin</code> や <code class="language-plaintext highlighter-rouge">stdout</code>、<code class="language-plaintext highlighter-rouge">stderr</code> という抽象化された仮想の標準端末を必要とします。</p>
 
 <p>一方デフォルトで OS が載らない Arduino ですが、<a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" title="Serial - Arduino Reference">Serial</a>、<a href="https://reference.arduino.cc/reference/en/libraries/liquidcrystal/" title="LiquidCrystal - Arduino Reference">LiquidCrystal</a>、<a href="https://www.arduino.cc/reference/en/libraries/ethernet/" title="Ethernet - Arduino Reference">Ethernet</a> や <a href="https://reference.arduino.cc/reference/en/libraries/wifi/wificlient/" title="WiFi - WiFiClient() - Arduino Reference">WiFi</a> といったデバイスクラスは、<a href="https://www.arduino.cc/reference/en/language/functions/communication/stream/" title="Stream - Arduino Reference">Stream クラス</a> から <a href="https://www.arduino.cc/reference/en/language/functions/communication/print/" title="Print - Arduino Reference">Print クラス</a> を継承しているので、これらを元にすれば stdio を <code class="language-plaintext highlighter-rouge">Serial</code> に決めることも可能だったハズです。</p>
 
