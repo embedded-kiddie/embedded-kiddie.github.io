@@ -165,7 +165,7 @@
 <span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">1.000e+00</span></code></pre></figure>
 
 <h3 id="エスケープシーケンスのテスト">エスケープシーケンスのテスト</h3>
-<p>ついでにシリアルモニタ側のテストとして <a href="https://qiita.com/PruneMazui/items/8a023347772620025ad6" title="ANSIエスケープシーケンス チートシート #Bash - Qiita">エスケープシーケンス</a> も試してみました。</p>
+<p>ついでに IDE のシリアルモニタ側テストとして、<a href="https://qiita.com/PruneMazui/items/8a023347772620025ad6" title="ANSIエスケープシーケンス チートシート #Bash - Qiita">エスケープシーケンス</a> も試してみました。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">printf</span><span class="p">(</span><span class="s">"%s%s"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[2J"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[0;0H"</span><span class="p">);</span> <span class="c1">// 画面クリア＋原点に移動</span></code></pre></figure>
 
