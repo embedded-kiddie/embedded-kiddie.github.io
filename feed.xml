@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-20T13:26:04+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-20T13:41:38+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -475,7 +475,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   </a>
 </figure>
 
-<p>Arduino IDE でデバッガを起動すると、MCU に内蔵された周辺装置のレジスタを「CORTEX PERIPHERALS」で参照または編集ができるようになります。</p>
+<p>Arduino IDE でデバッガを起動すると、MCU に内蔵された周辺装置のレジスタを「CORTEX PERIPHERALS」から、参照または編集ができるようになります。</p>
 
 <p>詳細は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> を参照してもらうとして、IDE で表示された <code class="language-plaintext highlighter-rouge">P100PFS</code> の内容と SVD ファイルの定義を一覧にすると、次のようになります。</p>
 
@@ -581,7 +581,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   </tbody>
 </table>
 
-<p>ここでのポイントは、汎用 I/O 端子は <code class="language-plaintext highlighter-rouge">P000</code> から <code class="language-plaintext highlighter-rouge">P915</code> まで多数あり、USB や シリアル通信など特定用途で使われる端子の仕様が他とは微妙に異なるという点です。</p>
+<p>ここでのポイントは、汎用 I/O 端子は <code class="language-plaintext highlighter-rouge">P000</code> から <code class="language-plaintext highlighter-rouge">P915</code> まで多数あり、USB や シリアル通信など、特定用途で使われる端子の仕様が、他の I/O 端子と微妙に異なるという点です。</p>
 
 <p>言い換えれば、これらの仕様違いを正しく XML で記述する必要があるという事です。</p>
 
@@ -594,7 +594,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 </div>
 
 <h3 id="p100pfs-の再定義">P100PFS の再定義</h3>
-<p>修正前は <code class="language-plaintext highlighter-rouge">P000PFS</code> を派生の親とする子の位置付けで定義されていましたが、他の親となり得るよう、次のように再定義しました（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16083" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">差分を確認</a>）</p>
+<p>修正前は、<code class="language-plaintext highlighter-rouge">P000PFS</code> を派生の親とする子の位置付けで定義されていましたが、他の親となり得るよう、次のように再定義しました（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16083" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">差分を確認</a>）</p>
 
 <figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;register&gt;</span>
   <span class="nt">&lt;name&gt;</span>P100PFS<span class="nt">&lt;/name&gt;</span>
@@ -868,7 +868,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <div class="quote clear-both">
 
-<p>先に示した通り、「<strong>P408 だけが DSCR1 ビットを持ちます</strong>」。それ以外の端子で <code class="language-plaintext highlighter-rouge">DSCR1</code>（ビットレンジ  [11:11]）は予約ビットとなります。</p>
+<p>先に示した通り、「<strong>P408 だけが DSCR1 ビットを持ちます</strong>」。それ以外の端子で <code class="language-plaintext highlighter-rouge">DSCR1</code>（ビットレンジ  [11:11]）は、予約ビットとなります。</p>
 
 </div>
 
@@ -1164,7 +1164,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   <span class="nt">&lt;resetMask&gt;</span>0xFFFFFFFD<span class="nt">&lt;/resetMask&gt;</span>
 <span class="nt">&lt;/register&gt;</span></code></pre></figure>
 
-<p><code class="language-plaintext highlighter-rouge">P101PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P107PFS</code> を <code class="language-plaintext highlighter-rouge">P100PFS</code> の派生とするため、次のように修正しました。（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16086" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">差分</a>）</p>
+<p><code class="language-plaintext highlighter-rouge">P101PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P107PFS</code> を <code class="language-plaintext highlighter-rouge">P100PFS</code> の派生とするため、次の様に修正しました。（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16086" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">差分</a>）</p>
 
 <figure class="highlight"><pre><code class="language-diff" data-lang="diff"><span class="gd">- &lt;register derivedFrom="P000PFS"&gt;
 </span><span class="gi">+ &lt;register derivedFrom="P100PFS"&gt;

@@ -161,7 +161,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   </a>
 </figure>
 
-<p>Arduino IDE でデバッガを起動すると、MCU に内蔵された周辺装置のレジスタを「CORTEX PERIPHERALS」で参照または編集ができるようになります。</p>
+<p>Arduino IDE でデバッガを起動すると、MCU に内蔵された周辺装置のレジスタを「CORTEX PERIPHERALS」から、参照または編集ができるようになります。</p>
 
 <p>詳細は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> を参照してもらうとして、IDE で表示された <code class="language-plaintext highlighter-rouge">P100PFS</code> の内容と SVD ファイルの定義を一覧にすると、次のようになります。</p>
 
@@ -267,7 +267,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   </tbody>
 </table>
 
-<p>ここでのポイントは、汎用 I/O 端子は <code class="language-plaintext highlighter-rouge">P000</code> から <code class="language-plaintext highlighter-rouge">P915</code> まで多数あり、USB や シリアル通信など特定用途で使われる端子の仕様が他とは微妙に異なるという点です。</p>
+<p>ここでのポイントは、汎用 I/O 端子は <code class="language-plaintext highlighter-rouge">P000</code> から <code class="language-plaintext highlighter-rouge">P915</code> まで多数あり、USB や シリアル通信など、特定用途で使われる端子の仕様が、他の I/O 端子と微妙に異なるという点です。</p>
 
 <p>言い換えれば、これらの仕様違いを正しく XML で記述する必要があるという事です。</p>
 
@@ -280,7 +280,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 </div>
 
 <h3 id="p100pfs-の再定義">P100PFS の再定義</h3>
-<p>修正前は <code class="language-plaintext highlighter-rouge">P000PFS</code> を派生の親とする子の位置付けで定義されていましたが、他の親となり得るよう、次のように再定義しました（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16083" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>差分を確認</a>）</p>
+<p>修正前は、<code class="language-plaintext highlighter-rouge">P000PFS</code> を派生の親とする子の位置付けで定義されていましたが、他の親となり得るよう、次のように再定義しました（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16083" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>差分を確認</a>）</p>
 
 <figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;register&gt;</span>
   <span class="nt">&lt;name&gt;</span>P100PFS<span class="nt">&lt;/name&gt;</span>
@@ -554,7 +554,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <div class="quote clear-both">
 
-<p>先に示した通り、「<strong>P408 だけが DSCR1 ビットを持ちます</strong>」。それ以外の端子で <code class="language-plaintext highlighter-rouge">DSCR1</code>（ビットレンジ  [11:11]）は予約ビットとなります。</p>
+<p>先に示した通り、「<strong>P408 だけが DSCR1 ビットを持ちます</strong>」。それ以外の端子で <code class="language-plaintext highlighter-rouge">DSCR1</code>（ビットレンジ  [11:11]）は、予約ビットとなります。</p>
 
 </div>
 
@@ -850,7 +850,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   <span class="nt">&lt;resetMask&gt;</span>0xFFFFFFFD<span class="nt">&lt;/resetMask&gt;</span>
 <span class="nt">&lt;/register&gt;</span></code></pre></figure>
 
-<p><code class="language-plaintext highlighter-rouge">P101PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P107PFS</code> を <code class="language-plaintext highlighter-rouge">P100PFS</code> の派生とするため、次のように修正しました。（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16086" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>差分</a>）</p>
+<p><code class="language-plaintext highlighter-rouge">P101PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P107PFS</code> を <code class="language-plaintext highlighter-rouge">P100PFS</code> の派生とするため、次の様に修正しました。（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16086" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>差分</a>）</p>
 
 <figure class="highlight"><pre><code class="language-diff" data-lang="diff"><span class="gd">- &lt;register derivedFrom="P000PFS"&gt;
 </span><span class="gi">+ &lt;register derivedFrom="P100PFS"&gt;
