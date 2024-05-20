@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-20T21:56:39+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-20T23:07:44+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -2403,18 +2403,29 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> が設定が可能です。</p>
   </li>
   <li>
-    <p>秒針の進みを数える <strong>カウンタ</strong>・レジスタ<br />
+    <p>秒針の進みを数える <strong>カウンタ・レジスタ</strong><br />
   １目盛１カウントとして刻むカウンタです。例えば16ビットタイマは 0 〜 65535 まで、32ビットタイマは 0 〜 4294967295 まで数えられます。<br />
   <br />秒針が１周すると 0 に戻る、即ちオーバーフローするので、アプリケーション側で適切に扱えるようオーバーフローを知らせるための割り込みを発生させる機能があったりします。</p>
   </li>
   <li>
     <p><strong>タイミング</strong> を決めるレジスタと <strong>動作</strong> を制御するレジスタ<br />
-  秒針の進みに応じてイベントを発生させるタイミングを設定するレジスタと、その時の動作を制御するレジスタがあります。イベントの発生により、割り込みを発生させたり、汎用出力ポートに HIGH または LOW の信号を出力したりすることが出来ます。<br />
-  <br />イベント発生用のレジスタは、3. のカウンタ・レジスタとの比較でタイミングを決めるため、「<strong>コンペア・レジスタ</strong>」とか「<strong>マッチ・レジスタ</strong>」と呼ばれます。<br />
-  <br />例えば、レジスタ A で汎用出力ポートを HIGH に、レジスタ B で LOW に、またレジスタ C でリセットする設定では、１目盛分の刻み幅と A、B、C から <strong>周波数</strong> と <strong>デューティ比</strong> が決まる PWM 出力を作り出せることになります。<br />
-  <br /><img src="/images/2024/04-04/counter-duty-pwm.jpg" alt="タイマレジスタとPWM出力の関係" title="タイマレジスタとPWM出力の関係" width="1377" height="540" /></p>
+  秒針の進みに応じて、イベントの発生タイミングを設定するレジスタ（<strong>カウンタ・レジスタ</strong>との比較で決めるため、「<strong>コンペア・レジスタ</strong>」とか「<strong>マッチ・レジスタ</strong>」と呼ばれる）と、割り込みの発生や、汎用出力ポートへの HIGH または LOW 信号の出力など、イベント発生時の動作を制御するレジスタがあります。</p>
   </li>
 </ol>
+
+<p>具体例を挙げてみます。例えば、カウンタが</p>
+
+<ul>
+  <li>レジスタ A <span class="inline"><img src="/images/2024/04-04/timer-a.png" width="24" height="27" alt="タイマレジスタ A" /></span> の設定値に到達したら、汎用出力ポートを HIGH にする</li>
+  <li>レジスタ B <span class="inline"><img src="/images/2024/04-04/timer-b.png" width="24" height="27" alt="タイマレジスタ A" /></span> の設定値に到達したら、汎用出力ポートを LOW にする</li>
+  <li>レジスタ C <span class="inline"><img src="/images/2024/04-04/timer-c.png" width="24" height="27" alt="タイマレジスタ A" /></span> の設定値に到達したら、タイマをリセットする</li>
+</ul>
+
+<p>という設定では、１目盛分の刻み幅と A・B・C の設定値から決まる、ある <strong>周波数</strong> と <strong>デューティ比</strong> の PWM 出力を作り出せることになります。</p>
+
+<p><img src="/images/2024/04-04/counter-duty-pwm.jpg" alt="タイマレジスタとPWM出力の関係" title="タイマレジスタとPWM出力の関係" width="1377" height="540" /></p>
+
+<p>また、このような HIGH か LOW の出力だけでなく、所定の LSB ずつ上げ下げすれば、三角波やノコギリ波の出力が可能ですし、制御する出力ポートを複数にすれば、多相モータの制御が可能となるなど、シンプルな機構で複雑な動作を実現できます。</p>
 
 <h3 id="ra4m1-のタイマ">RA4M1 のタイマ</h3>
 <p>一般論の次は、ルネサスのマイコン R7FA4M1AB のタイマです。Arm Cortex-M4 コアの直近で一定の時を刻む 24 ビットの <code class="language-plaintext highlighter-rouge">SysTick</code> タイマ（システムタイマ）のほか、アプリケーション用の高機能なタイマとして以下が備わっています。</p>
