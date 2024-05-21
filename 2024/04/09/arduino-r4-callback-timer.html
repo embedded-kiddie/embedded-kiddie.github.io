@@ -29,17 +29,21 @@
 </head>
 <body>
 <header class="site-header" role="banner">
-  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
         <label for="nav-trigger">
           <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
             </svg>
           </span>
         </label>
-        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
-      </nav></div>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
@@ -55,12 +59,12 @@
   <div class="post-content e-content" itemprop="articleBody">
     <p><a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">前回の記事</a> で、<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> による楽譜再生の課題と <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> や既存ライブラリの調査結果について書きました。</p>
 
-<p>今回は、前回調査を元にバックグラウンドで動作するライブラリ <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> 用に作成したタイマライブラリ <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> を解説したいと思います。</p>
+<p>今回は、その調査結果を元に作成したタイマライブラリ <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> を解説します。本ライブラリと、バックグラウンドで <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> を鳴らすライブラリ <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を組み合わせれば、「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">Lチカしながら音楽再生</a>」が出来るようになります。</p>
 
 <h2 id="callbacktimerr4">CallbackTimerR4</h2>
-<p>楽譜中には全音符以外にも、数秒間同じ音を繋げて鳴らす記号 <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> が度々現れます。例えば <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> の例題に添付の <a href="https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E3%83%96%E3%82%B9" title="グリーンスリーブス - Wikipedia">イングランド民謡</a> <a href="https://github.com/robsoncouto/arduino-songs/tree/master/greensleeves" title="arduino-songs/greensleeves at master · robsoncouto/arduino-songs">Greensleeves</a> には最長 2571msec の音符が現れます。この時間をきっちり計り、なおかつ CPU リソースの使用を小さく抑えたのがこのライブラリの特徴です。</p>
+<p>楽譜中には全音符以外にも、数秒間同じ音を繋げて鳴らす記号 <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> が度々現れます。例えば <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> に添付の <a href="https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E3%83%96%E3%82%B9" title="グリーンスリーブス - Wikipedia">イングランド民謡</a> <a href="https://github.com/robsoncouto/arduino-songs/tree/master/greensleeves" title="arduino-songs/greensleeves at master · robsoncouto/arduino-songs">Greensleeves</a> には最長 2571msec の音符が現れます。この時間をきっちり計り、かつ CPU リソースの使用を小さく抑えたのがこのライブラリの特徴です。</p>
 
-<p>仕組みの大雑把な話は「<a href="/2024/04/04/arduino-blink-with-bgm.html#自作のタイマ系ライブラリと-bgm-再生ライブラリ" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">自作のタイマ系ライブラリと BGM 再生ライブラリ</a>」を見てもらうとして、ここでは使い方とインストール方法、および正確性の確認方法について説明します。</p>
+<p>仕組みの大雑把な話は「<a href="/2024/04/04/arduino-blink-with-bgm.html#%E8%87%AA%E4%BD%9C%E3%81%AE%E3%82%BF%E3%82%A4%E3%83%9E%E7%B3%BB%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%A8-bgm-%E5%86%8D%E7%94%9F%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">自作のタイマ系ライブラリと BGM 再生ライブラリ</a>」の章を見てもらうとして、ここでは使い方とインストール方法、および正確性の確認方法を説明します。</p>
 
 <h3 id="スケッチのサンプル">スケッチのサンプル</h3>
 <p>Arduino UNO R4 の LED をフワッとさせながら TX、RX を Lチカさせるサンプルです。</p>
@@ -102,11 +106,11 @@
 
 <h3 id="メンバ関数の説明">メンバ関数の説明</h3>
 <h4 id="コンストラクタデストラクタ">コンストラクタ／デストラクタ</h4>
-<p><code class="language-plaintext highlighter-rouge">new</code> とかを使わずにクラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> で宣言してインスタンス化するのが Arduino 的かと思います。</p>
+<p><code class="language-plaintext highlighter-rouge">new</code> は使わず、クラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> 用いてインスタンス化するのが Arduino 的かと思います。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名</span><span class="p">;</span></code></pre></figure>
 
-<p>コンストラクタは特に何もしていません。デストラクタは <code class="language-plaintext highlighter-rouge">begin()</code> で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> のインスタンスが確保したタイマを解放し再利用可能にします。</p>
+<p>コンストラクタは特に何もしていません。デストラクタは <code class="language-plaintext highlighter-rouge">begin()</code> で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> のインスタンスが確保したタイマを解放し、再利用可能な状態にします。</p>
 
 <p>またそのインスタンス自体は <code class="language-plaintext highlighter-rouge">CBTimer</code> クラス内で静的に保持されているため、残念ながら（というか、敢えて）次のように複数を宣言しても１つしか動作しません。</p>
 
@@ -118,19 +122,19 @@
 
 <ul>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">int period_ms</code><br />
+    <p><code class="language-plaintext highlighter-rouge">int period_ms</code><br>
 タイマによるイベントの発火周期をミリ秒単位で指定します。</p>
   </li>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">void (*callback)(void)</code><br />
+    <p><code class="language-plaintext highlighter-rouge">void (*callback)(void)</code><br>
 タイマイベントの発火周期ごとに呼び出すコールバック関数を指定します。</p>
   </li>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">bool start</code><br />
+    <p><code class="language-plaintext highlighter-rouge">bool start</code><br>
 すぐにタイマのカウントを開始する場合は <code class="language-plaintext highlighter-rouge">true</code>（デフォルト、省略可能）を指定します。</p>
   </li>
   <li>
-    <p>戻り値<br />
+    <p>戻り値<br>
 初期化に成功し、<code class="language-plaintext highlighter-rouge">FspTimer</code> が確保できれば <code class="language-plaintext highlighter-rouge">true</code> が、出来なければ <code class="language-plaintext highlighter-rouge">false</code> を返します。</p>
   </li>
 </ul>
@@ -140,7 +144,8 @@
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="n">timer_mode_t</span> <span class="n">timer_mode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
 
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">timer_mode_t</code><br />
+  <li>
+<code class="language-plaintext highlighter-rouge">timer_mode_t</code><br>
 タイマイベントを周期的に発火させるには列挙定数の <code class="language-plaintext highlighter-rouge">TIMER_MODE_PERIODIC</code> を、1回限りの場合は <code class="language-plaintext highlighter-rouge">TIMER_MODE_ONE_SHOT</code> を指定します。列挙定数 <code class="language-plaintext highlighter-rouge">timer_mode_t</code> は階層の深いところ（<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 Minima</a>、<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 WiFi</a>）で定義されています。</li>
 </ul>
 
@@ -152,7 +157,7 @@
 <span class="kt">bool</span> <span class="nf">stop</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
 <span class="kt">void</span> <span class="nf">end</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></code></pre></figure>
 
-<p>初期化関数 <code class="language-plaintext highlighter-rouge">begin()</code> の <code class="language-plaintext highlighter-rouge">start</code> に <code class="language-plaintext highlighter-rouge">false</code> を指定した場合は <code class="language-plaintext highlighter-rouge">start()</code> でタイマのカウントを開始できます。また <code class="language-plaintext highlighter-rouge">stop()</code> はカウントの停止、<code class="language-plaintext highlighter-rouge">end()</code> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> 中の <a href="/2024/04/04/arduino-blink-with-bgm.html#gpt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">GPT</a> もしくは <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">AGT</a> インスタンスを解放し再利用可能にします。</p>
+<p>初期化関数 <code class="language-plaintext highlighter-rouge">begin()</code> の <code class="language-plaintext highlighter-rouge">start</code> に <code class="language-plaintext highlighter-rouge">false</code> を指定した場合は <code class="language-plaintext highlighter-rouge">start()</code> でタイマのカウントを開始できます。また <code class="language-plaintext highlighter-rouge">stop()</code> はカウントの停止、<code class="language-plaintext highlighter-rouge">end()</code> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> 中の <a href="/2024/04/04/arduino-blink-with-bgm.html#gpt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">GPT</a> もしくは <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">AGT</a> インスタンスを解放し、再利用可能な状態にします。</p>
 
 <h4 id="コールバック関数">コールバック関数</h4>
 <p>タイマイベントの発火と共に呼び出すコールバック関数ですが、「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">割り込みハンドラの怪</a>」にも書いた通り、少なくとも UNO R4 Minima と UNO R4 WiFi では <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> も使えちゃいます。</p>
@@ -165,21 +170,21 @@
 <h3 id="インストール方法">インストール方法</h3>
 <figure class="float-left">
   <a href="/images/2024/04-09/download-library.jpg" title="CallbackTimerR4-main.zipのダウンロード" data-lightbox="image">
-    <img src="/images/2024/04-09/download-library-small.jpg" width="457" height="276" alt="CallbackTimerR4-main.zipのダウンロード" />
+    <img src="/images/2024/04-09/download-library-small.jpg" width="457" height="276" alt="CallbackTimerR4-main.zipのダウンロード">
   </a>
   <a href="/images/2024/04-09/include-library.jpg" title="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" data-lightbox="image">
-    <img src="/images/2024/04-09/include-library-small.jpg" width="459" height="205" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" />
+    <img src="/images/2024/04-09/include-library-small.jpg" width="459" height="205" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…">
   </a>
 </figure>
 
-<p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
+<p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル">Source code (zip)</span></a> をダウンロードします。</p>
 
-<p>続いて Arduino IDE メニューの「スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…」からダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
+<p>続いて Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」からダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
 
 <h3 id="examples-の説明">Examples の説明</h3>
-<p>ライブラリのインストール後は、メニューの「ファイル → スケッチ例 → カスタムライブラリのスケッチ例」から例題のスケッチを参照することができます。</p>
+<p>ライブラリのインストール後は、メニューの「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>カスタムライブラリのスケッチ例</strong>」から例題のスケッチを参照することができます。</p>
 
-<p>例題 <a href="https://github.com/embedded-kiddie/CallbackTimerR4/tree/main/examples/dimming_and_blinking" title="CallbackTimerR4/examples/dimming_and_blinking at main · embedded-kiddie/CallbackTimerR4"><code class="language-plaintext highlighter-rouge">dimming_and_blinking</code></a> は上記 <a href="#スケッチのサンプル">スケッチのサンプル</a> と同じなので、ここではもう１つの例題 <a href="https://github.com/embedded-kiddie/CallbackTimerR4/tree/main/examples/check-timer-accuracy" title="CallbackTimerR4/examples/check-timer-accuracy at main · embedded-kiddie/CallbackTimerR4"><code class="language-plaintext highlighter-rouge">check-timer-accuracy</code></a> について説明します。</p>
+<p>例題 <a href="https://github.com/embedded-kiddie/CallbackTimerR4/tree/main/examples/dimming_and_blinking" title="CallbackTimerR4/examples/dimming_and_blinking at main · embedded-kiddie/CallbackTimerR4"><code class="language-plaintext highlighter-rouge">dimming_and_blinking</code></a> は上記 <a href="#%E3%82%B9%E3%82%B1%E3%83%83%E3%83%81%E3%81%AE%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB">スケッチのサンプル</a> と同じなので、ここではもう１つの例題 <a href="https://github.com/embedded-kiddie/CallbackTimerR4/tree/main/examples/check-timer-accuracy" title="CallbackTimerR4/examples/check-timer-accuracy at main · embedded-kiddie/CallbackTimerR4"><code class="language-plaintext highlighter-rouge">check-timer-accuracy</code></a> について説明します。</p>
 
 <h4 id="check-timer-accuracy">check-timer-accuracy</h4>
 <p>タイマイベント発火周期の正確性（精度）をソフトウェアで観測するスケッチです。ライブラリがちゃんと働いているかを確認するために作ったスケッチで、正確性の基準はあくまで <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> や <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> ですので、参考程度のものです。</p>
@@ -220,11 +225,11 @@
 
 <p>ただしインスタンスは１個限りという制約があります。僕の目的からすればこれで十分というのが理由ですが、通常はタイマ１つで複数のイベントを発火させることができるので、これを使わずして貴重なタイマ資源を消費するプログラムを作るのをためらったというのがもう一つの理由です。</p>
 
-<p>複数のタスクをキックしたいなら「<a href="https://garchiving.com/interrupt-without-timer/" title="ArduinoでTimerを使わずに割り込み処理をする  &#8211;  imo Lab.">ArduinoでTimerを使わずに割り込み処理をする</a>」で紹介されている方法が、直感的かつシンプルで良いと思います。</p>
+<p>複数のタスクをキックしたいなら「<a href="https://garchiving.com/interrupt-without-timer/" title="ArduinoでTimerを使わずに割り込み処理をする  –  imo Lab.">ArduinoでTimerを使わずに割り込み処理をする</a>」で紹介されている方法が、直感的かつシンプルで良いと思います。</p>
 
 <p>むしろ次に紹介予定の <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> のように、何かと組み合わせて内部に隠蔽してしまうのが適した使い方でしょう。</p>
 
-<p>ということで、次回はその <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を紹介したいと思います :love_you_gesture:</p>
+<p>ということで、次回はその <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を紹介したいと思います <img class="emoji" title=":herb:" alt=":herb:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f33f.png" height="20" width="20"></p>
 
 
   </div>
@@ -237,7 +242,10 @@
       <a href="/2024/04/12/background-tone-player.html" title="次の記事：Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介">Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介</a>
     </p>    
   </div>
-<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2024/04/09/arduino-r4-callback-timer.html" hidden></a>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/04/09/arduino-r4-callback-timer.html" hidden></a>
 </article>
 
       </div>
@@ -252,10 +260,15 @@
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
-          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
       </div>
 
-      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
 
       <div class="footer-col footer-col-3">
         <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
