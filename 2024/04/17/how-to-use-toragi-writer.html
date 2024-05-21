@@ -150,17 +150,17 @@
 
 </div>
 
-<p>この時、Windows であればドラッグ＆ドロップで OK ですが、Mac の場合は <a href="https://twitter.com/nxpfan" title="nxp fan (@nxpfan) さん / x">nxp fan﻿ さん</a> の Facebookページ <a href="https://www.facebook.com/notes/344084236658509/" title="Facebook">「USB経由ISP書き込み」をMacで行う</a> を参考に ターミナル.app からコピーしないとうまくいきません。</p>
+<p>この時、Windows であればドラッグ＆ドロップで OK ですが、Mac の場合は ターミナル.app からコピーしないとうまくいきません（ご参考：<a href="https://twitter.com/nxpfan" title="nxp fan (@nxpfan) さん / x">nxp fan﻿ さん</a> の Facebookページ <a href="https://www.facebook.com/notes/344084236658509/" title="Facebook">「USB経由ISP書き込み」をMacで行う</a>）。</p>
 
 <div class="quote clear-both">
 
 <h4 id="ターミナルapp-からのコピー方法">ターミナル.app からのコピー方法</h4>
-<p><span class="inline"><img src="/images/2024/04-18/terminal-app.png" width="108" height="27" title="ターミナル.app" alt="ターミナル.app" /></span> を起動し、<code class="language-plaintext highlighter-rouge">cp -X</code> とスペースを打ち込みます。続いてそこに <code class="language-plaintext highlighter-rouge">firmware.bin</code> をドラッグ＆ドロップし、さらに <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> をドラッグ＆ドロップすると、<code class="language-plaintext highlighter-rouge">cp -X</code> の後ろにコピー元のファイルとコピー先が入力されるので、リターンキーを押せば Mac 特有の拡張属性が付かずにコピーが完了します。</p>
+<p>まず <span class="inline"><img src="/images/2024/04-18/terminal-app.png" width="108" height="27" title="ターミナル.app" alt="ターミナル.app" /></span> を起動し、<code class="language-plaintext highlighter-rouge">cp -X</code> とスペースを打ち込みます。続いてそこに <code class="language-plaintext highlighter-rouge">firmware.bin</code> をドラッグ＆ドロップし、さらに <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> をドラッグ＆ドロップすると、<code class="language-plaintext highlighter-rouge">cp -X</code> の後ろにコピー元のファイルとコピー先が入力されるので、リターンキーを押します。これで Mac 特有の拡張属性が付かずにコピーが完了します。</p>
 
 </div>
 
 <h3 id="デバイスドライバの確認">デバイスドライバの確認</h3>
-<p>コピー後は通常の USB ドライブ同様 <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> を取り外す（Windows の場合）か、ゴミ箱にドラッグ＆ドロップする（Mac の場合）します。リセットボタンか電源を入れ直し、赤と緑の LED が点灯 → 消灯が確認できれば成功です。</p>
+<p>コピー後は、通常の USB ドライブと同様に <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> を取り外す（Windows の場合）か、ゴミ箱にドラッグ＆ドロップする（Mac の場合）します。リセットボタンか電源を入れ直し、赤と緑の LED が点灯 → 消灯が確認できれば成功です。</p>
 
 <h4 id="mac-の場合">Mac の場合</h4>
 <figure class="float-left">
@@ -234,7 +234,7 @@
 
 <p>次に <span class="inline"><img src="/images/2024/04-18/button-debug.png" width="27" height="27" title="デバッグボタン" alt="デバッグボタン" /></span> でデバッグを開始すると <code class="language-plaintext highlighter-rouge">Unable to parse SVD file</code> のエラーが発生するので、SVD ファイルへのパスを記録しておきます。</p>
 
-<p>またデバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> になっていることを確認してください。</p>
+<p>また、デバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> になっていることを確認してください。</p>
 
 <h3 id="svd-ファイルの差し替え">SVD ファイルの差し替え</h3>
 <p>まず <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">SVD ファイルの更新版</a> をダウンロードしてください。次に、先に記録した SVD ファイルのあるフォルダを開き、<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を <code class="language-plaintext highlighter-rouge">R7FA4M1AB-.svd</code> にリネームするなどして退避した後、ダウンロードした <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> に差し替えます。</p>
