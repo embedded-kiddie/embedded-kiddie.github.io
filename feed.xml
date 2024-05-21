@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-21T16:46:32+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-21T17:03:16+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -1882,13 +1882,13 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   </a>
 </figure>
 
-<p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library.">Github の BackgroundMusicR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/BackgroundMusicR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
+<p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library.">Github の BackgroundMusicR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/BackgroundMusicR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" />Source code (zip)</span></a> をダウンロードします。</p>
 
-<p>続いて Arduino IDE メニューの「スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…」からダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
+<p>続いて Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」から、先にダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
 
 <h2 id="使い方">使い方</h2>
 <h3 id="スケッチのサンプル">スケッチのサンプル</h3>
-<p>ライブラリのインストール後、IDE メニューの「ファイル → スケッチ例 → カスタムライブラリのスケッチ例」から、曲を再生しながら Lチカする <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/tree/main/examples/blink_and_music" title="BackgroundMusicR4/examples/blink_and_music at main · embedded-kiddie/BackgroundMusicR4"><code class="language-plaintext highlighter-rouge">blink_and_music</code></a> を開くことができます。添付の曲は <a href="https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E3%83%96%E3%82%B9" title="グリーンスリーブス - Wikipedia">イングランド民謡</a> の <a href="https://github.com/robsoncouto/arduino-songs/tree/master/greensleeves" title="arduino-songs/greensleeves at master · robsoncouto/arduino-songs">Greensleeves</a> です。</p>
+<p>ライブラリのインストール後、IDE メニューの「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>カスタムライブラリのスケッチ例</strong>」から、曲を再生しながら Lチカする <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/tree/main/examples/blink_and_music" title="BackgroundMusicR4/examples/blink_and_music at main · embedded-kiddie/BackgroundMusicR4"><code class="language-plaintext highlighter-rouge">blink_and_music</code></a> を開くことができます。添付の曲は <a href="https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E3%83%96%E3%82%B9" title="グリーンスリーブス - Wikipedia">イングランド民謡</a> の <a href="https://github.com/robsoncouto/arduino-songs/tree/master/greensleeves" title="arduino-songs/greensleeves at master · robsoncouto/arduino-songs">Greensleeves</a> です。</p>
 
 <p><code class="language-plaintext highlighter-rouge">Arduino.h</code> に続けて <code class="language-plaintext highlighter-rouge">BGMusic.h</code> をインクルードすれば <code class="language-plaintext highlighter-rouge">CBTimer.h</code> も読み込みます。</p>
 
@@ -1927,7 +1927,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>                      <span class="c1">// wait for a second</span>
 <span class="p">}</span></code></pre></figure>
 
-<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> と少し違うのは、音符と音符長のデータを１つの <code class="language-plaintext highlighter-rouge">int</code> 型配列にフラットに格納しているところで、<a href="https://github.com/robsoncouto/arduino-songs" title="robsoncouto/arduino-songs">Robson Couto さん</a> のアイディアです。音符を定義した <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/blob/main/examples/blink_and_music/Greensleeves.h" title="BackgroundMusicR4/examples/blink_and_music/Greensleeves.h at main · embedded-kiddie/BackgroundMusicR4"><code class="language-plaintext highlighter-rouge">Greensleeves.h</code></a> の中身はザッとこんな感じです。</p>
+<p>公式の <a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> と少し違うのは、音符と音符長のデータを１つの <code class="language-plaintext highlighter-rouge">int</code> 型配列にフラットに格納しているところで、<a href="https://github.com/robsoncouto/arduino-songs" title="robsoncouto/arduino-songs">Robson Couto さん</a> のアイディアです。音符を定義した <a href="https://github.com/embedded-kiddie/BackgroundMusicR4/blob/main/examples/blink_and_music/Greensleeves.h" title="BackgroundMusicR4/examples/blink_and_music/Greensleeves.h at main · embedded-kiddie/BackgroundMusicR4"><code class="language-plaintext highlighter-rouge">Greensleeves.h</code></a> の中身はザッとこんな感じです。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++">  <span class="n">NOTE_G4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
   <span class="n">NOTE_AS4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">NOTE_C5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_D5</span><span class="p">,</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_DS5</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span> <span class="n">NOTE_D5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
@@ -1936,7 +1936,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   <span class="n">NOTE_A4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">NOTE_FS4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span> <span class="n">NOTE_D4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">NOTE_G4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span>
   <span class="p">...</span></code></pre></figure>
 
-<p>ヘッダファイルとしてはイレギュラーですが、Arduino IDE が <code class="language-plaintext highlighter-rouge">.txt</code> とか <code class="language-plaintext highlighter-rouge">.dat</code> とかの拡張子を許してくれず、仕方なく <code class="language-plaintext highlighter-rouge">.h</code> としています。当たり前ですが、この楽譜データを差し替えれば色々な曲に対応できます。</p>
+<p>ヘッダファイルとしてはイレギュラーですが、Arduino IDE が <code class="language-plaintext highlighter-rouge">.txt</code> とか <code class="language-plaintext highlighter-rouge">.dat</code> とかの拡張子を許してくれず、仕方なく <code class="language-plaintext highlighter-rouge">.h</code> としています。当然、この楽譜データを差し替えれば色々な曲に対応できます。</p>
 
 <h3 id="メンバ関数の説明">メンバ関数の説明</h3>
 <h4 id="コンストラクタデストラクタ">コンストラクタ／デストラクタ</h4>
@@ -2015,9 +2015,9 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> では互換性を考慮し、この式を元に音符長を決めています。</p>
 
 <h2 id="音符長計算関数について">音符長計算関数について</h2>
-<p>さて上記方式の問題点は、「・」のついた付点音符（元の音符の1.5倍の長さ）や、4分音符＋16分音符を表す<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>などの音符長が整数で表せないことです。</p>
+<p>一方、上記方式の問題点は、「・」のついた付点音符（元の音符の1.5倍の長さ）や、4分音符＋16分音符を表す<span class="inline"><img src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>などの音符長が整数で表せないことです。</p>
 
-<p><code class="language-plaintext highlighter-rouge">float</code> を使えば <code class="language-plaintext highlighter-rouge">int</code> とデータサイズこそ同じになりますが、浮動小数点演算が必要になります。UNO R4 のマイコンは FPU を持っているので実際にはそれほど問題にならないかも知れませんが、できれば整数演算で済ませたいところです。</p>
+<p><code class="language-plaintext highlighter-rouge">float</code> を使えばデータサイズこそ <code class="language-plaintext highlighter-rouge">int</code> と同じになりますが、浮動小数点演算が必要になります。UNO R4 のマイコンは FPU を持っているので実際にはそれほど問題にならないかも知れませんが、できれば整数演算で済ませたいところです。</p>
 
 <p>ということで「音符長計算関数」の登場です。</p>
 
@@ -2047,9 +2047,9 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   </tbody>
 </table>
 
-<p>直感的に分かり易さを優先させたのだと思いますが、短い音符ほど音符長を表現する数値が大きくなってます。</p>
+<p>直感的な分かり易さを優先させたのだと思いますが、短い音符ほど音符長を表す数値が大きくなってます。</p>
 
-<p>一方、４分音符一拍分の長さを <code class="language-plaintext highlighter-rouge">4</code> を基準に（ここまでは <a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> と同じ）、各音符の長さの比と、それを表すシンボルに割り当ててみます。直感的な分かり易さはそのままに、数値ではなく <code class="language-plaintext highlighter-rouge">N4</code> などのシンボルを使う様にするワケです。</p>
+<p>これに対し、４分音符一拍分の長さ <code class="language-plaintext highlighter-rouge">4</code> を基準に（ここまでは（<a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> と同じ）、各音符の長さの比と、それを表すシンボルを割り当ててみます。直感的な分かり易さはそのままに、数値ではなく <code class="language-plaintext highlighter-rouge">N4</code> などのシンボルを使う様にするワケです。</p>
 
 <table>
   <thead>
@@ -2064,7 +2064,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left">音符長比</td>
+      <td style="text-align: left">音符長比 <span class="inline"><img src="/images/2024/04-10/n.png" width="27" height="27" alt="n" /></span></td>
       <td style="text-align: center">1</td>
       <td style="text-align: center">2</td>
       <td style="text-align: center">4</td>
@@ -2102,7 +2102,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left">音符長比</td>
+      <td style="text-align: left">音符長比<span class="inline"><img src="/images/2024/04-10/n.png" width="27" height="27" alt="n" /></span></td>
       <td style="text-align: center">1 × 3 = 3</td>
       <td style="text-align: center">4</td>
       <td style="text-align: center">2 × 3 = 6</td>
@@ -2289,7 +2289,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" />Source code (zip)</span></a> をダウンロードします。</p>
 
-<p>続いて Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」からダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
+<p>続いて Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」から、先にダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
 
 <h3 id="examples-の説明">Examples の説明</h3>
 <p>ライブラリのインストール後は、メニューの「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>カスタムライブラリのスケッチ例</strong>」から例題のスケッチを参照することができます。</p>
