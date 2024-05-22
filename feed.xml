@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-22T21:10:43+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-22T21:26:19+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -392,7 +392,7 @@
 
 <p>この修正により、UNO R4 Minima は <a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> をサポートした <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブ）で、UNO R4 WiFi は ESP32 を介したオンボードデバッガで、それぞれソースコードデバッグが可能になります。</p>
 
-<div class="quote clear-both">
+<div class="clear-both quote">
 <p>「<a href="/2024/03/24/arduino-debug-with-toragi.html#svdファイルとは何者" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">SVDファイルとは何者？</a>」から、CMSIS-DAP や CMSIS-SVD、JTAG/SWD デバッグプローブについての図を再掲します。</p>
 
 <figure class="flex">
@@ -400,7 +400,7 @@
     <img src="/images/2024/03-24/CMSIS-overview-small.png" alt="CMSISの全体像とデバッガの位置付け" width="458" height="168" />
   </a>
   <a href="/images/2024/03-24/block-diagram.jpg" title="ARM MCUからArduino IDEまでのブロック図" data-lightbox="image">
-    <img src="/images/2024/03-24/block-diagram-small.jpg" alt="ARM MCUからArduino IDEまでのブロック図" width="456" height="160" />
+    <img src="/images/2024/03-24/block-diagram-small.png" alt="ARM MCUからArduino IDEまでのブロック図" width="456" height="160" />
   </a>
 </figure>
 </div>
@@ -1512,7 +1512,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <ul>
   <li>
     <p><strong>Arduino UNO R4 Minima</strong><br />
-CMSIS-DAP に対応した JTAG/SWD デバッグプローブが必要です。本記事では トラ技 ARM ライタを紹介しています。</p>
+<a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> に対応した <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブが必要です。本記事では トラ技 ARM ライタを紹介しています。</p>
   </li>
   <li>
     <p><strong>Arduino UNO R4 WiFi</strong><br />
@@ -1528,7 +1528,7 @@ CMSIS-DAP に対応した JTAG/SWD デバッグプローブが必要です。本
     <img src="/images/2024/03-24/CMSIS-overview-small.png" alt="CMSISの全体像とデバッガの位置付け" width="458" height="168" />
   </a>
   <a href="/images/2024/03-24/block-diagram.jpg" title="ARM MCUからArduino IDEまでのブロック図" data-lightbox="image">
-    <img src="/images/2024/03-24/block-diagram-small.jpg" alt="ARM MCUからArduino IDEまでのブロック図" width="456" height="160" />
+    <img src="/images/2024/03-24/block-diagram-small.png" alt="ARM MCUからArduino IDEまでのブロック図" width="456" height="160" />
   </a>
 </figure>
 </div>
