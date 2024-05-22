@@ -58,7 +58,7 @@
     <h2 id="ディスプレイ数式数式だけの行">ディスプレイ数式（数式だけの行）</h2>
 <p>段落を分けるために前後を空行で囲むのが基本ルールです（例外あり）。</p>
 
-<h3>・<code>$$...$$</code></h3>
+<h3><strong>・<code>$$...$$</code></strong></h3>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex"> 
 <span class="p">$$</span><span class="nb">
@@ -79,7 +79,7 @@ s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span
 \[\textstyle
 s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\]
 
-<h3 id="-1">・<code>\[...\]</code></h3>
+<h3 id="-1"><strong>・<code>\[...\]</code></strong></h3>
 <p>前後に空行は必要ありませんが、二重の <code class="language-plaintext highlighter-rouge">\\</code> で <code class="language-plaintext highlighter-rouge">\</code> をエスケープする必要があります。<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup></p>
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
 <span class="k">\\</span>[
@@ -107,7 +107,7 @@ s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 \]
 テキスト</p>
 
-<h3 id="beginend">・<code>\begin{}...\end{}</code></h3>
+<h3 id="beginend"><strong>・<code>\begin{}...\end{}</code></strong></h3>
 <p>MathJax と異なり、空行と <code class="language-plaintext highlighter-rouge">$$...$$</code> で囲む必要があります。</p>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex"> 
@@ -165,7 +165,7 @@ s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 <h2 id="インライン数式文章中の数式">インライン数式（文章中の数式）</h2>
 <p>前後を空行で囲まず、１つの段落中に数式を記述します。</p>
 
-<h3 id="-2">・<code>$...$</code></h3>
+<h3 id="-2"><strong>・<code>$...$</code></strong></h3>
 <p>デフォルトでは <code class="language-plaintext highlighter-rouge">$...$</code> は使えないので、<code class="language-plaintext highlighter-rouge">$$...$$</code> で囲みます。</p>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
@@ -178,7 +178,7 @@ s</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span
 \(s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}\)
 テキスト</p>
 
-<h3 id="-3">・<code>\(...\)</code></h3>
+<h3 id="-3"><strong>・<code>\(...\)</code></strong></h3>
 <p>二重の <code class="language-plaintext highlighter-rouge">\\</code> で <code class="language-plaintext highlighter-rouge">\</code> をエスケープする必要があります。<sup id="fnref:1:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup></p>
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
 <span class="k">\\</span>(
@@ -192,7 +192,7 @@ s^2 = \frac{1}{n} \sum_{i=1}^n {(x_i - \overline{x})^2}
 \)
 テキスト</p>
 
-<h3 id="beginend-1">・<code>\begin{}...\end{}</code></h3>
+<h3 id="beginend-1"><strong>・<code>\begin{}...\end{}</code></strong></h3>
 <p>MathJax と異なり、LaTeX の仕様通り <code class="language-plaintext highlighter-rouge">align</code> や <code class="language-plaintext highlighter-rouge">equation</code>、<code class="language-plaintext highlighter-rouge">split</code> はディスプレイ数式（数式だけの行）でしか使えません。インライン数式なら <code class="language-plaintext highlighter-rouge">aligned</code> や <code class="language-plaintext highlighter-rouge">gathered</code> を使います。</p>
 
 <figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
