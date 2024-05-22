@@ -87,7 +87,22 @@
   <li>CLIバージョン：0.35.3</li>
 </ul>
 
+<h4 id="arduino-uno-r4-用ボードマネージャ">Arduino UNO R4 用ボードマネージャ</h4>
+<ul>
+  <li>Arduino UNO R4 Boards <small>by Arduino</small> 1.1.0</li>
+</ul>
+
 <h2 id="必要なもの">必要なもの</h2>
+<ul>
+  <li>
+    <p><strong>Arduino UNO R4 Minima</strong><br />
+CMSIS-DAP に対応した JTAG/SWD デバッグプローブが必要です。本記事では トラ技 ARM ライタを紹介しています。</p>
+  </li>
+  <li>
+    <p><strong>Arduino UNO R4 WiFi</strong><br />
+オンボードデバッガが搭載されているので、デバッグプローブは不要です。<a href="#デバッガの起動と-svd-ファイルの更新">デバッガの起動と SVD ファイルの更新</a> に進んで下さい。</p>
+  </li>
+</ul>
 
 <h3 id="トラ技-arm-ライタ">トラ技 ARM ライタ</h3>
 <p>購入は CQ 出版から出ている書籍版とマルツオンラインで販売されている単体版の２択です。
@@ -237,7 +252,9 @@
 <p>また、デバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> になっていることを確認してください。</p>
 
 <h3 id="svd-ファイルの差し替え">SVD ファイルの差し替え</h3>
-<p>まず <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">SVD ファイルの更新版</a> をダウンロードしてください。次に、先に記録した SVD ファイルのあるフォルダを開き、<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を <code class="language-plaintext highlighter-rouge">R7FA4M1AB-.svd</code> にリネームするなどして退避した後、ダウンロードした <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> に差し替えます。</p>
+<p><a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">SVD ファイルの更新版</a> をダウンロードしてください。本サイトの <a href="/images/2024/04-18/R7FA4M1AB.svd.zip">R7FA4M1AB.svd.zip</a> からもダウンロードが可能です（.zip ファイルは解凍してください）。</p>
+
+<p>次に、先に記録した SVD ファイルのあるフォルダを開き、元のファイルを <code class="language-plaintext highlighter-rouge">R7FA4M1AB-.svd</code> にリネームするなどして退避した後、ダウンロードした <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> に差し替えます。</p>
 
 <h3 id="デバッグの開始と終了">デバッグの開始と終了</h3>
 <p>これでデバッグができる準備が整ったハズです。行番号の左側をクリックするとブレークポイントが設定できるので、止めたいところをマーキングします。</p>
