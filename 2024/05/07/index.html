@@ -76,7 +76,11 @@
 
 <p>この修正により、UNO R4 Minima は <a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> をサポートした <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブ）で、UNO R4 WiFi は ESP32 を介したオンボードデバッガで、それぞれソースコードデバッグが可能になります。</p>
 
-<div class="clear-both"></div>
+<div class="quote clear-both">
+
+<p>CMSIS-DAP や CMSIS-SVD については、「<a href="/2024/03/24/arduino-debug-with-toragi.html#svd%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%A8%E3%81%AF%E4%BD%95%E8%80%85" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">SVDファイルとは何者？</a>」を参照願います。</p>
+
+</div>
 
 <p>本来は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> の仕様と対比して修正内容を提示したいところですが、Renesas の文書による許諾が必要なため、<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="CC BY-SA 4.0 Deed - Attribution-ShareAlike 4.0 International - Creative Commons">CC BY-SA</a> の元に公開されている <a href="https://docs.arduino.cc/resources/pinouts/ABX00080-full-pinout.pdf">Arduino UNO R4 Minima のピン配図</a> と MIT ライセンスの元に公開されている <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を用いて説明を試みます。</p>
 
