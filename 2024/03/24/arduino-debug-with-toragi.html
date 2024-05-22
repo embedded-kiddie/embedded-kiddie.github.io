@@ -117,7 +117,7 @@ SWD コネクタが載ってます。</p>
 
 <p>もう少し具体的に描くと、こんな感じでしょうか。よく出来ています。</p>
 
-<p><img src="/images/2024/03-24/block-diagram.jpg" alt="ARM MCUからArduino IDEまでのブロック図" title="ARM MCUからArduino IDEまでのブロック図" width="1380" height="483"></p>
+<p><img src="/images/2024/03-24/block-diagram.png" alt="ARM MCUからArduino IDEまでのブロック図" title="ARM MCUからArduino IDEまでのブロック図" width="1379" height="517"></p>
 
 <p>正体が分かったところで Arduino IDE に添付された <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を覗き <code class="language-plaintext highlighter-rouge">P100PFS</code> を探してみましたが見つかりません。にもかかわらず別なところから <code class="language-plaintext highlighter-rouge">derivedFrom</code> で継承されてるじゃないですか！ しかもコレだけじゃなく <code class="language-plaintext highlighter-rouge">P100PFS_HA</code> とか <code class="language-plaintext highlighter-rouge">P100PFS_BY</code> も未定義なことが分かりました。</p>
 
