@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-22T11:04:02+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-22T11:10:20+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -1634,25 +1634,23 @@ CMSIS-DAP に対応した JTAG/SWD デバッグプローブが必要です。本
 
 </div>
 
+<h2 id="デバッガの起動と-svd-ファイルの更新">デバッガの起動と SVD ファイルの更新</h2>
+
 <h3 id="コンパイルオプションの設定">コンパイルオプションの設定</h3>
 <figure class="float-left">
   <a href="/images/2024/04-18/compile-option.png" title="デバッグに最適化" data-lightbox="image">
     <img src="/images/2024/04-18/compile-option-small.jpg" width="459" height="320" alt="デバッグに最適化" />
   </a>
-</figure>
-
-<p>IED メニューから「<strong>スケッチ</strong> → <strong>デバッグに最適化</strong>」を選択しチェックをつけます。これを設定しておかないとまともにソースコードデバッグができません。</p>
-
-<h2 id="デバッガの起動と-svd-ファイルの更新">デバッガの起動と SVD ファイルの更新</h2>
-<figure class="float-left">
   <a href="/images/2024/04-18/svd-error.jpg" title="Unable to parse SVD file" data-lightbox="image">
     <img src="/images/2024/04-18/svd-error-small.jpg" width="460" height="287" alt="Unable to parse SVD file" />
   </a>
 </figure>
 
-<p>適当なスケッチを準備し、デバッグ情報が付加されたオブジェクトを生成するため <span class="inline"><img src="/images/2024/04-18/button-compile.png" width="27" height="27" title="コンパイルボタン" alt="コンパイルボタン" /></span> で再コンパイルします。</p>
+<p>IED メニューから「<strong>スケッチ</strong> → <strong>デバッグに最適化</strong>」を選択しチェックをつけます。これを設定しておかないとまともにソースコードデバッグができません。</p>
 
-<p>次に <span class="inline"><img src="/images/2024/04-18/button-debug.png" width="27" height="27" title="デバッグボタン" alt="デバッグボタン" /></span> でデバッグを開始すると <code class="language-plaintext highlighter-rouge">Unable to parse SVD file</code> のエラーが発生するので、SVD ファイルへのパスを記録しておきます。</p>
+<p>次に、適当なスケッチを準備し、デバッグ情報が付加されたオブジェクトを生成するため <span class="inline"><img src="/images/2024/04-18/button-compile.png" width="27" height="27" title="コンパイルボタン" alt="コンパイルボタン" /></span> で再コンパイルします。</p>
+
+<p><span class="inline"><img src="/images/2024/04-18/button-debug.png" width="27" height="27" title="デバッグボタン" alt="デバッグボタン" /></span> でデバッグを開始すると <code class="language-plaintext highlighter-rouge">Unable to parse SVD file</code> のエラーが発生するので、SVD ファイルへのパスを記録します。</p>
 
 <p>また、デバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> になっていることを確認してください。</p>
 
