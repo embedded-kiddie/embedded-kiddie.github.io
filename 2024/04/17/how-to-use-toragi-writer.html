@@ -296,7 +296,7 @@
 <p>トラ技 ARM ライタと通信ができない時に発生します。USB コネクタがキツかったりするので確認します。また電源を入れた時やリセット時など、赤と緑の LED が点灯 → 消灯するか確認します。症状が改善しない時は、<a href="#ファームウェアの書き込み">ファームウェアの書き込み</a> から再構築してみます。</p>
 
 <h3 id="dfu-util-no-dfu-capable-usb-device-available">dfu-util: No DFU capable USB device available</h3>
-<p>基本は公式サイト <a href="https://support.arduino.cc/hc/en-us/articles/11011849739804-dfu-util-errors-when-uploading-exit-status-74" title="dfu-util errors when uploading (exit status 74) &ndash; Arduino Help Center">dfu-util errors when uploading (exit status 74)</a> の「ケーブルを確認せよ」です。Windows であれば <a href="https://roboin.io/article/2023/12/11/arduino-dfu-error/" title="Arduinoで「No DFU capable USB device available」エラーが出たときの対処法 - ろぼいんブログ">Arduinoで「No DFU capable USB device available」エラーが出たときの対処法</a> が参考になるかもしれません。</p>
+<p>「デバイスのファームウェアをアップグレードできる USB が見つからない」というエラーで、公式サイト <a href="https://support.arduino.cc/hc/en-us/articles/11011849739804-dfu-util-errors-when-uploading-exit-status-74" title="dfu-util errors when uploading (exit status 74) &ndash; Arduino Help Center">dfu-util errors when uploading (exit status 74)</a> にある通り、基本は「ケーブルを確認せよ」です。Windows であれば <a href="https://roboin.io/article/2023/12/11/arduino-dfu-error/" title="Arduinoで「No DFU capable USB device available」エラーが出たときの対処法 - ろぼいんブログ">Arduinoで「No DFU capable USB device available」エラーが出たときの対処法</a> が参考になるかもしれません。</p>
 
 <p>僕の場合、アップロードも CMSIS-DAP からできるものと思い込み、Minima 側の USB を接続してなかった時に発生してました（トラ技 ARM ライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> をショートされれば Minima に電源供給できる）。今では両基板とも USB 接続することで事なきを得ています。</p>
 
