@@ -55,7 +55,16 @@
   <div class="post-content e-content" itemprop="articleBody">
     <p>何かメカ的に動くものが作りたくて <a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> というのを購入しました。</p>
 
-<p>今日日、小学生でもライントレースはプログラムするし、Arduino とかは CPU レジスタとか知らなくてもガンガンプログラムできちゃうわけだけど、やっぱ CPU のデータシートとかユーザーマニュアルとかと格闘しながらのプログラミングは楽しい！ ロボコンにハマる人の気持ちが分かります。</p>
+<p>恥ずかしながらデモ走行の動画です。係数の調整がイマイチですが、<a href="https://www.youtube.com/watch?v=liuNBOXGJxg" title="T-SQUARE 『Truth』 × 360 Reality Audio - スペシャルビデオ - YouTube">T-SQUARE の TRUTH</a> を奏でながら走行するローバーを見ながら F1 監督の気分を味わっています。</p>
+
+<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="ja" dir="ltr">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め<a href="https://t.co/q0I5bCi0YE">https://t.co/q0I5bCi0YE</a> <a href="https://t.co/YdKTqa6xzn">pic.twitter.com/YdKTqa6xzn</a></p>&mdash; Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1767330699332530660?ref_src=twsrc%5Etfw">March 11, 2024</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>画面左上で「ピッ」と鳴ってるのは Arduino Uno で作ったラップタイマーです。<a href="https://amzn.asia/d/czTh7l0" title="Amazon.co.jp: OSOYOO Arduino用 Raspberry Pi 5 対応 IR赤外線障害物回避 センサモジュール アルドゥイーノ スマート カー ロボット用 10PCSセット : 産業・研究開発用品">fc-51 赤外線モジュール</a> と <a href="https://amzn.asia/d/gyudCEt" title="Amazon.co.jp: DiyStudio 2 個 0.96 OLED i2c インチ有機モジュール IIC/I2Cインターフェース LCD SSD1306ドライバー 128X64解像度ホワイトディスプレイ，適用インターフェース VCC, GND, SCL, SDA : パソコン・周辺機器">SSD1306 OLED</a> のサンプルスケッチをコピペして <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> を呼び出せば、タイマーの基本部分はアッという間に出来てしまいます。様々なモジュールとサンプルプログラムを組み合わせオリジナル作品を創るのが、この手の醍醐味ですね。</p>
+
+<p>今日日、ライントレースは小学生でもプログラムするので、偉そうなことは言えませんが、Arduino とかは CPU のアーキテクチャとかレジスタとか知らなくてもガンガンプログラムできちゃうし、AI を適切な指示をすれば回路とかプログラムが手に入ります。</p>
+
+<p>でも、やっぱり 部品や CPU のデータシートとかユーザーマニュアルとかと格闘しながらのモノづくりは楽しい！ ロボコンにハマる人の気持ちが分かります。</p>
 
 <p>その楽しさを共有したく、<a href="https://github.com/embedded-kiddie/beauto-rover-arm" title="embedded-kiddie/beauto-rover-arm: ビュートローバーのソフトウェア">Githubに上げたソフト</a> の紹介文と一部Cソースコードの概要を <a href="https://chat.openai.com/" title="ChatGPT">ChatGPT</a> にマークダウンで書くよう指示したら、次のようになりました。
 <br /></p>
@@ -117,14 +126,9 @@
 <p><br />
 う〜ん、言いたいことが伝わるかどうか微妙、「新たな冒険への扉」とか「魅力的な特徴」とか赤面モノだし、修正が必要な箇所も多いけど、プロンプトの工夫次第で楽できるカモと思った次第です。</p>
 
-<p>さて、恥ずかしながらデモ走行の動画です。PID 制御（実際は PD だけど）の計算部分に浮動小数点を使わず全て整数演算にしてしまったので係数の調整がイマイチですが、<a href="https://www.youtube.com/watch?v=liuNBOXGJxg" title="T-SQUARE 『Truth』 × 360 Reality Audio - スペシャルビデオ - YouTube">T-SQUARE の TRUTH</a> を奏でながら走行するローバーを見ながら F1 監督の気分を味わっています。</p>
+<p>もちろん、ただ楽をするための技術ではなく、より生産性を上げ高い付加価値を生むための技術なのですが、一方で、ARM のユーザーマニュアルとかを読み解いていると、「よく、こんな複雑なレジスタ体系を考えたものだなぁ」と、作った人達の能力のすごさに感心します。</p>
 
-<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="ja" dir="ltr">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め<a href="https://t.co/q0I5bCi0YE">https://t.co/q0I5bCi0YE</a> <a href="https://t.co/YdKTqa6xzn">pic.twitter.com/YdKTqa6xzn</a></p>&mdash; Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1767330699332530660?ref_src=twsrc%5Etfw">March 11, 2024</a></blockquote>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<p>画面左上で「ピッ」と鳴ってるのは Arduino Uno で作ったラップタイマーです。<a href="https://amzn.asia/d/czTh7l0" title="Amazon.co.jp: OSOYOO Arduino用 Raspberry Pi 5 対応 IR赤外線障害物回避 センサモジュール アルドゥイーノ スマート カー ロボット用 10PCSセット : 産業・研究開発用品">fc-51 赤外線モジュール</a> と <a href="https://amzn.asia/d/gyudCEt" title="Amazon.co.jp: DiyStudio 2 個 0.96 OLED i2c インチ有機モジュール IIC/I2Cインターフェース LCD SSD1306ドライバー 128X64解像度ホワイトディスプレイ，適用インターフェース VCC, GND, SCL, SDA : パソコン・周辺機器">SSD1306 OLED</a> のサンプルスケッチをコピペして <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> とか呼び出せばタイマーの基本部分はアッという間に出来てしまいます。色々なモジュールを組み合わせてオリジナル作品を作るのがこの手の醍醐味ですが、そのうち物足りなくなるだろうなぁというのが個人的な感想です。</p>
-
-<p>ビュートローバーのマイコンボードには、古いとは言え 72MHz で動作する <a href="https://www.arm.com/ja/products/silicon-ip-cpu/cortex-m/cortex-m3" title="Cortex-M3 – Arm®">ARM Cortex-M3</a> CPU（ARM では MCU と呼んでますね）が搭載されています。<a href="https://amzn.asia/d/g6Fl6fZ" title="Amazon - プログラミング教育用ロボット ビュートローバー ARM 赤外線セット [学習教材] [vstone] - プログラミング・ロボティクス - おもちゃ">Amazon で8千円近くもしたおもちゃ</a> なので、しばらくはコレで遊んでみたいと思います。</p>
+<p>そういう人達の能力を学習した <a href="https://gigazine.net/news/20230704-ai-design-risc-v-cpu/" title="AIを使用してRISC-V CPUを人間のチームより約1000倍速く設計することに中国の研究チームが成功 - GIGAZINE">AI による CPU 設計</a> も実用化は時間の問題なのでしょうが、凡人の僕としては、すごい人達のことを考えながらのハーフスクラッチ開発をお勧めする次第です。</p>
 
 
   </div>
