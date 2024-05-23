@@ -54,7 +54,8 @@
   <div class="post-content">
     <p><a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> の <a href="https://katex.org/docs/autorender.html" title="Auto-render Extension · KaTeX">推奨パターン</a> では、<code class="language-plaintext highlighter-rouge">defer</code> 属性を付けた２つの <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> を <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> に配置します。２つ目の <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> で <code class="language-plaintext highlighter-rouge">onload</code> から <a href="https://katex.org/docs/autorender.html" title="Auto-render Extension · KaTeX"><code class="language-plaintext highlighter-rouge">renderMathInElement()</code></a> を呼び出してレンダリングを開始します。</p>
 
-\[f’(x) = \lim_{\varDelta x \to 0} \frac{ f(x+\varDelta x) - f(x) }{\varDelta x}\]
+\[\int \tan\theta \, d\theta = \int \frac{\sin\theta}{\cos\theta} \, d\theta
+  = -\log|\cos\theta| + C\]
 
 <h2 id="ディスプレイ数式数式だけの行">ディスプレイ数式（数式だけの行）</h2>
 <p>段落を分けるために前後を空行で囲むのが基本ルールです（例外あり）。</p>
