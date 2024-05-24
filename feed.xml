@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-24T00:15:28+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-24T20:19:37+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -2217,7 +2217,7 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <p>仕組みの大雑把な話は「<a href="/2024/04/04/arduino-blink-with-bgm.html#自作のタイマ系ライブラリと-bgm-再生ライブラリ" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">自作のタイマ系ライブラリと BGM 再生ライブラリ</a>」の章を見てもらうとして、ここでは使い方とインストール方法、および正確性の確認方法を説明します。</p>
 
 <h3 id="スケッチのサンプル">スケッチのサンプル</h3>
-<p>Arduino UNO R4 の LED をフワッとさせながら TX、RX を Lチカさせるサンプルです。</p>
+<p>Arduino UNO R4 の LED をフワッとさせながら Minima は TX、RX を、WiFi は TX を Lチカさせるサンプルです。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
 #include</span> <span class="cpf">"CBTimer.h"</span><span class="cp">
@@ -2225,6 +2225,8 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <span class="kt">void</span> <span class="nf">callback_func</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">static</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
+<span class="cp">#if defined(ARDUINO_MINIMA)
+</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">++</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
     <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span>  <span class="n">LOW</span><span class="p">);</span>
@@ -2232,17 +2234,39 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
     <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span>  <span class="n">LOW</span><span class="p">);</span>
     <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
   <span class="p">}</span>
-<span class="p">}</span>
+
+<span class="cp">#elif defined(ARDUINO_UNOWIFIR4)
+</span>
+  <span class="c1">// P109 Port Output Data</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">++</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">R_BSP_PinWrite</span><span class="p">(</span><span class="n">BSP_IO_PORT_01_PIN_09</span><span class="p">,</span> <span class="n">BSP_IO_LEVEL_HIGH</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">R_BSP_PinWrite</span><span class="p">(</span><span class="n">BSP_IO_PORT_01_PIN_09</span><span class="p">,</span> <span class="n">BSP_IO_LEVEL_LOW</span><span class="p">);</span>
+  <span class="p">}</span>
+
+<span class="cp">#endif
+</span><span class="p">}</span>
 
 <span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+<span class="cp">#if defined(ARDUINO_MINIMA)
+</span>
   <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
   <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
 
+<span class="cp">#elif defined(ARDUINO_UNOWIFIR4)
+</span>
+  <span class="c1">// setup P109 functions as GPIO output pin (PDR:1, PMR:0) for TX LED</span>
+  <span class="n">R_BSP_PinWrite</span><span class="p">(</span><span class="n">BSP_IO_PORT_01_PIN_09</span><span class="p">,</span> <span class="n">BSP_IO_LEVEL_LOW</span><span class="p">);</span>
+
+<span class="cp">#endif
+</span>
   <span class="k">static</span> <span class="n">CBTimer</span> <span class="n">timer</span><span class="p">;</span>
-  <span class="n">timer</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">callback_func</span><span class="p">);</span>
+  <span class="n">timer</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">350</span><span class="p">,</span> <span class="n">callback_func</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your main code here, to run repeatedly:</span>
   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">analogWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
     <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
@@ -2252,6 +2276,8 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
     <span class="n">analogWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
     <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
   <span class="p">}</span>
+
+  <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
 <h3 id="メンバ関数の説明">メンバ関数の説明</h3>
