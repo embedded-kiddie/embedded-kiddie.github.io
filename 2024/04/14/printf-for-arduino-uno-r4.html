@@ -132,11 +132,11 @@
 <div class="notice clear-both">
 
 <h4 id="minima-と-wifi-の違い2024年5月24日-追記">Minima と WiFi の違い！（2024年5月24日 追記）</h4>
-<p><strong>Minima</strong> では、シリアルへの出力として <code class="language-plaintext highlighter-rouge">Serial.write()</code> で OK でしたが、<strong>WiFi</strong> では 2 msec 程のディレイを入れないと <code class="language-plaintext highlighter-rouge">\r\n</code> が<strong>出力されないことがある</strong>という問題に遭遇したため、<code class="language-plaintext highlighter-rouge">Serial.print()</code> に差し替えました。</p>
+<p><strong>Minima</strong> では、シリアルへの出力関数として <code class="language-plaintext highlighter-rouge">Serial.write()</code> を使って OK でしたが、<strong>WiFi</strong> では、連続する <code class="language-plaintext highlighter-rouge">printf()</code> の間に 2 msec 程のディレイを入れないと末尾の <code class="language-plaintext highlighter-rouge">\r</code> や <code class="language-plaintext highlighter-rouge">\n</code> が<strong>出力されないことがある</strong>という問題に遭遇しました。このため、<code class="language-plaintext highlighter-rouge">Serial.print()</code> に差し替えました。</p>
 
-<p>また初期化においても、<code class="language-plaintext highlighter-rouge">Serial.begin(...); while(!Serial);</code> では不十分で、<strong>WiFi</strong> では <code class="language-plaintext highlighter-rouge">Serial.begin(...); delay(1000);</code> とする必要があります。</p>
+<p>また手元の WiFi では、初期化においても <code class="language-plaintext highlighter-rouge">Serial.begin(...); while(!Serial);</code> では不十分で、<code class="language-plaintext highlighter-rouge">Serial.begin(...); delay(1000);</code> とする必要がありました。</p>
 
-<p><strong>UNO R4 WiFi</strong> のシリアル通信は ESP32 を経由しているので、<strong>Minima</strong> との違いが出ているようです。</p>
+<p><strong>UNO R4 WiFi</strong> の USB 通信は ESP32 を経由しているので、<strong>Minima</strong> との違いが出ているのだと思います。</p>
 
 </div>
 
