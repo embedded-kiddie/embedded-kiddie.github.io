@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-24T20:39:46+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-05-24T23:53:00+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -1787,7 +1787,8 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
   <span class="n">va_end</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">);</span>
 
   <span class="c1">// output to the serial console through the 'Serial'</span>
-  <span class="n">len</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">,</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">len</span><span class="p">);</span>
+<span class="c1">//len = Serial.write((uint8_t*)buf, (size_t)len);</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
 
   <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
@@ -1797,6 +1798,17 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 <p>当然ですが、<code class="language-plaintext highlighter-rouge">printf()</code> にステップイン出来ました。読みは正しかった様です :+1:</p>
 
 <p><img src="/images/2024/04-14/debug-printf-again.jpg" alt="再びprintf()をデバッグ" title="再びprintf()をデバッグ" width="1379" height="862" /></p>
+
+<div class="notice clear-both">
+
+<h4 id="minima-と-wifi-の違い2024年5月24日-追記">Minima と WiFi の違い！（2024年5月24日 追記）</h4>
+<p><strong>Minima</strong> では、シリアルへの出力として <code class="language-plaintext highlighter-rouge">Serial.write()</code> で OK でしたが、<strong>WiFi</strong> では 2 msec 程のディレイを入れないと <code class="language-plaintext highlighter-rouge">\r\n</code> が<strong>出力されないことがある</strong>という問題に遭遇したため、<code class="language-plaintext highlighter-rouge">Serial.print()</code> に差し替えました。</p>
+
+<p>また初期化においても、<code class="language-plaintext highlighter-rouge">Serial.begin(...); while(!Serial);</code> では不十分で、<strong>WiFi</strong> では <code class="language-plaintext highlighter-rouge">Serial.begin(...); delay(1000);</code> とする必要があります。</p>
+
+<p><strong>UNO R4 WiFi</strong> のシリアル通信は ESP32 を経由しているので、<strong>Minima</strong> との違いが出ているようです。</p>
+
+</div>
 
 <h3 id="printfの書式と動作確認">printfの書式と動作確認</h3>
 
@@ -1847,13 +1859,13 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <h3 id="ライブラリ化">ライブラリ化</h3>
 
-<p>デバッグのたびにコピペするのも面倒なので、ライブラリ化しちゃいました。UNO R4 以外の動作確認ができないので R4 用としています → <a href="https://github.com/embedded-kiddie/Printf/releases" title="Releases · embedded-kiddie/Printf · GitHub">Printf v0.1</a></p>
+<p>デバッグのたびにコピペするのも面倒なので、ライブラリ化しちゃいました。UNO R4 以外の動作確認ができないので R4 用としています → <a href="https://github.com/embedded-kiddie/Printf/releases/tag/v0.2" title="Release First release. · embedded-kiddie/Printf">Printf v0.2</a></p>
 
 <p>よかったら使ってやってください。</p>
 
 <ol>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">Assets</code> から <a href="https://github.com/embedded-kiddie/Printf/archive/refs/tags/v0.1.zip" title="Releases · embedded-kiddie/Printf"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
+    <p><code class="language-plaintext highlighter-rouge">Assets</code> から <a href="https://github.com/embedded-kiddie/Printf/archive/refs/tags/v0.2.zip" title="Release First release. · embedded-kiddie/Printf"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" />Source code (zip)</span></a> をクリックしてダウンロードします。</p>
   </li>
   <li>
     <p>Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」からダウンロードした .zip ファイルを読み込みます。</p>
