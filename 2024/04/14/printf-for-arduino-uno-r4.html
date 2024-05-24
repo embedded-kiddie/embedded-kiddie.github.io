@@ -136,7 +136,7 @@
 
 <p>また手元の WiFi では、初期化においても <code class="language-plaintext highlighter-rouge">Serial.begin(...); while(!Serial);</code> では不十分で、<code class="language-plaintext highlighter-rouge">Serial.begin(...); delay(1000);</code> とする必要がありました。</p>
 
-<p><strong>UNO R4 WiFi</strong> の USB 通信は ESP32 を経由しているので、<strong>Minima</strong> との違いが出ているのだと思います。</p>
+<p><strong>UNO R4 WiFi</strong> の USB 通信は ESP32 を経由しているので、<strong>Minima</strong> との違いが出ているのでしょう。ピンアサインや TX、RX LED など、回路構成上の違いを確認せず、「両方動くだろう」と安易にプログラムを公開すると危険ということを思い知らされました。</p>
 
 </div>
 
