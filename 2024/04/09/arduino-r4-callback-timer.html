@@ -112,7 +112,7 @@
 <span class="cp">#endif
 </span>
   <span class="k">static</span> <span class="n">CBTimer</span> <span class="n">timer</span><span class="p">;</span>
-  <span class="n">timer</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">350</span><span class="p">,</span> <span class="n">callback_func</span><span class="p">);</span>
+  <span class="n">timer</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">350</span> <span class="cm">/* msec cycle */</span><span class="p">,</span> <span class="n">callback_func</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
@@ -203,7 +203,7 @@
   </a>
 </figure>
 
-<p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.0.zip" title="Release First release. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル">Source code (zip)</span></a> をダウンロードします。</p>
+<p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.1.zip" title="Release Fixed undefined symbol `LED_TX` and `LED_RX` errors on UNO R4 WiFi. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル">Source code (zip)</span></a> をダウンロードします。</p>
 
 <p>続いて Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」から、先にダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
 
