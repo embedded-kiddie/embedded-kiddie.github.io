@@ -117,8 +117,7 @@
   <span class="n">va_end</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">);</span>
 
   <span class="c1">// output to the serial console through the 'Serial'</span>
-<span class="c1">//len = Serial.write((uint8_t*)buf, (size_t)len);</span>
-  <span class="n">len</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">,</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">len</span><span class="p">);</span>
 
   <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
@@ -131,8 +130,8 @@
 
 <div class="notice clear-both">
 
-<h4 id="minima-と-wifi-の違い2024年5月24日-追記">Minima と WiFi の違い！（2024年5月24日 追記）</h4>
-<p><strong>Minima</strong> では、シリアルへの出力関数として <code class="language-plaintext highlighter-rouge">Serial.write()</code> を使って OK でしたが、<strong>WiFi</strong> では、連続する <code class="language-plaintext highlighter-rouge">printf()</code> の間に 2 msec 程のディレイを入れないと末尾の <code class="language-plaintext highlighter-rouge">\r</code> や <code class="language-plaintext highlighter-rouge">\n</code> が<strong>出力されないことがある</strong>という問題に遭遇しました。このため、<code class="language-plaintext highlighter-rouge">Serial.print()</code> に差し替えました。</p>
+<h4 id="minima-と-wifi-の違い2024年5月25日-追記">Minima と WiFi の違い！（2024年5月25日 追記）</h4>
+<p><strong>Minima</strong> では、シリアルへの出力関数として <code class="language-plaintext highlighter-rouge">Serial.write()</code> を使って OK でしたが、<strong>WiFi</strong> では、連続する <code class="language-plaintext highlighter-rouge">printf()</code> 間で、<strong>前後の文字が出力されないことがある</strong>という問題に遭遇しました。<code class="language-plaintext highlighter-rouge">Serial.print()</code> でも、頻度こそ減りますが同様です。どちらも末端の関数で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Serial.cpp#L114" title="ArduinoCore-renesas/cores/arduino/Serial.cpp at main · arduino/ArduinoCore-renesas">送信完了を監視している</a> のですが、完全では無いようで、<a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c#L76" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm">過去にも別のボードで同様の問題</a> に出会っています。そこで後述のライブラリには、アドホックな対応ですが、<code class="language-plaintext highlighter-rouge">delay()</code> を追加しています。</p>
 
 <p>また手元の WiFi では、初期化においても <code class="language-plaintext highlighter-rouge">Serial.begin(...); while(!Serial);</code> では不十分で、<code class="language-plaintext highlighter-rouge">Serial.begin(...); delay(1000);</code> とする必要がありました。</p>
 
@@ -189,13 +188,13 @@
 
 <h3 id="ライブラリ化">ライブラリ化</h3>
 
-<p>デバッグのたびにコピペするのも面倒なので、ライブラリ化しちゃいました。UNO R4 以外の動作確認ができないので R4 用としています → <a href="https://github.com/embedded-kiddie/Printf/releases/tag/v0.2" title="Release First release. · embedded-kiddie/Printf">Printf v0.2</a></p>
+<p>デバッグのたびにコピペするのも面倒なので、ライブラリ化しちゃいました。UNO R4 以外の動作確認ができないので R4 用としています → <a href="https://github.com/embedded-kiddie/Printf/releases/tag/v0.3" title="Release Fix an issue on UNO R4 Wifi. · embedded-kiddie/Printf">Printf v0.3</a></p>
 
 <p>よかったら使ってやってください。</p>
 
 <ol>
   <li>
-    <p><code class="language-plaintext highlighter-rouge">Assets</code> から <a href="https://github.com/embedded-kiddie/Printf/archive/refs/tags/v0.2.zip" title="Release First release. · embedded-kiddie/Printf"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル">Source code (zip)</span></a> をクリックしてダウンロードします。</p>
+    <p><code class="language-plaintext highlighter-rouge">Assets</code> から <a href="https://github.com/embedded-kiddie/Printf/archive/refs/tags/v0.3.zip" title="Release Fix an issue on UNO R4 Wifi. · embedded-kiddie/Printf"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル">Source code (zip)</span></a> をクリックしてダウンロードします。</p>
   </li>
   <li>
     <p>Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」からダウンロードした .zip ファイルを読み込みます。</p>
