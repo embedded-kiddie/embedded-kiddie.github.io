@@ -74,7 +74,11 @@
 
 <p>今朝 Arduino IDE（バージョン：2.3.2）の「ツール → 書き込み装置」をみたら “ARM CMSIS-DAP Compatible” になってました。そう言えば何かアップデートされたような… まッ、細かいことは気にせず、まずは双方の JTAG/SWD コネクタの確認から。</p>
 
-<p><img src="/images/2024/03-24/arduino-toragi-pin.jpg" alt="Arduino UNO Minimaとトラ技ARMライタのピン配" title="Arduino UNO Minimaとトラ技ARMライタのピン配" width="1380" height="580"></p>
+<figure>
+  <a href="/images/2024/03-24/arduino-toragi-pin.jpg" title="Arduino UNO Minimaとトラ技ARMライタのピン配" data-lightbox="image">
+    <img src="/images/2024/03-24/arduino-toragi-pin.jpg" width="1380" height="580" alt="Arduino UNO Minimaとトラ技ARMライタのピン配">
+  </a>
+</figure>
 
 <p>UNO R4 Minima の場合、両者の接続には <a href="/2024/03/23/debug-probe-for-beauto-rover.html#%E5%8D%98%E4%BD%93%E7%89%88" title="マルツオンラインのトラ技ARMライタ">マルツオンラインのトラ技ARMライタ</a> に付属の <a href="https://www.google.com/search?q=1.27mm(%E3%83%8F%E3%83%BC%E3%83%95%E3%83%94%E3%83%83%E3%83%81)+2%C3%975(10P)+%E3%83%94%E3%83%B3%E3%83%98%E3%83%83%E3%83%80%E4%BB%98%E3%81%8D%E3%83%95%E3%83%A9%E3%83%83%E3%83%88%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB" title="Google 検索">1.27mm(ハーフピッチ) 2×5(10P) ピンヘッダ付きフラットケーブル</a> が使えます。電源は Minima 側から +5V が供給されますが、トラ技ARMライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> が繋がってないため（とりあえず後で繋げるとして）、トラ技側も USB に接続します。</p>
 
