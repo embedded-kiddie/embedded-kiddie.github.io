@@ -417,7 +417,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">/Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h</code></pre></figure>
 
-<p>これを手作業で見つけ出すのは困難です。そんな時、Mac や Linux の人なら次の <code class="language-plaintext highlighter-rouge">find</code> コマンドが便利です。</p>
+<p>これを手作業で見つけ出すのは激ムズです。そんな時、Mac や Linux の人なら次の <code class="language-plaintext highlighter-rouge">find</code> コマンドが便利です。</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">find <span class="nb">.</span> <span class="nt">-name</span> <span class="s2">"*.h"</span> <span class="nt">-exec</span> <span class="nb">grep</span> <span class="nt">-w</span> R_PORT1 <span class="o">{}</span> <span class="se">\;</span> <span class="nt">-print</span></code></pre></figure>
 
