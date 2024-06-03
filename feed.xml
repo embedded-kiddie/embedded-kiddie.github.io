@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-04T01:41:21+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</title><link href="https://embedded-kiddie.github.io/2024/06/03/index.html" rel="alternate" type="text/html" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" /><published>2024-06-03T09:41:52+09:00</published><updated>2024-06-03T09:41:52+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/03/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/03/index.html"><![CDATA[<p><img src="/images/2024/06-03/registers-AGT.gif" alt="AGT レジスタ" title="AGT レジスタ" width="570" height="346" style="margin: auto; display: block" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-04T08:19:36+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</title><link href="https://embedded-kiddie.github.io/2024/06/03/index.html" rel="alternate" type="text/html" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" /><published>2024-06-03T09:41:52+09:00</published><updated>2024-06-03T09:41:52+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/03/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/03/index.html"><![CDATA[<p><img src="/images/2024/06-03/registers-AGT.gif" alt="AGT レジスタ" title="AGT レジスタ" width="570" height="346" style="margin: auto; display: block" /></p>
 
 <p>上の画像は、学習用に作成した <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">低消費電力非同期汎用タイマ（AGT）</a>のレジスタをモニターするプログラムです。AGT は 1ms を刻む <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> で使われていて、「１」が立つビットから次のことが分かります。</p>
 
@@ -241,7 +241,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <p>単に <code class="language-plaintext highlighter-rouge">pins</code> と入力すると、ボード上のデジタルピンとアナログピンの <code class="language-plaintext highlighter-rouge">PmnPFS</code> レジスタを一覧表示します。表示上、<code class="language-plaintext highlighter-rouge">D10</code> 〜 <code class="language-plaintext highlighter-rouge">D13</code> は <code class="language-plaintext highlighter-rouge">Da</code> 〜 <code class="language-plaintext highlighter-rouge">Dd</code> としています。</p>
 
-<p>また例えば、<code class="language-plaintext highlighter-rouge">D13</code>（<code class="language-plaintext highlighter-rouge">LED_BUILTIN</code>）を入力すると、Minima では <code class="language-plaintext highlighter-rouge">P111</code> を、WiFi では <code class="language-plaintext highlighter-rouge">P102</code> を表示できます。</p>
+<p>また逆引きも可能で、例えば <code class="language-plaintext highlighter-rouge">d13</code> を入力すると、Minima では <code class="language-plaintext highlighter-rouge">P111</code> を、WiFi では <code class="language-plaintext highlighter-rouge">P102</code> を表示します。</p>
 
 <h4 id="5-agt-画面">5. AGT 画面</h4>
 
@@ -371,11 +371,18 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <div class="clear-both"></div>
 
-<p>この <code class="language-plaintext highlighter-rouge">LOVE</code> ピンは <a href="https://forum.arduino.cc/t/the-way-how-to-use-arduino-uno-r4-minimas-love-pin/1142989" title="The way how to use Arduino UNO R4 MINIMA&#39;s LOVE pin - UNO R4 Minima - Arduino Forum">Arduino Forum</a> でも取り上げられていて、このピンを GND に落とすだけの、なんちゃってタッチセンサを実験している人がいました。おまけで貼っておきます。</p>
+<p>この <code class="language-plaintext highlighter-rouge">LOVE</code> ピンは <a href="https://forum.arduino.cc/t/the-way-how-to-use-arduino-uno-r4-minimas-love-pin/1142989" title="The way how to use Arduino UNO R4 MINIMA&#39;s LOVE pin - UNO R4 Minima - Arduino Forum">Arduino Forum</a> でも取り上げられていて、このピンを GND に落とすだけの、なんちゃってタッチセンサを実験している人がいました。</p>
 
 <figure style="text-align: center">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/5cS-ShyYW_k?si=Uw_eG0SokjU7WqUH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
 </figure>
+
+<p>さらにライブラリを作っちゃった人もいました。</p>
+
+<ul>
+  <li><a href="https://www.arduino.cc/reference/en/libraries/lovebutton/" title="LoveButton - Arduino Reference">LoveButton</a></li>
+  <li><a href="https://forum.arduino.cc/t/lovebutton-touch-sense-library-for-r4-minima-and-r4-wifi/1190017" title="LoveButton Touch Sense library for R4 Minima and R4 WiFi - Programming Questions - Arduino Forum">LoveButton Touch Sense library for R4 Minima and R4 WiFi</a></li>
+</ul>
 
 <h2 id="今後の予定は">今後の予定は…</h2>
 

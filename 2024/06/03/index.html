@@ -318,7 +318,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <p>単に <code class="language-plaintext highlighter-rouge">pins</code> と入力すると、ボード上のデジタルピンとアナログピンの <code class="language-plaintext highlighter-rouge">PmnPFS</code> レジスタを一覧表示します。表示上、<code class="language-plaintext highlighter-rouge">D10</code> 〜 <code class="language-plaintext highlighter-rouge">D13</code> は <code class="language-plaintext highlighter-rouge">Da</code> 〜 <code class="language-plaintext highlighter-rouge">Dd</code> としています。</p>
 
-<p>また例えば、<code class="language-plaintext highlighter-rouge">D13</code>（<code class="language-plaintext highlighter-rouge">LED_BUILTIN</code>）を入力すると、Minima では <code class="language-plaintext highlighter-rouge">P111</code> を、WiFi では <code class="language-plaintext highlighter-rouge">P102</code> を表示できます。</p>
+<p>また逆引きも可能で、例えば <code class="language-plaintext highlighter-rouge">d13</code> を入力すると、Minima では <code class="language-plaintext highlighter-rouge">P111</code> を、WiFi では <code class="language-plaintext highlighter-rouge">P102</code> を表示します。</p>
 
 <h4 id="5-agt-画面">5. AGT 画面</h4>
 
@@ -453,11 +453,18 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <div class="clear-both"></div>
 
-<p>この <code class="language-plaintext highlighter-rouge">LOVE</code> ピンは <a href="https://forum.arduino.cc/t/the-way-how-to-use-arduino-uno-r4-minimas-love-pin/1142989" title="The way how to use Arduino UNO R4 MINIMA's LOVE pin - UNO R4 Minima - Arduino Forum">Arduino Forum</a> でも取り上げられていて、このピンを GND に落とすだけの、なんちゃってタッチセンサを実験している人がいました。おまけで貼っておきます。</p>
+<p>この <code class="language-plaintext highlighter-rouge">LOVE</code> ピンは <a href="https://forum.arduino.cc/t/the-way-how-to-use-arduino-uno-r4-minimas-love-pin/1142989" title="The way how to use Arduino UNO R4 MINIMA's LOVE pin - UNO R4 Minima - Arduino Forum">Arduino Forum</a> でも取り上げられていて、このピンを GND に落とすだけの、なんちゃってタッチセンサを実験している人がいました。</p>
 
 <figure style="text-align: center">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/5cS-ShyYW_k?si=Uw_eG0SokjU7WqUH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
 </figure>
+
+<p>さらにライブラリを作っちゃった人もいました。</p>
+
+<ul>
+  <li><a href="https://www.arduino.cc/reference/en/libraries/lovebutton/" title="LoveButton - Arduino Reference">LoveButton</a></li>
+  <li><a href="https://forum.arduino.cc/t/lovebutton-touch-sense-library-for-r4-minima-and-r4-wifi/1190017" title="LoveButton Touch Sense library for R4 Minima and R4 WiFi - Programming Questions - Arduino Forum">LoveButton Touch Sense library for R4 Minima and R4 WiFi</a></li>
+</ul>
 
 <h2 id="今後の予定は">今後の予定は…</h2>
 
