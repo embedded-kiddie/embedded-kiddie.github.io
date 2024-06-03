@@ -196,7 +196,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <p>全部で５つの画面があります。スケッチの <a href="https://github.com/embedded-kiddie/PeripheralMonitor/blob/main/examples/monitor_by_rtc/monitor_by_rtc.ino" title="PeripheralMonitor/examples/monitor_by_rtc/monitor_by_rtc.ino at main · embedded-kiddie/PeripheralMonitor">サンプル</a> では、<code class="language-plaintext highlighter-rouge">D13</code> ピンの「ポート mn 端子機能選択レジスタ（PmnPFS）」の画面を表示します。</p>
 
-<p>Arduino IDE のシリアルモニタに <code class="language-plaintext highlighter-rouge">?</code> か <code class="language-plaintext highlighter-rouge">help</code> を入力すると、使えるコマンドを表示します。超簡単な CLI ですね。また画面が乱れた時はリターンキーのみの入力で再描画します。</p>
+<p>Arduino IDE のシリアルモニタに <code class="language-plaintext highlighter-rouge">?</code> か <code class="language-plaintext highlighter-rouge">help</code> を入力すると、使えるコマンドを表示します。超簡単な CLI ですネ。また画面が乱れた時はリターンキーのみの入力で再描画します。</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">Possible commands: ports, port, pins, p, agt, a, d, ?, <span class="nb">help</span></code></pre></figure>
 
@@ -407,7 +407,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <p>数値には文字列の生成と通信の時間を含んでいて、ほぼボーレートと反比例の関係にあることから、通信にかかる時間が支配的であることが分かります。</p>
 
-<p>Blutooth を使えばもう少し速くなるとは思いますが、何かのプログラムと組み合わせてデバッグできる程のリアルタイム性はなく、あくまで学習用というワケです。</p>
+<p>Blutooth を使えばもう少し速くなるとは思いますが、何かのプログラムと組み合わせてデバッグに使える程のリアルタイム性はなく、あくまで学習用というワケです。</p>
 
 <h2 id="周辺回路のレジスタ定義について">周辺回路のレジスタ定義について</h2>
 
@@ -443,9 +443,9 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
   <figcaption>Minima の P204 がチラついている</figcaption>
 </figure>
 
-<p>Minima の汎用 I/O 端子レジスタを観察していたら、何やら <code class="language-plaintext highlighter-rouge">P204</code> のポート状態が Low／High を繰り返していました。</p>
+<p>Minima の汎用 I/O 端子レジスタを観察していたら、何やら <code class="language-plaintext highlighter-rouge">P204</code> の状態がフラついているのが観測されました。</p>
 
-<p>ご存知の方も多いと思いますが、<a href="https://docs.arduino.cc/resources/schematics/ABX00080-schematics.pdf">Minima の回路図</a> を見ると、これは基盤裏側の <code class="language-plaintext highlighter-rouge">LOVE</code> 端子ですね。</p>
+<p>ご存知の方も多いと思いますが、<a href="https://docs.arduino.cc/resources/schematics/ABX00080-schematics.pdf">Minima の回路図</a> を見ると、これは基盤裏側の <code class="language-plaintext highlighter-rouge">LOVE</code> 端子ですネ。</p>
 
 <div class="clear-both"></div>
 
