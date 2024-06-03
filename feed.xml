@@ -1,4 +1,382 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-02T11:25:58+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-03T11:39:31+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</title><link href="https://embedded-kiddie.github.io/2024/06/03/index.html" rel="alternate" type="text/html" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" /><published>2024-06-03T09:41:52+09:00</published><updated>2024-06-03T09:41:52+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/03/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/03/index.html"><![CDATA[<p><img src="/images/2024/06-03/registers-AGT.gif" alt="AGT レジスタ" title="AGT レジスタ" width="570" height="346" style="margin: auto; display: block" /></p>
+
+<p>上の画像は、学習用に作った <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">低消費電力非同期汎用タイマ（AGT）</a> のレジスタをモニターするプログラムです。AGT は 1ms を刻む <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> で使われていますが、「１」が立っているビットから次のことが分かります。</p>
+
+<ol>
+  <li><strong>AGT コントロールレジスタ (AGTCR)</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">TSTART[1]</code> および <code class="language-plaintext highlighter-rouge">TCSTF[1]</code><br />
+ カウント動作が開始され、カウントが実行中であることを示しています。</li>
+    </ul>
+  </li>
+  <li><strong>AGT モードレジスタ 1 (AGTMR1)</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">TMOD[3]</code><br />
+ 「パルス幅測定モード」で動作しています。</li>
+      <li><code class="language-plaintext highlighter-rouge">TCK[3]</code><br />
+ 周辺回路用クロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）を分周比 \(\frac{1}{8}\) でカウントソースにしています。</li>
+    </ul>
+  </li>
+  <li><strong>AGT カウンタレジスタ (AGT)</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">AGT[16]</code><br />
+ \(\frac{8}{24000000} = \frac{1}{3000000}\)
+ 秒を１カウントとし、0 〜 2999 カウントで１ms としています。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>AGT だけじゃなく、汎用 I/O 端子のレジスタをモニターする機能も入れたので、誰かの役に立つことを願い、紹介したいと思います！</p>
+
+<h2 id="peripheralmonitor-の紹介">PeripheralMonitor の紹介</h2>
+
+<p>仕組みはとても簡単です。UNO R4 ボードで読み取ったレジスタ情報をシリアル通信でホスト PC に送り、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> などの VT100 端末エミュレータソフトで表示します。プログラムは UNO R4 用ライブラリとして GitHub のリポジトリ <a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> に上げました。</p>
+
+<h3 id="ホスト-pc-との接続">ホスト PC との接続</h3>
+
+<figure class="flex">
+  <a href="/images/2024/06-03/fritzig.jpg" title="Fritzig ブレッドボード図" data-lightbox="image">
+    <img src="/images/2024/06-03/fritzig-small.jpg" alt="Fritzig ブレッドボード図" width="460" height="334" />
+  </a>
+  <a href="/images/2024/06-03/serial-connection.jpg" title="シリアル接続" data-lightbox="image">
+    <img src="/images/2024/06-03/serial-connection-small.jpg" alt="シリアル接続" width="460" height="334" />
+  </a>
+</figure>
+
+<p>UNO R4 Minima/WiFi の <code class="language-plaintext highlighter-rouge">D0 (Rx)</code> と <code class="language-plaintext highlighter-rouge">D1 (Tx)</code> を、秋月で入手できる <a href="https://akizukidenshi.com/catalog/g/g108461/" title="FT234X 超小型USBシリアル変換モジュール: 半導体 秋月電子通商-電子部品・ネット通販">FT234X</a> や <a href="https://akizukidenshi.com/catalog/g/g114745/" title="CH340E USBシリアル変換モジュール Type-C: 半導体 秋月電子通商-電子部品・ネット通販">CH340E</a> などの USB シリアル変換モジュールを介して PC と接続します。Arduino 側の <code class="language-plaintext highlighter-rouge">Rx</code> は 相手側の <code class="language-plaintext highlighter-rouge">Tx</code> に、<code class="language-plaintext highlighter-rouge">Tx</code> は <code class="language-plaintext highlighter-rouge">Rx</code> にクロス接続します。</p>
+
+<h4 id="動作環境">動作環境</h4>
+
+<p>僕の環境はとても古く、参考にならない部分もあるとは思いますが、一応記しておきます。</p>
+
+<ul>
+  <li>Windows:<br />
+Intel Mac 上の <a href="https://www.parallels.com/jp/" title="Parallels：Mac および Windows の仮想化、リモートアプリケーションサーバー、Mac 管理ソリューション">Parallels</a> で動作する Windows 7</li>
+  <li>MacOS:<br />
+MacBook Pro (Late 2013), Big Sur (macOS バージョン 11.7.10)</li>
+  <li>シリアル通信のプロトコル<br />
+送信側の <a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/begin/" title="Serial.begin() - Arduino Reference"><code class="language-plaintext highlighter-rouge">SERIAL_8N1</code></a> と合わせるため、データ長やパリティ、フロー制御はデフォルトのままにします。</li>
+</ul>
+
+<h4 id="windows-の場合">Windows の場合</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/FT234X-TeraTerm.jpg" title="Tera Term のシリアルポート 設定と接続" data-lightbox="image">
+    <img src="/images/2024/06-03/FT234X-TeraTerm-small.jpg" alt="Tera Term のシリアルポート 設定と接続" width="460" height="562" />
+  </a>
+  <figcaption>Tera Term: シリアル 設定と接続</figcaption>
+</figure>
+
+<p><a href="https://akizukidenshi.com/catalog/g/g108461/" title="FT234X 超小型USBシリアル変換モジュール: 半導体 秋月電子通商-電子部品・ネット通販">FT234X</a> は自動でデバイスドライバがインストールされ、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> の最大ボーレート <code class="language-plaintext highlighter-rouge">921600</code> まで OK でした。</p>
+
+<p>一方の <a href="https://akizukidenshi.com/catalog/g/g114745/" title="CH340E USBシリアル変換モジュール Type-C: 半導体 秋月電子通商-電子部品・ネット通販">CH340E</a> は <a href="https://www.wch-ic.com/search?q=CH340&amp;t=downloads" title="search CH340 - NanjingQinhengMicroelectronics">製造元のページ</a> からデバイスドライバ（Windows 7 まで対応との記述あり）をダウンロード＆インストールしましたが、ボーレートを下げたり <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を咬ませたりしても文字化けが起きてしまいました。</p>
+
+<p>Windows 10 以上で確認ができればよかったのですが…。勘弁してください :bowing_man:</p>
+
+<h4 id="mac-の場合">Mac の場合</h4>
+
+<p><a href="https://akizukidenshi.com/catalog/g/g108461/" title="FT234X 超小型USBシリアル変換モジュール: 半導体 秋月電子通商-電子部品・ネット通販">FT234X</a>、<a href="https://akizukidenshi.com/catalog/g/g114745/" title="CH340E USBシリアル変換モジュール Type-C: 半導体 秋月電子通商-電子部品・ネット通販">CH340E</a> とも問題なく正常に動作しました。デバイスドライバは、<span class="inline"><img src="/images/2024/04-18/terminal-app.png" width="108" height="27" title="ターミナル.app" alt="ターミナル.app" /></span> を立ち上げ、<code class="language-plaintext highlighter-rouge">ls -l /dev/tty.*</code> の実行結果から、それらしい名前のファイルを見つけます。</p>
+
+<p>以下は僕の環境の場合ですが、<code class="language-plaintext highlighter-rouge">/dev/tty.usbserial-DK0G1BIL</code> が該当します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> /dev/tty.<span class="k">*</span>
+crw-rw-rw-  1 root  wheel   22,   0  5 30 06:58 /dev/tty.Bluetooth-Incoming-Port
+crw-rw-rw-  1 root  wheel   22,   2  6  2 00:49 /dev/tty.usbmodem1
+crw-rw-rw-  1 root  wheel   22,   4  5 30 13:32 /dev/tty.usbmodem14201
+crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</code></pre></figure>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/FT234X-MacOS.png" title="システム情報 → ハードウェア → USB" data-lightbox="image">
+    <img src="/images/2024/06-03/FT234X-MacOS-small.png" alt="システム情報 → ハードウェア → USB" width="460" height="360" />
+  </a>
+  <figcaption>システム情報→ハードウェア→USB</figcaption>
+</figure>
+
+<p>IDE で書き込み用に使っているデバイスと区別するためには、「<strong>アプリケーション</strong> → <strong>ユーティリティ</strong> → <strong>システム情報.app</strong>」、またはアップルマークから「<strong>この Mac について</strong> → <strong>システムレポート</strong> → <strong>ハードウェア</strong> → <strong>USB</strong>」と付き合わせると確実です。</p>
+
+<div class="clear-both"></div>
+
+<p>続いて見つけたデバイスファイル名とボーレートを <code class="language-plaintext highlighter-rouge">screen</code> コマンドに渡し、エミュレータを起動します。僕の Mac では、<code class="language-plaintext highlighter-rouge">230400</code> がボーレートの最大でした。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">screen /dev/tty.usbserial-DK0G1BIL 230400</code></pre></figure>
+
+<p>エミュレータから抜けるには <code class="language-plaintext highlighter-rouge">CTRL-a</code> + <code class="language-plaintext highlighter-rouge">k</code> を入力します。またターミナルの表示がバグったら <code class="language-plaintext highlighter-rouge">reset</code> コマンドで正常に戻せます（理由は後述しますが、ほぼ確実にバグります）。</p>
+
+<h3 id="スケッチのインストールと実行">スケッチのインストールと実行</h3>
+
+<p>手っ取り早く、ライブラリをインストールして実行する方法を示します。</p>
+
+<ol>
+  <li><a href="https://github.com/embedded-kiddie/PeripheralMonitor/releases" title="Releases · embedded-kiddie/PeripheralMonitor">GitHub のリポジトリ</a> から最新版の .zip ファイルを ダウンロードします。</li>
+  <li>Arduino IDE のメニュー「<strong>スケッチ</strong> → <strong>ライブラリのインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」からダウンロードした .zip ファイルを読み込ませます。</li>
+  <li>続いて「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>PeripheralMonitor</strong> → <strong>monitor_by_rtc</strong>」から、スケッチの <a href="https://github.com/embedded-kiddie/PeripheralMonitor/blob/main/examples/monitor_by_rtc/monitor_by_rtc.ino" title="PeripheralMonitor/examples/monitor_by_rtc/monitor_by_rtc.ino at main · embedded-kiddie/PeripheralMonitor">サンプル</a> を開きます。</li>
+  <li><span class="inline"><img src="/images/2024/04-18/button-compile.png" width="27" height="27" title="書き込みボタン" alt="書き込みボタン" /></span> でコンパイル＆アップロードすると、エミュレータに初期画面が表示されます。</li>
+</ol>
+
+<h3 id="画面の説明">画面の説明</h3>
+
+<p>全部で５つの画面があります。スケッチの <a href="https://github.com/embedded-kiddie/PeripheralMonitor/blob/main/examples/monitor_by_rtc/monitor_by_rtc.ino" title="PeripheralMonitor/examples/monitor_by_rtc/monitor_by_rtc.ino at main · embedded-kiddie/PeripheralMonitor">サンプル</a> では、<code class="language-plaintext highlighter-rouge">D13</code> ピンの「ポート mn 端子機能選択レジスタ（PmnPFS）」の画面を表示します。</p>
+
+<p>Arduino IDE のシリアルモニタに <code class="language-plaintext highlighter-rouge">?</code> か <code class="language-plaintext highlighter-rouge">help</code> を入力すると、使えるコマンドを表示します。超簡単な CLI ですね。また画面が乱れた時はリターンキーのみの入力で再描画します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Possible commands: ports, port, pins, p, agt, a, d, ?, <span class="nb">help</span></code></pre></figure>
+
+<h4 id="1-ports-画面">1. PORTS 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-PORTS.gif" title="ポート 1〜4 の Port Control レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-PORTS-small.gif" alt="ポート 1〜4 の Port Control レジスタ" width="285" height="173" />
+  </a>
+  <figcaption>ポート1〜4の Port Control レジスタ</figcaption>
+</figure>
+
+<p><code class="language-plaintext highlighter-rouge">ports</code> と入力すると、ポート 1 からポート 4 まで、ポートコントロールレジスタ（PCNTR1 〜 PCNTR4）の中身を 4 桁の 16 進数で表示します。</p>
+
+<p>各ポートには、それぞれ 0 〜 15 のビットに対応づけられた、最大で 16 本の I/O 端子（ピン）が割り当てられています。</p>
+
+<div class="clear-both"></div>
+
+<p>プログラムではなり振り構わず表示してしまいますが、実際には全てのピンが存在するわけではなく、下の表のようになっています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">ポート</th>
+      <th>ピン（パッケージ: 64ピン）</th>
+      <th style="text-align: center">本数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">ポート 0</td>
+      <td>P000 ~ P004, P010 ~ P015</td>
+      <td style="text-align: center">11</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 1</td>
+      <td>P100 ~ P113</td>
+      <td style="text-align: center">14</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 2</td>
+      <td>P200, P201, P204 ~ P206, P212 ~ P215</td>
+      <td style="text-align: center">9</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 3</td>
+      <td>P300 ~ P304</td>
+      <td style="text-align: center">5</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 4</td>
+      <td>P400 ~ P402, P407 ~ P411</td>
+      <td style="text-align: center">8</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 5</td>
+      <td>P500 ~ P502</td>
+      <td style="text-align: center">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 6</td>
+      <td>なし</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 7</td>
+      <td>なし</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 8</td>
+      <td>なし</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 9</td>
+      <td>P914, P915</td>
+      <td style="text-align: center">2</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a href="#1-ports-画面">サンプル画像</a> では、ポート 1 の <code class="language-plaintext highlighter-rouge">PODR</code>（端子出力データ、0: Low 出力、1: High 出力）と <code class="language-plaintext highlighter-rouge">PIDR</code>（端子状態、0: Low レベル、1: High レベル）がチラチラと変化する様子が見えます。これを次のコマンドで、詳細に確認することが出来ます。</p>
+
+<h4 id="2-port-画面">2. PORT 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-PORT1.gif" title="ポート 1 の Port Control レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-PORT1-small.gif" alt="ポート 1 の Port Control レジスタ" width="285" height="173" />
+  </a>
+  <figcaption>ポート1 の Port Control レジスタ</figcaption>
+</figure>
+
+<p>例えば <code class="language-plaintext highlighter-rouge">port1</code> のように、<code class="language-plaintext highlighter-rouge">port</code> に続けて 0 〜 9 を入力すると、各ポートのコントロールレジスタの中身を確認できます。</p>
+
+<p>サンプル画像では、<code class="language-plaintext highlighter-rouge">PODR</code> と <code class="language-plaintext highlighter-rouge">PIDR</code> の３ビット目、即ちピン <code class="language-plaintext highlighter-rouge">P102</code> で、何かが起きていることが確認できます。</p>
+
+<h4 id="3-pmnpfs-画面">3. PmnPFS 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-P102.gif" title="ポート 102 の Port Function Select レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-P102-small.gif" alt="ポート 102 の Port Function Select レジスタ" width="285" height="173" />
+  </a>
+  <figcaption>P102 の PmnPFS レジスタ</figcaption>
+</figure>
+
+<p>例えば <code class="language-plaintext highlighter-rouge">p102</code> のように、<code class="language-plaintext highlighter-rouge">p</code> に続けてピン番号を入力すると、ポート mn 端子機能選択レジスタ（PmnPFS）を表示します。</p>
+
+<p>このレジスタは、状態を表すレジスタの一部が、ポートコントロールレジスタと重複してますが、入出力に関する機能を制御するレジスタ群となっています。</p>
+
+<h4 id="4-pins-画面">4. PINS 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-PINS.gif" title="D0〜D19 の Port Function Select レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-PINS-small.gif" alt="D0〜D19 の Port Function Select レジスタ" width="285" height="173" />
+  </a>
+  <figcaption>D0〜D19 の PmnPFS レジスタ</figcaption>
+</figure>
+
+<p>単に <code class="language-plaintext highlighter-rouge">pins</code> と入力すると、ボード上のデジタルピンとアナログピンの <code class="language-plaintext highlighter-rouge">PmnPFS</code> レジスタを一覧表示します。表示上、<code class="language-plaintext highlighter-rouge">D10</code> 〜 <code class="language-plaintext highlighter-rouge">D13</code> は <code class="language-plaintext highlighter-rouge">Da</code> 〜 <code class="language-plaintext highlighter-rouge">Dd</code> としています。</p>
+
+<p>また例えば、<code class="language-plaintext highlighter-rouge">D13</code>（<code class="language-plaintext highlighter-rouge">LED_BUILTIN</code>）を入力すると、Minima では <code class="language-plaintext highlighter-rouge">P111</code> を、WiFi では <code class="language-plaintext highlighter-rouge">P102</code> を表示できます。</p>
+
+<h4 id="5-agt-画面">5. AGT 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-AGT.gif" title="AGT0 レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-AGT-small.gif" alt="AGT0 レジスタ" width="285" height="173" />
+  </a>
+  <figcaption>AGT0 レジスタ</figcaption>
+</figure>
+
+<p>冒頭に示した AGT レジスタの画面を表示するには、<code class="language-plaintext highlighter-rouge">agt0</code> または <code class="language-plaintext highlighter-rouge">agt1</code> と入力します。</p>
+
+<p>この画面は、「<a href="/2024/04/09/arduino-r4-callback-timer.html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説 - Embedded Kiddie">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</a>」で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas">FspTimer クラス</a> をテストするときに欲しかった機能で、ようやく実現しました :+1:</p>
+
+<h4 id="画面表示と実行速度について">画面表示と実行速度について</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/confused-terminal.png" title="バグったコンソール.app" data-lightbox="image">
+    <img src="/images/2024/06-03/confused-terminal-small.jpg" alt="バグったコンソール.app" width="459" height="299" />
+  </a>
+  <figcaption>バグったようなコンソール.app</figcaption>
+</figure>
+
+<p>画面のカーソル制御に <a href="https://en.wikipedia.org/wiki/ANSI_escape_code" title="ANSI escape code - Wikipedia">ANSI エスケープコード</a> を使っている関係上、特に Mac では、途中で通信が途切れるとシーケンスが乱れてバグったような状態になります。この様な状態になったらコマンド <code class="language-plaintext highlighter-rouge">reset</code> を入力してください。</p>
+
+<div class="clear-both"></div>
+
+<p>また、本来は PC 側で <a href="https://ja.wikipedia.org/wiki/Curses" title="curses - Wikipedia">curses ライブラリ</a> や GUI ソフトで画面を制御すべきを、Arduino ボード側で行っているため、それなりの時間を要します。下の表は、シリアル通信のボーレートと各画面の実行時間を <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で計測した結果です。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Baud Rate [bps]</th>
+      <th style="text-align: right">PORTS [msec]</th>
+      <th style="text-align: right">PORTx [msec]</th>
+      <th style="text-align: right">PINS [msec]</th>
+      <th style="text-align: right">Pxxx [msec]</th>
+      <th style="text-align: right">AGTx [msec]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right"><code class="language-plaintext highlighter-rouge">115200</code></td>
+      <td style="text-align: right">44.903</td>
+      <td style="text-align: right">26.336</td>
+      <td style="text-align: right">198.231</td>
+      <td style="text-align: right">11.660</td>
+      <td style="text-align: right">24.006</td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><code class="language-plaintext highlighter-rouge">230400</code></td>
+      <td style="text-align: right">23.815</td>
+      <td style="text-align: right">13.620</td>
+      <td style="text-align: right">105.974</td>
+      <td style="text-align: right">6.014</td>
+      <td style="text-align: right">12.327</td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><code class="language-plaintext highlighter-rouge">460800</code></td>
+      <td style="text-align: right">13.248</td>
+      <td style="text-align: right">7.255</td>
+      <td style="text-align: right">59.804</td>
+      <td style="text-align: right">3.187</td>
+      <td style="text-align: right">6.486</td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><code class="language-plaintext highlighter-rouge">921600</code></td>
+      <td style="text-align: right">7.957</td>
+      <td style="text-align: right">4.069</td>
+      <td style="text-align: right">36.668</td>
+      <td style="text-align: right">1.773</td>
+      <td style="text-align: right">3.560</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>何かのソフトと組み合わせてデバッグできる程のリアルタイム性はなく、あくまで学習用というワケです。</p>
+
+<h2 id="周辺回路のレジスタ定義について">周辺回路のレジスタ定義について</h2>
+
+<p><a href="/2024/05/07/" title="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！ - Embedded Kiddie">以前の記事</a> で解説した<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/svd/R7FA4M1AB.svd" title="ArduinoCore-renesas/svd/R7FA4M1AB.svd at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code></a> には、周辺回路のレジスタやアドレスが定義されてますが、プログラミングには <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h" title="ArduinoCore-renesas/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.h</code></a> が便利です。</p>
+
+<p>このファイルは Arduino 階層の深いところにあります。以下は Mac での例です。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h</code></pre></figure>
+
+<p>これを手作業で見つけ出すのは困難です。そんな時、Mac や Linux の人なら次の <code class="language-plaintext highlighter-rouge">find</code> コマンドが便利です。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">find <span class="nb">.</span> <span class="nt">-name</span> <span class="s2">"*.h"</span> <span class="nt">-exec</span> <span class="nb">grep</span> <span class="nt">-w</span> R_PORT1 <span class="o">{}</span> <span class="se">\;</span> <span class="nt">-print</span></code></pre></figure>
+
+<p>このコマンドは、以下の様に働きます。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.</code> が示す現在のディレクトリから、拡張子 <code class="language-plaintext highlighter-rouge">.h</code> を持つファイルを探し、</li>
+  <li>見つけたファイルを <code class="language-plaintext highlighter-rouge">{}</code> で <code class="language-plaintext highlighter-rouge">grep</code> に渡し、</li>
+  <li><code class="language-plaintext highlighter-rouge">-w</code> でワード単位に <code class="language-plaintext highlighter-rouge">R_PORT1</code> を検索し、</li>
+  <li>検索に引っ掛かったら、ファイル名を <code class="language-plaintext highlighter-rouge">-print</code> で出力する。</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">find</code> には沢山のオプションがあるので、幾つかを覚えておくと便利ですョ :point_up:</p>
+
+<h2 id="オマケ">オマケ</h2>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/MINIMA-PORT2-LOVE.gif" title="Minima の P204 が何か出力している" data-lightbox="image">
+    <img src="/images/2024/06-03/MINIMA-PORT2-LOVE-small.gif" alt="Minima の P204 が何か出力している" width="285" height="173" />
+  </a>
+  <figcaption>Minima の P204 が何か出力してる</figcaption>
+</figure>
+
+<p>Minima の汎用 I/O 端子レジスタを観察していたら、何やら <code class="language-plaintext highlighter-rouge">P204</code> のポート状態が Low／High を繰り返していました。</p>
+
+<p>ご存知の方も多いと思いますが、<a href="https://docs.arduino.cc/resources/schematics/ABX00080-schematics.pdf">Minima の回路図</a> を見ると、これは基盤裏側の <code class="language-plaintext highlighter-rouge">LOVE</code> 端子ですね。</p>
+
+<div class="clear-both"></div>
+
+<p><a href="https://forum.arduino.cc/t/the-way-how-to-use-arduino-uno-r4-minimas-love-pin/1142989" title="The way how to use Arduino UNO R4 MINIMA&#39;s LOVE pin - UNO R4 Minima - Arduino Forum">Arduino Forum</a> でも取り上げられていて、実用的ではないですが、このピンを GND に落とすだけの、なんちゃってタッチセンサを実験している人がいました。オマケで貼っておきます。</p>
+
+<figure style="text-align: center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5cS-ShyYW_k?si=Uw_eG0SokjU7WqUH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</figure>
+
+<h2 id="今後の予定は">今後の予定は…</h2>
+
+<p>何を作るにせよ、割り込みコントローラユニット (ICU) やイベントリンクコントローラ (ELC) がキモになりそうな気がしています。</p>
+
+<p>Arduino IDE のデバッグ機能にある <code class="language-plaintext highlighter-rouge">CORTEX PERIPHERALS</code> は、とても使い勝手が悪いので、作ってみるカモです :clown_face:</p>
+
+<h3 id="ご参考">ご参考</h3>
+
+<p><a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> を作るに当たり、参考にしたサイトです。</p>
+
+<ul>
+  <li><a href="http://radiopench.blog96.fc2.com/?no=1273" title="ラジオペンチ Arduino UNO R4 のレジスタ操作解説とピン設定ダンププログラム">Arduino UNO R4 のレジスタ操作解説とピン設定ダンププログラム</a></li>
+  <li><a href="https://www.chihayafuru.jp/tech/index.php/archives/3689" title="MacOSのUSBシリアル通信方法 - Tech控え帳">MacOSのUSBシリアル通信方法</a></li>
+  <li><a href="https://stackoverflow.com/questions/2649733/hide-cursor-on-remote-terminal" title="c - Hide cursor on remote terminal - Stack Overflow">Hide cursor on remote terminal</a></li>
+</ul>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</title><link href="https://embedded-kiddie.github.io/2024/05/16/index.html" rel="alternate" type="text/html" title="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" /><published>2024-05-16T22:12:51+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/05/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/05/16/index.html"><![CDATA[<p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
 
 <p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
 
@@ -2887,101 +3265,4 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>LPCXpresso のメニューから「Project → Properties」を開き、「C/C++ Build → Settings → MCU Linker → Managed Linker Script」をたどり、「Library」に <a href="https://community.nxp.com/t5/LPCXpresso-IDE-FAQs/What-are-none-nohost-and-semihost-libraries/m-p/475327" title="What are none, nohost and semihost libraries? - NXP Community"><code class="language-plaintext highlighter-rouge">Redlib (semihost)</code></a> を選択します。そして再コンパイルすれば <code class="language-plaintext highlighter-rouge">printf()</code> の出力先がコンソールになります。</p>
 
-<p>以上！</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ARM" /><category term="デバッグ" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</title><link href="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html" rel="alternate" type="text/html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?" /><published>2024-03-24T23:53:41+09:00</published><updated>2024-05-19T05:09:49+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/24/arduino-debug-with-toragi.html"><![CDATA[<p>Arduino UNO R4 でソースコードデバッグするには、<a href="https://www.segger.com/products/debug-probes/j-link/" title="SEGGER J-Link debug probes">Segger J-Link</a> と <a href="https://www.segger.com/products/development-tools/ozone-j-link-debugger/" title="Ozone – The Performance Analyzer">Ozone</a> を使えって、公式サイトの <a href="https://docs.arduino.cc/tutorials/uno-r4-minima/debugger/">Debugging the Arduino UNO R4 Minima</a> には書いてあるけど、Segger は高くて買う気にならないし、激安の怪しい奴は不安です。</p>
-
-<p>でもって先日、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> に載っている <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">古い LPC1343 ボードがトラ技ARMライタと繋がった</a> のに気を良くしたのに加え、Arduino IDE の “書き込み装置” に <a href="https://openocd.org/" title="Open On-Chip Debugger">OpenOCD</a>（<a href="https://interface.cqpub.co.jp/wp-content/uploads/interface/2015/03/if03_096.pdf" title="プロなみJTAGデバッグを個人でも! オープンソースOpenOCD入門">コチラの記事</a> が分かり易いです）があったのを思い出し、もしかしたらトラ技ARMライタで Arduino UNO R4 のデバッグができるんじゃね？ と。</p>
-
-<p>ってことで、繋いじゃいました！</p>
-
-<p><img src="/images/2024/03-24/arduino-toragi.jpg" alt="Arduino UNO Minimaに繋いだトラ技ARMライタ" title="Arduino UNO Minimaに繋いだトラ技ARMライタ" width="1380" height="792" /></p>
-
-<h2 id="arm-cmsis-dap-compatible">ARM CMSIS-DAP Compatible</h2>
-<figure class="float-left">
-  <a href="/images/2024/03-24/CMSIS-DAP.jpg" title="ARM CMSIS-DAP Compatible" data-lightbox="image">
-    <img src="/images/2024/03-24/CMSIS-DAP-small.jpg" width="460" height="298" alt="ARM CMSIS-DAP Compatible" />
-  </a>
-</figure>
-
-<p>今朝 Arduino IDE（バージョン：2.3.2）の「ツール → 書き込み装置」をみたら “ARM CMSIS-DAP Compatible” になってました。そう言えば何かアップデートされたような… まッ、細かいことは気にせず、まずは双方の JTAG/SWD コネクタの確認から。</p>
-
-<figure>
-  <a href="/images/2024/03-24/arduino-toragi-pin.jpg" title="Arduino UNO Minimaとトラ技ARMライタのピン配" data-lightbox="image">
-    <img src="/images/2024/03-24/arduino-toragi-pin.jpg" width="1380" height="580" alt="Arduino UNO Minimaとトラ技ARMライタのピン配" />
-  </a>
-</figure>
-
-<p>UNO R4 Minima の場合、両者の接続には <a href="/2024/03/23/debug-probe-for-beauto-rover.html#単体版" title="マルツオンラインのトラ技ARMライタ">マルツオンラインのトラ技ARMライタ</a> に付属の <a href="https://www.google.com/search?q=1.27mm(%E3%83%8F%E3%83%BC%E3%83%95%E3%83%94%E3%83%83%E3%83%81)+2%C3%975(10P)+%E3%83%94%E3%83%B3%E3%83%98%E3%83%83%E3%83%80%E4%BB%98%E3%81%8D%E3%83%95%E3%83%A9%E3%83%83%E3%83%88%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB" title="Google 検索">1.27mm(ハーフピッチ) 2×5(10P) ピンヘッダ付きフラットケーブル</a> が使えます。電源は Minima 側から +5V が供給されますが、トラ技ARMライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> が繋がってないため（とりあえず後で繋げるとして）、トラ技側も USB に接続します。</p>
-
-<p>一方 UNO R4 WiFi の場合は JTAG/SWD コネクタがなく、ARM MCU からの <code class="language-plaintext highlighter-rouge">SWCLK</code>（P300）、<code class="language-plaintext highlighter-rouge">SWDIO</code>（P108）が内部でレベル変換回路を通って <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> 無線モジュールに入っちゃってるので接続は無理<del>かも</del>です。残念…<del>LED のギミックいらないから開発環境を充実させてくれた方が有難いのに… と思うのは僕だけでしょうか？</del>（2024/4/18 修正：下の参考情報にも書いてますが、IDE が対応すれば <a href="https://ja.wikipedia.org/wiki/ESP32" title="ESP32 - Wikipedia"><code class="language-plaintext highlighter-rouge">ESP32</code></a> がオンボードのデバッガになると思います。）</p>
-
-<h4 id="参考情報2024年3月27日-追記">参考情報（2024年3月27日 追記）</h4>
-<ul>
-  <li>
-    <p><a href="https://forum.arduino.cc/t/will-the-uno-r4-minima-wifi-going-to-support-debug/1146373" title="Will the UNO R4 Minima &amp; WiFi going to support debug? - IDE 2.x - Arduino Forum">Will the UNO R4 Minima &amp; WiFi going to support debug?</a><br />
-「対応する予定は？ いつ？」に対し「気配はあるが…」で、既にクローズっぽい。色んな機種のデバッグ情報あり。</p>
-  </li>
-  <li>
-    <p><a href="https://docs.arduino.cc/tutorials/uno-r4-minima/cheat-sheet/#swd-connector">Arduino UNO R4 Minima Cheat Sheet</a><br />
-SWD コネクタが載ってます。</p>
-  </li>
-  <li>
-    <p><a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/cheat-sheet/">Arduino UNO R4 WiFi Cheat Sheet</a><br />
-デバッガに関するI/Fの言及なし。回路図を見てみて唯一考えられるのが ARM MCU と USB をブリッジしてる ESP32。ただ SWD の信号が外に出ていないので、デバッグプローブと電気的に接続するのではなく、ESP32 のファームを書き換えてオンボードのデバッガにするしかない <del>のでは？ という気がしてます。</del>（→ 2024年5月3日 修正：UNO R4 WiFi は ESP32 がオンボードデバッガの役割を果たすので、トラ技 ARM ライタは不要です。）</p>
-  </li>
-  <li>
-    <p><a href="https://support.arduino.cc/hc/en-us/articles/10531097579548-Debug-runtime-errors-on-UNO-R4-WiFi-using-stack-trace" title="Debug runtime errors on UNO R4 WiFi using stack trace &ndash; Arduino Help Center">Debug runtime errors on UNO R4 WiFi using stack trace</a><br />
-う〜ん、エラーが起きた時だけ。初心者にはハードル高し。</p>
-  </li>
-</ul>
-
-<h2 id="デバッグ開始">デバッグ開始！</h2>
-<p>Arduino IDE で Blink をロード → コンパイル → デバッグ！ っと… あれれっ？ <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> ファイルの読み込みで失敗しているみたいです。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unable to parse SVD file /Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/svd/R7FA4M1AB.svd: Error: SVD error: Invalid 'derivedFrom' "P100PFS" for register "P30%sPFS"
-</code></pre></div></div>
-
-<p><img src="/images/2024/03-24/SVD-file-error.jpg" alt="Unable to parse SVD file" title="Unable to parse SVD file" width="1254" height="785" /></p>
-
-<p><code class="language-plaintext highlighter-rouge">R7FA4M1AB</code> といえば、UNO R4 に載っている Renesus 製 ARM MCU の型番です。そこでこのエラーを Google 検索してみると、Arduino 公式の Github にも <a href="https://github.com/arduino/ArduinoCore-renesas/issues/276" title="&quot;Unable to parse SVD file&quot; error when starting debugger · Issue #276 · arduino/ArduinoCore-renesas">issue</a> が上がっていました。</p>
-
-<h2 id="svdファイルとは何者">SVDファイルとは何者？</h2>
-<p><a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_validate_file_pg.html" title="CMSIS-SVD: SVD File Validation and Usage">SVDファイルの正体</a> を調べてみると “System View Description”、つまり MCU のレジスタや周辺装置の仕様を XML で記述したものとのこと。<a href="https://arm-software.github.io/CMSIS_5/General/html/index.html" title="CMSIS: Introduction">CMSISのサイト</a> に載っている全体像からすると、MCU の仕様違いを吸収する層に位置付けられていることが分かります。</p>
-
-<p><img src="/images/2024/03-24/CMSIS-overview.png" alt="CMSISの全体像とデバッガの位置付け" title="CMSISの全体像とデバッガの位置付け" width="886" height="325" /></p>
-
-<p>もう少し具体的に描くと、こんな感じでしょうか。よく出来ています。</p>
-
-<p><img src="/images/2024/03-24/block-diagram.png" alt="ARM MCUからArduino IDEまでのブロック図" title="ARM MCUからArduino IDEまでのブロック図" width="1379" height="517" /></p>
-
-<p>正体が分かったところで Arduino IDE に添付された <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を覗き <code class="language-plaintext highlighter-rouge">P100PFS</code> を探してみましたが見つかりません。にもかかわらず別なところから <code class="language-plaintext highlighter-rouge">derivedFrom</code> で継承されてるじゃないですか！ しかもコレだけじゃなく <code class="language-plaintext highlighter-rouge">P100PFS_HA</code> とか <code class="language-plaintext highlighter-rouge">P100PFS_BY</code> も未定義なことが分かりました。</p>
-
-<h3 id="p100pfs-って何">P100PFS って何？</h3>
-<p><a href="https://www.renesas.com/jp/ja/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ra4m1-32-bit-microcontrollers-48mhz-arm-cortex-m4-and-lcd-controller-and-cap-touch-hmi?documents-type-filter=%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB%EF%BC%8D%E3%83%8F%E3%83%BC%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2#documents">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> によると、「ポート mn 端子機能選択レジスタ（Port Function Select）」の１つで、<code class="language-plaintext highlighter-rouge">P100PFS</code> はポート 1 の入出力方向やプルアップの有無などを決める大事なレジスタです。これは何とかしないといけません。</p>
-
-<h3 id="svdファイルの修正">SVDファイルの修正</h3>
-<p>さて SVD ファイルの生成には <a href="https://github.com/Open-CMSIS-Pack/cmsis-toolbox?tab=readme-ov-file" title="Open-CMSIS-Pack/cmsis-toolbox: CMSIS-Toolbox">CMSIS-Toolbox</a> で色々とやらなくちゃならないようです。コレを読みこなして習熟するには時間がかかりそうなので、さらに調べてみると Github に <a href="https://github.com/tinygo-org/renesas-svd" title="tinygo-org/renesas-svd: SVD fiies for Renesas MCU mirrored from Keil drivers release">renesas-svd</a> を上げている人を見つけました。</p>
-
-<p>同リポジトリの <a href="https://github.com/tinygo-org/renesas-svd/blob/main/R7FA4M1AB.svd" title="renesas-svd/R7FA4M1AB.svd at main · tinygo-org/renesas-svd">R7FA4M1AB.svd</a> を調べてみると、Arduino IDE に添付されたものと完全に一致します。<a href="https://github.com/tinygo-org/renesas-svd/blob/main/README.md" title="renesas-svd/README.md at main · tinygo-org/renesas-svd">README.md</a> によると <code class="language-plaintext highlighter-rouge">Renesas.RA_DFP.4.4.0.pack</code> を元にしているとのことで、<del><a href="https://www.keil.arm.com/packs/ra_dfp-renesas/devices/" title="Arm Keil - Renesas RA_DFP">最新版（5.2.0）</a> の <a href="https://www.keil.arm.com/devices/renesas-r7fa4m1ab/features/" title="Arm Keil - Renesas R7FA4M1AB">R7FA4M1AB</a> に更新する必要がありそうです。</del>（2024/04/18 追記：<a href="https://github.com/arduino/ArduinoCore-renesas/issues/276#issuecomment-2063638748" title="&quot;Unable to parse SVD file&quot; error when starting debugger · Issue #276 · arduino/ArduinoCore-renesas">Github の issue</a> で、最新版でもダメなことが報告されました。）</p>
-
-<p>ただ <code class="language-plaintext highlighter-rouge">.pack</code> の扱い方が分からないので、乱暴にも他の Cortex-M4 の <code class="language-plaintext highlighter-rouge">.svd</code> ファイルから <code class="language-plaintext highlighter-rouge">P100PFS</code>、<code class="language-plaintext highlighter-rouge">P100PFS_HA</code>、<code class="language-plaintext highlighter-rouge">P100PFS_BY</code> の定義を <a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/svd" title="ArduinoCore-renesas/svd at main · arduino/ArduinoCore-renesas · GitHub">Arduino IDE の <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code></a> ファイルにコピーしてみたところ、うっ…動きました。やったゼ〜 :+1:</p>
-
-<ul>
-  <li><del>Gist: R7FA4M1AB.svd（63712行あります）</del>
-→ 2024年5月3日：Gist は削除しました。<a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">こちらのリポジトリ</a> からダウンロードして下さい。</li>
-</ul>
-
-<p><img src="/images/2024/03-24/arduino-debugger.jpg" alt="トラ技ARMライタで動作する Arduino debugger" title="トラ技ARMライタで動作する Arduino debugger" width="2240" height="1400" /></p>
-
-<h3 id="注意事項">注意事項！</h3>
-<p>一応コピーした <code class="language-plaintext highlighter-rouge">P100PFS</code> 等のレジスタ定義はユーザーズマニュアルに照らして正しそうなことは確認しましたが、もちろん無保証なので扱いは自己責任でお願いします。</p>
-
-<p>また先にブレークポイントを設定しておかないとどこにも止まらないですし、デバッグを終了すると<del>ブートローダーが壊れるようで、</del> Minima のリセットボタンを<del>ダブル</del>クリックしてから「→」ボタンで書き込まないと復活しません。（2024/4/18 修正：単にデバッガからの指示待ちで停止しているだけなので、リセットするだけで OK でした）</p>
-
-<p><img src="/images/2024/03-24/error-status-74.jpg" alt="error: exit status 74" title="error: exit status 74" width="1380" height="863" /></p>
-
-<h2 id="他力本願な願望">他力本願な願望</h2>
-<p>と言うことで、とりあえずトラ技ARMライタが Arduino IDE 上のデバッグに使えそうだと言うことまでは分かりました。残念ですが、あとはエキスパートの方にお任せしたいと思います（オィ）。</p>
-
-<p>それにしても10年ほど前に作られたトラ技ARMライタにつくづく感謝です :bowing_man:</p>
-
-<p>※ <strong>2024/04/18 追記</strong>：「<a href="/2024/04/17/how-to-use-toragi-writer.html" title="Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足 - Embedded Kiddie">Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足</a>」にまとめ記事を書きました。</p>]]></content><author><name>Kingsman</name></author><category term="Arduino-Uno-R4" /><category term="デバッグ" /><summary type="html"><![CDATA[Arduino UNO R4 でソースコードデバッグするには、Segger J-Link と Ozone を使えって、公式サイトの Debugging the Arduino UNO R4 Minima には書いてあるけど、Segger は高くて買う気にならないし、激安の怪しい奴は不安です。]]></summary></entry></feed>
+<p>以上！</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ARM" /><category term="デバッグ" /><summary type="html"><![CDATA[]]></summary></entry></feed>
