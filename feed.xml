@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-03T13:12:58+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</title><link href="https://embedded-kiddie.github.io/2024/06/03/index.html" rel="alternate" type="text/html" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" /><published>2024-06-03T09:41:52+09:00</published><updated>2024-06-03T09:41:52+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/03/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/03/index.html"><![CDATA[<p><img src="/images/2024/06-03/registers-AGT.gif" alt="AGT レジスタ" title="AGT レジスタ" width="570" height="346" style="margin: auto; display: block" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-03T14:40:24+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</title><link href="https://embedded-kiddie.github.io/2024/06/03/index.html" rel="alternate" type="text/html" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" /><published>2024-06-03T09:41:52+09:00</published><updated>2024-06-03T09:41:52+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/03/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/03/index.html"><![CDATA[<p><img src="/images/2024/06-03/registers-AGT.gif" alt="AGT レジスタ" title="AGT レジスタ" width="570" height="346" style="margin: auto; display: block" /></p>
 
-<p>上の画像は、学習用に作った <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">低消費電力非同期汎用タイマ（AGT）</a> のレジスタをモニターするプログラムです。AGT は 1ms を刻む <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> で使われていますが、「１」が立っているビットから次のことが分かります。</p>
+<p>上の画像は、学習用に作成した <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">低消費電力非同期汎用タイマ（AGT）</a>のレジスタをモニターするプログラムです。AGT は 1ms を刻む <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> で使われていますが、「１」が立つビットから次のことが分かります。</p>
 
 <ol>
   <li><strong>AGT コントロールレジスタ (AGTCR)</strong>
@@ -21,7 +21,7 @@
     <ul>
       <li><code class="language-plaintext highlighter-rouge">AGT[16]</code><br />
  \(\frac{8}{24000000} = \frac{1}{3000000}\)
- 秒を１カウントとし、0 〜 2999 カウントで１ms としています。</li>
+ 秒を１カウントとし、0 〜 2999 をカウントして１ms としています。</li>
     </ul>
   </li>
 </ol>
@@ -132,13 +132,13 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
   <figcaption>ポート1〜4の Port Control レジスタ</figcaption>
 </figure>
 
-<p><code class="language-plaintext highlighter-rouge">ports</code> と入力すると、ポート 1 からポート 4 まで、ポートコントロールレジスタ（PCNTR1 〜 PCNTR4）の中身を 4 桁の 16 進数で表示します。</p>
+<p><code class="language-plaintext highlighter-rouge">ports</code> と入力すると、ポート 1 からポート 4 まで、ポートコントロールレジスタ（PCNTR1 〜 PCNTR4）の中身を 4 桁の 16 進数で表示します。<code class="language-plaintext highlighter-rouge">[]</code> 内の数字はビット幅です。</p>
 
 <p>各ポートには、それぞれ 0 〜 15 のビットに対応づけられた、最大で 16 本の I/O 端子（ピン）が割り当てられています。</p>
 
 <div class="clear-both"></div>
 
-<p>プログラムではなり振り構わず表示してしまいますが、実際には全てのピンが存在するわけではなく、下の表のようになっています。</p>
+<p>プログラムではなり振り構わず表示してしまいますが、<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーズマニュアル</a> によると、全てのピンが存在するわけではなく、下表のように構成されています。</p>
 
 <table>
   <thead>
@@ -328,7 +328,9 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
   </tbody>
 </table>
 
-<p>何かのプログラムと組み合わせてデバッグできる程のリアルタイム性はなく、あくまで学習用というワケです。</p>
+<p>数値には文字列の生成と通信の時間を含んでいて、ほぼボーレートと反比例の関係にあることから、通信にかかる時間が支配的であることが分かります。</p>
+
+<p>Blutooth を使えばもう少し速くなるとは思いますが、何かのプログラムと組み合わせてデバッグできる程のリアルタイム性はなく、あくまで学習用というワケです。</p>
 
 <h2 id="周辺回路のレジスタ定義について">周辺回路のレジスタ定義について</h2>
 
