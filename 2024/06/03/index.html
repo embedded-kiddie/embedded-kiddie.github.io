@@ -121,11 +121,17 @@
 <p>僕の環境はとても古く、参考にならない部分もあるとは思いますが、一応記しておきます。</p>
 
 <ul>
-  <li>Windows:<br>
+  <li>
+<strong>Windows:</strong><br>
 Intel Mac 上の <a href="https://www.parallels.com/jp/" title="Parallels：Mac および Windows の仮想化、リモートアプリケーションサーバー、Mac 管理ソリューション">Parallels</a> で動作する Windows 7</li>
-  <li>MacOS:<br>
+  <li>
+<strong>MacOS:</strong><br>
 MacBook Pro (Late 2013), Big Sur (macOS バージョン 11.7.10)</li>
-  <li>シリアル通信のプロトコル<br>
+  <li>
+<strong>Arduino IDE</strong><br>
+バージョン: 2.3.2、UNO R4 ボードマネージャ: 1.1.0</li>
+  <li>
+<strong>シリアル通信のプロトコル</strong><br>
 送信側の <a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/begin/" title="Serial.begin() - Arduino Reference"><code class="language-plaintext highlighter-rouge">SERIAL_8N1</code></a> と合わせるため、データ長やパリティ、フロー制御はデフォルトのままにします。</li>
 </ul>
 
@@ -330,17 +336,17 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 <h4 id="画面表示と実行速度について">画面表示と実行速度について</h4>
 
 <figure class="float-left">
-  <a href="/images/2024/06-03/confused-terminal.png" title="バグったコンソール.app" data-lightbox="image">
-    <img src="/images/2024/06-03/confused-terminal-small.jpg" alt="バグったコンソール.app" width="459" height="299">
+  <a href="/images/2024/06-03/confused-terminal.png" title="表示がバグったコンソール.app" data-lightbox="image">
+    <img src="/images/2024/06-03/confused-terminal-small.jpg" alt="表示がバグったコンソール.app" width="459" height="299">
   </a>
-  <figcaption>バグったようなコンソール.app</figcaption>
+  <figcaption>表示がバグったコンソール.app</figcaption>
 </figure>
 
-<p>画面のカーソル制御に <a href="https://en.wikipedia.org/wiki/ANSI_escape_code" title="ANSI escape code - Wikipedia">ANSI エスケープコード</a> を使っている関係上、特に Mac では、途中で通信が途切れるとシーケンスが乱れてバグったような状態になります。この様な状態になったらコマンド <code class="language-plaintext highlighter-rouge">reset</code> を入力してください。</p>
+<p>画面のカーソル制御に <a href="https://en.wikipedia.org/wiki/ANSI_escape_code" title="ANSI escape code - Wikipedia">ANSI エスケープコード</a> を使っている関係上、特に Mac では通信が途切れるとシーケンスが乱れ、バグったような状態になります。このような状態になったら、コマンド <code class="language-plaintext highlighter-rouge">reset</code> を入力してください。正常に戻ります。</p>
 
 <div class="clear-both"></div>
 
-<p>また、本来は PC 側で <a href="https://ja.wikipedia.org/wiki/Curses" title="curses - Wikipedia">curses ライブラリ</a> や GUI ソフトで画面を制御すべきを、Arduino ボード側で行っているため、それなりの時間を要します。下の表は、シリアル通信のボーレートと各画面の実行時間を <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で計測した結果です。</p>
+<p>また、本来は PC 側で <a href="https://ja.wikipedia.org/wiki/Curses" title="curses - Wikipedia">curses ライブラリ</a> や GUI ソフトで画面制御すべきを、Arduino ボード側で行っているため、それなりの時間を要します。下の表は、シリアル通信のボーレートと各画面の実行時間を <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で計測した結果です。</p>
 
 <table>
   <thead>
@@ -389,7 +395,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
   </tbody>
 </table>
 
-<p>何かのソフトと組み合わせてデバッグできる程のリアルタイム性はなく、あくまで学習用というワケです。</p>
+<p>何かのプログラムと組み合わせてデバッグできる程のリアルタイム性はなく、あくまで学習用というワケです。</p>
 
 <h2 id="周辺回路のレジスタ定義について">周辺回路のレジスタ定義について</h2>
 
@@ -416,13 +422,13 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <p><code class="language-plaintext highlighter-rouge">find</code> には沢山のオプションがあるので、幾つかを覚えておくと便利ですョ <img class="emoji" title=":point_up:" alt=":point_up:" src="https://github.githubassets.com/images/icons/emoji/unicode/261d.png" height="20" width="20"></p>
 
-<h2 id="オマケ">オマケ</h2>
+<h2 id="おまけ">おまけ</h2>
 
 <figure class="float-left">
-  <a href="/images/2024/06-03/MINIMA-PORT2-LOVE.gif" title="Minima の P204 が何か出力している" data-lightbox="image">
-    <img src="/images/2024/06-03/MINIMA-PORT2-LOVE-small.gif" alt="Minima の P204 が何か出力している" width="285" height="173">
+  <a href="/images/2024/06-03/MINIMA-PORT2-LOVE.gif" title="Minima の P204 の状態がチラついている" data-lightbox="image">
+    <img src="/images/2024/06-03/MINIMA-PORT2-LOVE-small.gif" alt="Minima の P204 の状態がチラついている" width="285" height="173">
   </a>
-  <figcaption>Minima の P204 が何か出力してる</figcaption>
+  <figcaption>Minima の P204 がチラついている</figcaption>
 </figure>
 
 <p>Minima の汎用 I/O 端子レジスタを観察していたら、何やら <code class="language-plaintext highlighter-rouge">P204</code> のポート状態が Low／High を繰り返していました。</p>
@@ -431,7 +437,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <div class="clear-both"></div>
 
-<p><a href="https://forum.arduino.cc/t/the-way-how-to-use-arduino-uno-r4-minimas-love-pin/1142989" title="The way how to use Arduino UNO R4 MINIMA's LOVE pin - UNO R4 Minima - Arduino Forum">Arduino Forum</a> でも取り上げられていて、実用的ではないですが、このピンを GND に落とすだけの、なんちゃってタッチセンサを実験している人がいました。オマケで貼っておきます。</p>
+<p><a href="https://forum.arduino.cc/t/the-way-how-to-use-arduino-uno-r4-minimas-love-pin/1142989" title="The way how to use Arduino UNO R4 MINIMA's LOVE pin - UNO R4 Minima - Arduino Forum">Arduino Forum</a> でも取り上げられていて、このピンを GND に落とすだけの、なんちゃってタッチセンサを実験している人がいました。おまけで貼っておきます。</p>
 
 <figure style="text-align: center">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/5cS-ShyYW_k?si=Uw_eG0SokjU7WqUH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
@@ -447,7 +453,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <h3 id="ご参考">ご参考</h3>
 
-<p><a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> を作るに当たり、参考にしたサイトです。</p>
+<p><a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> を作るに当たり、参考にさせて頂いたサイトです。</p>
 
 <ul>
   <li><a href="http://radiopench.blog96.fc2.com/?no=1273" title="ラジオペンチ Arduino UNO R4 のレジスタ操作解説とピン設定ダンププログラム">Arduino UNO R4 のレジスタ操作解説とピン設定ダンププログラム</a></li>
