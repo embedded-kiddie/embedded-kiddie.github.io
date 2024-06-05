@@ -99,6 +99,20 @@
 
 <p>AGT だけじゃなく、汎用 I/O 端子のレジスタをモニターする機能も入れたので、誰かの役に立つことを願い、紹介したいと思います！</p>
 
+<div class="quote clear-both">
+
+<p><a href="https://renesas.github.io/fsp/_i_o_d_e_f_i_n_e__o_v_e_r_v_i_e_w.html" title="RA Flexible Software Package Documentation: Using Registers Directly">FSP ユーザーマニュアル</a> には、レジスタ、及びその下のビットフィールへのアクセスは、以下のルールに従うと定義されています。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_</span> <span class="o">+</span> <span class="err">周辺回路の略語</span> <span class="o">+</span> <span class="err">チャネル番号</span> <span class="o">+</span> <span class="o">-&gt;</span> <span class="err">レジスタ名</span>
+<span class="n">R_</span> <span class="o">+</span> <span class="err">周辺回路の略語</span> <span class="o">+</span> <span class="err">チャネル番号</span> <span class="o">+</span> <span class="o">-&gt;</span> <span class="err">レジスタ名</span> <span class="o">+</span> <span class="n">_b</span><span class="p">.</span> <span class="o">+</span> <span class="err">ビットフィールド名</span></code></pre></figure>
+
+<p>上の例で言えば、<code class="language-plaintext highlighter-rouge">AGT0</code> の コントロールレジスタ <code class="language-plaintext highlighter-rouge">AGTCR</code> の下にあるビットフィールド <code class="language-plaintext highlighter-rouge">TSTART</code> へのアクセスは、次のようになります。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_AGT0</span><span class="o">-&gt;</span><span class="n">AGTCR_b</span><span class="p">.</span><span class="n">TSTART</span></code></pre></figure>
+
+
+</div>
+
 <h2 id="peripheralmonitor-の紹介">PeripheralMonitor の紹介</h2>
 
 <p>仕組みはとても簡単です。UNO R4 ボードで読み取ったレジスタ情報をシリアル通信でホスト PC に送り、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> 等の <a href="https://ja.wikipedia.org/wiki/VT100" title="VT100 - Wikipedia">VT100</a> <a href="https://ja.wikipedia.org/wiki/%E7%AB%AF%E6%9C%AB%E3%82%A8%E3%83%9F%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%BF" title="端末エミュレータ - Wikipedia">端末エミュレータ</a> ソフトで表示します。プログラムは UNO R4 用ライブラリとして GitHub のリポジトリ <a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> に上げました。</p>
