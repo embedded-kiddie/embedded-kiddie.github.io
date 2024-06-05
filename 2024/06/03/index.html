@@ -101,7 +101,7 @@
 
 <div class="quote clear-both">
 
-<p><a href="https://renesas.github.io/fsp/_i_o_d_e_f_i_n_e__o_v_e_r_v_i_e_w.html" title="RA Flexible Software Package Documentation: Using Registers Directly">FSP ユーザーマニュアル</a> には、レジスタ、及びその下のビットフィールへのアクセスは、以下のルールに従うと定義されています。</p>
+<p><a href="https://renesas.github.io/fsp/_i_o_d_e_f_i_n_e__o_v_e_r_v_i_e_w.html" title="RA Flexible Software Package Documentation: Using Registers Directly">FSP ユーザーマニュアル</a> には、レジスタ、及びその下のビットフィールへのアクセスは、MCU タイプ別に定義された構造体により、次のルールに従うと定義されています。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_</span> <span class="o">+</span> <span class="err">周辺回路の略語</span> <span class="o">+</span> <span class="err">チャネル番号</span> <span class="o">+</span> <span class="o">-&gt;</span> <span class="err">レジスタ名</span>
 <span class="n">R_</span> <span class="o">+</span> <span class="err">周辺回路の略語</span> <span class="o">+</span> <span class="err">チャネル番号</span> <span class="o">+</span> <span class="o">-&gt;</span> <span class="err">レジスタ名</span> <span class="o">+</span> <span class="n">_b</span><span class="p">.</span> <span class="o">+</span> <span class="err">ビットフィールド名</span></code></pre></figure>
