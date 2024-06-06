@@ -341,7 +341,7 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 <span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PODR</span>          <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">);</span>
 <span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PODR_b</span><span class="p">.</span><span class="n">PODR2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre></figure>
 
-<p>本例では設定するビットフィールドは１つなので、敢えて可読性の低い方法を選択するのはナンセンスですが、複数のビットフィールドをまとめて設定する場合など、可能な限り少ない回数でレジスタにアクセスできるよう、複数の方法が提供されています。</p>
+<p>本例では設定するビットフィールドは１つなので、敢えて可読性の低い方法を選択するのはナンセンスですが、複数のビットフィールドをまとめて設定する場合など、レジスタへのアクセス回数を極力少なくできるよう、複数の方法が提供されています。</p>
 
 <p>詳しくは <a href="https://renesas.github.io/fsp/_i_o_d_e_f_i_n_e__o_v_e_r_v_i_e_w.html" title="RA Flexible Software Package Documentation: Using Registers Directly">FSP ユーザーマニュアル</a> の実例を参照してください。</p>
 
