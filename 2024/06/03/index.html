@@ -319,9 +319,35 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
   <figcaption>P102 の PmnPFS レジスタ</figcaption>
 </figure>
 
-<p>例えば <code class="language-plaintext highlighter-rouge">p102</code> のように、<code class="language-plaintext highlighter-rouge">p</code> に続けてピン番号を入力すると、ポート mn 端子機能選択レジスタ（PmnPFS）を表示します。</p>
+<p>例えば <code class="language-plaintext highlighter-rouge">p102</code> のように、<code class="language-plaintext highlighter-rouge">p</code> に続けて 0 〜 9 のポート番号 <code class="language-plaintext highlighter-rouge">m</code> と 00 〜 15 のピン番号 <code class="language-plaintext highlighter-rouge">n</code> を入力すると、ポート mn 端子機能選択レジスタ（PmnPFS）を表示します。</p>
 
-<p>このレジスタは、ポートコントロールレジスタと重複する一部のビット列を含み、入出力に関する機能を制御するビット列で構成されています。</p>
+<p>このレジスタは、ポートコントロールレジスタと重複する一部のビット列を含み、入出力の機能を制御するビットフィールドで構成されています。</p>
+
+<details>
+<summary>重複するビットフィールドへのアクセス方法について</summary>
+
+
+<div class="quote clear-both">
+
+<p>例えば <code class="language-plaintext highlighter-rouge">P102</code> の <code class="language-plaintext highlighter-rouge">PmnPFS</code> レジスタの下にあるビットフィールド <code class="language-plaintext highlighter-rouge">PODR</code> に「１」を書き込むコードは次のようになります。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_PFS</span><span class="o">-&gt;</span><span class="n">PORT</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">PIN</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">PmnPFS</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">R_PFS_PORT_PIN_PmnPFS_PODR_Pos</span><span class="p">);</span>
+<span class="n">R_PFS</span><span class="o">-&gt;</span><span class="n">PORT</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">PIN</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">PmnPFS_b</span><span class="p">.</span><span class="n">PODR</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre></figure>
+
+<p>一方 <code class="language-plaintext highlighter-rouge">PODR</code> は、ポートコントロールレジスタ <code class="language-plaintext highlighter-rouge">PCNTR1</code> のビットフィールド <code class="language-plaintext highlighter-rouge">PODR</code> とも重複するので、次の方法も可能です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PCNTR1</span>        <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">R_PORT0_PCNTR1_PODR_Pos</span> <span class="o">+</span> <span class="mi">2</span><span class="p">));</span>
+<span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PCNTR1_b</span><span class="p">.</span><span class="n">PODR</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">);</span>
+<span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PODR</span>          <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">);</span>
+<span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PODR_b</span><span class="p">.</span><span class="n">PODR2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre></figure>
+
+<p>本例では設定するビットフィールドは１つなので、敢えて可読性の低い方法を選択するのはナンセンスですが、複数のビットフィールドをまとめて設定する場合など、可能な限り少ない回数でレジスタにアクセスできるよう、複数の方法が提供されています。</p>
+
+<p>詳しくは <a href="https://renesas.github.io/fsp/_i_o_d_e_f_i_n_e__o_v_e_r_v_i_e_w.html" title="RA Flexible Software Package Documentation: Using Registers Directly">FSP ユーザーマニュアル</a> の実例を参照してください。</p>
+
+
+</div>
+</details>
 
 <h4 id="4-pins-画面">4. PINS 画面</h4>
 
@@ -429,9 +455,9 @@ crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</cod
 
 <p><a href="/2024/05/07/" title="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！ - Embedded Kiddie">以前の記事</a> で解説した<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/svd/R7FA4M1AB.svd" title="ArduinoCore-renesas/svd/R7FA4M1AB.svd at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code></a> には、周辺回路のレジスタやアドレスが定義されてますが、プログラミングには <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h" title="ArduinoCore-renesas/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.h</code></a> が便利です。</p>
 
-<p>このファイルは Arduino 階層の深いところにあります。以下は Mac での例です。</p>
+<p>このファイルは Arduino 階層の深いところにあります。以下は Mac での例です（<code class="language-plaintext highlighter-rouge">1.2.0</code> はボードマネージャのバージョン）。</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.2.0/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h</code></pre></figure>
 
 <p>これを手作業で見つけ出すのは激ムズです。そんな時、Mac や Linux の人なら次の <code class="language-plaintext highlighter-rouge">find</code> コマンドが便利です。</p>
 
