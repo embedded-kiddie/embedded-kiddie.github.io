@@ -1,4 +1,489 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-10T00:50:04+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</title><link href="https://embedded-kiddie.github.io/2024/06/03/index.html" rel="alternate" type="text/html" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" /><published>2024-06-03T09:41:52+09:00</published><updated>2024-06-03T09:41:52+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/03/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/03/index.html"><![CDATA[<p><img src="/images/2024/06-03/registers-AGT.gif" alt="AGT レジスタ" title="AGT レジスタ" width="570" height="346" style="margin: auto; display: block" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-10T07:50:49+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU)の動作原理と試し方</title><link href="https://embedded-kiddie.github.io/2024/06/10/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU)の動作原理と試し方" /><published>2024-06-10T07:45:14+09:00</published><updated>2024-06-10T07:45:14+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/10/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/10/index.html"><![CDATA[<p><a href="/2024/06/03/#おまけ" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前回の記事の最後</a> でも少し触れましたが、Arduino コア開発の <a href="https://github.com/arduino/ArduinoCore-renesas/issues?q=involves%3Adelta-G" title="Issues · arduino/ArduinoCore-renesas">Issues</a> や <a href="https://github.com/arduino/ArduinoCore-renesas/pulls?q=involves%3Adelta-G" title="Pull requests · arduino/ArduinoCore-renesas">プルリク</a>、<a href="https://forum.arduino.cc/u/delta_g/summary" title="プロファイル - Delta_G - Arduino Forum">フォーラム</a> などで活躍中の <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による、UNO R4 静電容量式タッチセンシングユニット（<strong>C</strong>apacitive <strong>T</strong>ouch <strong>S</strong>ensing <strong>U</strong>nit、略して CTSU）用ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を試した結果を共有します。</p>
+
+<p>本記事では、フォーラムにおける次の３つのトピックスを参照しています。</p>
+
+<ul>
+  <li><a href="https://forum.arduino.cc/t/lets-play-with-the-ctsu/1187758" title="Let&#39;s play with the CTSU! - UNO R4 Minima - Arduino Forum">Let’s play with the CTSU!</a></li>
+  <li><a href="https://forum.arduino.cc/t/capacitive-touch-current-reference/1268532" title="Capacitive Touch Current Reference - General Electronics - Arduino Forum">Capacitive Touch Current Reference</a></li>
+  <li><a href="https://forum.arduino.cc/t/lovebutton-touch-sense-library-for-r4-minima-and-r4-wifi/1190017" title="LoveButton Touch Sense library for R4 Minima and R4 WiFi - Programming Questions - Arduino Forum">LoveButton Touch Sense library for R4 Minima and R4 WiFi</a></li>
+</ul>
+
+<h2 id="ctsu-の動作原理">CTSU の動作原理</h2>
+
+<p>CTSU の正確な解説は、<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> の P.1444「41.3.1 計測動作原理」に譲るとして、ここではマニュアルを読むのが面倒な人向けに :roll_eyes:、私の理解を解説をしたいと思います。</p>
+
+<h3 id="タッチの検出原理">タッチの検出原理</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/06-10/TouchScreen_projective_capacitive.jpg" title="" data-lightbox="image">
+    <img src="/images/2024/06-10/TouchScreen_projective_capacitive.small.png" alt="" width="458" height="332" />
+  </a>
+  <figcaption>By <a href="//commons.wikimedia.org/wiki/User:Mercury13" title="User:Mercury13">Mercury13</a> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=4105874">Link</a></figcaption>
+</figure>
+
+<p>人体はコンデンサに例えることができ、その静電容量は 100pF <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> とも 200pF <sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup> とも言われています。</p>
+
+<p>このためタッチ電極に指が近づくと、元々回路周辺にある静電容量（<a href="https://ja.wikipedia.org/wiki/%E5%AF%84%E7%94%9F%E5%AE%B9%E9%87%8F" title="寄生容量 - Wikipedia">寄生容量</a>）に人体の静電容量が加わります。この静電容量の変化を観測することでタッチを検出します。</p>
+
+<div class="clear-both"></div>
+
+<p>一般にコンデンサの静電容量の測り方として、定電流で充電した時の基準電圧に達するまでの時間を測定するという方法がありますが <sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup>、CTSU では、基準電圧で充放電を高速に繰り返した時の <a href="https://www.marutsu.co.jp/contents/shop/marutsu/mame/204.html" title="スイッチト・キャパシタ・フィルタとその応用 -原理と実験機設計編- − マルツオンライン">スイッチドキャパシタフィルタ</a> に流れる電流量を ICO（電流制御発振器、Intensity of Current Controlled Oscillator）に供給し、同電流に比例した周波数で生成されたクロックパルスを一定時間カウンタ回路が数え、そのカウント値をレジスタに出力します。</p>
+
+<p>つまり、直接的に静電容量を測定するのではなく、電極に指を置く前後のカウンタ値の差で、タッチを検出するワケです。</p>
+
+<div class="quote clear-both">
+
+<p>スイッチドキャパシタフィルタは、一般にアナログ信号を帯域制限するローパスフィルタとして使われますが、CTSU では、「<strong>コンデンサへの充放電をスイッチで切り替えることで抵抗のような働きをする特性</strong>」（<a href="https://techweb.rohm.co.jp/product/power-device/si/18325/" title="リアクタンスとは？ 「電気回路の流れにくさ」 - 交流（AC）の基礎 - TechWeb">交流回路における容量性リアクタンス</a>）を利用します。即ち、<strong>コンデンサへの電荷の移動</strong>を等価な<strong>抵抗に流れる電流</strong>に置き換えます。</p>
+
+<p>この時の等価抵抗は \(R = \frac{1}{2 \pi fC}\) で表され、オームの法則より \(I = \frac{V}{R} = 2 \pi fCV\) となります（\(V\) は印加電圧を、\(f\) はスイッチング周波数を、\(C\) は測定対象の容量を表す）。</p>
+
+<p>つまり、電流 \(I\) と容量 \(C\) は比例関係にあるため、静電容量 \(C\) を求める代わりに、電流 \(I\) の変化を観測することでタッチを判定するワケです。</p>
+
+</div>
+
+<h3 id="検出原理に基づく-ctsu-のポイント">検出原理に基づく CTSU のポイント</h3>
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーマニュアル</a> には、初期設定フローや状態遷移、各計測モードの処理フローが説明されていますが、どれも相当に複雑ですし、CTSU のレジスタも多数あります。</p>
+
+<p>一方、上記の測定原理からは、次の５つのパラメータがポイントとなることが推察されます。</p>
+
+<ul>
+  <li>充放電のスイッチング周波数</li>
+  <li>タッチ電極を含む寄生容量の初期値</li>
+  <li>ICO による電流→周波数変換の比例ゲイン</li>
+  <li>カウンタによるクロックパルスの計測時間</li>
+  <li>タッチの有無を判定するクロックパルスのカウント閾値</li>
+</ul>
+
+<p>これらの項目を押さえつつ、組み込まれた回路を正しく動作させる手順を辿れば、複雑な CTSU の処理フローとレジスタの関係を理解するのに役立つのではないかと考えています。</p>
+
+<p>この想定が正しいか否かはまだ分かりませんが、何よりまず、実際に動作する回路を製作し、その後に <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> のフローに沿ってプログラミングされた <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> の助けを借りて、CTSU の動作を紐解いていく、という手順で進めたいと思います。</p>
+
+<h2 id="試作した回路">試作した回路</h2>
+
+<p>CTSU には、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、タブレット端末のようにタッチされた２次元スクリーン上の位置を検出する「相互容量方式」の２つの計測モードで使えます。これに加え、１回キリの計測を行うシングルススキャン方式と、連続して計測するマルチスキャン方式が選択可能です。</p>
+
+<p>まずは、「自己容量方式」を「シングルスキャン方式」で原理確認することとします。</p>
+
+<h3 id="端子仕様の確認">端子仕様の確認</h3>
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.62「端子機能」から、CTSU に割り当てられた端子を確認します。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>機能</th>
+      <th>端子名</th>
+      <th>入出力</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CTSU</td>
+      <td>TS00 ~ TS13, TS17 ~ TS22,<br />TS27 ~ TS31, TS34, TS35</td>
+      <td>入力</td>
+      <td>静電容量式タッチ検出端子（タッチ端子）</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>TSCAP</td>
+      <td>-</td>
+      <td>タッチドライバ用の二次電源端子</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>同じく P.438「入出力端子機能のレジスタ設定」から、上記端子と Minima／WiFi のピン番号との対応を調べます。<code class="language-plaintext highlighter-rouge">Dn</code> はデジタルピンを、<code class="language-plaintext highlighter-rouge">An</code> はアナログピンを表します。</p>
+
+<details>
+<summary><strong>タッチセンシング端子と Minima／WiFi ピン番号の対応表</strong></summary>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>TS 端子</th>
+      <th>割り当てられた I/O 端子</th>
+      <th>Minima ピン番号</th>
+      <th>WiFi ピン番号</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>TS00</td>
+      <td>P204</td>
+      <td>LOVE</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>TS02</td>
+      <td>P303</td>
+      <td><code class="language-plaintext highlighter-rouge">D9</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D9</code></td>
+    </tr>
+    <tr>
+      <td>TS06</td>
+      <td>P410</td>
+      <td>-</td>
+      <td>D12</td>
+    </tr>
+    <tr>
+      <td>TS07</td>
+      <td>P411</td>
+      <td>-</td>
+      <td>D11</td>
+    </tr>
+    <tr>
+      <td>TS08</td>
+      <td>P302</td>
+      <td><code class="language-plaintext highlighter-rouge">D1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D1</code></td>
+    </tr>
+    <tr>
+      <td>TS09</td>
+      <td>P301</td>
+      <td><code class="language-plaintext highlighter-rouge">D0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D0</code></td>
+    </tr>
+    <tr>
+      <td>TS11</td>
+      <td>P304</td>
+      <td><code class="language-plaintext highlighter-rouge">D8</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D8</code></td>
+    </tr>
+    <tr>
+      <td>TS12</td>
+      <td>P111</td>
+      <td>D13</td>
+      <td>D6</td>
+    </tr>
+    <tr>
+      <td>TS13</td>
+      <td>P104</td>
+      <td>D3</td>
+      <td>D2</td>
+    </tr>
+    <tr>
+      <td>TS21</td>
+      <td>P000</td>
+      <td><code class="language-plaintext highlighter-rouge">A1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">A1</code></td>
+    </tr>
+    <tr>
+      <td>TS22</td>
+      <td>P001</td>
+      <td><code class="language-plaintext highlighter-rouge">A2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">A2</code></td>
+    </tr>
+    <tr>
+      <td>TS27</td>
+      <td>P113</td>
+      <td>-</td>
+      <td>LOVE</td>
+    </tr>
+    <tr>
+      <td>TS34</td>
+      <td>P105</td>
+      <td><code class="language-plaintext highlighter-rouge">D2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D3</code></td>
+    </tr>
+    <tr>
+      <td>TSCAP</td>
+      <td>P203, P205, P112</td>
+      <td>D10</td>
+      <td>D7</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+<p>また、どのピンがタッチセンサに使えるか一目で判るよう、逆引きの表も作ってみました。</p>
+
+<details>
+<summary><strong>Minima／WiFi のピン番号とタッチセンシング端子の対応表</strong></summary>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>デジタルピン</th>
+      <th>アナログピン</th>
+      <th>Minima TS端子</th>
+      <th>WiFi TS端子</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D0</code></td>
+      <td>-</td>
+      <td>TS09</td>
+      <td>TS09</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D1</code></td>
+      <td>-</td>
+      <td>TS08</td>
+      <td>TS08</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D2</code></td>
+      <td>-</td>
+      <td>TS34</td>
+      <td>TS13</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D3</code></td>
+      <td>-</td>
+      <td>TS13</td>
+      <td>TS34</td>
+    </tr>
+    <tr>
+      <td>D6</td>
+      <td>-</td>
+      <td>-</td>
+      <td>TS12</td>
+    </tr>
+    <tr>
+      <td>D7</td>
+      <td>-</td>
+      <td>-</td>
+      <td>TSCAP</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D8</code></td>
+      <td>-</td>
+      <td>TS11</td>
+      <td>TS11</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D9</code></td>
+      <td>-</td>
+      <td>TS02</td>
+      <td>TS02</td>
+    </tr>
+    <tr>
+      <td>D10</td>
+      <td>-</td>
+      <td>TSCAP</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>D11</td>
+      <td>-</td>
+      <td>-</td>
+      <td>TS07</td>
+    </tr>
+    <tr>
+      <td>D12</td>
+      <td>-</td>
+      <td>-</td>
+      <td>TS06</td>
+    </tr>
+    <tr>
+      <td>D13</td>
+      <td>-</td>
+      <td>TS12</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>(D15)</td>
+      <td><code class="language-plaintext highlighter-rouge">A1</code></td>
+      <td>TS21</td>
+      <td>TS21</td>
+    </tr>
+    <tr>
+      <td>(D16)</td>
+      <td><code class="language-plaintext highlighter-rouge">A2</code></td>
+      <td>TS22</td>
+      <td>TS22</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+<p><code class="language-plaintext highlighter-rouge">TSCAP</code> には基準電圧を安定させるデカップリングキャパシタ（パスコン）を接続します。<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> P.1635 「48.11 CTSU 特性」の表から、10nF ± 10% のコンデンサを、Minima は <code class="language-plaintext highlighter-rouge">D10</code> ピンと <code class="language-plaintext highlighter-rouge">GND</code> ピンの間に、WiFi では <code class="language-plaintext highlighter-rouge">D7</code> ピンと <code class="language-plaintext highlighter-rouge">GND</code> ピンの間に外付けします。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">項目</th>
+      <th style="text-align: center">シンボル</th>
+      <th style="text-align: center">Min</th>
+      <th style="text-align: center">Typ</th>
+      <th style="text-align: center">Max</th>
+      <th style="text-align: center">単位</th>
+      <th style="text-align: center">条件</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">TSCAP 端子に接続された外付け容量</td>
+      <td style="text-align: center">Ctscap</td>
+      <td style="text-align: center">9</td>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">11</td>
+      <td style="text-align: center">nF</td>
+      <td style="text-align: center">VCC = AVCC0 = 1.8~5.5V</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="タッチ電極部の試作">タッチ電極部の試作</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/06-10/1st-lot.jpg" title="試作１回目：タッチセンサ部" data-lightbox="image">
+    <img src="/images/2024/06-10/1st-lot-small.jpg" alt="試作１回目：タッチセンサ部" width="460" height="379" />
+  </a>
+  <figcaption>試作１回目：タッチセンサ部</figcaption>
+</figure>
+
+<p>あまり深くは考えずに、ユニバーサル基板に厚さ 0.3mm、1cm 角の銅板を貼り付けてみました。これはコレで、電極に直接指を触れさせた時の動作を確認することは出来ましたが、カバーを付けることを考えなかったので… 失敗でした :sweat_smile:</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2024/06-10/2nd-lot.jpg" title="試作２回目：タッチセンサ部パーツ" data-lightbox="image">
+    <img src="/images/2024/06-10/2nd-lot-small.jpg" alt="試作２回目：タッチセンサ部パーツ" width="459" height="326" />
+  </a>
+  <figcaption>試作２回目：タッチセンサ部パーツ</figcaption>
+</figure>
+
+<p>気を取り直し、２回目の試作は、カバー（0.3mm 厚のプラ板）を取り付けた時のデコボコ感を減らすために学校教育工作用紙で銅板を囲い、写真のように試作してみました。</p>
+
+<p>より実用的にするには、タッチ電極を含めてプリント基板を作っちゃうのが良いですね。</p>
+
+<div class="clear-both"></div>
+
+<figure class="flex">
+  <a href="/images/2024/06-10/2nd-lot-part1.jpg" title="試作２回目：センサ基板 - 裏面" data-lightbox="image">
+    <img src="/images/2024/06-10/2nd-lot-part1-small.jpg" alt="試作２回目：センサ基板 - 裏面" width="459" height="326" />
+  </a>
+  <a href="/images/2024/06-10/2nd-lot-part2.jpg" title="試作２回目：センサ基板 - 表面" data-lightbox="image">
+    <img src="/images/2024/06-10/2nd-lot-part2-small.jpg" alt="試作２回目：センサ基板 - 表面" width="459" height="326" />
+  </a>
+  <a href="/images/2024/06-10/2nd-lot-part3.jpg" title="試作２回目：センサ基板 - 組み上げ" data-lightbox="image">
+    <img src="/images/2024/06-10/2nd-lot-part3-small.jpg" alt="試作２回目：センサ基板 - 組み上げ" width="459" height="326" />
+  </a>
+</figure>
+
+<div class="clear-both"></div>
+
+<p>デカップリングキャパシタは、手持ちの 10nF（0.01μF）セラミックコンデンサを、またタッチの確認用に６個の LED を外付けしました（LED に接続する抵抗値は、<a href="https://cc.cqpub.co.jp/system/contents/3464/" title="LEDに抵抗を接続する理由 - CQ出版社 オンライン・サポート・サイト CQ connect">この記事</a> を参照すると良いですョ）。</p>
+
+<p>ブレッドボード右上の小さなブレークアウト基板は、USBシリアル変換モジュール <a href="https://akizukidenshi.com/catalog/g/g108461/" title="FT234X 超小型USBシリアル変換モジュール: 半導体 秋月電子通商-電子部品・ネット通販">FT234X</a> で、<a href="/2024/06/03/" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前の記事</a> で製作した <a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> で CTSU レジスタを観察するためのものです。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-10/passcon.jpg" title="0.01μF パスコン" data-lightbox="image">
+    <img src="/images/2024/06-10/passcon-small.jpg" alt="0.01μF パスコン" width="460" height="345" />
+  </a>
+  <a href="/images/2024/06-10/LED-part.jpg" title="確認用 LED と USB シリアル変換モジュール" data-lightbox="image">
+    <img src="/images/2024/06-10/LED-part-small.jpg" alt="確認用 LED と USB シリアル変換モジュール" width="458" height="344" />
+  </a>
+  <a href="/images/2024/06-10/wifi-touch.jpg" title="UNO R4 + タッチセンサ" data-lightbox="image">
+    <img src="/images/2024/06-10/wifi-touch-small.jpg" alt="UNO R4 + タッチセンサ" width="459" height="344" />
+  </a>
+</figure>
+
+<h2 id="テストプログラムの実行">テストプログラムの実行</h2>
+
+<h3 id="ライブラリのインストール">ライブラリのインストール</h3>
+
+<p>この記事を書いている最中にも <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> がアップデートされ、正式版として <a href="https://github.com/delta-G/R4_Touch/releases" title="Releases · delta-G/R4_Touch">1.0 がリリース</a> されました。作者である <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> はこのところ連チャンで投稿を続けていて、精力的な活動振りがよく分かります。</p>
+
+<ol>
+  <li><a href="https://github.com/delta-G/R4_Touch/archive/refs/tags/v1.0.zip" title="Release v1.0 · delta-G/R4_Touch">最新の .ZIP ファイル</a> をダウンロードします。</li>
+  <li>Arduino IDE メニューから「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」を実行し、ダウンロードしたファイルを読み込ませます。</li>
+</ol>
+
+<h3 id="テストプログラムの実行-1">テストプログラムの実行</h3>
+
+<p>ライブラリ R4_Touch の例題 <code class="language-plaintext highlighter-rouge">Simple Touch Example.ino</code> を開くと、Minima あるいは WiFi の基板裏面にある <code class="language-plaintext highlighter-rouge">LOVE</code> ピンでの動作確認ができます。</p>
+
+<p>静電気放電（<a href="https://toshiba.semicon-storage.com/jp/semiconductor/knowledge/faq/diode_tvs-diodes/what-is-electrostatic-discharge-esd.html" title="静電気放電（ESD : Electrostatic Discharge）とは何ですか？ - 東芝デバイス＆ストレージ株式会社 - 日本">ESD</a>）でボードが逝かないよう、<code class="language-plaintext highlighter-rouge">LOVE</code> ピンには直に触れず、何かでカバーするよう注意が促されています。</p>
+
+<p>僕は試作したタッチ電極と LED を使い、<a href="#タッチの検出原理">タッチの検出原理</a> で解説したカウンタ値を読み込む、次のようなコードで実験を行いました。Minima でも WiFi でも動作するピンを選んでいます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"R4_Touch.h"</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+  <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">Serial</span> <span class="o">&amp;&amp;</span> <span class="n">millis</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">);</span>
+
+  <span class="c1">// LED の初期化</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="p">;</span> <span class="c1">// 以下、略</span>
+
+  <span class="c1">// タッチセンサ部の初期化</span>
+  <span class="n">setTouchMode</span><span class="p">(</span> <span class="mi">9</span><span class="p">);</span>
+  <span class="n">setTouchMode</span><span class="p">(</span> <span class="mi">8</span><span class="p">);</span>
+  <span class="p">;</span> <span class="c1">// 以下、略</span>
+
+  <span class="n">TouchSensor</span><span class="o">::</span><span class="n">start</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="c">#if 0
+  // 各タッチパッドの値を出力する
+  Serial.print("   "); Serial.print(touchRead( 9));
+  Serial.print("   "); Serial.print(touchRead( 8));
+  ; // 以下、略
+  Serial.println();
+  delay(500);
+#else</span>
+  <span class="c1">// 各タッチパッドの値をに応じて LED を点灯／消灯させる</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">touchRead</span><span class="p">(</span> <span class="mi">9</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">18500</span> <span class="o">?</span> <span class="n">HIGH</span> <span class="o">:</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="n">touchRead</span><span class="p">(</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">19000</span> <span class="o">?</span> <span class="n">HIGH</span> <span class="o">:</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="p">;</span> <span class="c1">// 以下、略</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="cp">#endif
+</span><span class="p">}</span></code></pre></figure>
+
+<p>見てお分かりの通り、<code class="language-plaintext highlighter-rouge">loop()</code> 前半の <code class="language-plaintext highlighter-rouge">#if</code> 文で、タッチ前後のカウンタ値を確認し、後半で各電極に閾値を設定して LED を光らせています。</p>
+
+<p>次の図に、試作１回目のベアメタルでの状態と、試作２回目のカバーを被せた状態で、タッチ前後のカウンタ値の変化を観測した結果を示します。中央の２列はアナログピンのカウンタ値で、寄生容量に相当するタッチ前のカウンタ値が、明らかに他のピンと異なりました。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-10/touch-baremetal.png" title="ベアメタルでのタッチ結果" data-lightbox="image">
+    <img src="/images/2024/06-10/touch-baremetal-small.jpg" alt="ベアメタルでのタッチ結果" width="460" height="319" />
+  </a>
+  <a href="/images/2024/06-10/touch-covered.jpg" title="カバー後のタッチ結果" data-lightbox="image">
+    <img src="/images/2024/06-10/touch-covered-small.jpg" alt="カバー後のタッチ結果" width="460" height="319" />
+  </a>
+</figure>
+
+<p>また、デカップリングコンデンサの有無でもカウンタ値が大きく異なりました。</p>
+
+<p>これらの結果から、次のことが推察できます。</p>
+
+<ul>
+  <li>タッチ電極や回路構成によって、カウンタ値が異なる</li>
+  <li>デジタルピンとアナログピンで、カウンタ値が異なる</li>
+  <li>カバーの厚みや材質によっても、カウンタ値が異なる</li>
+</ul>
+
+<p>また人体の静電容量は個人差もあるハズなので、安定して検出するには、カウンタ値のベースラインと判定閾値のキャリブレーションが必要であることが分かりました。電極の経年劣化にも耐えられるよう、<a href="#検出原理に基づく-ctsu-のポイント">検出原理に基づく CTSU のポイント</a>で推察したパラメータを自動で設定できる、セルフキャリブレーションが組めればベストですね。</p>
+
+<p>とりあえず今回はここまでとし、次回以降、<a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> のソースコードとユーザーマニュアルに記載された CTSU の処理フローを見比べながら、CTSU レジスタの使い方を紐解いてみたいと思います :sunflower:</p>
+
+<h2 id="参考文献">参考文献</h2>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p><a href="http://www.iesj.org/content/files/pdf/papers/23/23-4-191.pdf" title="帯電した人体からの初期放電電荷量 増井 典明、村上 晋也、谷 辰夫 静電気学会誌 23,4 (1999) 191-197">帯電した人体からの初期放電電荷量</a> <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p><a href="https://phys-edu.net/wp/?p=35649" title="電気人間の3000Vの静電気は怖くない？ - 科学のネタ帳">電気人間の3000Vの静電気は怖くない？</a> <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:3" role="doc-endnote">
+      <p><a href="https://www.hioki.co.jp/jp/products/listUse/?category=42#:~:text=%E3%83%86%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%AE%E9%9D%99%E9%9B%BB%E5%AE%B9%E9%87%8F%E6%B8%AC%E5%AE%9A%E5%8E%9F%E7%90%86" title="テスターの機能と使い方 - 製品情報 - Hioki">テスターの静電容量測定原理</a> <a href="#fnref:3" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[前回の記事の最後 でも少し触れましたが、Arduino コア開発の Issues や プルリク、フォーラム などで活躍中の Delta-G 氏 による、UNO R4 静電容量式タッチセンシングユニット（Capacitive Touch Sensing Unit、略して CTSU）用ライブラリの R4_Touch を試した結果を共有します。]]></summary></entry><entry><title type="html">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</title><link href="https://embedded-kiddie.github.io/2024/06/03/index.html" rel="alternate" type="text/html" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" /><published>2024-06-03T09:41:52+09:00</published><updated>2024-06-03T09:41:52+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/03/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/03/index.html"><![CDATA[<p><img src="/images/2024/06-03/registers-AGT.gif" alt="AGT レジスタ" title="AGT レジスタ" width="570" height="346" style="margin: auto; display: block" /></p>
 
 <p>上の画像は、学習用に作成した <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">低消費電力非同期汎用タイマ（AGT）</a>のレジスタをモニターするプログラムの出力です。AGT は 1ms を刻む <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> で使われていて、ルネサス RA4M1 の <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーズマニュアル</a> で「１」が立つビットを調べると、次のことが分かります。</p>
 
@@ -3048,308 +3533,4 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 <p>これで、どんなに長い音符も再生できるようになりました。メデタシ メデタシ。</p>
 
 <h2 id="次回は">次回は…</h2>
-<p>ハナシが長くなったので、ライブラリの解説は次回以降にさせていただきます :ghost:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！]]></summary></entry><entry><title type="html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</title><link href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" rel="alternate" type="text/html" title="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" /><published>2024-03-26T20:45:16+09:00</published><updated>2024-05-18T05:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"><![CDATA[<p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" width="1600" height="1033" /></p>
-
-<p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
-
-<p>そこで本記事では「これだけ知っていれば、大抵のソースコードデバッグはOK」な項目に絞って解説をします。逆に「オンチップのトレースバッファを活用したアセンブリ言語レベルのデバッグ」や「SWO（Serial Wire Output）によるトレース」には触れていません。これらについては「LPCXpresso IDE Instruction - Trace Guide」や「LPCXpresso IDE SWO - Trace Guide」を参照してください（僕も使いこなせていませんので…）</p>
-
-<h2 id="全体構成">全体構成</h2>
-<p>まずは IDE の全体像を掴み、どこに何が表示されるかを把握してこそ効率的なデバッグができると僕は思うので、少し長くなりますが、１つ１つ解説したいと思います。</p>
-
-<figure class="float-left">
-  <a href="/images/2024/03-26/01.jpg" data-lightbox="image" title="全体構成">
-      <img src="/images/2024/03-26/01-small.jpg" width="460" height="297" alt="全体構成" />
-  </a>
-  <a href="/images/2024/03-26/06.png" data-lightbox="image" title="ビューのレイアウト変更">
-    <img src="/images/2024/03-26/06.png" width="1008" height="558" alt="ビューのレイアウト変更" />
-  </a>
-</figure>
-
-<p>デバッグを開始すると、コンパイルだけしていた時より１つ増えて５つの “ビュー” が開きます。この時、右上の <span class="inline" title="Open Perspective"><img src="/images/2024/03-26/button-open-perspective.png" width="27" height="27" alt="Open Perspective" /></span>（Open Perspective）ボタンを押すといくつかの選択肢が出てくるので「Debug」を選びます。すると外観がデバッグに適した “ビュー” の配置に変更されます。</p>
-
-<p>このように “Open Perspective” ボタンでその時々の作業内容に合わせて外観を変更できるので、好みで使い分けると良いでしょう（以下の解説は「Develop」を元にしています）。</p>
-
-<h3 id="-アプリケーション全体のリソース情報を表示するビュー">① アプリケーション全体のリソース情報を表示するビュー</h3>
-<p>どのビューにも特定の名前がついているワケではありません。その内容からタイトルのような名前をつけているだけですので、悪しからず。</p>
-
-<h4 id="project-explore-タブ">Project Explore タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/01-01.png" data-lightbox="image" title="Project Explore">
-      <img src="/images/2024/03-26/01-01.png" width="750" height="390" alt="Project Explore" />
-  </a>
-</figure>
-<p>プロジェクト、あるいはワークスペース全体のファイル構成をツリー形式で参照することができます。お馴染みだとは思いますが、ソースコードを選択し、エディタに表示することができるタブです。</p>
-
-<h4 id="peripherals-タブ">Peripherals タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/01-02.png" data-lightbox="image" title="Peripherals">
-    <img src="/images/2024/03-26/01-02.png" width="750" height="390" alt="Peripherals" />
-  </a>
-</figure>
-<p>ADC やタイマーなど、オンチップの周辺機能が一覧で表示されます。左側のチェックボックスを選択すると、<a href="#memory-タブ">③ Memory タブ</a> にレジスタの内容を表示することができます。</p>
-
-<h4 id="registers-タブ">Registers タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/01-03.png" data-lightbox="image" title="Registers">
-    <img src="/images/2024/03-26/01-03.png" width="750" height="390" alt="Registers" />
-  </a>
-</figure>
-<p>CPU のレジスタやスタックポインタ、プログラムカウンタなどを参照できます。<a href="#debug-タブ">⑤ デバッグタブ</a> 右上の <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" width="27" height="27" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンによるアセンブリ言語のステップ実行モード選択時に役立ちます。</p>
-
-<h4 id="symbol-viewer-タブ">Symbol Viewer タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/01-04.png" data-lightbox="image" title="Symbol Viewer">
-    <img src="/images/2024/03-26/01-04.png" width="750" height="390" alt="Symbol Viewer" />
-  </a>
-</figure>
-<p><span class="inline" title="Browse for a file with symbol table"><img src="/images/2024/03-26/button-browse.png" width="27" height="27" alt="Browse for a file with symbol table" /></span>（Browse for a file with symbol table）ボタンで実行ファイル <code class="language-plaintext highlighter-rouge">*.axf</code> を指定すると、テキストやデータ、<a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss</a> など各セクションのメモリ配置情報を参照することができます。</p>
-
-<h3 id="-エディタ-ビュー">② エディタ ビュー</h3>
-<p>お馴染みの各種ファイルを編集したり表示したりする役割を持ったビューです。</p>
-
-<h4 id="ブレーク停止中の行">ブレーク（停止）中の行</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/02-01.png" data-lightbox="image" title="現在ブレーク（停止）中の行">
-    <img src="/images/2024/03-26/02-01.png" width="930" height="454" alt="現在ブレーク（停止）中の行" />
-  </a>
-</figure>
-<p>現在停止中で、これから実行される行が若草色にハイライトされます。</p>
-
-<h4 id="カーソル位置の情報表示">カーソル位置の情報表示</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/02-02.png" data-lightbox="image" title="カーソル位置の情報表示">
-    <img src="/images/2024/03-26/02-02.png" width="930" height="630" alt="カーソル位置の情報表示" />
-  </a>
-</figure>
-<p>関数や変数、シンボルなどにカーソルを合わせると、その定義内容や変数の値を参照することができます。</p>
-
-<h4 id="右クリックでコンテキストメニューを表示">右クリックでコンテキストメニューを表示</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/02-03.png" data-lightbox="image" title="右クリックでコンテキストメニューを表示">
-    <img src="/images/2024/03-26/02-03.png" width="930" height="454" alt="右クリックでコンテキストメニューを表示" />
-  </a>
-</figure>
-<p>特定の行で右クリックをするとコンテキストメニューが開きます。多くのメニューがありますが、デバッグに役立つのは次の４つでしょう。<br class="clear-both" /></p>
-
-<ul>
-  <li>
-    <p><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" width="27" height="27" alt="Run to line" /></span> Run to line<br />
-カーソルのある行まで実行します。</p>
-  </li>
-  <li>
-    <p><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" width="27" height="27" alt="Move to line" /></span> Move to line<br />
-現在停止中の行からカーソルのある行にジャンプします。プログラムカウンタが直接書き換えられ、その間のコードは実行されません。問題のある箇所をすっ飛ばして処理を継続させたいと時に使います。</p>
-  </li>
-  <li>
-    <p><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" width="27" height="27" alt="Resume at line" /></span> Resume at line<br />
-カーソルのある行から実行を再開します。<a href="#variables-タブ">④ Variables タブ</a> で変数の値を書き換えた後に、再評価したい場合に用います。</p>
-  </li>
-  <li>
-    <p><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" width="27" height="27" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
-選択された変数や式を <a href="#expressions-タブ">④ Expressions タブ</a> に追加します。</p>
-  </li>
-</ul>
-
-<h4 id="ブレークポイントの設定">ブレークポイントの設定</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/02-04.png" data-lightbox="image" title="ブレークポイントの設定">
-    <img src="/images/2024/03-26/02-04.png" width="930" height="594" alt="ブレークポイントの設定" />
-  </a>
-</figure>
-<p>行番号をダブルクリックするか、カーソルのある行で右クリックしてコンテキストメニューを開き「Add Breakpoint…」を選択してブレークポイントを設定します。ブレークポイントの一覧は、<a href="#breakpoints-タブ">④ Breakpoints タブ</a> で確認することが出来ます。</p>
-
-<h3 id="-実行中のリソース情報を表示するビュー">③ 実行中のリソース情報を表示するビュー</h3>
-<p>高度なトレースを行う “Instruction Trace” タブと “SWO Trace Config” タブ、LPC1343 で対象外の “Power Measurement Tool” タブ以外を解説します。</p>
-
-<h4 id="console-タブ">Console タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/03-01.png" data-lightbox="image" title="Console">
-    <img src="/images/2024/03-26/03-01.png" width="952" height="504" alt="Console" />
-  </a>
-</figure>
-<p>コンパイルの実行結果が表示される以外に、<code class="language-plaintext highlighter-rouge">printf()</code> の出力がここに表示されます。「<a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</a>」との競合については後述します。</p>
-
-<h4 id="problems-タブ">Problems タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/03-02.png" data-lightbox="image" title="Problems">
-    <img src="/images/2024/03-26/03-02.png" width="800" height="192" alt="Problems" />
-  </a>
-</figure>
-<p>実行中に起きた問題に関するリソース情報がここに表示されるのだと思います。実際に何か表示されたことがないのであくまでも想像ですが…</p>
-
-<h4 id="memory-タブ">Memory タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/03-03.png" data-lightbox="image" title="Memory">
-    <img src="/images/2024/03-26/03-03.png" width="795" height="176" alt="Memory" />
-  </a>
-</figure>
-<p>直接メモリのアドレスを指定（→ <a href="/images/2024/03-26/03-03-memory.png" data-lightbox="image" title="LPC13XXのメモリマップ">メモリマップ</a>）するか、<a href="#peripherals-タブ">① Peripherals タブ</a> でチェックを入れたレジスタの情報がここに表示されます。メモリ中の値を直接編集することも可能です。</p>
-
-<h4 id="properties-タブ">Properties タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/03-04.png" data-lightbox="image" title="Properties">
-    <img src="/images/2024/03-26/03-04.png" width="793" height="176" alt="Properties" />
-  </a>
-</figure>
-<p>実行オブジェクトのサイズなど、実行中のリソースに関する情報がここに示されます。</p>
-
-<h4 id="navigator-タブ">Navigator タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/03-05.png" data-lightbox="image" title="Navigator">
-    <img src="/images/2024/03-26/03-05.png" width="795" height="177" alt="Navigator" />
-  </a>
-</figure>
-<p><a href="#project-explore-タブ">① Project Explore タブ</a> と同じなので、邪魔なら閉じちゃって良いと思います。</p>
-
-<h3 id="-ショートカットおよびデバッグ情報を表示するビュー">④ ショートカット、およびデバッグ情報を表示するビュー</h3>
-<p>一貫した名前が付けられそうもないビューですが、デバッグ中は頻繁に見ることになると思います。</p>
-
-<h4 id="quickstart-panel-タブ">Quickstart Panel タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/04-01.png" data-lightbox="image" title="Quickstart Panel">
-    <img src="/images/2024/03-26/04-01.png" width="542" height="307" alt="Quickstart Panel" />
-  </a>
-</figure>
-<p>色々なタスクのショートカットが集められたタブです。デバッグも一発で開始できて便利です。</p>
-
-<h4 id="variables-タブ">Variables タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/04-02.png" data-lightbox="image" title="Variables">
-    <img src="/images/2024/03-26/04-02.png" width="678" height="384" alt="Variables" />
-  </a>
-</figure>
-<p>実行中の関数内ローカル変数は、ここで参照できます。またセルをクリックして変数の値を直接変更することもできます。</p>
-
-<h4 id="breakpoints-タブ">Breakpoints タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/04-03.png" data-lightbox="image" title="Breakpoints">
-    <img src="/images/2024/03-26/04-03.png" width="678" height="384" alt="Breakpoints" />
-  </a>
-</figure>
-<p><a href="#-エディタ-ビュー">② エディタビュー</a> で設定されたブレークポイントの一覧が表示されます。各ブレークポイントを一時的に無効にしたり有効にしたりするのもこのタブで行います。</p>
-
-<h4 id="outlines-タブ">Outlines タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/04-04.png" data-lightbox="image" title="Outlines">
-    <img src="/images/2024/03-26/04-04.png" width="676" height="386" alt="Outlines" />
-  </a>
-</figure>
-<p>実行中のソースコードに定義されたシンボルや関数、グローバル変数の一覧が参照できます。各項目をクリックするとその箇所をエディタで示してくれるので、何気に便利なタブです。</p>
-
-<h4 id="expressions-タブ">Expressions タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/04-05.png" data-lightbox="image" title="Expressions">
-    <img src="/images/2024/03-26/04-05.png" width="676" height="386" alt="Expressions" />
-  </a>
-</figure>
-<p>変数や式を <a href="#-エディタ-ビュー">② エディタビュー</a> で選択したり、直接セルに入力することで、それらの値を参照することが出来ます。当然、実行中のスコープ外にある変数や式などは無視されます。</p>
-
-<h3 id="-デバッグ-ビュー">⑤ デバッグ ビュー</h3>
-<p>デバッグは “セッション” という形で管理され、実行中のセッションに関する情報がここに表示されます。</p>
-
-<h4 id="debug-タブ">Debug タブ</h4>
-<figure class="float-left">
-  <a href="/images/2024/03-26/05.png" data-lightbox="image" title="Debug">
-    <img src="/images/2024/03-26/05.png" width="1000" height="548" alt="Debug" />
-  </a>
-</figure>
-<p>実行中の <a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF" title="コールスタック - Wikipedia">スタックフレーム</a> が表示されます。特に便利な機能として <span class="inline" title="View menu"><img src="/images/2024/03-26/button-view-menu.png" width="27" height="27" alt="View menu" /></span>（View menu）ボタンを押すとデバッグ制御用のボタンが表示されるので、このタブで集中的に実行をコントロールできるようになります。</p>
-
-<p>また <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" width="27" height="27" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンで <a href="#-エディタ-ビュー">② エディタビュー</a> に逆アセンブルされたコードを表示することができ、アセンブリ言語レベルでのステップ実行が可能になります。</p>
-
-<h3 id="ビューのレイアウト変更について">ビューのレイアウト変更について</h3>
-<figure class="float-left">
-  <a href="/images/2024/03-26/07.png" data-lightbox="image" title="レイアウトをリセットする">
-    <img src="/images/2024/03-26/07.png" width="556" height="373" alt="レイアウトをリセットする" />
-  </a>
-</figure>
-<p>“Open Perspective” ボタンを使う以外にも、マニュアルで各ビューの配置を変更したり、独立させたりすることが出来ますが、弄り過ぎて元に戻したくなることがあります。そんな時はメニューから「Window → Perspective → Reset Perspective…」を選びましょう。元の配置に戻してくれます。</p>
-
-<h2 id="デバッグ制御用アイコン">デバッグ制御用アイコン</h2>
-<p><img src="/images/2024/03-26/08-01.png" alt="デバッグ制御用アイコン" title="デバッグ制御用アイコン" width="1148" height="92" /></p>
-
-<p>全体像が把握できたところで、いよいよデバッグ制御用のボタンを駆使してデバッグするワケですが、各ボタンの機能は全然難しくありません。</p>
-
-<p>以下に、”高度なトレース機能” を使う以外のボタンを示します。</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>アイコン</th>
-      <th>名称</th>
-      <th>説明</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-02.png" width="50" height="50" alt="全ブレークポイントをスキップ" /></td>
-      <td>Skip All Breakpoints</td>
-      <td>全ブレークポイントをスキップする／しないを制御するトグルボタン</td>
-    </tr>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-03.png" width="120" height="50" alt="続行（Resume）" /></td>
-      <td>Resume</td>
-      <td>停止中の実行を再開するボタン</td>
-    </tr>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-04.png" width="120" height="50" alt="一時停止（Suspend）" /></td>
-      <td>Suspend</td>
-      <td>実行中のプログラムを停止（ブレーク）させるボタン</td>
-    </tr>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-05.png" width="113" height="50" alt="終了（Terminate）" /></td>
-      <td>Terminate</td>
-      <td>デバッグを終了させるボタン</td>
-    </tr>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-06.png" width="50" height="50" alt="ステップ・イン（Step In）" /></td>
-      <td>Step In</td>
-      <td>最小の実行単位で、１行ごとの実行、または関数呼び出しであればその中に入って実行する</td>
-    </tr>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-07.png" width="50" height="50" alt="ステップ・オーバー（Step Over）" /></td>
-      <td>Step Over</td>
-      <td>関数呼び出しであってもその中には入らず1行ごとに実行する</td>
-    </tr>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-08.png" width="50" height="50" alt="ステップ・リターン（Step Return）" /></td>
-      <td>Step Return</td>
-      <td>Step In で関数内に入った場合、その関数の終了まで実行し呼び出し元に戻る</td>
-    </tr>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-09.png" width="50" height="50" alt="再スタート（Restart）" /></td>
-      <td>Restart</td>
-      <td>もう一度初めからスタートする</td>
-    </tr>
-    <tr>
-      <td><img loading="lazy" src="/images/2024/03-26/08-10.png" width="100" height="50" alt="再デバッグ（Debug）" /></td>
-      <td>Debug</td>
-      <td>デバッグ途中でソースコードを変更した時など、再度コンパイルからやり直してデバッグを開始する</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="最後にコンソールに-printf-出力する方法">最後に、コンソールに printf() 出力する方法</h2>
-<p><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> で <a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki/123_USBCDC" title="123_USBCDC · embedded-kiddie/beauto-rover-arm Wiki">USB CDC（Communication Device Class）をインストール</a> し、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> などのターミナル・ソフトウェアに <code class="language-plaintext highlighter-rouge">printf()</code> 出力する方法を解説しましたが、<a href="#console-タブ">③ コンソール</a> に出力するためには LPCXpresso 側の設定が必要です。</p>
-
-<p>以下にその方法を示し、本記事を〆たいと思います。</p>
-
-<h3 id="usb-cdc-をインストールした場合">USB CDC をインストールした場合</h3>
-<p><a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm"><code class="language-plaintext highlighter-rouge">sci.c</code></a> の25行目あたりの定義 <code class="language-plaintext highlighter-rouge">SYSTEM_CALL</code> を無効化し、代わりに <code class="language-plaintext highlighter-rouge">__sys_write()</code> など Redlib のシステムコール関数群がリンクされるようにします。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------------------------------
- * CMSISのstdio系関数がリンクされる場合は、重複するシステムコールの定義を無効にする
- *--------------------------------------------------------------------------*/</span>
-<span class="cp">#define	SYSTEM_CALL	0	// 有効化=1、無効化=0</span></code></pre></figure>
-
-<h3 id="redlib-semihost-の設定">Redlib (semihost) の設定</h3>
-<figure class="float-left">
-  <a href="/images/2024/03-26/redlib-semihost.jpg" title="Redlib(semihost)の設定" data-lightbox="image">
-    <img src="/images/2024/03-26/redlib-semihost-small.jpg" width="460" height="255" alt="Redlib(semihost)の設定" />
-  </a>
-</figure>
-
-<p>LPCXpresso のメニューから「Project → Properties」を開き、「C/C++ Build → Settings → MCU Linker → Managed Linker Script」をたどり、「Library」に <a href="https://community.nxp.com/t5/LPCXpresso-IDE-FAQs/What-are-none-nohost-and-semihost-libraries/m-p/475327" title="What are none, nohost and semihost libraries? - NXP Community"><code class="language-plaintext highlighter-rouge">Redlib (semihost)</code></a> を選択します。そして再コンパイルすれば <code class="language-plaintext highlighter-rouge">printf()</code> の出力先がコンソールになります。</p>
-
-<p>以上！</p>]]></content><author><name>Kingsman</name></author><category term="ロボット" /><category term="ARM" /><category term="デバッグ" /><summary type="html"><![CDATA[]]></summary></entry></feed>
+<p>ハナシが長くなったので、ライブラリの解説は次回以降にさせていただきます :ghost:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！]]></summary></entry></feed>
