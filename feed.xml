@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-10T23:01:54+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</title><link href="https://embedded-kiddie.github.io/2024/06/10/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編" /><published>2024-06-10T07:45:14+09:00</published><updated>2024-06-10T07:45:14+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/10/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/10/index.html"><![CDATA[<p><a href="/2024/06/03/#おまけ" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前回の記事の最後</a> でも少し触れましたが、Arduino コア開発の <a href="https://github.com/arduino/ArduinoCore-renesas/issues?q=involves%3Adelta-G" title="Issues · arduino/ArduinoCore-renesas">Issues</a> や <a href="https://github.com/arduino/ArduinoCore-renesas/pulls?q=involves%3Adelta-G" title="Pull requests · arduino/ArduinoCore-renesas">プルリク</a>、<a href="https://forum.arduino.cc/u/delta_g/summary" title="プロファイル - Delta_G - Arduino Forum">フォーラム</a> などで活躍中の <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による、UNO R4 静電容量式タッチセンシングユニット（<strong>C</strong>apacitive <strong>T</strong>ouch <strong>S</strong>ensing <strong>U</strong>nit、略して CTSU）用ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を試した結果を共有します。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-11T10:39:38+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</title><link href="https://embedded-kiddie.github.io/2024/06/10/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編" /><published>2024-06-10T07:45:14+09:00</published><updated>2024-06-10T07:45:14+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/10/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/10/index.html"><![CDATA[<p><a href="/2024/06/03/#おまけ" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前回の記事の最後</a> でも少し触れましたが、Arduino コア開発の <a href="https://github.com/arduino/ArduinoCore-renesas/issues?q=involves%3Adelta-G" title="Issues · arduino/ArduinoCore-renesas">Issues</a> や <a href="https://github.com/arduino/ArduinoCore-renesas/pulls?q=involves%3Adelta-G" title="Pull requests · arduino/ArduinoCore-renesas">プルリク</a>、<a href="https://forum.arduino.cc/u/delta_g/summary" title="プロファイル - Delta_G - Arduino Forum">フォーラム</a> などで活躍中の <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による、UNO R4 静電容量式タッチセンシングユニット（<strong>C</strong>apacitive <strong>T</strong>ouch <strong>S</strong>ensing <strong>U</strong>nit、略して CTSU）用ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を試した結果を共有します。</p>
 
 <p>本記事では、フォーラムにおける次の３つのトピックスを参照しています。</p>
 
@@ -31,7 +31,7 @@
 
 <p>つまり、直接的に静電容量を測定するのではなく、電極に指を置く前後のカウンタ値の差で、タッチを検出するワケです。</p>
 
-<p><img src="/images/2024/06-10/CTSU.jpg" alt="CTSU - スイッチドキャパシタフィルタとICO" title="CTSU - スイッチドキャパシタフィルタとICO" width="1378" height="708" class="simple" /></p>
+<p><img src="/images/2024/06-10/CTSU.jpg" alt="CTSU 計測回路 - スイッチドキャパシタフィルタとICO" title="CTSU 計測回路 - スイッチドキャパシタフィルタとICO" width="1378" height="708" class="simple" /></p>
 
 <div class="quote clear-both">
 
@@ -63,19 +63,34 @@
 
 <h2 id="試作した回路">試作した回路</h2>
 
-<p>CTSU には、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、タブレット端末のようにタッチされた２次元スクリーン上の位置を検出する「相互容量方式」の２つの計測モードで使えます。これに加え、１回キリの計測を行うシングルススキャン方式と、連続して計測するマルチスキャン方式が選択可能です。</p>
+<p>CTSU には、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、タブレット端末のようにタッチされた２次元スクリーン上の位置を検出する「相互容量方式」の２つの計測方式があり、さらに３つの計測モードがあります。</p>
 
-<p>まずは、「自己容量方式」を「シングルスキャン方式」で原理確認することとします。</p>
+<ul>
+  <li>
+    <p>自己容量方式シングルスキャンモード<br />
+特定のタッチセンシング端子を指定し、１回の計測を行うモード</p>
+  </li>
+  <li>
+    <p>自己容量方式マルチスキャンモード<br />
+全てのタッチセンシング端子に対し、１回の計測を行うモード</p>
+  </li>
+  <li>
+    <p>相互容量方式フルスキャンモード<br />
+全てのタッチセンシング端子に対し、連続して計測を行うモード</p>
+  </li>
+</ul>
+
+<p>まずは、「自己容量方式マルチスキャンモード」で原理確認することとします。</p>
 
 <h3 id="io-端子仕様の確認">I/O 端子仕様の確認</h3>
 
-<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.62「端子機能」から、CTSU に割り当てられた端子を確認します。</p>
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.62「端子機能」から、CTSU に割り当てられたタッチセンシング端子（以下、TS 端子と表記）を確認します。</p>
 
 <table>
   <thead>
     <tr>
       <th>機能</th>
-      <th>端子名</th>
+      <th>TS 端子名</th>
       <th>入出力</th>
       <th>説明</th>
     </tr>
@@ -85,7 +100,7 @@
       <td>CTSU</td>
       <td>TS00 ~ TS13, TS17 ~ TS22,<br />TS27 ~ TS31, TS34, TS35</td>
       <td>入力</td>
-      <td>静電容量式タッチ検出端子（タッチ端子）</td>
+      <td>静電容量式タッチセンシング端子</td>
     </tr>
     <tr>
       <td>^</td>
@@ -99,7 +114,7 @@
 <p>同じく P.438「入出力端子機能のレジスタ設定」から、上記端子と Minima／WiFi のピン番号との対応を調べます。<code class="language-plaintext highlighter-rouge">Dn</code> はデジタルピンを、<code class="language-plaintext highlighter-rouge">An</code> はアナログピンを表します。</p>
 
 <details>
-<summary><strong>タッチセンシング端子と Minima／WiFi ピン番号の対応表</strong></summary>
+<summary><strong>TS 端子と Minima／WiFi ピン番号の対応表</strong></summary>
 
 
 <table>
@@ -204,7 +219,7 @@
 <p>また、どのピンがタッチセンサに使えるか一目で判るよう、逆引きの表も作ってみました。</p>
 
 <details>
-<summary><strong>Minima／WiFi のピン番号とタッチセンシング端子の対応表</strong></summary>
+<summary><strong>Minima／WiFi のピン番号と TS 端子の対応表</strong></summary>
 
 
 <table>
@@ -212,8 +227,8 @@
     <tr>
       <th>デジタルピン</th>
       <th>アナログピン</th>
-      <th>Minima TS端子</th>
-      <th>WiFi TS端子</th>
+      <th>Minima TS 端子</th>
+      <th>WiFi TS 端子</th>
     </tr>
   </thead>
   <tbody>

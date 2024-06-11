@@ -95,7 +95,7 @@
 
 <p>つまり、直接的に静電容量を測定するのではなく、電極に指を置く前後のカウンタ値の差で、タッチを検出するワケです。</p>
 
-<p><img src="/images/2024/06-10/CTSU.jpg" alt="CTSU - スイッチドキャパシタフィルタとICO" title="CTSU - スイッチドキャパシタフィルタとICO" width="1378" height="708" class="simple"></p>
+<p><img src="/images/2024/06-10/CTSU.jpg" alt="CTSU 計測回路 - スイッチドキャパシタフィルタとICO" title="CTSU 計測回路 - スイッチドキャパシタフィルタとICO" width="1378" height="708" class="simple"></p>
 
 <div class="quote clear-both">
 
@@ -127,19 +127,34 @@
 
 <h2 id="試作した回路">試作した回路</h2>
 
-<p>CTSU には、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、タブレット端末のようにタッチされた２次元スクリーン上の位置を検出する「相互容量方式」の２つの計測モードで使えます。これに加え、１回キリの計測を行うシングルススキャン方式と、連続して計測するマルチスキャン方式が選択可能です。</p>
+<p>CTSU には、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、タブレット端末のようにタッチされた２次元スクリーン上の位置を検出する「相互容量方式」の２つの計測方式があり、さらに３つの計測モードがあります。</p>
 
-<p>まずは、「自己容量方式」を「シングルスキャン方式」で原理確認することとします。</p>
+<ul>
+  <li>
+    <p>自己容量方式シングルスキャンモード<br>
+特定のタッチセンシング端子を指定し、１回の計測を行うモード</p>
+  </li>
+  <li>
+    <p>自己容量方式マルチスキャンモード<br>
+全てのタッチセンシング端子に対し、１回の計測を行うモード</p>
+  </li>
+  <li>
+    <p>相互容量方式フルスキャンモード<br>
+全てのタッチセンシング端子に対し、連続して計測を行うモード</p>
+  </li>
+</ul>
+
+<p>まずは、「自己容量方式マルチスキャンモード」で原理確認することとします。</p>
 
 <h3 id="io-端子仕様の確認">I/O 端子仕様の確認</h3>
 
-<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.62「端子機能」から、CTSU に割り当てられた端子を確認します。</p>
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.62「端子機能」から、CTSU に割り当てられたタッチセンシング端子（以下、TS 端子と表記）を確認します。</p>
 
 <table>
   <thead>
     <tr>
       <th>機能</th>
-      <th>端子名</th>
+      <th>TS 端子名</th>
       <th>入出力</th>
       <th>説明</th>
     </tr>
@@ -149,7 +164,7 @@
       <td>CTSU</td>
       <td>TS00 ~ TS13, TS17 ~ TS22,<br>TS27 ~ TS31, TS34, TS35</td>
       <td>入力</td>
-      <td>静電容量式タッチ検出端子（タッチ端子）</td>
+      <td>静電容量式タッチセンシング端子</td>
     </tr>
     <tr>
       <td>^</td>
@@ -163,7 +178,7 @@
 <p>同じく P.438「入出力端子機能のレジスタ設定」から、上記端子と Minima／WiFi のピン番号との対応を調べます。<code class="language-plaintext highlighter-rouge">Dn</code> はデジタルピンを、<code class="language-plaintext highlighter-rouge">An</code> はアナログピンを表します。</p>
 
 <details>
-<summary><strong>タッチセンシング端子と Minima／WiFi ピン番号の対応表</strong></summary>
+<summary><strong>TS 端子と Minima／WiFi ピン番号の対応表</strong></summary>
 
 
 <table>
@@ -268,7 +283,7 @@
 <p>また、どのピンがタッチセンサに使えるか一目で判るよう、逆引きの表も作ってみました。</p>
 
 <details>
-<summary><strong>Minima／WiFi のピン番号とタッチセンシング端子の対応表</strong></summary>
+<summary><strong>Minima／WiFi のピン番号と TS 端子の対応表</strong></summary>
 
 
 <table>
@@ -276,8 +291,8 @@
     <tr>
       <th>デジタルピン</th>
       <th>アナログピン</th>
-      <th>Minima TS端子</th>
-      <th>WiFi TS端子</th>
+      <th>Minima TS 端子</th>
+      <th>WiFi TS 端子</th>
     </tr>
   </thead>
   <tbody>
