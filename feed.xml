@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-11T10:47:27+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</title><link href="https://embedded-kiddie.github.io/2024/06/10/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編" /><published>2024-06-10T07:45:14+09:00</published><updated>2024-06-10T07:45:14+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/10/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/10/index.html"><![CDATA[<p><a href="/2024/06/03/#おまけ" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前回の記事の最後</a> でも少し触れましたが、Arduino コア開発の <a href="https://github.com/arduino/ArduinoCore-renesas/issues?q=involves%3Adelta-G" title="Issues · arduino/ArduinoCore-renesas">Issues</a> や <a href="https://github.com/arduino/ArduinoCore-renesas/pulls?q=involves%3Adelta-G" title="Pull requests · arduino/ArduinoCore-renesas">プルリク</a>、<a href="https://forum.arduino.cc/u/delta_g/summary" title="プロファイル - Delta_G - Arduino Forum">フォーラム</a> などで活躍中の <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による、UNO R4 静電容量式タッチセンシングユニット（<strong>C</strong>apacitive <strong>T</strong>ouch <strong>S</strong>ensing <strong>U</strong>nit、略して CTSU）用ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を試した結果を共有します。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-11T10:51:40+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</title><link href="https://embedded-kiddie.github.io/2024/06/10/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編" /><published>2024-06-10T07:45:14+09:00</published><updated>2024-06-10T07:45:14+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/10/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/10/index.html"><![CDATA[<p><a href="/2024/06/03/#おまけ" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前回の記事の最後</a> でも少し触れましたが、Arduino コア開発の <a href="https://github.com/arduino/ArduinoCore-renesas/issues?q=involves%3Adelta-G" title="Issues · arduino/ArduinoCore-renesas">Issues</a> や <a href="https://github.com/arduino/ArduinoCore-renesas/pulls?q=involves%3Adelta-G" title="Pull requests · arduino/ArduinoCore-renesas">プルリク</a>、<a href="https://forum.arduino.cc/u/delta_g/summary" title="プロファイル - Delta_G - Arduino Forum">フォーラム</a> などで活躍中の <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による、UNO R4 静電容量式タッチセンシングユニット（<strong>C</strong>apacitive <strong>T</strong>ouch <strong>S</strong>ensing <strong>U</strong>nit、略して CTSU）用ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を試した結果を共有します。</p>
 
 <p>本記事では、フォーラムにおける次の３つのトピックスを参照しています。</p>
 
@@ -66,12 +66,18 @@
 <p>CTSU には、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、タブレット端末のようにタッチされた２次元スクリーン上の位置を検出する「相互容量方式」の２つの計測方式があり、さらに３つの計測モードがあります。</p>
 
 <ul>
-  <li>自己容量方式シングルスキャンモード<br />
-特定のタッチセンシング端子を指定し、センサ駆動パルスの High 期間で１回の計測を行うモード</li>
-  <li>自己容量方式マルチスキャンモード<br />
-全てのタッチセンシング端子に対し、センサ駆動パルスの High 期間で１回１回の計測を行うモード</li>
-  <li>相互容量方式フルスキャンモード<br />
-全てのタッチセンシング端子に対し、センサ駆動パルスの立ち上がりエッジと立ち下がりエッジで２回の計測を行うモード</li>
+  <li>
+    <p>自己容量方式シングルスキャンモード<br />
+１つのタッチセンシング端子を指定し、センサ駆動パルスの High 期間で１回の計測を行う</p>
+  </li>
+  <li>
+    <p>自己容量方式マルチスキャンモード<br />
+全てのタッチセンシング端子に対し、センサ駆動パルスの High 期間で１回の計測を行う</p>
+  </li>
+  <li>
+    <p>相互容量方式フルスキャンモード<br />
+全てのタッチセンシング端子に対し、センサ駆動パルスの立ち上がり、立ち下がりの両エッジで２回の計測を行う</p>
+  </li>
 </ul>
 
 <p>まずは、「自己容量方式マルチスキャンモード」で原理確認することとします。</p>
