@@ -128,19 +128,18 @@
 
 <p><img src="/images/2024/04-14/debug-printf-again.jpg" alt="再びprintf()をデバッグ" title="再びprintf()をデバッグ" width="1379" height="862"></p>
 
-<details>
-<summary><h4>Minima と WiFi の違い！（2024年5月25日 追記）</h4></summary>
+<h4 id="minima-と-wifi-の違い">Minima と WiFi の違い！</h4>
 
 <div class="notice clear-both">
 
-<p><strong>Minima</strong> では、シリアルへの出力関数として <code class="language-plaintext highlighter-rouge">Serial.write()</code> を使って OK でしたが、<strong>WiFi</strong> では、連続する <code class="language-plaintext highlighter-rouge">printf()</code> 間で<strong>前後の文字が欠落する</strong>という問題に遭遇しました。頻度こそ減りますが <code class="language-plaintext highlighter-rouge">Serial.print()</code> も同様です。どちらも <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Serial.cpp#L126" title="ArduinoCore-renesas/cores/arduino/Serial.cpp at main · arduino/ArduinoCore-renesas">送信完了を監視しています</a> が不完全なようで、後述のライブラリには <a href="https://github.com/embedded-kiddie/Printf/blob/main/Printf.cpp#L24" title="Printf/Printf.cpp at main · embedded-kiddie/Printf"><code class="language-plaintext highlighter-rouge">delay()</code> を追加</a> しています。</p>
+<p><strong>Minima</strong> では、出力関数により低レベルな関数 <code class="language-plaintext highlighter-rouge">Serial.write()</code> を使って OK でしたが、<strong>WiFi</strong> では、連続する <code class="language-plaintext highlighter-rouge">printf()</code> 間で<strong>前後の文字が欠落する</strong>という問題に遭遇したので、<code class="language-plaintext highlighter-rouge">Serial.print()</code> を使わざるを得ず、処理時間もかなり異なります。</p>
 
-<p>また <code class="language-plaintext highlighter-rouge">setup()</code> の中で <code class="language-plaintext highlighter-rouge">printf()</code> するには <code class="language-plaintext highlighter-rouge">Serial.begin(...); while(!Serial);</code> では不十分で、<code class="language-plaintext highlighter-rouge">Serial.begin(...); delay(1000);</code> とする必要がありました。</p>
+<p>また <strong>WiFi</strong> では、初期化待ちの <code class="language-plaintext highlighter-rouge">while(!Serial);</code> は機能せず、<code class="language-plaintext highlighter-rouge">delay(1000);</code> で待つ必要がありました。どちらも <a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/HardwareSerial.h" title="ArduinoCore-API/api/HardwareSerial.h at master · arduino/ArduinoCore-API"><code class="language-plaintext highlighter-rouge">HardwareSerial</code></a> という抽象クラスを継承していますが、<strong>Minima</strong> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/usb/SerialUSB.cpp#L119" title="ArduinoCore-renesas/cores/arduino/usb/SerialUSB.cpp at main · arduino/ArduinoCore-renesas">真偽を評価するオペレータがそれなりに実装されている</a> のに対し、 <strong>WiFi</strong> では <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Serial.cpp#L135" title="ArduinoCore-renesas/cores/arduino/Serial.cpp at main · arduino/ArduinoCore-renesas">単に <code class="language-plaintext highlighter-rouge">true</code> を返しているだけ</a> だからです。</p>
 
-<p><strong>Minima</strong> と違い <strong>WiFi</strong> の USB は、Arm との間に ESP32-S3-MINI-1-N8 を挟んでいるので、 このような違いが出るのだと思います。ピンアサインや TX/RX LED など、回路上の違いを十分検証せず、安易にプログラムを公開すると危険ということを思い知らされました。</p>
+<p><strong>Minima</strong> と違い <strong>WiFi</strong> の USB は、ARM との間に ESP32-S3-MINI-1-N8 を挟んでいるので、 このような違いが出るのだと思います。回路上の違いを十分検証せず、安易にプログラムを公開すると危険ということを思い知らされました。</p>
+
 
 </div>
-</details>
 
 <h3 id="printfの書式と動作確認">printfの書式と動作確認</h3>
 
@@ -162,6 +161,11 @@
   <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
   <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
 
+<span class="cp">#ifdef  ARDUINO_UNOR4_WIFI
+</span>  <span class="c1">// UNO R4 WiFi needs to wait for a while to complete Serial initialization.</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// It requires at least 600 ms.</span>
+<span class="cp">#endif
+</span>
 <span class="cp">#define EPSILON 0.00001
 </span>
   <span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">EPSILON</span><span class="p">;</span> <span class="n">f</span> <span class="o">+=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="p">{</span>
