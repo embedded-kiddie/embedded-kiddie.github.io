@@ -510,8 +510,8 @@
 <span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
 <span class="c">#if 0
   // 各タッチパッドの値を出力する
-  Serial.print("   "); Serial.print(touchRead( 9));
-  Serial.print("   "); Serial.print(touchRead( 8));
+  Serial.print("   " + String(touchRead( 9)));
+  Serial.print("   " + String(touchRead( 8)));
   ; // 以下、略
   Serial.println();
   delay(500);

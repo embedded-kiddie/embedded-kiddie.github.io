@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-17T00:40:08+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-17T00:46:06+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
   pre.mermaid {
     float: left;
     border: none;
@@ -812,8 +812,8 @@ flowchart TD
 <span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
 <span class="c">#if 0
   // 各タッチパッドの値を出力する
-  Serial.print("   "); Serial.print(touchRead( 9));
-  Serial.print("   "); Serial.print(touchRead( 8));
+  Serial.print("   " + String(touchRead( 9)));
+  Serial.print("   " + String(touchRead( 8)));
   ; // 以下、略
   Serial.println();
   delay(500);
