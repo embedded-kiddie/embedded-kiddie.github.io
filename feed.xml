@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-17T00:50:19+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-17T06:02:25+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
   pre.mermaid {
     float: left;
     border: none;
@@ -208,7 +208,7 @@ flowchart TD
   <li>割り込み要因に対応する SRAM ↔︎ レジスタ間の転送設定（<code class="language-plaintext highlighter-rouge">initialize_DTC()</code>）</li>
 </ul>
 
-<p>計測モードは「自己容量マルチスキャンモード」にハードコートされていて、複数のピン番号を指定した後、<code class="language-plaintext highlighter-rouge">TouchSensor::start()</code> により計測を開始します。</p>
+<p>計測モードは「自己容量マルチスキャンモード」にハードコートされています。また必要な数だけピンを指定した後は、<code class="language-plaintext highlighter-rouge">TouchSensor::start()</code> により計測を開始します。</p>
 
 <h5 id="チャネル設定要求割り込みハンドラ">チャネル設定要求割り込みハンドラ</h5>
 
@@ -217,7 +217,7 @@ flowchart TD
   <span class="n">R_BSP_IrqStatusClear</span><span class="p">(</span><span class="n">irq</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
-<p><code class="language-plaintext highlighter-rouge">initialize_DTC()</code> により、チャネル設定を格納した SRAM からレジスタへの <code class="language-plaintext highlighter-rouge">Write</code> 処理が設定されているため、対応する割り込み要因をクリアするだけの処理となっています。DTC を使わない場合は、CTSUSSC、CTSUSO0、CTSUSO1 レジスタへ選択したチャネル設定を書き込むコードを記述します。</p>
+<p><code class="language-plaintext highlighter-rouge">initialize_DTC()</code> により、チャネル設定を格納した SRAM からレジスタへの <code class="language-plaintext highlighter-rouge">Write</code> 処理が設定されているため、対応する割り込み要因をクリアするだけの処理となっています。DTC を使わない場合は、チャネル設定を CTSUSSC、CTSUSO0、CTSUSO1 レジスタへ書き込むコードを記述します。</p>
 
 <h5 id="結果読み出し要求割り込みハンドラ">結果読み出し要求割り込みハンドラ</h5>
 
@@ -226,7 +226,7 @@ flowchart TD
   <span class="n">R_BSP_IrqStatusClear</span><span class="p">(</span><span class="n">irq</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
-<p><code class="language-plaintext highlighter-rouge">initialize_DTC()</code> により、計測結果を格納したレジスタから SRAM への <code class="language-plaintext highlighter-rouge">Read</code> 処理が設定されているため、対応する割り込み要因をクリアするだけの処理となっています。DTC を使わない場合は、計測結果を２つの ICO カウンタ CTSUSC、CTSURC から読み出すコードを記述します。</p>
+<p><code class="language-plaintext highlighter-rouge">initialize_DTC()</code> により、計測結果を格納したレジスタから SRAM への <code class="language-plaintext highlighter-rouge">Read</code> 処理が設定されているため、対応する割り込み要因をクリアするだけの処理となっています。DTC を使わない場合は、２つの ICO カウンタ CTSUSC、CTSURC を読み出すコードを記述します。</p>
 
 <h5 id="計測終了割り込みハンドラ">計測終了割り込みハンドラ</h5>
 
@@ -357,7 +357,7 @@ flowchart TD
   </tbody>
 </table>
 
-<p>こうやって洗い出してみると、導入編の <a href="/2024/06/10/#検出原理に基づく-ctsu-のポイント" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">検出原理に基づく CTSU のポイント</a> で想定したパラメータでは足りませんでしたネ :sweat_smile:</p>
+<p>こうやって洗い出してみると、導入編の <a href="/2024/06/10/#検出原理に基づく-ctsu-のポイント" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">検出原理に基づく CTSU のポイント</a> で想定したパラメータでは足りませんでした :sweat_smile:</p>
 
 <h2 id="次回は">次回は…</h2>
 
