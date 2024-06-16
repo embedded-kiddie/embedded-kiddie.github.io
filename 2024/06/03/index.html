@@ -66,7 +66,7 @@
 
 <p>Arduino UNO R4の周辺回路レジスタをモニターするプログラムを作りました。</p>
 
-<p>上の画像は、<a href="/2024/04/04/arduino-blink-with-bgm.html#agt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">低消費電力非同期汎用タイマ（AGT）</a>のレジスタのモニター出力です。AGT は 1ms を刻む <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> で使われていて、ルネサス RA4M1 の <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーズマニュアル</a> で「１」が立つビットを調べると、次のことが分かります。</p>
+<p>上の画像は、<a href="/2024/04/04/arduino-blink-with-bgm.html#agt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">低消費電力非同期汎用タイマ（AGT）</a>のレジスタのモニター出力です。AGT は 1ms を刻む <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> で使われていて、「１」が立ってるビットを <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーズマニュアル</a> で調べると、次のことが分かります。</p>
 
 <ol>
   <li>
