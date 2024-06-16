@@ -1,4 +1,371 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-16T21:39:12+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</title><link href="https://embedded-kiddie.github.io/2024/06/10/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編" /><published>2024-06-10T07:45:14+09:00</published><updated>2024-06-10T07:45:14+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/10/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/10/index.html"><![CDATA[<p><a href="/2024/06/03/#おまけ" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前回の記事の最後</a> でも少し触れましたが、Arduino コア開発の <a href="https://github.com/arduino/ArduinoCore-renesas/issues?q=involves%3Adelta-G" title="Issues · arduino/ArduinoCore-renesas">Issues</a> や <a href="https://github.com/arduino/ArduinoCore-renesas/pulls?q=involves%3Adelta-G" title="Pull requests · arduino/ArduinoCore-renesas">プルリク</a>、<a href="https://forum.arduino.cc/u/delta_g/summary" title="プロファイル - Delta_G - Arduino Forum">フォーラム</a> などで活躍中の <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による、UNO R4 静電容量式タッチセンシングユニット（<strong>C</strong>apacitive <strong>T</strong>ouch <strong>S</strong>ensing <strong>U</strong>nit、略して CTSU）用ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を試した結果を共有します。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-16T21:43:53+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
+  pre.mermaid {
+    float: left;
+    border: none;
+    background-color: white;
+    margin-right: 1em;
+  }
+  @media screen and (min-width: 800px) {
+    #flow1 ~ ol li:nth-child(1) { padding-bottom: 0.5em; }
+    #flow1 ~ ol li:nth-child(2) { padding-bottom: 0.5em; }
+    #flow1 ~ ol li:nth-child(3) { padding-bottom: 0.5em; }
+    #flow1 ~ ol li:nth-child(5) { padding-bottom: 0.5em; }
+    #flow2 ~ ol li:nth-child(1) { padding-top: 1em; }
+    #flow2 ~ ol li:nth-child(2) { padding-top: 2em; }
+    #flow4 ~ ol li:nth-child(1) { padding-bottom:0; }
+    #flow4 ~ ol li:nth-child(2) { padding: 0; }
+    #flow1 { min-width: 234px; min-height: 784px; }
+    #flow1 { min-width: 255px; min-height: 170px; }
+    #flow3 { min-width: 760px; min-height: 910px; }
+    #flow4 { min-width: 246px; min-height: 912px; }
+  }
+</style>
+
+<p>前回の「<a href="/2024/06/10/" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">導入編</a>」 では、CTSU ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> でとりあえず試作タッチスイッチを動作させました。ただ、空中配線のせいもあると思いますが、日によって微妙にタッチの反応速度が異なり、安定して動作させるには判定閾値の調整が必要なことが分かりました。</p>
+
+<p>そこで今回は、<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> の P.1418 「41. 静電容量式タッチセンシングユニット（CTSU）」を紐解き、キャリブレーション手法の検討につなげたいと思います。幸い <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> は、マニュアルに沿って作られているので、仕様と実装を突き合わせながら、CTSU の使い方が学習できると思います。</p>
+
+<p>また今回を「基本編」としたのは、CTSU がサポートする３つの計測モードのうち、実用上もっとも基本的な「自己容量自己容量マルチスキャンモード」の紐解きだからです。</p>
+
+<p>他の計測モードとして、縦横２つの電極間の静電容量を元に２次元位置を検出する「相互容量方式」があり、その紐解きを「応用編」としたいのですが、結構ムズそうで、辿り着けるかどうか分かりません :sweat_smile:</p>
+
+<h2 id="ctsu-動作原理の復習">CTSU 動作原理の復習</h2>
+
+<p>ここでは CTSU 計測回路の図だけを示すので、詳細は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.1444「41.3 動作説明」を読むか、導入編の <a href="/2024/06/10/#ctsu-の動作原理" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">CTSU の動作原理</a> を読み返してください。</p>
+
+<figure>
+  <img class="simple" src="/images/2024/06-10/CTSU.jpg" alt="CTSU 計測回路 - スイッチドキャパシタフィルタとICO" width="1378" height="706" />
+  <figcaption style="max-width:none">CTSU 計測回路 - スイッチドキャパシタフィルタとICO</figcaption>
+</figure>
+
+<h3 id="ノイズ除去について">ノイズ除去について</h3>
+
+<p>人がタッチ電極に触れた際、<a href="https://techweb.rohm.co.jp/product/nowisee/18796/#toc6" title="スイッチングノイズとは？スイッチング電源で発生するノイズと対策 - EMCとは - TechWeb">コモンモードノイズ</a> が回り込み、駆動パルスによるタッチ電極への充放電周波数とノイズの周波数が近い場合、計測に影響を与える可能性があります。</p>
+
+<figure>
+  <img class="simple" src="/images/2024/06-16/CTSU-noise.jpg" alt="CTSU 計測回路 - コモンモードノイズ" width="1380" height="736" />
+  <figcaption style="max-width:none">CTSU 計測回路 - コモンモードノイズ</figcaption>
+</figure>
+
+<p>このノイズの影響を減らすため、MCU には「高域ノイズ低減機能（スペクトラム拡散機能）」が組み込まれてます。これをあえて利用しないという手はないでしょう。</p>
+
+<p>詳しくは、<a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-mcu-capacitive-touch-noise-immunity-guide?r=1054146" title="静電容量センサマイコン 静電容量タッチ ノイズイミュニティガイド - RENESAS アプリケーションノート">静電容量タッチ ノイズイミュニティガイド</a> を読むと、勉強になると思います。</p>
+
+<h2 id="計測のフロー">計測のフロー</h2>
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> では、ハードウェアに視点を置き、処理フロー、状態遷移、タイミングチャートの３つで仕様が記述されています。それゆえソフトウェア仕様に落とす前段階として、それら相互の関係を意識しながら、それぞれを噛み砕いて再表現してみました。</p>
+
+<p>何よりまずは自分自身の理解のため、そして誰かの役にも立つことを願って…</p>
+
+<h3 id="ctsu-初期設定フロー">CTSU 初期設定フロー</h3>
+
+<p>「CTSUCR1.CTSUPON = 1」などの表現は抜きに、CTSU 計測回路にとっての意味や目的を確認しながらフローを追いかけてみました。</p>
+
+<pre class="mermaid" id="flow1" aria-label="CTSU 初期設定のフローチャート">
+flowchart TB
+  A[1. TSCAP 端子外付け<br />コンデンサを放電] --&gt;
+  B[2. TS 端子の I/O ポート設定] --&gt;
+  C[3. CTSU 入力クロック許可] --&gt; 
+  D[4. CTSU 電源設定] --&gt; 
+  E[5. CTSU ベースクロック設定] --&gt;
+  F[6. CTSU 電源オン] --&gt;
+  G[7. 安定待ち] --&gt;
+  H([停止状態／計測開始待ち])
+</pre>
+
+<ol>
+  <li>
+    <p>TSCAP 端子を汎用 I/O ポートに設定し、一定期間 Low レベルにすることで外付けされたデカップリングコンデンサに溜まった電荷を放電します。</p>
+  </li>
+  <li>
+    <p>TS 端子を、ポート mn 端子機能選択レジスタで周辺機能用の入出力ポートに設定します。</p>
+  </li>
+  <li>
+    <p>CTSU のモジュールストップ状態を解除し、電源とクロックの供給すれば CTSU が動き出せる状態にします。</p>
+  </li>
+  <li>
+    <p>タッチ電極の静電容量に応じた基準電圧を印加するため、 CTSU の電源動作モードと電源能力を設定します。</p>
+  </li>
+  <li>
+    <p>スイッチドキャパシタフィルタと ICO の動作に必要な、CTSU のベースクロックを設定します。</p>
+  </li>
+  <li>
+    <p>TSCAP 接続 SW をオンし電源と繋げることで、外付けしたデカップリングコンデンサの充電を開始します。</p>
+  </li>
+  <li>
+    <p>タッチ電極に安定した基準電圧を印加できるよう、TSCAP 端子に外付けしたデカップリングコンデンサの充電完了を待ちます。</p>
+  </li>
+</ol>
+
+<h3 id="動作完了フロー">動作完了フロー</h3>
+
+<p>次章の「状態遷移」上は、<code class="language-plaintext highlighter-rouge">Status 1</code> から <code class="language-plaintext highlighter-rouge">Status 0</code> に遷移した際に実行すべきアクションかと思います。</p>
+
+<pre class="mermaid" id="flow2">
+flowchart TB
+  A[1. CTSU 電源オフ] --&gt;
+  B[2. モジュールスタンバイをオン]
+</pre>
+
+<ol>
+  <li>
+    <p>CTSU の電源をオフにし、TSCAP 接続 SW を切断します。</p>
+  </li>
+  <li>
+    <p>CSTU をモジュールストップ状態に移行させます。</p>
+  </li>
+</ol>
+
+<h3 id="状態遷移">状態遷移</h3>
+
+<p>CTSU ステータスレジスタ（CTSUST）には、計測回路の内部状態が書き込まれます（図の見通し良くするため「相互容量フルスキャンモード」の遷移は除外してあります）。</p>
+
+<p>ソフトウェア上は、処理の過程でステータスをチェックすること以外、あまり意識する必要はなく、<span class="strong">強調した処理</span> を実行するだけです。</p>
+
+<pre class="mermaid" id="flow3" aria-label="CTSU 計測回路の状態遷移">
+flowchart TB
+  S0([Status 0<br />停止状態／計測開始待ち])
+  S1([Status 1<br />計測チャネルの更新／計測終了判定])
+  S2([Status 2<br />センサ駆動パルス設定待ち])
+  S3([Status 3<br />センサ駆動パルス出力開始／センサ安定待ち区間])
+  S4([Status 4<br />計測開始／計測区間])
+  S5([Status 5<br />計測完了])
+  S0 -- ソフトウェアまたは外部トリガで <span class="strong">計測開始を指示</span> --&gt; S1
+  S1 -- 次に計測すべきチャネルがなく測定終了 --&gt; S0
+  S1 -- 計測チャネルの設定要求割り込み --&gt; S2
+%%S1 -- 相互容量フルスキャンモードで計測２回目の場合 --&gt; S3
+  S2 -- <span class="strong">計測チャネルを設定</span>（→ 完了後 IOC クロックが動作） --&gt; S3
+  S3 -- センサ安定時間が経過 --&gt; S4
+  S4 -- 所定の計測時間が経過 --&gt; S5
+  S5 -- 動作クロックが２クロック経過 --&gt; S1
+</pre>
+
+<h3 id="自己容量マルチスキャンモードの動作">自己容量マルチスキャンモードの動作</h3>
+
+<p>自己容量シングルスキャンモードでは、任意の１チャネルの静電容量を計測します。「4. CTSU 計測開始」後は、ICU（Interrupt Controller Unit）が管理する３つの割り込みにより計測処理が進むので、アプリケーションは、結果が書き込まれた SRAM 上のデータを非同期に読み込み、タッチを判定することができます。</p>
+
+<pre class="mermaid" id="flow4" aria-label="自己容量マルチスキャンモードのフローチャート">
+flowchart TD
+  A([1. 初期設定]) --&gt;
+  B[2. 割り込み動作設定<br />（DTC または ICU）] --&gt;
+  C[3. CTSUレジスタ設定]
+  -- 電源安定時間を経過 --&gt;
+  E[4. CTSU 計測開始] --&gt;
+  F([5. CTSU 計測動作開始]) --
+  <span class="strong">チャネル設定要求割り込み</span> 発生
+  --&gt; H
+  H[6. 計測チャネル設定] --
+  <span class="strong">結果読み出し要求割り込み</span> 発生
+  --&gt; J
+  J[7. 計測結果読み出し] --
+  <span class="strong">計測終了割り込み</span> 発生 --&gt; L
+  L[8. タッチ判定処理]
+</pre>
+
+<ol>
+  <li>
+    <p>「CTSU 初期設定フロー」完了後は <code class="language-plaintext highlighter-rouge">Status 0</code> 状態となるところから始まります。</p>
+  </li>
+  <li>
+    <p><span class="strong">チャネル設定要求</span>、<span class="strong">結果読み出し要求</span>、<span class="strong">計測終了</span> の各割り込みに対し、予め SRAM ↔︎ レジスタ間の転送処理を定義したハンドラ関数を登録します。</p>
+  </li>
+  <li>
+    <p>CTSU 動作クロックと計測モード（自己容量マルチスキャンモード）、スイッチドキャパシタフィルタ、センサ安定待ち時間、計測チャネルの設定を行います。</p>
+  </li>
+  <li>
+    <p>CTSU コントロールレジスタ 0 の CTSU 計測動作開始ビットに１を書き込むことで計測を開始します。</p>
+  </li>
+  <li>
+    <p>計測回路は <code class="language-plaintext highlighter-rouge">Status 1</code> に遷移し、ソフトウェアは、<span class="strong">チャネル設定要求割り込み</span>（CTSU_CTSUWR）を待ちます。</p>
+  </li>
+  <li>
+    <p>計測回路は <code class="language-plaintext highlighter-rouge">Status 2</code> に遷移し、<span class="strong">チャネル設定要求割り込み</span> ハンドラが予め SRAM 上に設定されたチャネル設定を所定のレジスタに転送します。計測回路は <code class="language-plaintext highlighter-rouge">Status 3</code> に遷移し、センサの安定を待ちます。</p>
+  </li>
+  <li>
+    <p>計測回路は <code class="language-plaintext highlighter-rouge">Status 4</code> に遷移し、<span class="strong">結果読み出し要求割り込み</span>（CTSU_CTSURD）ハンドラが、ICO の計測結果データを SRAM に転送します。</p>
+  </li>
+  <li>
+    <p>全チャネルの計測が終了すると <code class="language-plaintext highlighter-rouge">Status 5</code> に遷移し、<span class="strong">計測終了割り込み</span>（CTSU_CTSUFN）が発生します。</p>
+  </li>
+</ol>
+
+<h4 id="割り込み処理について">割り込み処理について</h4>
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.1457「41.3.3.2 割り込み」には、CTSU の３つの割り込みに対する処理が示されています。これらの実装には、IRQManager クラス と DTC（Data Transfer Controller）の利用が必須です。また周辺モジュールで発生するイベントを CPU を介さずに別モジュールと接続する <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/UNOWIFIR4/includes/ra/fsp/src/bsp/mcu/ra4m1/bsp_elc.h" title="ArduinoCore-renesas/variants/UNOWIFIR4/includes/ra/fsp/src/bsp/mcu/ra4m1/bsp_elc.h at main · arduino/ArduinoCore-renesas">ELC（Event Link Controller）</a>の知識も必要です。</p>
+
+<p>しかし、残念なことに僕がこれらに習熟していないので、ここでは <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> をコードリーディングした結果の概要紹介に留めたいと思います。</p>
+
+<h5 id="タッチピンの設定">タッチピンの設定</h5>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="n">setTouchMode</span><span class="p">(</span><span class="k">const</span> <span class="kt">uint8_t</span> <span class="n">pin</span><span class="p">)</span></code></pre></figure>
+
+<p><a href="/2024/06/10/#pin2ts" title="Minima／WiFi のピン番号と TS 端子の対応表">Minima/WiFi のピン番号</a> を指定すると、以下の処理が実行されます。</p>
+
+<ul>
+  <li>対応する TS 端子を計測チャネルの登録</li>
+  <li>CTSU 初期設定フローの実行</li>
+  <li>３つの CTSU 割り込みハンドラの登録（<code class="language-plaintext highlighter-rouge">initialize_CTSU()</code>）</li>
+  <li>割り込み要因に対応する SRAM ↔︎ レジスタ間の転送設定（<code class="language-plaintext highlighter-rouge">initialize_DTC()</code>）</li>
+</ul>
+
+<p>計測モードは「自己容量マルチスキャンモード」にハードコートされていて、複数のピン番号を指定した後、<code class="language-plaintext highlighter-rouge">TouchSensor::start()</code> により計測を開始します。</p>
+
+<h5 id="チャネル設定要求割り込みハンドラ">チャネル設定要求割り込みハンドラ</h5>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">CTSUWR_handler</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">IRQn_Type</span> <span class="n">irq</span> <span class="o">=</span> <span class="n">R_FSP_CurrentIrqGet</span><span class="p">();</span>
+  <span class="n">R_BSP_IrqStatusClear</span><span class="p">(</span><span class="n">irq</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">initialize_DTC()</code> により、チャネル設定を格納した SRAM からレジスタへの <code class="language-plaintext highlighter-rouge">Write</code> 処理が設定されているため、対応する割り込み要因をクリアするだけの処理となっています。DTC を使わない場合は、CTSUSSC、CTSUSO0、CTSUSO1 レジスタへ選択したチャネル設定を書き込むコードを記述します。</p>
+
+<h5 id="結果読み出し要求割り込みハンドラ">結果読み出し要求割り込みハンドラ</h5>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">CTSURD_handler</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">IRQn_Type</span> <span class="n">irq</span> <span class="o">=</span> <span class="n">R_FSP_CurrentIrqGet</span><span class="p">();</span>
+  <span class="n">R_BSP_IrqStatusClear</span><span class="p">(</span><span class="n">irq</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">initialize_DTC()</code> により、計測結果を格納したレジスタから SRAM への <code class="language-plaintext highlighter-rouge">Read</code> 処理が設定されているため、対応する割り込み要因をクリアするだけの処理となっています。DTC を使わない場合は、計測結果を２つの ICO カウンタ CTSUSC、CTSURC から読み出すコードを記述します。</p>
+
+<h5 id="計測終了割り込みハンドラ">計測終了割り込みハンドラ</h5>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">CTSUFN_handler</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">IRQn_Type</span> <span class="n">irq</span> <span class="o">=</span> <span class="n">R_FSP_CurrentIrqGet</span><span class="p">();</span>
+  <span class="n">R_BSP_IrqStatusClear</span><span class="p">(</span><span class="n">irq</span><span class="p">);</span>
+
+  <span class="n">ctsu_done</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">ctsu_fn_callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ctsu_fn_callback</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">free_running</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">startCTSUmeasure</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>割り込み要因をクリア、コールバック関数の実行、および次の計測動作開始を指示しています。タッチ判定はコールバック関数でも可能ですが、<code class="language-plaintext highlighter-rouge">touchRead()</code> 関数で SRAM に転送された計測結果を非同期に参照して行うことも可能です。</p>
+
+<p>２つの ICO カウンタがオーバーフローした場合、CTSUST レジスタの CTSUSOVF ビットか CTSUROVF ビットが立つとの記述がありますが、そもそもキャリブレーション時にオーバーフローしないようパラメータを設定すべきなのだと思います。</p>
+
+<h2 id="r4_touch-による動作確認">R4_Touch による動作確認</h2>
+
+<p>Arduino IDE のソースコードデバッガを使い、コードをトレースするのも勉強になるのでアリですが、ここでは <a href="/2024/06/10/" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">導入編</a> で試作した回路の TS 端子をオシロスコープで、CTSU レジスタを <a href="/2024/06/03/" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">PeripheralMonitor</a> で観測した結果を示します。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-16/CTSU-signal.jpg" title="オシロスコープの観測結果" data-lightbox="image">
+    <img src="/images/2024/06-16/CTSU-signal-small.jpg" alt="オシロスコープの観測結果" width="460" height="279" />
+  </a>
+  <a href="/images/2024/06-16/CTSU-monitor.gif" title="CTSU レジスタの観測結果" data-lightbox="image">
+    <img src="/images/2024/06-16/CTSU-monitor-small.gif" alt="CTSU レジスタの観測結果" width="460" height="279" />
+  </a>
+</figure>
+
+<p>オシロスコープは <code class="language-plaintext highlighter-rouge">TS02</code> 端子を観測しています。設定では TS 端子へのパルス駆動周波数は、周辺モジュールクロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）の 32 分周（CTSUSDPA[4:0] = 15）、つまり 750KHz ですが、計測チャネルごとに切り替わるので、結構ブレて観測されました。</p>
+
+<p>その他の設定値は <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> のデフォルト値にお任せしています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>設定項目</th>
+      <th>設定値</th>
+      <th>レジスタ</th>
+      <th>ビット</th>
+      <th>値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ベースクロック</td>
+      <td>24MHz（PCLKB を１分周）</td>
+      <td>CTSUCR1</td>
+      <td>CTSUCLK[1:0]</td>
+      <td>0x00</td>
+    </tr>
+    <tr>
+      <td>計測モード</td>
+      <td>自己容量マルチスキャンモード</td>
+      <td>^</td>
+      <td>CTSUMD[1:0]</td>
+      <td>0x01</td>
+    </tr>
+    <tr>
+      <td>計測時間</td>
+      <td>3（推奨設定値）</td>
+      <td>CTSUSDPRS</td>
+      <td>CTSUPRRATIO [3:0]</td>
+      <td>0x03</td>
+    </tr>
+    <tr>
+      <td>基本パルス数</td>
+      <td>62 パルス（推奨設定値）</td>
+      <td>^</td>
+      <td>CTSUPRMODE [1:0]</td>
+      <td>0x02</td>
+    </tr>
+    <tr>
+      <td>高域ノイズ低減機能</td>
+      <td>ON</td>
+      <td>^</td>
+      <td>CTSUSOFF</td>
+      <td>0x00</td>
+    </tr>
+    <tr>
+      <td>センサ安定待ち時間</td>
+      <td>0x10（推奨設定値）</td>
+      <td>CTSUSST</td>
+      <td>CTSUSST[7:0]</td>
+      <td>0x10</td>
+    </tr>
+    <tr>
+      <td>センサオフセット</td>
+      <td>電流オフセット量 0</td>
+      <td>CTSUSO0</td>
+      <td>CTSUSO[9:0]</td>
+      <td>0x00</td>
+    </tr>
+    <tr>
+      <td>計測回数</td>
+      <td>1</td>
+      <td>^</td>
+      <td>CTSUSNUM[5:0]</td>
+      <td>0x00</td>
+    </tr>
+    <tr>
+      <td>リファレンス ICO 電流</td>
+      <td>電流オフセット量 0</td>
+      <td>CTSUSO1</td>
+      <td>CTSURICOA[7:0]</td>
+      <td>0x00</td>
+    </tr>
+    <tr>
+      <td>センサ駆動パルス</td>
+      <td>750KHz（ベースクロックの1/32）</td>
+      <td>^</td>
+      <td>CTSUSDPA[4:0]</td>
+      <td>0x0F</td>
+    </tr>
+    <tr>
+      <td>ICOゲイン</td>
+      <td>ゲイン 100%</td>
+      <td>^</td>
+      <td>CTSUICOG[1:0]</td>
+      <td>0x00</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>こうやって洗い出してみると、導入編の <a href="/2024/06/10/#検出原理に基づく-ctsu-のポイント" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">検出原理に基づく CTSU のポイント</a> で想定したパラメータでは足りませんでしたネ :sweat_smile:</p>
+
+<h2 id="次回は">次回は…</h2>
+
+<p>ルネサスが提供する <a href="https://www.renesas.com/jp/ja/software-tool/flexible-software-package-fsp" title="Flexible Software Package (FSP) - Renesas">FSP</a> には、CapTouch という <a href="https://renesas.github.io/fsp/group___r_e_n_e_s_a_s___c_a_p_t_o_u_c_h___m_o_d_u_l_e_s.html" title="RA Flexible Software Package Documentation: CapTouch">モジュール</a> と <a href="https://renesas.github.io/fsp/group___c_t_s_u___a_p_i.html" title="RA Flexible Software Package Documentation: CTSU Interface">API</a> と、スライダーやパッド、ホイールなどの UI に対応したミドルウェアがサポートされているようですが、Arduino 開発者が「いらねぇ」と思ったのでしょうか、残念ながら UNO R4 にはポーティングされていません（他にも <a href="https://www.arm.com/ja/technologies/trustzone-for-cortex-m" title="Cortex-M用TrustZone – Arm®">TrustZone</a> とか、Cortex-M ならではの機能、多数ありますよね）。</p>
+
+<p><a href="https://www.renesas.com/jp/ja/software-tool/e-studio" title="統合開発環境 e² studio - Renesas">e² studio 環境</a> では <a href="https://www.renesas.com/jp/ja/software-tool/qe-capacitive-touch-development-assistance-tool-capacitive-touch-sensors" title="静電容量式タッチセンサ対応開発支援ツール QE for Capacitive Touch - Renesas">静電容量式タッチセンサ対応開発支援ツール</a> が使えて、前章で洗い出したパラメータの <a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-mcu-qe-capacitive-touch-advanced-mode-parameter-guide?r=1170071" title="静電容量センサマイコン QE for Capacitive Touch アドバンスドモード(高度な設定)パラメータガイド">チューニングが可能</a> なようですが、幸いにも <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> には <a href="https://github.com/delta-G/R4_Touch/tree/master/examples/Auto_Tune" title="R4_Touch/examples/Auto_Tune at master · delta-G/R4_Touch">Auto_Tune</a> という自動チューニングの例題があるので、次回はこれを紐解いてみたいと思います。</p>
+
+<p>ホント、<a href="https://github.com/delta-G" title="プロファイル - Delta_G - Arduino Forum">Delta-G 氏</a> さまさまです :fish_cake:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</title><link href="https://embedded-kiddie.github.io/2024/06/10/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編" /><published>2024-06-10T07:45:14+09:00</published><updated>2024-06-10T07:45:14+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/10/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/10/index.html"><![CDATA[<p><a href="/2024/06/03/#おまけ" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前回の記事の最後</a> でも少し触れましたが、Arduino コア開発の <a href="https://github.com/arduino/ArduinoCore-renesas/issues?q=involves%3Adelta-G" title="Issues · arduino/ArduinoCore-renesas">Issues</a> や <a href="https://github.com/arduino/ArduinoCore-renesas/pulls?q=involves%3Adelta-G" title="Pull requests · arduino/ArduinoCore-renesas">プルリク</a>、<a href="https://forum.arduino.cc/u/delta_g/summary" title="プロファイル - Delta_G - Arduino Forum">フォーラム</a> などで活躍中の <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による、UNO R4 静電容量式タッチセンシングユニット（<strong>C</strong>apacitive <strong>T</strong>ouch <strong>S</strong>ensing <strong>U</strong>nit、略して CTSU）用ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を試した結果を共有します。</p>
 
 <p>本記事では、フォーラムにおける次の３つのトピックスを参照しています。</p>
 
@@ -3412,172 +3779,4 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <p>むしろ次に紹介予定の <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> のように、何かと組み合わせて内部に隠蔽してしまうのが適した使い方でしょう。</p>
 
-<p>ということで、次回はその <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を紹介したいと思います :herb:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[前回の記事 で、tone() と delay() による楽譜再生の課題と FspTimer クラス や既存ライブラリの調査結果について書きました。]]></summary></entry><entry><title type="html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</title><link href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" rel="alternate" type="text/html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" /><published>2024-04-04T13:25:54+09:00</published><updated>2024-05-20T21:50:15+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"><![CDATA[<p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
-
-<ul>
-  <li>
-    <p><a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a><br />
-指定したサイクルで割り込みを生成し、タイマー イベントが発生とともに登録した関数を呼び出すことができるライブラリです。</p>
-  </li>
-  <li>
-    <p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a><br />
-Arduinoに何かをさせながらtone()でBGMを流すことができるライブラリです。</p>
-  </li>
-  <li>
-    <p><a href="https://github.com/embedded-kiddie/arduino-uno/tree/main/background_music" title="arduino-uno/background_music at main · embedded-kiddie/arduino-uno"><code class="language-plaintext highlighter-rouge">arduino-uno/background_music</code></a><br />
-Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOXGJxg" title="T-SQUARE 『Truth』 × 360 Reality Audio - スペシャルビデオ - YouTube">TRUTH</a> を奏でるデモプログラムです。</p>
-  </li>
-</ul>
-
-<p>映像は「<a href="/2024/03/16/arduino-lap-timer.html" title="Arduinoでライントレース用ラップタイマーを作る">Arduinoでライントレース用ラップタイマーを作る</a>」で紹介したラップタイマに移植した時の動作の様子です。</p>
-
-<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="ja" dir="ltr">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情<a href="https://t.co/Rt2UcFZT3u">https://t.co/Rt2UcFZT3u</a> <a href="https://t.co/cY1WBBwdS9">pic.twitter.com/cY1WBBwdS9</a></p>&mdash; Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1775814915762344118?ref_src=twsrc%5Etfw">April 4, 2024</a></blockquote>
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<p>以降は、表題に関する調査と学習の結果報告になります :v:</p>
-
-<h2 id="tone関数の問題点と対策">tone()関数の問題点と対策</h2>
-<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> にあるノンブロッキングな関数 <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の典型的な使い方は、直後に <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を呼び出しブロックする、次のようなパターン。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">tone</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">duration</span><span class="p">);</span>
-<span class="n">delay</span><span class="p">(</span><span class="n">duration</span><span class="p">);</span></code></pre></figure>
-
-<p>これを楽譜に合わせて次々に音符を再生するワケですが、これだと音を鳴らす以外に何も出来ません。</p>
-
-<p>作成したライブラリの仕組み自体はすごく簡単で、<code class="language-plaintext highlighter-rouge">delay()</code> の代わりに 音符の長さだけ時間が経過したら割り込みをかけ、<code class="language-plaintext highlighter-rouge">noTone()</code> で音を止めた後、音符の配列データから次の音符（周波数と音符長）を読み込み、次の割り込みを設定する - この繰り返しです。</p>
-
-<p>まずはこの動作を実現できる Arduino ライブラリの調査から始めました。</p>
-
-<h2 id="arduino-uno-r4-のタイマ系ライブラリの状況">Arduino UNO R4 のタイマ系ライブラリの状況</h2>
-<p>Arduino のタイマ系ライブラリを大きく分けると、<a href="https://playground.arduino.cc/Main/MsTimer2/" title="Arduino Playground - MsTimer2"><code class="language-plaintext highlighter-rouge">MsTimer2</code></a> などハードウェア・タイマを利用するタイプと、<a href="https://github.com/Aasim-A/AsyncTimer" title="Aasim-A/AsyncTimer: JavaScript-like Async timing functions (setTimeout, setInterval) for Arduino, ESP8266, ESP32 and other compatible boards"><code class="language-plaintext highlighter-rouge">AsyncTimer</code></a> の様に <code class="language-plaintext highlighter-rouge">loop()</code> 中に <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> や <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> でタスク起動のタイミングを管理するコードを埋め込むタイプとがあります。</p>
-
-<p>両者とも IDE からインストールできるものをいくつかトライしましたが、前者は ARV 系でないと動作しないものしか見つからず、後者は CPU やボードに依存しないものの、タイマの学習にはならないので今回は見送りです。</p>
-
-<p>また <a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> が Github 上で <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> を公開されていて、「これだ！」と思い実装を進めていったのですが、要件に合わなかったり（<a href="#AGTimer_R4_Library">後述</a>）多少動作が不安定なところがあったため、最終的に自作するハメとなりました。</p>
-
-<h2 id="arduino-uno-r4-ハードウェアタイマの仕組み">Arduino UNO R4 ハードウェア・タイマの仕組み</h2>
-<p>ということで、あらためてルネサス R7FA4M1AB（RA4M1 グループ）が持つタイマの仕組みから紐解きたいと思います。あくまで初心者目線ですので、よくご存知の方はスッ飛ばしてください。まずは一般論から。</p>
-
-<h3 id="マイコン内蔵タイマの仕組み">マイコン内蔵タイマの仕組み</h3>
-<p>マイコン内蔵のタイマには、CPU コアと密に関係するシステムタイマ（SysTickタイマ）や USB や UART、SPI などの I/F で同期やタイミングを制御するためのタイマ、RTC（リアルタイムクロック）、WDT（ウォッチドッグタイマ）など、周辺回路に専用のタイマがありますが、ここでは PWM 制御などに使えるなど汎用的なタイマについて見ていきたいと思います。</p>
-
-<p>汎用タイマの仕組みを理解するには、ストップウォッチを想定すると良いです。ザックリですが、この種のタイマは次の図のような幾つかの基本要素で構成されてます。</p>
-
-<p><img src="/images/2024/04-04/timer-overview.jpg" alt="タイマを構成する要素" title="タイマを構成する要素" width="1379" height="718" /></p>
-
-<ol>
-  <li>
-    <p>秒針１周分に相当する <strong>総カウント数</strong><br />
-  <strong>8ビットから32ビット</strong> まで、マイコンの種類と用途に応じて色々あります。</p>
-  </li>
-  <li>
-    <p>１目盛分の <strong>刻み幅</strong> を設定するレジスタ<br />
-  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。<br />
-さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> の設定が可能です。</p>
-  </li>
-  <li>
-    <p>秒針の進みを数える <strong>カウンタ・レジスタ</strong><br />
-  １目盛１カウントとして刻むカウンタです。例えば16ビットタイマは 0 〜 65535 まで、32ビットタイマは 0 〜 4294967295 まで数えられます。<br />
-  秒針が１周すると 0 に戻る、即ちオーバーフローするので、アプリケーション側で適切に扱えるよう、オーバーフロー時に割り込みを発生させる機能があったりします。</p>
-  </li>
-  <li>
-    <p><strong>タイミング</strong> を決めるレジスタと <strong>動作</strong> を制御するレジスタ<br />
-  秒針の進みに応じて、イベントの発生タイミングを設定するレジスタ（<strong>カウンタ・レジスタ</strong>との比較で決めるため、「<strong>コンペア・レジスタ</strong>」とか「<strong>マッチ・レジスタ</strong>」と呼ばれる）と、割り込みの発生や、汎用出力ポートへの HIGH または LOW 信号の出力など、イベント発生時の動作を制御するレジスタがあります。</p>
-  </li>
-</ol>
-
-<p>具体例を挙げてみます。例えば、カウンタが</p>
-
-<ul>
-  <li>レジスタ A <span class="inline"><img src="/images/2024/04-04/timer-a.png" width="24" height="27" alt="タイマレジスタ A" /></span> の設定値に到達したら、汎用出力ポートを HIGH にする</li>
-  <li>レジスタ B <span class="inline"><img src="/images/2024/04-04/timer-b.png" width="24" height="27" alt="タイマレジスタ A" /></span> の設定値に到達したら、汎用出力ポートを LOW にする</li>
-  <li>レジスタ C <span class="inline"><img src="/images/2024/04-04/timer-c.png" width="24" height="27" alt="タイマレジスタ A" /></span> の設定値に到達したら、タイマをリセットする</li>
-</ul>
-
-<p>という設定では、１目盛分の刻み幅と A・B・C の設定値から決まる、ある <strong>周波数</strong> と <strong>デューティ比</strong> の PWM 出力を作り出せることになります。</p>
-
-<p><img src="/images/2024/04-04/counter-duty-pwm.jpg" alt="タイマレジスタとPWM出力の関係" title="タイマレジスタとPWM出力の関係" width="1377" height="540" /></p>
-
-<p>また、このような HIGH か LOW の出力だけでなく、所定の LSB ずつ上げ下げすれば、三角波やノコギリ波の出力が可能ですし、制御する出力ポートを複数にすれば、多相モータの制御が可能となるなど、およそ汎用という名に相応しい、複雑な動作を実現できます。</p>
-
-<h3 id="ra4m1-のタイマ">RA4M1 のタイマ</h3>
-<p>一般論の次は、ルネサスのマイコン R7FA4M1AB のタイマです。Arm Cortex-M4 コアの直近で一定の時を刻む 24 ビットの <code class="language-plaintext highlighter-rouge">SysTick</code> タイマ（システムタイマ）のほか、アプリケーション用の高機能なタイマとして以下が備わっています。</p>
-
-<ul>
-  <li>GPT32 × 2</li>
-  <li>GPT16 × 6</li>
-  <li>AGT × 2</li>
-  <li>RTC</li>
-  <li>WDT / IWDT</li>
-</ul>
-
-<p>特に２つの汎用タイマ 〜 GPT（32ビットが２個、16ビットが６個）と AGT（16ビットが２個）〜 が今回の調査のお題です。</p>
-
-<h4 id="gpt-とは">GPT とは</h4>
-<p><strong>G</strong>eneral <strong>P</strong>ulse width modulation <strong>T</strong>imer、即ち汎用の PWM 用タイマです。<a href="#マイコン内蔵タイマの仕組み" title="マイコン内蔵タイマの仕組み">前章</a> でタイマの基本要素をいくつか紹介しましたが、実際のレジスタは11種類、235個もあり、矩形波やノコギリ波、三角波の生成や、単純な DC モータのデューティ制御から三相モーター用の出力まで、多様なニーズに応える動作モードの設定ができるようになっています。</p>
-
-<h4 id="agt-とは">AGT とは</h4>
-<p><a href="https://www.renesas.com/jp/ja/blogs/asynchronous-general-purpose-timer-providing-ra-microcontrollers-low-power-timing-solutions" title="The Asynchronous General Purpose Timer, Providing RA Microcontrollers with Low Power Timing Solutions - Renesas"><strong>A</strong>synchronous <strong>G</strong>eneral purpose <strong>T</strong>imer</a> の略で、ユーザーズマニュアルによると「低消費電力非同期汎用タイマ」とのことです。クロック発信源の１つとして 32.768KHz の「低速オンチップ オシレータ」が選択でき、汎用タイマ機能のほか、外部信号により低消費電力モードから復帰する際のフィルタ機能として、「外部パルスの幅または周期の測定や、外部イベントのカウントが可能」とのことです。</p>
-
-<p>GPTと比較すると関連するレジスタも少なく、5種類、10個です。</p>
-
-<h3 id="arduino-uno-r4-のタイマ事情">Arduino UNO R4 のタイマ事情</h3>
-<p>GPT や AGT を汎用タイマとして機能させるには、次のようなステップが必要です。</p>
-<ol>
-  <li>クロック発信源（ソース）の選択と分周比の設定</li>
-  <li>動作モードの設定</li>
-  <li>コンペアマッチレジスタの設定</li>
-  <li>割り込みの許可と優先度の設定</li>
-  <li>カウンタレジスタのクリア</li>
-  <li>タイマのスタート</li>
-</ol>
-
-<p>Arduino UNO R4 ではこのようなウザい詳細を隠蔽し、使われていないタイマを引き当て、周波数とデューティー比（あるいはクロック周期と分周比）を指定すれば、後は良しなにやってくれる関数が <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer.cpp</code></a> に定義されています。</p>
-
-<p>FSP（<a href="https://www.renesas.com/us/en/software-tool/flexible-software-package-fsp" title="Flexible Software Package (FSP) - Renesas">Flexible Software Package</a>）はルネサス製 ARM マイコンのソフトウェア群で、Qiita の記事「<a href="https://qiita.com/yasuhiro-k/items/93efb640aa12f3db9086" title="Arduino UNO R4のFspTimerライブラリの使い方 #Arduino - Qiita">Arduino UNO R4のFspTimerライブラリの使い方</a>」を参考に、実際に動作させてみて分かったことを紹介します。</p>
-
-<h4 id="汎用タイマの空き状況">汎用タイマの空き状況</h4>
-<p>全部で10個ある汎用タイマのうち、GPT は32ビットが２個と16ビットが１個、AGT は16ビット１個が既に Arduino 側で使用済みです。残りの５個は全て16ビットで、GPT が４個、AGT が１個という状況です。</p>
-
-<p>使用済みタイマのうち <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で AGT が <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/time.cpp" title="ArduinoCore-renesas/cores/arduino/time.cpp at main · arduino/ArduinoCore-renesas">使われています</a>。</p>
-
-<h4 id="割り込みハンドラの怪">割り込みハンドラの怪？</h4>
-<p><a href="https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/" title="attachInterrupt() - Arduino Reference"><code class="language-plaintext highlighter-rouge">attachInterrupt()</code></a> の解説によると、割り込みハンドラ関数内では多重割り込みが禁止されていて、故に <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> がインクリメントされず <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> が機能しない旨の記述があります。が、UNO R4 の場合、タイマや外部入力ピンへの割り込みハンドラ内で <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> も<strong>使えます</strong>。</p>
-
-<p>おそらく ARM の NVIC（Nested Vector Interrupt Controller、多重型ベクタ割り込みコントローラ）の効果だと思いますが、ユーザ側で複数の割り込みを使う場合、優先順位の調査が必要かと思います（未調査です、スミマセン…）。</p>
-
-<h4 id="クロック周波数">クロック周波数</h4>
-<p><a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer.cpp</code></a> で設定可能なクロックです。</p>
-
-<ul>
-  <li>
-    <p>GPT<br />
-サブクロックの <code class="language-plaintext highlighter-rouge">PCLKD</code> が発信源で、48MHz がデフォルト。分周比は 1、4、16、64、256、1024 が選択可能。</p>
-  </li>
-  <li>
-    <p>AGT<br />
-サブクロックの <code class="language-plaintext highlighter-rouge">PCLKB</code> が発信源で、24MHz がデフォルト。分周比は 1、2、8 が選択可能。</p>
-  </li>
-</ul>
-
-<h2 id="自作のタイマ系ライブラリと-bgm-再生ライブラリ">自作のタイマ系ライブラリと BGM 再生ライブラリ</h2>
-<p>さて、楽譜には同じ高さの音を繋げて１つの音として演奏する <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> という記号が出てきます。例えば曲の速さが<span class="inline"><img src="/images/2024/04-04/tempo-155.png" width="60" height="27" title="テンポ=155" alt="テンポ=155" /></span> で、4分音符に16分音符が続くタイ<span class="inline"><img class="inline" src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" title="4分音符＋16分音符" alt="4分音符＋16分音符" /></span>では、484ミリ秒の間、鳴らし続けなければなりません。また数秒間続く全音符のタイも度々登場します。</p>
-
-<p>これを1ミリ秒刻みの割り込みで484回を数えたり、数千回を数えたりするのは CPU リソースの無駄使いで、数えるのはタイマに任せるのが得策です。</p>
-
-<p>ここで問題なのは長い周期の場合で、16ビットを目一杯使い分周比を最大にしても GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" width="67.5" height="27" alt="GPTの計算式" /></span> より約 1398ミリ秒（小数点以下切り捨て）、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" width="65.57" height="27" alt="AGTの計算式(1)" /></span> ≒ 21ミリ秒（同）までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータと分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" width="84.852" height="27" title="AGTの計算式(2)" alt="AGTの計算式(2)" /></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスではこれが出来ません。</p>
-
-<p>またオーバーフロー割り込みを設定するメソッド <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp#L770" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code></a> を試してみましたが、うまく動かすことができませんでした。</p>
-
-<p><span id="AGTimer_R4_Library"></span>
-<a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうだったかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、およそ2秒を超えると想定通りに動作しません。ご自身でも書かれてますが、長周期の動作にデリケートなところがありそうで、使用を断念しました。</p>
-
-<h3 id="で結局どうしたか">で、結局どうしたか？</h3>
-<p>オーバーフローフラグによる割り込みを模擬しました。</p>
-
-<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、これを残り時間がゼロになるまで繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みを追加します。AGT の場合は追加の割り込みが90回となりますが、それでも（2000回に比べたら）激減できます。</p>
-
-<p>これで、どんなに長い音符も再生できるようになりました。メデタシ メデタシ。</p>
-
-<h2 id="次回は">次回は…</h2>
-<p>ハナシが長くなったので、ライブラリの解説は次回以降にさせていただきます :ghost:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！]]></summary></entry></feed>
+<p>ということで、次回はその <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を紹介したいと思います :herb:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[前回の記事 で、tone() と delay() による楽譜再生の課題と FspTimer クラス や既存ライブラリの調査結果について書きました。]]></summary></entry></feed>
