@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-17T09:22:10+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-17T09:31:26+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
   pre.mermaid {
     float: left;
     border: none;
@@ -27,7 +27,7 @@
 
 <p>また今回を「基本編」としたのは、CTSU がサポートする３つの計測モードのうち、実用上もっとも基本的な「自己容量自己容量マルチスキャンモード」の紐解きだからです。</p>
 
-<p>他の計測モードとして、縦横２つの電極間の静電容量を元に２次元位置を検出する「相互容量方式」があり、その紐解きを「応用編」としたいのですが、結構ムズそうで、辿り着けるかどうか分かりません :sweat_smile:</p>
+<p>他の計測モードとして、縦横２つの電極間の静電容量 <del>を元に２次元位置を検出する</del> の差を取ることで寄生容量をキャンセルする「相互容量方式」があり、その紐解きを「応用編」としたいのですが、結構ムズそうで、辿り着けるかどうか分かりません :sweat_smile:</p>
 
 <h2 id="ctsu-動作原理の復習">CTSU 動作原理の復習</h2>
 
@@ -432,7 +432,9 @@ flowchart TD
 
 <h2 id="試作した回路">試作した回路</h2>
 
-<p>CTSU には、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、タブレット端末のようにタッチされた２次元スクリーン上の位置を検出する「相互容量方式」の２つの計測方式があり、さらに３つの計測モードがあります。</p>
+<p>CTSU には、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、<del>タブレット端末のようにタッチされた２次元スクリーン上の位置を検出する</del> ２つの電極間の計測結果の差を取ることで、寄生容量をキャンセルする方式の「相互容量方式」の２つの計測方式があり、さらに３つの計測モードがあります。</p>
+
+<p>※ 原理的には、でした。</p>
 
 <ul>
   <li>
