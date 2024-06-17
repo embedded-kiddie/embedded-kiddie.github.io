@@ -334,7 +334,7 @@ flowchart TD
       <th>設定値</th>
       <th>レジスタ</th>
       <th>ビット</th>
-      <th>値</th>
+      <th style="text-align: center">値</th>
     </tr>
   </thead>
   <tbody>
@@ -343,77 +343,77 @@ flowchart TD
       <td>24MHz（PCLKB を１分周）</td>
       <td>CTSUCR1</td>
       <td>CTSUCLK[1:0]</td>
-      <td>0x00</td>
+      <td style="text-align: center">0x00</td>
     </tr>
     <tr>
       <td>計測モード</td>
       <td>自己容量マルチスキャンモード</td>
       <td>^</td>
       <td>CTSUMD[1:0]</td>
-      <td>0x01</td>
+      <td style="text-align: center">0x01</td>
     </tr>
     <tr>
-      <td>計測時間</td>
+      <td>同期ノイズ低減 計測時間</td>
       <td>3（推奨設定値）</td>
       <td>CTSUSDPRS</td>
       <td>CTSUPRRATIO [3:0]</td>
-      <td>0x03</td>
+      <td style="text-align: center">0x03</td>
     </tr>
     <tr>
-      <td>基本パルス数</td>
+      <td>^ 基本パルス数</td>
       <td>62 パルス（推奨設定値）</td>
       <td>^</td>
       <td>CTSUPRMODE [1:0]</td>
-      <td>0x02</td>
+      <td style="text-align: center">0x02</td>
     </tr>
     <tr>
-      <td>高域ノイズ低減機能</td>
+      <td>^ 高域ノイズ低減機能</td>
       <td>ON</td>
       <td>^</td>
       <td>CTSUSOFF</td>
-      <td>0x00</td>
+      <td style="text-align: center">0x00</td>
     </tr>
     <tr>
       <td>センサ安定待ち時間</td>
       <td>0x10（推奨設定値）</td>
       <td>CTSUSST</td>
       <td>CTSUSST[7:0]</td>
-      <td>0x10</td>
+      <td style="text-align: center">0x10</td>
     </tr>
     <tr>
       <td>センサオフセット</td>
       <td>電流オフセット量 0</td>
       <td>CTSUSO0</td>
       <td>CTSUSO[9:0]</td>
-      <td>0x00</td>
+      <td style="text-align: center">0x00</td>
     </tr>
     <tr>
       <td>計測回数</td>
       <td>1</td>
       <td>^</td>
       <td>CTSUSNUM[5:0]</td>
-      <td>0x00</td>
+      <td style="text-align: center">0x00</td>
     </tr>
     <tr>
       <td>リファレンス ICO 電流</td>
       <td>電流オフセット量 0</td>
       <td>CTSUSO1</td>
       <td>CTSURICOA[7:0]</td>
-      <td>0x00</td>
+      <td style="text-align: center">0x00</td>
     </tr>
     <tr>
       <td>センサ駆動パルス</td>
       <td>750KHz（ベースクロックの1/32）</td>
       <td>^</td>
       <td>CTSUSDPA[4:0]</td>
-      <td>0x0F</td>
+      <td style="text-align: center">0x0F</td>
     </tr>
     <tr>
       <td>ICOゲイン</td>
       <td>ゲイン 100%</td>
       <td>^</td>
       <td>CTSUICOG[1:0]</td>
-      <td>0x00</td>
+      <td style="text-align: center">0x00</td>
     </tr>
   </tbody>
 </table>
