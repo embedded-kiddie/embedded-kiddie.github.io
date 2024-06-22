@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-23T01:26:30+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編</title><link href="https://embedded-kiddie.github.io/2024/06/22/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編" /><published>2024-06-22T19:06:03+09:00</published><updated>2024-06-22T19:06:03+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/22/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/22/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-23T01:36:24+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編</title><link href="https://embedded-kiddie.github.io/2024/06/22/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編" /><published>2024-06-22T19:06:03+09:00</published><updated>2024-06-22T19:06:03+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/22/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/22/index.html"><![CDATA[<style>
   .emphasis,
   #t1 tbody tr:nth-of-type(1),
   #t1 tbody tr:nth-of-type(2),
@@ -244,22 +244,36 @@
   </tbody>
 </table>
 
-<p>ここではプログラムを見るより、探索処理が出力するデバッグ情報の方がイメージが湧き易いと思うので、以下に説明を試みます。</p>
+<p>ここではプログラムを見るより、探索処理が出力するデバッグ情報の方がイメージが湧き易いと思うので、以下に説明を試みます。まずは記号の説明です。</p>
 
-<p>まずは記号の説明です。</p>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">記号</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">SNUM</code></td>
+      <td>CSTS パラメータのうち、<strong>計測回数</strong> を表します。</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">SPDA</code></td>
+      <td>ベースクロックの分周比で <strong>計測（センサ駆動パルス）周波数</strong> を表します。ベースクロックを周辺回路クロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）に設定した場合、例えば分周比「<code class="language-plaintext highlighter-rouge">2</code>」は <code class="language-plaintext highlighter-rouge">1/6</code>、即ち 4MHz を表します。以降分周比が「<code class="language-plaintext highlighter-rouge">1</code>」増える毎に <code class="language-plaintext highlighter-rouge">1/8</code>、<code class="language-plaintext highlighter-rouge">1/10</code>、… と続きます。</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">RC</code></td>
+      <td>リファレンスカウンタを表しますが、探索処理では計測レンジの上限値を示しています。</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">SC</code></td>
+      <td>センサカウンタ、即ち計測された静電容量に相当します。</td>
+    </tr>
+  </tbody>
+</table>
 
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">SNUM</code><br />
-CSTS パラメータのうち、<strong>計測回数</strong> を表します。</li>
-  <li><code class="language-plaintext highlighter-rouge">SDPA</code><br />
-ベースクロックの分周比で <strong>計測（センサ駆動パルス）周波数</strong> を表します。ベースクロックを周辺回路クロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）に設定した場合、例えば分周比「<code class="language-plaintext highlighter-rouge">2</code>」は <code class="language-plaintext highlighter-rouge">1/6</code>、即ち 4MHz を表します。以降分周比が「<code class="language-plaintext highlighter-rouge">1</code>」増える毎に <code class="language-plaintext highlighter-rouge">1/8</code>、<code class="language-plaintext highlighter-rouge">1/10</code>、… と続きます。</li>
-  <li><code class="language-plaintext highlighter-rouge">RC</code><br />
-リファレンスカウンタを表しますが、探索処理では計測レンジの上限値を示しています。</li>
-  <li><code class="language-plaintext highlighter-rouge">SC</code><br />
-センサカウンタ、即ち計測された静電容量に相当します。</li>
-</ul>
-
-<p>また <a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> から次の制約条件を読み取り、センサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> が <strong>ターゲット値の 15360</strong> に最も近くなる <code class="language-plaintext highlighter-rouge">SNUM</code> と <code class="language-plaintext highlighter-rouge">SPDA</code> の組み合わせを探索することとしました。</p>
+<p>また <a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> から次の制約条件を読み取りました。</p>
 
 <ul>
   <li>センサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> と計測範囲の上限値 <code class="language-plaintext highlighter-rouge">RC</code> はオーバーフローしてはならない</li>
@@ -267,7 +281,9 @@ CSTS パラメータのうち、<strong>計測回数</strong> を表します。
   <li>計測範囲の上限値 <code class="language-plaintext highlighter-rouge">RC</code> は、100% のターゲット値（40960）より広くなければならない</li>
 </ul>
 
-<p>以下は、あるタッチ電極に対する探索結果です。３つの候補（<code class="language-plaintext highlighter-rouge">target candidate</code>）のうち、最後の <strong>計測回数＝1</strong> と <strong>計測（センサ駆動パルス）周波数＝16</strong> を求める解としています。</p>
+<p>この制約条件の元に、センサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> が <strong>ターゲット値の 15360</strong> に最も近くなる <code class="language-plaintext highlighter-rouge">SNUM</code> と <code class="language-plaintext highlighter-rouge">SPDA</code> の組み合わせを探索することとしています。</p>
+
+<p>以下は、あるタッチ電極に対する探索結果です。３つの候補（<code class="language-plaintext highlighter-rouge">target candidate</code>）のうち、最後の <strong>計測回数＝1</strong> と <strong>計測（センサ駆動パルス）周波数＝16</strong> が解として求まりました。</p>
 
 <figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="n">SNUM</span> <span class="o">=</span> <span class="m">8</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">2</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">58979</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">65535</span> <span class="o">--&gt;</span> <span class="n">overflow</span>
 <span class="n">SNUM</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">2</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">29488</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">46677</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
