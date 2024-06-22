@@ -272,7 +272,7 @@
   </tbody>
 </table>
 
-<p>ではどうしたかと言うと、「<strong>オフセットチューニング目標値</strong>」に対する「<strong>ターゲット値</strong>」なるものが示されているので、計測値が、デフォルトとされる「<span class="emphasis">37.5%</span>」に対する「<span class="emphasis">15360</span>」に最も近くなる「<strong>計測（センサ駆動パルス）周波数</strong>」と「<strong>計測回数</strong>」を探索することにしました。</p>
+<p>ではどうしたかと言うと、「<strong>オフセットチューニング目標値</strong>」に対する「<strong>ターゲット値</strong>」なるものが示されているので、計測値が、デフォルトとされる「<span class="emphasis">37.5%</span>」に対する「<span class="emphasis">15360</span>」に最も近くなる「<strong>計測（センサ駆動パルス）周波数</strong>」と「<strong>計測回数</strong>」の組み合わせを探索することにしました。</p>
 
 <table id="t2">
   <thead>
@@ -323,10 +323,10 @@
 CSTS パラメータのうち、<strong>計測回数</strong> を表します。</li>
   <li>
 <code class="language-plaintext highlighter-rouge">SDPA</code><br>
-ベースクロックの分周比で <strong>計測（センサ駆動パルス）周波数</strong> を表します。ベースクロックは周辺回路クロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）に設定されます。また分周比「<code class="language-plaintext highlighter-rouge">2</code>」は <code class="language-plaintext highlighter-rouge">1/6</code> を表し、以降「<code class="language-plaintext highlighter-rouge">1</code>」増える毎に <code class="language-plaintext highlighter-rouge">1/8</code>、<code class="language-plaintext highlighter-rouge">1/10</code>、… と続きます。</li>
+ベースクロックの分周比で <strong>計測（センサ駆動パルス）周波数</strong> を表します。ベースクロックを周辺回路クロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）に設定した場合、例えば分周比「<code class="language-plaintext highlighter-rouge">2</code>」は <code class="language-plaintext highlighter-rouge">1/6</code>、即ち 4MHz を表します。以降分周比が「<code class="language-plaintext highlighter-rouge">1</code>」増える毎に <code class="language-plaintext highlighter-rouge">1/8</code>、<code class="language-plaintext highlighter-rouge">1/10</code>、… と続きます。</li>
   <li>
 <code class="language-plaintext highlighter-rouge">RC</code><br>
-リファレンスカウンタを表しますが、探索処理では計測範囲の上限値を示しています。</li>
+リファレンスカウンタを表しますが、探索処理では計測レンジの上限値を示しています。</li>
   <li>
 <code class="language-plaintext highlighter-rouge">SC</code><br>
 センサカウンタ、即ち計測された静電容量に相当します。</li>
@@ -449,7 +449,7 @@ CSTS パラメータのうち、<strong>計測回数</strong> を表します。
 
 <p>また実用上は、タッチパッドに汚れが付着したり、一時的に水滴が付くなど、ベースラインが変化する可能性もあるので、ドリフト補正も必要です。</p>
 
-<p>今のところタッチ判定に影響を与えるほどではありませんが、油性マジックで描いた囲み数字がかすれてくる程度にペタペタと触っているためか（手垢が付着！）、現にドリフトが発生し始めています。</p>
+<p>今のところタッチ判定に影響を与えるほどではありませんが、油性マジックで描いた囲み数字がかすれてくる程度にペタペタと触っているためか（手垢が付着!?）、現にドリフトが発生し始めています。</p>
 
 <p>タッチ電極ごとに閾値を持たせれば、移動平均や適当な時定数でフィルタ処理するなど、ドリフト補正の実装も容易だと思います。</p>
 
