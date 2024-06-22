@@ -383,13 +383,13 @@ CSTS パラメータのうち、<strong>計測回数</strong> を表します。
 
 <div class="quote clear-both">
 
-<p>電流 <span style="color:red"><code class="language-plaintext highlighter-rouge">I1</code></span> に比例した電流が電流ミラー回路を通して <span style="color:red"><code class="language-plaintext highlighter-rouge">Iout</code></span> として出力され、ICO（電流制御発振器）で変換されたパルスのカウント値が、センサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> として計測される。</p>
+<p>電源からの <span style="color:red"><code class="language-plaintext highlighter-rouge">I1</code></span> に比例した電流が、電流ミラー回路を通じて <span style="color:red"><code class="language-plaintext highlighter-rouge">Iout</code></span> として出力され、ICO（電流制御発振器）で変換されたパルスがセンサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> として計測される。</p>
 
 <p>一方、実際の静電容量は、スイッチトキャパシタフィルタにセンサ駆動パルスを印加する DAC からの電流 <span style="color:red"><code class="language-plaintext highlighter-rouge">I2</code></span> も流れ込んで計測されるため、この影響を排除する必要がある。</p>
 
 </div>
 
-<p>つまり「ICO の制御電流で補正してやろう」という魂胆だと解釈したワケです。この手の補正をハードで処理するかソフトでやるかは、ありがちな選択肢だと思います。</p>
+<p>つまり「ICO の制御電流 <span style="color:red"><code class="language-plaintext highlighter-rouge">Iout</code></span> で補正してやろう」という魂胆だと解釈したワケです。この手の補正をハードで処理するかソフトでやるかは、ありがちな選択肢だと思います。</p>
 
 <figure class="flex">
   <a href="/images/2024/06-22/CTSU-circuit.jpg" title="図５ CTSU 計測回路" data-lightbox="image">
@@ -402,7 +402,7 @@ CSTS パラメータのうち、<strong>計測回数</strong> を表します。
   </a>
 </figure>
 
-<p>と言うことで、このパートのデバッグ出力は以下の通りです。<strong>ターゲット値の 15360</strong> とセンサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> との差 <code class="language-plaintext highlighter-rouge">diff</code> が最小となる <code class="language-plaintext highlighter-rouge">offset</code> を <strong>ICO 電流オフセット量</strong> としています。</p>
+<p>と言うことで、本パートのデバッグ出力を示します。<strong>ターゲット値の 15360</strong> とセンサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> との差 <code class="language-plaintext highlighter-rouge">diff</code> が最小となる <code class="language-plaintext highlighter-rouge">offset</code> を <strong>ICO 電流オフセット量</strong> として決定しています。</p>
 
 <figure class="highlight"><pre><code class="language-conf" data-lang="conf"><span class="n">offset</span>: <span class="m">0</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">16687</span>, <span class="n">diff</span>: <span class="m">1327</span>
 <span class="n">offset</span>: <span class="m">1</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">16492</span>, <span class="n">diff</span>: <span class="m">1132</span>
@@ -415,7 +415,7 @@ CSTS パラメータのうち、<strong>計測回数</strong> を表します。
 <span class="n">offset</span>: <span class="m">8</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">15237</span>, <span class="n">diff</span>: <span class="m">123</span>
 <span class="n">Sensor</span> <span class="n">offset</span> (<span class="n">CTSUSO0</span>.<span class="n">CTSUSO</span>): <span class="m">7</span></code></pre></figure>
 
-<p>またこの想定が成り立つ条件として、<a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> には以下の記述がありました。</p>
+<p>またこの想定が成り立つ条件として、<a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> には以下の記述があります。</p>
 
 <blockquote>
   <p>計測値は、電流制御発振器（ICO）の出力リニアリティ特性の良い範囲に収まるようにオフセットチューニング目標値を調整する必要があります。</p>
@@ -428,9 +428,9 @@ CSTS パラメータのうち、<strong>計測回数</strong> を表します。
   </a>
 </figure>
 
-<p><a href="#fig7" title="図７ ICO リファレンスカウンタ特性">図７</a> は、ICO リファレンスカウンタの特性を測定したグラフです。リファレンスカウンタとセンサカウンタは、回路的にほぼ同じと考えて良いかと思います。</p>
+<p><a href="#fig7" title="図７ ICO リファレンスカウンタ特性">図７</a> は、ICO リファレンスカウンタの特性を測定したグラフです。もう一方のセンサカウンタも、回路的にはほぼ同じ特性を持つと考えて良いかと思います。</p>
 
-<p>ただ、このグラフをもって「出力リニアリティ特性の良い範囲に収まる」と判断して良いか否かは、定かではありません…</p>
+<p>ただ、このグラフをもって「出力リニアリティ特性の良い範囲に収まる」と判断して良いかは、定かではありません…</p>
 
 <div class="clear-both"></div>
 
