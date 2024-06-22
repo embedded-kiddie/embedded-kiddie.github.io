@@ -1,4 +1,400 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-22T14:07:40+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-22T19:08:43+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編</title><link href="https://embedded-kiddie.github.io/2024/06/22/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編" /><published>2024-06-22T19:06:03+09:00</published><updated>2024-06-22T19:06:03+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/22/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/22/index.html"><![CDATA[<style>
+  .emphasis,
+  #t1 tbody tr:nth-of-type(1),
+  #t1 tbody tr:nth-of-type(2),
+  #t1 tbody tr:nth-of-type(3),
+  #t1 tbody tr:nth-of-type(9),
+  #t1 tbody tr:nth-of-type(10),
+  #t1 tbody tr:nth-of-type(11),
+  #t2 tbody tr:nth-of-type(4) {
+    background: #faf9cf;
+    color: #041fcc !important;
+    font-weight: bold;
+  }
+</style>
+
+<p><img src="/images/2024/06-22/touch-sensor.jpg" alt="試作したタッチセンサ" title="試作したタッチセンサ" width="1380" height="1050" /></p>
+
+<p><a href="/2024/06/10/" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">導入編</a> で試作タッチパッドの動作確認を <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> 製作の <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を使って行い、また <a href="/2024/06/16/" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編 | Embedded Kiddie">基本編</a> では <a href="#fig5" title="図５ CTSU 計測回路">CTSU 計測回路</a> の原理を紐解いてきましたが、日によってタッチ判定の閾値が微妙にズレて反応しなくなるという問題に遭遇しました。</p>
+
+<p>おそらく気温や湿度、僕の指の静電容量変化が原因と思われますが、何らかの較正（＝計器類の狂い・精度を、標準器と比べて正すこと）の必要性を感じた次第です。</p>
+
+<p>僕としてはこの較正を、静的または動的な <strong>キャリブレーション</strong> と呼びたいのですが、ルネサスでは <strong>チューニング</strong> と呼び（名前はどうでも良いですが…）、しっかり対策が準備されています。が、e² studio やら何やらが基本なので、Arduino 環境では工夫が必要です。</p>
+
+<p>幸い僕らには <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> という優れたライブラリがあるので、これを使って安定動作を目指すのが今回のテーマです。</p>
+
+<h2 id="まずは結果から">まずは結果から</h2>
+
+<p>以下の資料を参照し、試験的に作成したキャリブレーションの結果を示します。</p>
+
+<ol>
+  <li><span id="ref1"></span><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a></li>
+  <li><span id="ref2"></span><a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-mcu-qe-capacitive-touch-advanced-mode-parameter-guide?r=1054146" title="静電容量センサマイコン QE for Capacitive Touch アドバンスドモード(高度な設定)パラメータガイド">静電容量センサマイコン 静電容量タッチ ノイズイミュニティガイド</a></li>
+  <li><span id="ref3"></span><a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-microcontrollers-ctsu-capacitive-touch-introduction-guide?r=1054146" title="静電容量センサマイコン 静電容量タッチ導入ガイド">静電容量センサマイコン 静電容量タッチ導入ガイド</a></li>
+  <li><span id="ref4"></span><a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-mcu-capacitive-touch-noise-immunity-guide?r=1054146" title="静電容量センサマイコン 静電容量タッチ ノイズイミュニティガイド">静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド</a></li>
+  <li><span id="ref5"></span><a href="https://www.renesas.com/jp/ja/document/apn/ra-family-capacitive-touch-software-filter-sample-program?r=1054146" title="RAファミリ 静電容量タッチ ソフトウェアフィルタ サンプルプログラム">RAファミリ 静電容量タッチ ソフトウェアフィルタ サンプルプログラム</a></li>
+</ol>
+
+<p><a href="#fig1" title="図１ キャリブレーション前">図１</a> がキャリブレーション前の gif 動画で、R4_Touch デフォルトのパラメータを使用した動作例です（<a href="https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-serial-plotter/" title="Using the Serial Plotter Tool">シリアルプロッタ</a> は何気に便利ですね）。ピコピコと山が立っているところがタッチした瞬間です。見た通り、６個のスイッチの非タッチ状態（ベースライン）が異なります。</p>
+
+<p>（<a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> の名誉のために言っておきますが、パラメータが悪い訳ではなく、<a href="https://forum.arduino.cc/t/lets-play-with-the-ctsu/1187758" title="Let&#39;s play with the CTSU! - UNO R4 Minima - Arduino Forum">よく実験をした上で</a>、大抵のケースに対応できるであろう値が設定されています。）</p>
+
+<p>一方 <a href="#fig2" title="図２ キャリブレーション後">図２</a> のキャリブレーション後では、非タッチ状態のベースラインがほぼ揃い、閾値を１つにすることができました。暑い日でも雨でジトジトした日でも、安定して動作しています。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-22/calibration-before.gif" title="図１ キャリブレーション前" data-lightbox="image">
+    <img id="fig1" src="/images/2024/06-22/calibration-before.jpg" alt="図１ キャリブレーション前" width="1594" height="926" />
+  <figcaption>図１ キャリブレーション前</figcaption>
+  </a>
+  <a href="/images/2024/06-22/calibration-after.gif" title="図２ キャリブレーション後" data-lightbox="image">
+    <img id="fig2" src="/images/2024/06-22/calibration-after.jpg" alt="図２ キャリブレーション後" width="1594" height="926" />
+  <figcaption>図２ キャリブレーション後</figcaption>
+  </a>
+</figure>
+
+<h2 id="タッチ判定処理の概要">タッチ判定処理の概要</h2>
+
+<h3 id="処理フローの全体像">処理フローの全体像</h3>
+
+<p><a href="#fig3" title="静電容量式タッチセンサの処理フローと CTSU ソフトウェア群">図３</a> に <a href="#ref5" title="RAファミリ 静電容量タッチ ソフトウェアフィルタ サンプルプログラム">資料５</a> から引用した全体像を示します。企業としては当たり前のことなのでしょうが、センサ形状やら使用環境やら、およそ商品開発に必要そうなツールやソフトウェアが準備されています。きっとこれらを研究・開発した人達がいるのでしょう、頭が下がります :100:</p>
+
+<figure>
+  <img id="fig3" class="simple" src="/images/2024/06-22/software-group.jpg" alt="静電容量式タッチセンサの処理フローと CTSU ソフトウェア群" width="1380" height="440" />
+  <figcaption style="max-width:430px">図３ 静電容量式タッチセンサの処理フローと CTSU ソフトウェア群</figcaption>
+</figure>
+
+<p>また <a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> には、<a href="#t1" title="表１ CTSU パラメータと調整手法の位置付け">表１</a> に示す通り、ルネサスが提供するツールを用いて調整できるパラメータが示されています（UNO R4 では設定できないパラメータは除外してあります）。</p>
+
+<p>表中で<span class="emphasis"> ハイライトした行 </span>は、CTSU ドライバ（つまり R4_Touch）が扱うべきパラメータで、今回の較正対象です。残りはアプリケーションで扱うべきパラメータですね。</p>
+
+<table id="t1">
+  <thead>
+    <tr>
+      <th>CTSU パラメータ</th>
+      <th style="text-align: center">自動チューニング</th>
+      <th style="text-align: center">手動チューニング</th>
+      <th style="text-align: center">高度なチューニング</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>計測（センサ駆動パルス）周波数</td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>ICO 電流オフセット量</td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>タッチ判定閾値</td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>ヒステリシス</td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>ドリフト補正間隔</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>長押しキャンセルのサイクル</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>ポジティブ・ノイズフィルタのサイクル</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>ネガティブ・ノイズフィルタのサイクル</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>移動平均フィルタの深度</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">✔︎</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>計測回数</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">✔︎</td>
+    </tr>
+    <tr>
+      <td>オフセットチューニング目標値</td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">✔︎</td>
+    </tr>
+  </tbody>
+  <caption>表１ CTSU パラメータと調整手法の位置付け</caption>
+</table>
+
+<h3 id="試験的キャリブレーション手法">試験的キャリブレーション手法</h3>
+
+<p><a href="#ref3" title="静電容量センサマイコン 静電容量タッチ導入ガイド">資料３</a>、<a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> を元に、今回実施した「セルフキャリブレーション」および「タッチ判定閾値のチューニング」に関する処理フローを <a href="#fig4" title="図４ キャリブレーション／チューニングと調整パラメータ">図４</a> に示します。</p>
+
+<figure class="clear-both">
+  <img id="fig4" class="simple" src="/images/2024/06-22/tuning-parameters.jpg" alt="図４ キャリブレーション／チューニングと調整パラメータ" width="1375" height="243" />
+  <figcaption style="max-width:370px">図４ キャリブレーション／チューニングと調整パラメータ</figcaption>
+</figure>
+
+<p>それぞれを順番に見ていくことにします。</p>
+
+<h4 id="寄生容量の計測">寄生容量の計測</h4>
+
+<p><a href="#fig3" title="静電容量式タッチセンサの処理フローと CTSU ソフトウェア群">図３</a> では、最初が「静電容量計測」となってますが、絶対値を測るわけではなく、非タッチ時の寄生容量とタッチ時の静電容量の差を計測します。で、その「容量」はというと、<a href="#fig5" title="図５ CTSU 計測回路">図５</a> に示す <a href="https://cc.cqpub.co.jp/system/contents/1349/" title="不要信号が減衰するスイッチト・キャパシタ・フィルタはどっち？ - CQ出版社 オンライン・サポート・サイト CQ connect">スイッチトキャパシタフィルタ</a> の原理を用いて、回路に流れる電流を計測します。</p>
+
+<p>必然的に、スイッチトキャパシタフィルタに印加する「センサ駆動パルス」の周波数を適切に設定しなければなりません。何故ならば、計測する静電容量が大きい場合、充放電のサイクルが短いと、放電し切らないうちに充電することになり、計測値に誤差が生じるからです。</p>
+
+<p>ところが、その具体的手法や評価基準に関する記述が見当たりません。下記表を元にルネサス製のツールが「最適値を設定する」か「高度なチューニングで設定する」との記述があるだけです。きっとルネサスのノウハウなのでしょう。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th style="text-align: center">計測（センサ駆動パルス）周波数</th>
+      <th style="text-align: center">計測回数</th>
+      <th style="text-align: center">計測時間 [μs]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CTSU（RX130 の例）</td>
+      <td style="text-align: center">4.0 MHz</td>
+      <td style="text-align: center">8</td>
+      <td style="text-align: center">526</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td style="text-align: center">2.0 MHz</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">^</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td style="text-align: center">1.0 MHz</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">^</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td style="text-align: center">0.5 MHz</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">^</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ではどうしたかと言うと、「<strong>オフセットチューニング目標値</strong>」に対する「<strong>ターゲット値</strong>」なるものが示されているので、計測値が、デフォルトとされる「<span class="emphasis">37.5%</span>」に対する「<span class="emphasis">15360</span>」に最も近くなる「<strong>計測（センサ駆動パルス）周波数</strong>」と「<strong>計測回数</strong>」を探索することにしました。</p>
+
+<table id="t2">
+  <thead>
+    <tr>
+      <th style="text-align: center">オフセットチューニング目標値</th>
+      <th style="text-align: center">ターゲット値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">25.0%</td>
+      <td style="text-align: center">10240</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">30.0%</td>
+      <td style="text-align: center">12288</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">35.0%</td>
+      <td style="text-align: center">14336</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">37.5%</td>
+      <td style="text-align: center">15360</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">40.0%</td>
+      <td style="text-align: center">16384</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">45.0%</td>
+      <td style="text-align: center">18432</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">50.0%</td>
+      <td style="text-align: center">20480</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ここではプログラムを見るより、探索処理が出力するデバッグ情報の方がイメージが湧き易いと思うので、以下に説明を試みます。</p>
+
+<p>まずは記号の説明です。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SNUM</code><br />
+CSTS パラメータのうち、<strong>計測回数</strong> を表します。</li>
+  <li><code class="language-plaintext highlighter-rouge">SDPA</code><br />
+ベースクロックの分周比で <strong>計測（センサ駆動パルス）周波数</strong> を表します。ベースクロックは周辺回路クロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）に設定されます。また分周比「<code class="language-plaintext highlighter-rouge">2</code>」は <code class="language-plaintext highlighter-rouge">1/6</code> を表し、以降「<code class="language-plaintext highlighter-rouge">1</code>」増える毎に <code class="language-plaintext highlighter-rouge">1/8</code>、<code class="language-plaintext highlighter-rouge">1/10</code>、… と続きます。</li>
+  <li><code class="language-plaintext highlighter-rouge">RC</code><br />
+リファレンスカウンタを表しますが、探索処理では計測範囲の上限値を示しています。</li>
+  <li><code class="language-plaintext highlighter-rouge">SC</code><br />
+センサカウンタ、即ち計測された静電容量に相当します。</li>
+</ul>
+
+<p>また <a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> から次の制約条件を読み取り、センサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> が <strong>ターゲット値の 15360</strong> に最も近くなる <code class="language-plaintext highlighter-rouge">SNUM</code> と <code class="language-plaintext highlighter-rouge">SPDA</code> の組み合わせを探索することとしました。</p>
+
+<ul>
+  <li>センサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> と計測範囲の上限値 <code class="language-plaintext highlighter-rouge">RC</code> はオーバーフローしてはならない</li>
+  <li>センサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> は計測範囲の上限値 <code class="language-plaintext highlighter-rouge">RC</code> を超えてはならない</li>
+  <li>計測範囲の上限値 <code class="language-plaintext highlighter-rouge">RC</code> は、100% のターゲット値（40960）より広くなければならない</li>
+</ul>
+
+<p>以下は、あるタッチ電極に対する探索結果です。３つの候補（<code class="language-plaintext highlighter-rouge">target candidate</code>）のうち、最後の <strong>計測回数＝1</strong> と <strong>計測（センサ駆動パルス）周波数＝16</strong> を求める解としています。</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="n">SNUM</span> <span class="o">=</span> <span class="m">8</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">2</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">58979</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">65535</span> <span class="o">--&gt;</span> <span class="n">overflow</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">2</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">29488</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">46677</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">3</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">39322</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">52285</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">4</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">49156</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">55369</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">5</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">58989</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">57460</span> <span class="o">--&gt;</span> <span class="n">target</span> <span class="n">candidate</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">4</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">6</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">65535</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">59027</span> <span class="o">--&gt;</span> <span class="n">overflow</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">2</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">14743</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">23334</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">3</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">19663</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">26164</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">4</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">24579</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">27676</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">5</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">29494</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">28711</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">6</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">34416</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">29514</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">7</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">39316</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">30128</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">8</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">44254</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">30679</span> <span class="o">--&gt;</span> <span class="n">target</span> <span class="n">candidate</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">9</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">49160</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">31144</span> <span class="o">--&gt;</span> <span class="n">target</span> <span class="n">overshoot</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">2</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span>  <span class="m">7365</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">11657</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">3</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span>  <span class="m">9824</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">13090</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">4</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">12292</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">13862</span> <span class="o">--&gt;</span> <span class="n">SC</span><span class="o">:</span> <span class="n">out</span> <span class="n">of</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">5</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">14752</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">14359</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">6</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">17211</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">14750</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">7</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">19669</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">15079</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">8</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">22128</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">15348</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span>  <span class="m">9</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">24582</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">15584</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span> <span class="m">10</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">27035</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">15741</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span> <span class="m">11</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">29497</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">15918</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span> <span class="m">12</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">31963</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">16085</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span> <span class="m">13</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">34415</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">16240</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span> <span class="m">14</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">36879</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">16327</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span> <span class="m">15</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">39341</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">16483</span> <span class="o">--&gt;</span> <span class="n">RC</span><span class="o">:</span> <span class="n">narrow</span> <span class="k">range</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span> <span class="m">16</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">41796</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">16566</span> <span class="o">--&gt;</span> <span class="n">target</span> <span class="n">candidate</span>
+<span class="n">SNUM</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">SDPA</span> <span class="o">=</span> <span class="m">17</span><span class="p">,</span> <span class="n">RC</span> <span class="o">=</span> <span class="m">44231</span><span class="p">,</span> <span class="n">SC</span> <span class="o">=</span> <span class="m">16689</span> <span class="o">--&gt;</span> <span class="n">target</span> <span class="n">overshoot</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">Measurements</span> <span class="p">(</span><span class="n">CTSUSO0</span><span class="o">.</span><span class="n">CTSUSNUM</span><span class="p">)</span><span class="o">:</span> <span class="m">1</span>
+<span class="n">Sensor</span> <span class="n">Drive</span> <span class="n">Pulse</span> <span class="p">(</span><span class="n">CTSUSO1</span><span class="o">.</span><span class="n">CTSUSDPA</span><span class="p">)</span><span class="o">:</span> <span class="m">16</span></code></pre></figure>
+
+<p>う〜ん、これでも分かり難いですネ。</p>
+
+<h4 id="オフセットチューニング">オフセットチューニング</h4>
+
+<p>そもそも「オフセット」とは何なのか、<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ハードウェアマニュアル</a> や <a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> を読んでいて、最も分かり難かったのがこのパートです。<a href="#fig5" title="図５ CTSU 計測回路">図５</a> で僕の解釈を説明すると、次のようになります。</p>
+
+<div class="quote clear-both">
+
+<p>電流 <span style="color:red"><code class="language-plaintext highlighter-rouge">I1</code></span> に比例した電流が電流ミラー回路を通して <span style="color:red"><code class="language-plaintext highlighter-rouge">Iout</code></span> として出力され、ICO（電流制御発振器）で変換されたパルスのカウント値が、センサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> として計測される。</p>
+
+<p>一方、実際の静電容量は、スイッチトキャパシタフィルタにセンサ駆動パルスを印加する DAC からの電流 <span style="color:red"><code class="language-plaintext highlighter-rouge">I2</code></span> も流れ込んで計測されるため、この影響を排除する必要がある。</p>
+
+</div>
+
+<p>つまり「ICO の制御電流で補正してやろう」という魂胆だと解釈したワケです。この手の補正をハードで処理するかソフトでやるかは、ありがちな選択肢だと思います。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-22/CTSU-circuit.jpg" title="図５ CTSU 計測回路" data-lightbox="image">
+    <img id="fig5" class="simple" src="/images/2024/06-22/CTSU-circuit.jpg" alt="図５ CTSU 計測回路" width="1080" height="580" />
+    <figcaption>図５ CTSU 計測回路</figcaption>
+  </a>
+  <a href="/images/2024/06-22/offset-tuning.jpg" title="図６ 自己容量方式のオフセットチューニング処理" data-lightbox="image">
+    <img id="fig6" class="simple" src="/images/2024/06-22/offset-tuning.jpg" alt="図６ 自己容量方式のオフセットチューニング処理" width="1080" height="580" />
+    <figcaption style="max-width:320px">図６ 自己容量方式のオフセットチューニング処理</figcaption>
+  </a>
+</figure>
+
+<p>と言うことで、このパートのデバッグ出力は以下の通りです。<strong>ターゲット値の 15360</strong> とセンサカウンタ <code class="language-plaintext highlighter-rouge">SC</code> との差 <code class="language-plaintext highlighter-rouge">diff</code> が最小となる <code class="language-plaintext highlighter-rouge">offset</code> を <strong>ICO 電流オフセット量</strong> としています。</p>
+
+<figure class="highlight"><pre><code class="language-conf" data-lang="conf"><span class="n">offset</span>: <span class="m">0</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">16687</span>, <span class="n">diff</span>: <span class="m">1327</span>
+<span class="n">offset</span>: <span class="m">1</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">16492</span>, <span class="n">diff</span>: <span class="m">1132</span>
+<span class="n">offset</span>: <span class="m">2</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">16305</span>, <span class="n">diff</span>: <span class="m">945</span>
+<span class="n">offset</span>: <span class="m">3</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">16119</span>, <span class="n">diff</span>: <span class="m">759</span>
+<span class="n">offset</span>: <span class="m">4</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">15960</span>, <span class="n">diff</span>: <span class="m">600</span>
+<span class="n">offset</span>: <span class="m">5</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">15765</span>, <span class="n">diff</span>: <span class="m">405</span>
+<span class="n">offset</span>: <span class="m">6</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">15596</span>, <span class="n">diff</span>: <span class="m">236</span>
+<span class="n">offset</span>: <span class="m">7</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">15420</span>, <span class="n">diff</span>: <span class="m">60</span>
+<span class="n">offset</span>: <span class="m">8</span>, <span class="n">sensor</span> <span class="n">count</span>: <span class="m">15237</span>, <span class="n">diff</span>: <span class="m">123</span>
+<span class="n">Sensor</span> <span class="n">offset</span> (<span class="n">CTSUSO0</span>.<span class="n">CTSUSO</span>): <span class="m">7</span></code></pre></figure>
+
+<p>またこの想定が成り立つ条件として、<a href="#ref4" title="静電容量センサマイコン アドバンスドモード(高度な設定)パラメータガイド">資料４</a> には以下の記述がありました。</p>
+
+<blockquote>
+  <p>計測値は、電流制御発振器（ICO）の出力リニアリティ特性の良い範囲に収まるようにオフセットチューニング目標値を調整する必要があります。</p>
+</blockquote>
+
+<figure class="float-left" id="fig7">
+  <a href="/images/2024/06-22/ico-characteristic.png" title="ICO リファレンスカウンタ特性" data-lightbox="image">
+    <img class="simple" src="/images/2024/06-22/ico-characteristic-small.jpg" alt="ICO リファレンスカウンタ特性" width="459" height="327" />
+  <figcaption>図７ ICO リファレンスカウンタ特性</figcaption>
+  </a>
+</figure>
+
+<p><a href="#fig7" title="図７ ICO リファレンスカウンタ特性">図７</a> は、ICO リファレンスカウンタの特性を測定したグラフです。リファレンスカウンタとセンサカウンタは、回路的にほぼ同じと考えて良いかと思います。</p>
+
+<p>ただ、このグラフをもって「出力リニアリティ特性の良い範囲に収まる」と判断して良いか否かは、定かではありません…</p>
+
+<div class="clear-both"></div>
+
+<p>さて、試作したタッチパッドの６個のタッチ電極に、上記処理を施した結果を示します。各電極で <code class="language-plaintext highlighter-rouge">offset</code> が働き、冒頭の <a href="#fig2" title="図２ キャリブレーション後">図２</a> で示した通り、非タッチ状態での計測結果（ベースライン）が、ほぼ <strong>ターゲット値の 15360</strong> 付近に揃う結果となりました。メデタシ、メデタシ。</p>
+
+<figure class="highlight"><pre><code class="language-conf" data-lang="conf"><span class="n">pin</span>:  <span class="m">9</span>, <span class="n">div</span>: <span class="m">16</span>, <span class="n">gain</span>: <span class="m">0</span>, <span class="n">ref_current</span>: <span class="m">0</span>, <span class="n">offset</span>: <span class="m">13</span>, <span class="n">count</span>: <span class="m">1</span>
+<span class="n">pin</span>:  <span class="m">8</span>, <span class="n">div</span>: <span class="m">16</span>, <span class="n">gain</span>: <span class="m">0</span>, <span class="n">ref_current</span>: <span class="m">0</span>, <span class="n">offset</span>: <span class="m">14</span>, <span class="n">count</span>: <span class="m">1</span>
+<span class="n">pin</span>: <span class="m">15</span>, <span class="n">div</span>: <span class="m">16</span>, <span class="n">gain</span>: <span class="m">0</span>, <span class="n">ref_current</span>: <span class="m">0</span>, <span class="n">offset</span>: <span class="m">33</span>, <span class="n">count</span>: <span class="m">1</span>
+<span class="n">pin</span>: <span class="m">16</span>, <span class="n">div</span>: <span class="m">16</span>, <span class="n">gain</span>: <span class="m">0</span>, <span class="n">ref_current</span>: <span class="m">0</span>, <span class="n">offset</span>: <span class="m">35</span>, <span class="n">count</span>: <span class="m">1</span>
+<span class="n">pin</span>:  <span class="m">3</span>, <span class="n">div</span>: <span class="m">16</span>, <span class="n">gain</span>: <span class="m">0</span>, <span class="n">ref_current</span>: <span class="m">0</span>, <span class="n">offset</span>:  <span class="m">7</span>, <span class="n">count</span>: <span class="m">1</span>
+<span class="n">pin</span>:  <span class="m">2</span>, <span class="n">div</span>: <span class="m">16</span>, <span class="n">gain</span>: <span class="m">0</span>, <span class="n">ref_current</span>: <span class="m">0</span>, <span class="n">offset</span>:  <span class="m">0</span>, <span class="n">count</span>: <span class="m">1</span></code></pre></figure>
+
+<h4 id="感度計測--タッチ判定閾値決定">感度計測 〜 タッチ判定閾値決定</h4>
+
+<p>今回は、ほぼ全てのタッチ電極特性が揃ったのをイイことに、<strong>ターゲット値の 15360</strong> に適当なゲタを履かせて閾値としました。しかし本来は、非タッチ時とタッチ時の計測結果を統計処理するなどして、それぞれのタッチ電極ごとに閾値を決めるべきです。</p>
+
+<p>また実用上は、タッチパッドに汚れが付着したり、一時的に水滴が付くなど、ベースラインが変化する可能性もあるので、ドリフト補正も必要です。</p>
+
+<p>今のところタッチ判定に影響を与えるほどではありませんが、油性マジックで描いた囲み数字がかすれてくる程度にペタペタと触っているためか（手垢が付着！）、現にドリフトが発生し始めています。</p>
+
+<p>タッチ電極ごとに閾値を持たせれば、移動平均や適当な時定数でフィルタ処理するなど、ドリフト補正の実装も容易だと思います。</p>
+
+<h3 id="サンプルプログラム">サンプルプログラム</h3>
+
+<p>今回作成のソースコードを <a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/capacitive_touch" title="Arduino-UNO-R4/capacitive_touch at main · embedded-kiddie/Arduino-UNO-R4">GitHub に上げました</a>。「<a href="/2024/06/03/" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</a>」で作成した <a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX)">PeripheralMonitor</a> が組み込んであったりと、少々分かり難いところがあるかも知れませんが、紹介しなかった CTSU ドライバでの「移動平均」も組み込んであるので、よかったら覗いてみてください。</p>
+
+<h2 id="おことわり">おことわり</h2>
+
+<p><a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> には <a href="https://github.com/delta-G/R4_Touch/tree/master/examples/Auto_Tune" title="R4_Touch/examples/Auto_Tune at master · delta-G/R4_Touch">自動チューニングのサンプル</a> が添付されていますが、UNO R4 FiWi からのコマンド入力がうまくいかなかったり、算出されたパラメータやタッチ判定の閾値がイマイチだったりと、現時点のバージョンは、僕が試作したパッドと相性が良くありません。原因は CTSU 仕様の解釈の違いにあります。</p>
+
+<p>とは言え、今回紹介した僕の手法が、他の人にとって合わない可能性もあります。<a href="https://forum.arduino.cc/t/lets-play-with-the-ctsu/1187758/20" title="Let&#39;s play with the CTSU! - Delta_G の #19 - UNO R4 Minima - Arduino Forum">Delta-G 氏の言葉</a> を借りれば、これで「間違いない」とか、「最善である」とか、「正解である」などと主張するつもりは毛頭ありません。</p>
+
+<p>質問や疑問、ご提案などあれば、コメントを頂ければと思いますし、<a href="https://forum.arduino.cc/t/lets-play-with-the-ctsu/1187758" title="Let&#39;s play with the CTSU! - UNO R4 Minima - Arduino Forum">フォーラムでの議論</a> にご参加頂ければ、なお良いと思います :dizzy:</p>
+
+<h3 id="最後にちょっとだけ注意事項を">最後にちょっとだけ注意事項を…</h3>
+
+<p><a href="#ref2" title="静電容量センサマイコン 静電容量タッチ ノイズイミュニティガイド">資料２</a> には、TS 端子とタッチ電極の間にダンピング抵抗を接続することが推奨されています。一方 <a href="https://docs.arduino.cc/resources/schematics/ABX00080-schematics.pdf" title="ABX00080-schematics.pdf">Minima の回路図</a> や <a href="https://docs.arduino.cc/resources/schematics/ABX00087-schematics.pdf" title="ABX00087-schematics.pdf">WiFi の回路図</a> を見ると、Love ピンは直接 MCU に接続されていています。無闇に触って静電気で MCU にダメージを与えないよう、注意しましょう！</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</title><link href="https://embedded-kiddie.github.io/2024/06/16/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" /><published>2024-06-16T21:40:37+09:00</published><updated>2024-06-16T21:40:37+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/16/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/16/index.html"><![CDATA[<style>
   pre.mermaid {
     float: left;
     border: none;
@@ -3585,201 +3981,4 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <p>その上での感想ですが、まず第１に Cortex-M3 のレジスタに比べ Cortex-M4 のそれは何倍も難しくなっていること、そして第２に Arduino のプログラミングはライブラリのお陰で楽な反面、うまく折り合いを付けなきゃならない（コメントの少ないコードをリーディングするという）苦労があり、なかなかに手強いぞ！と感じてます。</p>
 
-<p>ともあれ、豊富な情報と関連モジュール（H/W、S/W）との組み合わせが Arduino を楽しむコツと分かってきた今日この頃です :man_shrugging:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[BGM 再生といっても tone() のことです、悪しからず。]]></summary></entry><entry><title type="html">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</title><link href="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html" rel="alternate" type="text/html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説" /><published>2024-04-09T17:43:21+09:00</published><updated>2024-05-17T10:46:57+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/09/arduino-r4-callback-timer.html"><![CDATA[<p><a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">前回の記事</a> で、<a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> による楽譜再生の課題と <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> や既存ライブラリの調査結果について書きました。</p>
-
-<p>今回は、それらを元に作成したタイマライブラリ <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a> を解説します。本ライブラリと、バックグラウンドで <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> を鳴らすライブラリ <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を組み合わせれば、「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">Lチカしながら音楽再生</a>」が出来るようになります。</p>
-
-<h2 id="callbacktimerr4">CallbackTimerR4</h2>
-<p>楽譜中には全音符以外にも、数秒間同じ音を繋げて鳴らす記号 <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> が度々現れます。例えば <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> に添付の <a href="https://ja.wikipedia.org/wiki/%E3%82%B0%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B9%E3%83%AA%E3%83%BC%E3%83%96%E3%82%B9" title="グリーンスリーブス - Wikipedia">イングランド民謡</a> <a href="https://github.com/robsoncouto/arduino-songs/tree/master/greensleeves" title="arduino-songs/greensleeves at master · robsoncouto/arduino-songs">Greensleeves</a> には最長 2571msec の音符が現れます。この時間をきっちり計り、かつ CPU リソースの使用を小さく抑えたのがこのライブラリの特徴です。</p>
-
-<p>仕組みの大雑把な話は「<a href="/2024/04/04/arduino-blink-with-bgm.html#自作のタイマ系ライブラリと-bgm-再生ライブラリ" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">自作のタイマ系ライブラリと BGM 再生ライブラリ</a>」の章を見てもらうとして、ここでは使い方とインストール方法、および正確性の確認方法を説明します。</p>
-
-<h3 id="スケッチのサンプル">スケッチのサンプル</h3>
-<p>Arduino UNO R4 の LED をフワッとさせながら Minima は TX、RX を、WiFi は TX を Lチカさせるサンプルです。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
-#include</span> <span class="cpf">"CBTimer.h"</span><span class="cp">
-</span>
-<span class="kt">void</span> <span class="nf">callback_func</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">static</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-<span class="cp">#if defined(ARDUINO_MINIMA)
-</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">++</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
-    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span>  <span class="n">LOW</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span>  <span class="n">LOW</span><span class="p">);</span>
-    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
-  <span class="p">}</span>
-
-<span class="cp">#elif defined(ARDUINO_UNOWIFIR4)
-</span>
-  <span class="c1">// P109 Port Output Data</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">++</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">R_BSP_PinWrite</span><span class="p">(</span><span class="n">BSP_IO_PORT_01_PIN_09</span><span class="p">,</span> <span class="n">BSP_IO_LEVEL_HIGH</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="n">R_BSP_PinWrite</span><span class="p">(</span><span class="n">BSP_IO_PORT_01_PIN_09</span><span class="p">,</span> <span class="n">BSP_IO_LEVEL_LOW</span><span class="p">);</span>
-  <span class="p">}</span>
-
-<span class="cp">#endif
-</span><span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// put your setup code here, to run once:</span>
-<span class="cp">#if defined(ARDUINO_MINIMA)
-</span>
-  <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_TX</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
-  <span class="n">pinMode</span><span class="p">(</span><span class="n">LED_RX</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
-
-<span class="cp">#elif defined(ARDUINO_UNOWIFIR4)
-</span>
-  <span class="c1">// setup P109 functions as GPIO output pin (PDR:1, PMR:0) for TX LED</span>
-  <span class="n">R_BSP_PinWrite</span><span class="p">(</span><span class="n">BSP_IO_PORT_01_PIN_09</span><span class="p">,</span> <span class="n">BSP_IO_LEVEL_LOW</span><span class="p">);</span>
-
-<span class="cp">#endif
-</span>
-  <span class="k">static</span> <span class="n">CBTimer</span> <span class="n">timer</span><span class="p">;</span>
-  <span class="n">timer</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">350</span> <span class="cm">/* msec cycle */</span><span class="p">,</span> <span class="n">callback_func</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// put your main code here, to run repeatedly:</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">analogWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
-    <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">255</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">analogWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
-    <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-<span class="p">}</span></code></pre></figure>
-
-<h3 id="メンバ関数の説明">メンバ関数の説明</h3>
-<h4 id="コンストラクタデストラクタ">コンストラクタ／デストラクタ</h4>
-<p><code class="language-plaintext highlighter-rouge">new</code> は使わず、クラス名 <code class="language-plaintext highlighter-rouge">CBTimer</code> 用いてインスタンス化するのが Arduino 的かと思います。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名</span><span class="p">;</span></code></pre></figure>
-
-<p>コンストラクタは特に何もしていません。デストラクタは <code class="language-plaintext highlighter-rouge">begin()</code> で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> のインスタンスが確保したタイマを解放し、再利用可能な状態にします。</p>
-
-<p>またそのインスタンス自体は <code class="language-plaintext highlighter-rouge">CBTimer</code> クラス内で静的に保持されているため、残念ながら（というか、敢えて）次のように複数を宣言しても１つしか動作しません。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">CBTimer</span> <span class="err">変数名１</span><span class="p">,</span> <span class="err">変数名２</span><span class="p">;</span> <span class="c1">// 変数名１と変数名２でFspTimerのインスタンスが共通となってしまう</span></code></pre></figure>
-
-<h4 id="初期化">初期化</h4>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
-
-<ul>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">int period_ms</code><br />
-タイマによるイベントの発火周期をミリ秒単位で指定します。</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">void (*callback)(void)</code><br />
-タイマイベントの発火周期ごとに呼び出すコールバック関数を指定します。</p>
-  </li>
-  <li>
-    <p><code class="language-plaintext highlighter-rouge">bool start</code><br />
-すぐにタイマのカウントを開始する場合は <code class="language-plaintext highlighter-rouge">true</code>（デフォルト、省略可能）を指定します。</p>
-  </li>
-  <li>
-    <p>戻り値<br />
-初期化に成功し、<code class="language-plaintext highlighter-rouge">FspTimer</code> が確保できれば <code class="language-plaintext highlighter-rouge">true</code> が、出来なければ <code class="language-plaintext highlighter-rouge">false</code> を返します。</p>
-  </li>
-</ul>
-
-<p>また次の様に <code class="language-plaintext highlighter-rouge">timer_mode</code> を指定することもできます。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">begin</span><span class="p">(</span><span class="n">timer_mode_t</span> <span class="n">timer_mode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">period_ms</span><span class="p">,</span> <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span> <span class="kt">bool</span> <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">timer_mode_t</code><br />
-タイマイベントを周期的に発火させるには列挙定数の <code class="language-plaintext highlighter-rouge">TIMER_MODE_PERIODIC</code> を、1回限りの場合は <code class="language-plaintext highlighter-rouge">TIMER_MODE_ONE_SHOT</code> を指定します。列挙定数 <code class="language-plaintext highlighter-rouge">timer_mode_t</code> は階層の深いところ（<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 Minima</a>、<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h" title="ArduinoCore-renesas/variants/UNOWIFIR4/includes/ra/fsp/inc/api/r_timer_api.h at main · arduino/ArduinoCore-renesas">UNO R4 WiFi</a>）で定義されています。</li>
-</ul>
-
-<p>その他のパラメータと戻り値は前項と同じです。</p>
-
-<h4 id="開始停止終了">開始、停止、終了</h4>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="nf">start</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-<span class="kt">bool</span> <span class="nf">stop</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">end</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span></code></pre></figure>
-
-<p>初期化関数 <code class="language-plaintext highlighter-rouge">begin()</code> の <code class="language-plaintext highlighter-rouge">start</code> に <code class="language-plaintext highlighter-rouge">false</code> を指定した場合は <code class="language-plaintext highlighter-rouge">start()</code> でタイマのカウントを開始できます。また <code class="language-plaintext highlighter-rouge">stop()</code> はカウントの停止、<code class="language-plaintext highlighter-rouge">end()</code> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> 中の <a href="/2024/04/04/arduino-blink-with-bgm.html#gpt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">GPT</a> もしくは <a href="/2024/04/04/arduino-blink-with-bgm.html#agt-とは" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">AGT</a> インスタンスを解放し、再利用可能な状態にします。</p>
-
-<h4 id="コールバック関数">コールバック関数</h4>
-<p>タイマイベントの発火と共に呼び出すコールバック関数ですが、「<a href="/2024/04/04/arduino-blink-with-bgm.html" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">割り込みハンドラの怪</a>」にも書いた通り、少なくとも UNO R4 Minima と UNO R4 WiFi では <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> も使えちゃいます。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">callback_func</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kt">uint32_t</span> <span class="n">time</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
-  <span class="p">...</span>
-<span class="p">}</span></code></pre></figure>
-
-<h3 id="インストール方法">インストール方法</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-09/download-library.jpg" title="CallbackTimerR4-main.zipのダウンロード" data-lightbox="image">
-    <img src="/images/2024/04-09/download-library-small.jpg" width="457" height="276" alt="CallbackTimerR4-main.zipのダウンロード" />
-  </a>
-  <a href="/images/2024/04-09/include-library.jpg" title="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" data-lightbox="image">
-    <img src="/images/2024/04-09/include-library-small.jpg" width="459" height="205" alt="スケッチ → ライブラリをインクルード → .ZIP形式のライブラリをインストール…" />
-  </a>
-</figure>
-
-<p>まず <a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class.">Github の CallbackTimerR4 リポジトリ</a> から画面右側にある <strong>Releases</strong> をたどり、移動先のページから最新版の <a href="https://github.com/embedded-kiddie/CallbackTimerR4/archive/refs/tags/v1.0.1.zip" title="Release Fixed undefined symbol `LED_TX` and `LED_RX` errors on UNO R4 WiFi. · embedded-kiddie/CallbackTimerR4"><span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" />Source code (zip)</span></a> をダウンロードします。</p>
-
-<p>続いて Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」から、先にダウンロードした .zip ファイルを読み込ませれば、ライブラリフォルダにインストールされます。</p>
-
-<h3 id="examples-の説明">Examples の説明</h3>
-<p>ライブラリのインストール後は、メニューの「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>カスタムライブラリのスケッチ例</strong>」から例題のスケッチを参照することができます。</p>
-
-<p>例題 <a href="https://github.com/embedded-kiddie/CallbackTimerR4/tree/main/examples/dimming_and_blinking" title="CallbackTimerR4/examples/dimming_and_blinking at main · embedded-kiddie/CallbackTimerR4"><code class="language-plaintext highlighter-rouge">dimming_and_blinking</code></a> は上記 <a href="#スケッチのサンプル">スケッチのサンプル</a> と同じなので、ここではもう１つの例題 <a href="https://github.com/embedded-kiddie/CallbackTimerR4/tree/main/examples/check-timer-accuracy" title="CallbackTimerR4/examples/check-timer-accuracy at main · embedded-kiddie/CallbackTimerR4"><code class="language-plaintext highlighter-rouge">check-timer-accuracy</code></a> について説明します。</p>
-
-<h4 id="check-timer-accuracy">check-timer-accuracy</h4>
-<p>タイマイベント発火周期の正確性（精度）をソフトウェアで観測するスケッチです。ライブラリがちゃんと働いているかを確認するために作ったスケッチで、正確性の基準はあくまで <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> や <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> ですので、参考程度のものです。</p>
-
-<p>実行時はシリアルモニタを開き、ボーレートを 115200bps に設定してください。</p>
-
-<p>スケッチ中の下記定義で、観測の基準を <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> か <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> かを切り替えます。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#if 1
-#define TIME_FUNCTION millis  // Check in milliseconds
-#define TIME_SCALE    1
-#else
-#define TIME_FUNCTION micros  // Check in microseconds
-#define TIME_SCALE    1000
-#endif</span></code></pre></figure>
-
-<p>また <code class="language-plaintext highlighter-rouge">TIME_PERIOD_MS</code> でタイマ周期を、<code class="language-plaintext highlighter-rouge">TIME_MEASUREMENT</code> で観測時間を設定します。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define TIME_PERIOD_MS    10 // 10, 50, 100, 500, 1000, 1500, 2000, 3000, ...[msec]
-#define TIME_MEASUREMENT  (60000 * TIME_SCALE)  // measurement for 1 minute</span></code></pre></figure>
-
-<p>実行結果はシリアルモニタに出力されます。下の例は、<code class="language-plaintext highlighter-rouge">TIME_PERIOD_MS</code> を 10ms に、<code class="language-plaintext highlighter-rouge">TIME_MEASUREMENT</code> を1分に設定した時の結果で、タイマの開始から <code class="language-plaintext highlighter-rouge">user_callback</code> で観測された <strong>経過時間</strong> と <strong>周期</strong>、および <strong>割り込み回数の総計</strong> を出力します。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="p">...</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">59970</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">59980</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">59990</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="mi">60000</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="mi">15</span><span class="o">:</span><span class="mi">12</span><span class="o">:</span><span class="mf">38.076</span> <span class="o">-&gt;</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">interrupts</span> <span class="o">=</span> <span class="mi">6000</span></code></pre></figure>
-
-<p>またこのスケッチ単体では GPT と AGT のうち前者が割り当てられるハズですが、下記のようにライブラリフォルダにある <code class="language-plaintext highlighter-rouge">CBTimer.cpp</code> の<code class="language-plaintext highlighter-rouge">#include "CBTimer.h</code> 直前に <code class="language-plaintext highlighter-rouge">#deifne CBTIMER_FORCE_AGT</code> を挿入すれば、強制的に AGT を割り当てて観測することが可能です。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define CBTIMER_FORCE_AGT
-#include</span> <span class="cpf">"CBTimer.h"</span></code></pre></figure>
-
-<h2 id="あとがきという名の言い訳">あとがき（という名の言い訳…）</h2>
-<p>今回作成したライブラリは単に <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer クラス</code></a> をラップしているに過ぎませんが、長周期のタイマを少ない割り込みのフットプリントで実行させられるのが特徴です（もっとも、数時間おきに何かさせたいならリアルタイムクロック（RTC）を使うべきですが…）</p>
-
-<p>ただしインスタンスは１個限りという制約があります。僕の目的からすればこれで十分というのが理由ですが、通常はタイマ１つで複数のイベントを発火させることができるので、これを使わずして貴重なタイマ資源を消費するプログラムを作るのをためらったというのがもう一つの理由です。</p>
-
-<p>複数のタスクをキックしたいなら「<a href="https://garchiving.com/interrupt-without-timer/" title="ArduinoでTimerを使わずに割り込み処理をする  &#8211;  imo Lab.">ArduinoでTimerを使わずに割り込み処理をする</a>」で紹介されている方法が、直感的かつシンプルで良いと思います。</p>
-
-<p>むしろ次に紹介予定の <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> のように、何かと組み合わせて内部に隠蔽してしまうのが適した使い方でしょう。</p>
-
-<p>ということで、次回はその <a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a> を紹介したいと思います :herb:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[前回の記事 で、tone() と delay() による楽譜再生の課題と FspTimer クラス や既存ライブラリの調査結果について書きました。]]></summary></entry></feed>
+<p>ともあれ、豊富な情報と関連モジュール（H/W、S/W）との組み合わせが Arduino を楽しむコツと分かってきた今日この頃です :man_shrugging:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="Timer" /><category term="tone" /><summary type="html"><![CDATA[BGM 再生といっても tone() のことです、悪しからず。]]></summary></entry></feed>
