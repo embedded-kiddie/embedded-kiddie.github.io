@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-23T17:07:47+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編</title><link href="https://embedded-kiddie.github.io/2024/06/22/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編" /><published>2024-06-22T19:06:03+09:00</published><updated>2024-06-22T19:06:03+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/22/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/22/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-23T17:09:31+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編</title><link href="https://embedded-kiddie.github.io/2024/06/22/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編" /><published>2024-06-22T19:06:03+09:00</published><updated>2024-06-22T19:06:03+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/22/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/22/index.html"><![CDATA[<style>
   .emphasis,
   #t1 tbody tr:nth-of-type(1),
   #t1 tbody tr:nth-of-type(2),
@@ -446,8 +446,8 @@
 <p>ここでは CTSU 計測回路の図だけを示すので、詳細は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.1444「41.3 動作説明」を読むか、導入編の <a href="/2024/06/10/#ctsu-の動作原理" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">CTSU の動作原理</a> を読み返してください。</p>
 
 <figure>
-  <img class="simple" src="/images/2024/06-10/CTSU.jpg" alt="CTSU 計測回路 - スイッチトキャパシタフィルタとICO" width="1070" height="580" />
-  <figcaption style="max-width:none">CTSU 計測回路 - スイッチトキャパシタフィルタとICO</figcaption>
+  <img class="simple" src="/images/2024/06-10/CTSU.jpg" alt="CTSU 計測回路 - スイッチトキャパシタとICO" width="1070" height="580" />
+  <figcaption style="max-width:none">CTSU 計測回路 - スイッチトキャパシタとICO</figcaption>
 </figure>
 
 <h3 id="ノイズ除去について">ノイズ除去について</h3>
@@ -499,7 +499,7 @@ flowchart TB
     <p>タッチ電極の静電容量に応じた基準電圧を印加するため、 CTSU の電源動作モードと電源能力を設定します。</p>
   </li>
   <li>
-    <p>スイッチトキャパシタフィルタと ICO の動作に必要な、CTSU のベースクロックを設定します。</p>
+    <p>スイッチトキャパシタと ICO の動作に必要な、CTSU のベースクロックを設定します。</p>
   </li>
   <li>
     <p>TSCAP 接続 SW をオンし電源と繋げることで、外付けしたデカップリングコンデンサの充電を開始します。</p>
@@ -582,7 +582,7 @@ flowchart TD
     <p><span class="strong">チャネル設定要求</span>、<span class="strong">結果読み出し要求</span>、<span class="strong">計測終了</span> の各割り込みに対し、予め SRAM ↔︎ レジスタ間の転送処理を定義したハンドラ関数を登録します。</p>
   </li>
   <li>
-    <p>CTSU 動作クロックと計測モード（自己容量マルチスキャンモード）、スイッチトキャパシタフィルタ、センサ安定待ち時間、計測チャネルの設定を行います。</p>
+    <p>CTSU 動作クロックと計測モード（自己容量マルチスキャンモード）、スイッチトキャパシタ、センサ安定待ち時間、計測チャネルの設定を行います。</p>
   </li>
   <li>
     <p>CTSU コントロールレジスタ 0 の CTSU 計測動作開始ビットに１を書き込むことで計測を開始します。</p>
