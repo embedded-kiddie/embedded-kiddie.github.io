@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-29T11:42:37+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編</title><link href="https://embedded-kiddie.github.io/2024/06/28/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編" /><published>2024-06-28T20:56:23+09:00</published><updated>2024-06-28T20:56:23+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/28/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/28/index.html"><![CDATA[<p>番外編というか、ちょっとしたお遊びネタですが、感圧センサになり得るか試してみました。タッチパッドを押す強さに応じてサーボモーターを 0°〜 180°まで駆動しています。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-29T15:50:12+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編</title><link href="https://embedded-kiddie.github.io/2024/06/28/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編" /><published>2024-06-28T20:56:23+09:00</published><updated>2024-06-28T20:56:23+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/28/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/28/index.html"><![CDATA[<p>番外編というか、ちょっとしたお遊びネタですが、感圧センサになり得るか試してみました。タッチパッドを押す強さに応じてサーボモーターを 0°〜 180°まで駆動しています。</p>
 
 <figure style="text-align: center">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/AucEHNyYjE0?si=VtTL3v4Tix0TkqZS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
   <figcaption>感圧センサになり得るかのテスト</figcaption>
 </figure>
 
-<p>これでゲームでも作れば良かったのですが…。悲しいかな、その能力もセンスもありません :cry:</p>
+<p>これでゲームでも作れれば良いのですが…。悲しいかな、その能力もセンスもありません :cry:</p>
 
 <p>さて、コレの肝心なところは、「非タッチ〜タッチ時におけるセンサ出力のダイナミックレンジを如何に上げるか」になります。例えばセンサ出力が 0 〜 100 しかなくて、ちょっと押すと「ビュンッ」と変わるより、0 〜 1000 まであった方が、微妙な操作が可能になりますよネ。</p>
 
@@ -60,7 +60,7 @@
   <li><a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a><br />
 静電容量式タッチセンシングユニットを活用するライブラリです。DTC（データトランスファコントローラ）や ELC（イベントリンクコントローラ）の使い方も勉強になります。</li>
   <li><a href="https://forum.arduino.cc/t/lets-play-with-the-ctsu/1187758" title="Let&#39;s play with the CTSU! - UNO R4 Minima - Arduino Forum">Let’s play with the CTSU!</a><br />
-<a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による CTSU 研究の議論の場です。僕もここで何度か参加しました。</li>
+<a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による CTSU に関する議論の場です。僕も何度か参加しました。</li>
   <li><a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/capacitive_touch" title="Arduino-UNO-R4/capacitive_touch at main · embedded-kiddie/Arduino-UNO-R4">capacitive_touch</a><br />
 試作タッチパッドのテスト用スケッチです。キャリブレーションのコアもここにあります。</li>
   <li><a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/capacitive_touch_love_pin" title="Arduino-UNO-R4/capacitive_touch_love_pin at main · embedded-kiddie/Arduino-UNO-R4">capacitive_touch_love_pin</a><br />
