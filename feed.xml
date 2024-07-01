@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T17:07:14+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-01T12:45:27+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T17:12:04+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-01T12:45:27+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
 
 <h2 id="はじめに">はじめに</h2>
 
@@ -142,7 +142,7 @@ Yours : 0.4.1</code></pre></figure>
 
 <h4 id="5-usb-ケーブルを差し直す">5. USB ケーブルを差し直す</h4>
 
-<p>インストール後は「ESP ダウンロードモード」という、IDE と RAM4M1 が USB 接続できないモードのままなので、USB ケーブルを抜き、再び差し込んで電源を入れ直す必要があります。</p>
+<p>インストール後は「ESP ダウンロードモード」という、IDE と RA4M1 が USB 接続できないモードのままなので、USB ケーブルを抜き、再び差し込んで電源を入れ直す必要があります。</p>
 
 <p>またインストール失敗時は、ESP ダウンロードモードに入れない限り、何をやっても IDE と繋がらない状態になります。この場合も念のため USB ケーブルの抜き差しはしておきましょう。</p>
 
