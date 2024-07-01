@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T12:47:26+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-01T12:45:27+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T13:45:28+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-01T12:45:27+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
 
 <h2 id="はじめに">はじめに</h2>
 
@@ -171,7 +171,7 @@ Yours : 0.4.1</code></pre></figure>
   </span>
 </figure>
 
-<h4 id="2-esp-ヘッダ端子のショート">2. ESP ヘッダ端子のショート</h4>
+<h4 id="2-esp-ダウンロードモードの設定">2. ESP ダウンロードモードの設定</h4>
 
 <p>次の写真にある通り、ESP ヘッダ端子の４番ピン（ESP Download）と６番ピン（GND）を、<a href="https://akizukidenshi.com/catalog/g/g103687/" title="ジャンパーピン黒(2.54mmピッチ): ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">ジャンパーピン</a> か <a href="https://akizukidenshi.com/catalog/g/g103475/" title="ブレッドボード・ジャンパー延長ワイヤ(メス-メス) 15cm黒: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">メス−メスのジャンパーワイヤ</a> でショートさせます。</p>
 
@@ -289,7 +289,9 @@ MAC address:       xx:xx:xx:xx:xx:xx
 
 <h2 id="おわりに">おわりに</h2>
 
-<p>UNO R4 WiFi ファームウェアの更新について、失敗する理由と確実に成功させる手順を見出すにあたり、下記を読み漁りました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
+<p>IDE メニューのうち、１つだけ英語のままの <strong>Firmware Updater</strong> が気になり、実行してしまったところから今回の調査となりました。USB を介さず直接 ESP32-S3 にファームウェアを送れる <a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> であれば安全にアップデートできると思いますが（未確認です…）、それにしても初心者向けには何か注意書きとか警告が欲しいですよね。</p>
+
+<p>また失敗する理由と確実に成功させる手順を見出すにために下記を読み漁った結果、RA4M1 と ESP32-S3 が互いに影響を及ぼし合う関係が見えてきました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
 
 <ul>
   <li><a href="https://github.com/arduino/arduino-ide/issues/2060" title="Firmware update fails if Serial Monitor/Plotter is open · Issue #2060 · arduino/arduino-ide">Firmware update fails if Serial Monitor/Plotter is open #2060</a> (2023年5月)</li>

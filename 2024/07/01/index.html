@@ -236,7 +236,7 @@ Yours : 0.4.1</code></pre></figure>
   </span>
 </figure>
 
-<h4 id="2-esp-ヘッダ端子のショート">2. ESP ヘッダ端子のショート</h4>
+<h4 id="2-esp-ダウンロードモードの設定">2. ESP ダウンロードモードの設定</h4>
 
 <p>次の写真にある通り、ESP ヘッダ端子の４番ピン（ESP Download）と６番ピン（GND）を、<a href="https://akizukidenshi.com/catalog/g/g103687/" title="ジャンパーピン黒(2.54mmピッチ): ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">ジャンパーピン</a> か <a href="https://akizukidenshi.com/catalog/g/g103475/" title="ブレッドボード・ジャンパー延長ワイヤ(メス-メス) 15cm黒: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">メス−メスのジャンパーワイヤ</a> でショートさせます。</p>
 
@@ -355,7 +355,9 @@ MAC address:       xx:xx:xx:xx:xx:xx
 
 <h2 id="おわりに">おわりに</h2>
 
-<p>UNO R4 WiFi ファームウェアの更新について、失敗する理由と確実に成功させる手順を見出すにあたり、下記を読み漁りました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
+<p>IDE メニューのうち、１つだけ英語のままの <strong>Firmware Updater</strong> が気になり、実行してしまったところから今回の調査となりました。USB を介さず直接 ESP32-S3 にファームウェアを送れる <a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> であれば安全にアップデートできると思いますが（未確認です…）、それにしても初心者向けには何か注意書きとか警告が欲しいですよね。</p>
+
+<p>また失敗する理由と確実に成功させる手順を見出すにために下記を読み漁った結果、RA4M1 と ESP32-S3 が互いに影響を及ぼし合う関係が見えてきました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
 
 <ul>
   <li>
@@ -398,10 +400,9 @@ MAC address:       xx:xx:xx:xx:xx:xx
       <a href="/" title="Home に戻る">Home に戻る</a>
     </p>    
   </div>
-<div id="disqus_thread"></div>
-  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/07/01/",this.page.identifier="/2024/07/01/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-</noscript>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/07/01/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
 <a class="u-url" href="/2024/07/01/" hidden></a>
 </article>
 
