@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T17:35:09+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-01T12:45:27+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-02T06:30:31+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-02T06:28:09+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
 
 <h2 id="はじめに">はじめに</h2>
 
@@ -144,7 +144,7 @@ Yours : 0.4.1</code></pre></figure>
 
 <p>インストール後は「ESP ダウンロードモード」という、IDE と RA4M1 が USB 接続できないモードのままなので、USB ケーブルを抜き、再び差し込んで電源を入れ直す必要があります。</p>
 
-<p>またインストール失敗時は、ESP ダウンロードモードに入れない限り、何をやっても IDE と繋がらない状態になります。この場合も念のため USB ケーブルの抜き差しはしておきましょう。</p>
+<p>またインストール失敗時は、何をやっても IDE と RA4M1 は繋がらない状態になります。<strong>リセットボタンのダブルクリックも効かず、LED の点滅を繰り返すだけの状態</strong> に陥ります。この場合も念のため USB ケーブルの抜き差しはしておきましょう。</p>
 
 <figure style="text-align:center">
   <img src="/images/2024/07-01/no-device-found.png" title="No device found on cu.usbmodem... Failed uploading: uploading error: exit status 1" alt="No device found on cu.usbmodem... Failed uploading: uploading error: exit status 1" width="2137" height="466" />
@@ -259,7 +259,20 @@ MAC address:       xx:xx:xx:xx:xx:xx
 
 <h2 id="uno-r4-wifi-が抱える事情">UNO R4 WiFi が抱える事情</h2>
 
-<p>ここからは僕の推測も入る余談みたいなものなので… 興味があればってことで。</p>
+<p>今回、失敗する理由と確実に成功させる手順を見出すにために下記を読み漁った結果、RA4M1 と ESP32-S3 が互いに影響を及ぼし合う関係が見えてきました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
+
+<ul>
+  <li><a href="https://github.com/arduino/arduino-ide/issues/2060" title="Firmware update fails if Serial Monitor/Plotter is open · Issue #2060 · arduino/arduino-ide">Firmware update fails if Serial Monitor/Plotter is open #2060</a> (2023年5月)</li>
+  <li><a href="https://github.com/arduino/arduino-ide/issues/2220" title="Display output from Arduino Firmware Uploader · Issue #2220 · arduino/arduino-ide">Display output from Arduino Firmware Uploader #2220</a> (2023年7月)</li>
+  <li><a href="https://forum.arduino.cc/t/arduino-uno-r4-wifi-firmware-updater/1167083" title="Arduino UNO R4 WIFI firmware updater - UNO R4 WiFi - Arduino Forum">Arduino UNO R4 WIFI firmware updater</a> (2023年9月)</li>
+  <li><a href="https://forum.arduino.cc/t/i-cant-update-the-firmware-on-my-arduino-uno-r4-wifi/1180604" title="I can&#39;t update the firmware on my Arduino Uno R4 WiFi - UNO R4 WiFi - Arduino Forum">I can’t update the firmware on my Arduino Uno R4 WiFi</a> (2023年10月)</li>
+  <li><a href="https://forum.arduino.cc/t/please-upgrade-the-firmware/1187822" title="Please upgrade the firmware - UNO R4 WiFi - Arduino Forum">Please upgrade the firmware</a> (2023年11月)</li>
+  <li><a href="https://forum.arduino.cc/t/arduino-uno-r4-wifi-firmware-update-fail/1198103" title="Arduino UNO R4 WIFI firmware update fail - UNO R4 WiFi - Arduino Forum">Arduino UNO R4 WIFI firmware update fail</a> (2023年12月)</li>
+  <li><a href="https://forum.arduino.cc/t/uno-r4-wifi-weak-signal-no-way-to-set-tx-power-on-esp32-s3/1239925" title="Uno R4 Wifi weak signal; no way to set TX power on ESP32-S3 - UNO R4 WiFi - Arduino Forum">Uno R4 Wifi weak signal; no way to set TX power on ESP32-S3</a> (2024年3月)</li>
+  <li><a href="https://forum.arduino.cc/t/error-when-updating-the-connectivity-module-firmware-on-uno-r4-wifi/1274533" title="Error when updating the connectivity module firmware on UNO R4 WiFi - UNO R4 WiFi - Arduino Forum">Error when updating the connectivity module firmware on UNO R4 WiFi</a> (2024年6月)</li>
+</ul>
+
+<p>読み間違えがあれば、ご指摘いただければと思います</p>
 
 <h3 id="ra4m1-が-esp32-s3-に及ぼす影響">RA4M1 が ESP32-S3 に及ぼす影響</h3>
 
@@ -270,7 +283,7 @@ MAC address:       xx:xx:xx:xx:xx:xx
   <figcaption style="max-width:100%">NLASB3157 アナログスイッチによる USB の切り替え</figcaption>
 </figure>
 
-<p>IDE の <strong>Firmware Updater</strong> で USB からのファームウェアデータを ESP32-S3 に流しているとき <code class="language-plaintext highlighter-rouge">P408</code> は <code class="language-plaintext highlighter-rouge">LOW</code> のハズですが、RA4M1 も USB に接続しようと <code class="language-plaintext highlighter-rouge">P408</code> を <code class="language-plaintext highlighter-rouge">HIGH</code> に切り替えるような事があると、ファームウェアデータが途切れることになります。</p>
+<p><strong>Firmware Updater</strong> 実行時、ファームウェアデータを IDE から ESP32-S3 に流しているときは <code class="language-plaintext highlighter-rouge">P408</code> は <code class="language-plaintext highlighter-rouge">LOW</code> のハズです。しかし、RA4M1 も USB に接続しようと <code class="language-plaintext highlighter-rouge">P408</code> を <code class="language-plaintext highlighter-rouge">HIGH</code> に切り替えるような事があると、送出中のファームウェアデータが途切れることになります。</p>
 
 <p>RA4M1 の USB 通信周りのソースコードを読み切れていないので推測になりますが、これが「<a href="#2-ide-とボード間の-usb-接続を完全に断ち切る">2. IDE とボード間の USB 接続を完全に断ち切る</a>」という手順が必要な理由だと思います。</p>
 
@@ -285,28 +298,90 @@ MAC address:       xx:xx:xx:xx:xx:xx
   <figcaption style="max-width:100%">TXB0108DQSR による UART のレベル変換</figcaption>
 </figure>
 
-<p>「<a href="#5-usb-ケーブルを差し直す">5. USB ケーブルを差し直す</a>」で「インストール失敗時は、ESP ダウンロードモードに入れない限り、何をやっても IDE と繋がらない状態になります」と書きましたが、リセットボタンのダブルクリックも効かず LED の点滅を繰り返す状態に陥ります。これは ESP-32 が RA4M1 のリセットを繰り返し行なっているために起きる事象ではないかと推測しています。</p>
+<p>「<a href="#5-usb-ケーブルを差し直す">5. USB ケーブルを差し直す</a>」で「<strong>インストール失敗時は、何をやっても IDE と RA4M1 は繋がらない状態になります。リセットボタンのダブルクリックも効かず、LED の点滅を繰り返すだけの状態に陥ります</strong>」と書きましたが、これは ESP-32 が RA4M1 のリセットを繰り返しているために起きる事象ではないかと推測しています。</p>
+
+<h3 id="serialprint-が遅いのななぜ">Serial.print が遅いのななぜ？</h3>
+
+<p>UNO R4 WiFi の <code class="language-plaintext highlighter-rouge">Serial.print()</code> や <code class="language-plaintext highlighter-rouge">Serial.println()</code> は Minima に比べ、とてつもなく遅い事が観測できます。例えば、<a href="https://ja.wikipedia.org/wiki/%E3%82%B8%E3%83%A3%E3%83%90%E3%82%A6%E3%82%A9%E3%83%83%E3%82%AF%E3%81%AE%E8%A9%A9" title="ジャバウォックの詩 - Wikipedia">ルイスキャロルの詩</a> の一節を <code class="language-plaintext highlighter-rouge">Serial.print</code> するだけの次のコードを実行してみます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*
+  Minima
+    ** Serial Speed Test **
+    !Serial = 1
+    Twas brillig and the slithy toves did gyre and gimble in the wabe...
+    Total Time : 207
+
+  WiFi
+    ** Serial Speed Test **
+    !Serial = 0
+    Twas brillig and the slithy toves did gyre and gimble in the wabe...
+    Total Time : 69792
+*/</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+  <span class="kt">bool</span> <span class="n">t</span> <span class="o">=</span> <span class="o">!</span><span class="n">Serial</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+
+<span class="cp">#ifdef  ARDUINO_UNOR4_WIFI
+</span>  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// It requires at least 600 ms to complete Serial initialization.</span>
+<span class="cp">#endif
+</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">** Serial Speed Test **"</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"!Serial = "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+
+  <span class="kt">uint32_t</span> <span class="n">start</span> <span class="o">=</span> <span class="n">micros</span><span class="p">();</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Twas brillig and the slithy toves did gyre and gimble in the wabe.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+  <span class="kt">uint32_t</span> <span class="n">finish</span> <span class="o">=</span> <span class="n">micros</span><span class="p">();</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Total Time : "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">finish</span> <span class="o">-</span> <span class="n">start</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{}</span></code></pre></figure>
+
+<p>結果は次の通りです（単位はμs）。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Minima [μs]</th>
+      <th style="text-align: right">WiFi [μs]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">207</td>
+      <td style="text-align: right">69792</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>上記コードは Minima の <code class="language-plaintext highlighter-rouge">Serial</code> と <code class="language-plaintext highlighter-rouge">Serial1</code> の速度違いが議論されているスレッド <a href="https://forum.arduino.cc/t/the-r4-serial-problem/1255584" title="The R4 Serial Problem - UNO R4 Minima - Arduino Forum">The R4 Serial Problem</a> からの引用です。同スレッドに示された計測結果は次の通りで、<strong>Minima の <code class="language-plaintext highlighter-rouge">Serial1.print()</code> は WiFi の <code class="language-plaintext highlighter-rouge">Serial.print()</code> とほぼ同じ速度</strong> を示しています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Serial [μs]</th>
+      <th style="text-align: right">Serial1 [μs]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">254</td>
+      <td style="text-align: right">68782</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>この結果が意味するのは、どちらも UART を使用しているということです。「なるほど、UNO R4 WiFi の <code class="language-plaintext highlighter-rouge">Serial</code> は ESP32-S3 を経由しているのね」とは簡単に納得できず、当然「なぜ、<code class="language-plaintext highlighter-rouge">P408</code> を <code class="language-plaintext highlighter-rouge">HIGH</code> にして直接 USB と繋がないの？」という疑問が湧いてきます。</p>
+
+<p>この辺りの仕組みはまだ解明できていませんが、UNO R4 WiFi と ESP32-S3 が抱える事情の１つとして挙げておきたいと思います。</p>
 
 <h2 id="おわりに">おわりに</h2>
 
-<p>IDE メニューのうち、１つだけ英語のままの <strong>Firmware Updater</strong> が気になり、実行してしまったところから今回の調査となりました。USB を介さず直接 ESP32-S3 にファームウェアを送れる <a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> であれば安全にアップデートできると思います（未確認です…）。</p>
+<p>IDE メニューの中で１つだけ英語のままの <strong>Firmware Updater</strong> が気になり、実行しちゃったところから今回の調査となりました。未確認ですが、USB を介さずネットワーク経由でファームウェアを送れる <a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> であれば安全にアップデートできると思います。</p>
 
-<p>それにしても「アップデートに失敗しました。もう一度試してください」のメッセージは、初心者には不親切過ぎます。何度試しても結果は変わらないのですから。実行前に注意書きとか警告が欲しいですよね。</p>
-
-<p>今回、失敗する理由と確実に成功させる手順を見出すにために下記を読み漁った結果、RA4M1 と ESP32-S3 が互いに影響を及ぼし合う関係が見えてきました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
-
-<ul>
-  <li><a href="https://github.com/arduino/arduino-ide/issues/2060" title="Firmware update fails if Serial Monitor/Plotter is open · Issue #2060 · arduino/arduino-ide">Firmware update fails if Serial Monitor/Plotter is open #2060</a> (2023年5月)</li>
-  <li><a href="https://github.com/arduino/arduino-ide/issues/2220" title="Display output from Arduino Firmware Uploader · Issue #2220 · arduino/arduino-ide">Display output from Arduino Firmware Uploader #2220</a> (2023年7月)</li>
-  <li><a href="https://forum.arduino.cc/t/arduino-uno-r4-wifi-firmware-updater/1167083" title="Arduino UNO R4 WIFI firmware updater - UNO R4 WiFi - Arduino Forum">Arduino UNO R4 WIFI firmware updater</a> (2023年9月)</li>
-  <li><a href="https://forum.arduino.cc/t/i-cant-update-the-firmware-on-my-arduino-uno-r4-wifi/1180604" title="I can&#39;t update the firmware on my Arduino Uno R4 WiFi - UNO R4 WiFi - Arduino Forum">I can’t update the firmware on my Arduino Uno R4 WiFi</a> (2023年10月)</li>
-  <li><a href="https://forum.arduino.cc/t/please-upgrade-the-firmware/1187822" title="Please upgrade the firmware - UNO R4 WiFi - Arduino Forum">Please upgrade the firmware</a> (2023年11月)</li>
-  <li><a href="https://forum.arduino.cc/t/arduino-uno-r4-wifi-firmware-update-fail/1198103" title="Arduino UNO R4 WIFI firmware update fail - UNO R4 WiFi - Arduino Forum">Arduino UNO R4 WIFI firmware update fail</a> (2023年12月)</li>
-  <li><a href="https://forum.arduino.cc/t/uno-r4-wifi-weak-signal-no-way-to-set-tx-power-on-esp32-s3/1239925" title="Uno R4 Wifi weak signal; no way to set TX power on ESP32-S3 - UNO R4 WiFi - Arduino Forum">Uno R4 Wifi weak signal; no way to set TX power on ESP32-S3</a> (2024年3月)</li>
-  <li><a href="https://forum.arduino.cc/t/error-when-updating-the-connectivity-module-firmware-on-uno-r4-wifi/1274533" title="Error when updating the connectivity module firmware on UNO R4 WiFi - UNO R4 WiFi - Arduino Forum">Error when updating the connectivity module firmware on UNO R4 WiFi</a> (2024年6月)</li>
-</ul>
-
-<p>読み間違えがあれば、ご指摘いただければと思います :man_cook:</p>
+<p>それにしても「アップデートに失敗しました。もう一度試してください」のメッセージは、初心者には不親切過ぎます。何度試しても結果は変わらないのですから。実行前に注意書きとか警告が欲しいですよね :man_cook:</p>
 
 <hr />
 
