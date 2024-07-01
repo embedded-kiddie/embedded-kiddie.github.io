@@ -374,7 +374,7 @@ MAC address:       xx:xx:xx:xx:xx:xx
 
 <p>「<a href="#5-usb-%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB%E3%82%92%E5%B7%AE%E3%81%97%E7%9B%B4%E3%81%99">5. USB ケーブルを差し直す</a>」で「<strong>インストール失敗時は、何をやっても IDE と RA4M1 は繋がらない状態になります。リセットボタンのダブルクリックも効かず、LED の点滅を繰り返すだけの状態に陥ります</strong>」と書きましたが、これは ESP-32 が RA4M1 のリセットを繰り返しているために起きる事象ではないかと推測しています。</p>
 
-<h3 id="serialprint-が遅いのななぜ">Serial.print が遅いのななぜ？</h3>
+<h3 id="serialprint-が遅いのはなぜ">Serial.print が遅いのはなぜ？</h3>
 
 <p>UNO R4 WiFi の <code class="language-plaintext highlighter-rouge">Serial.print()</code> や <code class="language-plaintext highlighter-rouge">Serial.println()</code> は Minima に比べ、とてつもなく遅い事が観測できます。例えば、<a href="https://ja.wikipedia.org/wiki/%E3%82%B8%E3%83%A3%E3%83%90%E3%82%A6%E3%82%A9%E3%83%83%E3%82%AF%E3%81%AE%E8%A9%A9" title="ジャバウォックの詩 - Wikipedia">ルイスキャロルの詩</a> の一節を <code class="language-plaintext highlighter-rouge">Serial.print</code> するだけの次のコードを実行してみます。</p>
 
