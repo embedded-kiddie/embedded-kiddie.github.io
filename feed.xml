@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T13:45:28+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-01T12:45:27+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T13:56:23+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-01T12:45:27+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
 
 <h2 id="はじめに">はじめに</h2>
 
@@ -162,12 +162,12 @@ Yours : 0.4.1</code></pre></figure>
 <ul>
   <li><strong>IDE が立ち上がっていると更新に失敗する</strong> ので、終了させておきます。</li>
   <li><code class="language-plaintext highlighter-rouge">espflash</code> の起動時に USB デバイス名の選択を間違えないよう、できるだけ PC から USB デバイスを抜いておきます。</li>
-  <li>GitHub から <a href="https://github.com/arduino/uno-r4-wifi-usb-bridge/releases/tag/0.4.1">最新版の更新用スクリプト</a> を OS に合わせてダウンロード＆解凍します。</li>
+  <li>GitHub から OS 毎の <a href="https://github.com/arduino/uno-r4-wifi-usb-bridge/releases/tag/0.4.1">最新版アップデート用スクリプト</a> をダウンロード＆解凍します。</li>
 </ul>
 <figure style="text-align:center">
   <span>
     <img src="/images/2024/07-01/downloaded-updater.png" alt="" width="1110" height="453" />
-    <figcaption style="max-width:100%">ダウンロード＆解凍された更新用スクリプト（MacOS の場合）</figcaption>
+    <figcaption style="max-width:100%">ダウンロード＆解凍されたアップデート用スクリプト（MacOS の場合）</figcaption>
   </span>
 </figure>
 
@@ -183,7 +183,7 @@ Yours : 0.4.1</code></pre></figure>
 
 <h4 id="4-ターミナルまたはシェルの起動">4. ターミナル（またはシェル）の起動</h4>
 
-<p>解凍した更新用スクリプトのフォルダで、ターミナルソフト（またはシェル）を起動します。</p>
+<p>解凍したアップデート用スクリプトのフォルダで、ターミナルソフト（またはシェル）を起動します。</p>
 
 <ul>
   <li>Windows の場合<br />
