@@ -355,9 +355,11 @@ MAC address:       xx:xx:xx:xx:xx:xx
 
 <h2 id="おわりに">おわりに</h2>
 
-<p>IDE メニューのうち、１つだけ英語のままの <strong>Firmware Updater</strong> が気になり、実行してしまったところから今回の調査となりました。USB を介さず直接 ESP32-S3 にファームウェアを送れる <a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> であれば安全にアップデートできると思いますが（未確認です…）、それにしても初心者向けには何か注意書きとか警告が欲しいですよね。</p>
+<p>IDE メニューのうち、１つだけ英語のままの <strong>Firmware Updater</strong> が気になり、実行してしまったところから今回の調査となりました。USB を介さず直接 ESP32-S3 にファームウェアを送れる <a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> であれば安全にアップデートできると思います（未確認です…）。</p>
 
-<p>また失敗する理由と確実に成功させる手順を見出すにために下記を読み漁った結果、RA4M1 と ESP32-S3 が互いに影響を及ぼし合う関係が見えてきました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
+<p>それにしても「アップデートに失敗しました。もう一度試してください」のメッセージは、初心者には不親切過ぎます。何度試しても結果は変わらないのですから。実行前に注意書きとか警告が欲しいですよね。</p>
+
+<p>今回、失敗する理由と確実に成功させる手順を見出すにために下記を読み漁った結果、RA4M1 と ESP32-S3 が互いに影響を及ぼし合う関係が見えてきました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
 
 <ul>
   <li>
