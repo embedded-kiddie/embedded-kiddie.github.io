@@ -1,4 +1,318 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-06-29T15:50:12+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編</title><link href="https://embedded-kiddie.github.io/2024/06/28/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編" /><published>2024-06-28T20:56:23+09:00</published><updated>2024-06-28T20:56:23+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/28/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/28/index.html"><![CDATA[<p>番外編というか、ちょっとしたお遊びネタですが、感圧センサになり得るか試してみました。タッチパッドを押す強さに応じてサーボモーターを 0°〜 180°まで駆動しています。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T12:47:26+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 WiFiファームウェアアップデートと失敗時のリカバリ方法" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-01T12:45:27+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>Arduino ボードの WiFi ファームウェアのアップデートに関するドキュメントは、以下の３つがありますが、UNO R4 WiFi 向けは後の２つです。</p>
+
+<ol>
+  <li><a href="https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-fw-cert-uploader/" title="Software tools - Adruino Docs">Updating Firmware version and Uploading Certificates</a> （最終更新：2024/01/17）</li>
+  <li><a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/esp32-upload/" title="UNO R4 WiFi Custom Firmware Upload to ESP32 (Advanced)">UNO R4 WiFi Custom Firmware Upload to ESP32 (Advanced)</a> （最終更新：2023/11/14）</li>
+  <li><a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi" title="Update the connectivity module firmware on UNO R4 WiFi &ndash; Arduino Help Center">Update the connectivity module firmware on UNO R4 WiFi</a> （最終更新：2024/04/11）</li>
+</ol>
+
+<p>本項では最新の「3.」を元に、以下の項目について調査結果を報告します。</p>
+
+<h3 id="目次">目次</h3>
+
+<ul>
+  <li><a href="#wifi-ファームウェアバージョンの確認方法">WiFi ファームウェアバージョンの確認方法</a></li>
+  <li><a href="#失敗しない-wifi-ファームウェアの更新方法">失敗しない WiFi ファームウェアの更新方法</a></li>
+  <li><a href="#更新に失敗した時のリカバリ方法">更新に失敗した時のリカバリ方法</a></li>
+  <li><a href="#uno-r4-wifi-が抱える事情">UNO R4 WiFi が抱える事情</a></li>
+</ul>
+
+<h2 id="wifi-ファームウェアバージョンの確認方法">WiFi ファームウェアバージョンの確認方法</h2>
+
+<p>次のコードで確認することができます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;WiFiS3.h&gt;</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// UNO R4 WiFi は、Serial 初期化完了まで少なくとも 600 ms 必要</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Latest: "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">WIFI_FIRMWARE_LATEST_VERSION</span><span class="p">));</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Yours : "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">WiFi</span><span class="p">.</span><span class="n">firmwareVersion</span><span class="p">()));</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>本稿執筆時点の Arduino IDE バージョンは 2.3.2 では、次のように表示されるハズです。ちなみに <a href="https://github.com/arduino/uno-r4-wifi-usb-bridge/releases/tag/0.4.1" title="Release Release 0.4.1 · arduino/uno-r4-wifi-usb-bridge">0.4.1 は 2024年2月16日の更新</a> です。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Latest: 0.4.1
+Yours : 0.4.1</code></pre></figure>
+
+<h2 id="失敗しない-wifi-ファームウェアの更新方法">失敗しない WiFi ファームウェアの更新方法</h2>
+
+<p><a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi" title="Update the connectivity module firmware on UNO R4 WiFi &ndash; Arduino Help Center">Update the connectivity module firmware on UNO R4 WiFi</a> には、ファームウェアの更新方法として以下の４つが挙げられています。</p>
+
+<ul>
+  <li>Arduino IDE の Firmware Updater による更新</li>
+  <li><a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> から OTA（Over The Air）による更新</li>
+  <li>アップデート用スクリプトによる更新</li>
+  <li>espflash による更新</li>
+</ul>
+
+<p>既に Arduino Cloud を利用していれば最新版に更新されているハズなので、ここでは最もベーシックな <strong>Firmware Updater</strong> による更新を、注意事項と共に解説します。</p>
+
+<h3 id="firmware-updater">Firmware Updater</h3>
+
+<p>「なんだ、実行するだけだろ」と思ったせっかちなアナタ、チョット待ってください。UNO R4 WiFi には他のボードには無い事情があり、ちゃんと以下のステップに従わないと、僕のように慌てふためくことになります。</p>
+
+<h4 id="1-bareminimum-スケッチをアップロードする">1. BareMinimum スケッチをアップロードする</h4>
+
+<p>IDE のメニューから「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>01.Basics</strong> → <strong>BareMinimum</strong>」を開き、コンパイルした後、書き込みます。</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-01/01-BareMinimum.jpg" title="BareMinimum" data-lightbox="image">
+    <img src="/images/2024/07-01/01-BareMinimum-small.jpg" alt="BareMinimum" width="459" height="297" />
+    <figcaption>BareMinimum</figcaption>
+  </a>
+  <a href="/images/2024/07-01/02-CompileUpload.jpg" title="BareMinimum" data-lightbox="image">
+    <img src="/images/2024/07-01/02-CompileUpload-small.jpg" alt="BareMinimum" width="474" height="296" />
+    <figcaption>コンパイルと書き込み</figcaption>
+  </a>
+</figure>
+
+<p>新規スケッチを開いても良いでしょう。とにかく何もしない空のスケッチが必要です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="p">}</span></code></pre></figure>
+
+<h4 id="2-ide-とボード間の-usb-接続を完全に断ち切る">2. IDE とボード間の USB 接続を完全に断ち切る</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/07-01/03-Unconnected.jpg" title="「出力」を閉じ、[未接続] を確認" data-lightbox="image">
+    <img src="/images/2024/07-01/03-Unconnected-small.jpg" alt="「出力」を閉じ、[未接続] を確認" width="459" height="287" />
+    <figcaption>「出力」を閉じ、[未接続] を確認</figcaption>
+  </a>
+</figure>
+
+<p>一旦ボードから USB ケーブルを完全に抜き、電源を OFF した後、IDE も終了させます。再び IDE を開き、シリアルモニタが閉じていること確認しましす。また複数の IDE が立ち上がっている場合も１つだけ残して他は全て閉じます。</p>
+
+<p>さらに最下端のステータスバーで「<strong>出力</strong>」コンソールを閉じ、ステータスが <strong>[未接続]</strong> となっていることを確認します。</p>
+
+<h4 id="3-firmware-updater-を実行する">3. Firmware Updater を実行する</h4>
+
+<p>IDE のメニュから「<strong>ツール</strong> → <strong>Firmware Updater</strong>」を選択します。続いて USB ケーブルを挿し電源を入れると「<strong>ボードを選択</strong>」が選べるようになります。UNO R4 WiFi を選択したら <strong>アップデートを確認</strong> を押し、<strong>ファームウェアのバージョンを選択</strong>します。この時、ダウングレードも可能です。</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-01/04-FirmwareUpdate.jpg" title="Firmware Updater を起動" data-lightbox="image">
+    <img src="/images/2024/07-01/04-FirmwareUpdate-small.jpg" alt="Firmware Updater を起動" width="459" height="287" />
+    <figcaption>Firmware Updater を起動</figcaption>
+  </a>
+  <a href="/images/2024/07-01/05-SelectBoard.jpg" title="ボードを選択" data-lightbox="image">
+    <img src="/images/2024/07-01/05-SelectBoard-small.jpg" alt="ボードを選択" width="459" height="287" />
+    <figcaption>ボードを選択</figcaption>
+  </a>
+  <a href="/images/2024/07-01/06-SelectVersion.jpg" title="ファームウェアのバージョンを選択" data-lightbox="image">
+    <img src="/images/2024/07-01/06-SelectVersion-small.jpg" alt="ファームウェアのバージョンを選択" width="459" height="287" />
+    <figcaption>ファームウェアのバージョンを選択</figcaption>
+  </a>
+</figure>
+
+<h4 id="4-インストールを実行">4. インストールを実行</h4>
+
+<p><strong>インストール</strong> を開始すると、約１分弱で完了します。</p>
+
+<p>運悪く（＝ボードと IDE 間の USB 接続を完全に断ち切れなかった）インストールに失敗したら、次の <a href="#更新に失敗した時のリカバリ方法">更新に失敗した時のリカバリ方法</a> からの再インストールが必要です。</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-01/07-Installing.jpg" title="インストール開始" data-lightbox="image">
+    <img src="/images/2024/07-01/07-Installing-small.jpg" alt="インストール開始" width="459" height="287" />
+    <figcaption>インストール開始</figcaption>
+  </a>
+  <a href="/images/2024/07-01/08-InstallSuccess.jpg" title="インストール成功" data-lightbox="image">
+    <img src="/images/2024/07-01/08-InstallSuccess-small.jpg" alt="インストール成功" width="459" height="287" />
+    <figcaption>インストール成功</figcaption>
+  </a>
+  <a href="/images/2024/07-01/09-InstallFail.jpg" title="インストール失敗" data-lightbox="image">
+    <img src="/images/2024/07-01/09-InstallFail-small.jpg" alt="インストール失敗" width="459" height="287" />
+    <figcaption>インストール失敗</figcaption>
+  </a>
+</figure>
+
+<h4 id="5-usb-ケーブルを差し直す">5. USB ケーブルを差し直す</h4>
+
+<p>インストール後は「ESP ダウンロードモード」という、IDE と RAM4M1 が USB 接続できないモードのままなので、USB ケーブルを抜き、再び差し込んで電源を入れ直す必要があります。</p>
+
+<p>またインストール失敗時は、ESP ダウンロードモードに入れない限り、何をやっても IDE と繋がらない状態になります。この場合も念のため USB ケーブルの抜き差しはしておきましょう。</p>
+
+<figure style="text-align:center">
+  <img src="/images/2024/07-01/no-device-found.png" title="No device found on cu.usbmodem... Failed uploading: uploading error: exit status 1" alt="No device found on cu.usbmodem... Failed uploading: uploading error: exit status 1" width="2137" height="466" />
+  <figcaption style="max-width:100%">No device found on cu.usbmodem... Failed uploading: uploading error: exit status 1</figcaption>
+</figure>
+
+<h2 id="更新に失敗した時のリカバリ方法">更新に失敗した時のリカバリ方法</h2>
+
+<p><a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi" title="Update the connectivity module firmware on UNO R4 WiFi &ndash; Arduino Help Center">Update the connectivity module firmware on UNO R4 WiFi</a> には <a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi#use-the-updater-script" title="Update the connectivity module firmware on UNO R4 WiFi &ndash; Arduino Help Center">アップデート用スクリプト</a> と <a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi#run-espflash-directly" title="Update the connectivity module firmware on UNO R4 WiFi &ndash; Arduino Help Center">espflash</a> の直接実行の２通りが示されています。<a href="https://github.com/arduino/uno-r4-wifi-usb-bridge/tree/main/unor4wifi-updater#troubleshooting" title="uno-r4-wifi-usb-bridge/unor4wifi-updater at main · arduino/uno-r4-wifi-usb-bridge">前者が失敗した時の最後の砦として後者が紹介されている</a> ので、ここでは後者でリカバリを試みることにします。</p>
+
+<h3 id="espflash-の直接実行">espflash の直接実行</h3>
+
+<h4 id="1-pc-の下準備">1. PC の下準備</h4>
+
+<ul>
+  <li><strong>IDE が立ち上がっていると更新に失敗する</strong> ので、終了させておきます。</li>
+  <li><code class="language-plaintext highlighter-rouge">espflash</code> の起動時に USB デバイス名の選択を間違えないよう、できるだけ PC から USB デバイスを抜いておきます。</li>
+  <li>GitHub から <a href="https://github.com/arduino/uno-r4-wifi-usb-bridge/releases/tag/0.4.1">最新版の更新用スクリプト</a> を OS に合わせてダウンロード＆解凍します。</li>
+</ul>
+<figure style="text-align:center">
+  <span>
+    <img src="/images/2024/07-01/downloaded-updater.png" alt="" width="1110" height="453" />
+    <figcaption style="max-width:100%">ダウンロード＆解凍された更新用スクリプト（MacOS の場合）</figcaption>
+  </span>
+</figure>
+
+<h4 id="2-esp-ヘッダ端子のショート">2. ESP ヘッダ端子のショート</h4>
+
+<p>次の写真にある通り、ESP ヘッダ端子の４番ピン（ESP Download）と６番ピン（GND）を、<a href="https://akizukidenshi.com/catalog/g/g103687/" title="ジャンパーピン黒(2.54mmピッチ): ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">ジャンパーピン</a> か <a href="https://akizukidenshi.com/catalog/g/g103475/" title="ブレッドボード・ジャンパー延長ワイヤ(メス-メス) 15cm黒: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">メス−メスのジャンパーワイヤ</a> でショートさせます。</p>
+
+<p><img src="/images/2024/07-01/esp32-data-pins.png" alt="ESP ヘッダピンのショート" title="ESP ヘッダーピンのショート" width="830" height="430" /></p>
+
+<h4 id="3-ボードと-pc-の接続">3. ボードと PC の接続</h4>
+
+<p>UNO R4 WiFi を PC と USB ケーブルで接続し、ボードに電源を供給します。</p>
+
+<h4 id="4-ターミナルまたはシェルの起動">4. ターミナル（またはシェル）の起動</h4>
+
+<p>解凍した更新用スクリプトのフォルダで、ターミナルソフト（またはシェル）を起動します。</p>
+
+<ul>
+  <li>Windows の場合<br />
+フォルダの余白で 「<code class="language-plaintext highlighter-rouge">Shift</code> キー」＋「<strong>右クリック</strong> → <strong>PowerShellウィンドウをここで開く</strong>」</li>
+  <li>MacOS の場合<br />
+フォルダを「<strong>右クリック</strong> → <strong>サービス</strong> → <strong>フォルダに新規ターミナル</strong>」</li>
+  <li>ご参考<br />
+<a href="https://aadojo.alterbooth.com/entry/2023/01/17/110000" title="特定のディレクトリでターミナルをかんたんに開く方法！【Win / Mac どちらも紹介！】 - Alternative Architecture DOJO">特定のディレクトリでターミナルをかんたんに開く方法！【Win / Mac どちらも紹介！】</a></li>
+</ul>
+
+<h4 id="5-espflash-の起動">5. espflash の起動</h4>
+
+<p>ターミナル（またはシェル）から次のコマンドで <code class="language-plaintext highlighter-rouge">espflash</code> を起動します。</p>
+
+<ul>
+  <li>Windows</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">bin\espflash</span><span class="w"> </span><span class="nx">write-bin</span><span class="w"> </span><span class="nt">-b</span><span class="w"> </span><span class="nx">115200</span><span class="w"> </span><span class="nx">0x0</span><span class="w"> </span><span class="p">(</span><span class="n">Get-Item</span><span class="w"> </span><span class="o">.</span><span class="nx">\firmware\UNOR4-WIFI-S3-</span><span class="o">*.</span><span class="nf">bin</span><span class="p">)</span><span class="o">.</span><span class="nf">FullName</span></code></pre></figure>
+
+<ul>
+  <li>MacOS / Linux</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./bin/espflash write-bin <span class="nt">-b</span> 115200 0x0 firmware/UNOR4-WIFI-S3-<span class="k">*</span>.bin</code></pre></figure>
+
+<p>おそらく Windows、MacOS とも下のような警告が出るでしょう。</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-01/security-windows.png" title="セキュリティ警告（Windows）" data-lightbox="image">
+    <img src="/images/2024/07-01/security-windows.png" alt="セキュリティ警告（Windows）" width="427" height="400" />
+    <figcaption>セキュリティ警告（Windows）</figcaption>
+  </a>
+  <a href="/images/2024/07-01/security-macos.png" title="セキュリティ警告（MacOS）" data-lightbox="image">
+    <img src="/images/2024/07-01/security-macos.png" alt="セキュリティ警告（MacOS）" width="376" height="399" />
+    <figcaption>セキュリティ警告（MacOS）</figcaption>
+  </a>
+</figure>
+
+<p>Windows の場合は「<strong>詳細情報</strong>」を開き「<strong>実行</strong>」を押します。MacOS の場合は、次のコマンドを実行し、再び <code class="language-plaintext highlighter-rouge">espflash</code> を起動します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">chmod </span>a+x update.command <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>xattr <span class="nt">-d</span> com.apple.quarantine bin/espflash <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>xattr <span class="nt">-d</span> com.apple.quarantine bin/unor4wifi-reboot-macos</code></pre></figure>
+
+<h4 id="6-usb-ドライバの選択">6. USB ドライバの選択</h4>
+
+<p><code class="language-plaintext highlighter-rouge">espflash</code> からは、下のようなメッセージと共に USB ドライバを選択するよう促されるので、矢印キーで「❯」を上下させ、正しいドライバ名（<code class="language-plaintext highlighter-rouge">/dev/cu.usbmodem...</code>）を選択します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>2024-06-25T09:18:07Z INFO <span class="o">]</span> 🚀 A new version of espflash is available: v3.1.0
+<span class="o">[</span>2024-06-25T09:18:07Z INFO <span class="o">]</span> Detected 2 serial ports
+<span class="o">[</span>2024-06-25T09:18:07Z INFO <span class="o">]</span> Ports which match a known common dev board are highlighted
+<span class="o">[</span>2024-06-25T09:18:07Z INFO <span class="o">]</span> Please <span class="k">select </span>a port
+❯ /dev/cu.usbmodemDC5475EAF4182 - UNO WiFi R4 CMSIS_DAP
+  /dev/tty.usbmodemDC5475EAF4182 - UNO WiFi R4 CMSIS_DAP</code></pre></figure>
+
+<p>その後、書き込みが始まり、次のようになれば終了です。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>2024-06-25T08:38:17Z INFO <span class="o">]</span> Serial port: <span class="s1">'/dev/cu.usbmodem14201'</span>
+<span class="o">[</span>2024-06-25T08:38:17Z INFO <span class="o">]</span> Connecting...
+<span class="o">[</span>2024-06-25T08:38:17Z INFO <span class="o">]</span> Using flash stub
+Chip <span class="nb">type</span>:         esp32s3 <span class="o">(</span>revision v0.2<span class="o">)</span>
+Crystal frequency: 40MHz
+Flash size:        8MB
+Features:          WiFi, BLE
+MAC address:       xx:xx:xx:xx:xx:xx
+<span class="o">[</span>00:00:15] <span class="o">[========================================]</span>     877/877     0x0</code></pre></figure>
+
+<p>また以下のようなエラーが出ることがあります。 IDE が立ち上がっていないか、または正しい USB デバイス名を確認し、再度 <code class="language-plaintext highlighter-rouge">espflash</code> を起動します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Error: espflash::timeout
+
+  × Error <span class="k">while </span>connecting to device
+  ╰─▶ Timeout <span class="k">while </span>running FlashDeflateData <span class="nb">command</span></code></pre></figure>
+
+<h2 id="uno-r4-wifi-が抱える事情">UNO R4 WiFi が抱える事情</h2>
+
+<p>ここからは僕の推測も入る余談みたいなものなので… 興味があればってことで。</p>
+
+<h3 id="ra4m1-が-esp32-s3-に及ぼす影響">RA4M1 が ESP32-S3 に及ぼす影響</h3>
+
+<p>まずは UNO R4 WiFi の回路図による事実確認です。次の図は、<a href="https://www.onsemi.jp/products/interfaces/analog-switches/NLASB3157" title="NLASB3157">NLASB3157</a> というアナログスイッチ IC 周りの回路図です。USB の作動信号ライン（<code class="language-plaintext highlighter-rouge">USB_D_P</code>、<code class="language-plaintext highlighter-rouge">USB_D_N</code>）が、RA4M1 の <code class="language-plaintext highlighter-rouge">P408</code> または <code class="language-plaintext highlighter-rouge">SJ1</code>（基板裏面の <code class="language-plaintext highlighter-rouge">RAM4M1 USB</code> 半田ブリッジジャンパ）によって切り替え可能になっている事が分かります。</p>
+
+<figure style="text-align:center">
+  <img class="simple" src="/images/2024/07-01/AnalogSwitch.png" alt="NLASB3157 アナログスイッチによる USB の切り替え" width="1900" height="700" />
+  <figcaption style="max-width:100%">NLASB3157 アナログスイッチによる USB の切り替え</figcaption>
+</figure>
+
+<p>IDE の <strong>Firmware Updater</strong> で USB からのファームウェアデータを ESP32-S3 に流しているとき <code class="language-plaintext highlighter-rouge">P408</code> は <code class="language-plaintext highlighter-rouge">LOW</code> のハズですが、RA4M1 も USB に接続しようと <code class="language-plaintext highlighter-rouge">P408</code> を <code class="language-plaintext highlighter-rouge">HIGH</code> に切り替えるような事があると、ファームウェアデータが途切れることになります。</p>
+
+<p>RA4M1 の USB 通信周りのソースコードを読み切れていないので推測になりますが、これが「<a href="#2-ide-とボード間の-usb-接続を完全に断ち切る">2. IDE とボード間の USB 接続を完全に断ち切る</a>」が必要な理由だと思います。</p>
+
+<p>この問題は、UNO R4 WiFi が市場に出回る（2023年10月）以前から <a href="https://github.com/arduino/arduino-ide/issues/2060" title="Firmware update fails if Serial Monitor/Plotter is open · Issue #2060 · arduino/arduino-ide">IDE 開発の公式 GitHub で issue に上がっていましたが</a>、<a href="https://github.com/arduino/arduino-ide/issues/2220" title="Display output from Arduino Firmware Uploader · Issue #2220 · arduino/arduino-ide">アプリケーションによる USB 通信の問題</a> もあり、IDE だけではどうにもならない問題と思われます。</p>
+
+<h3 id="esp32-s3-が-ra4m1-に及ぼす影響">ESP32-S3 が RA4M1 に及ぼす影響</h3>
+
+<p>一方、ESP32-S3 と RA4M1 との間には <a href="https://www.ti.com/product/ja-jp/TXB0108/part-details/TXB0108DQSR">TXB0108DQSR</a> という UART のレベル変換を行う IC があり、ESP32-S3 側から RA4M1 をリセットすることが可能になっています。恐らく RA4M1 にプログラムを書き込む際、「<strong>IDE</strong> → <strong>アナログスイッチ IC</strong> → <strong>ESP32-S3 (USB)</strong> → <strong>レベル変換 IC</strong> → <strong>RA4M1 (UART)</strong>」という経路を辿り<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>、その後リセットをかけるための仕掛けでしょう。</p>
+
+<figure style="text-align:center">
+  <img class="simple" src="/images/2024/07-01/LevelTranslator.jpg" alt="TXB0108DQSR による UART のレベル変換" width="1900" height="730" />
+  <figcaption style="max-width:100%">TXB0108DQSR による UART のレベル変換</figcaption>
+</figure>
+
+<p>「<a href="#5-usb-ケーブルを差し直す">5. USB ケーブルを差し直す</a>」で「インストール失敗時は、ESP ダウンロードモードに入れない限り、何をやっても IDE と繋がらない状態になります」と書きましたが、リセットボタンのダブルクリックも効かず LED の点滅を繰り返す状態に陥ります。これは ESP-32 が RA4M1 のリセットを繰り返し行なっているために起きる事象ではないかと推測しています。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>UNO R4 WiFi ファームウェアの更新について、失敗する理由と確実に成功させる手順を見出すにあたり、下記を読み漁りました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
+
+<ul>
+  <li><a href="https://github.com/arduino/arduino-ide/issues/2060" title="Firmware update fails if Serial Monitor/Plotter is open · Issue #2060 · arduino/arduino-ide">Firmware update fails if Serial Monitor/Plotter is open #2060</a> (2023年5月)</li>
+  <li><a href="https://github.com/arduino/arduino-ide/issues/2220" title="Display output from Arduino Firmware Uploader · Issue #2220 · arduino/arduino-ide">Display output from Arduino Firmware Uploader #2220</a> (2023年7月)</li>
+  <li><a href="https://forum.arduino.cc/t/arduino-uno-r4-wifi-firmware-updater/1167083" title="Arduino UNO R4 WIFI firmware updater - UNO R4 WiFi - Arduino Forum">Arduino UNO R4 WIFI firmware updater</a> (2023年9月)</li>
+  <li><a href="https://forum.arduino.cc/t/i-cant-update-the-firmware-on-my-arduino-uno-r4-wifi/1180604" title="I can&#39;t update the firmware on my Arduino Uno R4 WiFi - UNO R4 WiFi - Arduino Forum">I can’t update the firmware on my Arduino Uno R4 WiFi</a> (2023年10月)</li>
+  <li><a href="https://forum.arduino.cc/t/please-upgrade-the-firmware/1187822" title="Please upgrade the firmware - UNO R4 WiFi - Arduino Forum">Please upgrade the firmware</a> (2023年11月)</li>
+  <li><a href="https://forum.arduino.cc/t/arduino-uno-r4-wifi-firmware-update-fail/1198103" title="Arduino UNO R4 WIFI firmware update fail - UNO R4 WiFi - Arduino Forum">Arduino UNO R4 WIFI firmware update fail</a> (2023年12月)</li>
+  <li><a href="https://forum.arduino.cc/t/uno-r4-wifi-weak-signal-no-way-to-set-tx-power-on-esp32-s3/1239925" title="Uno R4 Wifi weak signal; no way to set TX power on ESP32-S3 - UNO R4 WiFi - Arduino Forum">Uno R4 Wifi weak signal; no way to set TX power on ESP32-S3</a> (2024年3月)</li>
+  <li><a href="https://forum.arduino.cc/t/error-when-updating-the-connectivity-module-firmware-on-uno-r4-wifi/1274533" title="Error when updating the connectivity module firmware on UNO R4 WiFi - UNO R4 WiFi - Arduino Forum">Error when updating the connectivity module firmware on UNO R4 WiFi</a> (2024年6月)</li>
+</ul>
+
+<p>読み間違えがあれば、ご指摘いただければと思います :man_cook:</p>
+
+<hr />
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p><a href="https://toragi.cqpub.co.jp/wp-content/uploads/p069-15.pdf">トランジスタ技術 2024年1月号 第1部 新定番の登場！Arduino Uno R4入門 / 第1章 5Vで使えて高性能！ 新生Arduino Uno R4 / P.72 Arduino UNO R4 のハードウェア構成 - CQ出版社</a> <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。]]></summary></entry><entry><title type="html">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編</title><link href="https://embedded-kiddie.github.io/2024/06/28/index.html" rel="alternate" type="text/html" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編" /><published>2024-06-28T20:56:23+09:00</published><updated>2024-06-28T20:56:23+09:00</updated><id>https://embedded-kiddie.github.io/2024/06/28/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/06/28/index.html"><![CDATA[<p>番外編というか、ちょっとしたお遊びネタですが、感圧センサになり得るか試してみました。タッチパッドを押す強さに応じてサーボモーターを 0°〜 180°まで駆動しています。</p>
 
 <figure style="text-align: center">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/AucEHNyYjE0?si=VtTL3v4Tix0TkqZS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
@@ -3568,195 +3882,4 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
 
 <p>Arduino IDE のデバッガはとても使い難いです。VSCode + <a href="https://platformio.org/" title="Your Gateway to Embedded Software Development Excellence · PlatformIO">PlatformIO</a> に乗り換えようと奮闘中ですが、同様の SVD ファイルエラーを抱えていますね。</p>
 
-<p>※ <strong>2024年5月7日 追記</strong>：<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">修正版</a> が Arduino 公式 GitHub に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">取り込まれました</a>。修正内容の詳細を「<a href="/2024/05/07/">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</a>」で解説しているので、興味があれば覗いてみてください。</p>]]></content><author><name>Kingsman</name></author><category term="Arduino-Uno-R4" /><category term="デバッグ" /><summary type="html"><![CDATA[本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。]]></summary></entry><entry><title type="html">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</title><link href="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" rel="alternate" type="text/html" title="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" /><published>2024-04-14T20:49:21+09:00</published><updated>2024-05-20T11:55:44+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"><![CDATA[<h2 id="printf-使える">printf 使える？</h2>
-
-<p>とりあえず乱暴にもこんなコードを試してみました。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
-#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
-</span>
-<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// put your setup code here, to run once:</span>
-  <span class="n">printf</span><span class="p">(</span><span class="s">"Hello World</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// put your main code here, to run repeatedly:</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>コンパイルは…OK、おぉ、ってことは <code class="language-plaintext highlighter-rouge">printf()</code> あるんだ！ ダウンロードも OK だ。
-シリアルモニタを確認っと…</p>
-
-<p>あれっ…出ない！？…おかしいなぁ…。</p>
-
-<p>念の為、オマジナイ <code class="language-plaintext highlighter-rouge">Serial.begin(9600); while (!Serial);</code> を入れてみましたが、変わりません。
-一体全体 <code class="language-plaintext highlighter-rouge">printf()</code> の出力はどこに行っちゃったんでしょう？</p>
-
-<h3 id="デバッガで確認">デバッガで確認</h3>
-
-<p><code class="language-plaintext highlighter-rouge">printf()</code> の行方を探すため、<a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">トラ技 ARM ライタ</a> でステップインしてみると、スカッ！と次の行に移動しちゃいます。どうやら空の関数っぽい挙動です。う〜ん…</p>
-
-<p><img src="/images/2024/04-14/debug-printf.jpg" alt="printf()をデバッグ" title="printf()をデバッグ" width="1380" height="862" /></p>
-
-<ul>
-  <li>Arduino UNO R4 のソースコードデバッグは、以下をご参照ください。
-    <ul>
-      <li><a href="/2024/04/17/how-to-use-toragi-writer.html" title="Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足 - Embedded Kiddie">Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足</a></li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="ライブラリを試す">ライブラリを試す</h3>
-
-<p>気を取り直し、IDE のライブラリマネージャーで「printf」を検索。シンプルなものから重厚なものまで工夫を凝らしたものが色々出てきます。大抵の場合は良く出来ていて、<code class="language-plaintext highlighter-rouge">Sirial</code> 以外のデバイスにもバインドできる感じに作られています。</p>
-
-<p>1番シッカリしてそうなのは、公式サイトにも上がっている <a href="https://www.arduino.cc/reference/en/libraries/libprintf/" title="LibPrintf - Arduino Reference">LibPrintf</a> でしょうか。<code class="language-plaintext highlighter-rouge">snprintf()</code> や <code class="language-plaintext highlighter-rouge">vsnprintf()</code> も再現されています。</p>
-
-<p>でも僕には帯にも襷にも長い感じ。</p>
-
-<p>で、一番しっくりきたのが <a href="https://qiita.com/teddokano/items/9afc45bb1beab9b7af4f" title="Arduinoで`printf()` #Arduino - Qiita">Qiita の記事</a> のコードです。ただ僕は、きっとどこかで <code class="language-plaintext highlighter-rouge">printf()</code> が <a href="https://syohex.hatenablog.com/entry/20100610/1276180481" title="weakシンボル - Shohei Yoshida&#39;s Diary">weak シンボル</a> か <code class="language-plaintext highlighter-rouge">virtual</code> として定義されているに違いないと読み、<code class="language-plaintext highlighter-rouge">stdio.h</code> の I/F 仕様でコーディング＆試してみました。案の定（定義が見つかっていないのでわかりませんが…）エラーも無く動作 OK です。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define PRINTF_BUF_SIZE  256
-</span>
-<span class="kt">int</span> <span class="nf">printf</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fmt</span><span class="p">,</span> <span class="p">...)</span> <span class="p">{</span>
-  <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">PRINTF_BUF_SIZE</span><span class="p">];</span>
-
-  <span class="kt">va_list</span> <span class="n">arg_ptr</span><span class="p">;</span>
-  <span class="n">va_start</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">,</span> <span class="n">fmt</span><span class="p">);</span>
-  <span class="n">len</span> <span class="o">=</span> <span class="n">vsnprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">PRINTF_BUF_SIZE</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">arg_ptr</span><span class="p">);</span>
-  <span class="n">va_end</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">);</span>
-
-  <span class="c1">// output to the serial console through the 'Serial'</span>
-  <span class="n">len</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">,</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">len</span><span class="p">);</span>
-
-  <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>このコードはかつて <a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm">LPC-1343 ボードで実装した sci.c</a> からの移植です。<code class="language-plaintext highlighter-rouge">Serial</code> 専用だけど、僕的にはこれで十分です。</p>
-
-<p>当然ですが、<code class="language-plaintext highlighter-rouge">printf()</code> にステップイン出来ました。読みは正しかった様です :+1:</p>
-
-<p><img src="/images/2024/04-14/debug-printf-again.jpg" alt="再びprintf()をデバッグ" title="再びprintf()をデバッグ" width="1379" height="862" /></p>
-
-<h4 id="minima-と-wifi-の違い">Minima と WiFi の違い！</h4>
-
-<div class="notice clear-both">
-
-<p><strong>Minima</strong> では、出力関数により低レベルな関数 <code class="language-plaintext highlighter-rouge">Serial.write()</code> を使って OK でしたが、<strong>WiFi</strong> では、連続する <code class="language-plaintext highlighter-rouge">printf()</code> 間で<strong>前後の文字が欠落する</strong>という問題に遭遇したので、<code class="language-plaintext highlighter-rouge">Serial.print()</code> を使わざるを得ず、処理時間もかなり異なります。<a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/serial_speed_test" title="Arduino-UNO-R4/serial_speed_test at main · embedded-kiddie/Arduino-UNO-R4">GitHub</a> にテストスケッチを置いたので、気になる方は試してみてください。</p>
-
-<p>また <strong>WiFi</strong> では、初期化待ちの <code class="language-plaintext highlighter-rouge">while(!Serial);</code> は機能せず、<code class="language-plaintext highlighter-rouge">delay(1000);</code> で待つ必要がありました。どちらも <a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/HardwareSerial.h" title="ArduinoCore-API/api/HardwareSerial.h at master · arduino/ArduinoCore-API"><code class="language-plaintext highlighter-rouge">HardwareSerial</code></a> という抽象クラスを継承していますが、<strong>Minima</strong> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/usb/SerialUSB.cpp#L119" title="ArduinoCore-renesas/cores/arduino/usb/SerialUSB.cpp at main · arduino/ArduinoCore-renesas">真偽を評価するオペレータがそれなりに実装されている</a> のに対し、 <strong>WiFi</strong> では <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Serial.cpp#L135" title="ArduinoCore-renesas/cores/arduino/Serial.cpp at main · arduino/ArduinoCore-renesas">単に <code class="language-plaintext highlighter-rouge">true</code> を返しているだけ</a> だからです。</p>
-
-<p><strong>Minima</strong> と違い <strong>WiFi</strong> の USB は、ARM との間に ESP32-S3-MINI-1-N8 を挟んでいるので、 このような違いが出るのだと思います。回路上の違いを十分検証せず、安易にプログラムを公開すると危険ということを思い知らされました。</p>
-
-
-</div>
-
-<h3 id="printfの書式と動作確認">printfの書式と動作確認</h3>
-
-<p><code class="language-plaintext highlighter-rouge">printf()</code> や <code class="language-plaintext highlighter-rouge">scanf()</code> で押さえるべき書式文字列のフォーマットは次図の通り、<code class="language-plaintext highlighter-rouge">%</code> に続き、フラグ、最小フィールド幅、精度、長さ修飾子、変換指定子で構成されます。</p>
-
-<p><img src="/images/2024/04-14/printf-format.png" alt="`printf()` や `scanf()` の書式" title="printf() や scanf() の書式" class="simple" width="1377" height="398" /></p>
-
-<p>それぞれの厳密な仕様はそれなりのボリュームになり、ここには書ききれませんが、Linux 系や <a href="https://zenn.dev/kumamoto/articles/d536ac6df8a544" title="Macでもmanコマンドの出力を日本語/英語切り替え出来るようにする">Mac であれば</a>、シェルからコマンド <code class="language-plaintext highlighter-rouge">man 3 printf</code> を打てば標準 C ライブラリの書式を調べられますし、簡潔にまとめてくれている次のサイトがオススメです。</p>
-
-<ul>
-  <li><a href="https://qiita.com/keitean/items/7cd52af571d27a1173d0" title="C言語 printfのフォーマット指定子 #C - Qiita">C言語 printfのフォーマット指定子</a></li>
-  <li><a href="https://www.k-cube.co.jp/wakaba/server/format.html" title="若葉プログラミング塾 &gt; 知識の玉手箱 &gt; ワンポイントTips &gt; フォーマット指定子一覧">フォーマット指定子一覧</a></li>
-</ul>
-
-<p>今回は出力を検証するために、前者のサンプルコードを使わせてもらいました。どれも記事の記述通りになりましたし、浮動小数点もそれなりに（厳密に仕様通りか未検証という意味）フォーマットしてくれてます。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// put your setup code here, to run once:</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
-  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
-
-<span class="cp">#ifdef  ARDUINO_UNOR4_WIFI
-</span>  <span class="c1">// UNO R4 WiFi needs to wait for a while to complete Serial initialization.</span>
-  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// It requires at least 600 ms.</span>
-<span class="cp">#endif
-</span>
-<span class="cp">#define EPSILON 0.00001
-</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">EPSILON</span><span class="p">;</span> <span class="n">f</span> <span class="o">+=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"f = %5.3f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"e = %5.3e</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span></code></pre></figure>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="p">...</span>
-<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.980</span>
-<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">9.800e-01</span>
-<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.990</span>
-<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">9.900e-01</span>
-<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">1.000</span>
-<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">1.000e+00</span></code></pre></figure>
-
-<h3 id="エスケープシーケンスのテスト">エスケープシーケンスのテスト</h3>
-<p>ついでに IDE のシリアルモニタ側テストとして、<a href="https://qiita.com/PruneMazui/items/8a023347772620025ad6" title="ANSIエスケープシーケンス チートシート #Bash - Qiita">エスケープシーケンス</a> も試してみました。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">printf</span><span class="p">(</span><span class="s">"%s%s"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[2J"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[0;0H"</span><span class="p">);</span> <span class="c1">// 画面クリア＋原点に移動</span></code></pre></figure>
-
-<p><a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> 並の動作を期待したのですが、これはダメでした。不可視文字も含めてそのまま出てきちゃいます。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="mi">20</span><span class="o">:</span><span class="mi">44</span><span class="o">:</span><span class="mf">40.763</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="mi">2</span><span class="n">J</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="n">H</span></code></pre></figure>
-
-<p>VSCode のターミナルなら<a href="https://code.visualstudio.com/docs/terminal/advanced" title="Advanced Terminal Usage in Visual Studio Code">対応している気もします</a>が、僕の Mac が古いためか（Late 2013）、環境構築がうまくいかず未確認です。せめて画面クリアや文字色の変更か反転ぐらいできると助かるんですけどネ :expressionless:</p>
-
-<h3 id="ライブラリ化">ライブラリ化</h3>
-
-<p>デバッグのたびにコピペするのも面倒なので、ライブラリ化しちゃいました。UNO R4 以外の動作確認ができないので R4 用としています → <a href="https://github.com/embedded-kiddie/Printf/releases/tag/v0.3" title="Release Fix an issue on UNO R4 Wifi. · embedded-kiddie/Printf">Printf v0.3</a></p>
-
-<p>よかったら使ってやってください。</p>
-
-<ol>
-  <li>
-    <p><a href="https://github.com/embedded-kiddie/Printf/releases" title="Releases · embedded-kiddie/Printf">Release</a> から最新版の <span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル" /></span><code class="language-plaintext highlighter-rouge">Source code (zip)</code> をダウンロードします。</p>
-  </li>
-  <li>
-    <p>Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」からダウンロードした .zip ファイルを読み込みます。</p>
-  </li>
-  <li>
-    <p>IDE メニューの「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>カスタムライブラリのスケッチ例</strong>」からサンプル <code class="language-plaintext highlighter-rouge">printf</code> を試せます。</p>
-  </li>
-</ol>
-
-<h2 id="serialprintln-の小技">Serial.println() の小技</h2>
-
-<p><a href="https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/" title="String() - Arduino Reference"><code class="language-plaintext highlighter-rouge">String</code> クラス</a> は <a href="https://docs.arduino.cc/built-in-examples/strings/StringConstructors/" title="Home / Programming / Built-in Examples / String Object Constructors">数値を文字列に変換</a> したり <a href="https://docs.arduino.cc/built-in-examples/strings/StringAdditionOperator/" title="Home / Programming / Built-in Examples / String Addition Operator">他の文字列との足し算</a> ができるので、<code class="language-plaintext highlighter-rouge">println()</code> との組み合わせがイイ感じです。僕はもっぱらコレですネ。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">float</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1415926</span><span class="p">;</span>
-<span class="kt">uint32_t</span> <span class="n">ul</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">;</span>
-<span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"pi = "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">ul</span><span class="p">)</span> <span class="o">+</span> <span class="s">" = 0x"</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">ul</span><span class="p">,</span> <span class="n">HEX</span><span class="p">));</span></code></pre></figure>
-
-<p><a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/String.cpp" title="ArduinoCore-API/api/String.cpp at master · arduino/ArduinoCore-API">クラス内部</a> で引数（コンストラクタ）に応じて <a href="https://qiita.com/xxpisu/items/2c68722d7f1e38f7a4d0" title="dtostrf関数の使い方 #Arduino - Qiita"><code class="language-plaintext highlighter-rouge">dtostrf()</code></a> や <code class="language-plaintext highlighter-rouge">ultoa()</code> を選り分けているので、オーバーヘッドやメモリへのフットプリントもそれなりと思いますが、小数点以下の桁数指定や基数変換ができたりする多才な奴です。</p>
-
-<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="mo">02</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mf">19.513</span> <span class="o">-&gt;</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1416</span><span class="p">,</span> <span class="mi">1234</span> <span class="o">=</span> <span class="mh">0x4d2</span></code></pre></figure>
-
-<p>Arduino の <a href="https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/" title="String() - Arduino Reference"><code class="language-plaintext highlighter-rouge">String</code> クラス</a> は <a href="https://cpprefjp.github.io/international-standard.html" title="C++国際標準規格 - cpprefjp C++日本語リファレンス">C++ の標準規格</a> に比べてメソッド数が少ないものの、ハードウェアに依存しない <a href="https://github.com/arduino/ArduinoCore-API" title="arduino/ArduinoCore-API: Hardware independent layer of the Arduino cores defining the official API">ArduinoCore-API</a> レイヤに属しているので、どのアーキテクチャのボードでもそれなりに動くハズです。</p>
-
-<h2 id="printfの行方は">printfの行方は？</h2>
-
-<p>さて冒頭の件に戻りますが、以下の２つの疑問が湧いてきます。</p>
-
-<ul>
-  <li>なぜ空の <code class="language-plaintext highlighter-rouge">printf()</code> が定義されているのか</li>
-  <li>どこで定義されているのか</li>
-</ul>
-
-<p>Arduino 新参者で UNO R4 しか持ってない僕には歴史的な経緯はわかりませんが、<a href="https://playground.arduino.cc/Main/Printf/" title="Arduino Playground - Printf">Arduino Playground - Printf</a> の冒頭には「<strong>stdio および（それを出力先とする）printf() は Arduino 環境に組み込まれていません…</strong>」とハッキリ書かれています。</p>
-
-<p>メモリが少なく、また多くのアーキテクチャを抱える Arduino が <code class="language-plaintext highlighter-rouge">printf()</code> ではなく、より単純な <code class="language-plaintext highlighter-rouge">print()</code> と <code class="language-plaintext highlighter-rouge">println()</code> をベースラインにしたことは理解できます。</p>
-
-<p>では「stdio を組み込んでいない」のはなぜか？ 以下は私の勝手な解釈です。</p>
-
-<p>OS が載るシステムでは、システムをオペレートするための標準入出力 I/F として、<code class="language-plaintext highlighter-rouge">stdin</code> や <code class="language-plaintext highlighter-rouge">stdout</code>、<code class="language-plaintext highlighter-rouge">stderr</code> という抽象化された仮想の標準端末を必要とします。</p>
-
-<p>一方デフォルトで OS が載らない Arduino ですが、<a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" title="Serial - Arduino Reference">Serial</a>、<a href="https://reference.arduino.cc/reference/en/libraries/liquidcrystal/" title="LiquidCrystal - Arduino Reference">LiquidCrystal</a>、<a href="https://www.arduino.cc/reference/en/libraries/ethernet/" title="Ethernet - Arduino Reference">Ethernet</a> や <a href="https://reference.arduino.cc/reference/en/libraries/wifi/wificlient/" title="WiFi - WiFiClient() - Arduino Reference">WiFi</a> といったデバイスクラスは、<a href="https://www.arduino.cc/reference/en/language/functions/communication/stream/" title="Stream - Arduino Reference">Stream クラス</a> から <a href="https://www.arduino.cc/reference/en/language/functions/communication/print/" title="Print - Arduino Reference">Print クラス</a> を継承しているので、これらを元にすれば stdio を <code class="language-plaintext highlighter-rouge">Serial</code> に決めることも可能だったハズです。</p>
-
-<p>それでも stdio を一意に決めていないのは、標準入出力 I/F として物理層に何を載せるか、「決めるのはお前だゾ」と暗に言われているように僕には思えます。生粋の組込系的発想ですかね。</p>
-
-<p>とはいえ、単純に未定義にしないのは親切心か、はたまた余計なお世話か？… 未だに見つからない定義箇所と共に謎は残ります。まぁ、どうでもイイことですが…</p>
-
-<p>以上、中途半ばな謎解きと小技でした :grin:</p>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><category term="tips" /><category term="printf" /><summary type="html"><![CDATA[Arduino UNO R4で、デバッグには欠かせないprintf()の実態を定義し、書式指定フォーマットの押さえるべきポイントをまとめました。]]></summary></entry></feed>
+<p>※ <strong>2024年5月7日 追記</strong>：<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">修正版</a> が Arduino 公式 GitHub に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">取り込まれました</a>。修正内容の詳細を「<a href="/2024/05/07/">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</a>」で解説しているので、興味があれば覗いてみてください。</p>]]></content><author><name>Kingsman</name></author><category term="Arduino-Uno-R4" /><category term="デバッグ" /><summary type="html"><![CDATA[本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。]]></summary></entry></feed>
