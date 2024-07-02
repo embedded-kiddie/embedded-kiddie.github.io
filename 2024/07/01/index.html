@@ -451,6 +451,9 @@ MAC address:       xx:xx:xx:xx:xx:xx
 
 <p>この辺りの仕組みはまだ解明できていませんが、UNO R4 WiFi と ESP32-S3 が抱える事情の１つとして挙げておきたいと思います。</p>
 
+<p>※ <strong>2024年7月2日 追記</strong>
+タイムリーなことに、フォーラムに <a href="https://forum.arduino.cc/t/more-on-the-serial-topic/1277064" title="More on the Serial topic - UNO R4 WiFi - Arduino Forum">More on the Serial topic</a> という UNO R4 WiFi についてのスレッドが立ったので、<code class="language-plaintext highlighter-rouge">Serial.print()</code> が遅い理由を聞きました。やはりレベル変換 IC を介して ESP32-S3 と通信する UART クラスが原因とのこと。もう一方のアナログスイッチ経由でつながる USB クラスについては、超長いスレッドを紹介されました。何か新しい発見があれば別途報告しますネ。</p>
+
 <h2 id="おわりに">おわりに</h2>
 
 <p>IDE メニューの中で１つだけ英語のままの <strong>Firmware Updater</strong> が気になり、実行しちゃったところから今回の調査となりました。未確認ですが、USB を介さずネットワーク経由でファームウェアを送れる <a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> であれば安全にアップデートできると思います。</p>
