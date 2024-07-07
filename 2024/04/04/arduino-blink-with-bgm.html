@@ -91,7 +91,16 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
 <p>これを楽譜に合わせて次々に音符を再生するワケですが、これだと音を鳴らす以外に何も出来ません。</p>
 
-<p>作成したライブラリの仕組み自体はすごく簡単で、<code class="language-plaintext highlighter-rouge">delay()</code> の代わりに 音符の長さだけ時間が経過したら割り込みをかけ、<code class="language-plaintext highlighter-rouge">noTone()</code> で音を止めた後、音符の配列データから次の音符（周波数と音符長）を読み込み、次の割り込みを設定する - この繰り返しです。</p>
+<p>作成したライブラリの仕組み自体はすごく簡単で、<code class="language-plaintext highlighter-rouge">delay()</code> の代わりに 音符の長さだけ時間が経過したら割り込みをかけます。<a href="https://ja.wikipedia.org/wiki/%E5%89%B2%E3%82%8A%E8%BE%BC%E3%81%BF%E3%83%8F%E3%83%B3%E3%83%89%E3%83%A9" title="割り込みハンドラ - Wikipedia">割り込みハンドラ</a> では、<code class="language-plaintext highlighter-rouge">noTone()</code> で音を止めた後、音符の配列データから次の音符（周波数と音符長）を読み込み、次の割り込みを設定する - この繰り返しです。</p>
+
+<p>この処理は、Lチカのプログラムとは何のインタラクションも無く完全に独立しているため、<code class="language-plaintext highlighter-rouge">loop()</code> には以下のLチカのコードがあるだけです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>まずはこの動作を実現できる Arduino ライブラリの調査から始めました。</p>
 
