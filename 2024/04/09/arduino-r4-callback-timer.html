@@ -67,7 +67,14 @@
 <p>仕組みの大雑把な話は「<a href="/2024/04/04/arduino-blink-with-bgm.html#%E8%87%AA%E4%BD%9C%E3%81%AE%E3%82%BF%E3%82%A4%E3%83%9E%E7%B3%BB%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%A8-bgm-%E5%86%8D%E7%94%9F%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">自作のタイマ系ライブラリと BGM 再生ライブラリ</a>」の章を見てもらうとして、ここでは使い方とインストール方法、および正確性の確認方法を説明します。</p>
 
 <h3 id="スケッチのサンプル">スケッチのサンプル</h3>
-<p>Arduino UNO R4 の LED をフワッとさせながら Minima は TX、RX を、WiFi は TX を Lチカさせるサンプルです。</p>
+<p>Arduino UNO R4 の LED をフワッとさせながら Minima は TX、RX を、WiFi は TX を Lチカさせるサンプルです。もちろん、わざわざタイマーを使わなくても <a href="https://docs.arduino.cc/built-in-examples/digital/BlinkWithoutDelay/" title="Home / Programming / Built-in Examples / Blink Without Delay">Blink Without Delay</a> を応用して、仮想的な２つのタスクで実現できますが、あくまで今回のサンプルということで。</p>
+
+<figure style="text-align:center">
+  <div>
+    <img src="/images/2024/04-09/blink_with_timer.gif" alt="フワチカのサンプル" width="570" height="346">
+    <figcaption>フワチカのサンプル</figcaption>
+  </div>
+</figure>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
 #include</span> <span class="cpf">"CBTimer.h"</span><span class="cp">
