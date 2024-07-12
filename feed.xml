@@ -1,4 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-08T11:27:38+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-02T06:28:09+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-07-12T16:29:33+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">UNO R4でサーボモータがカクカクする問題とライブラリの更新</title><link href="https://embedded-kiddie.github.io/2024/07/12/index.html" rel="alternate" type="text/html" title="UNO R4でサーボモータがカクカクする問題とライブラリの更新" /><published>2024-07-12T16:25:30+09:00</published><updated>2024-07-12T16:25:30+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/12/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/12/index.html"><![CDATA[<p>Arduino UNO R4 ユーザーの皆さん、<a href="https://www.arduino.cc/reference/en/libraries/servo/" title="Servo - Arduino Reference">サーボモータ用ライブラリ</a> が 2024年6月23日 に更新されたのって、知ってました？ 私はつい最近まで知りませんでした。</p>
+
+<p><a href="/2024/06/28/" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編 - Embedded Kiddie">この記事</a> で「なんかカクカクするな？」とは思っていましたが、調べてみるとライブラリの UNO R4 用のコードに <a href="https://github.com/arduino-libraries/Servo/issues/113" title="PWM duty cycle range not continuous on UNO R4 · Issue #113 · arduino-libraries/Servo">バグがあり</a>、2024年1月9日 に <a href="https://github.com/arduino-libraries/Servo/pull/116" title="Unor4 timer period updates by KurtE · Pull Request #116 · arduino-libraries/Servo">修正された</a> ものの、2024年6月3日の IDE 2.3.2 リリース時に IDE 本体には取り込まれず、ライブラリ単独での更新となりました。</p>
+
+<h2 id="サーボモータ用ライブラリの更新">サーボモータ用ライブラリの更新</h2>
+
+<p>ということで、とっととライブラリマネージャから最新の <a href="https://github.com/arduino-libraries/Servo/releases/tag/1.2.2" title="Release Release 1.2.2 · arduino-libraries/Servo">1.2.2</a> に更新しましょう！</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-12/Servo-old.jpg" title="ライブラリマネージャ" data-lightbox="image">
+    <img src="/images/2024/07-12/Servo-old.jpg" alt="ライブラリマネージャ" width="1400" height="875" />
+    <figcaption>ライブラリマネージャで検索</figcaption>
+  </a>
+  <a href="/images/2024/07-12/Servo-new.jpg" title="バージョン 1.2.2 インストール" data-lightbox="image">
+    <img src="/images/2024/07-12/Servo-new.jpg" alt="バージョン 1.2.2 インストール" width="1400" height="875" />
+    <figcaption>バージョン 1.2.2 をインストール</figcaption>
+  </a>
+</figure>
+
+<h2 id="修正前後の比較">修正前後の比較</h2>
+
+<p>サーボモータ用ライブラリのバージョンは、修正前が 1.2.1、修正後が 1.2.2 で、次の映像は修正前後の比較です。</p>
+
+<figure style="text-align:center">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/z2R4vBfO6XA?si=hiDafv-5nh4a-dM6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+  <figcaption style="max-width:400px">左映像：バージョン 1.2.1、右映像：バージョン 1.2.2</figcaption>
+</figure>
+
+<p>明らかに修正前はカクカクしてますよね。参考までに比較に用いたコードを載せておきます。</p>
+
+<details>
+<summary>サーボモータのテスト用コード</summary>
+
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;Servo.h&gt;</span><span class="cp">
+</span>
+<span class="n">Servo</span> <span class="n">myservo</span><span class="p">;</span>  <span class="c1">// create Servo object to control a servo</span>
+<span class="c1">// twelve Servo objects can be created on most boards</span>
+
+<span class="kt">int</span> <span class="n">usec</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>    <span class="c1">// variable to store the servo position</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">myservo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">2500</span><span class="p">);</span>  <span class="c1">// attaches the servo on pin 9 to the Servo object</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">myservo</span><span class="p">.</span><span class="n">writeMicroseconds</span><span class="p">(</span><span class="n">usec</span><span class="p">);</span>
+  <span class="n">usec</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">usec</span> <span class="o">&gt;</span> <span class="mi">2500</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">usec</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+    <span class="n">myservo</span><span class="p">.</span><span class="n">writeMicroseconds</span><span class="p">(</span><span class="n">usec</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+
+</details>
+
+<h3 id="バグの概要">バグの概要</h3>
+
+<p>2023年9月に出された <a href="https://github.com/arduino-libraries/Servo/pull/116" title="Unor4 timer period updates by KurtE · Pull Request #116 · arduino-libraries/Servo">プルリク</a> によると、RA4M1 マイコンのタイマの使い方がバグっていて、<code class="language-plaintext highlighter-rouge">Servo.write()</code> または <code class="language-plaintext highlighter-rouge">Servo.writeMicroseconds()</code> からの PWM 出力が 100μs ごとの階段状にしか変化せず、カクカクしていたのでした。</p>
+
+<p>先に挙げた映像は、分かり易いよう PWM 出力の ON 時間を 5μs ごとに上げているのですが、修正前は２０回に１回しか変化していないことになります。</p>
+
+<h2 id="ところで">ところで…</h2>
+
+<figure class="float-left">
+  <a href="/images/2024/07-12/SG90.jpg" title="SG90" data-lightbox="image">
+    <img src="/images/2024/07-12/SG90.jpg" alt="SG90" width="1080" height="840" />
+    <figcaption>SG90 外観</figcaption>
+  </a>
+</figure>
+
+<p>手持ちのサーボモータは SG90 というマイクロサーボなので、デジタルピンの駆動電流が 8mA の UNO R4 でもサーボに負荷を掛けなければ何とか駆動できます。が、0°〜 180°に対応する１周期 20ms 当たりの ON 時間が 500μs 〜 2400μs というよくある仕様ではなく、なぜか 500μs 〜 2500μs という謎仕様！のモノで、コピー品なのかもしれません。</p>
+
+<figure class="flex clear-both">
+  <a href="/images/2024/07-12/SG90-duty.jpg" title="SG90 デューティ仕様" data-lightbox="image">
+    <img src="/images/2024/07-12/SG90-duty.jpg" alt="SG90 デューティ仕様" width="977" height="675" />
+    <figcaption>よくある SG90 デューティ仕様</figcaption>
+  </a>
+  <a href="/images/2024/07-12/27_servo_duty.webp" title="手持ちの SG90 謎仕様" data-lightbox="image">
+    <img src="/images/2024/07-12/27_servo_duty.webp" alt="手持ちの SG90 謎仕様" width="1072" height="675" />
+    <figcaption>手持ちの SG90 謎仕様</figcaption>
+  </a>
+</figure>
+
+<p>まぁそれは良いとして、<a href="https://github.com/arduino-libraries/Servo/blob/master/examples/Sweep/Sweep.ino" title="Servo/examples/Sweep/Sweep.ino at master · arduino-libraries/Servo">サンプルスケッチ</a> の <code class="language-plaintext highlighter-rouge">Servo.attach()</code> は 544μs 〜 2400μs がデフォルトのデューティーサイクルとなっているので、ちゃんと仕様に合った設定をしましょう。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">myservo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span> <span class="c1">//第２引数（デフォルト 544）、第３引数（デフォルト 2400）が省略されている</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="参考情報">参考情報</h2>
+
+<ul>
+  <li><a href="https://forum.arduino.cc/t/uno-r4-wifi-unexpected-servo-movements/1163179/9" title="UNO R4 WIFI - Unexpected servo movements - post #9 - UNO R4 WiFi - Arduino Forum">UNO R4 WIFI - Unexpected servo movements</a></li>
+  <li><a href="https://forum.arduino.cc/t/servo-not-moving-below-9-steps/1246268/15" title="Servo not moving below 9° steps - post #15 - Motors, Mechanics, Power and CNC - Arduino Forum">Servo not moving below 9° steps</a></li>
+  <li><a href="https://forum.arduino.cc/t/trouble-with-servos-on-r4-wifi/1151749/25" title="Trouble with Servos on R4 Wifi - Delta_G の #25 - UNO R4 WiFi - Arduino Forum">Trouble with Servos on R4 Wifi</a></li>
+</ul>]]></content><author><name>Kingsman</name></author><category term="Arduino" /><summary type="html"><![CDATA[Arduino IDE に最新の UNO R4 用サーボモータライブラリがインストールされているか、確認しましょう！]]></summary></entry><entry><title type="html">RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート</title><link href="https://embedded-kiddie.github.io/2024/07/01/index.html" rel="alternate" type="text/html" title="RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート" /><published>2024-07-01T12:45:27+09:00</published><updated>2024-07-02T06:28:09+09:00</updated><id>https://embedded-kiddie.github.io/2024/07/01/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/07/01/index.html"><![CDATA[<p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
 
 <h2 id="はじめに">はじめに</h2>
 
@@ -3696,272 +3796,4 @@ Arduino IDE のデバッガを通して、<code class="language-plaintext highli
     sample.parentNode.appendChild(s);
   });
 })();
-</script>]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。]]></summary></entry><entry><title type="html">Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足</title><link href="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html" rel="alternate" type="text/html" title="Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足" /><published>2024-04-17T18:45:26+09:00</published><updated>2024-05-18T20:30:21+09:00</updated><id>https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/04/17/how-to-use-toragi-writer.html"><![CDATA[<p>本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。</p>
-
-<ul>
-  <li><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編 - Embedded Kiddie">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a></li>
-  <li><a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</a></li>
-</ul>
-
-<p>前者は <a href="https://www.vstone.co.jp/products/vs_wrc103lv/index.html" title="ARMマイコン搭載CPUボード「VS-WRC103LV」 - ヴイストン株式会社">LPC1343 ボード</a> のことになるので、Arduino UNO R4 Minima でトラ技 ARM ライタを動かすには両記事の拾い読みが必要でした。また幾つかノウハウも溜まってきたので改めて本記事にまとめます。</p>
-
-<h2 id="本記事の元となる開発環境について">本記事の元となる開発環境について</h2>
-<p>最初のお断りとして、僕の開発環境は以下のようにとても古いです。幸い Mac 上で Arduino IDE 2.x は動作しますが、仮想マシン上の Widnows7 では動作しないので、IDE の動作例は全て Mac 版となります。</p>
-
-<h3 id="pc-環境">PC 環境</h3>
-<ul>
-  <li>MacOS バージョン 11.7.10 (Big Sur on MacBook Pro Late 2013)</li>
-  <li>Window 7 (MacOS 上の仮想マシン環境にて動作)</li>
-</ul>
-
-<p>ただし以下は <a href="https://www.vstone.co.jp/products/vs_wrc103lv/index.html" title="ARMマイコン搭載CPUボード「VS-WRC103LV」 - ヴイストン株式会社">LPC1343 ボード</a> での実績により、Windows 上でも動作するハズです。</p>
-
-<ul>
-  <li>ISP モードによる トラ技 ARM ライタのファームウェア書き換え</li>
-  <li>ヒューマン インターフェース デバイス（HID）ドライバのインストール</li>
-  <li>CMSIS-DAP（デバイス名：<code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code>）によるデバッグ</li>
-</ul>
-
-<p>また本記事内の Windows7 スクリーンキャプチャ画像は、最新機種のものに読み替えてご覧ください。</p>
-
-<h3 id="arduino-ide">Arduino IDE</h3>
-<ul>
-  <li>バージョン：2.3.2</li>
-  <li>CLIバージョン：0.35.3</li>
-</ul>
-
-<h4 id="arduino-uno-r4-用ボードマネージャ">Arduino UNO R4 用ボードマネージャ</h4>
-<ul>
-  <li>Arduino UNO R4 Boards <small>by Arduino</small> 1.1.0</li>
-</ul>
-
-<h2 id="必要なもの">必要なもの</h2>
-<ul>
-  <li>
-    <p><strong>Arduino UNO R4 Minima</strong><br />
-<a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> に対応した <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブが必要です。本記事では トラ技 ARM ライタを紹介しています。</p>
-  </li>
-  <li>
-    <p><strong>Arduino UNO R4 WiFi</strong><br />
-オンボードデバッガが搭載されているので、デバッグプローブは不要です。<a href="#デバッガの起動と-svd-ファイルの更新">デバッガの起動と SVD ファイルの更新</a> に進んで下さい。</p>
-  </li>
-</ul>
-
-<div class="quote clear-both">
-<p>「<a href="/2024/03/24/arduino-debug-with-toragi.html#svdファイルとは何者" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">SVDファイルとは何者？</a>」から、CMSIS-DAP や CMSIS-SVD、JTAG/SWD デバッグプローブについての図を再掲します。</p>
-
-<figure class="flex">
-  <a href="/images/2024/03-24/CMSIS-overview.png" title="CMSISの全体像とデバッガの位置付け" data-lightbox="image">
-    <img src="/images/2024/03-24/CMSIS-overview-small.png" alt="CMSISの全体像とデバッガの位置付け" width="458" height="168" />
-  </a>
-  <a href="/images/2024/03-24/block-diagram.png" title="ARM MCUからArduino IDEまでのブロック図" data-lightbox="image">
-    <img src="/images/2024/03-24/block-diagram-small.png" alt="ARM MCUからArduino IDEまでのブロック図" width="457" height="172" />
-  </a>
-</figure>
-</div>
-
-<h3 id="トラ技-arm-ライタ">トラ技 ARM ライタ</h3>
-<p>購入は CQ 出版から出ている書籍版とマルツオンラインで販売されている単体版の２択です。
-（UNO R4 WiFi では ESP32 がオンボードデバッガとして機能するので不要です。）</p>
-
-<ul>
-  <li>
-    <p>書籍版<br />
-<a href="https://amzn.asia/d/0Sw2p9E" title="Amazon.co.jp: mbed×デバッガ!一枚二役ARMマイコン基板: WEBブラウザで即席プログラミング!サクッと動かしてバッチリ仕上がる (トライアルシリーズ) : 島田 義人ほか: 本">Amazon</a> あるいは <a href="https://www.kinokuniya.co.jp/f/dsg-01-9784789848138" title="ｍｂｅｄ×デバッガ！一枚二役ＡＲＭマイコン基板 / 島田 義人/白阪 一郎/渡會 豊政/大中 邦彦/辰岡 鉄郎【ほか著】 - 紀伊國屋書店ウェブストア｜オンライン書店｜本、雑誌の通販、電子書籍ストア">紀伊國屋書店</a> から購入可能です。<a href="https://shop.cqpub.co.jp/hanbai/books/MTR/MTRZ201503/MTRZ201503.pdf" title="マイコン開発入門の新定番!? トラ技ARMライタ誕生!">mbedやデバッガ関連の記事</a>、トラ技 ARM ライタ基板、ピンヘッダやスイッチ類、CD-ROM のセットからなり、ピンヘッダやスイッチ類のハンダ付けが必要です。また USB-miniB ケーブルと 2×5 ハーフピッチフラットケーブルは別途準備が必要です。</p>
-  </li>
-  <li>
-    <p>単体版<br />
-<a href="https://amzn.asia/d/3WgLsWc" title="Amazon - マルツ トラ技ARMライタ TG-LPC11U35-501 - マイクロプロセッサ - 産業・研究開発用品 通販">Amazon でも購入可能</a> ですが、<a href="https://www.marutsu.co.jp/pc/i/238834/" title="トラ技ARMライタ TG-LPC11U35-501 マルツエレック製｜電子部品・半導体通販のマルツ">マルツオンライン</a> の方が安価です。ハンダ付けが不要で、USB-miniB ケーブル、2×5 ハーフピッチのフラットケーブルが付属します。簡単な取説がついていますが、基本オンライン情報のみです。価格が安く接続に必要な品が揃っているので <strong>オススメ</strong> です。</p>
-  </li>
-</ul>
-
-<p>僕は <a href="https://www.vstone.co.jp/products/vs_wrc103lv/index.html" title="ARMマイコン搭載CPUボード「VS-WRC103LV」 - ヴイストン株式会社">LPC1343 ボード</a> 用と兼用しているので取り付けましたが、両版とも <code class="language-plaintext highlighter-rouge">CN5</code> 用に付属する 1×8 L字ピンヘッダは邪魔になるだけなのでハンダ付けの必要はありません。</p>
-
-<h3 id="あると便利なもの">あると便利なもの</h3>
-<ul>
-  <li>
-    <p><a href="https://akizukidenshi.com/catalog/g/g106776/" title="2&#215;5(10P)両端コネクタ付IDCリボンケーブル(フラットケーブル ハーフピッチ): ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">2×5(10P)両端コネクタ付IDCリボンケーブル(フラットケーブル ハーフピッチ)</a><br />
-書籍版には必要ですし、単体版のケーブルは 10cm と短く取り回しの自由度が少ないため、あると便利と思います。</p>
-  </li>
-  <li>
-    <p><a href="https://amzn.asia/d/3K9emQP" title="Amazon.co.jp: KAUMO スイッチ付き USBケーブル データOK 28cm データ結線済み (USBオス/USBメス) シーソースイッチ ロッカースイッチ (ブラック) : パソコン・周辺機器">スイッチ付き USB ケーブル</a><br />
-あると便利、というかケーブルの頻繁な抜き差しはよくないので。必ず <strong>データ線が結線されているタイプ</strong> を選んでください。</p>
-  </li>
-</ul>
-
-<h2 id="cmsis-dap-用ファームウェアの書き込み">CMSIS-DAP 用ファームウェアの書き込み</h2>
-<h3 id="ファームウェアのダウンロードと解凍">ファームウェアのダウンロードと解凍</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-18/toragi-firmware.png" title="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア" data-lightbox="image">
-    <img src="/images/2024/04-18/toragi-firmware-small.jpg" width="460" height="351" alt="トラ技ARMライタ基板をCMSIS-DAP（デバッガ）として使うときのファームウェア" />
-  </a>
-</figure>
-
-<p>購入時は単にマイコン基板として動作するだけなので、CMSIS-DAP 用ファームウェアへの書き換えが必要です。</p>
-
-<p>過去ログ <a href="https://toragi.cqpub.co.jp/tabid/707/Default.html" title="2014年2月号3月号連続企画 - トランジスタ技術">2014年2月号3月号連続企画</a> のページから <a href="https://toragi.cqpub.co.jp/tabid/707/Default.html#dnn_ctr1684_dnnTITLE_lblTitle" title="3月号付録基板関連ファイル - 2014年2月号3月号連続企画 - トランジスタ技術">3月号付録基板関連ファイル</a> にあるトラ技ARMライタのファームウェア <a href="https://toragi.cqpub.co.jp/Portals/0/download/2014/TR1403N.zip">TR1403N.zip</a> をダウンロードし解凍します。</p>
-
-<h3 id="ファームウェアの書き込み">ファームウェアの書き込み</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-18/CRP-DISABLE.jpg" title="CRP DISABLE" data-lightbox="image">
-    <img src="/images/2024/04-18/CRP-DISABLE-small.jpg" width="457" height="163" alt="CRP DISABLE" />
-  </a>
-  <a href="/images/2024/04-18/toragi-button.jpg" title="トラ技ARMライタ基板上のタクトスイッチ" data-lightbox="image">
-    <img src="/images/2024/04-18/toragi-button-small.jpg" width="458" height="242" alt="トラ技ARMライタ基板上のタクトスイッチ" />
-  </a>
-</figure>
-
-<p>トラ技 ARM ライタを ISP ボタンを押しながら USB miniB ケーブルで PC に接続するか、接続済みなら ISP ボタンを押しながらリセットすると、<a href="https://ja.wikipedia.org/wiki/File_Allocation_Table#FAT12" title="File Allocation Table - Wikipedia">FAT12</a> の USB ストレージ <code class="language-plaintext highlighter-rouge">CRP DISABLE</code>（物理デバイス名は <code class="language-plaintext highlighter-rouge">LPC1XXX IFLASH</code>）が現れます。</p>
-
-<p>中の <code class="language-plaintext highlighter-rouge">firmware.bin</code> を削除し、替わりにダウンロードした <code class="language-plaintext highlighter-rouge">firmware.bin</code> をコピーします。</p>
-
-<div class="quote clear-both">
-
-<p>ISP は <a href="https://ja.wikipedia.org/wiki/In-System_Programming" title="In-System Programming - Wikipedia">In-System Programming</a> の略で、製品になってからも PC などからファームウェアの書き込みができる機能です。また CRP は <a href="https://edn.itmedia.co.jp/edn/articles/1805/25/news022_3.html" title="マイコンのセキュリティ機能を詳細解説 ～ハードウェア編">Code Read Protection</a> の略で、内蔵メモリの読み出しを防止する機能です。<code class="language-plaintext highlighter-rouge">CRP DISABLE</code> はこの機能を「無効」にしていることを表しています。</p>
-
-</div>
-
-<p>この時、Windows であればドラッグ＆ドロップで OK ですが、Mac の場合は ターミナル.app からコピーしないとうまくいきません（ご参考：<a href="https://twitter.com/nxpfan" title="nxp fan (@nxpfan) さん / x">nxp fan﻿ さん</a> の Facebookページ <a href="https://www.facebook.com/notes/344084236658509/" title="Facebook">「USB経由ISP書き込み」をMacで行う</a>）。</p>
-
-<div class="quote clear-both">
-
-<h4 id="ターミナルapp-からのコピー方法">ターミナル.app からのコピー方法</h4>
-<p>まず <span class="inline"><img src="/images/2024/04-18/terminal-app.png" width="108" height="27" title="ターミナル.app" alt="ターミナル.app" /></span> を起動し、<code class="language-plaintext highlighter-rouge">cp -X</code> とスペースを打ち込みます。続いてそこに <code class="language-plaintext highlighter-rouge">firmware.bin</code> をドラッグ＆ドロップし、さらに <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> をドラッグ＆ドロップすると、<code class="language-plaintext highlighter-rouge">cp -X</code> の後ろにコピー元のファイルとコピー先が入力されるので、リターンキーを押します。これで Mac 特有の拡張属性が付かずにコピーが完了します。</p>
-
-</div>
-
-<h3 id="デバイスドライバの確認">デバイスドライバの確認</h3>
-<p>コピー後は、通常の USB ドライブと同様に <code class="language-plaintext highlighter-rouge">CRP DISABLE</code> を取り外す（Windows の場合）か、ゴミ箱にドラッグ＆ドロップする（Mac の場合）します。リセットボタンか電源を入れ直し、赤と緑の LED が点灯 → 消灯が確認できれば成功です。</p>
-
-<h4 id="mac-の場合">Mac の場合</h4>
-<figure class="float-left">
-  <a href="/images/2024/04-18/usb-mac.png" title="MacのUSBドライバ" data-lightbox="image">
-    <img src="/images/2024/04-18/usb-mac-small.jpg" width="458" height="276" alt="MacのUSBドライバ" />
-  </a>
-</figure>
-
-<p>アップルメニューから「<strong>この Mac について</strong> → <strong>システムレポート</strong> → <strong>ハードウェア</strong> → <strong>USB</strong>」をたどり <code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code> が確認できれば OK です。</p>
-
-<h4 id="windows-の場合">Windows の場合</h4>
-<figure class="float-left">
-  <a href="/images/2024/04-18/usb-windows.jpg" title="WindowsのUSBドライバ" data-lightbox="image">
-    <img src="/images/2024/04-18/usb-windows-small.jpg" width="460" height="299" alt="WindowsのUSBドライバ" />
-  </a>
-</figure>
-
-<p>デバイスマネージャから「<strong>ヒューマン インターフェース デバイス</strong> → <strong>HID 準拠デバイス</strong> → <strong>詳細</strong> → <strong>ハードウェア ID</strong>」とたどり、値が <code class="language-plaintext highlighter-rouge">HID¥VID_0D28&amp;PID_0019&amp;REV_0100</code> であることを確認できれば OK です。</p>
-
-<h2 id="設定と接続">設定と接続</h2>
-<h3 id="トラ技-arm-ライタと-arduino-uno-r4-minima-の接続">トラ技 ARM ライタと Arduino UNO R4 Minima の接続</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-18/connection.jpg" title="トラ技 ARM ライタと Arduino UNO R4 Minima の接続" data-lightbox="image">
-    <img src="/images/2024/04-18/connection-small.jpg" width="460" height="170" alt="トラ技 ARM ライタと Arduino UNO R4 Minima の接続" />
-  </a>
-</figure>
-
-<p>コネクタのピン配列は <a href="/2024/03/24/arduino-debug-with-toragi.html#arm-cmsis-dap-compatible" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">以前の記事</a> を参照してください。フラットケーブルを、トラ技 ARM ライタ側は <code class="language-plaintext highlighter-rouge">CN4</code> に、Minima 側は <code class="language-plaintext highlighter-rouge">SWD</code> に接続します。画像を参考に、接続の向きには十分注意してください。逆挿はヤバいです。</p>
-
-<h3 id="pc-との接続と設定">PC との接続と設定</h3>
-<figure class="float-left">
-  <a href="/images/2024/03-24/CMSIS-DAP.jpg" title="書き込み装置に ARM CMSIS-DAP Compatible を選択" data-lightbox="image">
-    <img src="/images/2024/03-24/CMSIS-DAP-small.jpg" width="460" height="298" alt="書き込み装置に ARM CMSIS-DAP Compatible を選択" />
-  </a>
-  <a href="/images/2024/04-18/usb-devices.png" title="MacOS 上 の USB デバイスドライバ" data-lightbox="image">
-    <img src="/images/2024/04-18/usb-devices-small.png" width="459" height="384" alt="MacOS 上の USB デバイスドライバ" />
-  </a>
-</figure>
-
-<p>まず Arduino IDE メニューの「<strong>ツール</strong> → <strong>書き込み装置</strong>」を <code class="language-plaintext highlighter-rouge">ARM CMSIS-DAP compatible</code> に設定します。でも実際には CMSIS-DAP で書き込みは行いません。</p>
-
-<p>Arduino IDE では プログラムの書き込みを USB ドライバ <code class="language-plaintext highlighter-rouge">UNO R4 Minima</code> から <a href="https://dfu-util.sourceforge.net/" title="dfu-util Homepage">dfu-util（Device Firmware Upgrade Utilities）</a> で、デバッグを <code class="language-plaintext highlighter-rouge">Toragi-LPC Writer CMSIS-DAP</code> から <a href="https://openocd.org/" title="Open On-Chip Debugger">openocd（Open On-Chip Debugger）</a> で行います。</p>
-
-<p>これが意味するのは Minima とトラ技 ARM ライタの両方を PC と繋がなくちゃならないということです。</p>
-
-<div class="quote clear-both">
-
-<p>書き込みも openocd で出来れば、USB ケーブルはトラ技 ARM ライタ側だけで OK なハズですが、現状は <code class="language-plaintext highlighter-rouge">launch.json</code> などで変えられそうにないんですよね。</p>
-
-<p>ちなみに、どんな都合か分かりませんが UNO R4 WiFi は <a href="https://github.com/shumatech/BOSSA" title="shumatech/BOSSA: BOSSA is a flash programming utility for Atmel&#39;s SAM family of flash-based ARM microcontrollers.  The motivation behind BOSSA is to create a simple, easy-to-use, open source utility to replace Atmel&#39;s SAM-BA software.  BOSSA is an acronym for Basic Open Source SAM-BA Application to reflect that goal.">BOSSA</a> という、また違った書き込みソフトを使っています。</p>
-
-</div>
-
-<h2 id="デバッガの起動と-svd-ファイルの更新">デバッガの起動と SVD ファイルの更新</h2>
-
-<div class="notice clear-both">
-
-<p>2024年6月3日に UNO R4 用ボードマネージャが <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.2.0" title="Release Release 1.2.0 · arduino/ArduinoCore-renesas">1.2.0</a> にアップデートされたので、SVD ファイルの更新は不要です。</p>
-
-<p>ちなみに、SVD ファイルの修正に貢献しました！
-<img src="/images/2024/04-18/pr-merged.jpg" alt="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. #305" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. #305" width="1380" height="683" class="simple" /></p>
-
-
-</div>
-
-<h3 id="コンパイルオプションの設定">コンパイルオプションの設定</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-18/compile-option.png" title="デバッグに最適化" data-lightbox="image">
-    <img src="/images/2024/04-18/compile-option-small.jpg" width="459" height="320" alt="デバッグに最適化" />
-  </a>
-  <a href="/images/2024/04-18/svd-error.jpg" title="Unable to parse SVD file" data-lightbox="image">
-    <img src="/images/2024/04-18/svd-error-small.jpg" width="460" height="287" alt="Unable to parse SVD file" />
-  </a>
-</figure>
-
-<p>IED メニューから「<strong>スケッチ</strong> → <strong>デバッグに最適化</strong>」にチェックを付けます。これを設定しておかないとまともにソースコードデバッグができません。</p>
-
-<p>次に、適当なスケッチを準備し、デバッグ情報が付加されたオブジェクトを生成するため <span class="inline"><img src="/images/2024/04-18/button-compile.png" width="27" height="27" title="コンパイルボタン" alt="コンパイルボタン" /></span> で再コンパイルします。</p>
-
-<p><span class="inline"><img src="/images/2024/04-18/button-debug.png" width="27" height="27" title="デバッグボタン" alt="デバッグボタン" /></span> でデバッグを開始すると <code class="language-plaintext highlighter-rouge">Unable to parse SVD file</code> のエラーが発生するので、SVD ファイルへのパスを記録します。</p>
-
-<p>また、デバッグウィンドー内の構成リストが <code class="language-plaintext highlighter-rouge">Arduino UNO R4 Minima (cmsis-dap)</code> になっていることを確認してください。</p>
-
-<h3 id="svd-ファイルの差し替え">SVD ファイルの差し替え</h3>
-<p><a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">SVD ファイルの更新版</a> をダウンロードしてください。本サイトの <a href="/images/2024/04-18/R7FA4M1AB.svd.zip">R7FA4M1AB.svd.zip</a> からもダウンロードが可能です（.zip ファイルは解凍してください）。</p>
-
-<p>次に、先に記録した SVD ファイルのあるフォルダを開き、元のファイルを <code class="language-plaintext highlighter-rouge">R7FA4M1AB-.svd</code> にリネームするなどして退避した後、ダウンロードした <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> に差し替えます。</p>
-
-<h3 id="デバッグの開始と終了">デバッグの開始と終了</h3>
-<p>これでデバッグができる準備が整ったハズです。行番号の左側をクリックするとブレークポイントが設定できるので、止めたいところをマーキングします。</p>
-
-<p><img src="/images/2024/04-18/break-point.png" alt="ブレークポイントの設定" title="ブレークポイントの設定" width="1400" height="250" /></p>
-
-<p>デバッグの終了は <span class="inline"><img src="/images/2024/04-18/button-end-debug.png" width="27" height="27" title="デバッグの終了" alt="" /></span> ボタンで可能ですが、Minima はデバッガからの指示待ちで停止したままなので、リセットボタンで再起動してください。</p>
-
-<h2 id="トラブルシューティング">トラブルシューティング</h2>
-<p>ここに辿り着くまでに出会ったエラーを載せておきます。</p>
-
-<h3 id="upload-error-failed-uploading-unloading-error-exit-status-74">Upload error: Failed uploading: unloading error: exit status 74</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-18/error-exit-status-74.jpg" title="Upload error: Failed uploading: unloading error: exit status 74" data-lightbox="image">
-    <img src="/images/2024/04-18/error-exit-status-74-small.jpg" width="457" height="125" alt="Upload error: Failed uploading: unloading error: exit status 74" />
-  </a>
-</figure>
-
-<p>IDE が Arduino ボードにアクセス出来ない時に起こります。電源、コネクタはもちろんですが、デバイスドライバが認識されているかを確認します。</p>
-
-<h3 id="openocd-gdb-server-quit-unexpectedly-see-dbg-server-output-for-more-details">OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details.</h3>
-<figure class="float-left">
-  <a href="/images/2024/04-18/error-openocd.jpg" title="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details." data-lightbox="image">
-    <img src="/images/2024/04-18/error-openocd-small.jpg" width="458" height="125" alt="OpenOCD: GDB Server Quit Unexpectedly. See dbg-server output for more details." />
-  </a>
-</figure>
-
-<p>トラ技 ARM ライタと通信ができない時に発生します。USB コネクタが物理的にしっかり接続されているか、または設定で「<strong>ツール</strong> → <strong>書き込み装置</strong>」の <code class="language-plaintext highlighter-rouge">ARM CMSIS-DAP compatible</code> にチェックが入っているかを確認します。正しく繋がっていれば、電源投入時やリセット時など、トラ技 ARM ライタの赤と緑の LED が点灯 → 消灯します。症状が改善しない時は、<a href="#ファームウェアの書き込み">ファームウェアの書き込み</a> から再構築してみます。</p>
-
-<h3 id="dfu-util-no-dfu-capable-usb-device-available">dfu-util: No DFU capable USB device available</h3>
-<p>「デバイスのファームウェアをアップグレードできる USB が見つからない」というエラーで、公式サイト <a href="https://support.arduino.cc/hc/en-us/articles/11011849739804-dfu-util-errors-when-uploading-exit-status-74" title="dfu-util errors when uploading (exit status 74) &ndash; Arduino Help Center">dfu-util errors when uploading (exit status 74)</a> にある通り、基本は「ケーブルを確認せよ」です。Windows であれば <a href="https://roboin.io/article/2023/12/11/arduino-dfu-error/" title="Arduinoで「No DFU capable USB device available」エラーが出たときの対処法 - ろぼいんブログ">Arduinoで「No DFU capable USB device available」エラーが出たときの対処法</a> が参考になるかもしれません。</p>
-
-<p>僕の場合、アップロードも CMSIS-DAP からできるものと思い込み、Minima 側の USB を接続してなかった時に発生してました（トラ技 ARM ライタ基板裏面の <code class="language-plaintext highlighter-rouge">SJ7</code> をショートされれば Minima に電源供給できる）。今では両基板とも USB 接続することで事なきを得ています。</p>
-
-<h3 id="何をやっても-crp-disabled-が出現する">何をやっても CRP DISABLED が出現する</h3>
-<p>トラ技 ARM ライタを単独で電源投入すると、赤と緑の LED ランプが点灯せず ISP モードで立ち上がることがあります。先に Minima を ON していればこの事象は発生しないようです。</p>
-
-<p>一方何をやっても ISP モードとなってしまう場合には、CMSIS-DAP ファームウェアが正しく書き込めていないことが考えられます。</p>
-
-<p>特に Mac の場合、CMSIS-DAP ファームウェアを書き込む際にドラッグ＆ドロップしてませんか？ <a href="#ターミナルapp-からのコピー方法">ターミナルapp からのコピー方法</a> の手順に従ってください。</p>
-
-<h2 id="最後に">最後に…</h2>
-
-<p>Arduino IDE のデバッガはとても使い難いです。VSCode + <a href="https://platformio.org/" title="Your Gateway to Embedded Software Development Excellence · PlatformIO">PlatformIO</a> に乗り換えようと奮闘中ですが、同様の SVD ファイルエラーを抱えていますね。</p>
-
-<p>※ <strong>2024年5月7日 追記</strong>：<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi">修正版</a> が Arduino 公式 GitHub に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title="Update &quot;Port mn Pin Function Select Register&quot; in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas">取り込まれました</a>。修正内容の詳細を「<a href="/2024/05/07/">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</a>」で解説しているので、興味があれば覗いてみてください。</p>]]></content><author><name>Kingsman</name></author><category term="Arduino-Uno-R4" /><category term="デバッグ" /><summary type="html"><![CDATA[本サイトでは、トラ技 ARM ライタに関する記事を２つほど紹介してきました。]]></summary></entry></feed>
+</script>]]></content><author><name>Kingsman</name></author><summary type="html"><![CDATA[GitHub Pages 上で使えるコメントフォームの UI や使い心地を確認するため、５つのホスティングサービスを実際に試してみました。全て フリーミアム もしくは無料で設置できます。]]></summary></entry></feed>
