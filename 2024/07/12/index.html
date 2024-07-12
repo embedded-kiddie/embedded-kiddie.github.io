@@ -128,7 +128,7 @@
   </a>
 </figure>
 
-<p>手持ちのサーボモータは SG90 というマイクロサーボなので、デジタルピンの駆動電流が 8mA の UNO R4 でもサーボに負荷を掛けなければ何とか駆動できます。が、0°〜 180°に対応する１周期 20ms 当たりの ON 時間が 500μs 〜 2400μs というよくある仕様ではなく、なぜか 500μs 〜 2500μs という謎仕様！のモノで、コピー品なのかもしれません。</p>
+<p>手持ちのサーボモータは SG90 というマイクロサーボなので、デジタルピンの駆動電流が 8mA の UNO R4 でもサーボに負荷を掛けなければ何とか駆動できます。が、0°〜 180°に対応する１サイクル 20ms 当たりの ON 時間が 500μs 〜 2400μs というよくある仕様ではなく、なぜか 500μs 〜 2500μs という謎仕様！のモノで、コピー品なのかもしれません。</p>
 
 <figure class="flex clear-both">
   <a href="/images/2024/07-12/SG90-duty.jpg" title="SG90 デューティ仕様" data-lightbox="image">
@@ -141,7 +141,7 @@
   </a>
 </figure>
 
-<p>まぁそれは良いとして、<a href="https://github.com/arduino-libraries/Servo/blob/master/examples/Sweep/Sweep.ino" title="Servo/examples/Sweep/Sweep.ino at master · arduino-libraries/Servo">サンプルスケッチ</a> の <code class="language-plaintext highlighter-rouge">Servo.attach()</code> は 544μs 〜 2400μs がデフォルトのデューティーサイクルとなっているので、ちゃんと仕様に合った設定をしましょう。</p>
+<p>まぁそれは良いとして、<a href="https://github.com/arduino-libraries/Servo/blob/master/examples/Sweep/Sweep.ino" title="Servo/examples/Sweep/Sweep.ino at master · arduino-libraries/Servo">サンプルスケッチ</a> の <code class="language-plaintext highlighter-rouge">Servo.attach()</code> は 544μs 〜 2400μs がデフォルトのデューティ仕様となっているので、ちゃんと仕様に合った設定をしましょう。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
   <span class="n">myservo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span> <span class="c1">//第２引数（デフォルト 544）、第３引数（デフォルト 2400）が省略されている</span>
