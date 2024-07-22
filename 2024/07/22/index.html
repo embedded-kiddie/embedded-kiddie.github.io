@@ -172,7 +172,7 @@
 
 <p>この「<strong>短い時間間隔で</strong>」というのがミソです。この手の例題に用いられる <code class="language-plaintext highlighter-rouge">digitalWrite()</code> や <code class="language-plaintext highlighter-rouge">analogWrite()</code> で LED を点滅させたりサーボモータを駆動したりする、ナノ秒オーダーで完了する処理なら問題とはならないでしょう。</p>
 
-<p>しかし、サンプリング周波数一定が好ましいフィルタリング（タイマ割り込みを使わない前提）で、浮動小数点演算でミリ秒オーダーの時間がかかったりすると、その周期性に問題が出始めます。</p>
+<p>しかしサンプリング周期一定が好ましいフィルタリング処理（タイマ割り込みを使わない前提）で、浮動小数点演算でミリ秒オーダーの時間がかかったりすると、その周期性に問題が出始めます。</p>
 
 <p>試しに冒頭のコードにおいて、各タスクの起動周期をそれぞれ 110msec、120msec、130msec に、処理時間が 1msec、2msec、3msec かかると想定した次のようなコードで、実際の周期性を観測してみます。</p>
 
@@ -341,10 +341,9 @@
       <a href="/" title="Home に戻る">Home に戻る</a>
     </p>    
   </div>
-<div id="disqus_thread"></div>
-  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/07/22/",this.page.identifier="/2024/07/22/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-</noscript>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/07/22/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
 <a class="u-url" href="/2024/07/22/" hidden></a>
 </article>
 
