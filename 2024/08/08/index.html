@@ -79,7 +79,7 @@
   <iframe width="560" height="315" src="https://www.youtube.com/embed/K5Ht-r3FQZE?si=m00dZ_tglkxvnf1q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
 </figure>
 
-<p>ソースコードやワイヤリングは、GitHub の <a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/breakout">Arduino-UNO-R4/breakout</a> を覗いてみて下さい。また R4 以前での動作を確認するため <a href="https://wokwi.com/projects/405346200615499777" title="Breakout Game - Wokwi ESP32, STM32, Arduino Simulator">Wokwi</a> を試してみました。5V → 3.3V のロジックレベル変換を省いてますし、現実に動作するか否かも保証の限りではないのでご注意を。</p>
+<p>ソースコードやワイヤリングは、GitHub の <a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/breakout">Arduino-UNO-R4/breakout</a> を覗いてみて下さい。また R4 以前での動作を確認するため <a href="https://wokwi.com/projects/405346200615499777" title="Breakout Game - Wokwi ESP32, STM32, Arduino Simulator">Wokwi</a> を試してみました。5V → 3.3V のロジックレベル変換を省いてますし、現実に動作するかどうかも保証の限りではないのでご注意を。</p>
 
 <figure class="flex" style="text-align:center; align-items:flex-end">
   <a href="/images/2024/08-08/LCD240x240.jpg" title="ブロック崩しのワイヤリング" data-lightbox="image">
@@ -148,7 +148,7 @@
 <p>以下、何となくオブジェクト指向な書きっぷりで説明しますが、実際のコードは C++ ではなく C で書います
  <img class="emoji" title=":stuck_out_tongue_winking_eye:" alt=":stuck_out_tongue_winking_eye:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f61c.png" height="20" width="20"></p>
 
-<p>まず最初のオブジェクトとして「状態コントローラ」を設定し、ゲームの進行を司る役割を持たせます。このオブジェクトが持つ状態遷移を図で表すと、ザックリですが次のように考えられます <sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup> 。</p>
+<p>まず最初の <a href="https://ja.wikipedia.org/wiki/%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88_(%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0)" title="オブジェクト (プログラミング) - Wikipedia">オブジェクト</a> として、「状態コントローラ」にゲームの進行を司る役割を持たせることを考えます。このオブジェクトが持つ状態遷移を図で表すと <sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup> 、ザックリですが次のように想定できます。</p>
 
 <dev style="text-align:center">
   <pre class="mermaid" id="flow" aria-label="状態コントローラ">
@@ -167,9 +167,9 @@
   </pre>
 </dev>
 
-<p>「オープニング」では、ゲームタイトルが表示されカッコいい音楽が流れるイメージですかネ。</p>
+<p>「オープニング」ではゲームタイトルが表示され、カッコいい音楽が流れるイメージですかネ。</p>
 
-<p>続いてゲーム中の主要な <a href="https://ja.wikipedia.org/wiki/%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88_(%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0)" title="オブジェクト (プログラミング) - Wikipedia">オブジェクト</a> として、ブロック、ボール、ラケットの３つを考えます（「壁」は能動的な役割や状態を持たないので分析の対象外）。これらオブジェクトの振る舞いは、ザックリ次のようになるでしょう。</p>
+<p>続いてゲーム中の主要なオブジェクトとして、ブロック、ボール、ラケットの３つを考えます（「壁」は能動的な役割や状態を持たないので分析の対象外）。これらオブジェクトの振る舞いは、およそ次のようになるでしょう。</p>
 
 <ol>
   <li>
@@ -201,7 +201,7 @@
   </li>
 </ol>
 
-<p>これらのオブジェクトも自身の状態と状態遷移を持ち得ますが、必ずしもゲーム進行の詳細を知らずとも良いようにする ─ 即ち、状態コントローラが指示するシステム状態に従って「せっせと自分自身の仕事に専念させる」ことがポイントです。</p>
+<p>これらのオブジェクトも自身の状態と状態遷移を持ち得ますが、必ずしもゲーム進行の詳細を知らずとも良いようにすることがポイントです。即ち、状態コントローラが指示するシステム状態に従い「せっせと自分の仕事に専念する」ことができるようにしてあげます。</p>
 
 <h2 id="実装設計の概要">実装設計の概要</h2>
 
@@ -244,13 +244,13 @@
   <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>続いて先の「状態遷移図」を眺めつつ、状態コントローラの役割をもう少し具体化することで「何らかの処理」の仕様を決めていきます。</p>
+<p>続いて先の「状態遷移図」を眺めつつ、状態コントローラの役割をもう少し具体化することで「何らかの処理」の内容を決めていきます。</p>
 
 <h3 id="状態コントローラと各オブジェクトの役割分担">状態コントローラと各オブジェクトの役割分担</h3>
 
 <p>各オブジェクトも独自の状態と状態遷移を持ち得ますが、今回はそこまで複雑にせず、遷移時に必要な各オブジェクトのメソッドを状態コントローラが呼び出す実装とします。</p>
 
-<p>例えば「ボール」オブジェクトが持つメソッド「<a href="#ball-init" title="2.「ボール」オブジェクトを扱うタスク"><strong>プレイ開始時に、新しいボールの打ち出しを準備する</strong></a>」を「ボール」自身の状態遷移中で実行するのではなく、状態コントローラの「<code class="language-plaintext highlighter-rouge">case START:</code> 〜 <code class="language-plaintext highlighter-rouge">break;</code>」で同メソッドを呼び出すと言うワケです。</p>
+<p>例えば「ボール」オブジェクトが持つメソッド「<a href="#ball-init" title="2.「ボール」オブジェクトを扱うタスク"><strong>プレイ開始時に、新しいボールの打ち出しを準備する</strong></a>」を「ボール」自身の状態遷移中で実行するのではなく、状態コントローラが「<code class="language-plaintext highlighter-rouge">case START:</code> 〜 <code class="language-plaintext highlighter-rouge">break;</code>」で同メソッドを呼び出すと言うワケです。</p>
 
 <p>このような実装のメリットとデメリットは以下となります。</p>
 
@@ -787,7 +787,7 @@
 
 <p>興味を持たれた方は是非、boochow さんの記事と本記事を参考に、ご自分でマルチタスキングのプログラミングを実装して楽しんでもらうのが宜しいかと思います。</p>
 
-<p>また例えば、１画面に複数のボールを出現させようスレば C++ でないとキツイと思いますし、C++ でコーディングできれば、スキルアップ間違いナシです（と、手抜きの言い訳）<img class="emoji" title=":watermelon:" alt=":watermelon:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f349.png" height="20" width="20"></p>
+<p>また例えば、１画面に複数のボールを出現させようすれば C++ でないとキツイと思いますし、C++ でコーディングできれば、スキルアップ間違いナシです（と、手抜きの言い訳）<img class="emoji" title=":watermelon:" alt=":watermelon:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f349.png" height="20" width="20"></p>
 
 <hr>
 
