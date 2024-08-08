@@ -780,7 +780,7 @@
 
 <p>本記事では、オブジェクト指向的な分析・設計が実装と乖離した、何とも中途半端な記事となりましたが、主テーマはタイトル通りとご理解頂ければ幸いです。</p>
 
-<p>それともう１つ。この手のプログラムでは、まずブロック崩しのコア部分が解説され、「ボールの移動 → 衝突判定 → ラケットの移動」といった具合に処理が順番に組まれ、最後にオマケ程度に状態コントローラが追加されるパターンが多いかと思います。</p>
+<p>それともう１つ。この手のプログラムでは、まずブロック崩しのコア部分が解説され、「ボールの移動 → 衝突判定 → ラケットの移動 → 時間調整」といった具合に処理が順番に組まれ、最後にオマケ程度に状態コントローラが追加されるパターンが多いかと思います。</p>
 
 <p>主題がゲームの実装にあるので致し方ないことですが、状態コントローラの分析次第でゲーム部分の実装設計も変わり得るので、「分析は大事だョ」ということを伝えるべく、本記事を構成したつもりです。</p>
 
@@ -816,10 +816,9 @@
       <a href="/" title="Home に戻る">Home に戻る</a>
     </p>    
   </div>
-<div id="disqus_thread"></div>
-  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/08/08/",this.page.identifier="/2024/08/08/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-</noscript>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/08/08/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
 <a class="u-url" href="/2024/08/08/" hidden></a>
 </article>
 
