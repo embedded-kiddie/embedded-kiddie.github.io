@@ -94,7 +94,7 @@
 
 <h2 id="ノンプリエンプティブなマルチタスクのテンプレート">ノンプリエンプティブなマルチタスクのテンプレート</h2>
 
-<p>マルチタスクなプログラミングのテンプレートとして、状態コントローラ（<a href="https://ja.wikipedia.org/wiki/%E6%9C%89%E9%99%90%E3%82%AA%E3%83%BC%E3%83%88%E3%83%9E%E3%83%88%E3%83%B3" title="有限オートマトン - Wikipedia">ステートマシン</a>）と複数のタスクが動く次のようなコードを考えます。Arduino IDE にコピペすれば、コンパイルは通りますが、もちろん何も起きません。「<code class="language-plaintext highlighter-rouge">DO_EVERY</code> って何？」という方は、<a href="/2024/07/22/" title="Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ - Embedded Kiddie">前回記事</a> を参照して下さい。</p>
+<p><a href="/2024/07/22/" title="Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ - Embedded Kiddie">前回の記事</a> では、複数のタスクを周期的に起動するマクロ <code class="language-plaintext highlighter-rouge">DO_EVERY</code> を紹介しました。今回はそれに状態コントローラ（<a href="https://ja.wikipedia.org/wiki/%E6%9C%89%E9%99%90%E3%82%AA%E3%83%BC%E3%83%88%E3%83%9E%E3%83%88%E3%83%B3" title="有限オートマトン - Wikipedia">ステートマシン</a>）を加えた、次のようなコードを考えます。Arduino IDE にコピペすれば、コンパイルは通りますが、もちろん何も起きません。</p>
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// Non-preemptive multitasking</span>
 <span class="cp">#define DO_EVERY(period, prev)  static uint32_t prev = 0; for (uint32_t now = millis(); now - prev &gt;= period; prev = now)
