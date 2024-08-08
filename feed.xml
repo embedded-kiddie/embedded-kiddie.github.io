@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-08-08T14:15:25+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">マルチタスク風プログラミングで作るArduinoのブロック崩し</title><link href="https://embedded-kiddie.github.io/2024/08/08/index.html" rel="alternate" type="text/html" title="マルチタスク風プログラミングで作るArduinoのブロック崩し" /><published>2024-08-08T09:42:24+09:00</published><updated>2024-08-08T09:42:24+09:00</updated><id>https://embedded-kiddie.github.io/2024/08/08/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/08/08/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-08-08T18:28:19+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">マルチタスク風プログラミングで作るArduinoのブロック崩し</title><link href="https://embedded-kiddie.github.io/2024/08/08/index.html" rel="alternate" type="text/html" title="マルチタスク風プログラミングで作るArduinoのブロック崩し" /><published>2024-08-08T09:42:24+09:00</published><updated>2024-08-08T09:42:24+09:00</updated><id>https://embedded-kiddie.github.io/2024/08/08/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/08/08/index.html"><![CDATA[<style>
   pre.mermaid {
     float: left;
     border: none;
@@ -14,7 +14,7 @@
 
 <h2 id="まずはデモから">まずはデモから</h2>
 
-<p>Amazon でカラー LCD を検索すれば大抵は目にしていると思われる「🍒」が特徴の、1.3” カラー LCD（解像度 240X240、ドライバーIC ST7789VW）と Arduino UNO R4 で作成しました。電源を ON すると、ポテンショメータを動かすまでは自動で打ち返すデモが続きます。</p>
+<p>Arduino UNO R4 と 1.3” カラー LCD（解像度 240X240、ドライバーIC ST7789VW、Amazon でカラー LCD を検索するとよく目にする「🍒」が特徴のヤツ）で作成しました。電源を ON すると、ポテンショメータを動かすまでは自動で打ち返すデモが続きます。</p>
 
 <figure style="text-align:center">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/K5Ht-r3FQZE?si=m00dZ_tglkxvnf1q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
