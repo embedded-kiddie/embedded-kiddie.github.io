@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-08-08T18:58:52+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">マルチタスク風プログラミングで作るArduinoのブロック崩し</title><link href="https://embedded-kiddie.github.io/2024/08/08/index.html" rel="alternate" type="text/html" title="マルチタスク風プログラミングで作るArduinoのブロック崩し" /><published>2024-08-08T09:42:24+09:00</published><updated>2024-08-08T09:42:24+09:00</updated><id>https://embedded-kiddie.github.io/2024/08/08/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/08/08/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-08-08T19:04:35+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">マルチタスク風プログラミングで作るArduinoのブロック崩し</title><link href="https://embedded-kiddie.github.io/2024/08/08/index.html" rel="alternate" type="text/html" title="マルチタスク風プログラミングで作るArduinoのブロック崩し" /><published>2024-08-08T09:42:24+09:00</published><updated>2024-08-08T09:42:24+09:00</updated><id>https://embedded-kiddie.github.io/2024/08/08/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/08/08/index.html"><![CDATA[<style>
   pre.mermaid {
     float: left;
     border: none;
@@ -44,7 +44,7 @@
 #define INTERVAL2 120 // [msec]
 #define INTERVAL3 130 // [msec]
 </span>
-<span class="kt">void</span> <span class="nf">StateMachineController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="nf">StateController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">;</span>
 <span class="p">}</span>
 
@@ -54,7 +54,7 @@
 
 <span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">// 状態コントローラ</span>
-  <span class="n">StateMachineController</span><span class="p">();</span>
+  <span class="n">StateController</span><span class="p">();</span>
 
   <span class="c1">// １つ目のタスク</span>
   <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL1</span><span class="p">,</span> <span class="n">Timer1</span><span class="p">)</span> <span class="p">{</span>
@@ -161,7 +161,7 @@
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">Status_t</span> <span class="n">status</span> <span class="o">=</span> <span class="n">OPENING</span><span class="p">;</span>
 
-<span class="kt">void</span> <span class="nf">StateMachineController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="nf">StateController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">switch</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">case</span> <span class="n">OPENING</span><span class="p">:</span>
       <span class="p">;</span> <span class="c1">// 何らかの処理</span>

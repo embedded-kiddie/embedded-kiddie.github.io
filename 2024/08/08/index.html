@@ -103,7 +103,7 @@
 #define INTERVAL2 120 // [msec]
 #define INTERVAL3 130 // [msec]
 </span>
-<span class="kt">void</span> <span class="nf">StateMachineController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="nf">StateController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">;</span>
 <span class="p">}</span>
 
@@ -113,7 +113,7 @@
 
 <span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">// 状態コントローラ</span>
-  <span class="n">StateMachineController</span><span class="p">();</span>
+  <span class="n">StateController</span><span class="p">();</span>
 
   <span class="c1">// １つ目のタスク</span>
   <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL1</span><span class="p">,</span> <span class="n">Timer1</span><span class="p">)</span> <span class="p">{</span>
@@ -223,7 +223,7 @@
 
 <figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">Status_t</span> <span class="n">status</span> <span class="o">=</span> <span class="n">OPENING</span><span class="p">;</span>
 
-<span class="kt">void</span> <span class="nf">StateMachineController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="kt">void</span> <span class="nf">StateController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">switch</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">case</span> <span class="n">OPENING</span><span class="p">:</span>
       <span class="p">;</span> <span class="c1">// 何らかの処理</span>
