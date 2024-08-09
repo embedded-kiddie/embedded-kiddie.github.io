@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-08-09T08:22:58+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">マルチタスク風プログラミングで作るArduinoのブロック崩し</title><link href="https://embedded-kiddie.github.io/2024/08/08/index.html" rel="alternate" type="text/html" title="マルチタスク風プログラミングで作るArduinoのブロック崩し" /><published>2024-08-08T09:42:24+09:00</published><updated>2024-08-08T09:42:24+09:00</updated><id>https://embedded-kiddie.github.io/2024/08/08/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/08/08/index.html"><![CDATA[<style>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://embedded-kiddie.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://embedded-kiddie.github.io/" rel="alternate" type="text/html" /><updated>2024-08-09T14:54:17+09:00</updated><id>https://embedded-kiddie.github.io/feed.xml</id><title type="html">Embedded Kiddie</title><subtitle>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</subtitle><author><name>Kingsman</name></author><entry><title type="html">マルチタスク風プログラミングで作るArduinoのブロック崩し</title><link href="https://embedded-kiddie.github.io/2024/08/08/index.html" rel="alternate" type="text/html" title="マルチタスク風プログラミングで作るArduinoのブロック崩し" /><published>2024-08-08T09:42:24+09:00</published><updated>2024-08-08T09:42:24+09:00</updated><id>https://embedded-kiddie.github.io/2024/08/08/index</id><content type="html" xml:base="https://embedded-kiddie.github.io/2024/08/08/index.html"><![CDATA[<style>
   pre.mermaid {
     float: left;
     border: none;
@@ -102,7 +102,7 @@
       [*] --&gt; オープニング
       オープニング --&gt; プレイ開始:プレイ開始のトリガ
       プレイ開始 --&gt; プレイ中:プレイの準備完了
-      プレイ中 --&gt; ステージクリア:全てのブロックが消去された
+      プレイ中 --&gt; ステージクリア:ブロックが全て消去された
       ステージクリア --&gt; プレイ開始:次のステージの準備完了
       プレイ中 --&gt; ゲームオーバー:ボール残数がゼロ
       ゲームオーバー --&gt; オープニング:オープニング開始のトリガ
@@ -210,11 +210,74 @@
 
 <p>さらにゲームの進行上、スコアとボール残数の管理や表示、「ゲームオーバー」等のメッセージ表示機能の割り当てを考えなければなりません。新たなオブジェクトを定義する手もありますが、前述同様にシンプルさを優先させ、それらも状態コントローラに割り振る事にします。</p>
 
-<p>ボールの管理やステージクリア時の処理、スコアやメッセージの表示まで、ゲーム進行に関する全段取りを整える役割を状態コントローラに負ってもらうワケで、その責任は重大ですネ。</p>
+<p>ボール残数とスコアの管理からステージクリア時の処理やメッセージの表示まで、ゲーム進行に関する全段取りを整える役割を状態コントローラに負ってもらうワケで、その責任は重大ですネ。</p>
 
 <h2 id="プログラム実装の概要">プログラム実装の概要</h2>
 
-<p>さて、肝心なブロック崩しのコードですが、以下の記事から流用させてもらうこととしました（オィ）。</p>
+<p>前章の役割分担に基づき、各オブジェクトのメンバー変数やメソッドを定義し、<code class="language-plaintext highlighter-rouge">loop()</code> 内の処理を書いていきます。実際のプログラムを C で書いている都合上（<code class="language-plaintext highlighter-rouge">public</code> や <code class="language-plaintext highlighter-rouge">private</code> を区別せず全てグローバルにしちゃっていて、カッコ悪いので…）、ここでは <code class="language-plaintext highlighter-rouge">loop()</code> 内の処理についてだけ示したいと思います。</p>
+
+<p>ちなみに、「ブロック」オブジェクトには能動的な動きがないので、タスクは割り当てなくても良いと思います。</p>
+
+<h3 id="状態コントローラオブジェクト">「状態コントローラ」オブジェクト</h3>
+
+<p>およそ次のような感じになると思います。括弧（「オブジェクト」）は、それぞれのメソッドを呼び出すことを意図しています。また「メッセージを表示する」は、数秒間ポーズをかける仕組みが必要になりそうです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">StateController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">OPENING</span><span class="p">:</span>
+      <span class="c1">// ゲームを初期化する;</span>
+      <span class="c1">// オープニング画面を描画する;</span>
+      <span class="c1">// プレイ開始のトリガで status = START;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">START</span><span class="p">:</span>
+      <span class="c1">// 「ボール」の位置と方向を設定する;</span>
+      <span class="c1">// 「ブロック」を初期化して描画する;</span>
+      <span class="c1">// status = PLAYING;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">PLAYING</span><span class="p">:</span>
+      <span class="c1">// 「ブロック」が全て消去されたら status = CLEAR;</span>
+      <span class="c1">// 「ラケット」に当たらず空振したら status = START;</span>
+      <span class="c1">// 「ボール」残数がゼロになったら status = GAMEOVER;</span>
+      <span class="c1">// ステージやスコア、ボール残数を表示する;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">CLEAR</span><span class="p">:</span>
+      <span class="c1">// ステージクリア時のメッセージを表示する;</span>
+      <span class="c1">// 次ステージの準備をする;</span>
+      <span class="c1">// status = START;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">GAMEOVER</span><span class="p">:</span>
+      <span class="c1">// ゲーム終了のメッセージを表示する;</span>
+      <span class="c1">// オープニング開始のトリガで status = OPENING;</span>
+      <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="ボールオブジェクトのタスク">「ボール」オブジェクトのタスク</h3>
+
+<p>「プレイ中」は、ひたすらボールを移動させると同時に、壁やブロック、ラケットへの衝突を判定し、衝突時には移動方向を変えたりする処理を書く事になります。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">  <span class="c1">// ボールオブジェクトのタスク</span>
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL1</span><span class="p">,</span> <span class="n">Timer1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">PLAYING</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// ボールの位置を更新する;</span>
+      <span class="c1">// 壁、ブロック、ラケットへの衝突を判定し、衝突時は移動方向を変える;</span>
+      <span class="c1">// 更新された位置に基づきボールを描画する;</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<h3 id="ラケットオブジェクトのタスク">「ラケット」オブジェクトのタスク</h3>
+
+<p>ひたすらユーザ入力を監視し、ラケットを動かすだけですネ。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">  <span class="c1">// ラケットオブジェクトのタスク</span>
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL2</span><span class="p">,</span> <span class="n">Timer2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ユーザ操作を読み取る</span>
+    <span class="c1">// 読み取った位置に応じてラケットを描画する</span>
+  <span class="p">}</span></code></pre></figure>
+
+<h3 id="ブロック崩しのコア部分は">ブロック崩しのコア部分は…</h3>
+
+<p>さて、肝心のブロック崩しですが、以下の記事から流用させてもらうこととしました（オィ）。</p>
 
 <ul>
   <li><a href="https://blog.boochow.com/article/423049468.html" title="Arduino（４）　ブロック崩しを作ってみる（１）  &#8211;  楽しくやろう。">Arduino（４）　ブロック崩しを作ってみる（１）</a></li>
@@ -222,7 +285,7 @@
   <li><a href="https://blog.boochow.com/article/423481451.html" title="Arduino（６）　ブロック崩しを作ってみる（３）  &#8211;  楽しくやろう。">Arduino（６）　ブロック崩しを作ってみる（３）</a></li>
 </ul>
 
-<p>作者の boochow さんには、流用したコードの公開を快諾していただきました。上記の記事とプログラムには、以下の優れた特徴があります。</p>
+<p>作者の boochow さんには、流用したコードの公開を快諾していただきました。それぞれの記事と添付されたプログラムには、以下の優れた特徴があります。</p>
 
 <ul>
   <li>小さなプログラムから始まり、少しづつ機能を追加していくプロセスがとてもわかり易い</li>
@@ -243,7 +306,7 @@
   <li>ステージをクリアする度に少しづつブロックが下がり、ボールの移動速度が早くなる</li>
 </ul>
 
-<p>ということで、スコアやボールの管理、状態の通知方法やメッセージの表示処理等、説明していない部分もありますし、オブジェクト指向的な説明をしながらも <del>手抜きして C++ ではなく</del> オリジナルの良さを生かし、C で実装という事情もありますが、参考までに作成したプログラムを載せておきます :sweat_smile:</p>
+<p>ということで、スコアやボールの管理、状態の通知方法やメッセージの表示処理等、説明していない部分もありますし、オブジェクト指向的な説明をしながらも <del>手抜きして C++ ではなく</del> オリジナルの良さを生かし、C で実装という事情もありますが :sweat_smile:、作成したプログラムを載せておきます。</p>
 
 <details>
 <summary><h3>作成したプログラム</h3>（ご参考）</summary>
@@ -723,11 +786,11 @@
 
 <p>それともう１つ。この手のプログラムでは、まずブロック崩しのコア部分が解説され、「ボールの移動 → 衝突判定 → ラケットの移動 → 時間調整」といった具合に処理が順番に組まれ、最後にオマケ程度に状態コントローラが追加されるパターンが多いかと思います。</p>
 
-<p>主題がゲームの実装にあるので致し方ないことですが、状態コントローラの分析次第でゲーム部分の実装設計も変わり得るので、「分析は大事だョ」ということを伝えるべく、本記事を構成したつもりです。</p>
+<p>主題がゲームの実現にあるので致し方ないことですが、状態コントローラの分析次第でゲームの実装設計も変わり得るので、「分析は大事だョ」ということを伝えるべく、本記事を構成したつもりです。</p>
 
-<p>興味を持たれた方は是非、boochow さんの記事と本記事を参考に、ご自分でマルチタスキングのプログラミングを実装して楽しんでもらうのが宜しいかと思います。</p>
+<p>興味を持たれた方は、boochow さんの記事や本記事を参考にご自分で実装し、マルチタスクのプログラミングを楽しんでもらうのが宜しいかと思います。</p>
 
-<p>また例えば、１画面に複数のボールを出現させようすれば C++ でないとキツイと思いますし、C++ でコーディングできれば、スキルアップ間違いナシです（と、手抜きの言い訳）:watermelon:</p>
+<p>例えば、１画面に複数のボールを出現させようすれば C++ でないとキツイと思いますし、C++ でコーディングできれば、スキルアップ間違いナシです（と、手抜きの言い訳）:watermelon:</p>
 
 <hr />
 
