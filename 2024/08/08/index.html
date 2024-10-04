@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Blink Without DelayパターンとFinite State Machineで作るArduinoのブロック崩し | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Blink Without DelayパターンとFinite State Machineで作るArduinoのブロック崩し" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/08/08/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/08/08/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-08T09:42:24+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Blink Without DelayパターンとFinite State Machineで作るArduinoのブロック崩し" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-09-08T20:03:53+09:00","datePublished":"2024-08-08T09:42:24+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"Blink Without DelayパターンとFinite State Machineで作るArduinoのブロック崩し","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/08/08/"},"url":"https://embedded-kiddie.github.io/2024/08/08/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Blink Without DelayパターンとFinite State Machineで作るArduinoのブロック崩し</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-08-08T09:42:24+09:00" itemprop="datePublished">Aug 8, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <style>
+  pre.mermaid {
+    float: left;
+    border: none;
+    background-color: white;
+    margin-right: 1em;
+  }
+  @media screen and (min-width: 800px) {
+    #flow { min-width: 760px; min-height: 782px; }
+  }
+</style>
+
+<p>前回記事「<a href="/2024/07/22/" title="Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ - Embedded Kiddie">Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ</a>」の応用として、ブロック崩しを作ってみました。</p>
+
+<h2 id="まずはデモから">まずはデモから</h2>
+
+<p>Arduino UNO R4 と 1.3” カラー LCD（解像度 240X240、ドライバーIC ST7789VW、Amazon でカラー LCD を検索するとよく目にする「🍒」が特徴のヤツ）で作成しました。電源を ON すると、ポテンショメータを動かすまでは自動で打ち返すデモが続きます。</p>
+
+<figure style="text-align:center">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/K5Ht-r3FQZE?si=m00dZ_tglkxvnf1q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</figure>
+
+<p>ソースコードやワイヤリングは、GitHub の <a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/breakout">Arduino-UNO-R4/breakout</a> を覗いてみて下さい。また R4 以前での動作を確認するため <a href="https://wokwi.com/projects/405346200615499777" title="Breakout Game - Wokwi ESP32, STM32, Arduino Simulator">Wokwi</a> を試してみました。5V → 3.3V のロジックレベル変換を省いてますし、現実に動作するかどうかも保証の限りではないのでご注意を。</p>
+
+<figure class="flex" style="text-align:center; align-items:flex-end">
+  <a href="/images/2024/08-08/LCD240x240.jpg" title="ブロック崩しのワイヤリング" data-lightbox="image">
+    <img src="/images/2024/08-08/LCD240x240-small.jpg" alt="ブロック崩しのワイヤリング" width="1376" height="1000">
+    <figcaption style="min-width: 400px">ブロック崩しのワイヤリング</figcaption>
+  </a>
+  <a class="simple" href="https://wokwi.com/projects/405346200615499777" title="Wokwiでブロック崩しをシミュレーション">
+    <img src="/images/2024/08-08/wokwi.jpg" alt="Wokwiでブロック崩しをシミュレーション" width="1376" height="1000">
+    <figcaption style="min-width: 400px">Wokwiでブロック崩しをシミュレーション</figcaption>
+  </a>
+</figure>
+
+<h2 id="ノンプリエンプティブなマルチタスクのテンプレート">ノンプリエンプティブなマルチタスクのテンプレート</h2>
+
+<p><a href="/2024/07/22/" title="Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ - Embedded Kiddie">前回の記事</a> では、複数のタスクを周期的に起動するマクロ <code class="language-plaintext highlighter-rouge">DO_EVERY</code> を紹介しました。今回はそれに状態コントローラ（<a href="https://ja.wikipedia.org/wiki/%E6%9C%89%E9%99%90%E3%82%AA%E3%83%BC%E3%83%88%E3%83%9E%E3%83%88%E3%83%B3" title="有限オートマトン - Wikipedia">ステートマシン</a>）を加えた、次のようなコードを考えます。Arduino IDE にコピペすれば、コンパイルは通りますが、もちろん何も起きません。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// Non-preemptive multitasking</span>
+<span class="cp">#define DO_EVERY(period, prev)  static uint32_t prev = 0; for (uint32_t now = millis(); now - prev &gt;= period; prev = now)
+</span>
+<span class="cp">#define INTERVAL1 110 // [msec]
+#define INTERVAL2 120 // [msec]
+#define INTERVAL3 130 // [msec]
+</span>
+<span class="kt">void</span> <span class="nf">StateController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// 状態コントローラ</span>
+  <span class="n">StateController</span><span class="p">();</span>
+
+  <span class="c1">// １つ目のタスク</span>
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL1</span><span class="p">,</span> <span class="n">Timer1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">;</span> <span class="c1">// 何らかの処理</span>
+  <span class="p">}</span>
+
+  <span class="c1">// ２つ目のタスク</span>
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL2</span><span class="p">,</span> <span class="n">Timer2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">;</span> <span class="c1">// 何らかの処理</span>
+  <span class="p">}</span>
+
+  <span class="c1">// ３つ目のタスク</span>
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL3</span><span class="p">,</span> <span class="n">Timer3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">;</span> <span class="c1">// 何らかの処理</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>このコードの意図は、以下の繰り返しになります。</p>
+
+<ul>
+  <li>状態コントローラは、各タスクの状態を常に監視し、システム状態を決定する</li>
+  <li>各タスクは、状態コントローラが決定したシステム状態に応じた処理を実行する</li>
+  <li>各タスクは、自身の状態が変化したら、その旨を状態コントローラに通知する</li>
+</ul>
+
+<p>状態コントローラと各タスク間でどのように状態をやり取りをするか、ここでは具体的な方法を示していませんが、Arduino であればグローバル変数を介したやり取りで十分でしょう。なぜなら、リアルタイム OS で制御される「<a href="https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%AB%E3%83%81%E3%82%BF%E3%82%B9%E3%82%AF#%E3%83%97%E3%83%AA%E3%82%A8%E3%83%B3%E3%83%97%E3%83%86%E3%82%A3%E3%83%96%E3%83%BB%E3%83%9E%E3%83%AB%E3%83%81%E3%82%BF%E3%82%B9%E3%82%AF" title="プリエンプティブ・マルチタスク - Wikipedia">プリエンプティブなマルチタスク</a>」ではなく、あくまで「<a href="https://atmarkit.itmedia.co.jp/ait/articles/0506/15/news114.html" title="第4回　デッドロックの回避とスレッド間での同期制御 ― マルチスレッド・プログラミングにおける排他制御と同期制御（後編） ―：連載.NETマルチスレッド・プログラミング入門（1/3 ページ） - ＠IT">ノンプリエンプティブなマルチタスク</a>」だからです <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> 。</p>
+
+<p>つまりは（割り込みを使わない限り <sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup> ）グローバル変数を書き換える際の排他制御も不要だし、排他制御が原因で起きる <a href="https://atmarkit.itmedia.co.jp/ait/articles/0506/15/news114.html" title="第4回　デッドロックの回避とスレッド間での同期制御 ― マルチスレッド・プログラミングにおける排他制御と同期制御（後編） ―：連載.NETマルチスレッド・プログラミング入門（1/3 ページ） - ＠IT">デッドロック</a> も心配しなくてイイという事です。</p>
+
+<p>ただし、どのタスクも所定の時間内には終わるように作りましょうネ。</p>
+
+<h2 id="ブロック崩しゲームの分析">ブロック崩しゲームの分析</h2>
+
+<p>以下、何となくオブジェクト指向な書きっぷりで説明しますが、実際のコードは C++ ではなく C で書います
+ <img class="emoji" title=":stuck_out_tongue_winking_eye:" alt=":stuck_out_tongue_winking_eye:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f61c.png" height="20" width="20"></p>
+
+<p>まず最初の <a href="https://ja.wikipedia.org/wiki/%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88_(%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0)" title="オブジェクト (プログラミング) - Wikipedia">オブジェクト</a> として、「状態コントローラ」にゲームの進行を司る役割を持たせることを考えます。このオブジェクトが持つ状態遷移を図で表すと <sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup> 、ザックリですが次のように想定できます。</p>
+
+<dev style="text-align:center">
+  <pre class="mermaid" id="flow" aria-label="状態コントローラ">
+  stateDiagram-v2
+    [*] --&gt; ゲーム起動中:電源ON
+    ゲーム起動中 --&gt; [*]:電源OFF
+    state ゲーム起動中 {
+      [*] --&gt; オープニング
+      オープニング --&gt; プレイ開始:プレイ開始のトリガ
+      プレイ開始 --&gt; プレイ中:プレイの準備完了
+      プレイ中 --&gt; ステージクリア:ブロックが全て消去された
+      ステージクリア --&gt; プレイ開始:次のステージの準備完了
+      プレイ中 --&gt; ゲームオーバー:ボール残数がゼロ
+      ゲームオーバー --&gt; オープニング:オープニング開始のトリガ
+    }
+  </pre>
+</dev>
+
+<p>「オープニング」ではゲームタイトルが表示され、カッコいい音楽が流れるイメージですかネ。</p>
+
+<p>続いてゲーム中の主要なオブジェクトとして、ブロック、ボール、ラケットの３つを考えます（「壁」は能動的な役割や状態を持たないので分析の対象外）。これらオブジェクトの振る舞いは、およそ次のようになるでしょう。</p>
+
+<ol>
+  <li>
+<strong>ブロック</strong>
+    <ul>
+      <li>プレイ開始時に、全てのブロックが消されていない状態に準備する</li>
+      <li>消されていないブロックを描画する</li>
+      <li>消されるべきブロックを画面から消去する</li>
+      <li>全てのブロックが消去されたら、その旨を状態コントローラに通知する</li>
+    </ul>
+  </li>
+  <li>
+<strong>ボール</strong>
+    <ul>
+      <li><span id="ball-init">プレイ開始時に、新しいボールの打ち出しを準備する</span></li>
+      <li>プレイ中は、自身の移動方向に応じてボールを動かす</li>
+      <li>壁、ブロック、ラケットに当たったら移動方向を変える</li>
+      <li>ブロックに当たったら、スコアアップを状態コントローラに通知する</li>
+      <li>ラケットより下に移動したら、ボール残数の減少を状態コントローラに通知する</li>
+    </ul>
+  </li>
+  <li>
+<strong>ラケット</strong>
+    <ul>
+      <li>ユーザ入力を監視する</li>
+      <li>オープニング中にユーザ入力があれば、プレイ開始を状態コントローラに通知する</li>
+      <li>プレイ中は、ユーザ入力に応じてラケットを動かす</li>
+    </ul>
+  </li>
+</ol>
+
+<p>これらのオブジェクトも自身の状態と状態遷移を持ち得ますが、必ずしもゲーム進行の詳細を知らずとも良いようにすることがポイントです。即ち、状態コントローラが指示するシステム状態に従い「せっせと自分の仕事に専念する」ことができるようにしてあげます。</p>
+
+<h2 id="設計の概要">設計の概要</h2>
+
+<p>続いて「状態遷移の仕組み」と「状態コントローラと各オブジェクトの役割分担」をより具体的に落とし込んでいきます。</p>
+
+<h3 id="状態遷移の仕組み">状態遷移の仕組み</h3>
+
+<p>先の状態遷移図に則り、ゲーム進行を司る「システム状態」を、次のような <a href="https://ja.wikipedia.org/wiki/%E5%88%97%E6%8C%99%E5%9E%8B" title="列挙型 - Wikipedia"><code class="language-plaintext highlighter-rouge">emum</code>（列挙型）</a>として定義します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
+  <span class="n">OPENING</span><span class="p">,</span>  <span class="c1">// オープニング</span>
+  <span class="n">START</span><span class="p">,</span>    <span class="c1">// プレイ開始</span>
+  <span class="n">PLAYING</span><span class="p">,</span>  <span class="c1">// プレイ中</span>
+  <span class="n">CLEAR</span><span class="p">,</span>    <span class="c1">// ステージクリア</span>
+  <span class="n">GAMEOVER</span><span class="p">,</span> <span class="c1">// ゲームオーバー</span>
+<span class="p">}</span> <span class="n">Status_t</span><span class="p">;</span></code></pre></figure>
+
+<p>この <code class="language-plaintext highlighter-rouge">Status_t</code> をグローバル変数に割り当て、状態コントローラを <code class="language-plaintext highlighter-rouge">switch - case文</code> で構成すると、次のようなコードになります。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">Status_t</span> <span class="n">status</span> <span class="o">=</span> <span class="n">OPENING</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">StateController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">OPENING</span><span class="p">:</span>
+      <span class="p">;</span> <span class="c1">// 何らかの処理</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">START</span><span class="p">:</span>
+      <span class="p">;</span> <span class="c1">// 何らかの処理</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">PLAYING</span><span class="p">:</span>
+      <span class="p">;</span> <span class="c1">// 何らかの処理</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">CLEAR</span><span class="p">:</span>
+      <span class="p">;</span> <span class="c1">// 何らかの処理</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">GAMEOVER</span><span class="p">:</span>
+    <span class="nl">default:</span>
+      <span class="p">;</span> <span class="c1">// 何らかの処理</span>
+      <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>続いて先の「状態遷移図」を眺めつつ、状態コントローラの役割をもう少し具体化することで「何らかの処理」の内容を決めていきます。</p>
+
+<h3 id="状態コントローラと各オブジェクトの役割分担">状態コントローラと各オブジェクトの役割分担</h3>
+
+<p>各オブジェクトも独自の状態と状態遷移を持ち得ますが、今回はそこまで複雑にせず、遷移時に必要な各オブジェクトのメソッドを状態コントローラが呼び出す実装とします。</p>
+
+<p>例えば「ボール」オブジェクトが持つメソッド「<a href="#ball-init" title="2.「ボール」オブジェクトを扱うタスク"><strong>プレイ開始時に、新しいボールの打ち出しを準備する</strong></a>」を「ボール」自身の状態遷移中で実行するのではなく、状態コントローラが「<code class="language-plaintext highlighter-rouge">case START:</code> 〜 <code class="language-plaintext highlighter-rouge">break;</code>」で同メソッドを呼び出すと言うワケです。</p>
+
+<p>このような実装のメリットとデメリットは以下となります。</p>
+
+<ul>
+  <li>
+    <p>メリット<br>
+各オブジェクトは、必要とされるメソッドを備えるだけで良い（ゲーム進行に伴う状態遷移時の詳細を知る必要がない、
+即ち<strong>状態コントローラへの依存度が低くなる</strong>）</p>
+  </li>
+  <li>
+    <p>デメリット<br>
+状態コントローラは、状態遷移時に必要な処理を行う責任がある（各オブジェクトのメソッドを知っている必要がある、即ち<strong>各オブジェクトへの依存度が高くなる</strong>）</p>
+  </li>
+</ul>
+
+<p>オブジェクト指向のキーワード（というかソフトウェア品質の指標）に「<a href="https://ja.wikipedia.org/wiki/%E5%87%9D%E9%9B%86%E5%BA%A6" title="凝集度 - Wikipedia">高凝集・疎結合</a>」があり、将来の拡張性を考えればメリデメを反転させる考え方もあり得ますが、今回はシンプルさを優先させることとします。</p>
+
+<p>さらにゲームの進行上、スコアとボール残数の管理や表示、「ゲームオーバー」等のメッセージ表示機能の割り当てを考えなければなりません。新たなオブジェクトを定義する手もありますが、前述同様にシンプルさを優先させ、それらも状態コントローラに割り振る事にします。</p>
+
+<p>ボール残数とスコアの管理からステージクリア時の処理やメッセージの表示まで、ゲーム進行に関する全段取りを整える役割を状態コントローラに負ってもらうワケで、その責任は重大ですネ。</p>
+
+<h2 id="実装の概要">実装の概要</h2>
+
+<p>前章の役割分担に基づき、各オブジェクトのメンバー変数やメソッドを定義し、<code class="language-plaintext highlighter-rouge">loop()</code> 内の処理を書いていきます。実際のプログラムを C で書いている都合上（<code class="language-plaintext highlighter-rouge">public</code> や <code class="language-plaintext highlighter-rouge">private</code> を区別せず全てグローバルにしちゃっていて、カッコ悪いので…）、ここでは <code class="language-plaintext highlighter-rouge">loop()</code> 内の処理についてだけ示したいと思います。</p>
+
+<p>ちなみに、「ブロック」オブジェクトには能動的な動きがないので、タスクは割り当てなくても良いと思います。</p>
+
+<h3 id="状態コントローラオブジェクト">「状態コントローラ」オブジェクト</h3>
+
+<p>およそ次のような感じになると思います。括弧（「オブジェクト」）は、それぞれのメソッドを呼び出すことを意図しています。また「メッセージを表示する」は、数秒間ポーズをかける仕組みが必要になりそうです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">StateController</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">OPENING</span><span class="p">:</span>
+      <span class="c1">// ゲームを初期化する;</span>
+      <span class="c1">// オープニング画面を描画する;</span>
+      <span class="c1">// プレイ開始のトリガで status = START;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">START</span><span class="p">:</span>
+      <span class="c1">// 「ボール」の位置と方向を設定する;</span>
+      <span class="c1">// 「ブロック」を初期化して描画する;</span>
+      <span class="c1">// status = PLAYING;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">PLAYING</span><span class="p">:</span>
+      <span class="c1">// 「ブロック」が全て消去されたら status = CLEAR;</span>
+      <span class="c1">// 「ラケット」に当たらず空振したら status = START;</span>
+      <span class="c1">// 「ボール」残数がゼロになったら status = GAMEOVER;</span>
+      <span class="c1">// ステージやスコア、ボール残数を表示する;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">CLEAR</span><span class="p">:</span>
+      <span class="c1">// ステージクリア時のメッセージを表示する;</span>
+      <span class="c1">// 次ステージの準備をする;</span>
+      <span class="c1">// status = START;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">GAMEOVER</span><span class="p">:</span>
+      <span class="c1">// ゲーム終了のメッセージを表示する;</span>
+      <span class="c1">// オープニング開始のトリガで status = OPENING;</span>
+      <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="ボールオブジェクトのタスク">「ボール」オブジェクトのタスク</h3>
+
+<p>「プレイ中」は、ひたすらボールを移動させると同時に、壁やブロック、ラケットへの衝突を判定し、衝突時には移動方向を変えたりする処理を書く事になります。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">  <span class="c1">// ボールオブジェクトのタスク</span>
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL1</span><span class="p">,</span> <span class="n">Timer1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">==</span> <span class="n">PLAYING</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// ボールの位置を更新する;</span>
+      <span class="c1">// 壁、ブロック、ラケットへの衝突を判定し、衝突時は移動方向を変える;</span>
+      <span class="c1">// 更新された位置に基づきボールを描画する;</span>
+    <span class="p">}</span>
+  <span class="p">}</span></code></pre></figure>
+
+<h3 id="ラケットオブジェクトのタスク">「ラケット」オブジェクトのタスク</h3>
+
+<p>ひたすらユーザ入力を監視し、ラケットを動かすだけですネ。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">  <span class="c1">// ラケットオブジェクトのタスク</span>
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">INTERVAL2</span><span class="p">,</span> <span class="n">Timer2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ユーザ操作を読み取る</span>
+    <span class="c1">// 読み取った位置に応じてラケットを描画する</span>
+  <span class="p">}</span></code></pre></figure>
+
+<h3 id="ブロック崩しのコア部分は">ブロック崩しのコア部分は…</h3>
+
+<p>さて、肝心のブロック崩しですが、以下の記事から流用させてもらうこととしました（オィ）。</p>
+
+<ul>
+  <li><a href="https://blog.boochow.com/article/423049468.html" title="Arduino（４）　ブロック崩しを作ってみる（１）  –  楽しくやろう。">Arduino（４）　ブロック崩しを作ってみる（１）</a></li>
+  <li><a href="https://blog.boochow.com/article/423178933.html" title="Arduino（５）　ブロック崩しを作ってみる（２）  –  楽しくやろう。">Arduino（５）　ブロック崩しを作ってみる（２）</a></li>
+  <li><a href="https://blog.boochow.com/article/423481451.html" title="Arduino（６）　ブロック崩しを作ってみる（３）  –  楽しくやろう。">Arduino（６）　ブロック崩しを作ってみる（３）</a></li>
+</ul>
+
+<p>作者の boochow さんには、流用したコードの公開を快諾していただきました。それぞれの記事と添付されたプログラムには、以下の優れた特徴があります。</p>
+
+<ul>
+  <li>小さなプログラムから始まり、少しづつ機能を追加していくプロセスがとてもわかり易い</li>
+  <li>仮想のスクリーン解像度を設定し、異なる解像度を持つ LCD への移植を容易にしている</li>
+  <li>浮動小数点数を用いず、整数計算だけで実現しているため、処理負荷がとても軽い</li>
+  <li>意図的に各オブジェクトの役割が整理され、コーディングに反映されている</li>
+</ul>
+
+<p>ゲームなど作ったことのない僕にとって正に救いの神であり、また今回のお題にピッタリというワケです。</p>
+
+<p>さらにちょっと欲張って、次の機能を追加してみました。</p>
+
+<ul>
+  <li>電源投入直後は、自動でボールを打ち返すデモモードが動作する</li>
+  <li>ラケットを操作するポテンショメータを動かすと、ゲームが始まる</li>
+  <li>連続してブロックに当たると、どんどん得点が高くなるコンボ機能</li>
+  <li>（入射角と反射角の法則に反し）打ち返したラケットの位置に応じて反射角が変わる</li>
+  <li>ステージをクリアする度に少しづつブロックが下がり、ボールの移動速度が早くなる</li>
+</ul>
+
+<p>ということで、スコアやボールの管理、状態の通知方法やメッセージの表示処理等、説明していない部分もあり、また説明とのズレも多少ありますが、作成したプログラムを載せておきます。オブジェクト指向的な説明をしながらも <del>手抜きして</del> オリジナルの良さを生かし、C で実装しているところもご勘弁ください <img class="emoji" title=":sweat_smile:" alt=":sweat_smile:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png" height="20" width="20"></p>
+
+<details>
+<summary><h3>作成したプログラム</h3>（ご参考）</summary>
+
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*
+ * Copyright (c) 2024 embedded-kiddie
+ * Copyright (c) 2015 boochow
+ * Released under the MIT license
+ * https://opensource.org/license/mit
+ */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Adafruit_GFX.h&gt;</span><span class="c1">    // Core graphics library</span><span class="cp">
+#include</span> <span class="cpf">&lt;Adafruit_ST7789.h&gt;</span><span class="c1"> // Hardware-specific library for ST7789</span><span class="cp">
+#include</span> <span class="cpf">&lt;SPI.h&gt;</span><span class="cp">
+</span>
+<span class="cm">/* SPI pin definition for Arduino UNO R3 and R4
+  | ST7789 | PIN  |  R3  |   R4   |     Description      |
+  |--------|------|------|--------|----------------------|
+  | SCL    |  D13 | SCK  | RSPCKA | Serial clock         |
+  | SDA    | ~D11 | COPI | COPIA  | Serial data input    |
+  | RES    | ~D9  | PB1  | P303   | Reset signal         |
+  | DC     |  D8  | PB0  | P304   | Display data/command |
+*/</span>
+<span class="cp">#define TFT_CS 10
+#define TFT_RST 9  // Or set to -1 and connect to Arduino RESET pin
+#define TFT_DC  8
+</span>
+<span class="cp">#define DEVICE_WIDTH  240
+#define DEVICE_HEIGHT 240
+#define DEVICE_ORIGIN 2
+</span>
+<span class="n">Adafruit_ST7789</span> <span class="n">tft</span> <span class="o">=</span> <span class="n">Adafruit_ST7789</span><span class="p">(</span><span class="n">TFT_CS</span><span class="p">,</span> <span class="n">TFT_DC</span><span class="p">,</span> <span class="n">TFT_RST</span><span class="p">);</span>
+
+<span class="cp">#define PIN_RACKET  A5  // Potentiometer or Joystick
+#define PIN_SOUND   7   // Buzzer
+</span>
+<span class="c1">// Pseudo screen scaling</span>
+<span class="cp">#define SCREEN_SCALE  2 // 2 (60 x 60) or 3 (30 x 30)
+#define SCREEN_DEV(v) ((int)(v) &lt;&lt; SCREEN_SCALE) // Screen to Device
+#define DEV_SCREEN(v) ((int)(v) &gt;&gt; SCREEN_SCALE) // Device to Screen
+#define SCREEN_WIDTH  DEV_SCREEN(DEVICE_WIDTH)
+#define SCREEN_HEIGHT DEV_SCREEN(DEVICE_HEIGHT)
+</span>
+<span class="c1">// Block (Screen coordinate system)</span>
+<span class="cp">#define BLOCK_ROWS    5
+#define BLOCK_COLS    10
+#define BLOCK_WIDTH   (SCREEN_WIDTH / BLOCK_COLS)
+#define BLOCK_HEIGHT  DEV_SCREEN( 8)
+#define BLOCK_TOP     DEV_SCREEN(18)
+#define BLOCK_END(t)  ((t) + BLOCK_ROWS * BLOCK_HEIGHT - 1)
+</span>
+<span class="c1">// Ball</span>
+<span class="cp">#define BALL_SIZE     7 // [px] (Device coordinate system)
+#define BALL_MOVE_X   (SCREEN_SCALE &lt;= 2 ? 2 : 1) // Screen coordinate system
+#define BALL_MOVE_Y   (SCREEN_SCALE &lt;= 2 ? 2 : 1) // Screen coordinate system
+#define BALL_CYCLE    (SCREEN_SCALE * 18) // [msec]
+#define DEMO_CYCLE    (SCREEN_SCALE *  8) // [msec]
+</span>
+<span class="c1">// Racket (Screen coordinate system)</span>
+<span class="cp">#define RACKET_WIDTH  DEV_SCREEN(44)
+#define RACKET_HEIGHT DEV_SCREEN( 8)
+#define RACKET_TOP    (SCREEN_HEIGHT - RACKET_HEIGHT)
+#define RACKET_CYCLE  16
+</span>
+<span class="c1">// Wall (Screen coordinate system)</span>
+<span class="cp">#define WALL_TOP      0
+#define WALL_LEFT     0
+#define WALL_RIGHT    (SCREEN_WIDTH - 1)
+</span>
+<span class="c1">// Font size for setTextSize(2)</span>
+<span class="cp">#define FONT_WIDTH    12 // [px] (Device coordinate system)
+#define FONT_HEIGHT   16 // [px] (Device coordinate system)
+</span>
+<span class="c1">// Drawing level and score</span>
+<span class="cp">#define DRAW_SCORE    2
+#define DRAW_ALL      3
+</span>
+<span class="c1">// Tone frequency</span>
+<span class="cp">#include</span> <span class="cpf">"pitches.h"</span><span class="cp">
+#define HIT_BLOCK   NOTE_C4
+#define HIT_RACKET  NOTE_C3
+</span>
+<span class="c1">// Colors by 16-bit (R5-G6-B5)</span>
+<span class="cp">#define BLACK     ST77XX_BLACK
+#define WHITE     ST77XX_WHITE
+#define RED       ST77XX_RED
+#define GREEN     ST77XX_GREEN
+#define BLUE      ST77XX_BLUE
+#define CYAN      ST77XX_CYAN
+#define MAGENTA   ST77XX_MAGENTA
+#define YELLOW    ST77XX_YELLOW
+#define ORANGE    ST77XX_ORANGE
+</span>
+<span class="c1">// Misc functions</span>
+<span class="cp">#define SIGN(a)   ((a) &gt; (0) ? (1) : (-1))
+#define NARR(a, t) (sizeof(a) / sizeof(t))
+</span>
+<span class="cp">#define ClearScreen() tft.fillScreen(BLACK)
+#define ClearMessage() tft.fillRect(0, DEVICE_HEIGHT / 2, DEVICE_WIDTH - 1, FONT_HEIGHT * 2, BLACK)
+</span>
+<span class="cp">#if (SCREEN_SCALE &lt;= 2)
+#define DrawBall(ball, tft, color) tft.fillCircle(SCREEN_DEV(ball.x), SCREEN_DEV(ball.y), (BALL_SIZE &gt;&gt; 1), (color))
+#else
+#define DrawBall(ball, tft, color) tft.fillRect(SCREEN_DEV(ball.x), SCREEN_DEV(ball.y), BALL_SIZE, BALL_SIZE, (color))
+#endif
+#define DrawRacket(x, tft, color) tft.fillRect(SCREEN_DEV(x), SCREEN_DEV(RACKET_TOP), SCREEN_DEV(RACKET_WIDTH), SCREEN_DEV(RACKET_HEIGHT), (color))
+</span>
+<span class="c1">// Type definitions</span>
+<span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
+  <span class="n">OPENING</span><span class="p">,</span>
+  <span class="n">START</span><span class="p">,</span>
+  <span class="n">PLAYING</span><span class="p">,</span>
+  <span class="n">CLEAR</span><span class="p">,</span>
+  <span class="n">GAMEOVER</span><span class="p">,</span>
+<span class="p">}</span> <span class="n">Status_t</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="kt">bool</span>      <span class="n">demo</span><span class="p">;</span>
+  <span class="n">Status_t</span>  <span class="n">status</span><span class="p">;</span>
+  <span class="kt">uint8_t</span>   <span class="n">level</span><span class="p">;</span>
+  <span class="kt">uint8_t</span>   <span class="n">balls</span><span class="p">;</span>
+  <span class="kt">uint8_t</span>   <span class="n">block_top</span><span class="p">;</span>
+  <span class="kt">uint8_t</span>   <span class="n">block_end</span><span class="p">;</span>
+  <span class="kt">uint8_t</span>   <span class="n">ball_cycle</span><span class="p">;</span>
+  <span class="kt">uint8_t</span>   <span class="n">racket_width</span><span class="p">;</span>
+  <span class="kt">uint8_t</span>   <span class="n">combo</span><span class="p">;</span>
+  <span class="kt">int8_t</span>    <span class="n">spin</span><span class="p">;</span>
+  <span class="kt">uint16_t</span>  <span class="n">score</span><span class="p">;</span>
+  <span class="kt">uint32_t</span>  <span class="n">pause</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">Play_t</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="kt">int16_t</span>   <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+  <span class="kt">int16_t</span>   <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">Ball_t</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="kt">int16_t</span>   <span class="n">x</span><span class="p">;</span>
+  <span class="kt">int16_t</span>   <span class="n">x_prev</span><span class="p">;</span>
+  <span class="kt">uint8_t</span>   <span class="n">count</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">Racket_t</span><span class="p">;</span>
+
+<span class="c1">// Global variables</span>
+<span class="n">Play_t</span> <span class="n">play</span><span class="p">;</span>
+<span class="n">Ball_t</span> <span class="n">ball</span><span class="p">;</span>
+<span class="n">Racket_t</span> <span class="n">racket</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">blocks</span><span class="p">[</span><span class="n">BLOCK_ROWS</span><span class="p">][</span><span class="n">BLOCK_COLS</span><span class="p">];</span>
+
+<span class="kt">void</span> <span class="nf">GameInit</span><span class="p">(</span><span class="kt">bool</span> <span class="n">demo</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">DrawMessage</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">pause</span><span class="p">,</span> <span class="kt">uint16_t</span> <span class="n">x</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">setCursor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">DEVICE_HEIGHT</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+
+  <span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen_P</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">tft</span><span class="p">.</span><span class="n">print</span><span class="p">((</span><span class="kt">char</span><span class="p">)</span><span class="n">pgm_read_byte</span><span class="p">(</span><span class="n">msg</span><span class="o">++</span><span class="p">));</span>
+  <span class="p">}</span>
+
+  <span class="n">play</span><span class="p">.</span><span class="n">pause</span> <span class="o">=</span> <span class="n">millis</span><span class="p">()</span> <span class="o">+</span> <span class="n">pause</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">DrawScore</span><span class="p">(</span><span class="kt">int</span> <span class="n">refresh</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">setCursor</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Lv:"</span><span class="p">);</span>
+
+  <span class="c1">// Level (3 digits)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">refresh</span> <span class="o">==</span> <span class="n">DRAW_ALL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">tft</span><span class="p">.</span><span class="n">fillRect</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">FONT_WIDTH</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">FONT_HEIGHT</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">refresh</span> <span class="o">!=</span> <span class="n">DRAW_SCORE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">tft</span><span class="p">.</span><span class="n">setCursor</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">tft</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">level</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Score (5 digits)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">refresh</span> <span class="o">&amp;</span> <span class="n">DRAW_SCORE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">tft</span><span class="p">.</span><span class="n">fillRect</span><span class="p">(</span><span class="mi">96</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">FONT_WIDTH</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="n">FONT_HEIGHT</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+  <span class="n">sprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s">"%05d"</span><span class="p">,</span> <span class="n">play</span><span class="p">.</span><span class="n">score</span><span class="p">);</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">setCursor</span><span class="p">(</span><span class="mi">96</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+
+  <span class="c1">// Balls (5 digits)</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">refresh</span> <span class="o">==</span> <span class="n">DRAW_ALL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">tft</span><span class="p">.</span><span class="n">fillRect</span><span class="p">(</span><span class="mi">175</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">DEVICE_WIDTH</span> <span class="o">-</span> <span class="mi">175</span><span class="p">,</span> <span class="n">FONT_HEIGHT</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">refresh</span> <span class="o">!=</span> <span class="n">DRAW_SCORE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">play</span><span class="p">.</span><span class="n">balls</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">tft</span><span class="p">.</span><span class="n">fillCircle</span><span class="p">(</span><span class="mi">230</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">BALL_SIZE</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">BALL_SIZE</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">BALL_SIZE</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Block related method</span>
+<span class="kt">void</span> <span class="nf">BlocksInit</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">memset</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">blocks</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="nb">true</span><span class="p">,</span> <span class="n">NARR</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="kt">bool</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">int8_t</span> <span class="nf">BlocksCount</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">int8_t</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">bool</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">bool</span><span class="o">*</span><span class="p">)</span><span class="n">blocks</span><span class="p">;</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int8_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NARR</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="kt">bool</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">int8_t</span><span class="p">)</span><span class="o">*</span><span class="n">p</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">BlocksDrawAll</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">static</span> <span class="k">const</span> <span class="kt">uint16_t</span> <span class="n">colors</span><span class="p">[]</span> <span class="n">PROGMEM</span> <span class="o">=</span> <span class="p">{</span><span class="n">CYAN</span><span class="p">,</span> <span class="n">MAGENTA</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">,</span> <span class="n">RED</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">,</span> <span class="n">ORANGE</span><span class="p">};</span>
+
+  <span class="kt">int16_t</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+  <span class="kt">int16_t</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">bool</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">bool</span><span class="o">*</span><span class="p">)</span><span class="n">blocks</span><span class="p">;</span>
+
+  <span class="k">for</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">play</span><span class="p">.</span><span class="n">block_top</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="n">play</span><span class="p">.</span><span class="n">block_end</span><span class="p">;</span> <span class="n">y</span> <span class="o">+=</span> <span class="n">BLOCK_HEIGHT</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">NARR</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="kt">uint16_t</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">SCREEN_WIDTH</span><span class="p">;</span> <span class="n">x</span> <span class="o">+=</span> <span class="n">BLOCK_WIDTH</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tft</span><span class="p">.</span><span class="n">fillRect</span><span class="p">(</span><span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">BLOCK_WIDTH</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">BLOCK_HEIGHT</span><span class="p">),</span> <span class="n">pgm_read_word</span><span class="p">(</span><span class="o">&amp;</span><span class="n">colors</span><span class="p">[</span><span class="n">c</span><span class="p">]));</span>
+        <span class="n">tft</span><span class="p">.</span><span class="n">drawRect</span><span class="p">(</span><span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">BLOCK_WIDTH</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">BLOCK_HEIGHT</span><span class="p">),</span> <span class="n">BLACK</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">BlocksEraseOne</span><span class="p">(</span><span class="kt">int16_t</span> <span class="n">row</span><span class="p">,</span> <span class="kt">int16_t</span> <span class="n">col</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">int16_t</span> <span class="n">x</span> <span class="o">=</span> <span class="n">col</span> <span class="o">*</span> <span class="n">BLOCK_WIDTH</span><span class="p">;</span>
+  <span class="kt">int16_t</span> <span class="n">y</span> <span class="o">=</span> <span class="n">row</span> <span class="o">*</span> <span class="n">BLOCK_HEIGHT</span> <span class="o">+</span> <span class="n">play</span><span class="p">.</span><span class="n">block_top</span><span class="p">;</span>
+
+  <span class="n">tft</span><span class="p">.</span><span class="n">fillRect</span><span class="p">(</span><span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">BLOCK_WIDTH</span><span class="p">),</span> <span class="n">SCREEN_DEV</span><span class="p">(</span><span class="n">BLOCK_HEIGHT</span><span class="p">),</span> <span class="n">BLACK</span><span class="p">);</span>
+  <span class="n">tone</span><span class="p">(</span><span class="n">PIN_SOUND</span><span class="p">,</span> <span class="n">HIT_BLOCK</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+  <span class="n">blocks</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+  <span class="n">play</span><span class="p">.</span><span class="n">score</span> <span class="o">+=</span> <span class="o">++</span><span class="n">play</span><span class="p">.</span><span class="n">combo</span><span class="p">;</span>
+  <span class="n">DrawScore</span><span class="p">(</span><span class="n">DRAW_SCORE</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="nf">BlockExist</span><span class="p">(</span><span class="kt">int16_t</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int16_t</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">int16_t</span> <span class="n">row</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">play</span><span class="p">.</span><span class="n">block_top</span><span class="p">);</span>
+  <span class="kt">int16_t</span> <span class="n">col</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">WALL_LEFT</span>     <span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">col</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">row</span> <span class="o">/=</span> <span class="n">BLOCK_HEIGHT</span><span class="p">;</span>
+    <span class="n">col</span> <span class="o">/=</span> <span class="n">BLOCK_WIDTH</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">&lt;</span> <span class="n">BLOCK_ROWS</span> <span class="o">&amp;&amp;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">BLOCK_COLS</span> <span class="o">&amp;&amp;</span> <span class="n">blocks</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">])</span> <span class="p">{</span>
+      <span class="n">BlocksEraseOne</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">BlocksCheckHit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">BlockExist</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">ball</span><span class="p">.</span><span class="n">y</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">ball</span><span class="p">.</span><span class="n">dx</span> <span class="o">=</span> <span class="o">-</span><span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">BlockExist</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">ball</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">ball</span><span class="p">.</span><span class="n">dy</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">ball</span><span class="p">.</span><span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="n">ball</span><span class="p">.</span><span class="n">dy</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">BlockExist</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">ball</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">ball</span><span class="p">.</span><span class="n">dy</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">ball</span><span class="p">.</span><span class="n">dx</span> <span class="o">=</span> <span class="o">-</span><span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">;</span>
+    <span class="n">ball</span><span class="p">.</span><span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="n">ball</span><span class="p">.</span><span class="n">dy</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Ball related method</span>
+<span class="kt">void</span> <span class="nf">BallInit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">DrawBall</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">tft</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">);</span>
+
+  <span class="kt">int16_t</span> <span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">SCREEN_WIDTH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="n">ball</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">x</span>  <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">x</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">y</span>  <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)(</span><span class="n">play</span><span class="p">.</span><span class="n">block_end</span> <span class="o">+</span> <span class="n">BLOCK_HEIGHT</span><span class="p">),</span>
+    <span class="p">.</span><span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">SCREEN_WIDTH</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="o">-</span><span class="n">BALL_MOVE_X</span> <span class="o">:</span> <span class="n">BALL_MOVE_X</span><span class="p">),</span>
+    <span class="p">.</span><span class="n">dy</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int16_t</span><span class="p">)</span><span class="n">BALL_MOVE_Y</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="nf">BallLost</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">ball</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="n">RACKET_TOP</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">BallMove</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">status</span>  <span class="o">==</span> <span class="n">PLAYING</span> <span class="o">&amp;&amp;</span> <span class="n">play</span><span class="p">.</span><span class="n">pause</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int16_t</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">);</span>
+    <span class="kt">int16_t</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">dy</span><span class="p">);</span>
+    <span class="kt">int16_t</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">SIGN</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">);</span>
+    <span class="kt">int16_t</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">SIGN</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">dy</span><span class="p">);</span>
+
+    <span class="k">do</span> <span class="p">{</span>
+      <span class="n">DrawBall</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">tft</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">);</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">nx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nx</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">dx</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">SCREEN_WIDTH</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">ball</span><span class="p">.</span><span class="n">dx</span> <span class="o">=</span> <span class="o">-</span><span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">;</span>
+          <span class="n">dx</span> <span class="o">=</span> <span class="o">-</span><span class="n">dx</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">ny</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ny</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">ball</span><span class="p">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">dy</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">RACKET_TOP</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">racket</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">racket</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">RACKET_WIDTH</span><span class="p">)</span> <span class="p">{</span>
+<span class="cp">#if (SCREEN_SCALE &lt;= 2)
+</span>            <span class="kt">int8_t</span> <span class="n">d</span> <span class="o">=</span> <span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">racket</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="n">RACKET_WIDTH</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">RACKET_WIDTH</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">))</span> <span class="p">{</span>
+              <span class="n">ball</span><span class="p">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">SIGN</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">BALL_MOVE_X</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// center</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+              <span class="n">ball</span><span class="p">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">SIGN</span><span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">dx</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">BALL_MOVE_X</span><span class="p">);</span> <span class="c1">// edge</span>
+            <span class="p">}</span>
+<span class="cp">#endif
+</span>            <span class="n">play</span><span class="p">.</span><span class="n">combo</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">ball</span><span class="p">.</span><span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="n">ball</span><span class="p">.</span><span class="n">dy</span><span class="p">;</span>
+            <span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="n">dy</span><span class="p">;</span>
+            <span class="n">tone</span><span class="p">(</span><span class="n">PIN_SOUND</span><span class="p">,</span> <span class="n">HIT_RACKET</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">WALL_TOP</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ball</span><span class="p">.</span><span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="n">ball</span><span class="p">.</span><span class="n">dy</span><span class="p">;</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="o">-</span><span class="n">dy</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="n">DrawBall</span><span class="p">(</span><span class="n">ball</span><span class="p">,</span> <span class="n">tft</span><span class="p">,</span> <span class="n">YELLOW</span><span class="p">);</span>
+      <span class="n">BlocksCheckHit</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">nx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">ny</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="c1">// Redraw game score when ball is inside the drawing area</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ball</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="n">DEV_SCREEN</span><span class="p">(</span><span class="n">FONT_HEIGHT</span><span class="p">)</span> <span class="o">+</span> <span class="n">DEV_SCREEN</span><span class="p">(</span><span class="n">BALL_SIZE</span><span class="p">))</span> <span class="p">{</span>
+      <span class="n">DrawScore</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Racket related method</span>
+<span class="kt">void</span> <span class="nf">RacketInit</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">racket</span> <span class="o">=</span> <span class="p">{</span> <span class="n">racket</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">racket</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">RacketMove</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">int16_t</span> <span class="n">x</span><span class="p">,</span> <span class="n">before</span> <span class="o">=</span> <span class="n">racket</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+
+  <span class="n">x</span> <span class="o">=</span> <span class="n">map</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">PIN_RACKET</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1023</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">SCREEN_WIDTH</span> <span class="o">-</span> <span class="n">RACKET_WIDTH</span> <span class="o">+</span> <span class="mi">5</span><span class="p">);</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">constrain</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">WALL_LEFT</span><span class="p">,</span> <span class="n">WALL_RIGHT</span> <span class="o">-</span> <span class="n">RACKET_WIDTH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">demo</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">racket</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// Once user moves the racket sufficiently, demo mode will be disabled</span>
+    <span class="kt">int16_t</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">racket</span><span class="p">.</span><span class="n">x_prev</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">++</span><span class="n">racket</span><span class="p">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">racket</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+      <span class="n">GameInit</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span> <span class="c1">// --&gt; demo = false, status = OPENING</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">racket</span><span class="p">.</span><span class="n">x_prev</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+      <span class="n">racket</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">ball</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">RACKET_WIDTH</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="n">racket</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">max</span><span class="p">(</span><span class="n">racket</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">WALL_LEFT</span><span class="p">),</span> <span class="n">WALL_RIGHT</span> <span class="o">-</span> <span class="n">RACKET_WIDTH</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">before</span> <span class="o">!=</span> <span class="n">racket</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">DrawRacket</span><span class="p">(</span><span class="n">before</span><span class="p">,</span> <span class="n">tft</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">DrawRacket</span><span class="p">(</span><span class="n">racket</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">tft</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">);</span>  
+<span class="p">}</span>
+
+<span class="c1">// Play control method</span>
+<span class="kt">void</span> <span class="nf">PlayInit</span><span class="p">(</span><span class="kt">bool</span> <span class="n">demo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">play</span> <span class="o">=</span> <span class="p">{</span> <span class="n">demo</span><span class="p">,</span> <span class="n">OPENING</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">BLOCK_TOP</span><span class="p">,</span> <span class="n">BLOCK_END</span><span class="p">(</span><span class="n">BLOCK_TOP</span><span class="p">),</span> <span class="p">(</span><span class="kt">uint8_t</span><span class="p">)(</span><span class="n">demo</span> <span class="o">?</span> <span class="n">DEMO_CYCLE</span> <span class="o">:</span> <span class="n">BALL_CYCLE</span><span class="p">),</span> <span class="n">RACKET_WIDTH</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">PlayNext</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">play</span><span class="p">.</span><span class="n">level</span><span class="o">++</span><span class="p">;</span>
+  <span class="n">play</span><span class="p">.</span><span class="n">ball_cycle</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="n">play</span><span class="p">.</span><span class="n">ball_cycle</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">ball_cycle</span><span class="p">,</span> <span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">demo</span> <span class="o">?</span> <span class="n">DEMO_CYCLE</span> <span class="o">:</span> <span class="n">BALL_CYCLE</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">));</span>
+  <span class="n">play</span><span class="p">.</span><span class="n">block_top</span> <span class="o">+=</span> <span class="p">(</span><span class="n">BLOCK_HEIGHT</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="n">play</span><span class="p">.</span><span class="n">block_top</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">block_top</span><span class="p">,</span> <span class="p">(</span><span class="n">BLOCK_TOP</span> <span class="o">+</span> <span class="n">BLOCK_HEIGHT</span> <span class="o">*</span> <span class="mi">5</span><span class="p">));</span>
+  <span class="n">play</span><span class="p">.</span><span class="n">block_end</span> <span class="o">=</span> <span class="n">BLOCK_END</span><span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">block_top</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">PlayControl</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">pause</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="n">OPENING</span><span class="p">:</span>
+        <span class="n">ClearScreen</span><span class="p">();</span>
+        <span class="n">GameStart</span><span class="p">();</span>
+        <span class="n">play</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">START</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="n">START</span><span class="p">:</span>
+        <span class="n">BallInit</span><span class="p">();</span>
+        <span class="n">play</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">PLAYING</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">demo</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">DrawMessage</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="n">PSTR</span><span class="p">(</span><span class="s">"Ready?"</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="n">PLAYING</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">BlocksCount</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">play</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">CLEAR</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">BallLost</span><span class="p">())</span> <span class="p">{</span>
+          <span class="n">play</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="p">(</span><span class="o">--</span><span class="n">play</span><span class="p">.</span><span class="n">balls</span> <span class="o">?</span> <span class="n">START</span> <span class="o">:</span> <span class="n">GAMEOVER</span><span class="p">);</span>
+          <span class="n">DrawScore</span><span class="p">(</span><span class="n">DRAW_ALL</span><span class="p">);</span>
+          <span class="n">DrawMessage</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">PSTR</span><span class="p">(</span><span class="s">"Oops!"</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="n">CLEAR</span><span class="p">:</span>
+        <span class="n">PlayNext</span><span class="p">();</span>
+        <span class="n">play</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">OPENING</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">demo</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">DrawMessage</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">PSTR</span><span class="p">(</span><span class="s">"Nice!"</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="n">GAMEOVER</span><span class="p">:</span>
+        <span class="n">GameInit</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span> <span class="c1">// --&gt; demo = true, status = OPENING</span>
+        <span class="n">DrawMessage</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="n">PSTR</span><span class="p">(</span><span class="s">"Game Over"</span><span class="p">));</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">play</span><span class="p">.</span><span class="n">pause</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ClearMessage</span><span class="p">();</span>
+    <span class="n">play</span><span class="p">.</span><span class="n">pause</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Game initialize method</span>
+<span class="kt">void</span> <span class="nf">GameInit</span><span class="p">(</span><span class="kt">bool</span> <span class="n">demo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">PlayInit</span><span class="p">(</span><span class="n">demo</span><span class="p">);</span>
+  <span class="n">RacketInit</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">GameStart</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">BallInit</span><span class="p">();</span>
+  <span class="n">BlocksInit</span><span class="p">();</span>
+  <span class="n">BlocksDrawAll</span><span class="p">();</span>
+  <span class="n">DrawScore</span><span class="p">(</span><span class="n">DRAW_ALL</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="n">DEVICE_WIDTH</span><span class="p">,</span> <span class="n">DEVICE_HEIGHT</span><span class="p">,</span> <span class="n">SPI_MODE2</span><span class="p">);</span> <span class="c1">// SPI_MODE2 or SPI_MODE3</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">setRotation</span><span class="p">(</span><span class="n">DEVICE_ORIGIN</span><span class="p">);</span>
+  <span class="n">tft</span><span class="p">.</span><span class="n">setTextColor</span><span class="p">(</span><span class="n">WHITE</span><span class="p">);</span>
+
+  <span class="n">GameInit</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Non-preemptive multitasking</span>
+<span class="cp">#define DO_EVERY(period, prev)  static uint32_t prev = 0; for (uint32_t now = millis(); now - prev &gt;= period; prev = now)
+</span>
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">PlayControl</span><span class="p">();</span>
+
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">play</span><span class="p">.</span><span class="n">ball_cycle</span><span class="p">,</span> <span class="n">TimeBall</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">BallMove</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="n">DO_EVERY</span><span class="p">(</span><span class="n">RACKET_CYCLE</span><span class="p">,</span> <span class="n">TimeRacket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">RacketMove</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+
+</details>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>本記事では、オブジェクト指向的な分析・設計が実装と乖離した、何とも中途半端な記事となりましたが、主テーマはタイトル通りとご理解頂ければ幸いです。</p>
+
+<p>興味を持たれた方は、boochow さんの記事や本記事を参考にご自分で実装し、マルチタスクのプログラミングを楽しんでもらうのが宜しいかと思います。</p>
+
+<p>例えば、１画面に複数のボールを出現させようすれば C++ でないとキツイと思いますし、C++ でコーディングできれば、スキルアップ間違いナシです（と、手抜きの言い訳）。</p>
+
+<p>それともう１つ。この手のプログラムでは、「ボールの移動 → 衝突判定 → ラケットの移動 → delay()」といった具合に処理が順番に組まれパターンが多いかと思います。</p>
+
+<p>主題がゲームの実現にあるので致し方ないことですが、状態コントローラの分析次第でゲームの実装設計も変わり得るので、「状態遷移の分析は大事だョ」ということを伝えるべく、本記事を構成したつもりです。</p>
+
+<p>というか、考え方は <a href="https://docs.arduino.cc/built-in-examples/digital/BlinkWithoutDelay/" title="Home / Programming / Built-in Examples / Blink Without Delay">“Blink Without Delay”</a> と何ら変わりません。Lチカで <code class="language-plaintext highlighter-rouge">delay()</code> の代わりに <code class="language-plaintext highlighter-rouge">millis()</code> を使うことが BWD というなら、本質の半分しか理解していない事になります。「ステートマシン ＋ <code class="language-plaintext highlighter-rouge">millis()</code>」が正しい理解なので、お間違えなく <img class="emoji" title=":watermelon:" alt=":watermelon:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f349.png" height="20" width="20"></p>
+
+<hr>
+
+<h3 id="参考情報">参考情報</h3>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>応用情報技術者試験の設問「<a href="https://www.ap-siken.com/kakomon/06_haru/q16.html" title="応用情報技術者令和6年春期問16 ノンプリエンプティブ方式のタスクの状態遷移｜応用情報技術者試験.com">ノンプリエンプティブ方式のタスクの状態遷移に関する記述として、適切なものはどれか</a>」が、ノンプリエンプティブなマルチタスクの特徴をよく言い表しています。 <a href="#fnref:1" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p>割り込みハンドラがグローバルな状態変数を書き換える場合は、各タスクで <a href="https://www.arduino.cc/reference/en/language/functions/interrupts/nointerrupts/">noInterrupts()</a> による割り込み禁止が必要になります。 <a href="#fnref:2" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+    <li id="fn:3" role="doc-endnote">
+      <p>仕事で状態遷移を正確に書こうとすると、<a href="https://www.mamezou.com/techinfo/modeling_ddd/modewaza_03" title="ステートマシン図Ⅰ - 株式会社豆蔵">結構難しい</a> のですが、慣れていなければ <a href="https://www.ogis-ri.co.jp/otc/hiroba/UMLTutorial/analysis/do_work/dowork7_1.html" title="ステートチャート図の作成">このチュートリアル</a> から始めるのが分かり易くて良いと思います。 <a href="#fnref:3" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/07/22/" title="前の記事：Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ">← Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/08/15/" title="次の記事：基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/08/08/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/08/08/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/08/08/";this.page.identifier="/2024/08/08/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>

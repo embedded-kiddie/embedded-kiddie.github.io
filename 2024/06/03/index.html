@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Arduino UNO R4の周辺回路レジスタをモニターするプログラム | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/06/03/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/06/03/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-06-03T09:41:52+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Arduino UNO R4の周辺回路レジスタをモニターするプログラム" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-06-03T09:41:52+09:00","datePublished":"2024-06-03T09:41:52+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"Arduino UNO R4の周辺回路レジスタをモニターするプログラム","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/06/03/"},"url":"https://embedded-kiddie.github.io/2024/06/03/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" integrity="sha256-fl23kUuX5ZajbBq7Z8zH8XT4u3HTjJqIxVsmLtFzf5c=" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-06-03T09:41:52+09:00" itemprop="datePublished">Jun 3, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/images/2024/06-03/registers-AGT.gif" alt="AGT レジスタ" title="AGT レジスタ" width="570" height="346" style="margin: auto; display: block"></p>
+
+<p>Arduino UNO R4の周辺回路レジスタをモニターするプログラムを作りました。</p>
+
+<p>上の画像は、<a href="/2024/04/04/arduino-blink-with-bgm.html#agt-%E3%81%A8%E3%81%AF" title="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 - Embedded Kiddie">低消費電力非同期汎用タイマ（AGT）</a>のレジスタのモニター出力です。AGT は 1ms を刻む <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> で使われていて、「１」が立ってるビットを <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーズマニュアル</a> で調べると、次のことが分かります。</p>
+
+<ol>
+  <li>
+<strong>AGT コントロールレジスタ (AGTCR)</strong>
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">TSTART[1]</code> および <code class="language-plaintext highlighter-rouge">TCSTF[1]</code><br>
+ カウント動作が開始され、カウントが実行中であることを示しています。</li>
+    </ul>
+  </li>
+  <li>
+<strong>AGT モードレジスタ 1 (AGTMR1)</strong>
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">TMOD[3]</code><br>
+ 「パルス幅測定モード」で動作しています。</li>
+      <li>
+<code class="language-plaintext highlighter-rouge">TCK[3]</code><br>
+ 周辺回路用クロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）の 分周比 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>8</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{8}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> をカウントソースとしています。</li>
+    </ul>
+  </li>
+  <li>
+<strong>AGT カウンタレジスタ (AGT)</strong>
+    <ul>
+      <li>
+<code class="language-plaintext highlighter-rouge">AGT[16]</code><br>
+ <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>8</mn><mn>24000000</mn></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>3000000</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{8}{24000000} = \frac{1}{3000000}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">24000000</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3000000</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>
+ 秒を 3000 回カウントして１ms としています。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>AGT だけじゃなく、汎用 I/O 端子のレジスタをモニターする機能も入れたので、誰かの役に立つことを願い、紹介したいと思います！</p>
+
+<div class="quote clear-both">
+
+<p><a href="https://renesas.github.io/fsp/_i_o_d_e_f_i_n_e__o_v_e_r_v_i_e_w.html" title="RA Flexible Software Package Documentation: Using Registers Directly">FSP ユーザーマニュアル</a> には、レジスタ、及びその下のビットフィールへのアクセスは、MCU タイプ別に定義された構造体により、次のルールに従うと定義されています。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_</span> <span class="o">+</span> <span class="err">周辺回路の略語</span> <span class="o">+</span> <span class="err">チャネル番号</span> <span class="o">+</span> <span class="o">-&gt;</span> <span class="err">レジスタ名</span>
+<span class="n">R_</span> <span class="o">+</span> <span class="err">周辺回路の略語</span> <span class="o">+</span> <span class="err">チャネル番号</span> <span class="o">+</span> <span class="o">-&gt;</span> <span class="err">レジスタ名</span> <span class="o">+</span> <span class="n">_b</span><span class="p">.</span> <span class="o">+</span> <span class="err">ビットフィールド名</span></code></pre></figure>
+
+<p>上の例で言えば、<code class="language-plaintext highlighter-rouge">AGT0</code> の コントロールレジスタ <code class="language-plaintext highlighter-rouge">AGTCR</code> の下にあるビットフィールド <code class="language-plaintext highlighter-rouge">TSTART</code> へのアクセスは、次のようになります。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_AGT0</span><span class="o">-&gt;</span><span class="n">AGTCR_b</span><span class="p">.</span><span class="n">TSTART</span></code></pre></figure>
+
+
+</div>
+
+<h2 id="peripheralmonitor-の紹介">PeripheralMonitor の紹介</h2>
+
+<p>仕組みはとても簡単です。UNO R4 ボードで読み取ったレジスタ情報をシリアル通信でホスト PC に送り、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> 等の <a href="https://ja.wikipedia.org/wiki/VT100" title="VT100 - Wikipedia">VT100</a> <a href="https://ja.wikipedia.org/wiki/%E7%AB%AF%E6%9C%AB%E3%82%A8%E3%83%9F%E3%83%A5%E3%83%AC%E3%83%BC%E3%82%BF" title="端末エミュレータ - Wikipedia">端末エミュレータ</a> ソフトで表示します。プログラムは UNO R4 用ライブラリとして GitHub のリポジトリ <a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> に上げました。</p>
+
+<h3 id="ホスト-pc-との接続">ホスト PC との接続</h3>
+
+<p><a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" title="Serial - Arduino Reference">Arduino 公式リファレンス</a> に従い、UNO R4 Minima/WiFi の <code class="language-plaintext highlighter-rouge">D0 (Rx)</code> と <code class="language-plaintext highlighter-rouge">D1 (Tx)</code> を、秋月で入手できる <a href="https://akizukidenshi.com/catalog/g/g108461/" title="FT234X 超小型USBシリアル変換モジュール: 半導体 秋月電子通商-電子部品・ネット通販">FT234X</a> や <a href="https://akizukidenshi.com/catalog/g/g114745/" title="CH340E USBシリアル変換モジュール Type-C: 半導体 秋月電子通商-電子部品・ネット通販">CH340E</a> などの USB シリアル変換モジュールに繋ぎます。接続は、Arduino 側の <code class="language-plaintext highlighter-rouge">Rx</code> を 相手側の <code class="language-plaintext highlighter-rouge">Tx</code> に、<code class="language-plaintext highlighter-rouge">Tx</code> を <code class="language-plaintext highlighter-rouge">Rx</code> につなぐ、クロス接続です。もちろん USB 側は PC に繋ぎます。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-03/fritzig.jpg" title="Fritzig ブレッドボード図" data-lightbox="image">
+    <img src="/images/2024/06-03/fritzig-small.jpg" alt="Fritzig ブレッドボード図" width="460" height="334">
+  </a>
+  <a href="/images/2024/06-03/serial-connection.jpg" title="シリアル接続" data-lightbox="image">
+    <img src="/images/2024/06-03/serial-connection-small.jpg" alt="シリアル接続" width="460" height="334">
+  </a>
+</figure>
+
+<h4 id="動作環境">動作環境</h4>
+
+<p>僕の環境はとても古く、参考にならない部分もあるとは思いますが、一応記しておきます。</p>
+
+<ul>
+  <li>
+<strong>Windows:</strong><br>
+Intel Mac 上の <a href="https://www.parallels.com/jp/" title="Parallels：Mac および Windows の仮想化、リモートアプリケーションサーバー、Mac 管理ソリューション">Parallels</a> で動作する Windows 7</li>
+  <li>
+<strong>MacOS:</strong><br>
+MacBook Pro (Late 2013), Big Sur (macOS バージョン 11.7.10)</li>
+  <li>
+<strong>Arduino IDE</strong><br>
+バージョン: 2.3.2、UNO R4 ボードマネージャ: 1.1.0</li>
+  <li>
+<strong>シリアル通信のプロトコル</strong><br>
+送信側の <a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/begin/" title="Serial.begin() - Arduino Reference"><code class="language-plaintext highlighter-rouge">SERIAL_8N1</code></a> と合わせるため、データ長やパリティ、フロー制御はデフォルトのままにします。</li>
+</ul>
+
+<h4 id="windows-の場合">Windows の場合</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/FT234X-TeraTerm.jpg" title="Tera Term のシリアルポート 設定と接続" data-lightbox="image">
+    <img src="/images/2024/06-03/FT234X-TeraTerm-small.jpg" alt="Tera Term のシリアルポート 設定と接続" width="460" height="562">
+  </a>
+  <figcaption>Tera Term: シリアル 設定と接続</figcaption>
+</figure>
+
+<p><a href="https://akizukidenshi.com/catalog/g/g108461/" title="FT234X 超小型USBシリアル変換モジュール: 半導体 秋月電子通商-電子部品・ネット通販">FT234X</a> は自動でデバイスドライバがインストールされ、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> の最大ボーレート <code class="language-plaintext highlighter-rouge">921600</code> まで OK でした。</p>
+
+<p>一方の <a href="https://akizukidenshi.com/catalog/g/g114745/" title="CH340E USBシリアル変換モジュール Type-C: 半導体 秋月電子通商-電子部品・ネット通販">CH340E</a> は <a href="https://www.wch-ic.com/search?q=CH340&amp;t=downloads" title="search CH340 - NanjingQinhengMicroelectronics">製造元のページ</a> からデバイスドライバ（Windows 7 まで対応との記述あり）をダウンロード＆インストールしましたが、ボーレートを下げたり <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を咬ませたりしても文字化けが起きてしまいました。</p>
+
+<p>Mac ではちゃんと動作しているので、デバイスドライバか OS に問題がありそうです。Windows 10 以上で確認ができればよかったのですが…。勘弁してください <img class="emoji" title=":bowing_man:" alt=":bowing_man:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f647.png" height="20" width="20"></p>
+
+<h4 id="mac-の場合">Mac の場合</h4>
+
+<p><a href="https://akizukidenshi.com/catalog/g/g108461/" title="FT234X 超小型USBシリアル変換モジュール: 半導体 秋月電子通商-電子部品・ネット通販">FT234X</a>、<a href="https://akizukidenshi.com/catalog/g/g114745/" title="CH340E USBシリアル変換モジュール Type-C: 半導体 秋月電子通商-電子部品・ネット通販">CH340E</a> とも問題なく正常に動作しました。デバイスドライバは、<span class="inline"><img src="/images/2024/04-18/terminal-app.png" width="108" height="27" title="ターミナル.app" alt="ターミナル.app"></span> を立ち上げ、<code class="language-plaintext highlighter-rouge">ls -l /dev/tty.*</code> の実行結果から、それらしい名前のファイルを見つけます。</p>
+
+<p>以下は僕の環境の場合ですが、<code class="language-plaintext highlighter-rouge">/dev/tty.usbserial-DK0G1BIL</code> が該当します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> /dev/tty.<span class="k">*</span>
+crw-rw-rw-  1 root  wheel   22,   0  5 30 06:58 /dev/tty.Bluetooth-Incoming-Port
+crw-rw-rw-  1 root  wheel   22,   2  6  2 00:49 /dev/tty.usbmodem1
+crw-rw-rw-  1 root  wheel   22,   4  5 30 13:32 /dev/tty.usbmodem14201
+crw-rw-rw-  1 root  wheel   22,   4  6  2 00:49 /dev/tty.usbserial-DK0G1BIL</code></pre></figure>
+
+<div class="clear-both" style="margin-top:2em"></div>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/FT234X-MacOS.png" title="システム情報 → ハードウェア → USB" data-lightbox="image">
+    <img src="/images/2024/06-03/FT234X-MacOS-small.png" alt="システム情報 → ハードウェア → USB" width="460" height="360">
+  </a>
+  <figcaption>システム情報→ハードウェア→USB</figcaption>
+</figure>
+
+<p>Arduino IDE がアップロード用に使うデバイスと区別するには、「<strong>アプリケーション</strong> → <strong>ユーティリティ</strong> → <strong>システム情報.app</strong>」、または <span class="inline"><img src="/images/2024/06-03/apple-logo.png" alt="Apple マーク" title="Apple マーク" width="27" height="27"></span> から「<strong>この Mac について</strong> → <strong>システムレポート</strong> → <strong>ハードウェア</strong> → <strong>USB</strong>」で得られる情報と付き合わせるのが確実です。</p>
+
+<div class="clear-both"></div>
+
+<p>続いて、見つけたデバイスファイル名とボーレートを <code class="language-plaintext highlighter-rouge">screen</code> コマンドに渡し、エミュレータを起動します。僕の Mac では、<code class="language-plaintext highlighter-rouge">230400</code> がボーレートの最大でした。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">screen /dev/tty.usbserial-DK0G1BIL 230400</code></pre></figure>
+
+<p>エミュレータから抜けるには <code class="language-plaintext highlighter-rouge">CTRL-a</code> + <code class="language-plaintext highlighter-rouge">k</code> を入力します。またターミナルの表示がバグったら <code class="language-plaintext highlighter-rouge">reset</code> コマンドで正常に戻せます（理由は後述しますが、ほぼ確実にバグります）。</p>
+
+<h3 id="スケッチのインストールと実行">スケッチのインストールと実行</h3>
+
+<p>リアルタイムクロック (RTC) の <a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/rtc/#periodic-interrupt">Periodic Interrupt</a> を流用し、一定時間ごとに画面を更新するサンプルスケッチを用意しました。ここでは手っ取り早く、ライブラリをインストールして実行する方法を示します。</p>
+
+<ol>
+  <li>
+<a href="https://github.com/embedded-kiddie/PeripheralMonitor/releases" title="Releases · embedded-kiddie/PeripheralMonitor">GitHub のリポジトリ</a> から最新版の .zip ファイルを ダウンロードします。</li>
+  <li>Arduino IDE のメニュー「<strong>スケッチ</strong> → <strong>ライブラリのインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」からダウンロードした .zip ファイルを読み込ませます。</li>
+  <li>続いて「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>PeripheralMonitor</strong> → <strong>monitor_by_rtc</strong>」から、スケッチの <a href="https://github.com/embedded-kiddie/PeripheralMonitor/blob/main/examples/monitor_by_rtc/monitor_by_rtc.ino" title="PeripheralMonitor/examples/monitor_by_rtc/monitor_by_rtc.ino at main · embedded-kiddie/PeripheralMonitor">サンプル</a> を開きます。</li>
+  <li>
+<span class="inline"><img src="/images/2024/04-18/button-compile.png" width="27" height="27" title="書き込みボタン" alt="書き込みボタン"></span> でコンパイル＆アップロードすると、エミュレータに初期画面が表示されます。</li>
+</ol>
+
+<h3 id="画面の説明">画面の説明</h3>
+
+<p>全部で５つの画面があります。スケッチの <a href="https://github.com/embedded-kiddie/PeripheralMonitor/blob/main/examples/monitor_by_rtc/monitor_by_rtc.ino" title="PeripheralMonitor/examples/monitor_by_rtc/monitor_by_rtc.ino at main · embedded-kiddie/PeripheralMonitor">サンプル</a> では、<code class="language-plaintext highlighter-rouge">D13</code> ピンの「ポート mn 端子機能選択レジスタ（PmnPFS）」の画面を表示します。</p>
+
+<p>Arduino IDE のシリアルモニタに <code class="language-plaintext highlighter-rouge">?</code> か <code class="language-plaintext highlighter-rouge">help</code> を入力すると、使えるコマンドを表示します。超簡単な CLI ですネ。また画面が乱れた時はリターンキーのみの入力で再描画します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Possible commands: ports, port, pins, p, agt, a, d, ?, <span class="nb">help</span></code></pre></figure>
+
+<h4 id="1-ports-画面">1. PORTS 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-PORTS.gif" title="ポート 1〜4 の Port Control レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-PORTS-small.gif" alt="ポート 1〜4 の Port Control レジスタ" width="285" height="173">
+  </a>
+  <figcaption>ポート1〜4の Port Control レジスタ</figcaption>
+</figure>
+
+<p><code class="language-plaintext highlighter-rouge">ports</code> と入力すると、ポート 1 からポート 4 まで、ポートコントロールレジスタ（PCNTR1 〜 PCNTR4）の中身を 4 桁の 16 進数で表示します。<code class="language-plaintext highlighter-rouge">[]</code> 内の数字はビット幅です。</p>
+
+<p>各ポートには、それぞれ 0 〜 15 のビットに対応づけられた、最大で 16 本の I/O 端子（ピン）が割り当てられています。</p>
+
+<div class="clear-both"></div>
+
+<p>プログラムではなり振り構わず表示してしまいますが、<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーズマニュアル</a> によると、全てのピンが存在するわけではなく、下表のように構成されています。</p>
+
+<details>
+<summary><h5>ポートごとのピンの構成表</h5></summary>
+
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">ポート</th>
+      <th>ピン（パッケージ: 64ピン）</th>
+      <th style="text-align: center">本数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">ポート 0</td>
+      <td>P000 ~ P004, P010 ~ P015</td>
+      <td style="text-align: center">11</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 1</td>
+      <td>P100 ~ P113</td>
+      <td style="text-align: center">14</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 2</td>
+      <td>P200, P201, P204 ~ P206, P212 ~ P215</td>
+      <td style="text-align: center">9</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 3</td>
+      <td>P300 ~ P304</td>
+      <td style="text-align: center">5</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 4</td>
+      <td>P400 ~ P402, P407 ~ P411</td>
+      <td style="text-align: center">8</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 5</td>
+      <td>P500 ~ P502</td>
+      <td style="text-align: center">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 6</td>
+      <td>なし</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 7</td>
+      <td>なし</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 8</td>
+      <td>なし</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ポート 9</td>
+      <td>P914, P915</td>
+      <td style="text-align: center">2</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+<p><a href="#1-ports-%E7%94%BB%E9%9D%A2">サンプル画像</a> では、ポート 1 の <code class="language-plaintext highlighter-rouge">PODR</code>（端子出力データ、0: Low 出力、1: High 出力）と <code class="language-plaintext highlighter-rouge">PIDR</code>（端子状態、0: Low レベル、1: High レベル）がチラチラと変化する様子が見えます。これを次のコマンドで、詳細に確認することが出来ます。</p>
+
+<h4 id="2-port-画面">2. PORT 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-PORT1.gif" title="ポート 1 の Port Control レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-PORT1-small.gif" alt="ポート 1 の Port Control レジスタ" width="285" height="173">
+  </a>
+  <figcaption>ポート1 の Port Control レジスタ</figcaption>
+</figure>
+
+<p>例えば <code class="language-plaintext highlighter-rouge">port1</code> のように、<code class="language-plaintext highlighter-rouge">port</code> に続けて 0 〜 9 を入力すると、各ポートのコントロールレジスタの中身を確認できます。</p>
+
+<p>サンプル画像では、<code class="language-plaintext highlighter-rouge">PODR</code> と <code class="language-plaintext highlighter-rouge">PIDR</code> の３ビット目、即ちピン <code class="language-plaintext highlighter-rouge">P102</code> で、何かが起きていることが確認できます。</p>
+
+<h4 id="3-pmnpfs-画面">3. PmnPFS 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-P102.gif" title="ポート 102 の Port Function Select レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-P102-small.gif" alt="ポート 102 の Port Function Select レジスタ" width="285" height="173">
+  </a>
+  <figcaption>P102 の PmnPFS レジスタ</figcaption>
+</figure>
+
+<p>例えば <code class="language-plaintext highlighter-rouge">p102</code> のように、<code class="language-plaintext highlighter-rouge">p</code> に続けて 0 〜 9 のポート番号 <code class="language-plaintext highlighter-rouge">m</code> と 00 〜 15 のピン番号 <code class="language-plaintext highlighter-rouge">n</code> を入力すると、ポート mn 端子機能選択レジスタ（PmnPFS）を表示します。</p>
+
+<p>このレジスタは、ポートコントロールレジスタと重複する一部のビット列を含み、入出力の機能を制御するビットフィールドで構成されています。</p>
+
+<details>
+<summary><h5>重複するビットフィールドへのアクセス方法について</h5></summary>
+
+
+<div class="quote clear-both">
+
+<p>例えば <code class="language-plaintext highlighter-rouge">P102</code> の <code class="language-plaintext highlighter-rouge">PmnPFS</code> レジスタの下にあるビットフィールド <code class="language-plaintext highlighter-rouge">PODR</code> に「１」を書き込むコードは、次の２つのパターンが可能です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_PFS</span><span class="o">-&gt;</span><span class="n">PORT</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">PIN</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">PmnPFS</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">R_PFS_PORT_PIN_PmnPFS_PODR_Pos</span><span class="p">);</span>
+<span class="n">R_PFS</span><span class="o">-&gt;</span><span class="n">PORT</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">PIN</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">PmnPFS_b</span><span class="p">.</span><span class="n">PODR</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre></figure>
+
+<p>一方 <code class="language-plaintext highlighter-rouge">PODR</code> は、ポートコントロールレジスタ <code class="language-plaintext highlighter-rouge">PCNTR1</code> のビットフィールド <code class="language-plaintext highlighter-rouge">PODR</code> とも重複するので、次の方法でも可能です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PCNTR1</span>        <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">R_PORT0_PCNTR1_PODR_Pos</span> <span class="o">+</span> <span class="mi">2</span><span class="p">));</span>
+<span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PCNTR1_b</span><span class="p">.</span><span class="n">PODR</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">);</span>
+<span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PODR</span>          <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">);</span>
+<span class="n">R_PORT1</span><span class="o">-&gt;</span><span class="n">PODR_b</span><span class="p">.</span><span class="n">PODR2</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span></code></pre></figure>
+
+<p>上の例の様に、書き込むビットフィールドが１つの場合、敢えて可読性の低い方法を選択するのはナンセンスですが、複数のビットフィールドをまとめて設定する場合、レジスタへのアクセス回数が極力少なくなるよう、複数の方法が提供されています。</p>
+
+<p>詳しくは <a href="https://renesas.github.io/fsp/_i_o_d_e_f_i_n_e__o_v_e_r_v_i_e_w.html" title="RA Flexible Software Package Documentation: Using Registers Directly">FSP ユーザーマニュアル</a> の実例を参照してください。</p>
+
+
+</div>
+</details>
+
+<h4 id="4-pins-画面">4. PINS 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-PINS.gif" title="D0〜D19 の Port Function Select レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-PINS-small.gif" alt="D0〜D19 の Port Function Select レジスタ" width="285" height="173">
+  </a>
+  <figcaption>D0〜D19 の PmnPFS レジスタ</figcaption>
+</figure>
+
+<p>単に <code class="language-plaintext highlighter-rouge">pins</code> と入力すると、ボード上のデジタルピンとアナログピンの <code class="language-plaintext highlighter-rouge">PmnPFS</code> レジスタを一覧表示します。表示上、<code class="language-plaintext highlighter-rouge">D10</code> 〜 <code class="language-plaintext highlighter-rouge">D13</code> は <code class="language-plaintext highlighter-rouge">Da</code> 〜 <code class="language-plaintext highlighter-rouge">Dd</code> としています。</p>
+
+<p>また逆引きも可能で、例えば <code class="language-plaintext highlighter-rouge">d13</code> を入力すると、Minima では <code class="language-plaintext highlighter-rouge">P111</code> を、WiFi では <code class="language-plaintext highlighter-rouge">P102</code> を表示します。</p>
+
+<h4 id="5-agt-画面">5. AGT 画面</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/registers-AGT.gif" title="AGT0 レジスタ" data-lightbox="image">
+    <img src="/images/2024/06-03/registers-AGT-small.gif" alt="AGT0 レジスタ" width="285" height="173">
+  </a>
+  <figcaption>AGT0 レジスタ</figcaption>
+</figure>
+
+<p>冒頭に示した AGT レジスタの画面を表示するには、<code class="language-plaintext highlighter-rouge">agt0</code> または <code class="language-plaintext highlighter-rouge">agt1</code> と入力します。</p>
+
+<p>この画面は、「<a href="/2024/04/09/arduino-r4-callback-timer.html" title="BGM再生用に作成したArduino UNO R4用タイマライブラリの解説 - Embedded Kiddie">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</a>」で <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.h" title="ArduinoCore-renesas/cores/arduino/FspTimer.h at main · arduino/ArduinoCore-renesas">FspTimer クラス</a> をテストするときに欲しかった機能で、ようやく実現しました <img class="emoji" title=":+1:" alt=":+1:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png" height="20" width="20"></p>
+
+<h4 id="画面表示と実行速度について">画面表示と実行速度について</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/confused-terminal.png" title="表示がバグったコンソール.app" data-lightbox="image">
+    <img src="/images/2024/06-03/confused-terminal-small.jpg" alt="表示がバグったコンソール.app" width="459" height="299">
+  </a>
+  <figcaption>表示がバグったコンソール.app</figcaption>
+</figure>
+
+<p>画面のカーソル制御に <a href="https://en.wikipedia.org/wiki/ANSI_escape_code" title="ANSI escape code - Wikipedia">ANSI エスケープコード</a> を使っている関係上、特に Mac では通信が途切れるとシーケンスが乱れ、バグったような状態になります。このような状態になったら、コマンド <code class="language-plaintext highlighter-rouge">reset</code> を入力してください。正常に戻ります。</p>
+
+<div class="clear-both"></div>
+
+<p>また、本来は PC 側で <a href="https://ja.wikipedia.org/wiki/Curses" title="curses - Wikipedia">curses ライブラリ</a> や GUI ソフトで画面制御すべきを、Arduino ボード側で行っているため、それなりの時間を要します。下の表は、シリアル通信のボーレートと各画面の実行時間を <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で計測した結果です。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Baud Rate</th>
+      <th style="text-align: right">PORTS [ms]</th>
+      <th style="text-align: right">PORTx [ms]</th>
+      <th style="text-align: right">PINS [ms]</th>
+      <th style="text-align: right">Pxxx [ms]</th>
+      <th style="text-align: right">AGTx [ms]</th>
+      <th style="text-align: center">Windows</th>
+      <th style="text-align: center">MacOS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right"><code class="language-plaintext highlighter-rouge">115200</code></td>
+      <td style="text-align: right">44.903</td>
+      <td style="text-align: right">26.336</td>
+      <td style="text-align: right">198.231</td>
+      <td style="text-align: right">11.660</td>
+      <td style="text-align: right">24.006</td>
+      <td style="text-align: center">○</td>
+      <td style="text-align: center">○</td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><code class="language-plaintext highlighter-rouge">230400</code></td>
+      <td style="text-align: right">23.815</td>
+      <td style="text-align: right">13.620</td>
+      <td style="text-align: right">105.974</td>
+      <td style="text-align: right">6.014</td>
+      <td style="text-align: right">12.327</td>
+      <td style="text-align: center">○</td>
+      <td style="text-align: center">○</td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><code class="language-plaintext highlighter-rouge">460800</code></td>
+      <td style="text-align: right">13.248</td>
+      <td style="text-align: right">7.255</td>
+      <td style="text-align: right">59.804</td>
+      <td style="text-align: right">3.187</td>
+      <td style="text-align: right">6.486</td>
+      <td style="text-align: center">○</td>
+      <td style="text-align: center">×</td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><code class="language-plaintext highlighter-rouge">921600</code></td>
+      <td style="text-align: right">7.957</td>
+      <td style="text-align: right">4.069</td>
+      <td style="text-align: right">36.668</td>
+      <td style="text-align: right">1.773</td>
+      <td style="text-align: right">3.560</td>
+      <td style="text-align: center">○</td>
+      <td style="text-align: center">×</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>数値には文字列の生成と通信の時間を含んでいて、ほぼボーレートと反比例の関係にあることから、通信にかかる時間が支配的であることが分かります。</p>
+
+<p>Blutooth を使えばもう少し速くなるとは思いますが、他のプログラムと組み合わせてデバッグに使える程のリアルタイム性はなく、あくまで学習用というワケです。</p>
+
+<h2 id="周辺回路のレジスタ定義について">周辺回路のレジスタ定義について</h2>
+
+<p><a href="/2024/05/07/" title="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！ - Embedded Kiddie">以前の記事</a> で解説した<a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/svd/R7FA4M1AB.svd" title="ArduinoCore-renesas/svd/R7FA4M1AB.svd at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code></a> には、周辺回路のレジスタやアドレスが定義されてますが、プログラミングには <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h" title="ArduinoCore-renesas/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.h</code></a> が便利です。</p>
+
+<p>このファイルは Arduino 階層の深いところにあります。以下は Mac での例です（<code class="language-plaintext highlighter-rouge">1.2.0</code> はボードマネージャのバージョン）。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.2.0/variants/MINIMA/includes/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M1AB.h</code></pre></figure>
+
+<p>これを手作業で見つけ出すのは激ムズです。そんな時、Mac や Linux の人なら次の <code class="language-plaintext highlighter-rouge">find</code> コマンドが便利です。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">find <span class="nb">.</span> <span class="nt">-name</span> <span class="s2">"*.h"</span> <span class="nt">-exec</span> <span class="nb">grep</span> <span class="nt">-w</span> R_PORT1 <span class="o">{}</span> <span class="se">\;</span> <span class="nt">-print</span></code></pre></figure>
+
+<p>このコマンドは、以下の様に働きます。</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">.</code> が示す現在のディレクトリから、<code class="language-plaintext highlighter-rouge">-name</code> で示される <code class="language-plaintext highlighter-rouge">.h</code> ファイルを探し、</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">-exec</code> 〜 <code class="language-plaintext highlighter-rouge">\;</code> で囲まれたコマンドを実行し、</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">{}</code> でファイルへのパスを <code class="language-plaintext highlighter-rouge">grep</code> に渡し、</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">-w</code> でワード単位に <code class="language-plaintext highlighter-rouge">R_PORT1</code> を検索し、</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">-print</code> で検索に引っ掛かったファイルへのパスを出力する。</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">find</code> には沢山のオプションがあるので、幾つかを覚えておくと便利ですョ <img class="emoji" title=":point_up:" alt=":point_up:" src="https://github.githubassets.com/images/icons/emoji/unicode/261d.png" height="20" width="20"></p>
+
+<h2 id="おまけ">おまけ</h2>
+
+<figure class="float-left">
+  <a href="/images/2024/06-03/MINIMA-PORT2-LOVE.gif" title="Minima の P204 の状態がチラついている" data-lightbox="image">
+    <img src="/images/2024/06-03/MINIMA-PORT2-LOVE-small.gif" alt="Minima の P204 の状態がチラついている" width="285" height="173">
+  </a>
+  <figcaption>Minima の P204 がチラついている</figcaption>
+</figure>
+
+<p>Minima の汎用 I/O 端子レジスタを観察していたら、何やら <code class="language-plaintext highlighter-rouge">P204</code> の状態がフラついているのが観測されました。</p>
+
+<p>ご存知の方も多いと思いますが、<a href="https://docs.arduino.cc/resources/schematics/ABX00080-schematics.pdf">Minima の回路図</a> を見ると、これは基盤裏側の <code class="language-plaintext highlighter-rouge">LOVE</code> ピンですネ。</p>
+
+<div class="clear-both"></div>
+
+<p>この <code class="language-plaintext highlighter-rouge">LOVE</code> ピンは <a href="https://forum.arduino.cc/t/the-way-how-to-use-arduino-uno-r4-minimas-love-pin/1142989" title="The way how to use Arduino UNO R4 MINIMA's LOVE pin - UNO R4 Minima - Arduino Forum">Arduino Forum</a> でも取り上げられていて、このピンを GND に落とすだけの、なんちゃってタッチセンサを実験している人がいました。</p>
+
+<figure style="text-align: center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5cS-ShyYW_k?si=Uw_eG0SokjU7WqUH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</figure>
+
+<p>さらに、とても研究熱心な <a href="https://forum.arduino.cc/u/delta_g/activity/topics" title="プロファイル - Delta_G - Arduino Forum">Delta_G さん</a> が <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーズマニュアル</a> を元に作り込んだライブラリもありました。33 分にもなる <a href="https://youtu.be/7eDtiHNg2Gw" title="Arduino R4 Capacitive Touch Sensing - YouTube">解説の YouTube 動画</a> は勉強になります！</p>
+
+<ul>
+  <li><a href="https://www.arduino.cc/reference/en/libraries/lovebutton/" title="LoveButton - Arduino Reference">LoveButton</a></li>
+  <li><a href="https://forum.arduino.cc/t/lovebutton-touch-sense-library-for-r4-minima-and-r4-wifi/1190017" title="LoveButton Touch Sense library for R4 Minima and R4 WiFi - Programming Questions - Arduino Forum">LoveButton Touch Sense library for R4 Minima and R4 WiFi</a></li>
+  <li><a href="https://forum.arduino.cc/t/lets-play-with-the-ctsu/1187758" title="Let's play with the CTSU! - UNO R4 Minima - Arduino Forum">Let’s play with the CTSU!</a></li>
+</ul>
+
+<h2 id="今後の予定は">今後の予定は…</h2>
+
+<p>何を作るにせよ、割り込みコントローラユニット (ICU) やイベントリンクコントローラ (ELC) がキモになりそうな気がしています。</p>
+
+<p>Arduino IDE のデバッグ機能にある <code class="language-plaintext highlighter-rouge">CORTEX PERIPHERALS</code> は、とても使い勝手が悪いので、作ってみるカモです <img class="emoji" title=":clown_face:" alt=":clown_face:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f921.png" height="20" width="20"></p>
+
+<figure style="text-align: center">
+  <img src="/images/2024/06-03/cortex-peripherals.jpg" alt="Arduino IDE の CORTEX PERIPHERALS は使い勝手が最悪！" width="1380" height="876">
+  <figcaption style="max-width: 460px">Arduino IDE の CORTEX PERIPHERALS は使い勝手が最悪！</figcaption>
+</figure>
+
+<h3 id="ご参考">ご参考</h3>
+
+<p><a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> を作るに当たり、参考にさせて頂いたサイトです。</p>
+
+<ul>
+  <li><a href="http://radiopench.blog96.fc2.com/?no=1273" title="ラジオペンチ Arduino UNO R4 のレジスタ操作解説とピン設定ダンププログラム">Arduino UNO R4 のレジスタ操作解説とピン設定ダンププログラム</a></li>
+  <li><a href="https://www.chihayafuru.jp/tech/index.php/archives/3689" title="MacOSのUSBシリアル通信方法 - Tech控え帳">MacOSのUSBシリアル通信方法</a></li>
+  <li><a href="https://stackoverflow.com/questions/2649733/hide-cursor-on-remote-terminal" title="c - Hide cursor on remote terminal - Stack Overflow">Hide cursor on remote terminal</a></li>
+</ul>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/05/16/" title="前の記事：Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった">← Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/06/10/" title="次の記事：Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/06/03/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/06/03/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/06/03/";this.page.identifier="/2024/06/03/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

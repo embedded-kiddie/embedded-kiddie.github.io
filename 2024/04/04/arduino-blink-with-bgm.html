@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！" />
+<meta property="og:description" content="このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-04-04T13:25:54+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-05-20T21:50:15+09:00","datePublished":"2024-04-04T13:25:54+09:00","description":"このブログ初の記事 で、ビュートローバーARM が T-SQUARE の TRUTH を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを Arduino UNO R4 に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！","headline":"Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"},"url":"https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-04-04T13:25:54+09:00" itemprop="datePublished">Apr 4, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><a href="/2024/03/12/half-scrach-dev.html" title="ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め">このブログ初の記事</a> で、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> が <a href="https://www.youtube.com/watch?v=FZaUPGjjA4c" title="TRUTH (LIVE) T-SQUARE - YouTube">T-SQUARE の TRUTH</a> を BGM 再生しながら疾走する映像を貼りましたが、この度この再生ソフトを <a href="https://store-usa.arduino.cc/pages/uno-r4" title="Arduino UNO R4 — Arduino Online Shop">Arduino UNO R4</a> に移植しました。表題の通りタイマとか割り込みとかクロックとか、調べることが多々あり苦戦しましたが、だいぶ理解が進んだのでここにお披露目したいと思います！</p>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/embedded-kiddie/CallbackTimerR4" title="embedded-kiddie/CallbackTimerR4: Arduino UNO R4 timer library using FspTimer class."><code class="language-plaintext highlighter-rouge">CallbackTimerR4</code></a><br>
+指定サイクルで割り込みを生成し、登録した関数を実行することができるライブラリです。</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/embedded-kiddie/BackgroundMusicR4" title="embedded-kiddie/BackgroundMusicR4: Arduino background music player with tone using CallbackTimerR4 library."><code class="language-plaintext highlighter-rouge">BackgroundMusicR4</code></a><br>
+Arduinoに何かをさせながらtone()でBGMを流すことができるライブラリです。</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/background_music" title="Arduino-UNO-R4/background_music at main · embedded-kiddie/Arduino-UNO-R4"><code class="language-plaintext highlighter-rouge">Arduino-UNO-R4/background_music</code></a><br>
+Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOXGJxg" title="T-SQUARE 『Truth』 × 360 Reality Audio - スペシャルビデオ - YouTube">TRUTH</a> を奏でるデモスケッチです。</p>
+  </li>
+</ul>
+
+<p>映像は「<a href="/2024/03/16/arduino-lap-timer.html" title="Arduinoでライントレース用ラップタイマーを作る">Arduinoでライントレース用ラップタイマーを作る</a>」で紹介したラップタイマに移植した時の動作の様子です。</p>
+
+<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560">
+<p lang="ja" dir="ltr">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情<a href="https://t.co/Rt2UcFZT3u">https://t.co/Rt2UcFZT3u</a> <a href="https://t.co/cY1WBBwdS9">pic.twitter.com/cY1WBBwdS9</a></p>— Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1775814915762344118?ref_src=twsrc%5Etfw">April 4, 2024</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>以降は、表題に関する調査と学習の結果報告になります <img class="emoji" title=":v:" alt=":v:" src="https://github.githubassets.com/images/icons/emoji/unicode/270c.png" height="20" width="20"></p>
+
+<h2 id="tone関数の問題点と対策">tone()関数の問題点と対策</h2>
+<p><a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function">チュートリアル</a> にあるノンブロッキングな関数 <a href="https://www.arduino.cc/reference/en/language/functions/advanced-io/tone/" title="tone() - Arduino Reference"><code class="language-plaintext highlighter-rouge">tone()</code></a> の典型的な使い方は、直後に <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> を呼び出しブロックする、次のようなパターン。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">tone</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">frequency</span><span class="p">,</span> <span class="n">duration</span><span class="p">);</span>
+<span class="n">delay</span><span class="p">(</span><span class="n">duration</span><span class="p">);</span></code></pre></figure>
+
+<p>これを楽譜に合わせて次々に音符を再生するワケですが、これだと音を鳴らす以外に何も出来ません。</p>
+
+<p>作成したライブラリの仕組み自体はすごく簡単で、<code class="language-plaintext highlighter-rouge">delay()</code> の代わりに 音符の長さだけ時間が経過したら割り込みをかけます。<a href="https://ja.wikipedia.org/wiki/%E5%89%B2%E3%82%8A%E8%BE%BC%E3%81%BF%E3%83%8F%E3%83%B3%E3%83%89%E3%83%A9" title="割り込みハンドラ - Wikipedia">割り込みハンドラ</a> では、<code class="language-plaintext highlighter-rouge">noTone()</code> で音を止めた後、音符の配列データから次の音符（周波数と音符長）を読み込み、次の割り込みを設定する - この繰り返しです。</p>
+
+<p>この処理は、Lチカのプログラムとは何のインタラクションも無く完全に独立しているため、<code class="language-plaintext highlighter-rouge">loop()</code> には以下のLチカのコードがあるだけです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>まずはこの動作を実現できる Arduino ライブラリの調査から始めました。</p>
+
+<h2 id="arduino-uno-r4-のタイマ系ライブラリの状況">Arduino UNO R4 のタイマ系ライブラリの状況</h2>
+<p>Arduino のタイマ系ライブラリを大きく分けると、<a href="https://playground.arduino.cc/Main/MsTimer2/" title="Arduino Playground - MsTimer2"><code class="language-plaintext highlighter-rouge">MsTimer2</code></a> などハードウェア・タイマを利用するタイプと、<a href="https://github.com/Aasim-A/AsyncTimer" title="Aasim-A/AsyncTimer: JavaScript-like Async timing functions (setTimeout, setInterval) for Arduino, ESP8266, ESP32 and other compatible boards"><code class="language-plaintext highlighter-rouge">AsyncTimer</code></a> の様に <code class="language-plaintext highlighter-rouge">loop()</code> 中に <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> や <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> でタスク起動のタイミングを管理するコードを埋め込むタイプとがあります。</p>
+
+<p>両者とも IDE からインストールできるものをいくつかトライしましたが、前者は ARV 系でないと動作しないものしか見つからず、後者は CPU やボードに依存しないものの、タイマの学習にはならないので今回は見送りです。</p>
+
+<p>また <a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> が Github 上で <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> を公開されていて、「これだ！」と思い実装を進めていったのですが、要件に合わなかったり（<a href="#AGTimer_R4_Library">後述</a>）多少動作が不安定なところがあったため、最終的に自作するハメとなりました。</p>
+
+<h2 id="arduino-uno-r4-ハードウェアタイマの仕組み">Arduino UNO R4 ハードウェア・タイマの仕組み</h2>
+<p>ということで、あらためてルネサス R7FA4M1AB（RA4M1 グループ）が持つタイマの仕組みから紐解きたいと思います。あくまで初心者目線ですので、よくご存知の方はスッ飛ばしてください。まずは一般論から。</p>
+
+<h3 id="マイコン内蔵タイマの仕組み">マイコン内蔵タイマの仕組み</h3>
+<p>マイコン内蔵のタイマには、CPU コアと密に関係するシステムタイマ（SysTickタイマ）や USB や UART、SPI などの I/F で同期やタイミングを制御するためのタイマ、RTC（リアルタイムクロック）、WDT（ウォッチドッグタイマ）など、周辺回路に専用のタイマがありますが、ここでは PWM 制御などに使えるなど汎用的なタイマについて見ていきたいと思います。</p>
+
+<p>汎用タイマの仕組みを理解するには、ストップウォッチを想定すると良いです。ザックリですが、この種のタイマは次の図のような幾つかの基本要素で構成されてます。</p>
+
+<p><img src="/images/2024/04-04/timer-overview.jpg" alt="タイマを構成する要素" title="タイマを構成する要素" width="1379" height="718"></p>
+
+<ol>
+  <li>
+    <p>秒針１周分に相当する <strong>総カウント数</strong><br>
+  <strong>8ビットから32ビット</strong> まで、マイコンの種類と用途に応じて色々あります。</p>
+  </li>
+  <li>
+    <p>１目盛分の <strong>刻み幅</strong> を設定するレジスタ<br>
+  秒針を刻むための信号源として、外部信号と内部クロックが切り替えられます。内部の場合には <strong>メインクロック</strong> 以外にも消費電力を抑えるため、より低い周波数のクロックを発生させる <strong>オシレータ</strong> を使うことが出来たりします。<br>
+さらにクロックの周波数を 1/4 や 1/256 などにする <strong>分周比</strong> の設定が可能です。</p>
+  </li>
+  <li>
+    <p>秒針の進みを数える <strong>カウンタ・レジスタ</strong><br>
+  １目盛１カウントとして刻むカウンタです。例えば16ビットタイマは 0 〜 65535 まで、32ビットタイマは 0 〜 4294967295 まで数えられます。<br>
+  秒針が１周すると 0 に戻る、即ちオーバーフローするので、アプリケーション側で適切に扱えるよう、オーバーフロー時に割り込みを発生させる機能があったりします。</p>
+  </li>
+  <li>
+    <p><strong>タイミング</strong> を決めるレジスタと <strong>動作</strong> を制御するレジスタ<br>
+  秒針の進みに応じて、イベントの発生タイミングを設定するレジスタ（<strong>カウンタ・レジスタ</strong>との比較で決めるため、「<strong>コンペア・レジスタ</strong>」とか「<strong>マッチ・レジスタ</strong>」と呼ばれる）と、割り込みの発生や、汎用出力ポートへの HIGH または LOW 信号の出力など、イベント発生時の動作を制御するレジスタがあります。</p>
+  </li>
+</ol>
+
+<p>具体例を挙げてみます。例えば、カウンタが</p>
+
+<ul>
+  <li>レジスタ A <span class="inline"><img src="/images/2024/04-04/timer-a.png" width="24" height="27" alt="タイマレジスタ A"></span> の設定値に到達したら、汎用出力ポートを HIGH にする</li>
+  <li>レジスタ B <span class="inline"><img src="/images/2024/04-04/timer-b.png" width="24" height="27" alt="タイマレジスタ A"></span> の設定値に到達したら、汎用出力ポートを LOW にする</li>
+  <li>レジスタ C <span class="inline"><img src="/images/2024/04-04/timer-c.png" width="24" height="27" alt="タイマレジスタ A"></span> の設定値に到達したら、タイマをリセットする</li>
+</ul>
+
+<p>という設定では、１目盛分の刻み幅と A・B・C の設定値から決まる、ある <strong>周波数</strong> と <strong>デューティ比</strong> の PWM 出力を作り出せることになります。</p>
+
+<p><img src="/images/2024/04-04/counter-duty-pwm.jpg" alt="タイマレジスタとPWM出力の関係" title="タイマレジスタとPWM出力の関係" width="1377" height="540"></p>
+
+<p>また、このような HIGH か LOW の出力だけでなく、所定の LSB ずつ上げ下げすれば、三角波やノコギリ波の出力が可能ですし、制御する出力ポートを複数にすれば、多相モータの制御が可能となるなど、およそ汎用という名に相応しい、複雑な動作を実現できます。</p>
+
+<h3 id="ra4m1-のタイマ">RA4M1 のタイマ</h3>
+<p>一般論の次は、ルネサスのマイコン R7FA4M1AB のタイマです。Arm Cortex-M4 コアの直近で一定の時を刻む 24 ビットの <code class="language-plaintext highlighter-rouge">SysTick</code> タイマ（システムタイマ）のほか、アプリケーション用の高機能なタイマとして以下が備わっています。</p>
+
+<ul>
+  <li>GPT32 × 2</li>
+  <li>GPT16 × 6</li>
+  <li>AGT × 2</li>
+  <li>RTC</li>
+  <li>WDT / IWDT</li>
+</ul>
+
+<p>特に２つの汎用タイマ 〜 GPT（32ビットが２個、16ビットが６個）と AGT（16ビットが２個）〜 が今回の調査のお題です。</p>
+
+<h4 id="gpt-とは">GPT とは</h4>
+<p><strong>G</strong>eneral <strong>P</strong>ulse width modulation <strong>T</strong>imer、即ち汎用の PWM 用タイマです。<a href="#%E3%83%9E%E3%82%A4%E3%82%B3%E3%83%B3%E5%86%85%E8%94%B5%E3%82%BF%E3%82%A4%E3%83%9E%E3%81%AE%E4%BB%95%E7%B5%84%E3%81%BF" title="マイコン内蔵タイマの仕組み">前章</a> でタイマの基本要素をいくつか紹介しましたが、実際のレジスタは11種類、235個もあり、矩形波やノコギリ波、三角波の生成や、単純な DC モータのデューティ制御から三相モーター用の出力まで、多様なニーズに応える動作モードの設定ができるようになっています。</p>
+
+<h4 id="agt-とは">AGT とは</h4>
+<p><a href="https://www.renesas.com/jp/ja/blogs/asynchronous-general-purpose-timer-providing-ra-microcontrollers-low-power-timing-solutions" title="The Asynchronous General Purpose Timer, Providing RA Microcontrollers with Low Power Timing Solutions - Renesas"><strong>A</strong>synchronous <strong>G</strong>eneral purpose <strong>T</strong>imer</a> の略で、ユーザーズマニュアルによると「低消費電力非同期汎用タイマ」とのことです。クロック発信源の１つとして 32.768KHz の「低速オンチップ オシレータ」が選択でき、汎用タイマ機能のほか、外部信号により低消費電力モードから復帰する際のフィルタ機能として、「外部パルスの幅または周期の測定や、外部イベントのカウントが可能」とのことです。</p>
+
+<p>GPTと比較すると関連するレジスタも少なく、5種類、10個です。</p>
+
+<h3 id="arduino-uno-r4-のタイマ事情">Arduino UNO R4 のタイマ事情</h3>
+<p>GPT や AGT を汎用タイマとして機能させるには、次のようなステップが必要です。</p>
+<ol>
+  <li>クロック発信源（ソース）の選択と分周比の設定</li>
+  <li>動作モードの設定</li>
+  <li>コンペアマッチレジスタの設定</li>
+  <li>割り込みの許可と優先度の設定</li>
+  <li>カウンタレジスタのクリア</li>
+  <li>タイマのスタート</li>
+</ol>
+
+<p>Arduino UNO R4 ではこのようなウザい詳細を隠蔽し、使われていないタイマを引き当て、周波数とデューティー比（あるいはクロック周期と分周比）を指定すれば、後は良しなにやってくれる関数が <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer.cpp</code></a> に定義されています。</p>
+
+<p>FSP（<a href="https://www.renesas.com/us/en/software-tool/flexible-software-package-fsp" title="Flexible Software Package (FSP) - Renesas">Flexible Software Package</a>）はルネサス製 ARM マイコンのソフトウェア群で、Qiita の記事「<a href="https://qiita.com/yasuhiro-k/items/93efb640aa12f3db9086" title="Arduino UNO R4のFspTimerライブラリの使い方 #Arduino - Qiita">Arduino UNO R4のFspTimerライブラリの使い方</a>」を参考に、実際に動作させてみて分かったことを紹介します。</p>
+
+<h4 id="汎用タイマの空き状況">汎用タイマの空き状況</h4>
+<p>全部で10個ある汎用タイマのうち、GPT は32ビットが２個と16ビットが１個、AGT は16ビット１個が既に Arduino 側で使用済みです。残りの５個は全て16ビットで、GPT が４個、AGT が１個という状況です。</p>
+
+<p>使用済みタイマのうち <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> と <a href="https://www.arduino.cc/reference/en/language/functions/time/micros/" title="micros() - Arduino Reference"><code class="language-plaintext highlighter-rouge">micros()</code></a> で AGT が <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/time.cpp" title="ArduinoCore-renesas/cores/arduino/time.cpp at main · arduino/ArduinoCore-renesas">使われています</a>。</p>
+
+<h4 id="割り込みハンドラの怪">割り込みハンドラの怪？</h4>
+<p><a href="https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/" title="attachInterrupt() - Arduino Reference"><code class="language-plaintext highlighter-rouge">attachInterrupt()</code></a> の解説によると、割り込みハンドラ関数内では多重割り込みが禁止されていて、故に <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> がインクリメントされず <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> が機能しない旨の記述があります。が、UNO R4 の場合、タイマや外部入力ピンへの割り込みハンドラ内で <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="&gt;millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> も <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" title="delay() - Arduino Reference"><code class="language-plaintext highlighter-rouge">delay()</code></a> も<strong>使えます</strong>。</p>
+
+<p>おそらく ARM の NVIC（Nested Vector Interrupt Controller、多重型ベクタ割り込みコントローラ）の効果だと思いますが、ユーザ側で複数の割り込みを使う場合、優先順位の調査が必要かと思います（未調査です、スミマセン…）。</p>
+
+<h4 id="クロック周波数">クロック周波数</h4>
+<p><a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">FspTimer.cpp</code></a> で設定可能なクロックです。</p>
+
+<ul>
+  <li>
+    <p>GPT<br>
+サブクロックの <code class="language-plaintext highlighter-rouge">PCLKD</code> が発信源で、48MHz がデフォルト。分周比は 1、4、16、64、256、1024 が選択可能。</p>
+  </li>
+  <li>
+    <p>AGT<br>
+サブクロックの <code class="language-plaintext highlighter-rouge">PCLKB</code> が発信源で、24MHz がデフォルト。分周比は 1、2、8 が選択可能。</p>
+  </li>
+</ul>
+
+<h2 id="自作のタイマ系ライブラリと-bgm-再生ライブラリ">自作のタイマ系ライブラリと BGM 再生ライブラリ</h2>
+<p>さて、楽譜には同じ高さの音を繋げて１つの音として演奏する <a href="https://ja.wikipedia.org/wiki/%E3%82%BF%E3%82%A4_(%E9%9F%B3%E6%A5%BD%E8%A8%98%E5%8F%B7)" title="タイ (音楽記号) - Wikipedia">タイ</a> という記号が出てきます。例えば曲の速さが<span class="inline"><img src="/images/2024/04-04/tempo-155.png" width="60" height="27" title="テンポ=155" alt="テンポ=155"></span> で、4分音符に16分音符が続くタイ<span class="inline"><img class="inline" src="/images/2024/04-04/tie-quater-16th.png" width="74" height="27" title="4分音符＋16分音符" alt="4分音符＋16分音符"></span>では、484ミリ秒の間、鳴らし続けなければなりません。また数秒間続く全音符のタイも度々登場します。</p>
+
+<p>これを1ミリ秒刻みの割り込みで484回を数えたり、数千回を数えたりするのは CPU リソースの無駄使いで、数えるのはタイマに任せるのが得策です。</p>
+
+<p>ここで問題なのは長い周期の場合で、16ビットを目一杯使い分周比を最大にしても GPT では計算式 <span class="inline"><img src="/images/2024/04-04/slowest-GPT.png" title="GPTの計算式" width="67.5" height="27" alt="GPTの計算式"></span> より約 1398ミリ秒（小数点以下切り捨て）、AGT では <span class="inline"><img src="/images/2024/04-04/slower-AGT.png" title="AGTの計算式(1)" width="65.57" height="27" alt="AGTの計算式(1)"></span> ≒ 21ミリ秒（同）までしか計れません。AGT の場合、32.768KHz の低速オンチップ オシレータと分周比 1/64 が選択できれば <span class="inline"><img src="/images/2024/04-04/slowest-AGT.png" width="84.852" height="27" title="AGTの計算式(2)" alt="AGTの計算式(2)"></span> ≒ 127秒まで計れますが、<code class="language-plaintext highlighter-rouge">FspTimer</code> クラスではこれが出来ません。</p>
+
+<p>またオーバーフロー割り込みを設定するメソッド <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/FspTimer.cpp#L770" title="ArduinoCore-renesas/cores/arduino/FspTimer.cpp at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">setup_overflow_irq()</code></a> を試してみましたが、うまく動かすことができませんでした。</p>
+
+<p><span id="AGTimer_R4_Library"></span>
+<a href="https://washiyamagiken.hatenablog.com/entry/2023/07/02/223344" title="【Arduino UNO R4】タイマーライブラリ作りました - WASHIYAMA GIKEN">WASHIYAMA GIKENさん</a> の <a href="https://github.com/washiyamagiken/AGTimer_R4_Library" title="washiyamagiken/AGTimer_R4_Library"><code class="language-plaintext highlighter-rouge">AGTimer_R4_Library</code></a> はどうだったかと言うと、プログラム上はクロック 32.768KHz、分周比 1/64 を設定している箇所があるのですが、およそ2秒を超えると想定通りに動作しません。ご自身でも書かれてますが、長周期の動作にデリケートなところがありそうで、使用を断念しました。</p>
+
+<h3 id="で結局どうしたか">で、結局どうしたか？</h3>
+<p>オーバーフローフラグによる割り込みを模擬しました。</p>
+
+<p>つまり一旦オーバーフローする直前に割り込みがかかるようタイマをセットし、ハンドラ内で残り時間を再セット、これを残り時間がゼロになるまで繰り返します。例えば2秒を計測する場合、GPT であれば（2000回の割り込みではなく）1.398秒後に１回だけ割り込みを追加します。AGT の場合は追加の割り込みが90回となりますが、それでも（2000回に比べたら）激減できます。</p>
+
+<p>これで、どんなに長い音符も再生できるようになりました。メデタシ メデタシ。</p>
+
+<h2 id="次回は">次回は…</h2>
+<p>ハナシが長くなったので、ライブラリの解説は次回以降にさせていただきます <img class="emoji" title=":ghost:" alt=":ghost:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f47b.png" height="20" width="20"></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/03/26/how-to-debug-with-lpcexpresso.html" title="前の記事：ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編">← ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/04/09/arduino-r4-callback-timer.html" title="次の記事：BGM再生用に作成したArduino UNO R4用タイマライブラリの解説">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/04/04/arduino-blink-with-bgm.html" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/04/04/arduino-blink-with-bgm.html";this.page.identifier="/2024/04/04/arduino-blink-with-bgm.html"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

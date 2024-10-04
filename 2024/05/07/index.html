@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！ | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/05/07/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/05/07/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-05-07T18:02:39+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-05-10T18:39:39+09:00","datePublished":"2024-05-07T18:02:39+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/05/07/"},"url":"https://embedded-kiddie.github.io/2024/05/07/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-05-07T18:02:39+09:00" itemprop="datePublished">May 7, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/images/2024/05-07/debugging-arduino-uno-r4-wifi.jpg" alt="Arduino UNO R4 WiFi のソースコードデバッグ" title="Arduino UNO R4 WiFi のソースコードデバッグ" width="1380" height="892"></p>
+
+<p>この度、次の２つの記事で紹介してきた <a href="https://github.com/embedded-kiddie/R7FA4M1AB" title="embedded-kiddie/R7FA4M1AB: System View Description file for Arduino UNO R4 Minima/WiFi"><code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の修正版</a> が、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> に <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>取り込まれることになりました</a>。</p>
+
+<ul>
+  <li><a href="/2024/04/17/how-to-use-toragi-writer.html" title="Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足">Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足</a></li>
+  <li><a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</a></li>
+</ul>
+
+<p>おそらく UNO R4 用ボードマネージャーの更新（本記事執筆時点のバージョンは <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a>）という形で配信されると思います。</p>
+
+<div class="quote clear-both">
+
+<p>2024年6月3日にバージョン <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.2.0" title="Release Release 1.2.0 · arduino/ArduinoCore-renesas">1.2.0</a> がリリースされ、貢献者にハンドル名が載りました。嬉しい限りです！</p>
+
+<p><img src="/images/2024/05-07/new-contributers.png" alt="New Contributers" title="New Contributers" width="1280" height="460" class="simple"></p>
+
+</div>
+
+<figure class="float-left">
+  <a href="/images/2024/05-07/PR305.jpg" title="Port mn Pin Function Select Register in SVD file. #305" data-lightbox="image">
+    <img src="/images/2024/05-07/PR305-small.jpg" width="458" height="228" alt="Port mn Pin Function Select Register in SVD file. #305">
+  </a>
+</figure>
+
+<p>この修正により、UNO R4 Minima は <a href="https://arm-software.github.io/CMSIS_5/DAP/html/index.html" title="CMSIS-DAP: Firmware for CoreSight Debug Access Port">CMSIS-DAP</a> をサポートした <a href="https://www.tokudenkairo.co.jp/jtag/adv2018/08.php" title="12月8日 JTAGとSWD - 特殊電子回路">JTAG/SWD</a> デバッグプローブ）で、UNO R4 WiFi は ESP32 を介したオンボードデバッガで、それぞれソースコードデバッグが可能になります。</p>
+
+<div class="clear-both quote">
+<p>「<a href="/2024/03/24/arduino-debug-with-toragi.html#svd%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%A8%E3%81%AF%E4%BD%95%E8%80%85" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">SVDファイルとは何者？</a>」から、CMSIS-DAP や CMSIS-SVD、JTAG/SWD デバッグプローブについての図を再掲します。</p>
+
+<figure class="flex">
+  <a href="/images/2024/03-24/CMSIS-overview.png" title="CMSISの全体像とデバッガの位置付け" data-lightbox="image">
+    <img src="/images/2024/03-24/CMSIS-overview-small.png" alt="CMSISの全体像とデバッガの位置付け" width="458" height="168">
+  </a>
+  <a href="/images/2024/03-24/block-diagram.png" title="ARM MCUからArduino IDEまでのブロック図" data-lightbox="image">
+    <img src="/images/2024/03-24/block-diagram-small.png" alt="ARM MCUからArduino IDEまでのブロック図" width="457" height="172">
+  </a>
+</figure>
+</div>
+
+<p>本来は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> の仕様と対比して修正内容を提示したいところですが、Renesas の文書による許諾が必要なため、<a href="https://creativecommons.org/licenses/by-sa/4.0/" title="CC BY-SA 4.0 Deed - Attribution-ShareAlike 4.0 International - Creative Commons">CC BY-SA</a> の元に公開されている <a href="https://docs.arduino.cc/resources/pinouts/ABX00080-full-pinout.pdf">Arduino UNO R4 Minima のピン配図</a> と MIT ライセンスの元に公開されている <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を用いて説明を試みます。</p>
+
+<p>とても退屈な話になりますが…、苦労話を書きたくなる気持ちを察してやって下さい <img class="emoji" title=":pensive:" alt=":pensive:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f614.png" height="20" width="20"></p>
+
+<h2 id="r7fa4m1absvd-とは">R7FA4M1AB.svd とは</h2>
+<p>SVD は <a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/index.html" title="CMSIS-SVD: System View Description">System View Description</a> の略で、Arm Cortex-M の持つ機能を XML で記述したものになります。また <code class="language-plaintext highlighter-rouge">R7FA4M1AB</code> は UNO R4 に搭載された Renesas MCU の型番の一部です。</p>
+
+<p>例えば、僕らがプロセッサやその周辺回路の使い方をマニュアルで調べるのと同様、Arduino IDE のデバッガは、どのレジスタが何処のアドレスにマッピングされているかを知るために SVD ファイルを参照します。</p>
+
+<p>つまり Arduino IDE にとって <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code>は、人間にとっての <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> に相当し、そのフォーマットは <a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/schema_1_2_gr.html" title="CMSIS-SVD: CMSIS-SVD Schema File">CMSIS-SVD スキーマ</a> として定められています。</p>
+
+<p>人用のマニュアルが 1700 ページほどあるのに対し、<code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> は６万数千行もあります。その中身は共通部分も多く、親とその派生で定義が可能な感じですが、仮に手作業でこれを作成するとしたら、間違えも起きるよネというのが正直な感想です。</p>
+
+<p>ちなみに <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> の原版は、Arm のサイトに公開されています。</p>
+
+<ul>
+  <li><a href="https://www.keil.arm.com/devices/renesas-r7fa4m1ab/features/" title="Arm Keil - Renesas R7FA4M1AB">R7FA4M1AB</a></li>
+  <li><a href="https://www.keil.arm.com/packs/ra_dfp-renesas/devices/" title="Arm Keil - Renesas RA_DFP">RA_DFP</a></li>
+</ul>
+
+<h2 id="問題点の分析と修正方針">問題点の分析と修正方針</h2>
+<p>UNO R4 用オンボードマネージャのバージョン <a href="https://github.com/arduino/ArduinoCore-renesas/releases/tag/1.1.0" title="Release 1.1.0 · arduino/ArduinoCore-renesas">1.1.0</a> では、<span class="inline"><img src="/images/2024/04-18/button-debug.png" width="27" height="27" title="デバッグボタン" alt="デバッグボタン"> でデバッガを起動すると、以下のエラーが起きます。</span></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unable to parse SVD file /Users/xxxx/Library/Arduino15/packages/arduino/hardware/renesas_uno/1.1.0/svd/R7FA4M1AB.svd: Error: SVD error: Invalid 'derivedFrom' "P100PFS" for register "P30%sPFS"
+</code></pre></div></div>
+
+<figure class="float-left">
+  <a href="/images/2024/05-07/minima-schematics.jpg" title="Unable to parse SVD file" data-lightbox="image">
+    <img src="/images/2024/05-07/minima-schematics-small.jpg" width="459" height="293" alt="Unable to parse SVD file">
+  </a>
+</figure>
+
+<p>この問題は、<a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino 公式 GitHub</a> にも「<a href="https://github.com/arduino/ArduinoCore-renesas/issues/276" title='"Unable to parse SVD file" error when starting debugger · Issue #276 · arduino/ArduinoCore-renesas'>“Unable to parse SVD file” error when starting debugger #276</a>」として挙がっていますが、「無効な <code class="language-plaintext highlighter-rouge">P100PFS</code> から <code class="language-plaintext highlighter-rouge">P30xPFS</code> を派生させている」ことを訴えています。</p>
+
+<p><code class="language-plaintext highlighter-rouge">P100PFS</code> の <code class="language-plaintext highlighter-rouge">PFS</code> は Port Function Select の略で、汎用 I/O 端子 <code class="language-plaintext highlighter-rouge">P000</code> 〜 <code class="language-plaintext highlighter-rouge">P915</code> の入出力方向の切り替え、プルアップ抵抗や割り込み有無の設定など、汎用 I/O 端子の機能を選択するレジスタ群になります。</p>
+
+<p>ちなみにこのエラーによりプログラムが暴走したりすることはなく、単に IDE の UI を通してレジスタの内容を表示したり書き換えたりする機能に影響があるだけです。</p>
+
+<div class="clear-both"><br></div>
+
+<p>さて、エラーを手掛かりに <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> を精査すると、次の２つの問題があることが判明しました。</p>
+
+<ul>
+  <li>
+<a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/schema_1_2_gr.html" title="CMSIS-SVD: CMSIS-SVD Schema File">CMSIS-SVD スキーマ</a> 上 <code class="language-plaintext highlighter-rouge">P100PFS</code> の定義は正しいが、派生元の親として定義されてない</li>
+  <li>
+<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> 上、幾つかの I/O 端子は派生元の親を間違えて定義されている</li>
+</ul>
+
+<p>従って修正方針はこれらの裏返しです。</p>
+
+<ul>
+  <li>派生元の親となり得るよう <code class="language-plaintext highlighter-rouge">P100PFS</code> を再定義する</li>
+  <li>派生元の親を間違えている I/O 端子を抽出し、正しい親を定義し直す</li>
+</ul>
+
+<p>何せ行数が多いため、汎用 I/O 端子ごとにチェックリストを作成しながら進めました。</p>
+
+<h2 id="svd-ファイルの修正内容">SVD ファイルの修正内容</h2>
+<p>ここからは以下の章立てにより、修正内容の説明を試みます。</p>
+
+<ul>
+  <li>
+    <p><a href="#pfs-%E3%83%AC%E3%82%B8%E3%82%B9%E3%82%BF%E3%81%AE%E6%A6%82%E8%A6%81">PFS レジスタの概要</a><br>
+Arduino IDE のデバッガを通して、<code class="language-plaintext highlighter-rouge">PFS</code> レジスタの全体像を把握します。</p>
+  </li>
+  <li>
+    <p><a href="#p100pfs-%E3%81%AE%E5%86%8D%E5%AE%9A%E7%BE%A9">P100PFS の再定義</a><br>
+<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> の定義に基づき、<code class="language-plaintext highlighter-rouge">P100PFS</code> を再定義した内容を提示します。</p>
+  </li>
+  <li>
+    <p><a href="#%E6%B4%BE%E7%94%9F%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E4%BF%AE%E6%AD%A3">派生に関する修正</a><br>
+派生元となる親を間違えているレジスタの修正内容を提示します。</p>
+  </li>
+</ul>
+
+<h3 id="pfs-レジスタの概要">PFS レジスタの概要</h3>
+<figure class="float-left">
+  <a href="/images/2024/05-07/cortex-peripherals.jpg" title="CORTEX PERIPHERALS" data-lightbox="image">
+    <img src="/images/2024/05-07/cortex-peripherals-small.jpg" width="459" height="417" alt="CORTEX PERIPHERALS">
+  </a>
+</figure>
+
+<p>Arduino IDE でデバッガを起動すると、MCU に内蔵された周辺装置のレジスタを「CORTEX PERIPHERALS」から、参照または編集ができるようになります。</p>
+
+<p>詳細は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> を参照してもらうとして、IDE で表示された <code class="language-plaintext highlighter-rouge">P100PFS</code> の内容と SVD ファイルの定義を一覧にすると、次のようになります。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PODR</code></td>
+      <td>[0:0]</td>
+      <td>Port Output Data</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PIDR</code></td>
+      <td>[1:1]</td>
+      <td>Port Input Data</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PDR</code></td>
+      <td>[2:2]</td>
+      <td>Port Direction</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[3:3]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PCR</code></td>
+      <td>[4:4]</td>
+      <td>Pull-up Control</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[5:5]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NCODR</code></td>
+      <td>[6:6]</td>
+      <td>N-Channel Open Drain Control</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[9:7]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">DSCR</code></td>
+      <td>[10:10]</td>
+      <td>Port Drive Capability</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[11:11]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EOR</code></td>
+      <td>[12:12]</td>
+      <td>Event on Rising</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EOF</code></td>
+      <td>[13:13]</td>
+      <td>Event on Falling</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ISEL</code></td>
+      <td>[14:14]</td>
+      <td>IRQ input enable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ASEL</code></td>
+      <td>[15:15]</td>
+      <td>Analog Input enable</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PMR</code></td>
+      <td>[16:16]</td>
+      <td>Port Mode Control</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[23:17]</td>
+      <td>予約ビット</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PSEL</code></td>
+      <td>[28:24]</td>
+      <td>Port Function Select</td>
+    </tr>
+    <tr>
+      <td>Reserved</td>
+      <td>[31:29]</td>
+      <td>予約ビット</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ここでのポイントは、汎用 I/O 端子は <code class="language-plaintext highlighter-rouge">P000</code> から <code class="language-plaintext highlighter-rouge">P915</code> まで多数あり、USB や シリアル通信など、特定用途で使われる端子の仕様が、他の I/O 端子と微妙に異なるという点です。</p>
+
+<p>言い換えれば、これらの仕様違いを正しく XML で記述する必要があるという事です。</p>
+
+<div class="quote clear-both">
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> の P.430 には、但し書きで仕様違いをを規定していますが、この規定と SVD ファイルとの相違が <a href="#%E5%95%8F%E9%A1%8C%E7%82%B9%E3%81%A8%E4%BF%AE%E6%AD%A3%E6%96%B9%E9%87%9D%E3%81%AE%E3%82%B5%E3%83%9E%E3%83%AA">Arduino IDE でのエラー</a> につながっていました。</p>
+
+<p>中でも「P408 は DSCR1 ビットだけを持ちます」という記述は<strong>誤訳</strong>なので要注意です。原文は「P408 only has DSCR1 bit」であり、「<strong>P408 だけが DSCR1 ビットを持ちます</strong>」と訳すのが正解です（Renesas に確認済み）。</p>
+
+</div>
+
+<h3 id="p100pfs-の再定義">P100PFS の再定義</h3>
+<p>修正前は、<code class="language-plaintext highlighter-rouge">P000PFS</code> を派生の親とする子の位置付けで定義されていましたが、他の親となり得るよう、次のように再定義しました（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16083" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>差分を確認</a>）</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;register&gt;</span>
+  <span class="nt">&lt;name&gt;</span>P100PFS<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;description&gt;</span>P100 Pin Function Control Register<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;addressOffset&gt;</span>0x040<span class="nt">&lt;/addressOffset&gt;</span>
+  <span class="nt">&lt;size&gt;</span>32<span class="nt">&lt;/size&gt;</span>
+  <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+  <span class="nt">&lt;resetValue&gt;</span>0x00000000<span class="nt">&lt;/resetValue&gt;</span>
+  <span class="nt">&lt;resetMask&gt;</span>0xFFFFFFFD<span class="nt">&lt;/resetMask&gt;</span></code></pre></figure>
+
+<div class="quote clear-both">
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> のメモリマップによると、汎用 I/O 関連のレジスタは <code class="language-plaintext highlighter-rouge">0x40000000</code> 〜 <code class="language-plaintext highlighter-rouge">0x40100000</code> 番地にマッピングされています。</p>
+
+<p>このうち PFS (Pin Function Select) は、下記 XML の通り <code class="language-plaintext highlighter-rouge">0x40040800</code> から始まると定義されていて、<code class="language-plaintext highlighter-rouge">P100PFS</code> はこのセクションに属しています。</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;peripheral&gt;</span>
+  <span class="nt">&lt;name&gt;</span>PFS<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;description&gt;</span>Pmn Pin Function Control Register<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;baseAddress&gt;</span>0x40040800<span class="nt">&lt;/baseAddress&gt;</span>
+  ...
+<span class="nt">&lt;/peripheral&gt;</span></code></pre></figure>
+
+<p>即ち <code class="language-plaintext highlighter-rouge">P100PFS</code> は、<code class="language-plaintext highlighter-rouge">baseAddress</code> の <code class="language-plaintext highlighter-rouge">0x4004 0800</code> に <code class="language-plaintext highlighter-rouge">addressOffset</code> の <code class="language-plaintext highlighter-rouge">0x040</code> を加えた <code class="language-plaintext highlighter-rouge">0x4004 0840</code> 番地にマッピングされています。</p>
+
+<p>また <code class="language-plaintext highlighter-rouge">resetValue</code> は各レジスタで異なる値を取り、特にリセット後の値が不定なビットがあるため <code class="language-plaintext highlighter-rouge">resetMask</code> でマスクする定義となっています。</p>
+
+</div>
+
+<p>以下、予約ビットを除き、<code class="language-plaintext highlighter-rouge">P100PFS</code> の修正済み定義を示します。</p>
+
+<h4 id="podr">PODR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PODR</code></td>
+      <td>[0:0]</td>
+      <td>Port Output Data</td>
+      <td>0: Low output<br>1: High output</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PODR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Output Data<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>0<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>0<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Low output<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>High output<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span>
+  <span class="nt">&lt;/fields&gt;</span>
+<span class="nt">&lt;/register&gt;</span></code></pre></figure>
+
+<h4 id="pidr">PIDR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PIDR</code></td>
+      <td>[1:1]</td>
+      <td>Port Input Data</td>
+      <td>0: Low input<br>1: High input</td>
+      <td>R</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PIDR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Input Data<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>1<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>1<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-only<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Low input<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>High input<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="pdr">PDR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PDR</code></td>
+      <td>[2:2]</td>
+      <td>Port Direction</td>
+      <td>0: Input (Functions as an input pin)<br>1: Output (Functions as an output pin)</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PDR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Direction<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>2<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>2<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Input (Functions as an input pin.)<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Output (Functions as an output pin.)<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="pcr">PCR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PCR</code></td>
+      <td>[4:4]</td>
+      <td>Pull-up Control</td>
+      <td>0: Disables an input pull-up<br>1: Enables an input pull-up</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PCR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Pull-up Control<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>4<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>4<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Disables an input pull-up.<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Enables an input pull-up.<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="ncodr">NCODR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NCODR</code></td>
+      <td>[6:6]</td>
+      <td>N-Channel Open Drain Control</td>
+      <td>0: CMOS output<br>1: NMOS open-drain output</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>NCODR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>N-Channel Open Drain Control<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>6<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>6<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>CMOS output<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>NMOS open-drain output<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="dscr">DSCR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">DSCR</code></td>
+      <td>[10:10]</td>
+      <td>Port Drive Capability</td>
+      <td>0: Low drive<br>1: Middle drive</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="quote clear-both">
+
+<p>先に示した通り、「<strong>P408 だけが DSCR1 ビットを持ちます</strong>」。それ以外の端子で <code class="language-plaintext highlighter-rouge">DSCR1</code>（ビットレンジ  [11:11]）は、予約ビットとなります。</p>
+
+</div>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">  <span class="nt">&lt;field&gt;</span>
+    <span class="nt">&lt;name&gt;</span>DSCR<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Port Drive Capability<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;lsb&gt;</span>10<span class="nt">&lt;/lsb&gt;</span>
+    <span class="nt">&lt;msb&gt;</span>10<span class="nt">&lt;/msb&gt;</span>
+    <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+    <span class="nt">&lt;enumeratedValues&gt;</span>
+      <span class="nt">&lt;enumeratedValue&gt;</span>
+        <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Low drive<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+      <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;enumeratedValue&gt;</span>
+        <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Middle drive.<span class="nt">&lt;/description&gt;</span>
+        <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+      <span class="nt">&lt;/enumeratedValue&gt;</span>
+    <span class="nt">&lt;/enumeratedValues&gt;</span>
+  <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="eor">EOR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EOR</code></td>
+      <td>[12:12]</td>
+      <td>Event on Rising</td>
+      <td>0: Do not care<br>1: Detect rising edge</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>EOR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Event on Rising<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>12<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>12<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Do not care<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Detect rising edge<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="eof">EOF</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">EOF</code></td>
+      <td>[13:13]</td>
+      <td>Event on Falling</td>
+      <td>0: Do not care<br>1: Detect falling edge</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="quote clear-both">
+
+<p><code class="language-plaintext highlighter-rouge">EOR</code>、<code class="language-plaintext highlighter-rouge">EOF</code> は、<code class="language-plaintext highlighter-rouge">P100PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P415PFS</code> にだけ定義されています。修正前の <code class="language-plaintext highlighter-rouge">P100PFS</code> は、<code class="language-plaintext highlighter-rouge">P000PFS</code> を継承し予約ビットとなっていたため、あらためて <code class="language-plaintext highlighter-rouge">P100PFS</code> を派生元の親として再定義し、<code class="language-plaintext highlighter-rouge">P200PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P415PFS</code> がこれを継承するように修正しました。</p>
+
+</div>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>EOF<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Event on Falling<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>13<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>13<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Do not care<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Detect falling edge<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="isel">ISEL</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ISEL</code></td>
+      <td>[14:14]</td>
+      <td>IRQ input enable</td>
+      <td>0: Not used as IRQn input pin<br>1: Used as IRQn input pin</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>ISEL<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>IRQ input enable<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>14<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>14<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Not used as IRQn input pin<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Used as IRQn input pin<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="asel">ASEL</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ASEL</code></td>
+      <td>[15:15]</td>
+      <td>Analog Input enable</td>
+      <td>0: Used other than as analog pin<br>1: Used as analog pin</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>ASEL<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Analog Input enable<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>15<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>15<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Used other than as analog pin<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Used as analog pin<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="pmr">PMR</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PMR</code></td>
+      <td>[16:16]</td>
+      <td>Port Mode Control</td>
+      <td>0: Uses the pin as a general I/O pin<br>1: Uses the pin as an I/O port<br> for peripheral functions</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PMR<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Mode Control<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>16<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>16<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+      <span class="nt">&lt;enumeratedValues&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>0<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Uses the pin as a general I/O pin.<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#0<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+        <span class="nt">&lt;enumeratedValue&gt;</span>
+          <span class="nt">&lt;name&gt;</span>1<span class="nt">&lt;/name&gt;</span>
+          <span class="nt">&lt;description&gt;</span>Uses the pin as an I/O port for peripheral functions.<span class="nt">&lt;/description&gt;</span>
+          <span class="nt">&lt;value&gt;</span>#1<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/enumeratedValue&gt;</span>
+      <span class="nt">&lt;/enumeratedValues&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<h4 id="psel">PSEL</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ビットフィールド</th>
+      <th>ビットレンジ</th>
+      <th>名称</th>
+      <th>機能</th>
+      <th>R/W</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">PSEL</code></td>
+      <td>[28:24]</td>
+      <td>Port Function Select</td>
+      <td>These bits select the peripheral function</td>
+      <td>R/W</td>
+    </tr>
+  </tbody>
+</table>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">  <span class="nt">&lt;fields&gt;</span>
+    <span class="nt">&lt;field&gt;</span>
+      <span class="nt">&lt;name&gt;</span>PSEL<span class="nt">&lt;/name&gt;</span>
+      <span class="nt">&lt;description&gt;</span>Port Function Select
+      These bits select the peripheral function. For individual pin functions, see the MPC table<span class="nt">&lt;/description&gt;</span>
+      <span class="nt">&lt;lsb&gt;</span>24<span class="nt">&lt;/lsb&gt;</span>
+      <span class="nt">&lt;msb&gt;</span>28<span class="nt">&lt;/msb&gt;</span>
+      <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+    <span class="nt">&lt;/field&gt;</span></code></pre></figure>
+
+<p>以上が修正した <code class="language-plaintext highlighter-rouge">P100PFS</code> の全てです。</p>
+
+<h3 id="派生に関する修正">派生に関する修正</h3>
+<p>例えば修正前の <code class="language-plaintext highlighter-rouge">P101PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P107PFS</code> は、次のように <code class="language-plaintext highlighter-rouge">P100PFS</code> もろとも <code class="language-plaintext highlighter-rouge">P000PFS</code> の派生として定義されていました。</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;register</span> <span class="na">derivedFrom=</span><span class="s">"P000PFS"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;dim&gt;</span>8<span class="nt">&lt;/dim&gt;</span>
+  <span class="nt">&lt;dimIncrement&gt;</span>0x4<span class="nt">&lt;/dimIncrement&gt;</span>
+  <span class="nt">&lt;dimIndex&gt;</span>0-7<span class="nt">&lt;/dimIndex&gt;</span>
+  <span class="nt">&lt;name&gt;</span>P10%sPFS<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;description&gt;</span>P10%s Pin Function Control Register<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;addressOffset&gt;</span>0x040<span class="nt">&lt;/addressOffset&gt;</span>
+  <span class="nt">&lt;size&gt;</span>32<span class="nt">&lt;/size&gt;</span>
+  <span class="nt">&lt;access&gt;</span>read-write<span class="nt">&lt;/access&gt;</span>
+  <span class="nt">&lt;resetValue&gt;</span>0x00000000<span class="nt">&lt;/resetValue&gt;</span>
+  <span class="nt">&lt;resetMask&gt;</span>0xFFFFFFFD<span class="nt">&lt;/resetMask&gt;</span>
+<span class="nt">&lt;/register&gt;</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">P101PFS</code> 〜 <code class="language-plaintext highlighter-rouge">P107PFS</code> を <code class="language-plaintext highlighter-rouge">P100PFS</code> の派生とするため、次の様に修正しました。（→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L16086" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>差分</a>）</p>
+
+<figure class="highlight"><pre><code class="language-diff" data-lang="diff"><span class="gd">- &lt;register derivedFrom="P000PFS"&gt;
+</span><span class="gi">+ &lt;register derivedFrom="P100PFS"&gt;
+</span><span class="gd">-   &lt;dim&gt;8&lt;/dim&gt;
+</span><span class="gi">+   &lt;dim&gt;7&lt;/dim&gt;
+</span>    &lt;dimIncrement&gt;0x4&lt;/dimIncrement&gt;
+<span class="gd">-   &lt;dimIndex&gt;0-7&lt;/dimIndex&gt;
+</span><span class="gi">+   &lt;dimIndex&gt;1-7&lt;/dimIndex&gt;
+</span>    &lt;name&gt;P10%sPFS&lt;/name&gt;
+    &lt;description&gt;P10%s Pin Function Control Register&lt;/description&gt;
+<span class="gd">-   &lt;addressOffset&gt;0x040&lt;/addressOffset&gt;
+</span><span class="gi">+   &lt;addressOffset&gt;0x044&lt;/addressOffset&gt;
+</span>    &lt;size&gt;32&lt;/size&gt;
+    &lt;access&gt;read-write&lt;/access&gt;
+    &lt;resetValue&gt;0x00000000&lt;/resetValue&gt;
+    &lt;resetMask&gt;0xFFFFFFFD&lt;/resetMask&gt;
+  &lt;/register&gt;</code></pre></figure>
+
+<p>また <code class="language-plaintext highlighter-rouge">P200PFS</code>、<code class="language-plaintext highlighter-rouge">P400PFS</code> も同様に修正しています。以下は <code class="language-plaintext highlighter-rouge">P200PFS</code> の例です。(→ <a href="https://github.com/arduino/ArduinoCore-renesas/pull/305/files#diff-4096b81daefa278ff67b409b974801e5934ecc81550d0cbd42774932c840f382L17444" title='Update "Port mn Pin Function Select Register" in SVD file. by embedded-kiddie · Pull Request #305 · arduino/ArduinoCore-renesas'>差分</a>）</p>
+
+<figure class="highlight"><pre><code class="language-diff" data-lang="diff"><span class="gd">- &lt;register derivedFrom="P000PFS"&gt;
+</span><span class="gi">+ &lt;register derivedFrom="P100PFS"&gt;
+</span>    &lt;name&gt;P200PFS&lt;/name&gt;
+    &lt;description&gt;P200 Pin Function Control Register&lt;/description&gt;
+    &lt;addressOffset&gt;0x080&lt;/addressOffset&gt;
+    &lt;size&gt;32&lt;/size&gt;
+    &lt;access&gt;read-write&lt;/access&gt;
+    &lt;resetValue&gt;0x00000000&lt;/resetValue&gt;
+    &lt;resetMask&gt;0xFFFFFFFD&lt;/resetMask&gt;
+  &lt;/register&gt;</code></pre></figure>
+
+<p>ここまで <code class="language-plaintext highlighter-rouge">P100PFS</code> を例に 32ビット幅のフィールド定義だけを示してきましたが、全ての汎用 I/O 端子に <code class="language-plaintext highlighter-rouge">PxxxPFS_HA</code>（16ビット）、<code class="language-plaintext highlighter-rouge">PxxxPFS_BY</code>（8ビット）が割り当てられており、これら全てについても仕様に基づく検査と修正を行っています。</p>
+
+<p>以上が修正の全容です。</p>
+
+<p>いつの日か、こういう地味な作業を AI に任せられる日が来ると良いですネ。</p>
+
+<h2 id="svdconv-utility-による検査">SVDConv utility による検査</h2>
+<p><a href="https://github.com/Open-CMSIS-Pack/cmsis-toolbox/" title="Open-CMSIS-Pack/cmsis-toolbox: CMSIS-Toolbox">CMSIS-Toolbox</a> には、<a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/schema_1_2_gr.html" title="CMSIS-SVD: CMSIS-SVD Schema File">CMSIS-SVD スキーマ</a> に従い SVD ファイルを検査するコマンド <a href="https://www.keil.com/pack/doc/CMSIS/SVD/html/svd_SVDConv_pg.html" title="CMSIS-SVD: SVDConv utility">svdconv</a> が含まれています。そこで修正前の <code class="language-plaintext highlighter-rouge">R7FA4M1AB.svd</code> をこのコマンドにかけてみましたが、Arduino IDE で見られたようなエラーは検出できませんでした。つまり、文法上は合っていても MCU の機能が正しく定義されているとは限らないと言うことです。</p>
+
+<p>代わりに次のようなエラーが３つ検出されました。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Expression marker found but no &lt;dim&gt; specified: 'P00 Pin Function Control Register'
+</code></pre></div></div>
+
+<p>ここで言う <code class="language-plaintext highlighter-rouge">&lt;dim&gt;</code> とは配列などの要素数を示すと思われますが、何をどう修正すれば良いのか分かりません。まぁ、Arduino IDE には影響が無さそうなので今のところは放置です <img class="emoji" title=":relieved:" alt=":relieved:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f60c.png" height="20" width="20"></p>
+
+<h2 id="あとがき">あとがき</h2>
+<p>最初は UNO R4 と同じ Cortex-M4 アーキテクチャの <code class="language-plaintext highlighter-rouge">R7FA6M1AD.svd</code> から <code class="language-plaintext highlighter-rouge">P100PSF</code> の定義をまるっとコピーし、「とりあえずエラーが出なくなったので OK！」とはしゃぎ、あとは「エキスパートによる修正を待つ」気でいました。</p>
+
+<p>ところがどっこい、GitHub に上げてしまったところからプルリクのハナシが飛び出し、急遽再チェックしたところ初版の間違いに気づき、また日本語 <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編">ユーザーズマニュアル</a> の誤訳に惑わされ、Renesas に真偽を問い合わせたり…と。</p>
+
+<p>結局最後は自分で自分のケツを拭かざるを得なくなり、5000 行弱の該当部分をマニュアル片手に 1 行ずつチェックすると言う、実に地味な作業を強いられる羽目となりました。</p>
+
+<p>でもまぁ、それもこれも UNO R4 ユーザーの皆さんの役に立てると思えばハッピーです！ <img class="emoji" title=":beer:" alt=":beer:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f37a.png" height="20" width="20"></p>
+
+<!-------------------------------------------------------------------------------------->
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/04/23/" title="前の記事：サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集">← サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/05/16/" title="次の記事：Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/05/07/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/05/07/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/05/07/";this.page.identifier="/2024/05/07/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

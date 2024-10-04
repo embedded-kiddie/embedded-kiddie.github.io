@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="基板上の部品温度を測りたくて、どうせなら熱電対とテスターで測るより温度分布を可視化してみたいと思い立ち、手持ちの Arduino UNO R4 でサーモグラフィカメラを作ってみる事にしました。そこで赤外線アレイセンサとカメラモジュールのピックアップから始めました。" />
+<meta property="og:description" content="基板上の部品温度を測りたくて、どうせなら熱電対とテスターで測るより温度分布を可視化してみたいと思い立ち、手持ちの Arduino UNO R4 でサーモグラフィカメラを作ってみる事にしました。そこで赤外線アレイセンサとカメラモジュールのピックアップから始めました。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/08/15/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/08/15/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-15T07:21:34+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-09-04T20:30:31+09:00","datePublished":"2024-08-15T07:21:34+09:00","description":"基板上の部品温度を測りたくて、どうせなら熱電対とテスターで測るより温度分布を可視化してみたいと思い立ち、手持ちの Arduino UNO R4 でサーモグラフィカメラを作ってみる事にしました。そこで赤外線アレイセンサとカメラモジュールのピックアップから始めました。","headline":"基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/08/15/"},"url":"https://embedded-kiddie.github.io/2024/08/15/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-08-15T07:21:34+09:00" itemprop="datePublished">Aug 15, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>基板上の部品温度を測りたくて、どうせなら熱電対とテスターで測るより温度分布を可視化してみたいと思い立ち、手持ちの Arduino UNO R4 でサーモグラフィカメラを作ってみる事にしました。そこで赤外線アレイセンサとカメラモジュールのピックアップから始めました。</p>
+
+<h2 id="赤外線センサとカメラモジュールの選定">赤外線センサとカメラモジュールの選定</h2>
+
+<h3 id="amg88xx">AMG88xx</h3>
+
+<figure class="float-left">
+  <a class="simple" href="https://industrial.panasonic.com/jp/products/pt/grid-eye" title="赤外線アレイセンサGrid-EYE - パナソニック">
+    <img src="/images/2024/08-15/AMG88xx.jpg" alt="Panasonic 赤外線アレイセンサ Grid-EYE" width="640" height="378">
+    <figcaption>Panasonic の製品紹介ページから</figcaption>
+  </a>
+</figure>
+
+<p>Panasonic 製 <a href="https://industrial.panasonic.com/jp/products/pt/grid-eye" title="赤外線アレイセンサGrid-EYE - パナソニック">赤外線アレイセンサ Grid-EYE</a> シリーズのうち、8×8 画素（88）、3.3V（3）、ハイゲインタイプ（3）の AMG8833 が良さそうです。測定温度範囲は 0℃ ～ 80℃ で、FOV が 60°、最大検知距離は 7m と、家電や設備での人検知が想定用途のようですね。</p>
+
+<p>Arduino IDE のライブラリマネージャで「AMG88」を検索すれば Adafruit、SparkFun のライブラリがインストールできるので、開発もし易そうです。秋月電子の <a href="https://akizukidenshi.com/catalog/g/g116737/" title="AMG8833使用 赤外線アレイセンサー(Grid-EYE)モジュール: 計測器・センサー・ロガー 秋月電子通商-電子部品・ネット通販">AMG8833使用 赤外線アレイセンサー(Grid-EYE)モジュール</a>（￥3,980）なら、ロジックレベル変換やプルアップ抵抗も載っているので、UNO R4 の I2C ピンに直接接続できるのも良いと思います。</p>
+
+<h3 id="mlx90640">MLX90640</h3>
+
+<figure class="float-left">
+  <a class="simple" href="https://www.sparkfun.com/products/14843" title="SparkFun IR Array Breakout - 110 Degree FOV, MLX90640 (Qwiic) - SEN-14843 - SparkFun Electronics">
+    <img src="/images/2024/08-15/SparkFun-MLX90640-Waving.png" alt="SparkFun IR Array Breakout - 110 Degree FOV, MLX90640 (Qwiic) - SEN-14843 - SparkFun Electronics" width="482" height="433">
+    <figcaption>SparkFun の製品紹介ページから</figcaption>
+  </a>
+</figure>
+
+<p>ベルギーの半導体メーカー <a href="https://www.melexis.com/" title="Semiconductor Solutions - Innovation with heart I Melexis">Melexis</a> の <a href="https://www.melexis.com/en/product/MLX90640/Far-Infrared-Thermal-Sensor-Array" title="Far Infrared Thermal Sensor Array (32x24 RES) I Melexis">MLX90640</a>（32×24 画素、測定範囲 -40℃ ～ 300℃）を搭載した Adafruit 製や SparkFun 製のカメラモジュールが <a href="https://www.digikey.jp/ja/products/detail/adafruit-industries-llc/4407/11497500" title="4407 Adafruit Industries LLC - 開発ボード、キット、プログラマ - DigiKey">DigiKey</a> や <a href="https://www.switch-science.com/products/4036" title="Qwiic - MLX90640搭載 赤外線アレイモジュール（FOV110°） スイッチサイエンス">スイッチサイエンス</a> で購入出来ます。しかし価格が１万数千円もするので、同程度の性能と思われる出来合いのカメラを買った方が安く済みますネ。一方価格が半値程度の中国製 <a href="https://ja.aliexpress.com/item/1005006674751991.html" title="MLX90640カメラモジュール熱画像温度センサー32x24 ir赤外線配列体温計32*24センサーGY-MCU90640 - AliExpress">GY-MCU90640</a> が AliExpress から購入可能です。</p>
+
+<div class="clear-both">
+どの製品も FOV が 55°と 110°の２タイプがあり、用途に応じて選べるのが良さげです。
+</div>
+
+<p><del>それにしても SparkFun のデモ画像に写っている人は、少なくとも上半身が裸じゃないでしょうか？ 服と肌の温度差がないなんて…</del>   SparkFun の <a href="#ex2">サンプルプログラム</a> では表示の温度域が動的に変わり、前景（人）と背景（環境温度）を分ける程度の色使いになることが分かりました。</p>
+
+<h3 id="lepton">Lepton</h3>
+
+<figure class="float-left">
+  <a class="simple" href="https://www.flir.jp/products/lepton/" title="Lepton | Teledyne FLIR">
+    <img src="/images/2024/08-15/Lepton.jpg" alt="マイクロサイズのLWIRカメラモジュール Lepton" width="640" height="355">
+    <figcaption>Lepton の製品紹介ページから</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://www.flir.jp/" title="サーモグラフィ・赤外線カメラなどのフリアーシステムズ - Teledyne FLIR - Teledyne FLIR">フリアーシステムズ社</a> の <a href="https://www.flir.jp/products/lepton/" title="Lepton - Teledyne FLIR">Lepton</a> というシリーズ。Amazon で <a href="https://www.amazon.co.jp/s?k=flir+lepton" title="Amazon.co.jp : flir lepton">flir lepton を検索</a> すると、ハンディタイプやスマホに繋げるタイプなど、カメラとしてのラインナップが豊富です。</p>
+
+<p>組み込み用のセンサとして、画素数が 80×60 の Lepton 2.x と 160×120 の Lepton 3.x があり、カメラモジュールは <a href="https://www.marutsu.co.jp/GoodsListNavi.jsp?path=&amp;q=lepton" title="leptonの通販はマルツ。3000円ご利用で送料無料 該当件数23件">マルツオンライン</a> や <a href="https://www.switch-science.com/search?q=lepton" title="検索: 「lepton」の検索結果11件 スイッチサイエンス">スイッチサイエンス</a> で入手可能です。解像度が高いのが魅力ですが、センサとブレイクアウトボードを合わせて５万円前後〜とかなりお高いので、手を出しづらいです。</p>
+
+<h3 id="選定結果">選定結果</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/08-15/AliExpress.jpg" title="AliExpressでのお買い物" data-lightbox="image">
+    <img src="/images/2024/08-15/AliExpress-small.jpg" alt="AliExpressでのお買い物" width="524" height="458">
+  </a>
+</figure>
+
+<p>今回の用途では近距離で広い範囲を観測する事とコスパを重視し、MLX90640 の 110°タイプを調達する事にしました。</p>
+
+<p>問題は価格を取るか品質をとるかですが、結局は中国のコストカット・エンジニアリングの凄さを感じる GY-MCU90640 に決めました。</p>
+
+<div class="clear-both">
+また UNO R4 で動作しなかった時のために ESP32 のクローンボード（¥659）と、ついでに「2.4 インチ、タッチスクリーン + SD カードスロット付きカラー LCD」（ナント ¥159 !!）を購入しちゃいました。
+</div>
+
+<p>ESP32 の方はＬチカ程度の動作確認ができましたが、LCD は <del>自治体の小型家電リサイクルボックス行きが濃厚です</del>   グラフィック表示とタッチスクリーンは動作しましたが、SD カードで <code class="language-plaintext highlighter-rouge">Could not find FAT16/FAT32 partition.</code> のエラーが出て、苦戦中です <img class="emoji" title=":persevere:" alt=":persevere:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f623.png" height="20" width="20"></p>
+
+<h2 id="ハードウェア">ハードウェア</h2>
+
+<p>あらためて、試作したサーモグラフィカメラを構成する部品の仕様を確認します。</p>
+
+<h3 id="cpu-ボード">CPU ボード</h3>
+
+<p>温度画像用フレームバッファの関連だと思いますが、20Kバイト以上の RAM 容量が要求されるため、Raspberry Pi や ESP32 系、Teency 系の実装例が多く見られます。ただし <a href="https://forum.arduino.cc/t/using-the-mlx90640-thermal-camera-with-uno/541651" title="Using the MLX90640 (thermal camera) with Uno - Project Guidance - Arduino Forum">Nano や R4 以前の Uno でも動作するドライバ作っちゃった人</a> がいるので、少ないメモリの CPU でチャレンジするのもアリかもしれません。</p>
+
+<p>RAM が 32Kバイトの UNO R4 で動作するかどうか心配でしたが、無事に動きました。</p>
+
+<h3 id="mlx90640-1">MLX90640</h3>
+
+<p><a href="https://media.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf" title="Download product datasheet">MLX90640 データシート</a> の 11 ページ「10.2. Communication protocol」には、以下の記述があります。</p>
+
+<blockquote>
+  <p>赤外線センサの他に MCU が内蔵されていて、Fast Mode Plus（最大 1MHz のクロック周波数）の I2C プロトコルを使用サポートしています。また SDA ポートと SCL ポートは 5V トレラントで、センサーは 5V 系の I2C ネットワークに直接接続できます。</p>
+</blockquote>
+
+<figure class="float-left" style="text-align:center">
+  <a href="/images/2024/08-15/MLX90640-schematic.jpg" title="MLX90640 回路図" data-lightbox="image">
+    <img src="/images/2024/08-15/MLX90640-schematic.jpg" alt="MLX90640 回路図" width="1740" height="1170">
+    <figcaption>MLX90640 回路図</figcaption>
+  </a>
+</figure>
+
+<p>回路図を見ると、I2C は 1KΩ でプルアップされており、外付けのプルアップは不要です。</p>
+
+<p>また I2C クロックは 400KHz が標準で、最大 1MHz、スレーブアドレスは 0x33 がデフォルト（変更可能）です。</p>
+
+<p>測定対象の最大温度は 300℃ ですが、内蔵されたチップの周囲温度を測定する温度センサと VDD を制御する電流センサで動作温度が 85℃ までの素子を保護している（あるいはアプリケーションでの保護が必要）と思われます。また EEPROM を内蔵しているので、スレーブアドレスや <a href="https://ja.wikipedia.org/wiki/%E6%94%BE%E5%B0%84%E7%8E%87" title="放射率 - Wikipedia">放射率</a> など各種設定値の保存が可能です。</p>
+
+<h3 id="gy-mcu90640">GY-MCU90640</h3>
+
+<figure class="float-left" style="text-align:center">
+  <a href="/images/2024/08-15/GY-MCU90640.jpg" title="GY-MCU90640 の端子" data-lightbox="image">
+    <img src="/images/2024/08-15/GY-MCU90640.jpg" alt="GY-MCU90640 の端子" width="1740" height="1170">
+    <figcaption>GY-MCU90640 の端子</figcaption>
+  </a>
+</figure>
+
+<p>近接撮像用の視野角が 110°× 75°の MLX90640BAA を搭載したカメラモジュールです。各端子の定義を下の表に示します。</p>
+
+<p><a href="https://github.com/vvkuryshev/GY-MCU90640-RPI-Python/blob/master/GY_MCU9064%20user%20manual%20v1.pdf" title="vvkuryshev/GY-MCU90640-RPI-Python: The script to connect the thermal image module GY-MCU90640 to Raspberry Pi.">GY-MCU90640 ユーザマニュアル</a> によれば、シリアル通信用の RX／TX 端子を CH340 や FT232 とつなげば、PC との USB 接続が可能とのことですが、確認はしていません。</p>
+
+<div class="clear-both"></div>
+
+<p>一方 I2C は「<code class="language-plaintext highlighter-rouge">PS</code> を <code class="language-plaintext highlighter-rouge">GND</code> に落とす」か「<code class="language-plaintext highlighter-rouge">SET I2C</code> の短絡」で使用可能になります。秋月電子で <a href="https://akizukidenshi.com/catalog/g/g115885" title="コネクター付コード 4P 黒赤青黄: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">コネクター付コード 4P 黒赤青黄</a> や <a href="https://akizukidenshi.com/catalog/g/g117485/" title="SHコネクターDIP化キット: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">SHコネクターDIP化キット</a> を購入すれば UNO R4 WiFi の <a href="https://www.sparkfun.com/qwiic" title="Qwiic Connect System - SparkFun Electronics">Qwiic 端子</a> が使えると思います（順次、確認していく予定です）。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>端子</th>
+      <th>定義</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>VCC</td>
+      <td>電源 (+3V〜+5V)</td>
+    </tr>
+    <tr>
+      <td>GND</td>
+      <td>グランド</td>
+    </tr>
+    <tr>
+      <td>RX</td>
+      <td>シリアル通信用データ受信</td>
+    </tr>
+    <tr>
+      <td>TX</td>
+      <td>シリアル通信用データ送信</td>
+    </tr>
+    <tr>
+      <td>SCL</td>
+      <td>MLX90640 用シリアルクロック</td>
+    </tr>
+    <tr>
+      <td>SDA</td>
+      <td>MLX90640 用シリアルデータ</td>
+    </tr>
+    <tr>
+      <td>PS</td>
+      <td>モジュール機能設定用スイッチ</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="ロジックレベル変換">ロジックレベル変換</h3>
+
+<p>MLX90640 が 5V トレラントで、GY-MCU90640 の動作電圧も 3V 〜 5V なので、直接 UNO R4 の I2C（D18、D19 ピン）に接続できそうですが、安い部品ではないし、UNO R4 WiFi の Qwiic に挿せるというメリットもあり、5V ⇄ 3V のロジックレベル変換をかませる事にしました。</p>
+
+<p>現在、秋月電子の <a href="https://akizukidenshi.com/catalog/g/g113837/" title="4ビット双方向ロジックレベル変換モジュール BSS138使用: 半導体 秋月電子通商-電子部品・ネット通販">4ビット双方向ロジックレベル変換モジュール BSS138使用</a> の２ビット分を使って動作しています。</p>
+
+<h2 id="ソフトウェア">ソフトウェア</h2>
+
+<ul>
+  <li>
+    <p><strong>Melexis 版（ドライバ）</strong><br>
+Melexis が <a href="https://github.com/melexis/mlx90640-library" title="melexis/mlx90640-library: MLX90640 library functions">melexis/mlx90640-library</a> に公開している MLX90640 用ドライバです。ただし <a href="https://github.com/melexis/mlx90640-library/issues/116" title="Is a file missing from this repo? · Issue #116 · melexis/mlx90640-library">不足ファイルがある</a> ため、実際には SparkFun 版か Adafruit 版を使うことになります。</p>
+  </li>
+  <li>
+    <p><strong>SparkFun 版（サンプルプログラム）</strong><br>
+Melexis 版をベースに <a href="https://github.com/sparkfun/SparkFun_MLX90640_Arduino_Example" title="sparkfun/SparkFun_MLX90640_Arduino_Example: Controlling and reading from the MLX90640 IR array thermal imaging sensor">sparkfun/SparkFun_MLX90640_Arduino_Example</a> に３つの例題が公開されています。</p>
+
+    <ul>
+      <li>
+        <p><strong>Example1_BasicReadings</strong><br>
+EEPROM に保存されたデータを読み出し、幾つかの画素の温度を表示するサンプルです。</p>
+      </li>
+      <li>
+        <p><strong><span id="ex2">Example2_OutputToProcessing</span></strong><br>
+Example1 に加え、全画素の温度をシリアル経由で PC に転送し <a href="https://processing.org/" title="Welcome to Processing! / Processing.org">Processing</a> で可視化するサンプルです。</p>
+      </li>
+      <li>
+        <p><strong>Example3_MaxRefreshRate</strong><br>
+リフレッシュレートや I2C シリアルクロックを変えて試すコードが追加されている以外は Example2 と同じです。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Adafruit 版（ライブラリ）</strong></p>
+  </li>
+</ul>
+<figure class="float-left" style="text-align:center">
+  <a href="/images/2024/08-15/Adafruit-MLX90640.jpg" title="Adafruit_MLX90640" data-lightbox="image">
+    <img src="/images/2024/08-15/Adafruit-MLX90640.jpg" alt="Adafruit_MLX90640" width="1380" height="860">
+    <figcaption>ライブラリの依存関係</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://github.com/adafruit/Adafruit_MLX90640" title="adafruit/Adafruit_MLX90640: MLX90640 library functions">adafruit/Adafruit_MLX90640</a> に Melexis 版ドライバを簡単に扱うための <a href="https://adafruit.github.io/Adafruit_MLX90640/html/class_adafruit___m_l_x90640.html" title="Adafruit MLX90640 Sensor Library: Adafruit_MLX90640 Class Reference">独自 API</a> を含んだライブラリパッケージが 公開されています。</p>
+
+<p>Arduino IDE へのインストール時には Adafruit Arcada <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> への依存から、多数の（余計な）
+関連するライブラリのインストールが促されますが、「依存関係なしにインストール」で OK です。</p>
+
+<h2 id="ワイヤリング">ワイヤリング</h2>
+
+<p>UNO R4 ⇄ GY-MCU90640 （I2C）、および UNO R4 ⇄ LCD（SPI）の電圧レベルを合わせるため、それぞれロジックレベル変換回路と分圧抵抗を噛ませています。その関係でワイヤリングは <a href="https://app.cirkitdesigner.com/project/2cb358c0-bc87-438d-aa5b-aa6f1288262a" title="Cirkit Designer IDE - app.cirkitdesigner.com">ご覧の通り</a> です。動作確認が終わったら、何とかしなくちゃです。</p>
+
+<figure class="flex">
+  <a href="/images/2024/08-15/MLX90640-wiring.jpg" title="MLX90640 と 240x240 SPI LCD の結線" data-lightbox="image">
+    <img src="/images/2024/08-15/MLX90640-wiring-small.jpg" alt="MLX90640 と 240x240 SPI LCD の結線" width="506" height="287">
+    <figcaption>MLX90640 と 240x240 LCD</figcaption>
+  </a>
+  <a href="/images/2024/08-15/MLX90640-breadboard.jpg" title="MLX90640 と 240x240 SPI LCD の実際" data-lightbox="image">
+    <img src="/images/2024/08-15/MLX90640-breadboard-small.jpg" alt="MLX90640 と 240x240 SPI LCD の実際" width="383" height="287">
+    <figcaption>実際のワイヤリング</figcaption>
+  </a>
+</figure>
+
+<h2 id="動作確認">動作確認</h2>
+
+<p>１ステップずつ、確実に進めます。信頼性の低いハードウェアを含む場合は特にですね。動作確認した最終的なスケッチは <a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/MLX90640">GitHub</a> に上げてあります。</p>
+
+<h3 id="mlx90640-との-i2c-接続を確認する">MLX90640 との I2C 接続を確認する</h3>
+
+<p><a href="https://playground.arduino.cc/Main/I2cScanner/" title="Arduino Playground - I2cScanner">I2cScanner</a> のスケッチをコンパイル＆アップロードし、シリアルモニターで以下の出力が確認できれば OK です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">I2C</span> <span class="n">Scanner</span>
+<span class="n">Scanning</span><span class="p">...</span>
+<span class="n">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x33</span>  <span class="o">!</span>
+<span class="n">done</span></code></pre></figure>
+
+<h3 id="mlx90640-の出力を確認する">MLX90640 の出力を確認する</h3>
+
+<p>ライブラリ <a href="https://github.com/adafruit/Adafruit_MLX90640" title="adafruit/Adafruit_MLX90640: MLX90640 library functions">adafruit/Adafruit_MLX90640</a> をインストールしたら、Arduino IDE メニューの「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>Adafruit MLX90640</strong>」から <a href="https://github.com/adafruit/Adafruit_MLX90640/tree/master/examples/MLX90640_simpletest" title="Adafruit_MLX90640/examples/MLX90640_simpletest at master · adafruit/Adafruit_MLX90640">MLX90640_simpletest</a> を開き、そのままコンパイルします。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">最大262144バイトのフラッシュメモリのうち、スケッチが84316バイト（32%）を使っています。
+最大32768バイトのRAMのうち、グローバル変数が20144バイト（61%）を使っていて、ローカル変数で12624バイト使うことができます。</code></pre></figure>
+
+<p>キッチリ 20Kバイトが使われてますが、まだ少し余裕がありますね。続いてアップロードすると、<code class="language-plaintext highlighter-rouge">setup()</code> がシリアルモニタに以下を出力します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Found Adafruit MLX90640
+Serial number: 1B0FFBCE18B
+Current mode: Chess
+Current resolution: 18 bit
+Current frame rate: 2 Hz</code></pre></figure>
+
+<p>さらに <code class="language-plaintext highlighter-rouge">loop()</code> からは、32×24 の各画素値を２℃毎に刻んだアスキー文字が 0.5 秒毎に出力されるので、カメラに手をかざすなどして文字が変われば動作 OK です。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">===================================</span>
+Ambient temperature <span class="o">=</span> 37.56 degC
+
+
+<span class="c">#############%%%#####%########%%</span>
+<span class="c">###X########%#%###%#############</span>
+<span class="c">################################</span>
+<span class="c">###X##########%#################</span>
+<span class="c">################################</span>
+<span class="c">##############%###############%#</span>
+<span class="c">###############################%</span>
+<span class="c">###X########################%#%#</span>
+<span class="c">#XXX#########################%#%</span>
+X###########################%#%%
+<span class="c">##############################%%</span>
+<span class="c">############################%#%%</span>
+%####%#%###################%#%#%
+%#%%%#%###################%#%###
+%%%%%###########################
+%%##############################
+%%%%%%##########################
+%%#%#%%#########################
+<span class="c">#%#########%###%################</span>
+%%%%############%###########%###
+%%%%%##%%%#%#%################%%
+%%%%%#%###%%%%#%##############%%
+%%%%%%%%#%#%#%###############%%%
+%%%%%%%%%%%%%##%%%##########%%%x</code></pre></figure>
+
+<h3 id="フレームレートの調整">フレームレートの調整</h3>
+
+<p>MLX90640 のリフレッシュレート（上げすぎると露光時間が短くなりノイズが増える）と I2C のシリアルクロック周波数を調整すると、UNO R4 では 5FPS 強まで行きますが、4FPS 程度が安定するようです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">  <span class="n">mlx</span><span class="p">.</span><span class="n">setRefreshRate</span><span class="p">(</span><span class="n">MLX90640_4_HZ</span><span class="p">);</span>
+  <span class="n">Wire</span><span class="p">.</span><span class="n">setClock</span><span class="p">(</span><span class="mi">400000</span><span class="p">);</span> <span class="c1">// 400 KHz</span></code></pre></figure>
+
+<figure class="float-left">
+  <a href="/images/2024/08-15/ExposurePattern.jpg" title="市松模様の露光パターン" data-lightbox="image">
+    <img src="/images/2024/08-15/ExposurePattern-small.jpg" alt="市松模様の露光パターン" width="460" height="192">
+    <figcaption>市松模様の露光パターン</figcaption>
+  </a>
+</figure>
+
+<p>実際には市松模様に露光した２枚の画像を合成して１枚の温度画像にしているので、表示上のフレームレートは 2FPS です。</p>
+
+<p>合成するまでのフレーム間の時間差により、動きの早い対象の撮像はブレも大きくなりますが、今回の目的からすれば、さほど問題にはならないと考えています。</p>
+
+<h3 id="サーモグラフィを確認する">サーモグラフィを確認する</h3>
+
+<p>MLX90640 の出力をカラー化するには、スケッチ例「<a href="https://github.com/adafruit/Adafruit_MLX90640/tree/master/examples/MLX90640_arcadaCam" title="Adafruit_MLX90640/examples/MLX90640_arcadaCam at master · adafruit/Adafruit_MLX90640">MLX90640_arcadaCam</a>」をベースに、Adafruit Arcada のグラフィック用コードを使用する LCD 用に置き換えるのが簡単です。</p>
+
+<p>僕の場合、「<a href="/2024/08/08/">マルチタスク風プログラミングで作るArduinoのブロック崩し</a>」で使った 240×240 の LCD をそのまんま流用しました。</p>
+
+<p>昨今の地球温暖化で気温が体温より高いと人体は判別できませんが、28℃ の室内でカメラから 60cm 程度離れて手を上げ <img class="emoji" title=":raising_hand_man:" alt=":raising_hand_man:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f64b-2642.png" height="20" width="20"> たり、20cm 程度の距離で <img class="emoji" title=":fist:" alt=":fist:" src="https://github.githubassets.com/images/icons/emoji/unicode/270a.png" height="20" width="20"> <img class="emoji" title=":v:" alt=":v:" src="https://github.githubassets.com/images/icons/emoji/unicode/270c.png" height="20" width="20"> <img class="emoji" title=":raised_hand_with_fingers_splayed:" alt=":raised_hand_with_fingers_splayed:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f590.png" height="20" width="20"> した程度なら、目視で判別ぐらいは出来そうです。</p>
+
+<figure class="flex">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/sfqiSglsp9Y?si=mhPLUxN-YJOJSpU7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</figure>
+
+<h2 id="このあとは">このあとは…</h2>
+
+<p>今のバラックのままでは “カメラ” とは言い難いので何とかしたいですし、ギザギザの画像を滑らかにしたり補間して擬似的に解像度を上げたりしていきたいと思います <img class="emoji" title=":camera:" alt=":camera:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4f7.png" height="20" width="20"></p>
+
+<h3 id="参考情報">参考情報</h3>
+
+<ul>
+  <li>
+    <p><strong><a href="https://www.melexis.com/en/product/MLX90640/Far-Infrared-Thermal-Sensor-Array" title="Far Infrared Thermal Sensor Array (32x24 RES) I Melexis">Far infrared thermal sensor array (32x24 RES)</a></strong><br>
+MLX90640 の製品紹介ページです。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://media.melexis.com/-/media/files/documents/datasheets/mlx90640-datasheet-melexis.pdf" title="Download product datasheet">MLX90640 データシート</a></strong><br>
+赤外線センサアレイ MLX90640 の Melexis 公式データシートです。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/vvkuryshev/GY-MCU90640-RPI-Python/blob/master/GY_MCU9064%20user%20manual%20v1.pdf" title="vvkuryshev/GY-MCU90640-RPI-Python: The script to connect the thermal image module GY-MCU90640 to Raspberry Pi.">GY-MCU90640 ユーザマニュアル</a></strong><br>
+GY-MCU90640 の製造元が特定できず、公式のドキュメントも見つかりませんでした。私的なものかもしれませんが、唯一見つけたマニュアルです。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/sparkfun/SparkFun_MLX90640_Arduino_Example" title="sparkfun/SparkFun_MLX90640_Arduino_Example: Controlling and reading from the MLX90640 IR array thermal imaging sensor">sparkfun/SparkFun_MLX90640_Arduino_Example</a></strong><br>
+SparkFun によるサンプルコードで、Melexis 公式の MLX90640 ドライバとドキュメント一式を含んでいます。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/adafruit/Adafruit_MLX90640" title="adafruit/Adafruit_MLX90640: MLX90640 library functions">adafruit/Adafruit_MLX90640</a></strong><br>
+Adafruit による MLX90640 用ライブラリです。こちらも Melexis 公式の MLX90640 ドライバとドキュメント一式を含んでいます。</p>
+  </li>
+</ul>
+
+<hr>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>PyGamer や PyBadge といった Adafruit 製ゲーム開発基板向けにハードウェアを抽象化したライブラリ。 <a href="#fnref:1" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/08/08/" title="前の記事：Blink Without DelayパターンとFinite State Machineで作るArduinoのブロック崩し">← Blink Without DelayパターンとFinite State Machineで作るArduinoのブロック崩し</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/09/04/" title="次の記事：基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/08/15/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/08/15/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/08/15/";this.page.identifier="/2024/08/15/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

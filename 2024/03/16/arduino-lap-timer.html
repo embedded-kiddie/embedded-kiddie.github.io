@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Arduinoでライントレース用ラップタイマーを作る | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Arduinoでライントレース用ラップタイマーを作る" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/03/16/arduino-lap-timer.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/03/16/arduino-lap-timer.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-16T20:31:10+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Arduinoでライントレース用ラップタイマーを作る" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-05-19T05:42:39+09:00","datePublished":"2024-03-16T20:31:10+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"Arduinoでライントレース用ラップタイマーを作る","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/03/16/arduino-lap-timer.html"},"url":"https://embedded-kiddie.github.io/2024/03/16/arduino-lap-timer.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Arduinoでライントレース用ラップタイマーを作る</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-03-16T20:31:10+09:00" itemprop="datePublished">Mar 16, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/images/2024/03-16/arduino-and-mac.jpg" alt="Aruduino" title="Arduino UNO R4 Minima" width="1282" height="920" /></p>
+
+<h2 id="ラップタイマーが欲しい">ラップタイマーが欲しい！</h2>
+
+<p>ライントレースで遊んでいると欲しくなりますよネ。どのパラメータの組みが速いかも知りたいですし。しかもブレッドボードで組むんじゃなくて、子基板（シールドって言うんですね）を載せてポータブルにしたい！ってことで作っちゃいました。</p>
+
+<h3 id="全体像">全体像</h3>
+
+<figure class="float-left">
+<a href="/images/2024/03-16/arduino-lap-timer.jpg" data-lightbox="image"><img src="/images/2024/03-16/arduino-lap-timer.jpg" width="948" height="703" alt="作成したラップタイマー" /></a>
+</figure>
+
+<p>写真は <a href="https://amzn.asia/d/4USPHyq" title="Amazon.co.jp: SunFounder オリジナル Arduino Uno R4 Minima 用のセンサーキット究極版、 スマート IoT および基本センサープロジェクト向けのオンラインチュートリアル（日本語）を備え、初心者向け （オリジナル Arduino Uno R4 Minima 付属） : 産業・研究開発用品">Arduino のキット</a> についてきたセンサやディスプレイをサンハヤトのArduino用ユニバーサル基板 <a href="https://amzn.asia/d/0cvz9Qs" title="Amazon - サンハヤト Arduino用ユニバーサルキバン UB-ARD03-P - 基板 - 産業・研究開発用品 通販">UB-ARD03-P</a> の上に載せたものです。この基板は Arduino のリセットボタンが隠れず、また GND と VCC がベタで引き回されているので配線が楽でした。逆に Arduino のピンから信号を引っ張り出すにはそれらを跨がなければならず、狭い基板がますます狭くなるので、使い易さと使い難さが同居している感じです。</p>
+
+<p>またセンサやディスプレイはピンソケットから引っこ抜いて再利用できるようにしています（ケチ）。</p>
+
+<h3 id="センサモジュール">センサモジュール</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-16/fc51-1.jpg" data-lightbox="image">
+    <img src="/images/2024/03-16/fc51-1.jpg" width="777" height="583" alt="赤外線障害物回避モジュールの出力ピン" />
+  </a>
+</figure>
+<figure class="float-left">
+  <a href="/images/2024/03-16/fc51-2.jpg" data-lightbox="image">
+    <img src="/images/2024/03-16/fc51-2.jpg" width="777" height="583" alt="赤外線障害物回避モジュールの取り付け" />
+  </a>
+</figure>
+
+<p>出力ピンがL字型で基板に対して垂直に立つタイプなので、取り外して縦型のピンヘッダに交換しようかとも思いましたが、センサの高さを低く抑えたかったのでL字型のピンソケットを介して基板に対して水平になるようにしています。</p>
+
+<h3 id="タクタイルスイッチ">タクタイルスイッチ</h3>
+<p>サンハヤトの基盤についてくるタクタイルスイッチはリセットがかかるようパターンが引かれているので、カッターでカットしてラップのリセット用にすることにしました。</p>
+
+<h3 id="電源">電源</h3>
+<p>006P 電池は東芝のニッケル水素電池 <a href="https://amzn.asia/d/g9eAoxV" title="Amazon - TOSHIBA ニッケル水素電池 充電式IMPULSE 単6P形充電池(min.200mAh) 1本 6TNH22A - 東芝(TOSHIBA) - 充電式電池">IMPULSE</a> で <a href="https://amzn.asia/d/g4qnJGo" title="Amazon - 東芝(TOSHIBA) TOSHIBA 充電式IMPULSE 6P形専用充電器 1~2個充電モデル TNHC-622SC - 東芝(TOSHIBA) - 充電式電池">充電器</a> と一緒に Amazon 購入です。容量が 200mAh なので連続で数時間遊んでいるとなくなります。フル充電に6時間かかります。</p>
+
+<h3 id="圧電ブザー">圧電ブザー</h3>
+<p>１つはアクティブ（自励振）タイプでラップを刻んだ時に「ピッ」と音を鳴らします。もう１つはパッシブ（他励振）タイプで、<a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> に実装した楽譜再生プログラムを Arduino に移植することを考えてます。タイムを計測しながらカッコいい曲を流す予定です！</p>
+
+<h2 id="配線とプログラムはチュートリアルから">配線とプログラムはチュートリアルから！</h2>
+
+<p>SunFounder の「<a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/components_basic/00-component_list.html" title="コンポーネントの基本 &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">コンポーネントの基本</a>」ページから「<a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/components_basic/09-component_ir_obstacle.html" title="IR 赤外線障害物回避センサーモジュール &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">IR 赤外線障害物回避センサーモジュール</a>」と「<a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/components_basic/22-component_oled.html" title="OLEDディスプレイモジュール &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">OLEDディスプレイモジュール</a>」を参考に “ニコイチ” にします。</p>
+
+<figure class="float-left">
+  <a href="/images/2024/03-16/line_trace_lap_timer_breadboard.png" data-lightbox="image">
+    <img src="/images/2024/03-16/line_trace_lap_timer_breadboard.png" width="948" height="1401" alt="ブレッドボード配線図" />
+  </a>
+</figure>
+
+<figure class="float-left">
+  <a href="/images/2024/03-16/line_trace_lap_timer_schematic.png" data-lightbox="image">
+    <img src="/images/2024/03-16/line_trace_lap_timer_schematic.png" width="972" height="996" alt="回路図" />
+  </a>
+</figure>
+
+<p>回路図は描いた事がなかったので部品のレイアウトに苦労しましたが、一応 <a href="https://fritzing.org/" title="Welcome to Fritzing">Fritzing</a> で配線図と回路図を引いてみました。エキスパートの方々は <a href="https://www.kicad.org/" title="KiCad EDA - Schematic Capture &amp; PCB Design Software">KiCad</a> を使っているらしいので、いづれ習熟してオリジナル基板を発注するのが夢です。</p>
+
+<p>また Minima のパーツは <a href="https://forum.fritzing.org/t/arduino-r4-minima/20064" title="Arduino R4 Minima - parts submit - fritzing forum">Fritzing のフォーラム</a> からもらいました。ホント、ありがたいですネ。</p>
+
+<h2 id="ソースコードのご紹介">ソースコードのご紹介</h2>
+
+<p>ソースコードを <a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/line_trace_lap_timer" title="Arduino-UNO-R4/line_trace_lap_timer at main · embedded-kiddie/Arduino-UNO-R4">Github</a> に上げてありますが、ここでも簡単に解説したいと思います。</p>
+
+<h3 id="要求">要求</h3>
+
+<ul>
+  <li>センサでロボット車の通過を検知する</li>
+  <li>コースを１周するごとにラップタイムをディスプレイに表示する</li>
+  <li>ディスプレイの上段に経過時間、下段にラップタイムを表示する</li>
+  <li>タイムは 1/100 秒まで計測する</li>
+  <li>計測の状態変化を音と表示で知らせる</li>
+</ul>
+
+<h3 id="要件">要件</h3>
+
+<ul>
+  <li>小型、ポータブル、乾電池で動作すること
+    <ul>
+      <li>Arduino UNO R3/R4（秋月電子で検索：<a href="https://akizukidenshi.com/catalog/goods/search.aspx?search=x&amp;keyword=Arduino+UNO&amp;search=search" title="秋月電子で検索">Arduino UNO</a>）</li>
+      <li>FC-51（Amazonで検索：<a href="https://www.amazon.co.jp/s?k=%E8%B5%A4%E5%A4%96%E7%B7%9A+%E9%9A%9C%E5%AE%B3%E7%89%A9+%E5%9B%9E%E9%81%BF+%E3%82%BB%E3%83%B3%E3%82%B5%E3%83%BC+%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB" title="Amazonで検索">赤外線障害物回避モジュール</a>）</li>
+      <li>OLEDモジュール（Amazonで検索：<a href="https://www.amazon.co.jp/s?k=oled+%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB+128x64+i2c+1306" title="Amazonで検索">128X64、I2C、SSD1306</a>）</li>
+      <li>圧電ブザー</li>
+      <li>006P 乾電池</li>
+    </ul>
+  </li>
+  <li>制約条件
+    <ul>
+      <li>コースを１周するのに４秒以上であること</li>
+      <li>黒色の車体は計測の対象外とする</li>
+      <li>…</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="仕様">仕様</h3>
+
+<ul>
+  <li>ロボット車の通過に伴うセンサの状態変化を割り込みで処理する</li>
+  <li>車体の凹凸などに伴うセンサ出力のチャタリングを除去する</li>
+  <li>タイマーの状態は「計測前」、「計測中」の２状態とする</li>
+  <li>ラップタイム更新時には音を鳴らし、表示を点滅させる</li>
+  <li>ラップタイムの点滅は、点滅周期と点滅時間で制御する</li>
+</ul>
+
+<h3 id="実装">実装</h3>
+
+<p>まずは OLED の設定です。チュートリアル「<a href="https://docs.sunfounder.com/projects/ultimate-sensor-kit/ja/latest/components_basic/22-component_oled.html" title="OLEDディスプレイモジュール &mdash; SunFounder Ultimate Sensor Kit  ドキュメント">OLEDディスプレイモジュール</a>」に従い、Adafruit の SSD1306 用ライブラリとグラフィック用ライブラリが IDE にンストールされていることが前提です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*
+  This code initializes an OLED display (SSD1306) using the Adafruit SSD1306 library, 
+  and displays various text, numbers, and scroll animations on the screen.
+
+  Board: Arduino Uno R4 (or R3)
+  Component:  OLED (SSD1306)
+  Library: https://github.com/adafruit/Adafruit_SSD1306 (Adafruit SSD1306 by Adafruit)
+           https://github.com/adafruit/Adafruit-GFX-Library (Adafruit GFX Library by Adafruit)
+*/</span>
+<span class="c1">// Libraries in use: "Adafruit SSD1306", "Adafruit BusIO", "Adafruit GFX"</span>
+<span class="cp">#include</span> <span class="cpf">&lt;SPI.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;Wire.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;Adafruit_GFX.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;Adafruit_SSD1306.h&gt;</span><span class="cp">
+</span>
+<span class="cp">#define SCREEN_WIDTH 128  // OLED display width, in pixels
+#define SCREEN_HEIGHT 64  // OLED display height, in pixels
+</span>
+<span class="c1">// Declaration for SSD1306 display connected using I2C</span>
+<span class="cp">#define OLED_RESET      (-1)  // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS  0x3C
+</span><span class="n">Adafruit_SSD1306</span> <span class="nf">display</span><span class="p">(</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="n">SCREEN_HEIGHT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Wire</span><span class="p">,</span> <span class="n">OLED_RESET</span><span class="p">);</span></code></pre></figure>
+
+<p>続いてタイマーとラップ表示に関する設定です。割り込みを使わない設定もできますが、振る舞いが若干変わります。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * タイマーとラップ表示の設定
+ *--------------------------------------------------*/</span>
+<span class="cp">#define DEBUG_PRINT     0     // デバッグコンソールに出力する場合は 1
+#define USE_INTERRUPT   1     // センサモジュール FC-51 の状態変化を割り込みで処理する場合は 1
+#define IR_SENSOR_PIN   2     // センサモジュール FC-51 出力の入力ピン番号
+#define BLINK_COUNT     3     // ラップタイムの点滅回数
+#define BLINK_INTERVAL  250   // ラップタイムの点滅周期 [msec]
+#define LAP_HYSTERESIS  4000  // チャタリング除去用のヒステリシス [msec]
+#define TIMER_CURSOR_X  16    // ディスプレイ表示のX座標
+#define TIMER_CURSOR_Y  10    // ディスプレイ表示のY座標
+</span>
+<span class="cm">/*--------------------------------------------------
+ * 状態変化時の音の設定
+ *--------------------------------------------------*/</span>
+<span class="cp">#define BUZZER_PIN      8     // ブザー出力のピン番号
+#define BUZZER_DURATION 16    // 音の長さ [msec]
+#define BUZZER_FREQUENCY 2794 // 音階の周波数（ファ）</span></code></pre></figure>
+
+<p>割り込みハンドラには引数も戻り値も無いので、メインループとはグローバル変数でやりとりします。メインループ内の処理にとっては知らない所（＝割り込みハンドラ）で変数の値が変更されるため、<a href="https://tool-support.renesas.com/autoupdate/support/onlinehelp/ja-JP/csp/V4.01.00/CS+.chm/Compiler-CCRH.chm/Output/ccrh11c0100y.html" title="volatile修飾子 - CS+ V4.01.00"><code class="language-plaintext highlighter-rouge">volatile</code></a> をつけてコンパイラに適切に扱うよう指示（＝最適化を適用しない）しています。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * 割り込みハンドラ内で設定される変数
+ *--------------------------------------------------*/</span>
+<span class="c1">// ラップタイマー関連</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">start</span><span class="p">;</span>                 <span class="c1">// 計測開始前[false]、計測開始後[true]</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="kt">char</span> <span class="n">strLap</span><span class="p">[]</span> <span class="o">=</span> <span class="s">"00:00:00"</span><span class="p">;</span> <span class="c1">// ディスプレイ用ラップタイム</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="n">u_int32_t</span> <span class="n">timerT0</span><span class="p">,</span> <span class="n">timerT1</span><span class="p">;</span> <span class="c1">// ラップ計測用タイム</span>
+
+<span class="c1">// ラップの点滅表示関連</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="kt">int</span> <span class="n">blinkCount</span><span class="p">;</span>             <span class="c1">// 点滅した回数</span>
+<span class="k">volatile</span> <span class="k">static</span> <span class="kt">uint32_t</span> <span class="n">blinkT0</span><span class="p">;</span>           <span class="c1">// 点滅開始時間</span></code></pre></figure>
+
+<p>次は Arduino の <code class="language-plaintext highlighter-rouge">setup()</code> で呼び出す初期化の関数群です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * OLED の設定
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">setupDisplay</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// OLED 用インスタンスの初期化</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">display</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">SSD1306_SWITCHCAPVCC</span><span class="p">,</span> <span class="n">SCREEN_ADDRESS</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// エラーが起きた場合、シリアル通信にメッセージを出し続ける</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">F</span><span class="p">(</span><span class="s">"SSD1306 allocation failed"</span><span class="p">));</span>
+      <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// ディスプレイバッファをクリア</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">clearDisplay</span><span class="p">();</span>
+
+  <span class="c1">// Display Text</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">setTextSize</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>       <span class="c1">// テキストサイズの設定</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">setTextColor</span><span class="p">(</span><span class="n">WHITE</span><span class="p">);</span>  <span class="c1">// テキスト表示色の設定（黒 or 白）</span>
+<span class="p">}</span>
+
+<span class="cm">/*--------------------------------------------------
+ * 障害物センサの設定
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">setupSensor</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">IR_SENSOR_PIN</span><span class="p">,</span> <span class="n">INPUT</span><span class="p">);</span>
+
+<span class="cp">#if USE_INTERRUPT
+</span>  <span class="c1">// 障害物センサ状態が変化した時に割り込みハンドラ checkStateIR() を起動する</span>
+  <span class="kt">void</span> <span class="n">checkStateIR</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+  <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">IR_SENSOR_PIN</span><span class="p">),</span> <span class="n">checkStateIR</span><span class="p">,</span> <span class="n">CHANGE</span><span class="p">);</span>
+<span class="cp">#endif
+</span><span class="p">}</span>
+
+<span class="cm">/*--------------------------------------------------
+ * タイマーとラップ表示の初期化
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">resetTimer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// タイマーの初期化</span>
+  <span class="n">start</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+  <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">strcpy</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">strLap</span><span class="p">,</span> <span class="s">"00:00:00"</span><span class="p">);</span>
+
+  <span class="c1">// ラップ表示の初期化</span>
+  <span class="n">blinkT0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">blinkCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>続いて、ミリ秒を 1/100 秒単位の文字列に変換をするためのサブルーチンです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * ミリ秒を文字列に変換する (00:00:00 - 59:59:99)
+ *--------------------------------------------------*/</span>
+<span class="kt">char</span><span class="o">*</span> <span class="nf">time2str</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">msec</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">uint32_t</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">;</span>
+
+  <span class="c1">// 1/1000[sec] --&gt; 1/100[sec]</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">msec</span> <span class="o">/=</span>  <span class="mi">10UL</span><span class="p">)</span> <span class="o">%</span> <span class="mi">100UL</span><span class="p">;</span>
+  <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">msec</span> <span class="o">/=</span> <span class="mi">100UL</span><span class="p">)</span> <span class="o">%</span>  <span class="mi">60UL</span><span class="p">;</span>
+  <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">msec</span> <span class="o">/=</span>  <span class="mi">60UL</span><span class="p">)</span> <span class="o">%</span>  <span class="mi">60UL</span><span class="p">;</span>
+  <span class="n">sprintf</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="s">"%02d:%02d:%02d"</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="n">str</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>次は割り込みハンドラの定義です。障害物センサ FC-51 は、未検出の場合は <code class="language-plaintext highlighter-rouge">High</code>、検出した場合は <code class="language-plaintext highlighter-rouge">Low</code> を出力します。即ちエッジの立ち下がりを検知すれば通過を判定できるのですが、<code class="language-plaintext highlighter-rouge">setupSensor()</code> で <a href="https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/" title="attachInterrupt() - Arduino Reference"><code class="language-plaintext highlighter-rouge">attachInterrupt()</code></a> に <code class="language-plaintext highlighter-rouge">FALLING</code> を設定しても <code class="language-plaintext highlighter-rouge">CHANGE</code> と同じ振る舞いが観測されたため、わざわざ <a href="https://www.arduino.cc/reference/en/language/functions/digital-io/digitalread/" title="digitalRead() - Arduino Reference"><code class="language-plaintext highlighter-rouge">digitalRead()</code></a> で状態を確認しています。</p>
+
+<p>Arduino R4 コアのソースコード には <code class="language-plaintext highlighter-rouge">HIGH</code> の場合に <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Interrupts.cpp#L170" title="ArduinoCore-renesas/cores/arduino/Interrupts.cpp at main · arduino/ArduinoCore-renesas">問題がありげ</a> なコメントが書かれているので、何かあるのかもしれません。</p>
+
+<p>またアクションとして状態変化に伴う音を <code class="language-plaintext highlighter-rouge">tone()</code> で鳴らしています。音の長さを <code class="language-plaintext highlighter-rouge">BUZZER_DURATION</code> （16[msec]）で指定していますが、鳴り終わるまでここで待っているわけではなく、タイマーに「指定した周波数で指定時間分だけアナログ出力せよ」と指示してすぐに戻ってきます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * 計測と表示の状態変化を判定し、アクションを実行する
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">checkStateIR</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">bool</span> <span class="n">status</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">IR_SENSOR_PIN</span><span class="p">);</span>
+
+<span class="cp">#if DEBUG_PRINT
+</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">status</span><span class="p">);</span>
+<span class="cp">#endif
+</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kt">uint32_t</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">timerT1</span> <span class="o">-</span> <span class="n">timerT0</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">delta</span> <span class="o">&gt;=</span> <span class="n">LAP_HYSTERESIS</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 計測開始後４秒以上経過していれば状態を変えても良い</span>
+        <span class="n">time2str</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">strLap</span><span class="p">);</span>
+        <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span><span class="p">;</span>
+
+        <span class="n">blinkT0</span> <span class="o">=</span> <span class="n">timerT0</span><span class="p">;</span>
+        <span class="n">blinkCount</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">tone</span><span class="p">(</span><span class="n">BUZZER_PIN</span><span class="p">,</span> <span class="n">BUZZER_FREQUENCY</span><span class="p">,</span> <span class="n">BUZZER_DURATION</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 計測開始の1回だけ実行する</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="n">start</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+      <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span><span class="p">;</span>
+
+      <span class="n">tone</span><span class="p">(</span><span class="n">BUZZER_PIN</span><span class="p">,</span> <span class="n">BUZZER_FREQUENCY</span><span class="p">,</span> <span class="n">BUZZER_DURATION</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>続いて Arduino お約束の <code class="language-plaintext highlighter-rouge">setup()</code> で先に定義した初期化の関数群を呼び出します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * OLED, 障害物センサ、タイマーと表示の初期化
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// OLED の設定</span>
+  <span class="n">setupDisplay</span><span class="p">();</span>
+
+  <span class="c1">// FC-51 赤外線センサモジュールの設定</span>
+  <span class="n">setupSensor</span><span class="p">();</span>
+
+  <span class="c1">// 計測と表示用のグローバル変数の初期化</span>
+  <span class="n">resetTimer</span><span class="p">();</span>
+
+<span class="cp">#if DEBUG_PRINT
+</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+<span class="cp">#endif
+</span><span class="p">}</span></code></pre></figure>
+
+<p>最後はメインループです。<code class="language-plaintext highlighter-rouge">millis()</code> で最新の経過時間を読み込み、その表示とラップタイムの表示を担当しています。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------
+ * メインループ
+ *--------------------------------------------------*/</span>
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// for timer</span>
+  <span class="kt">char</span> <span class="n">strNow</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+  <span class="kt">uint32_t</span> <span class="n">delta</span><span class="p">;</span>
+
+  <span class="n">timerT1</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+
+  <span class="c1">// 計測開始の1回だけ実行</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">start</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">timerT0</span> <span class="o">=</span> <span class="n">timerT1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">delta</span> <span class="o">=</span> <span class="n">timerT1</span> <span class="o">-</span> <span class="n">timerT0</span><span class="p">;</span>
+
+<span class="cp">#if ! USE_INTERRUPT
+</span>  <span class="n">checkStateIR</span><span class="p">();</span> <span class="c1">// 割り込みを使わない場合は、ここで状態変化を判定する</span>
+<span class="cp">#endif
+</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">clearDisplay</span><span class="p">();</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">setCursor</span><span class="p">(</span><span class="n">TIMER_CURSOR_X</span><span class="p">,</span> <span class="n">TIMER_CURSOR_Y</span><span class="p">);</span>
+  <span class="n">display</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">time2str</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">strNow</span><span class="p">));</span>
+
+  <span class="c1">// ラップ表示の点滅が開始されたら点滅周期ごとに点滅回数を更新する</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">blinkCount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">timerT1</span> <span class="o">-</span> <span class="n">blinkT0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">BLINK_INTERVAL</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">blinkT0</span> <span class="o">=</span> <span class="n">timerT1</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">blinkCount</span><span class="o">++</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">BLINK_COUNT</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">blinkCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">blinkCount</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// 2回に1回、点灯と消灯の状態を変えて表示する</span>
+    <span class="n">display</span><span class="p">.</span><span class="n">setCursor</span><span class="p">(</span><span class="n">TIMER_CURSOR_X</span><span class="p">,</span> <span class="n">TIMER_CURSOR_Y</span> <span class="o">+</span> <span class="mi">32</span><span class="p">);</span>
+    <span class="n">display</span><span class="p">.</span><span class="n">println</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">strLap</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">display</span><span class="p">.</span><span class="n">display</span><span class="p">();</span> <span class="c1">// ディスプレイバッファを反映する</span>
+
+<span class="cp">#if DEBUG_PRINT
+</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">strNow</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"</span><span class="se">\t</span><span class="s">"</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">strLap</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="cp">#endif
+</span><span class="p">}</span></code></pre></figure>
+
+<h2 id="以上">以上！</h2>
+
+<p>ライントレースで楽しんでもらえたら嬉しいです ^.^)y</p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/03/15/items-for-electronic-hobbyists.html" title="前の記事：電子工作初心者の僕が買い揃えた14＋αのアイテム">← 電子工作初心者の僕が買い揃えた14＋αのアイテム</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/03/17/items-for-line-trace-dev.html" title="次の記事：ライントレースのプログラム開発を楽しむためのアイテム">ライントレースのプログラム開発を楽しむためのアイテム →</a>
+    </p>    
+  </div>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/03/16/arduino-lap-timer.html"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2024/03/16/arduino-lap-timer.html" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/03/16/arduino-lap-timer.html";this.page.identifier="/2024/03/16/arduino-lap-timer.html"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

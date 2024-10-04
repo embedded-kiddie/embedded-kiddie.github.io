@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-26T20:45:16+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-05-18T05:30:21+09:00","datePublished":"2024-03-26T20:45:16+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"},"url":"https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-03-26T20:45:16+09:00" itemprop="datePublished">Mar 26, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/images/2024/03-26/LPCXpresso.jpg" alt="LPCXpressoのデバッグ画面" title="LPCXpressoのデバッグ画面" width="1600" height="1033" /></p>
+
+<p>前回の <a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> に続き、LPCXpresso でのデバッグ方法を解説します。<a href="https://ja.wikipedia.org/wiki/Eclipse_(%E7%B5%B1%E5%90%88%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83)" title="Eclipse (統合開発環境) - Wikipedia">この手の IDE</a> に慣れていないと、沢山あるウィンドウやその中のタブに戸惑うことと思います。また  <a href="https://www.nxp.jp/products/processors-and-microcontrollers/arm-microcontrollers/general-purpose-mcus/lpc54000-arm-cortex-m4-/lpcxpresso-ide-v8-2-2:LPCXPRESSO" title="LPCXpresso IDE v8.2.2 - NXP Semiconductors">LPCXpresso IDE - User Guide</a> 中のデバッグに関する説明も内容が薄く、あまり役に立ちません。</p>
+
+<p>そこで本記事では「これだけ知っていれば、大抵のソースコードデバッグはOK」な項目に絞って解説をします。逆に「オンチップのトレースバッファを活用したアセンブリ言語レベルのデバッグ」や「SWO（Serial Wire Output）によるトレース」には触れていません。これらについては「LPCXpresso IDE Instruction - Trace Guide」や「LPCXpresso IDE SWO - Trace Guide」を参照してください（僕も使いこなせていませんので…）</p>
+
+<h2 id="全体構成">全体構成</h2>
+<p>まずは IDE の全体像を掴み、どこに何が表示されるかを把握してこそ効率的なデバッグができると僕は思うので、少し長くなりますが、１つ１つ解説したいと思います。</p>
+
+<figure class="float-left">
+  <a href="/images/2024/03-26/01.jpg" data-lightbox="image" title="全体構成">
+      <img src="/images/2024/03-26/01-small.jpg" width="460" height="297" alt="全体構成" />
+  </a>
+  <a href="/images/2024/03-26/06.png" data-lightbox="image" title="ビューのレイアウト変更">
+    <img src="/images/2024/03-26/06.png" width="1008" height="558" alt="ビューのレイアウト変更" />
+  </a>
+</figure>
+
+<p>デバッグを開始すると、コンパイルだけしていた時より１つ増えて５つの “ビュー” が開きます。この時、右上の <span class="inline" title="Open Perspective"><img src="/images/2024/03-26/button-open-perspective.png" width="27" height="27" alt="Open Perspective" /></span>（Open Perspective）ボタンを押すといくつかの選択肢が出てくるので「Debug」を選びます。すると外観がデバッグに適した “ビュー” の配置に変更されます。</p>
+
+<p>このように “Open Perspective” ボタンでその時々の作業内容に合わせて外観を変更できるので、好みで使い分けると良いでしょう（以下の解説は「Develop」を元にしています）。</p>
+
+<h3 id="-アプリケーション全体のリソース情報を表示するビュー">① アプリケーション全体のリソース情報を表示するビュー</h3>
+<p>どのビューにも特定の名前がついているワケではありません。その内容からタイトルのような名前をつけているだけですので、悪しからず。</p>
+
+<h4 id="project-explore-タブ">Project Explore タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/01-01.png" data-lightbox="image" title="Project Explore">
+      <img src="/images/2024/03-26/01-01.png" width="750" height="390" alt="Project Explore" />
+  </a>
+</figure>
+<p>プロジェクト、あるいはワークスペース全体のファイル構成をツリー形式で参照することができます。お馴染みだとは思いますが、ソースコードを選択し、エディタに表示することができるタブです。</p>
+
+<h4 id="peripherals-タブ">Peripherals タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/01-02.png" data-lightbox="image" title="Peripherals">
+    <img src="/images/2024/03-26/01-02.png" width="750" height="390" alt="Peripherals" />
+  </a>
+</figure>
+<p>ADC やタイマーなど、オンチップの周辺機能が一覧で表示されます。左側のチェックボックスを選択すると、<a href="#memory-タブ">③ Memory タブ</a> にレジスタの内容を表示することができます。</p>
+
+<h4 id="registers-タブ">Registers タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/01-03.png" data-lightbox="image" title="Registers">
+    <img src="/images/2024/03-26/01-03.png" width="750" height="390" alt="Registers" />
+  </a>
+</figure>
+<p>CPU のレジスタやスタックポインタ、プログラムカウンタなどを参照できます。<a href="#debug-タブ">⑤ デバッグタブ</a> 右上の <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" width="27" height="27" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンによるアセンブリ言語のステップ実行モード選択時に役立ちます。</p>
+
+<h4 id="symbol-viewer-タブ">Symbol Viewer タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/01-04.png" data-lightbox="image" title="Symbol Viewer">
+    <img src="/images/2024/03-26/01-04.png" width="750" height="390" alt="Symbol Viewer" />
+  </a>
+</figure>
+<p><span class="inline" title="Browse for a file with symbol table"><img src="/images/2024/03-26/button-browse.png" width="27" height="27" alt="Browse for a file with symbol table" /></span>（Browse for a file with symbol table）ボタンで実行ファイル <code class="language-plaintext highlighter-rouge">*.axf</code> を指定すると、テキストやデータ、<a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss</a> など各セクションのメモリ配置情報を参照することができます。</p>
+
+<h3 id="-エディタ-ビュー">② エディタ ビュー</h3>
+<p>お馴染みの各種ファイルを編集したり表示したりする役割を持ったビューです。</p>
+
+<h4 id="ブレーク停止中の行">ブレーク（停止）中の行</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/02-01.png" data-lightbox="image" title="現在ブレーク（停止）中の行">
+    <img src="/images/2024/03-26/02-01.png" width="930" height="454" alt="現在ブレーク（停止）中の行" />
+  </a>
+</figure>
+<p>現在停止中で、これから実行される行が若草色にハイライトされます。</p>
+
+<h4 id="カーソル位置の情報表示">カーソル位置の情報表示</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/02-02.png" data-lightbox="image" title="カーソル位置の情報表示">
+    <img src="/images/2024/03-26/02-02.png" width="930" height="630" alt="カーソル位置の情報表示" />
+  </a>
+</figure>
+<p>関数や変数、シンボルなどにカーソルを合わせると、その定義内容や変数の値を参照することができます。</p>
+
+<h4 id="右クリックでコンテキストメニューを表示">右クリックでコンテキストメニューを表示</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/02-03.png" data-lightbox="image" title="右クリックでコンテキストメニューを表示">
+    <img src="/images/2024/03-26/02-03.png" width="930" height="454" alt="右クリックでコンテキストメニューを表示" />
+  </a>
+</figure>
+<p>特定の行で右クリックをするとコンテキストメニューが開きます。多くのメニューがありますが、デバッグに役立つのは次の４つでしょう。<br class="clear-both" /></p>
+
+<ul>
+  <li>
+    <p><span class="inline" title="Run to line"><img src="/images/2024/03-26/button-run-to-line.png" width="27" height="27" alt="Run to line" /></span> Run to line<br />
+カーソルのある行まで実行します。</p>
+  </li>
+  <li>
+    <p><span class="inline" title="Move to line"><img src="/images/2024/03-26/button-move-to-line.png" width="27" height="27" alt="Move to line" /></span> Move to line<br />
+現在停止中の行からカーソルのある行にジャンプします。プログラムカウンタが直接書き換えられ、その間のコードは実行されません。問題のある箇所をすっ飛ばして処理を継続させたいと時に使います。</p>
+  </li>
+  <li>
+    <p><span class="inline" title="Resume at line"><img src="/images/2024/03-26/button-resume-at-line.png" width="27" height="27" alt="Resume at line" /></span> Resume at line<br />
+カーソルのある行から実行を再開します。<a href="#variables-タブ">④ Variables タブ</a> で変数の値を書き換えた後に、再評価したい場合に用います。</p>
+  </li>
+  <li>
+    <p><span class="inline" title="Add Watch Expression…"><img src="/images/2024/03-26/button-add-watch-expression.png" width="27" height="27" alt="Add Watch Expression…" /></span> Add Watch Expression…<br />
+選択された変数や式を <a href="#expressions-タブ">④ Expressions タブ</a> に追加します。</p>
+  </li>
+</ul>
+
+<h4 id="ブレークポイントの設定">ブレークポイントの設定</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/02-04.png" data-lightbox="image" title="ブレークポイントの設定">
+    <img src="/images/2024/03-26/02-04.png" width="930" height="594" alt="ブレークポイントの設定" />
+  </a>
+</figure>
+<p>行番号をダブルクリックするか、カーソルのある行で右クリックしてコンテキストメニューを開き「Add Breakpoint…」を選択してブレークポイントを設定します。ブレークポイントの一覧は、<a href="#breakpoints-タブ">④ Breakpoints タブ</a> で確認することが出来ます。</p>
+
+<h3 id="-実行中のリソース情報を表示するビュー">③ 実行中のリソース情報を表示するビュー</h3>
+<p>高度なトレースを行う “Instruction Trace” タブと “SWO Trace Config” タブ、LPC1343 で対象外の “Power Measurement Tool” タブ以外を解説します。</p>
+
+<h4 id="console-タブ">Console タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-01.png" data-lightbox="image" title="Console">
+    <img src="/images/2024/03-26/03-01.png" width="952" height="504" alt="Console" />
+  </a>
+</figure>
+<p>コンパイルの実行結果が表示される以外に、<code class="language-plaintext highlighter-rouge">printf()</code> の出力がここに表示されます。「<a href="/2024/03/14/printf-debug.html" title="ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</a>」との競合については後述します。</p>
+
+<h4 id="problems-タブ">Problems タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-02.png" data-lightbox="image" title="Problems">
+    <img src="/images/2024/03-26/03-02.png" width="800" height="192" alt="Problems" />
+  </a>
+</figure>
+<p>実行中に起きた問題に関するリソース情報がここに表示されるのだと思います。実際に何か表示されたことがないのであくまでも想像ですが…</p>
+
+<h4 id="memory-タブ">Memory タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-03.png" data-lightbox="image" title="Memory">
+    <img src="/images/2024/03-26/03-03.png" width="795" height="176" alt="Memory" />
+  </a>
+</figure>
+<p>直接メモリのアドレスを指定（→ <a href="/images/2024/03-26/03-03-memory.png" data-lightbox="image" title="LPC13XXのメモリマップ">メモリマップ</a>）するか、<a href="#peripherals-タブ">① Peripherals タブ</a> でチェックを入れたレジスタの情報がここに表示されます。メモリ中の値を直接編集することも可能です。</p>
+
+<h4 id="properties-タブ">Properties タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-04.png" data-lightbox="image" title="Properties">
+    <img src="/images/2024/03-26/03-04.png" width="793" height="176" alt="Properties" />
+  </a>
+</figure>
+<p>実行オブジェクトのサイズなど、実行中のリソースに関する情報がここに示されます。</p>
+
+<h4 id="navigator-タブ">Navigator タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/03-05.png" data-lightbox="image" title="Navigator">
+    <img src="/images/2024/03-26/03-05.png" width="795" height="177" alt="Navigator" />
+  </a>
+</figure>
+<p><a href="#project-explore-タブ">① Project Explore タブ</a> と同じなので、邪魔なら閉じちゃって良いと思います。</p>
+
+<h3 id="-ショートカットおよびデバッグ情報を表示するビュー">④ ショートカット、およびデバッグ情報を表示するビュー</h3>
+<p>一貫した名前が付けられそうもないビューですが、デバッグ中は頻繁に見ることになると思います。</p>
+
+<h4 id="quickstart-panel-タブ">Quickstart Panel タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-01.png" data-lightbox="image" title="Quickstart Panel">
+    <img src="/images/2024/03-26/04-01.png" width="542" height="307" alt="Quickstart Panel" />
+  </a>
+</figure>
+<p>色々なタスクのショートカットが集められたタブです。デバッグも一発で開始できて便利です。</p>
+
+<h4 id="variables-タブ">Variables タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-02.png" data-lightbox="image" title="Variables">
+    <img src="/images/2024/03-26/04-02.png" width="678" height="384" alt="Variables" />
+  </a>
+</figure>
+<p>実行中の関数内ローカル変数は、ここで参照できます。またセルをクリックして変数の値を直接変更することもできます。</p>
+
+<h4 id="breakpoints-タブ">Breakpoints タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-03.png" data-lightbox="image" title="Breakpoints">
+    <img src="/images/2024/03-26/04-03.png" width="678" height="384" alt="Breakpoints" />
+  </a>
+</figure>
+<p><a href="#-エディタ-ビュー">② エディタビュー</a> で設定されたブレークポイントの一覧が表示されます。各ブレークポイントを一時的に無効にしたり有効にしたりするのもこのタブで行います。</p>
+
+<h4 id="outlines-タブ">Outlines タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-04.png" data-lightbox="image" title="Outlines">
+    <img src="/images/2024/03-26/04-04.png" width="676" height="386" alt="Outlines" />
+  </a>
+</figure>
+<p>実行中のソースコードに定義されたシンボルや関数、グローバル変数の一覧が参照できます。各項目をクリックするとその箇所をエディタで示してくれるので、何気に便利なタブです。</p>
+
+<h4 id="expressions-タブ">Expressions タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/04-05.png" data-lightbox="image" title="Expressions">
+    <img src="/images/2024/03-26/04-05.png" width="676" height="386" alt="Expressions" />
+  </a>
+</figure>
+<p>変数や式を <a href="#-エディタ-ビュー">② エディタビュー</a> で選択したり、直接セルに入力することで、それらの値を参照することが出来ます。当然、実行中のスコープ外にある変数や式などは無視されます。</p>
+
+<h3 id="-デバッグ-ビュー">⑤ デバッグ ビュー</h3>
+<p>デバッグは “セッション” という形で管理され、実行中のセッションに関する情報がここに表示されます。</p>
+
+<h4 id="debug-タブ">Debug タブ</h4>
+<figure class="float-left">
+  <a href="/images/2024/03-26/05.png" data-lightbox="image" title="Debug">
+    <img src="/images/2024/03-26/05.png" width="1000" height="548" alt="Debug" />
+  </a>
+</figure>
+<p>実行中の <a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%AB%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF" title="コールスタック - Wikipedia">スタックフレーム</a> が表示されます。特に便利な機能として <span class="inline" title="View menu"><img src="/images/2024/03-26/button-view-menu.png" width="27" height="27" alt="View menu" /></span>（View menu）ボタンを押すとデバッグ制御用のボタンが表示されるので、このタブで集中的に実行をコントロールできるようになります。</p>
+
+<p>また <span class="inline" title="Instruction Stepping Mode"><img src="/images/2024/03-26/button-instruction.png" width="27" height="27" alt="Instruction Stepping Mode" /></span>（Instruction Stepping Mode）ボタンで <a href="#-エディタ-ビュー">② エディタビュー</a> に逆アセンブルされたコードを表示することができ、アセンブリ言語レベルでのステップ実行が可能になります。</p>
+
+<h3 id="ビューのレイアウト変更について">ビューのレイアウト変更について</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-26/07.png" data-lightbox="image" title="レイアウトをリセットする">
+    <img src="/images/2024/03-26/07.png" width="556" height="373" alt="レイアウトをリセットする" />
+  </a>
+</figure>
+<p>“Open Perspective” ボタンを使う以外にも、マニュアルで各ビューの配置を変更したり、独立させたりすることが出来ますが、弄り過ぎて元に戻したくなることがあります。そんな時はメニューから「Window → Perspective → Reset Perspective…」を選びましょう。元の配置に戻してくれます。</p>
+
+<h2 id="デバッグ制御用アイコン">デバッグ制御用アイコン</h2>
+<p><img src="/images/2024/03-26/08-01.png" alt="デバッグ制御用アイコン" title="デバッグ制御用アイコン" width="1148" height="92" /></p>
+
+<p>全体像が把握できたところで、いよいよデバッグ制御用のボタンを駆使してデバッグするワケですが、各ボタンの機能は全然難しくありません。</p>
+
+<p>以下に、”高度なトレース機能” を使う以外のボタンを示します。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>アイコン</th>
+      <th>名称</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-02.png" width="50" height="50" alt="全ブレークポイントをスキップ" /></td>
+      <td>Skip All Breakpoints</td>
+      <td>全ブレークポイントをスキップする／しないを制御するトグルボタン</td>
+    </tr>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-03.png" width="120" height="50" alt="続行（Resume）" /></td>
+      <td>Resume</td>
+      <td>停止中の実行を再開するボタン</td>
+    </tr>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-04.png" width="120" height="50" alt="一時停止（Suspend）" /></td>
+      <td>Suspend</td>
+      <td>実行中のプログラムを停止（ブレーク）させるボタン</td>
+    </tr>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-05.png" width="113" height="50" alt="終了（Terminate）" /></td>
+      <td>Terminate</td>
+      <td>デバッグを終了させるボタン</td>
+    </tr>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-06.png" width="50" height="50" alt="ステップ・イン（Step In）" /></td>
+      <td>Step In</td>
+      <td>最小の実行単位で、１行ごとの実行、または関数呼び出しであればその中に入って実行する</td>
+    </tr>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-07.png" width="50" height="50" alt="ステップ・オーバー（Step Over）" /></td>
+      <td>Step Over</td>
+      <td>関数呼び出しであってもその中には入らず1行ごとに実行する</td>
+    </tr>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-08.png" width="50" height="50" alt="ステップ・リターン（Step Return）" /></td>
+      <td>Step Return</td>
+      <td>Step In で関数内に入った場合、その関数の終了まで実行し呼び出し元に戻る</td>
+    </tr>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-09.png" width="50" height="50" alt="再スタート（Restart）" /></td>
+      <td>Restart</td>
+      <td>もう一度初めからスタートする</td>
+    </tr>
+    <tr>
+      <td><img loading="lazy" src="/images/2024/03-26/08-10.png" width="100" height="50" alt="再デバッグ（Debug）" /></td>
+      <td>Debug</td>
+      <td>デバッグ途中でソースコードを変更した時など、再度コンパイルからやり直してデバッグを開始する</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="最後にコンソールに-printf-出力する方法">最後に、コンソールに printf() 出力する方法</h2>
+<p><a href="/2024/03/23/debug-probe-for-beauto-rover.html" title="ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編">デバッグ・プローブ編</a> で <a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki/123_USBCDC" title="123_USBCDC · embedded-kiddie/beauto-rover-arm Wiki">USB CDC（Communication Device Class）をインストール</a> し、<a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> などのターミナル・ソフトウェアに <code class="language-plaintext highlighter-rouge">printf()</code> 出力する方法を解説しましたが、<a href="#console-タブ">③ コンソール</a> に出力するためには LPCXpresso 側の設定が必要です。</p>
+
+<p>以下にその方法を示し、本記事を〆たいと思います。</p>
+
+<h3 id="usb-cdc-をインストールした場合">USB CDC をインストールした場合</h3>
+<p><a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm"><code class="language-plaintext highlighter-rouge">sci.c</code></a> の25行目あたりの定義 <code class="language-plaintext highlighter-rouge">SYSTEM_CALL</code> を無効化し、代わりに <code class="language-plaintext highlighter-rouge">__sys_write()</code> など Redlib のシステムコール関数群がリンクされるようにします。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*--------------------------------------------------------------------------
+ * CMSISのstdio系関数がリンクされる場合は、重複するシステムコールの定義を無効にする
+ *--------------------------------------------------------------------------*/</span>
+<span class="cp">#define	SYSTEM_CALL	0	// 有効化=1、無効化=0</span></code></pre></figure>
+
+<h3 id="redlib-semihost-の設定">Redlib (semihost) の設定</h3>
+<figure class="float-left">
+  <a href="/images/2024/03-26/redlib-semihost.jpg" title="Redlib(semihost)の設定" data-lightbox="image">
+    <img src="/images/2024/03-26/redlib-semihost-small.jpg" width="460" height="255" alt="Redlib(semihost)の設定" />
+  </a>
+</figure>
+
+<p>LPCXpresso のメニューから「Project → Properties」を開き、「C/C++ Build → Settings → MCU Linker → Managed Linker Script」をたどり、「Library」に <a href="https://community.nxp.com/t5/LPCXpresso-IDE-FAQs/What-are-none-nohost-and-semihost-libraries/m-p/475327" title="What are none, nohost and semihost libraries? - NXP Community"><code class="language-plaintext highlighter-rouge">Redlib (semihost)</code></a> を選択します。そして再コンパイルすれば <code class="language-plaintext highlighter-rouge">printf()</code> の出力先がコンソールになります。</p>
+
+<p>以上！</p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/03/24/arduino-debug-with-toragi.html" title="前の記事：Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?">← Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/04/04/arduino-blink-with-bgm.html" title="次の記事：Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2024/03/26/how-to-debug-with-lpcexpresso.html" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/03/26/how-to-debug-with-lpcexpresso.html";this.page.identifier="/2024/03/26/how-to-debug-with-lpcexpresso.html"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

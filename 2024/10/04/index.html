@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編（１） | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編（１）" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="作りたい機能と要件の再整理" />
+<meta property="og:description" content="作りたい機能と要件の再整理" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/10/04/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/10/04/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-10-04T11:02:24+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編（１）" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-10-04T11:02:24+09:00","datePublished":"2024-10-04T11:02:24+09:00","description":"作りたい機能と要件の再整理","headline":"基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編（１）","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/10/04/"},"url":"https://embedded-kiddie.github.io/2024/10/04/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" integrity="sha256-fl23kUuX5ZajbBq7Z8zH8XT4u3HTjJqIxVsmLtFzf5c=" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編（１）</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-10-04T11:02:24+09:00" itemprop="datePublished">Oct 4, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="作りたい機能と要件の再整理">作りたい機能と要件の再整理</h2>
+
+<p><a href="/2024/08/15/" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編｜Embedded Kiddie">前々回</a> は UNO R4 で動作確認を、続く <a href="/2024/09/04/" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編｜Embedded Kiddie">前回</a> は新たに <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" title="Getting Started with Seeed Studio XIAO ESP32S3 (Sense)｜Seeed Studio Wiki">XIAO（ESP32S3）</a> を手配して実用的なカメラの製作を進めてきましたが、完成に向けてソフトウェア開発を推し進めるため、漠然としていた作りたい機能の目標を再整理しました。</p>
+
+<ul>
+  <li>温度画像を擬似カラーで表示する機能、特定ポイントの温度を表示する機能</li>
+  <li>測定の温度範囲や表示の解像度など、各種設定値を変更し保存するメニュー機能</li>
+  <li>温度画像や擬似カラー画像を SD カードにファイルとして保存し、また表示する機能</li>
+</ul>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/MLX90640-XIAO-ESP32.jpg" title="XIAO、MLX90640、LCDの配線図" data-lightbox="image">
+    <img src="/images/2024/09-04/MLX90640-XIAO-ESP32-small.jpg" alt="XIAO、MLX90640、LCDの配線図" width="500" height="462">
+    <figcaption style="max-width:500px">XIAO、MLX90640、LCDの配線図</figcaption>
+  </a>
+</figure>
+
+<p>一方これまで <a href="https://app.cirkitdesigner.com/" title="Cirkit Designer IDE">Cirkit Designer</a> で <a href="https://app.cirkitdesigner.com/project/837fd6ec-a7d8-4381-a41f-4b953adefee0">配線図</a> を描きましたが、<a href="https://fritzing.org/" title="Welcome to Fritzing">Frizing</a> も含め、この手のツールで描く配線図は、苦労の割にあまり役に立たない事が最近になって分かってきました。</p>
+
+<p>例えば「XIAO、MLX90640、LCDの配線図」を見ても、どのようなソフトウェアを実装すべきか、すぐにはピンときません。配線の情報しか表現していないので、当たり前ですね <img class="emoji" title=":stuck_out_tongue_winking_eye:" alt=":stuck_out_tongue_winking_eye:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f61c.png" height="20" width="20"></p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2024/10-04/BlockDiagram.jpg" title="サーモグラフィカメラのブロック図" data-lightbox="image">
+    <img src="/images/2024/10-04/BlockDiagram-small.jpg" alt="サーモグラフィカメラのブロック図" width="510" height="300">
+    <figcaption>サーモグラフィカメラのブロック図</figcaption>
+  </a>
+</figure>
+
+<p>ということで今回、「サーモグラフィカメラのブロック図」を改めて描いてみました。このブロック図を元に、I2C 通信、SPI 通信、LCD やタッチスクリーン、SD カードといったデバイス毎の要件を、次のように設定しました。</p>
+
+<div class="clear-both"></div>
+
+<ol>
+  <li>
+<strong>I2C 通信</strong><br>
+  <span class="strong">滑らかで遅れの少ない表示</span>となるよう、高速かつ高フレームレートで温度画像を取り込む。</li>
+  <li>
+<strong>SPI 通信</strong><br>
+  SPI を共有する LCD、タッチスクリーン、SD カードの<span class="strong">全てが機能する</span>よう SPI を構成する。</li>
+  <li>
+<strong>LCD</strong><br>
+  擬似カラー化した温度画像や色々な付帯情報を、できるだけ<span class="strong">高解像度で描画</span>する。</li>
+  <li>
+<strong>タッチスクリーン</strong><br>
+  特定ポイントの温度表示や設定のためのメニュー表示など、<span class="strong">タッチをトリガに様々な機能を起動可能</span>にする。</li>
+  <li>
+<strong>SD カード</strong><br>
+  LCD に表示された温度画像や各種情報を<span class="strong">画像ファイルとして保存</span>したり、保存された画像を読み出して LCD に表示できる様にする。</li>
+</ol>
+
+<p>順を追って、こららの実装への落とし込みを披露していきたいと思います。</p>
+
+<h2 id="実装への落とし込み">実装への落とし込み</h2>
+
+<h3 id="mlx90640--xiaoesp32s3の-i2c-通信仕様">MLX90640 〜 XIAO（ESP32S3）の I2C 通信仕様</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/10-04/MLX90640datasheet.jpg" title="I2C バス速度設定レジスタ仕様" data-lightbox="image">
+    <img src="/images/2024/10-04/MLX90640datasheet-small.jpg" alt="I2C バス速度設定レジスタ仕様" width="550 " height="260">
+    <figcaption>I2C バスクロック設定レジスタ仕様</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://www.melexis.com/en/documents/documentation/datasheets/datasheet-mlx90640" title="atasheet for MLX90640 I Melexis">MLX90640 のデータシート</a> によると、I2C のバスクロックは Fm+ (Fast-mode Plus) がデフォルトなので、1Mbps での通信が可能です。</p>
+
+<p>一方マスター側の XIAO では、<a href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf" title="ESP32-S3 Series">ESP32-S3 Series Datasheet</a>「4.2.1.2 I2C Interface」に「800Kbps まで」との記述があり、また <a href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf#i2c" title="ESP32-S3 Technical Reference Manual &gt; Chapter I2C Controller">ESP32-S3 Technical Reference Manual</a> に至っては、その記述すらありません。</p>
+
+<blockquote>
+  <p>• Standard mode (100 kbit/s)<br>
+• Fast mode (400 kbit/s)<br>
+• <strong>Up to 800 kbit/s (constrained by SCL and SDA pull-up strength)</strong><br>
+• 7-bit and 10-bit addressing mode<br>
+• Double addressing mode (slave addressing and slave register addressing)</p>
+</blockquote>
+
+<p>マスター側は以下のコードで I2C バスクロックを設定でき、<code class="language-plaintext highlighter-rouge">Wire.getClock()</code>（<a href="https://www.arduino.cc/reference/en/language/functions/communication/wire/" title="Wire - Arduino Reference">公式リファレンス</a> には載っていない関数です）で調べてみると、1Mbps が返ってきます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">  <span class="c1">// I2C bus clock for MLX90640</span>
+  <span class="c1">// Note: ESP32S3 supports up to 800 MHz</span>
+  <span class="n">Wire</span><span class="p">.</span><span class="n">setClock</span><span class="p">(</span><span class="mi">1000000</span><span class="p">);</span> <span class="c1">// 400 KHz (Sm) or 1 MHz (Fm+)</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">Wire</span><span class="p">.</span><span class="n">getClock</span><span class="p">());</span> <span class="c1">// 1000000</span></code></pre></figure>
+
+<figure class="float-left">
+  <a href="/images/2024/10-04/SCL-signal.jpg" title="I2C SCLの観測" data-lightbox="image">
+    <img src="/images/2024/10-04/SCL-signal-small.jpg" alt="I2C SCLの観測" width="512" height="300">
+    <figcaption>I2C SCLの観測</figcaption>
+  </a>
+</figure>
+
+<p>ところがオシロスコープで <code class="language-plaintext highlighter-rouge">SCL</code> を観たところ、リファレンス通り 800Kbps 程度しか出ていませんし、立ち上がりも相当に緩やかでした。ただ温度画像は取り込めているので、とりあえずはこの設定のままスルーしたいと思います（オィ <img class="emoji" title=":flushed:" alt=":flushed:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f633.png" height="20" width="20">）</p>
+
+<div class="quote clear-both">
+
+<p><a href="https://www.nxp.com/docs/en/user-guide/UM10204.pdf" title="UM10204 I2C-bus specification and user manual">NXP の I2C バス仕様書</a> によると、Fm+ は「<strong>1Mbps まで</strong>」とのことなので、800Kbps でも大丈夫そうです。</p>
+
+<details>
+<summary>I2C-bus specification and user manual</summary>
+
+
+<ul>
+  <li>Bidirectional bus:
+    <ul>
+      <li>Standard-mode (Sm), with a bit rate up to 100 kbit/s</li>
+      <li>Fast-mode (Fm), with a bit rate up to 400 kbit/s</li>
+      <li><strong>Fast-mode Plus (Fm+), with a bit rate up to 1 Mbit/s</strong></li>
+      <li>High-speed mode (Hs-mode), with a bit rate up to 3.4 Mbit/s.</li>
+    </ul>
+  </li>
+  <li>Unidirectional bus:
+    <ul>
+      <li>Ultra Fast-mode (UFm), with a bit rate up to 5 Mbit/s</li>
+    </ul>
+  </li>
+</ul>
+
+</details>
+
+</div>
+
+<p>また通信仕様ではありませんが、<a href="https://github.com/adafruit/Adafruit_MLX90640/blob/master/Adafruit_MLX90640.cpp#L152-L160" title="Adafruit_MLX90640/Adafruit_MLX90640.cpp at master · adafruit/Adafruit_MLX90640"><code class="language-plaintext highlighter-rouge">Adafruit_MLX90640::SetRefreshRate()</code></a> で MLX90640 のサンプリング周波数を 0.5Hz 〜 64Hz の範囲で設定できます。実際は２回のサンプリングで１枚の画像を生成しているので、表示のフレームレートは設定した周波数の半分です。</p>
+
+<p>色々と実験してみると、MLX90640 は「設定したサンプリング周波数 ≒ 全体のフレームレート（の２倍）」となるように振る舞うことが分かりました。この関係がズレると、ブロックノイズが載ったり全く取得できない事象が観測されます。また周波数を上げると露光時間が短くなるので、ノイズが載り易くなります。</p>
+
+<p>このことから、全体のフレームレートによって自ずと取りうるサンプリング周波数の最大値が決まるため、次に紹介する画像処理の高速化がキーとなることが分かりました <img class="emoji" title=":+1:" alt=":+1:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png" height="20" width="20"></p>
+
+<h3 id="xiaoesp32s3の画像処理概要">XIAO（ESP32S3）の画像処理概要</h3>
+
+<p>温度画像を取り込んだ後の処理として、次の４つを想定しました。今回で全て実装できたワケではありませんが、考え方だけでも披露したいと思います。</p>
+
+<pre class="mermaid" id="block-diagram" aria-label="XIAOの後段処理">
+  graph LR
+  A["ノイズ除去"] --&gt; B["高解像度化"] --&gt; C["カラー画像生成"] --&gt; D["LCD 表示"]
+</pre>
+
+<h4 id="ノイズ除去">ノイズ除去</h4>
+
+<p>これはまだ未実装です。処理時間に余裕があれば、温度画像にガウシアンフィルタかメディアンフィルタを適用してみたいと考えています。今後の課題ですね。</p>
+
+<h4 id="高解像度化">高解像度化</h4>
+
+<p><a href="/2024/08/15/" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編｜Embedded Kiddie">動作確認編</a> では UNO R4 を使い、単純に１画素を７×７画素に拡大し 1.3” ディスプレイに表示してました。今回はより滑らかな画像を生成するため、もう少しマシな画素補間アルゴリズムで擬似的に高解像度化しました。</p>
+
+<p>代表的な画素補間のアルゴリズムにバイリニア補間とバイキュービック補間があります。後者は <a href="https://industrial.panasonic.com/jp/products/pt/grid-eye" title="赤外線アレイセンサGrid-EYE - パナソニック">Panasonic 製 赤外線アレイセンサ Grid-EYE</a> 向けに、少し計算を簡略化したプログラムが <a href="https://github.com/adafruit/Adafruit_AMG88xx/tree/master/examples/thermal_cam_interpolate" title="Adafruit_AMG88xx/examples/thermal_cam_interpolate at master · adafruit/Adafruit_AMG88xx">Adafruit_AMG88xx</a> に載っています。が、2.4” ディスプレイ向けに解像度を上げると実用的な処理時間に収まらず、また思ったほど綺麗な画像にはなりませんでした。</p>
+
+<p>そこでより計算コストの小さいバイリニア補間を実装したところ、まずまずの結果が得られたので、そのアルゴリズムを簡単に紹介します。</p>
+
+<p>以下の図は、画素 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span> を <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n \times n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span> に拡大する際の計算原理を示しています。</p>
+
+<p><img src="/images/2024/10-04/BilinearInterpolation.png" alt="バイリニア補間の原理図" title="バイリニア補間の原理図" style="margin: auto; display: block; box-shadow: none;" width="1360" height="900"></p>
+
+<p>まず、２つの画素 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span> と <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x+1,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span> からの距離に応じた比例配分により、矢印方向に B の画素値を計算します。</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd class="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>B</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mi>x</mi><mo stretchy="false">)</mo><mo>⋅</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>+</mo><mi>d</mi><mi>x</mi><mo>⋅</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd class="mtr-glue"></mtd><mtd class="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
+    B &amp;= (1-dx) \cdot I(x,y) + dx \cdot I(x+1,y)
+  \end{align}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.5em;vertical-align:-0.5em;"></span><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1em;"><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1em;"><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1em;"><span style="top:-3em;"><span class="pstrut" style="height:2.84em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5em;"><span></span></span></span></span></span></span></span></span>
+
+<p>同様に、画素 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x,y+1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> と <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x+1,y+1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> から矢印方向に C の画素値を計算します。</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd class="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>C</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mi>x</mi><mo stretchy="false">)</mo><mo>⋅</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>+</mo><mi>d</mi><mi>x</mi><mo>⋅</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd class="mtr-glue"></mtd><mtd class="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
+    C &amp;= (1-dx) \cdot I(x,y+1) + dx \cdot I(x+1,y+1)
+  \end{align}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.5em;vertical-align:-0.5em;"></span><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1em;"><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1em;"><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1em;"><span style="top:-3em;"><span class="pstrut" style="height:2.84em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5em;"><span></span></span></span></span></span></span></span></span>
+
+<p>最後は縦方向に B と C からの距離に応じた比例配分で A の画素値を計算します。</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right" columnspacing=""><mtr><mtd class="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>A</mi><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mi>y</mi><mo stretchy="false">)</mo><mo>⋅</mo><mi>B</mi><mo>+</mo><mi>d</mi><mi>y</mi><mo>⋅</mo><mi>C</mi><mo>=</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mo>−</mo><mi>d</mi><mi>y</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>d</mi><mi>y</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>B</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mi>C</mi></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow></mrow></mstyle></mtd><mtd class="mtr-glue"></mtd><mtd class="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
+  A = (1-dy) \cdot B + dy \cdot C =
+  \begin{pmatrix}
+    1-dy &amp; dy
+  \end{pmatrix}
+  \begin{pmatrix}
+    B\\
+    C
+  \end{pmatrix}
+  \end{align}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.7em;vertical-align:-1.1em;"></span><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-3.6em;"><span class="pstrut" style="height:3.45em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-3.6em;"><span class="pstrut" style="height:3.45em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1em;"><span></span></span></span></span></span></span></span></span>
+
+<p>(1)、(2)、(3) をまとめると、A の画素値は次の行列式で求めることができます。</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="right" columnspacing=""><mtr><mtd class="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>A</mi><mo>=</mo><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mo>−</mo><mi>d</mi><mi>y</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>d</mi><mi>y</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow><mrow><mo fence="true">(</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>1</mn><mo>−</mo><mi>d</mi><mi>x</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>d</mi><mi>x</mi></mrow></mstyle></mtd></mtr></mtable><mo fence="true">)</mo></mrow></mrow></mstyle></mtd><mtd class="mtr-glue"></mtd><mtd class="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
+  A =
+  \begin{pmatrix}
+    1-dy &amp; dy
+  \end{pmatrix}
+  \begin{pmatrix}
+    I(x,y) &amp; I(x+1,y)\\
+    I(x,y+1) &amp; I(x+1,y+1)
+  \end{pmatrix}
+  \begin{pmatrix}
+    1-dx\\
+    dx
+  \end{pmatrix}
+  \end{align}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.7em;vertical-align:-1.1em;"></span><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-3.6em;"><span class="pstrut" style="height:3.45em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.85em;"><span style="top:-3.01em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.5em;"></span><span class="arraycolsep" style="width:0.5em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6em;"><span style="top:-3.6em;"><span class="pstrut" style="height:3.45em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1em;"><span></span></span></span></span></span></span></span></span>
+
+<p>プログラムは GitHub の <a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/blob/main/MLX90640/interpolation.hpp" title="Arduino-XIAO-ESP32/MLX90640/interpolation.hpp at main · embedded-kiddie/Arduino-XIAO-ESP32">interpolation.cpp</a> に上げたので、興味があれば参照してみて下さい。</p>
+
+<details>
+<summary>演算の回数と方向について</summary>
+
+
+<div class="quote clear-both">
+
+<p>(4) の行列式を全て展開すると次の様になりますが、行列式のまま計算するより乗算回数が増えてしまいます。</p>
+
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.16em" columnspacing="1em"><mtr><mtd class="mtr-glue"></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>A</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mi>x</mi><mo stretchy="false">)</mo><mo>⋅</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mi>y</mi><mo stretchy="false">)</mo><mo>⋅</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>+</mo><mi>d</mi><mi>x</mi><mo>⋅</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mi>y</mi><mo stretchy="false">)</mo><mo>⋅</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mtext> </mtext><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mi>x</mi><mo stretchy="false">)</mo><mo>⋅</mo><mi>d</mi><mi>y</mi><mo>⋅</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mtext> </mtext><mtext>  </mtext><mtext> </mtext><mo>+</mo><mi>d</mi><mi>x</mi><mo>⋅</mo><mi>d</mi><mi>y</mi><mo>⋅</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo separator="true">,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></mstyle></mtd></mtr></mtable></mstyle></mtd><mtd class="mtr-glue"></mtd><mtd class="mml-eqn-num"></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation}
+  \begin{split}
+  A &amp;= (1-dx) \cdot (1-dy) \cdot I(x,y)
+  + dx \cdot (1-dy) \cdot I(x+1,y)\\
+  &amp; + \, (1-dx) \cdot dy \cdot I(x,y+1)
+  \ \; \, + dx \cdot dy \cdot I(x+1,y+1)
+  \end{split}
+  \end{equation}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.75em;"><span class="pstrut" style="height:3.75em;"></span><span class="mord"><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">A</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.75em;"><span class="pstrut" style="height:3.75em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span></span></span></span>
+
+<p>また説明では、横方向に計算してから縦方向の計算を行いましたが、縦横を逆転させても同じ結果が得られます。これは (4) において、行列の乗算は順序を変えても結果が同じになることと等価です。</p>
+
+</div>
+
+</details>
+
+<h4 id="カラー画像生成">カラー画像生成</h4>
+
+<figure class="float-left" style="width: inherit">
+  <a class="simple" href="https://ja.wikipedia.org/wiki/HSV%E8%89%B2%E7%A9%BA%E9%96%93" title="HSV色空間 - Wikipedia">
+    <img src="/images/2024/10-04/Hsv_sample.png" alt="HSV 色空間" width="160" height="160">
+    <figcaption>HSV色空間 - Wikipedia</figcaption>
+  </a>
+</figure>
+
+<p>現時点は <a href="https://github.com/adafruit/Adafruit_MLX90640/blob/master/examples/MLX90640_arcadaCam/MLX90640_arcadaCam.ino" title="Adafruit_MLX90640/examples/MLX90640_arcadaCam/MLX90640_arcadaCam.ino at master · adafruit/Adafruit_MLX90640">Adafruit_MLX90640 の例題</a> にある 256 色のカラーテーブルを使っています。おそらくこのテーブルは、<a href="https://ja.wikipedia.org/wiki/HSV%E8%89%B2%E7%A9%BA%E9%96%93" title="HSV色空間 - Wikipedia">HSV 色空間</a> の S（彩度）と V（明度）を 100% に設定し、H（色相）を 0°〜 360° まで 256 色分をサンプリングして作られたものと思います（Wikipedia の図で、外側の円の部分）。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left" style="width: inherit">
+  <a class="simple" href="https://ja.wikipedia.org/wiki/CIE_1931_%E8%89%B2%E7%A9%BA%E9%96%93" title="CIE 1931 色空間 - Wikipedia">
+    <img src="/images/2024/10-04/CIE1931xy_blank.png" alt="CIE 1931 xy 色空間" width="160" height="160">
+    <figcaption>CIE 1931 色空間 - Wikipedia</figcaption>
+  </a>
+</figure>
+
+<p>次ステップでは、例えば <a href="https://ja.wikipedia.org/wiki/CIE_1931_%E8%89%B2%E7%A9%BA%E9%96%93" title="CIE 1931 色空間 - Wikipedia">CIE 1931 色空間</a> 上を辿るスペクトル軌跡で独自のカラープロファイルを作るなど、16ビット（RGB565）で 65536 色を出せる LCD の能力を活かしたカラー変換を検討したいと思います。</p>
+
+<h4 id="lcd-表示">LCD 表示</h4>
+
+<p>このパートでは、以下の４つの中から最も高速に描画できるグラフィック・ライブラリを選択するだけです。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/adafruit/Adafruit-GFX-Library" title="adafruit/Adafruit-GFX-Library: Adafruit GFX graphics core Arduino library, this is the 'core' class that all our other graphics libraries derive from">adafruit/Adafruit-GFX-Library</a> (<a href="https://github.com/adafruit/Adafruit-GFX-Library/releases/tag/1.11.10" title="Release 1.11.10 Add ATtiny84 support · adafruit/Adafruit-GFX-Library">1.11.10</a>)</li>
+  <li>
+<a href="https://github.com/moononournation/Arduino_GFX" title="moononournation/Arduino_GFX: Arduino GFX developing for various color displays and various data bus interfaces">moononournation/Arduino_GFX</a> (<a href="https://github.com/moononournation/Arduino_GFX/releases/tag/v1.4.9" title="Release v1.4.9 · moononournation/Arduino_GFX">1.4.9</a>)</li>
+  <li>
+<a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">lovyan03/LovyanGFX</a> (<a href="https://github.com/lovyan03/LovyanGFX/releases/tag/1.1.16" title="Release 1.1.16 · lovyan03/LovyanGFX">1.1.16</a>)</li>
+  <li>
+<a href="https://github.com/Bodmer/TFT_eSPI" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">Bodmer/TFT_eSPI</a> (<a href="https://github.com/Bodmer/TFT_eSPI/releases/tag/V2.5.43" title="Release Bug fixes · Bodmer/TFT_eSPI">V2.5.43</a>)</li>
+</ul>
+
+<p>そこで <a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/GFXbenchmark" title="Arduino-XIAO-ESP32/GFXbenchmark at main · embedded-kiddie/Arduino-XIAO-ESP32">描画速度のベンチマーク</a> を実施したところ、LovyanGFX の圧勝となりました。</p>
+
+<details>
+<summary>描画速度のベンチマーク結果</summary>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>ベンチマーク</th>
+      <th style="text-align: right">Adafruit_GFX</th>
+      <th style="text-align: right">Arduino_GFX</th>
+      <th style="text-align: right">Lovyan_GFX</th>
+      <th style="text-align: right">TFT_eSPI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Screen fill</td>
+      <td style="text-align: right">115,519</td>
+      <td style="text-align: right">100,071</td>
+      <td style="text-align: right"><strong>81,683</strong></td>
+      <td style="text-align: right">83,406</td>
+    </tr>
+    <tr>
+      <td>Text</td>
+      <td style="text-align: right">109,677</td>
+      <td style="text-align: right">15,463</td>
+      <td style="text-align: right"><strong>18,627</strong></td>
+      <td style="text-align: right">23.982</td>
+    </tr>
+    <tr>
+      <td>Pixels</td>
+      <td style="text-align: right">1,790,682</td>
+      <td style="text-align: right">904,524</td>
+      <td style="text-align: right"><strong>390,413</strong></td>
+      <td style="text-align: right">1,089,390</td>
+    </tr>
+    <tr>
+      <td>Lines</td>
+      <td style="text-align: right">1,233,294</td>
+      <td style="text-align: right">435,673</td>
+      <td style="text-align: right"><strong>255,570</strong></td>
+      <td style="text-align: right">310,244</td>
+    </tr>
+    <tr>
+      <td>Horiz/Vert Lines</td>
+      <td style="text-align: right">11,798</td>
+      <td style="text-align: right">9,245</td>
+      <td style="text-align: right"><strong>7,159</strong></td>
+      <td style="text-align: right">8,479</td>
+    </tr>
+    <tr>
+      <td>Rectangles-filled</td>
+      <td style="text-align: right">240,282</td>
+      <td style="text-align: right">208,162</td>
+      <td style="text-align: right"><strong>169,746</strong></td>
+      <td style="text-align: right">173,568</td>
+    </tr>
+    <tr>
+      <td>Rectangles</td>
+      <td style="text-align: right">8,106</td>
+      <td style="text-align: right">6,203</td>
+      <td style="text-align: right"><strong>4,738</strong></td>
+      <td style="text-align: right">5,450</td>
+    </tr>
+    <tr>
+      <td>Triangles-filled</td>
+      <td style="text-align: right">106,388</td>
+      <td style="text-align: right">80,118</td>
+      <td style="text-align: right"><strong>61,673</strong></td>
+      <td style="text-align: right">68,413</td>
+    </tr>
+    <tr>
+      <td>Triangles</td>
+      <td style="text-align: right">67,645</td>
+      <td style="text-align: right">24,438</td>
+      <td style="text-align: right"><strong>14,900</strong></td>
+      <td style="text-align: right">18,332</td>
+    </tr>
+    <tr>
+      <td>Circles-filled</td>
+      <td style="text-align: right">70,073</td>
+      <td style="text-align: right">40,776</td>
+      <td style="text-align: right"><strong>28,548</strong></td>
+      <td style="text-align: right">38,811</td>
+    </tr>
+    <tr>
+      <td>Circles</td>
+      <td style="text-align: right">138,015</td>
+      <td style="text-align: right">42,721</td>
+      <td style="text-align: right"><strong>23,124</strong></td>
+      <td style="text-align: right">29,515</td>
+    </tr>
+    <tr>
+      <td>Arcs-filled</td>
+      <td style="text-align: right">N/A</td>
+      <td style="text-align: right">31,769</td>
+      <td style="text-align: right"><strong>20,193</strong></td>
+      <td style="text-align: right">N/A</td>
+    </tr>
+    <tr>
+      <td>Arcs</td>
+      <td style="text-align: right">N/A</td>
+      <td style="text-align: right">72,927</td>
+      <td style="text-align: right"><strong>54,902</strong></td>
+      <td style="text-align: right">N/A</td>
+    </tr>
+    <tr>
+      <td>Rounded rects-fill</td>
+      <td style="text-align: right">248,323</td>
+      <td style="text-align: right">214,102</td>
+      <td style="text-align: right"><strong>170,552</strong></td>
+      <td style="text-align: right">177,262</td>
+    </tr>
+    <tr>
+      <td>Rounded rects</td>
+      <td style="text-align: right">46,158</td>
+      <td style="text-align: right">19,740</td>
+      <td style="text-align: right"><strong>9,872</strong></td>
+      <td style="text-align: right">15,184</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+<p>また各ライブラリには、SPI バスを占有して一連のコマンドを実行する <code class="language-plaintext highlighter-rouge">startWrite()</code> 〜 <code class="language-plaintext highlighter-rouge">endWrite()</code> が提供されています。これを試したところ、LovyanGFX と TFT_eSPI では劇的な効果がありました。一方なぜか Adafruit_GFX と Arduino_GFX では画面の更新が止まってしまいました。残念ですが、この問題の掘り下げは一旦保留にしています。</p>
+
+<p>ただし、この段階ではまだ SPI を共有するタッチスクリーンや SD カードの動作が未確認でしたので、全てのライブラリで動作するようコードを構成しています。</p>
+
+<details>
+<summary>TFT_eSPI と ESP32S3 の相性問題と対策について</summary>
+
+
+<p>TFT_eSPI は ESP32S3 との相性が悪く、<code class="language-plaintext highlighter-rouge">TFT_eSPI::init()</code> で以下のメッセージを吐き出して再起動するという問題に遭遇しました。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TFT_eSPI library test!
+Guru Meditation Error: Core  1 panic'ed (StoreProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x420041cc  PS      : 0x00060430  A0      : 0x82004963  A1      : 0x3fcebd60  
+A2      : 0x3fc94b1c  A3      : 0x00000000  A4      : 0x00000008  A5      : 0x00000009  
+A6      : 0x000000ff  A7      : 0x00000001  A8      : 0x00000010  A9      : 0x08000000  
+A10     : 0x3fc94c40  A11     : 0x019bfcc0  A12     : 0x00000301  A13     : 0x00000000  
+A14     : 0x00000031  A15     : 0x3fc93b9c  SAR     : 0x00000002  EXCCAUSE: 0x0000001d  
+EXCVADDR: 0x00000010  LBEG    : 0x40056f08  LEND    : 0x40056f12  LCOUNT  : 0x00000000  
+
+Backtrace: 0x420041c9:0x3fcebd60 0x42004960:0x3fcebd90 0x42002335:0x3fcebdc0 0x4200b24d:0x3fcebde0 0x4037d136:0x3fcebe00
+
+ELF file SHA256: 42fe0e0edde69bd7
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x8 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40378c3a
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce3818,len:0x109c
+load:0x403c9700,len:0x4
+load:0x403c9704,len:0xb50
+load:0x403cc700,len:0x2fd0
+entry 0x403c98ac
+</code></pre></div></div>
+
+<p>この問題は Issues にも数多く挙がっていています。</p>
+
+<ul>
+  <li><a href="https://github.com/Bodmer/TFT_eSPI/issues/3289" title="Guru Meditation Error on tft.begin() (ESP32-S3 dev module) · Issue #3289 · Bodmer/TFT_eSPI">Guru Meditation Error on tft.begin() (ESP32-S3 dev module) #3289</a></li>
+  <li><a href="https://github.com/Bodmer/TFT_eSPI/issues/3329" title="library not working with espressif32 esp32-s3 Arduino core &gt; 2.0.14 · Issue #3329 · Bodmer/TFT_eSPI">library not working with espressif32 esp32-s3 Arduino core &gt; 2.0.14 #3329</a></li>
+  <li><a href="https://github.com/Bodmer/TFT_eSPI/issues/3332" title="ESP32 Core  1 panic'ed (StoreProhibited). Exception was unhandled when tft.init() is executed. · Issue #3332 · Bodmer/TFT_eSPI">ESP32 Core 1 panic’ed (StoreProhibited). Exception was unhandled when tft.init() is executed. #3332</a></li>
+  <li><a href="https://github.com/Bodmer/TFT_eSPI/issues/3464" title="ESP32-C3 using TFT_eSPI@^2.5.43 version, what is the reason for repeated reboots? · Issue #3464 · Bodmer/TFT_eSPI">ESP32-C3 using TFT_eSPI@^2.5.43 version, what is the reason for repeated reboots? #3464</a></li>
+</ul>
+
+<p>SPI 周りの定義に不整合があるらしく、Espressif の ESP32 用ボードパッケージをバージョン 2.0.14 に戻すか、<a href="https://github.com/Bodmer/TFT_eSPI/blob/master/User_Setup.h#L374-L377" title="TFT_eSPI/User_Setup.h at master · Bodmer/TFT_eSPI">User_Setup.h</a> の <code class="language-plaintext highlighter-rouge">USE_HSPI_PORT</code> か <code class="language-plaintext highlighter-rouge">USE_FSPI_PORT</code> を有効にするのが当面の対策の様です。僕の環境では、前者では解決せず、以下のように後者で対応しています。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// The ESP32 has 2 free SPI ports i.e. VSPI and HSPI, the VSPI is the default.</span>
+<span class="c1">// If the VSPI port is in use and pins are not accessible (e.g. TTGO T-Beam)</span>
+<span class="c1">// then uncomment the following line:</span>
+<span class="cp">#define USE_HSPI_PORT // or USE_FSPI_PORT
+</span></code></pre></div></div>
+
+</details>
+
+<h3 id="タッチスクリーンと-sd-カード">タッチスクリーンと SD カード</h3>
+
+<p>今回、スクリーンにタッチすると LCD 画面をキャプチャし、SD カードに保存する機能までが実装出来ました。が、幾つかトラブルがあったので、誰かのお役に立てることを願い、順を追って情報共有します。</p>
+
+<h4 id="sd-カードに対する基本機能の確認">SD カードに対する基本機能の確認</h4>
+
+<p>まずは「ディレクトリの作成・閲覧・削除」や「ファイルの作成・追加・削除」といった、基本機能の確認を実施しました。</p>
+
+<p>ESP32 では、Arduino 標準の SD ライブラリの代わりに、<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">espressif/arduino-esp32/libraries/SD</a> が標準となっています。今回は同ライブラリの <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD/examples/SD_Test" title="arduino-esp32/libraries/SD/examples/SD_Test at master · espressif/arduino-esp32">例題スケッチ</a> を元に、<a href="https://github.com/greiman/SdFat" title="greiman/SdFat: Arduino FAT16/FAT32 exFAT Library">SdFat</a> を加えた <a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/GFX_Touch_SD_Interoperability" title="Arduino-XIAO-ESP32/GFX_Touch_SD_Interoperability at main · embedded-kiddie/Arduino-XIAO-ESP32">評価用スケッチ</a> を作成し確認しました。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>GFX ライブラリ</th>
+      <th>タッチライブラリ</th>
+      <th>ESP32 標準の SD</th>
+      <th>SdFat <code class="language-plaintext highlighter-rouge">SHARED_SPI</code>
+</th>
+      <th>SdFat <code class="language-plaintext highlighter-rouge">DEDICATED_SPI</code>
+</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Adafruit_GFX</td>
+      <td>XPT2046_Touchscreen</td>
+      <td>OK</td>
+      <td>OK <strong>(＊1)</strong>
+</td>
+      <td>NG</td>
+    </tr>
+    <tr>
+      <td>Arduino_GFX</td>
+      <td>XPT2046_Touchscreen</td>
+      <td>OK</td>
+      <td>OK <strong>(＊1)</strong>
+</td>
+      <td>NG</td>
+    </tr>
+    <tr>
+      <td>LovyanGFX</td>
+      <td>&lt;–</td>
+      <td>OK <strong>(＊2)</strong>
+</td>
+      <td>NG</td>
+      <td>NG</td>
+    </tr>
+    <tr>
+      <td>TFT_eSPI</td>
+      <td>&lt;–</td>
+      <td>OK <strong>(＊3)</strong>
+</td>
+      <td>NG</td>
+      <td>NG</td>
+    </tr>
+  </tbody>
+</table>
+
+<details>
+<summary>(＊1)、(＊2)、(＊3) の詳細</summary>
+
+<div class="quote clear-both">
+
+<p>まず SdFat の <strong>(＊1)</strong> ですが、SPI をタッチスクリーンと共有するためには <code class="language-plaintext highlighter-rouge">SHARED_SPI</code> の設定が必要になります。ただし、ESP32 標準に比べて処理時間が数倍に伸びてしまいました。当然 <code class="language-plaintext highlighter-rouge">DEDICATED_SPI</code> にするとタッチ機能が使えなくなります。よって SdFat を選択肢から外しました。</p>
+
+<p>次に LovyanGFX の <strong>(＊2)</strong> ですが、SD カードと SPI を共有しなければ、ホストの指定は <code class="language-plaintext highlighter-rouge">SPI2_HOST</code> でも <code class="language-plaintext highlighter-rouge">SPI3_HOST</code> でも動作します。しかし SD カードは <a href="https://github.com/espressif/esp-idf/blob/master/components/esp_driver_sdspi/include/driver/sdspi_host.h#L23-L29" title="esp-idf/components/esp_driver_sdspi/include/driver/sdspi_host.h at master · espressif/esp-idf">sdspi_host.h</a>（<code class="language-plaintext highlighter-rouge">#include &lt;driver/sdspi_host.h&gt;</code> の追加で参照可能）で次の様に定義されているため、他デバイスと共有するには <code class="language-plaintext highlighter-rouge">SPI2_HOST</code> でなければなりません。</p>
+
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S2
+#define SDSPI_DEFAULT_HOST HSPI_HOST
+#define SDSPI_DEFAULT_DMA  SDSPI_DEFAULT_HOST
+#else
+#define SDSPI_DEFAULT_HOST SPI2_HOST
+#define SDSPI_DEFAULT_DMA  SPI_DMA_CH_AUTO
+#endif
+</span></code></pre></div></div>
+
+<p><strong>(＊3)</strong> は <strong>(＊2)</strong> とは逆のパターンで、TFT_eSPI 内部で保持している SPI のインスタンスを <code class="language-plaintext highlighter-rouge">TFT_eSPI::getSPIinstance()</code> で取得し、<code class="language-plaintext highlighter-rouge">SPI.begin()</code> に渡す必要がありました。</p>
+
+<p>ESP32 は C2、C3、C6、S2、S3、H2 など派生が多数あり、S3 に至ってはボードによってフラッシュメモリが <a href="%E9%AB%98%E9%80%9F%E3%82%B7%E3%83%AA%E3%82%A2%E3%83%ABNOR/RAM%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%95%E3%82%A7%E3%83%BC%E3%82%B9%E3%81%AE%E3%81%94%E7%B4%B9%E4%BB%8B%EF%BD%9C%E3%83%86%E3%82%AF%E3%83%8B%E3%82%AB%E3%83%AB%E3%82%B9%E3%82%AF%E3%82%A8%E3%82%A2%EF%BD%9C%E4%B8%B8%E6%96%87%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE">Quad SPI（100MHz）と Octal SPI（200MHz）の２タイプ</a> あり、よくよく注意しないとハマってしまいます。</p>
+
+</div>
+</details>
+
+<h4 id="スクリーンキャプチャ機能の確認">スクリーンキャプチャ機能の確認</h4>
+
+<p>スクリーンキャプチャが機能するには、LCD のドライバ IC を通して各画素値を取得する必要があります。以下は、フォーマットの簡単な <a href="https://ja.wikipedia.org/wiki/Windows_bitmap" title="Windows bitmap - Wikipedia">ビットマップ画像</a> を保存した時の結果です。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>GFX ライブラリ</th>
+      <th>画素値を取得する関数</th>
+      <th>SD カードへの保存</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Adafruit_GFX</td>
+      <td><code class="language-plaintext highlighter-rouge">Adafruit_GFX::spiRead()</code></td>
+      <td>画素値の読み出しに失敗</td>
+    </tr>
+    <tr>
+      <td>Arduino_GFX</td>
+      <td>なし</td>
+      <td>不可</td>
+    </tr>
+    <tr>
+      <td>LovyanGFX</td>
+      <td><code class="language-plaintext highlighter-rouge">LGFX::readPixel()</code></td>
+      <td>OK</td>
+    </tr>
+    <tr>
+      <td>TFT_eSPI</td>
+      <td><code class="language-plaintext highlighter-rouge">TFT_eSPI::readPixel()</code></td>
+      <td>ファイルの保存に失敗</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Adafruit_GFX の場合、<a href="https://forum.arduino.cc/t/create-snapshot-of-3-5-tft-and-save-to-file-in-bitmap-format/391367/7" title='create snapshot of 3.5" TFT and save to file in bitmap format - Displays - Arduino Forum'>Arduino フォーラムの記事</a> を参考に画素値の読み出し関数を組み込みましたが、全て 0 が返り正しく機能しませんでした。</p>
+
+<p>また Arduino_GFX にはそもそも画素値を読み出す関数が提供されていません。</p>
+
+<p>TFT_eSPI については LovyanGFX と全く同じコードで、画素値は読み出せているのですが、なぜかファイル保存に失敗してしまいます。</p>
+
+<p>ということで、要件を満たすには <span style="font-size: 1.6em; font-weight: bold;">LovyanGFX がベスト！</span> ということにして、他の不具合は深追いせず放置することにしました！メデタシ、メデタシ <img class="emoji" title=":stuck_out_tongue_winking_eye:" alt=":stuck_out_tongue_winking_eye:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f61c.png" height="20" width="20"></p>
+
+<h3 id="マルチコアによるマルチタスク化">マルチコアによるマルチタスク化</h3>
+
+<p>ESP32 にはコアが２つ載っているので、これを利用しない手はありません。</p>
+
+<p>そこでスループットの向上を目的に温度画像をダブルバッファ化し、MLX90640 から取り込む <strong>入力タスク</strong> をコア１に、取り込んだ温度画像を LCD に表示する <strong>出力タスク</strong> をコア０に配置してみました。</p>
+
+<figure class="flex">
+  <a href="/images/2024/10-04/TimingChart.jpg" title="マルチコア／マルチタスクのタイミングチャート" data-lightbox="image">
+    <img src="/images/2024/10-04/TimingChart.jpg" alt="マルチコア／マルチタスクのタイミングチャート" width="1500" height="440">
+    <figcaption style="min-width: 600px">マルチコア／マルチタスクのタイミングチャート</figcaption>
+  </a>
+</figure>
+
+<p>この場合、排他制御すべき共有資源をダブルバッファの「バンク ID」とし、メッセージキューとセマフォを使い、次のようなプロトコルでタスク間の同期を図りました。</p>
+
+<ul>
+  <li>
+<strong>入力タスク</strong> は、温度画像を取り込んだ先のバンク ID をメッセージキューに入れて送信し、セマフォのリリースを待ちます。</li>
+  <li>
+<strong>出力タスク</strong> は、メッセージを受け取ったらすぐにセマフォをリリースし、キューに格納されたバンク ID のバッファにアクセスを開始します。</li>
+  <li>セマフォを獲得した <strong>入力タスク</strong> はバンク ID を更新し、<strong>出力タスク</strong> がアクセスしていない方のバンクに次の温度画像を取り込みます。</li>
+</ul>
+
+<p>GitHub に <a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/FreeRTOS/SyncTasks" title="Arduino-XIAO-ESP32/FreeRTOS/SyncTasks at main · embedded-kiddie/Arduino-XIAO-ESP32">サンプルスケッチ</a> を上げたので、興味があれば覗いてみて下さい。</p>
+
+<h2 id="ここまでの成果">
+<span style="font-size: 2em; vertical-align: middle;">💮</span> ここまでの成果</h2>
+
+<p>画素補間の拡大率ごとに適切なサンプリング周波数を設定した時のスクリーンキャプチャ画像を添付します <img class="emoji" title=":v:" alt=":v:" src="https://github.githubassets.com/images/icons/emoji/unicode/270c.png" height="20" width="20"></p>
+
+<p>右側の数字は、上からセンサ温度 [℃]、フレームレート [Hz]、入力タスクの処理時間 [msec]、出力タスクの処理時間 [msec] です。出力タスクの処理時間は、入力タスクの裏に隠れているので、まだ少し余裕がありますネ。</p>
+
+<figure class="flex">
+  <a href="/images/2024/10-04/test-8x1-8Hz.png" title="画素補間あり（1画素→8画素）" data-lightbox="image">
+    <img src="/images/2024/10-04/test-8x1-8Hz.png" alt="画素補間あり（1画素→8画素）" width="320" height="240">
+    <figcaption>画素補間あり（1画素→8画素）</figcaption>
+  </a>
+  <a href="/images/2024/10-04/test-4x2-16Hz.png" title="画素補間あり（1画素→4画素）" data-lightbox="image">
+    <img src="/images/2024/10-04/test-4x2-16Hz.png" alt="画素補間あり（1画素→4画素）" width="320" height="240">
+    <figcaption>画素補間あり（1画素→4画素）</figcaption>
+  </a>
+</figure>
+
+<figure class="flex">
+  <a href="/images/2024/10-04/test-2x4-32Hz.png" title="画素補間あり（1画素→2画素）" data-lightbox="image">
+    <img src="/images/2024/10-04/test-2x4-32Hz.png" alt="画素補間あり（1画素→2画素）" width="320" height="240">
+    <figcaption>画素補間あり（1画素→2画素）</figcaption>
+  </a>
+  <a href="/images/2024/10-04/test-1x8-32Hz.png" title="画素補間なし" data-lightbox="image">
+    <img src="/images/2024/10-04/test-1x8-32Hz.png" alt="画素補間なし" width="320" height="240">
+    <figcaption>画素補間なし</figcaption>
+  </a>
+</figure>
+
+<h2 id="ふぅ">ふぅ…</h2>
+
+<p><a href="/2024/09/04/" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編｜Embedded Kiddie">前回の記事</a> を上げてからほぼ１ヶ月… <span style="font-size: 1.5em;">😮‍💨</span> 幾つか自分のポカミスでうまく動かないトラブルがあり、ライブラリの開発元やフォーラムに相談した挙句に自己レス解決するという、なんとも情けない日々を過ごしてきました <img class="emoji" title=":relieved:" alt=":relieved:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f60c.png" height="20" width="20"></p>
+
+<p>恥ずかしながら、そのいくつかを紹介します。</p>
+
+<ul>
+  <li><a href="https://github.com/lovyan03/LovyanGFX/discussions/616" title="Display freezes when saving images to SD card · lovyan03/LovyanGFX · Discussion #616">Display freezes when saving images to SD card #616</a></li>
+  <li><a href="https://github.com/lovyan03/LovyanGFX/issues/617" title="Display freezes when saving images to SD card · Issue #617 · lovyan03/LovyanGFX">Display freezes when saving images to SD card #617</a></li>
+  <li><a href="https://forum.arduino.cc/t/why-is-multi-tasking-on-esp32-dual-cores-not-faster-than-single-tasking-on-one-core/1304901/" title="Why is multi-tasking on ESP32 dual-cores not faster than single-tasking on one core? - embeddedkiddie の #41 - Networking, Protocols, and Devices - Arduino Forum">Why is multi-tasking on ESP32 dual-cores not faster than single-tasking on one core?</a></li>
+</ul>
+
+<p>…さて、気を取り直し、最後の仕上げとしてメニュー機能の製作に取り掛かろうと思います。<a href="https://github.com/lvgl/lvgl" title="lvgl/lvgl: Embedded graphics library to create beautiful UIs for any MCU, MPU and display type.">lvgl</a> とかが使えたら、挑戦してみたいですネ <img class="emoji" title=":skull:" alt=":skull:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f480.png" height="20" width="20"></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/09/04/" title="前の記事：基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編">← 基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/10/04/",this.page.identifier="/2024/10/04/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+<a class="u-url" href="/2024/10/04/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/10/04/";this.page.identifier="/2024/10/04/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>

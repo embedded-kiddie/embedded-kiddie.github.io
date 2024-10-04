@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="MathJaxとKaTeXのページ表示速度とFOUCを評価していたら、JekyllプラグインのJekTexが爆速ということが分かりました。" />
+<meta property="og:description" content="MathJaxとKaTeXのページ表示速度とFOUCを評価していたら、JekyllプラグインのJekTexが爆速ということが分かりました。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/05/16/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/05/16/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-05-16T22:12:51+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-05-18T05:30:21+09:00","datePublished":"2024-05-16T22:12:51+09:00","description":"MathJaxとKaTeXのページ表示速度とFOUCを評価していたら、JekyllプラグインのJekTexが爆速ということが分かりました。","headline":"Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/05/16/"},"url":"https://embedded-kiddie.github.io/2024/05/16/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-05-16T22:12:51+09:00" itemprop="datePublished">May 16, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><a href="/2024/04/12/background-tone-player.html" title="Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介 - Embedded Kiddie">この記事</a> では数式を書いているのですが、なんと <a href="https://www.apple.com/jp/keynote/" title="Keynote - Apple（日本）">Mac の Kyenote</a> で TeX の数式を入力し、画像にして貼り付けていました。</p>
+
+<p>さすがにこれを続けるのはダサいので、<a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> と <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> のどちらかを採用すべく、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> を含めて比較してみました。また <a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> というプラグインも見つけたので、まとめてレポートしたいと思います。</p>
+
+<h2 id="比較のポイント">比較のポイント</h2>
+<p>比較のポイントは以下の２つです。</p>
+
+<figure class="float-left">
+  <a href="/images/2024/05-16/chrome-FOUC.gif" title="FOUCの例" data-lightbox="image">
+    <img src="/images/2024/05-16/chrome-FOUC.gif" alt="FOUCの例" width="580" height="434">
+  </a>
+  <figcaption>FOUC - Flash Of Unstyled Content</figcaption>
+</figure>
+
+<ul>
+  <li>
+    <p>ページの表示速度と、FOUC（<a href="https://en.wikipedia.org/wiki/Flash_of_unstyled_content" title="Flash of unstyled content - Wikipedia">Flash Of Unstyled Content</a>、外部スタイルシートの読み込み前に、ブラウザのデフォルトスタイルで一時的に表示されてしまう事象）の影響</p>
+  </li>
+  <li>
+    <p>想定するユースケース（例えば数式が主体のコンテンツだけでなく、数式の入力方法や書式を説明するコンテンツなど）での使い勝手</p>
+  </li>
+</ul>
+
+<h3 id="１表示速度と-fouc-の評価">１．表示速度と FOUC の評価</h3>
+
+<p>それぞれのスクリプトが推奨する <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> の設置方法で、ほぼ同内容のコンテンツを表示するページを作成し、<a href="https://developer.chrome.com/docs/devtools/network?hl=ja" title="ネットワーク アクティビティを検査する  -  Chrome DevTools  -  Chrome for Developers">ブラウザの開発者ツール</a> と <a href="https://pagespeed.web.dev/?hl=ja" title="PageSpeed Insights">PageSpeed Insights</a> で評価しました。「デスクトップ」の指標はほぼ満点となるため、「携帯電話」の指標を参照しています。以下は評価結果の一覧です。理由は後述しますが、<a href="#jektex-csspreload" title="JekTex (css:preload) - Embedded Kiddie">JekTex (css:preload)</a> がほぼ満点となりました。</p>
+
+<details>
+<summary>表中の指標</summary>
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">PFM</code>: <a href="https://developer.chrome.com/docs/lighthouse/performance/performance-scoring?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="Lighthouse のパフォーマンス スコアリング  -  Chrome for Developers">パフォーマンス</a>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">FCP</code>: <a href="https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="First Contentful Paint  -  Lighthouse  -  Chrome for Developers">First Contentful Paint</a>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">LCP</code>: <a href="https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="Largest Contentful Paint  -  Lighthouse  -  Chrome for Developers">Largest Contentful Paint</a>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">SPI</code>: <a href="https://developer.chrome.com/docs/lighthouse/performance/speed-index?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="速度インデックス  -  Lighthouse  -  Chrome for Developers">Speed Index</a>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">TBT</code>: <a href="https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="Total Blocking Time  -  Lighthouse  -  Chrome for Developers">Total Blocking Time</a>
+</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">FOUC</code>: 目視による主観評価（×:目立つ、△:やや目立つ、○:目立たない）</li>
+</ul>
+</details>
+
+<table>
+  <thead>
+    <tr>
+      <th>スクリプト</th>
+      <th>設置方法</th>
+      <th style="text-align: center">PFM</th>
+      <th style="text-align: center">FCP [sec]</th>
+      <th style="text-align: center">LCP [sec]</th>
+      <th style="text-align: center">SPI [sec]</th>
+      <th style="text-align: right">TBT [ms]</th>
+      <th style="text-align: center">FOUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a></td>
+      <td><a href="#mathjax-jsasync" title="MathJax (js:async) - Embedded Kiddie">js:async</a></td>
+      <td style="text-align: center">80</td>
+      <td style="text-align: center">1.0</td>
+      <td style="text-align: center">1.0</td>
+      <td style="text-align: center">1.1</td>
+      <td style="text-align: right">860</td>
+      <td style="text-align: center">×</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><a href="#mathjax-jsdeferasync-%E3%81%AA%E3%81%97" title="MathJax (js:defer/async なし） - Embedded Kiddie">js:async/defer なし</a></td>
+      <td style="text-align: center">77</td>
+      <td style="text-align: center">4.0</td>
+      <td style="text-align: center">4.1</td>
+      <td style="text-align: center">4.0</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: center">×</td>
+    </tr>
+    <tr>
+      <td><a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a></td>
+      <td><a href="#katex-jsdefer" title="KaTeX (js:defer) - Embedded Kiddie">js:defer</a></td>
+      <td style="text-align: center">84</td>
+      <td style="text-align: center">1.5</td>
+      <td style="text-align: center">1.5</td>
+      <td style="text-align: center">1.5</td>
+      <td style="text-align: right">610</td>
+      <td style="text-align: center">△</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><a href="#katex-csspreload--jsdefer" title="KaTeX (css:preload + js:defer) - Embedded Kiddie">css:preload + js:defer</a></td>
+      <td style="text-align: center">93</td>
+      <td style="text-align: center">1.5</td>
+      <td style="text-align: center">2.5</td>
+      <td style="text-align: center">1.5</td>
+      <td style="text-align: right">220</td>
+      <td style="text-align: center">△</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a></td>
+      <td><a href="#jektex-csspreload" title="JekTex (css:preload) - Embedded Kiddie">css:preload</a></td>
+      <td style="text-align: center">99</td>
+      <td style="text-align: center">1.5</td>
+      <td style="text-align: center">1.8</td>
+      <td style="text-align: center">1.5</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: center">○</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>以下は、各設置方法に対応したサンプルページと詳細です。参考にして下さい。</p>
+
+<h4 id="mathjax-jsasync">MathJax (js:async)</h4>
+
+<p><a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> では、<code class="language-plaintext highlighter-rouge">async</code> 属性を付けた <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> を <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> 内に設置する事が <a href="https://docs.mathjax.org/en/latest/web/start.html#using-mathjax-from-a-content-delivery-network-cdn" title="Getting Started with MathJax Components — MathJax 3.2 documentations">推奨されています</a>。これにより表示速度は上がりますが、ページのレンダリングが早期に始まり、また <a href="https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="Total Blocking Time  -  Lighthouse  -  Chrome for Developers">TBT</a> も長いため、<a href="https://en.wikipedia.org/wiki/Flash_of_unstyled_content" title="Flash of unstyled content - Wikipedia">FOUC</a> が目立ちます。</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;script </span><span class="na">async</span> <span class="na">id=</span><span class="s">"MathJax-script"</span> <span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"</span><span class="nt">&gt;&lt;/script&gt;</span></code></pre></figure>
+
+<ul>
+  <li><a href="/pages/math/mathjax.html" title="MathJax - Embedded Kiddie">サンプルページ</a></li>
+  <li><a href="https://pagespeed.web.dev/analysis/https-embedded-kiddie-github-io-pages-math-mathjax-html/u07tm52lcj?hl=ja&amp;form_factor=mobile">PageSpeed Insights</a></li>
+</ul>
+
+<details>
+<figure class="flex">
+  <a href="/images/2024/05-16/mathjax-network.jpg" title="MathJaxの読み込みタイムライン" data-lightbox="image">
+    <img src="/images/2024/05-16/mathjax-network-small.jpg" alt="MathJaxの読み込みタイムライン" width="459" height="383">
+  </a>
+  <a href="/images/2024/05-16/mathjax-pagespeed1.jpg" title="MathJaxのページスピード結果（指標）" data-lightbox="image">
+    <img src="/images/2024/05-16/mathjax-pagespeed1-small.jpg" alt="MathJaxのページスピード結果（指標）" width="460" height="384">
+  </a>
+  <a href="/images/2024/05-16/mathjax-pagespeed2.jpg" title="MathJaxのページスピード結果（診断）" data-lightbox="image">
+    <img src="/images/2024/05-16/mathjax-pagespeed2-small.jpg" alt="MathJaxのページスピード結果（診断）" width="460" height="384">
+  </a>
+</figure>
+</details>
+
+<h4 id="mathjax-jsdeferasync-なし">MathJax (js:defer/async なし）</h4>
+
+<p>非同期読み込みの属性を付けない <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> を <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> 内に設置する、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> デフォルトのパターンです。スクリプトの読み込みと解析が完了するまで初期のレンダリングがブロックされますが、<a href="https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="Total Blocking Time  -  Lighthouse  -  Chrome for Developers">TBT</a> が短く、<a href="https://en.wikipedia.org/wiki/Flash_of_unstyled_content" title="Flash of unstyled content - Wikipedia">FOUC</a> がやや目立ちにくいパターンと言えます。</p>
+
+<p>また <a href="https://caniuse.com/mdn-html_elements_script_blocking" title="Can I use... Support tables for HTML5, CSS3, etc">対応ブラウザは少ない</a> ですが、<code class="language-plaintext highlighter-rouge">defer blocking="render'</code> とすると、さらに <a href="https://en.wikipedia.org/wiki/Flash_of_unstyled_content" title="Flash of unstyled content - Wikipedia">FOUC</a> が目立たなくなりますが、<a href="https://developer.chrome.com/docs/lighthouse/performance/performance-scoring?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="Lighthouse のパフォーマンス スコアリング  -  Chrome for Developers">PFM</a> が悪化するので推奨できません。</p>
+
+<ul>
+  <li><a href="/pages/math/mathjax-blocking.html" title="MathJax - Embedded Kiddie">サンプルページ</a></li>
+  <li><a href="https://pagespeed.web.dev/analysis/https-embedded-kiddie-github-io-pages-math-mathjax-blocking-html/0j6k29pfci?hl=ja&amp;form_factor=mobile">PageSpeed Insights</a></li>
+</ul>
+
+<details>
+<figure class="flex">
+  <a href="/images/2024/05-16/mathjax-blocking-network.jpg" title="MathJax-blockingの読み込みタイムライン" data-lightbox="image">
+    <img src="/images/2024/05-16/mathjax-blocking-network-small.jpg" alt="MathJax-blockingの読み込みタイムライン" width="457" height="391">
+  </a>
+  <a href="/images/2024/05-16/mathjax-blocking-pagespeed1.jpg" title="MathJax-blockingのページスピード結果（指標）" data-lightbox="image">
+    <img src="/images/2024/05-16/mathjax-blocking-pagespeed1-small.jpg" alt="MathJax-blockingのページスピード結果（指標）" width="460" height="393">
+  </a>
+  <a href="/images/2024/05-16/mathjax-blocking-pagespeed2.jpg" title="MathJax-blockingのページスピード結果（診断）" data-lightbox="image">
+    <img src="/images/2024/05-16/mathjax-blocking-pagespeed2-small.jpg" alt="MathJax-blockingのページスピード結果（診断）" width="458" height="393">
+  </a>
+</figure>
+</details>
+
+<h4 id="katex-jsdefer">KaTeX (js:defer)</h4>
+
+<p><a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> の <a href="https://katex.org/docs/autorender.html" title="Auto-render Extension · KaTeX">推奨パターン</a> では、<code class="language-plaintext highlighter-rouge">defer</code> 属性を付けた２つの <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> を <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> に配置します。わざわざ <a href="https://developer.mozilla.org/ja/docs/Web/API/Document/DOMContentLoaded_event" title="Document:DOMContentLoaded イベント - Web API - MDN"><code class="language-plaintext highlighter-rouge">Document:DOMContentLoaded</code></a> を待つまでもなく、２つ目の <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> で <code class="language-plaintext highlighter-rouge">onload</code> から <a href="https://katex.org/docs/autorender.html" title="Auto-render Extension · KaTeX"><code class="language-plaintext highlighter-rouge">renderMathInElement()</code></a> を呼び出してレンダリングを開始します。</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css"</span> <span class="na">integrity=</span><span class="s">"sha384-wcIxkf4k558AjM3Yz3BBFQUbk/zgIYC2R0QpeeYb+TwlBVMrlgLqwRjRtGZiK7ww"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;script </span><span class="na">defer</span> <span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"</span> <span class="na">integrity=</span><span class="s">"sha384-hIoBPJpTUs74ddyc4bFZSM1TVlQDA60VBbJS0oA934VSz82sBx1X7kSx2ATBDIyd"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">defer</span> <span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"</span> <span class="na">integrity=</span><span class="s">"sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span> <span class="na">onload=</span><span class="s">"renderMathInElement(document.body);"</span><span class="nt">&gt;&lt;/script&gt;</span></code></pre></figure>
+
+<ul>
+  <li><a href="/pages/math/katex.html" title="KaTeX - Embedded Kiddie">サンプルページ</a></li>
+  <li><a href="https://pagespeed.web.dev/analysis/https-embedded-kiddie-github-io-pages-math-katex-html/em7b0y7p50?hl=ja&amp;form_factor=mobile">PageSpeed Insights</a></li>
+</ul>
+
+<details>
+<figure class="flex">
+  <a href="/images/2024/05-16/katex-network.jpg" title="KaTeXの読み込みタイムライン" data-lightbox="image">
+    <img src="/images/2024/05-16/katex-network-small.jpg" alt="KaTeXの読み込みタイムライン" width="457" height="382">
+  </a>
+  <a href="/images/2024/05-16/katex-pagespeed1.jpg" title="KaTeXのページスピード結果（指標）" data-lightbox="image">
+    <img src="/images/2024/05-16/katex-pagespeed1-small.jpg" alt="KaTeXのページスピード結果（指標）" width="460" height="394">
+  </a>
+  <a href="/images/2024/05-16/katex-pagespeed2.jpg" title="KaTeXのページスピード結果（診断）" data-lightbox="image">
+    <img src="/images/2024/05-16/katex-pagespeed2-small.jpg" alt="KaTeXのページスピード結果（診断）" width="460" height="394">
+  </a>
+</figure>
+</details>
+
+<h4 id="katex-csspreload--jsdefer">KaTeX (css:preload + js:defer)</h4>
+
+<p><a href="https://katex.org/docs/browser#loading-as-global" title="Browser · KaTeX">もう一つの推奨パターン</a> として、<code class="language-plaintext highlighter-rouge">&lt;link&gt;</code> に <a href="https://developer.mozilla.org/ja/docs/Web/HTML/Attributes/rel/preload" title="rel=preload - HTML: ハイパーテキストマークアップ言語 - MDN"><code class="language-plaintext highlighter-rouge">rel="preload"</code></a> を付与することが提案されています。</p>
+
+<p>どうせならということで、Web フォントも先読みし、さらに <a href="https://www.jsdelivr.com/documentation#id-combine-multiple-files" title="Documentation - jsDelivr">jsdelivr の結合機能</a> で２つのスクリプトを１つにしたサンプルを作成しました。大抵のブラウザの <a href="https://stackoverflow.com/questions/985431/max-parallel-http-connections-in-a-browser" title="html - Max parallel HTTP connections in a browser? - Stack Overflow">TCP 同時接続数</a> 以下で、並列に読み込む事が可能になります。</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css"</span> <span class="na">integrity=</span><span class="s">"sha256-fl23kUuX5ZajbBq7Z8zH8XT4u3HTjJqIxVsmLtFzf5c="</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"preload"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Main-Regular.woff2"</span> <span class="na">as=</span><span class="s">"font"</span> <span class="na">type=</span><span class="s">"font/woff2"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"preload"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Math-Italic.woff2"</span> <span class="na">as=</span><span class="s">"font"</span> <span class="na">type=</span><span class="s">"font/woff2"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"preload"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size2-Regular.woff2"</span> <span class="na">as=</span><span class="s">"font"</span> <span class="na">type=</span><span class="s">"font/woff2"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"preload"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size1-Regular.woff2"</span> <span class="na">as=</span><span class="s">"font"</span> <span class="na">type=</span><span class="s">"font/woff2"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;script </span><span class="na">defer</span> <span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/combine/npm/katex@0.16.10,npm/katex@0.16.10/dist/contrib/auto-render.min.js"</span> <span class="na">onload=</span><span class="s">"renderMathInElement(document.body);"</span><span class="nt">&gt;&lt;/script&gt;</span></code></pre></figure>
+
+<ul>
+  <li><a href="/pages/math/katex-preload.html" title="KaTeX - Embedded Kiddie">サンプルページ</a></li>
+  <li><a href="https://pagespeed.web.dev/analysis/https-embedded-kiddie-github-io-pages-math-katex-preload-html/6eq2z5o3zp?hl=ja&amp;form_factor=mobile">PageSpeed Insights</a></li>
+</ul>
+
+<details>
+<figure class="flex">
+  <a href="/images/2024/05-16/katex-preload-network.jpg" title="KaTeX-preloadの読み込みタイムライン" data-lightbox="image">
+    <img src="/images/2024/05-16/katex-preload-network-small.jpg" alt="KaTeX-preloadの読み込みタイムライン" width="457" height="382">
+  </a>
+  <a href="/images/2024/05-16/katex-preload-pagespeed1.jpg" title="KaTeX-preloadのページスピード結果（指標）" data-lightbox="image">
+    <img src="/images/2024/05-16/katex-preload-pagespeed1-small.jpg" alt="KaTeX-preloadのページスピード結果（指標）" width="460" height="384">
+  </a>
+  <a href="/images/2024/05-16/katex-preload-pagespeed2.jpg" title="KaTeX-preloadのページスピード結果（診断）" data-lightbox="image">
+    <img src="/images/2024/05-16/katex-preload-pagespeed2-small.jpg" alt="KaTeX-preloadのページスピード結果（診断）" width="460" height="384">
+  </a>
+</figure>
+</details>
+
+<h4 id="jekyll-spaceship">jekyll-spaceship</h4>
+
+<p><a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> は、コンテンツの作成はこれ１本で大抵は事足りると思えるほど、機能てんこ盛りのプラグインです。数式を記述したページにだけスクリプトを設置してくれるので、書くことに集中できます。</p>
+
+<p>逆に設置の自由度がないとも言えますが、敢えて <a href="https://docs.mathjax.org/en/latest/web/start.html#using-mathjax-from-a-content-delivery-network-cdn" title="Getting Started with MathJax Components — MathJax 3.2 documentations">MathJax の推奨パターン</a> を採用していないのは、表示速度と FOUC とのバランスを考えてのこと（?）かもしれません。</p>
+
+<p>その表示速度と FOUC については、<a href="#mathjax-jsdeferasync-%E3%81%AA%E3%81%97">MathJax (js:defer/async なし）</a> を参照してください。</p>
+
+<h4 id="jektex-csspreload">JekTex (css:preload)</h4>
+
+<p><a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> は、KaTeX 同等のレンダリングエンジンを持つ Jekyll プラグインです。その特徴は何と言っても、数式をサーバーサイドでレンダリングするという点です。このため、ブラウザに JavaScript を読み込む必要がなく、表示速度と FOUC の点で他を圧倒しています。</p>
+
+<p>スタイルシート <code class="language-plaintext highlighter-rouge">katex.min.css</code> を読み込む必要はあるので、どうせなら Web フォントも <a href="https://developer.mozilla.org/ja/docs/Web/HTML/Attributes/rel/preload" title="rel=preload - HTML: ハイパーテキストマークアップ言語 - MDN"><code class="language-plaintext highlighter-rouge">rel="preload"</code></a> してしまいましょう。</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css"</span> <span class="na">integrity=</span><span class="s">"sha256-fl23kUuX5ZajbBq7Z8zH8XT4u3HTjJqIxVsmLtFzf5c="</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"preload"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Main-Regular.woff2"</span> <span class="na">as=</span><span class="s">"font"</span> <span class="na">type=</span><span class="s">"font/woff2"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"preload"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Math-Italic.woff2"</span> <span class="na">as=</span><span class="s">"font"</span> <span class="na">type=</span><span class="s">"font/woff2"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"preload"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size2-Regular.woff2"</span> <span class="na">as=</span><span class="s">"font"</span> <span class="na">type=</span><span class="s">"font/woff2"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"preload"</span> <span class="na">href=</span><span class="s">"https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size1-Regular.woff2"</span> <span class="na">as=</span><span class="s">"font"</span> <span class="na">type=</span><span class="s">"font/woff2"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span></code></pre></figure>
+
+<ul>
+  <li><a href="/pages/math/jektex.html" title="JekTex - Embedded Kiddie">サンプルページ</a></li>
+  <li><a href="https://pagespeed.web.dev/analysis/https-embedded-kiddie-github-io-pages-math-jektex-html/a3xk7omh9q?hl=ja&amp;form_factor=mobile">PageSpeed Insights</a></li>
+</ul>
+
+<details>
+<figure class="flex">
+  <a href="/images/2024/05-16/jektex-network.jpg" title="JekTexの読み込みタイムライン" data-lightbox="image">
+    <img src="/images/2024/05-16/jektex-network-small.jpg" alt="JekTexの読み込みタイムライン" width="457" height="382">
+  </a>
+  <a href="/images/2024/05-16/jektex-pagespeed1.jpg" title="JekTexのページスピード結果（指標）" data-lightbox="image">
+    <img src="/images/2024/05-16/jektex-pagespeed1-small.jpg" alt="JekTexのページスピード結果（指標）" width="460" height="390">
+  </a>
+  <a href="/images/2024/05-16/jektex-pagespeed2.jpg" title="JekTexのページスピード結果（診断）" data-lightbox="image">
+    <img src="/images/2024/05-16/jektex-pagespeed2-small.jpg" alt="JekTexのページスピード結果（診断）" width="460" height="390">
+  </a>
+</figure>
+</details>
+
+<h3 id="２使い勝手の評価">２．使い勝手の評価</h3>
+
+<p>前章のサンプルページは全て、数式そのものを表示するだけでなく、数式の入力方法や書式を説明することを想定ユースケースとしています。ここでは各方式の差異を抽出してみました。</p>
+
+<h4 id="mathjax-vs-katex">MathJax vs KaTeX</h4>
+
+<p>MathJax と KaTeX とでは、それぞれの多少の方言があり、どちらも一長一短あります。次の表は、サンプルページの作成で判明した相違へのリンクです。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>スクリプト</th>
+      <th style="text-align: center">相違１</th>
+      <th style="text-align: center">相違２</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MathJax</td>
+      <td style="text-align: center"><a href="/pages/math/mathjax.html#beginend"><code class="language-plaintext highlighter-rouge">\begin{}…\end{}</code>のディスプレイ数式</a></td>
+      <td style="text-align: center"><a href="/pages/math/mathjax.html#beginend-1"><code class="language-plaintext highlighter-rouge">\begin{}…\end{}</code>のインライン数式</a></td>
+    </tr>
+    <tr>
+      <td>KaTeX</td>
+      <td style="text-align: center"><a href="/pages/math/katex.html#beginend"><code class="language-plaintext highlighter-rouge">\begin{}…\end{}</code>のディスプレイ数式</a></td>
+      <td style="text-align: center"><a href="/pages/math/katex.html#beginend-1"><code class="language-plaintext highlighter-rouge">\begin{}…\end{}</code>のインライン数式</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>MathJax は LaTeX でエラーと定義されているパターンも受容するのに対し、KaTeX は LaTeX に準拠しようと努力している（完璧ではないという意味）感じです。</p>
+
+<p>また、あまりユースケースが思い浮かびませんが、数式を文字列として JavaScript の変数に代入する際の <a href="https://docs.mathjax.org/en/latest/basic/mathematics.html#putting-math-in-javascript-strings">注意事項</a> が MathJax の公式ドキュメントに記載されています。</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">math</span> <span class="o">=</span> <span class="dl">'</span><span class="se">\\</span><span class="s1">frac{1}{</span><span class="se">\\</span><span class="s1">sqrt{x^2 + 1}}</span><span class="dl">'</span><span class="p">;</span></code></pre></figure>
+
+<figure class="float-left">
+  <a href="/images/2024/05-16/context-menu.png" title="MathJaxのコンテキストメニュー" data-lightbox="image">
+    <img src="/images/2024/05-16/context-menu-small.jpg" alt="MathJaxのコンテキストメニュー" width="459" height="266">
+  </a>
+</figure>
+
+<p>さらに MathJax 特有の機能として、数式を右クリックして表示されるコンテキストメニューで、数式のコピーや、Web フォントから SVG への変換など、幾つかの付加的な機能を挙げることができます。拡張機能をインストールすれば、音声読み上げなどもできるようです。</p>
+
+<h4 id="katex-vs-jektex">KaTeX vs JekTex</h4>
+
+<p>同じ KaTeX 系の JekTex ですが、以下の点でスクリプト版の KaTeX との相違が生じています。</p>
+
+<ul>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">&lt;code&gt;</code> タグ内の <code class="language-plaintext highlighter-rouge">\［...\］</code> や <code class="language-plaintext highlighter-rouge">\（...\）</code> を数式に変換してしまう</strong>（相違１、相違２）<br>
+この問題を <a href="https://github.com/yagarea/jektex/issues/5" title="Rendering in pre or code tags · Issue #5 · yagarea/jektex">issue</a> に上げたところ、<a href="https://kramdown.gettalong.org/" title="Home - kramdown">kramdown</a> との関係で正規表現の組み立てに苦労しているものの、解決に向けた検討をしてくれることになりました。期待しましょう。</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">\begin{}...\end{}</code> は <code class="language-plaintext highlighter-rouge">$$...$$</code> で囲う必要がある</strong>（相違３）<br>
+スクリプト版 KaTeX の場合、<code class="language-plaintext highlighter-rouge">\begin{}...\end{}</code> を「空行と <code class="language-plaintext highlighter-rouge">$$...$$</code> で囲む必要がある場合（<a href="#mathjax-vs-katex">MathJax vs KaTeX</a> 参照）」と「必要ない場合」があり、一貫性に欠けますが、JekTex の場合、<code class="language-plaintext highlighter-rouge">\begin{}...\end{}</code> は必ず <code class="language-plaintext highlighter-rouge">$$...$$</code> で囲う必要があります。</p>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>スクリプト</th>
+      <th style="text-align: center">相違１</th>
+      <th style="text-align: center">相違２</th>
+      <th style="text-align: center">相違３</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>KaTeX</td>
+      <td style="text-align: center"><a href="/pages/math/katex.html#-1"><code class="language-plaintext highlighter-rouge">\［…\］</code></a></td>
+      <td style="text-align: center"><a href="/pages/math/katex.html#-3"><code class="language-plaintext highlighter-rouge">\（…\）</code></a></td>
+      <td style="text-align: center"><a href="/pages/math/katex.html#diff-1"><code class="language-plaintext highlighter-rouge">\begin{}…\end{}</code>のディスプレイ数式</a></td>
+    </tr>
+    <tr>
+      <td>JekTex</td>
+      <td style="text-align: center"><a href="/pages/math/jektex.html#-1"><code class="language-plaintext highlighter-rouge">\［…\］</code></a></td>
+      <td style="text-align: center"><a href="/pages/math/jektex.html#-3"><code class="language-plaintext highlighter-rouge">\（…\）</code></a></td>
+      <td style="text-align: center"><a href="/pages/math/jektex.html#diff-1"><code class="language-plaintext highlighter-rouge">\begin{}…\end{}</code>のディスプレイ数式</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="jekyll-spaceship-の場合">jekyll-spaceship の場合</h4>
+
+<p>数式の書式を説明するユースケースで問題が起きました。例えば <code>`...`</code> や <code class="language-plaintext highlighter-rouge">{% highlight tex %}...{% endhighlight %}</code> といった <code class="language-plaintext highlighter-rouge">&lt;code&gt;</code> タグ内の <code class="language-plaintext highlighter-rouge">$$</code> が <code class="language-plaintext highlighter-rouge">\$\$</code> に変換されてしまいます。この回避には <code class="language-plaintext highlighter-rouge">$$</code> に <code class="language-plaintext highlighter-rouge">{% raw %}</code> を適用する必要があり、ちょっと面倒です。</p>
+
+<h2 id="総評">総評</h2>
+<p>本サイトの場合、受け継ぐ過去の資産もなく、これから数式を書くことがあるかも知れない、という程度なので、<a href="https://github.com/yagarea/jektex" title="yagarea/jektex: A Jekyll plugin for blazing-fast server-side cached LaTeX rendering, with support for macros. Enjoy the comfort of LaTeX and Markdown without cluttering your site with bloated JavaScript.">JekTex</a> 一択で良いということが分かりました。</p>
+
+<p>一方、従来から <a href="https://katex.org/" title="KaTeX – The fastest math typesetting library for the web">KaTeX</a> を使用する Jekyll サイトでは、すぐに JekTex に移行するのは難しいかも知れません。ただ、ページの表示速度を気にするのであれば、その価値はあるかと思いますし、問題があれば <a href="https://github.com/yagarea/jektex/issues" title="Issues · yagarea/jektex">issues</a> で相談するのが良いと思います。</p>
+
+<p>対して FOUC では他に譲る <a href="https://www.mathjax.org/" title="MathJax - Beautiful math in all browsers.">MathJax</a> ですが、<a href="https://www.math.union.edu/~dpvc/jsMath/" title="jsMath:  jsMath Home Page">その開発の歴史は古く</a>、数式の入力として TeX だけでなく <a href="https://developer.mozilla.org/ja/docs/Web/MathML" title="MathML - MDN">MathML</a> の <a href="https://docs.mathjax.org/en/latest/output/mathml.html" title="MathML Support — MathJax 3.2 documentation">サポート</a> や <a href="https://asciimath.org/" title="AsciiMath">AsciiMath</a> にも対応し、出力には Web フォントや SVG のみならず、音声読み上げへの対応など、入力と出力を柔軟に組み合わせられるモジュラー構成でしか対応できないユースケースもあることと思います。</p>
+
+<p>あらためて、これらのオープンソース開発を担ってくれている方々に感謝です <img class="emoji" title=":shamrock:" alt=":shamrock:" src="https://github.githubassets.com/images/icons/emoji/unicode/2618.png" height="20" width="20"></p>
+
+<h3 id="用語について">用語について</h3>
+
+<p>参照した Web サイトによって、「文章中に表示される数式」と「単独の段落として表示される数式」を識別する用語にゆらぎが見られたので、本サイトでは、<a href="https://www.latex-project.org/" title="LaTeX - A document preparation system">LaTeX project <span class="inline"><img src="/images/2024/05-16/latex-project-logo.svg" width="71" height="27" alt="The LaTeX Project logo"></span></a> に掲載された、以下の文献中の用語「インライン数式（文章中の数式）」と「ディスプレイ数式（数式だけの行）」を使うことにしました。</p>
+
+<ul>
+  <li><a href="https://www.latex-project.org/help/documentation/short-math-guide_jpn.pdf">はやわかり LaTeX で数式組版 (Short Math Guide for LaTeX)</a></li>
+</ul>
+
+<h3 id="参考文献">参考文献</h3>
+
+<p>本記事中の評価を実施するに当たり、参考にさせていただいたサイト様や記事です。</p>
+
+<ul>
+  <li><a href="https://qiita.com/TA6335/items/3ebe4180fb20b7ec300f" title="LaTex よく使う数式集と基本的なLatex【備忘録】 #LaTeX - Qiita">LaTex よく使う数式集と基本的なLatex【備忘録】</a></li>
+  <li><a href="https://qiita.com/Yarakashi_Kikohshi/items/ef693d7abb195c55af7a" title="LaTeX の数式モードをまとめたよ #LaTeX - Qiita">LaTeX の数式モードをまとめたよ</a></li>
+  <li><a href="https://tex2e.github.io/blog/latex/mathjax-to-katex" title="JekyllでMathJaxからKaTeXに移行した - 晴耕雨読">JekyllでMathJaxからKaTeXに移行した</a></li>
+  <li><a href="https://sekika.github.io/2017/05/01/katex-equation/" title="KaTeX による数式の表示">KaTeX による数式の表示</a></li>
+  <li><a href="https://mathlandscape.com/latex-eq/" title="【LaTeX】数式環境まとめ【amsmath】 - 数学の景色">【LaTeX】数式環境まとめ【amsmath】</a></li>
+  <li><a href="https://mathlandscape.com/latex-style/" title="【LaTeX】数式の4つのスタイル～ディスプレイ・テキストスタイル～ - 数学の景色">【LaTeX】数式の4つのスタイル～ディスプレイ・テキストスタイル～</a></li>
+  <li><a href="https://www.fourier.jp/techblog/articles/blocking-render/" title='JavaScriptの読み込み時にblocking="render"でFOUC対策 - FOURIER TECH BLOG 〜 IT技術ブログ 〜'>JavaScriptの読み込み時にblocking=”render”でFOUC対策</a></li>
+  <li><a href="https://developer.mozilla.org/ja/docs/Web/HTML/Element/script#blocking" title="&lt;script&gt;: スクリプト要素 - HTML: ハイパーテキストマークアップ言語 - MDN">&lt;script&gt;: スクリプト要素</a></li>
+  <li><a href="https://daringfireball.net/projects/markdown/syntax#backslash" title="Daring Fireball: Markdown Syntax Documentation">Daring Fireball: Markdown Syntax Documentation</a></li>
+</ul>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/05/07/" title="前の記事：Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！">← Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/06/03/" title="次の記事：Arduino UNO R4の周辺回路レジスタをモニターするプログラム">Arduino UNO R4の周辺回路レジスタをモニターするプログラム →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/05/16/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/05/16/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/05/16/";this.page.identifier="/2024/05/16/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>

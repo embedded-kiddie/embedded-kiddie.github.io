@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/06/16/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/06/16/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-06-16T21:40:37+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-06-16T21:40:37+09:00","datePublished":"2024-06-16T21:40:37+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/06/16/"},"url":"https://embedded-kiddie.github.io/2024/06/16/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-06-16T21:40:37+09:00" itemprop="datePublished">Jun 16, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <style>
+  pre.mermaid {
+    float: left;
+    margin-right: 1em;
+  }
+  @media screen and (min-width: 800px) {
+    #flow1 ~ ol li:nth-child(1) { padding-bottom: 0.5em; }
+    #flow1 ~ ol li:nth-child(2) { padding-bottom: 0.5em; }
+    #flow1 ~ ol li:nth-child(3) { padding-bottom: 0.5em; }
+    #flow1 ~ ol li:nth-child(5) { padding-bottom: 0.5em; }
+    #flow2 ~ ol li:nth-child(1) { padding-top: 1em; }
+    #flow2 ~ ol li:nth-child(2) { padding-top: 2em; }
+    #flow4 ~ ol li:nth-child(1) { padding-bottom:0; }
+    #flow4 ~ ol li:nth-child(2) { padding: 0; }
+    #flow1 { min-width: 234px; min-height: 784px; }
+    #flow1 { min-width: 255px; min-height: 170px; }
+    #flow3 { min-width: 760px; min-height: 910px; }
+    #flow4 { min-width: 246px; min-height: 912px; }
+  }
+</style>
+
+<p>前回の「<a href="/2024/06/10/" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">導入編</a>」 では、CTSU ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> でとりあえず試作タッチスイッチを動作させました。ただ、空中配線のせいもあると思いますが、日によって微妙にタッチの反応速度が異なり、安定して動作させるには判定閾値の調整が必要なことが分かりました。</p>
+
+<p>そこで今回は、<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> の P.1418 「41. 静電容量式タッチセンシングユニット（CTSU）」を紐解き、キャリブレーション手法の検討につなげたいと思います。幸い <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> は、マニュアルに沿って作られているので、仕様と実装を突き合わせながら、CTSU の使い方が学習できると思います。</p>
+
+<p>また今回を「基本編」としたのは、CTSU がサポートする３つの計測モードのうち、実用上もっとも基本的な「自己容量自己容量マルチスキャンモード」の紐解きだからです。</p>
+
+<p>他の計測モードとして、マトリックス状に配置した２つの電極間の差を取ることで寄生容量をキャンセルする「相互容量方式」があり、その紐解きを「応用編」としたいのですが、結構ムズそうで、辿り着けるかどうか分かりません <img class="emoji" title=":sweat_smile:" alt=":sweat_smile:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png" height="20" width="20"></p>
+
+<h2 id="ctsu-動作原理の復習">CTSU 動作原理の復習</h2>
+
+<p>ここでは CTSU 計測回路の図だけを示すので、詳細は <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.1444「41.3 動作説明」を読むか、導入編の <a href="/2024/06/10/#ctsu-%E3%81%AE%E5%8B%95%E4%BD%9C%E5%8E%9F%E7%90%86" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">CTSU の動作原理</a> を読み返してください。</p>
+
+<figure>
+  <img class="simple" src="/images/2024/06-10/CTSU.jpg" alt="CTSU 計測回路 - スイッチトキャパシタとICO" width="1070" height="580">
+  <figcaption style="max-width:none">CTSU 計測回路 - スイッチトキャパシタとICO</figcaption>
+</figure>
+
+<h3 id="ノイズ除去について">ノイズ除去について</h3>
+
+<p>人がタッチ電極に触れた際、<a href="https://techweb.rohm.co.jp/product/nowisee/18796/#toc6" title="スイッチングノイズとは？スイッチング電源で発生するノイズと対策 - EMCとは - TechWeb">コモンモードノイズ</a> が回り込み、駆動パルスによるタッチ電極への充放電周波数とノイズの周波数が近い場合、計測に影響を与える可能性があります。</p>
+
+<figure>
+  <img class="simple" src="/images/2024/06-16/CTSU-noise.jpg" alt="CTSU 計測回路 - コモンモードノイズ" width="1060" height="600">
+  <figcaption style="max-width:none">CTSU 計測回路 - コモンモードノイズ</figcaption>
+</figure>
+
+<p>このノイズの影響を減らすため、MCU には「高域ノイズ低減機能（スペクトラム拡散機能）」が組み込まれてます。これをあえて利用しないという手はないでしょう。</p>
+
+<p>詳しくは、<a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-mcu-capacitive-touch-noise-immunity-guide?r=1054146" title="静電容量センサマイコン 静電容量タッチ ノイズイミュニティガイド - RENESAS アプリケーションノート">静電容量タッチ ノイズイミュニティガイド</a> を読むと、勉強になると思います。</p>
+
+<h2 id="計測のフロー">計測のフロー</h2>
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> では、ハードウェアに視点を置き、処理フロー、状態遷移、タイミングチャートの３つで仕様が記述されています。それゆえソフトウェア仕様に落とす前段階として、それら相互の関係を意識しながら、それぞれを噛み砕いて再表現してみました。</p>
+
+<p>何よりまずは自分自身の理解のため、そして誰かの役にも立つことを願って…</p>
+
+<h3 id="ctsu-初期設定フロー">CTSU 初期設定フロー</h3>
+
+<p>「CTSUCR1.CTSUPON = 1」などの表現は抜きに、CTSU 計測回路にとっての意味や目的を確認しながらフローを追いかけてみました。</p>
+
+<pre class="mermaid" id="flow1" aria-label="CTSU 初期設定のフローチャート">
+flowchart TB
+  A["１. TSCAP 端子外付け<br>コンデンサを放電"] --&gt;
+  B["２. TS 端子 I/O ポート設定"] --&gt;
+  C["３. CTSU 入力クロック許可"] --&gt; 
+  D["４. CTSU 電源設定"] --&gt; 
+  E["５. CTSU ベースClock設定"] --&gt;
+  F["６. CTSU 電源オン"] --&gt;
+  G["７. 安定待ち"] --&gt;
+  H(["停止状態／計測開始待ち"])
+</pre>
+
+<ol>
+  <li>
+    <p>TSCAP 端子を汎用 I/O ポートに設定し、一定期間 Low レベルにすることで外付けされたデカップリングコンデンサに溜まった電荷を放電します。</p>
+  </li>
+  <li>
+    <p>TS 端子を、ポート mn 端子機能選択レジスタで周辺機能用の入出力ポートに設定します。</p>
+  </li>
+  <li>
+    <p>CTSU のモジュールストップ状態を解除し、電源とクロックの供給すれば CTSU が動き出せる状態にします。</p>
+  </li>
+  <li>
+    <p>タッチ電極の静電容量に応じた基準電圧を印加するため、 CTSU の電源動作モードと電源能力を設定します。</p>
+  </li>
+  <li>
+    <p>スイッチトキャパシタと ICO の動作に必要な、CTSU のベースクロックを設定します。</p>
+  </li>
+  <li>
+    <p>TSCAP 接続 SW をオンし電源と繋げることで、外付けしたデカップリングコンデンサの充電を開始します。</p>
+  </li>
+  <li>
+    <p>タッチ電極に安定した基準電圧を印加できるよう、TSCAP 端子に外付けしたデカップリングコンデンサの充電完了を待ちます。</p>
+  </li>
+</ol>
+
+<h3 id="動作完了フロー">動作完了フロー</h3>
+
+<p>次章の「状態遷移」上は、<code class="language-plaintext highlighter-rouge">Status 1</code> から <code class="language-plaintext highlighter-rouge">Status 0</code> に遷移した際に実行すべきアクションかと思います。</p>
+
+<pre class="mermaid" id="flow2">
+flowchart TB
+  A[１. CTSU 電源オフ] --&gt;
+  B[２. モジュールスタンバイをオン]
+</pre>
+
+<ol>
+  <li>
+    <p>CTSU の電源をオフにし、TSCAP 接続 SW を切断します。</p>
+  </li>
+  <li>
+    <p>CSTU をモジュールストップ状態に移行させます。</p>
+  </li>
+</ol>
+
+<h3 id="状態遷移">状態遷移</h3>
+
+<p>CTSU ステータスレジスタ（CTSUST）には、計測回路の内部状態が書き込まれます（図の見通し良くするため「相互容量フルスキャンモード」の遷移は除外してあります）。</p>
+
+<p>ソフトウェア上は、処理の過程でステータスをチェックすること以外、あまり意識する必要はなく、<span class="strong">強調した処理</span> を実行するだけです。</p>
+
+<pre class="mermaid" id="flow3" aria-label="CTSU 計測回路の状態遷移">
+flowchart TB
+  S0([Status 0<br>停止状態／計測開始待ち])
+  S1([Status 1<br>計測チャネルの更新／計測終了判定])
+  S2([Status 2<br>センサ駆動パルス設定待ち])
+  S3([Status 3<br>センサ駆動パルス出力開始／センサ安定待ち区間])
+  S4([Status 4<br>計測開始／計測区間])
+  S5([Status 5<br>計測完了])
+  S0 -- ソフトウェアまたは外部トリガで <span class="strong">計測開始を指示</span> --&gt; S1
+  S1 -- 次に計測すべきチャネルがなく測定終了 --&gt; S0
+  S1 -- 計測チャネルの設定要求割り込み --&gt; S2
+%%S1 -- 相互容量フルスキャンモードで計測２回目の場合 --&gt; S3
+  S2 -- <span class="strong">計測チャネルを設定</span>（→ 完了後 IOC クロックが動作） --&gt; S3
+  S3 -- センサ安定時間が経過 --&gt; S4
+  S4 -- 所定の計測時間が経過 --&gt; S5
+  S5 -- 動作クロックが２クロック経過 --&gt; S1
+</pre>
+
+<h3 id="自己容量マルチスキャンモードの動作">自己容量マルチスキャンモードの動作</h3>
+
+<p>自己容量シングルスキャンモードでは、任意の１チャネルの静電容量を計測します。「4. CTSU 計測開始」後は、ICU（Interrupt Controller Unit）が管理する３つの割り込みにより計測処理が進むので、アプリケーションは、結果が書き込まれた SRAM 上のデータを非同期に読み込み、タッチを判定することができます。</p>
+
+<pre class="mermaid" id="flow4" aria-label="自己容量マルチスキャンモードのフローチャート">
+flowchart TD
+  A([１. 初期設定]) --&gt;
+  B[２. 割り込み動作設定<br>（DTC または ICU）] --&gt;
+  C[３. CTSUレジスタ設定]
+  -- 電源安定時間を経過 --&gt;
+  E[４. CTSU 計測開始] --&gt;
+  F([５. CTSU 計測動作開始]) --
+  <span class="strong">チャネル設定要求割り込み</span> 発生
+  --&gt; H
+  H[６. 計測チャネル設定] --
+  <span class="strong">結果読み出し要求割り込み</span> 発生
+  --&gt; J
+  J[７. 計測結果読み出し] --
+  <span class="strong">計測終了割り込み</span> 発生 --&gt; L
+  L[８. タッチ判定処理]
+</pre>
+
+<ol>
+  <li>
+    <p>「CTSU 初期設定フロー」完了後は <code class="language-plaintext highlighter-rouge">Status 0</code> 状態となるところから始まります。</p>
+  </li>
+  <li>
+    <p><span class="strong">チャネル設定要求</span>、<span class="strong">結果読み出し要求</span>、<span class="strong">計測終了</span> の各割り込みに対し、予め SRAM ↔︎ レジスタ間の転送処理を定義したハンドラ関数を登録します。</p>
+  </li>
+  <li>
+    <p>CTSU 動作クロックと計測モード（自己容量マルチスキャンモード）、スイッチトキャパシタ、センサ安定待ち時間、計測チャネルの設定を行います。</p>
+  </li>
+  <li>
+    <p>CTSU コントロールレジスタ 0 の CTSU 計測動作開始ビットに１を書き込むことで計測を開始します。</p>
+  </li>
+  <li>
+    <p>計測回路は <code class="language-plaintext highlighter-rouge">Status 1</code> に遷移し、ソフトウェアは、<span class="strong">チャネル設定要求割り込み</span>（CTSU_CTSUWR）を待ちます。</p>
+  </li>
+  <li>
+    <p>計測回路は <code class="language-plaintext highlighter-rouge">Status 2</code> に遷移し、<span class="strong">チャネル設定要求割り込み</span> ハンドラが予め SRAM 上に設定されたチャネル設定を所定のレジスタに転送します。計測回路は <code class="language-plaintext highlighter-rouge">Status 3</code> に遷移し、センサの安定を待ちます。</p>
+  </li>
+  <li>
+    <p>計測回路は <code class="language-plaintext highlighter-rouge">Status 4</code> に遷移し、<span class="strong">結果読み出し要求割り込み</span>（CTSU_CTSURD）ハンドラが、ICO の計測結果データを SRAM に転送します。</p>
+  </li>
+  <li>
+    <p>全チャネルの計測が終了すると <code class="language-plaintext highlighter-rouge">Status 5</code> に遷移し、<span class="strong">計測終了割り込み</span>（CTSU_CTSUFN）が発生します。</p>
+  </li>
+</ol>
+
+<h4 id="割り込み処理について">割り込み処理について</h4>
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.1457「41.3.3.2 割り込み」には、CTSU の３つの割り込みに対する処理が示されています。これらの実装には、IRQManager クラス と DTC（Data Transfer Controller）の利用が必須です。また周辺モジュールで発生するイベントを CPU を介さずに別モジュールと接続する <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/UNOWIFIR4/includes/ra/fsp/src/bsp/mcu/ra4m1/bsp_elc.h" title="ArduinoCore-renesas/variants/UNOWIFIR4/includes/ra/fsp/src/bsp/mcu/ra4m1/bsp_elc.h at main · arduino/ArduinoCore-renesas">ELC（Event Link Controller）</a>の知識も必要です。</p>
+
+<p>しかし、残念なことに僕がこれらに習熟していないので、ここでは <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> をコードリーディングした結果の概要紹介に留めたいと思います。</p>
+
+<h5 id="タッチピンの設定">タッチピンの設定</h5>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">bool</span> <span class="n">setTouchMode</span><span class="p">(</span><span class="k">const</span> <span class="kt">uint8_t</span> <span class="n">pin</span><span class="p">)</span></code></pre></figure>
+
+<p><a href="/2024/06/10/#pin2ts" title="Minima／WiFi のピン番号と TS 端子の対応表">Minima/WiFi のピン番号</a> を指定すると、以下の処理が実行されます。</p>
+
+<ul>
+  <li>対応する TS 端子を計測チャネルの登録</li>
+  <li>CTSU 初期設定フローの実行</li>
+  <li>３つの CTSU 割り込みハンドラの登録（<code class="language-plaintext highlighter-rouge">initialize_CTSU()</code>）</li>
+  <li>割り込み要因に対応する SRAM ↔︎ レジスタ間の転送設定（<code class="language-plaintext highlighter-rouge">initialize_DTC()</code>）</li>
+</ul>
+
+<p>計測モードは「自己容量マルチスキャンモード」にハードコートされています。また必要な数だけピンを指定した後は、<code class="language-plaintext highlighter-rouge">TouchSensor::start()</code> により計測を開始します。</p>
+
+<h5 id="チャネル設定要求割り込みハンドラ">チャネル設定要求割り込みハンドラ</h5>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">CTSUWR_handler</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">IRQn_Type</span> <span class="n">irq</span> <span class="o">=</span> <span class="n">R_FSP_CurrentIrqGet</span><span class="p">();</span>
+  <span class="n">R_BSP_IrqStatusClear</span><span class="p">(</span><span class="n">irq</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">initialize_DTC()</code> により、チャネル設定を格納した SRAM からレジスタへの <code class="language-plaintext highlighter-rouge">Write</code> 処理が設定されているため、対応する割り込み要因をクリアするだけの処理となっています。DTC を使わない場合は、チャネル設定を CTSUSSC、CTSUSO0、CTSUSO1 レジスタへ書き込むコードを記述します。</p>
+
+<h5 id="結果読み出し要求割り込みハンドラ">結果読み出し要求割り込みハンドラ</h5>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">CTSURD_handler</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">IRQn_Type</span> <span class="n">irq</span> <span class="o">=</span> <span class="n">R_FSP_CurrentIrqGet</span><span class="p">();</span>
+  <span class="n">R_BSP_IrqStatusClear</span><span class="p">(</span><span class="n">irq</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">initialize_DTC()</code> により、計測結果を格納したレジスタから SRAM への <code class="language-plaintext highlighter-rouge">Read</code> 処理が設定されているため、対応する割り込み要因をクリアするだけの処理となっています。DTC を使わない場合は、２つの ICO カウンタ CTSUSC、CTSURC を読み出すコードを記述します。</p>
+
+<h5 id="計測終了割り込みハンドラ">計測終了割り込みハンドラ</h5>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">CTSUFN_handler</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">IRQn_Type</span> <span class="n">irq</span> <span class="o">=</span> <span class="n">R_FSP_CurrentIrqGet</span><span class="p">();</span>
+  <span class="n">R_BSP_IrqStatusClear</span><span class="p">(</span><span class="n">irq</span><span class="p">);</span>
+
+  <span class="n">ctsu_done</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">ctsu_fn_callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ctsu_fn_callback</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">free_running</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">startCTSUmeasure</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>割り込み要因をクリア、コールバック関数の実行、および次の計測動作開始を指示しています。タッチ判定はコールバック関数でも可能ですが、<code class="language-plaintext highlighter-rouge">touchRead()</code> 関数で SRAM に転送された計測結果を非同期に参照して行うことも可能です。</p>
+
+<p>２つの ICO カウンタがオーバーフローした場合、CTSUST レジスタの CTSUSOVF ビットか CTSUROVF ビットが立つとの記述がありますが、そもそもキャリブレーション時にオーバーフローしないようパラメータを設定すべきなのだと思います。</p>
+
+<h2 id="r4_touch-による動作確認">R4_Touch による動作確認</h2>
+
+<p>Arduino IDE のソースコードデバッガを使い、コードをトレースするのも勉強になるのでアリですが、ここでは <a href="/2024/06/10/" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">導入編</a> で試作した回路の TS 端子をオシロスコープで、CTSU レジスタを <a href="/2024/06/03/" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">PeripheralMonitor</a> で観測した結果を示します。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-16/CTSU-signal.jpg" title="オシロスコープの観測結果" data-lightbox="image">
+    <img src="/images/2024/06-16/CTSU-signal-small.jpg" alt="オシロスコープの観測結果" width="460" height="279">
+  </a>
+  <a href="/images/2024/06-16/CTSU-monitor.gif" title="CTSU レジスタの観測結果" data-lightbox="image">
+    <img src="/images/2024/06-16/CTSU-monitor-small.gif" alt="CTSU レジスタの観測結果" width="460" height="279">
+  </a>
+</figure>
+
+<p>オシロスコープは <code class="language-plaintext highlighter-rouge">TS02</code> 端子を観測しています。設定では TS 端子へのパルス駆動周波数は、周辺モジュールクロック <code class="language-plaintext highlighter-rouge">PCLKB</code>（24MHz）の 32 分周（CTSUSDPA[4:0] = 15）、つまり 750KHz ですが、ノイズと同期しないようにランダムなパルスを出力する「スペクトラム拡散機能」をオンにしているため、結構ブレて観測されました。</p>
+
+<p>その他の設定値は <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> のデフォルト値にお任せしています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>設定項目</th>
+      <th>設定値</th>
+      <th>レジスタ</th>
+      <th>ビット</th>
+      <th style="text-align: center">値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ベースクロック</td>
+      <td>24MHz（PCLKB を１分周）</td>
+      <td>CTSUCR1</td>
+      <td>CTSUCLK[1:0]</td>
+      <td style="text-align: center">0x00</td>
+    </tr>
+    <tr>
+      <td>計測モード</td>
+      <td>自己容量マルチスキャンモード</td>
+      <td>^</td>
+      <td>CTSUMD[1:0]</td>
+      <td style="text-align: center">0x01</td>
+    </tr>
+    <tr>
+      <td>同期ノイズ低減 計測時間</td>
+      <td>3（推奨設定値）</td>
+      <td>CTSUSDPRS</td>
+      <td>CTSUPRRATIO [3:0]</td>
+      <td style="text-align: center">0x03</td>
+    </tr>
+    <tr>
+      <td>^ 基本パルス数</td>
+      <td>62 パルス（推奨設定値）</td>
+      <td>^</td>
+      <td>CTSUPRMODE [1:0]</td>
+      <td style="text-align: center">0x02</td>
+    </tr>
+    <tr>
+      <td>^ 高域ノイズ低減機能</td>
+      <td>ON</td>
+      <td>^</td>
+      <td>CTSUSOFF</td>
+      <td style="text-align: center">0x00</td>
+    </tr>
+    <tr>
+      <td>センサ安定待ち時間</td>
+      <td>0x10（推奨設定値）</td>
+      <td>CTSUSST</td>
+      <td>CTSUSST[7:0]</td>
+      <td style="text-align: center">0x10</td>
+    </tr>
+    <tr>
+      <td>センサオフセット</td>
+      <td>電流オフセット量 0</td>
+      <td>CTSUSO0</td>
+      <td>CTSUSO[9:0]</td>
+      <td style="text-align: center">0x00</td>
+    </tr>
+    <tr>
+      <td>計測回数</td>
+      <td>1</td>
+      <td>^</td>
+      <td>CTSUSNUM[5:0]</td>
+      <td style="text-align: center">0x00</td>
+    </tr>
+    <tr>
+      <td>リファレンス ICO 電流</td>
+      <td>電流オフセット量 0</td>
+      <td>CTSUSO1</td>
+      <td>CTSURICOA[7:0]</td>
+      <td style="text-align: center">0x00</td>
+    </tr>
+    <tr>
+      <td>センサ駆動パルス</td>
+      <td>750KHz（ベースクロックの1/32）</td>
+      <td>^</td>
+      <td>CTSUSDPA[4:0]</td>
+      <td style="text-align: center">0x0F</td>
+    </tr>
+    <tr>
+      <td>ICO ゲイン</td>
+      <td>ゲイン 100%（推奨設定値）</td>
+      <td>^</td>
+      <td>CTSUICOG[1:0]</td>
+      <td style="text-align: center">0x00</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>こうやって洗い出してみると、導入編の <a href="/2024/06/10/#%E6%A4%9C%E5%87%BA%E5%8E%9F%E7%90%86%E3%81%AB%E5%9F%BA%E3%81%A5%E3%81%8F-ctsu-%E3%81%AE%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88" title="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 - Embedded Kiddie">検出原理に基づく CTSU のポイント</a> で想定したパラメータでは足りませんでした <img class="emoji" title=":sweat_smile:" alt=":sweat_smile:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png" height="20" width="20"></p>
+
+<h2 id="次回は">次回は…</h2>
+
+<p>ルネサスが提供する <a href="https://www.renesas.com/jp/ja/software-tool/flexible-software-package-fsp" title="Flexible Software Package (FSP) - Renesas">FSP</a> には、CapTouch という <a href="https://renesas.github.io/fsp/group___r_e_n_e_s_a_s___c_a_p_t_o_u_c_h___m_o_d_u_l_e_s.html" title="RA Flexible Software Package Documentation: CapTouch">モジュール</a> と <a href="https://renesas.github.io/fsp/group___c_t_s_u___a_p_i.html" title="RA Flexible Software Package Documentation: CTSU Interface">API</a>、それにスライダーやパッド、ホイールなどの UI に対応したミドルウェアがサポートされていますが、Arduino 開発者が「いらねぇ」と思ったのでしょうか、残念ながら UNO R4 にはポーティングされていません（<a href="https://www.arm.com/ja/technologies/trustzone-for-cortex-m" title="Cortex-M用TrustZone – Arm®">TrustZone</a> とか、他にも載せて欲しい機能、ありますよね）。</p>
+
+<p><a href="https://www.renesas.com/jp/ja/software-tool/e-studio" title="統合開発環境 e² studio - Renesas">e² studio 環境</a> では <a href="https://www.renesas.com/jp/ja/software-tool/qe-capacitive-touch-development-assistance-tool-capacitive-touch-sensors" title="静電容量式タッチセンサ対応開発支援ツール QE for Capacitive Touch - Renesas">静電容量式タッチセンサ対応開発支援ツール</a> が使えて、前章で洗い出したパラメータの <a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-mcu-qe-capacitive-touch-advanced-mode-parameter-guide?r=1170071" title="静電容量センサマイコン QE for Capacitive Touch アドバンスドモード(高度な設定)パラメータガイド">チューニングが可能</a> なようですが、幸いにも <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> には <a href="https://github.com/delta-G/R4_Touch/tree/master/examples/Auto_Tune" title="R4_Touch/examples/Auto_Tune at master · delta-G/R4_Touch">Auto_Tune</a> という自動チューニングの例題があるので、次回はこれを紐解いてみたいと思います。</p>
+
+<p>ホント、<a href="https://github.com/delta-G" title="プロファイル - Delta_G - Arduino Forum">Delta-G 氏</a> さまさまです <img class="emoji" title=":fish_cake:" alt=":fish_cake:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f365.png" height="20" width="20"></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/06/10/" title="前の記事：Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編">← Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/06/22/" title="次の記事：Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/06/16/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/06/16/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/06/16/";this.page.identifier="/2024/06/16/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</body>
+</html>

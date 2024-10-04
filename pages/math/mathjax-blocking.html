@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>MathJax(js:defer/async なし) サンプルページ | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="MathJax(js:defer/async なし) サンプルページ" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="非同期読み込みの属性を付けないスクリプトを &lt;head&gt; 内に設置する、jekyll-spaceship デフォルトのパターンです。スクリプトの読み込みと解析が完了するまで初期のレンダリングがブロックされますが、TBT が短く、FOUC がやや目立ちにくいパターンと言えます。" />
+<meta property="og:description" content="非同期読み込みの属性を付けないスクリプトを &lt;head&gt; 内に設置する、jekyll-spaceship デフォルトのパターンです。スクリプトの読み込みと解析が完了するまで初期のレンダリングがブロックされますが、TBT が短く、FOUC がやや目立ちにくいパターンと言えます。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/pages/math/mathjax-blocking.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/pages/math/mathjax-blocking.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="MathJax(js:defer/async なし) サンプルページ" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Kingsman"},"description":"非同期読み込みの属性を付けないスクリプトを &lt;head&gt; 内に設置する、jekyll-spaceship デフォルトのパターンです。スクリプトの読み込みと解析が完了するまで初期のレンダリングがブロックされますが、TBT が短く、FOUC がやや目立ちにくいパターンと言えます。","headline":"MathJax(js:defer/async なし) サンプルページ","url":"https://embedded-kiddie.github.io/pages/math/mathjax-blocking.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" crossorigin="anonymous"></script>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">MathJax(js:defer/async なし) サンプルページ</h1>
+  </header>
+
+  <div class="post-content">
+    <p>非同期読み込みの属性を付けない <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> を <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> 内に設置する、<a href="https://github.com/jeffreytse/jekyll-spaceship" title="jeffreytse/jekyll-spaceship: 🚀 A Jekyll plugin to provide powerful supports for table, mathjax, plantuml, mermaid, emoji, video, audio, youtube, vimeo, dailymotion, soundcloud, spotify, etc.">jekyll-spaceship</a> デフォルトのパターンです。スクリプトの読み込みと解析が完了するまで初期のレンダリングがブロックされますが、<a href="https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time?utm_source=lighthouse&amp;utm_medium=lr&amp;hl=ja" title="Total Blocking Time &nbsp;-&nbsp; Lighthouse &nbsp;-&nbsp; Chrome for Developers">TBT</a> が短く、<a href="https://en.wikipedia.org/wiki/Flash_of_unstyled_content" title="Flash of unstyled content - Wikipedia">FOUC</a> がやや目立ちにくいパターンと言えます。</p>
+
+\[f’(x) = \lim_{\varDelta x \to 0} \frac{ f(x+\varDelta x) - f(x) }{\varDelta x}\]
+
+<h2 id="ディスプレイ数式数式だけの行">ディスプレイ数式（数式だけの行）</h2>
+<p>段落を分けるために前後を空行で囲むのが基本ルールです（例外あり）。</p>
+
+<h3><strong>・<code>$$...$$</code></strong></h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"> 
+<span class="p">$$</span><span class="nb">
+S</span><span class="o">=</span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">n</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nv">\infty</span><span class="nb"> a</span><span class="p">_</span><span class="nb">n
+</span><span class="p">$$</span>
+ </code></pre></figure>
+
+\[S=\sum_{n=1}^\infty a_n\]
+
+<p><code class="language-plaintext highlighter-rouge">\textstyle</code> を追加すると、テキストスタイルになります。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"> 
+<span class="p">$$</span><span class="nb"> </span><span class="nv">\textstyle</span><span class="nb">
+S</span><span class="o">=</span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">n</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nv">\infty</span><span class="nb"> a</span><span class="p">_</span><span class="nb">n
+</span><span class="p">$$</span>
+ </code></pre></figure>
+
+\[\textstyle
+S=\sum_{n=1}^\infty a_n\]
+
+<h3 id="-1"><strong>・<code>\[...\]</code></strong></h3>
+<p>前後に空行は必要ありませんが、二重の <code class="language-plaintext highlighter-rouge">\\</code> で <code class="language-plaintext highlighter-rouge">\</code> をエスケープする必要があります。<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup></p>
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="k">\\</span>[
+S=<span class="k">\sum</span><span class="p">_{</span>n=1<span class="p">}^</span><span class="k">\infty</span> a<span class="p">_</span>n
+<span class="k">\\</span>]
+テキスト</code></pre></figure>
+
+<p>テキスト
+\[
+S=\sum_{n=1}^\infty a_n
+\]
+テキスト</p>
+
+<p><code class="language-plaintext highlighter-rouge">\textstyle</code> を追加すると、テキストスタイルになります。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="k">\\</span>[ <span class="k">\textstyle</span>
+S=<span class="k">\sum</span><span class="p">_{</span>n=1<span class="p">}^</span><span class="k">\infty</span> a<span class="p">_</span>n
+<span class="k">\\</span>]
+テキスト</code></pre></figure>
+
+<p>テキスト
+\[ \textstyle
+S=\sum_{n=1}^\infty a_n
+\]
+テキスト</p>
+
+<h3 id="beginend"><strong>・<code>\begin{}...\end{}</code></strong></h3>
+<p>KaTex と異なり、空行と<code class="language-plaintext highlighter-rouge">$$...$$</code> で囲む必要がありませんが、<code class="language-plaintext highlighter-rouge">split</code> が効きません。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="nt">\begin{equation}</span>
+  <span class="nt">\begin{split}</span> 
+    a <span class="p">&amp;</span>= <span class="k">\int</span><span class="p">_</span>0<span class="p">^</span><span class="k">\infty</span> f(x) <span class="k">\sin</span> x <span class="k">\cos</span> x <span class="k">\,</span> dx <span class="k">\\</span>
+      <span class="p">&amp;</span><span class="k">\quad</span> + <span class="k">\int</span><span class="p">_</span>0<span class="p">^</span><span class="k">\infty</span> f(-x) <span class="k">\sin</span> x <span class="k">\log</span> x <span class="k">\,</span> dx 
+  <span class="nt">\end{split}</span>
+<span class="nt">\end{equation}</span>
+テキスト</code></pre></figure>
+
+<p>テキスト
+\begin{equation}
+  \begin{split} 
+    a &amp;= \int_0^\infty f(x) \sin x \cos x \, dx <br />
+      &amp;\quad + \int_0^\infty f(-x) \sin x \log x \, dx 
+  \end{split}
+\end{equation}
+テキスト</p>
+
+<p>ディスプレイ数式のまま <code class="language-plaintext highlighter-rouge">split</code> を効かせるためには 前後の空行と <code class="language-plaintext highlighter-rouge">$$...$$</code> が必要です。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"> 
+<span class="p">$$</span><span class="nb">
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
+  </span><span class="nv">\begin</span><span class="p">{</span><span class="nb">split</span><span class="p">}</span><span class="nb">
+    a </span><span class="p">&amp;</span><span class="o">=</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\cos</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx </span><span class="nv">\\</span><span class="nb">
+      </span><span class="p">&amp;</span><span class="nv">\quad</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\int</span><span class="p">_</span><span class="m">0</span><span class="p">^</span><span class="nv">\infty</span><span class="nb"> f</span><span class="o">(-</span><span class="nb">x</span><span class="o">)</span><span class="nb"> </span><span class="nv">\sin</span><span class="nb"> x </span><span class="nv">\log</span><span class="nb"> x </span><span class="nv">\,</span><span class="nb"> dx 
+  </span><span class="nv">\end</span><span class="p">{</span><span class="nb">split</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\end</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span>
+ </code></pre></figure>
+
+\[\begin{equation} \textstyle
+  \begin{split}
+    a &amp;= \int_0^\infty f(x) \sin x \cos x \, dx \\
+      &amp;\quad + \int_0^\infty f(-x) \sin x \log x \, dx 
+  \end{split}
+\end{equation}\]
+
+<p id="diff-1">１行に収まる方程式であれば <code>\textstyle</code> が効きます。空行も <code>$$...$$</code> も不要で、ディスプレイ数式（数式だけの行）として表示されます。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="nt">\begin{equation}</span> <span class="k">\textstyle</span>
+<span class="k">\sum</span><span class="p">_{</span>k=1<span class="p">}^{</span>n<span class="p">}</span> k = 1 + 2 + 3 + <span class="k">\cdots</span> + n = <span class="k">\frac</span><span class="p">{</span>n(n+1)<span class="p">}{</span>2<span class="p">}</span>
+<span class="nt">\end{equation}</span>
+テキスト</code></pre></figure>
+
+<p>テキスト
+\begin{equation} \textstyle
+\sum_{k=1}^{n} k = 1 + 2 + 3 + \cdots + n = \frac{n(n+1)}{2}
+\end{equation}
+テキスト</p>
+
+<h2 id="インライン数式文章中の数式">インライン数式（文章中の数式）</h2>
+<p>前後を空行で囲まず、１つの段落中に数式を記述します。</p>
+
+<h3 id="-2"><strong>・<code>$...$</code></strong></h3>
+<p>デフォルトでは <code class="language-plaintext highlighter-rouge">$...$</code> は使えないので、<code class="language-plaintext highlighter-rouge">$$...$$</code> で囲みます。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="p">$$</span><span class="nb">
+</span><span class="o">(</span><span class="nb">a</span><span class="o">+</span><span class="nb">b</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">=</span><span class="nb"> a</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="m">2</span><span class="nb">ab </span><span class="o">+</span><span class="nb"> b</span><span class="p">^</span><span class="m">2</span><span class="nb">
+</span><span class="p">$$</span>
+テキスト</code></pre></figure>
+
+<p>テキスト
+\((a+b)^2 = a^2 + 2ab + b^2\)
+テキスト</p>
+
+<h3 id="-3"><strong>・<code>\(...\)</code></strong></h3>
+<p>二重の <code class="language-plaintext highlighter-rouge">\\</code> で <code class="language-plaintext highlighter-rouge">\</code> をエスケープする必要があります。<sup id="fnref:1:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup></p>
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト
+<span class="k">\\</span>(
+(a+b)<span class="p">^</span>2 = a<span class="p">^</span>2 + 2ab + b<span class="p">^</span>2
+<span class="k">\\</span>)
+テキスト</code></pre></figure>
+
+<p>テキスト
+\(
+(a+b)^2 = a^2 + 2ab + b^2
+\)
+テキスト</p>
+
+<h3 id="beginend-1"><strong>・<code>\begin{}...\end{}</code></strong></h3>
+<p>KaTeX と異なり、<code class="language-plaintext highlighter-rouge">align</code> や <code class="language-plaintext highlighter-rouge">equation</code>、<code class="language-plaintext highlighter-rouge">split</code> もインライン数式（文章中の数式）で表示することができます（LaTeX ではエラーと定義されているパターンです）。</p>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">テキスト テキスト テキスト 
+<span class="p">$$</span><span class="nb">
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
+ </span><span class="nv">\zeta</span><span class="o">(</span><span class="m">2</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">n</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nv">\infty</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">^</span><span class="m">2</span><span class="p">}</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\pi</span><span class="p">^</span><span class="m">2</span><span class="p">}{</span><span class="m">6</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\end</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span>
+ テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト</code></pre></figure>
+
+<p>テキスト テキスト テキスト 
+\(\begin{equation}
+ \zeta(2) = \sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}
+\end{equation}\)
+ テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト テキスト</p>
+
+<h2 id="様々な数式">様々な数式</h2>
+<h3 id="インライン式の記述">インライン式の記述</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex">This sentence uses `<span class="p">$</span><span class="nb">` delimiters to show math inline:  </span><span class="p">$$</span><span class="nv">\sqrt</span><span class="p">{</span><span class="m">3</span><span class="nb">x</span><span class="o">-</span><span class="m">1</span><span class="p">}</span><span class="o">+(</span><span class="m">1</span><span class="o">+</span><span class="nb">x</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="p">$$</span></code></pre></figure>
+
+<p>This sentence uses <code class="language-plaintext highlighter-rouge">$</code> delimiters to show math inline:  \(\sqrt{3x-1}+(1+x)^2\)</p>
+
+<h3 id="リーマンのゼータ関数">リーマンのゼータ関数</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
+ </span><span class="nv">\zeta</span><span class="o">(</span><span class="nb">s</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">n</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nv">\infty</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nb">n</span><span class="p">^</span><span class="nb">s</span><span class="p">}</span><span class="nb">
+</span><span class="nv">\end</span><span class="p">{</span><span class="nb">equation</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span></code></pre></figure>
+
+\[\begin{equation}
+ \zeta(s) = \sum_{n=1}^\infty \frac{1}{n^s}
+\end{equation}\]
+
+<h3 id="連立方程式-cases">連立方程式 (<code class="language-plaintext highlighter-rouge">cases</code>)</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
+</span><span class="nv">\begin</span><span class="p">{</span><span class="nb">cases</span><span class="p">}</span><span class="nb"> x </span><span class="o">+</span><span class="nb"> </span><span class="m">2</span><span class="nb">y </span><span class="o">+</span><span class="nb"> </span><span class="m">4</span><span class="nb">z </span><span class="p">&amp;</span><span class="o">=</span><span class="nb"> </span><span class="m">5</span><span class="nb"> </span><span class="nv">\\</span><span class="nb"> </span><span class="m">3</span><span class="nb">x </span><span class="o">-</span><span class="nb"> y </span><span class="p">&amp;</span><span class="o">=</span><span class="nb"> </span><span class="m">1</span><span class="nb"> </span><span class="nv">\\</span><span class="nb"> </span><span class="m">4</span><span class="nb">x </span><span class="o">+</span><span class="nb"> </span><span class="m">2</span><span class="nb">y </span><span class="o">-</span><span class="m">5</span><span class="nb">z </span><span class="p">&amp;</span><span class="o">=</span><span class="nb"> </span><span class="m">0</span><span class="nb"> </span><span class="nv">\end</span><span class="p">{</span><span class="nb">cases</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span></code></pre></figure>
+
+\[\begin{cases} x + 2y + 4z &amp;= 5 \\ 3x - y &amp;= 1 \\ 4x + 2y -5z &amp;= 0 \end{cases}\]
+
+<h3 id="ボックスで囲まれた式">ボックスで囲まれた式</h3>
+
+<figure class="highlight"><pre><code class="language-tex" data-lang="tex"><span class="p">$$</span><span class="nb">
+</span><span class="nv">\boxed</span><span class="p">{</span><span class="nv">\left</span><span class="o">(</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">k</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n a</span><span class="p">_</span><span class="nb">k b</span><span class="p">_</span><span class="nb">k </span><span class="nv">\right</span><span class="o">)</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="nv">\leq</span><span class="nb"> </span><span class="nv">\left</span><span class="o">(</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">k</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n a</span><span class="p">_</span><span class="nb">k</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="nv">\right</span><span class="o">)</span><span class="nb"> </span><span class="nv">\left</span><span class="o">(</span><span class="nb"> </span><span class="nv">\sum</span><span class="p">_{</span><span class="nb">k</span><span class="o">=</span><span class="m">1</span><span class="p">}^</span><span class="nb">n b</span><span class="p">_</span><span class="nb">k</span><span class="p">^</span><span class="m">2</span><span class="nb"> </span><span class="nv">\right</span><span class="o">)</span><span class="p">}</span><span class="nb">
+</span><span class="p">$$</span></code></pre></figure>
+
+\[\boxed{\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)}\]
+
+<hr />
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p><a href="https://daringfireball.net/projects/markdown/syntax#backslash" title="Daring Fireball: Markdown Syntax Documentation" target="_blank">BACKSLASH ESCAPES</a> <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#fnref:1:1" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});})();</script>
+</body>
+</html>

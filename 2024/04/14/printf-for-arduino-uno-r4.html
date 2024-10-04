@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Arduino UNO R4で、デバッグには欠かせないprintf()の実態を定義し、書式指定フォーマットの押さえるべきポイントをまとめました。" />
+<meta property="og:description" content="Arduino UNO R4で、デバッグには欠かせないprintf()の実態を定義し、書式指定フォーマットの押さえるべきポイントをまとめました。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-04-14T20:49:21+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-05-20T11:55:44+09:00","datePublished":"2024-04-14T20:49:21+09:00","description":"Arduino UNO R4で、デバッグには欠かせないprintf()の実態を定義し、書式指定フォーマットの押さえるべきポイントをまとめました。","headline":"Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"},"url":"https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-04-14T20:49:21+09:00" itemprop="datePublished">Apr 14, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="printf-使える">printf 使える？</h2>
+
+<p>とりあえず乱暴にもこんなコードを試してみました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"Arduino.h"</span><span class="cp">
+#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">"Hello World</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>コンパイルは…OK、おぉ、ってことは <code class="language-plaintext highlighter-rouge">printf()</code> あるんだ！ ダウンロードも OK だ。
+シリアルモニタを確認っと…</p>
+
+<p>あれっ…出ない！？…おかしいなぁ…。</p>
+
+<p>念の為、オマジナイ <code class="language-plaintext highlighter-rouge">Serial.begin(9600); while (!Serial);</code> を入れてみましたが、変わりません。
+一体全体 <code class="language-plaintext highlighter-rouge">printf()</code> の出力はどこに行っちゃったんでしょう？</p>
+
+<h3 id="デバッガで確認">デバッガで確認</h3>
+
+<p><code class="language-plaintext highlighter-rouge">printf()</code> の行方を探すため、<a href="/2024/03/24/arduino-debug-with-toragi.html" title="Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!? - Embedded Kiddie">トラ技 ARM ライタ</a> でステップインしてみると、スカッ！と次の行に移動しちゃいます。どうやら空の関数っぽい挙動です。う〜ん…</p>
+
+<p><img src="/images/2024/04-14/debug-printf.jpg" alt="printf()をデバッグ" title="printf()をデバッグ" width="1380" height="862"></p>
+
+<ul>
+  <li>Arduino UNO R4 のソースコードデバッグは、以下をご参照ください。
+    <ul>
+      <li><a href="/2024/04/17/how-to-use-toragi-writer.html" title="Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足 - Embedded Kiddie">Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="ライブラリを試す">ライブラリを試す</h3>
+
+<p>気を取り直し、IDE のライブラリマネージャーで「printf」を検索。シンプルなものから重厚なものまで工夫を凝らしたものが色々出てきます。大抵の場合は良く出来ていて、<code class="language-plaintext highlighter-rouge">Sirial</code> 以外のデバイスにもバインドできる感じに作られています。</p>
+
+<p>1番シッカリしてそうなのは、公式サイトにも上がっている <a href="https://www.arduino.cc/reference/en/libraries/libprintf/" title="LibPrintf - Arduino Reference">LibPrintf</a> でしょうか。<code class="language-plaintext highlighter-rouge">snprintf()</code> や <code class="language-plaintext highlighter-rouge">vsnprintf()</code> も再現されています。</p>
+
+<p>でも僕には帯にも襷にも長い感じ。</p>
+
+<p>で、一番しっくりきたのが <a href="https://qiita.com/teddokano/items/9afc45bb1beab9b7af4f" title="Arduinoで`printf()` #Arduino - Qiita">Qiita の記事</a> のコードです。ただ僕は、きっとどこかで <code class="language-plaintext highlighter-rouge">printf()</code> が <a href="https://syohex.hatenablog.com/entry/20100610/1276180481" title="weakシンボル - Shohei Yoshida's Diary">weak シンボル</a> か <code class="language-plaintext highlighter-rouge">virtual</code> として定義されているに違いないと読み、<code class="language-plaintext highlighter-rouge">stdio.h</code> の I/F 仕様でコーディング＆試してみました。案の定（定義が見つかっていないのでわかりませんが…）エラーも無く動作 OK です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#define PRINTF_BUF_SIZE  256
+</span>
+<span class="kt">int</span> <span class="nf">printf</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fmt</span><span class="p">,</span> <span class="p">...)</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">PRINTF_BUF_SIZE</span><span class="p">];</span>
+
+  <span class="kt">va_list</span> <span class="n">arg_ptr</span><span class="p">;</span>
+  <span class="n">va_start</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">,</span> <span class="n">fmt</span><span class="p">);</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">vsnprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">PRINTF_BUF_SIZE</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span> <span class="n">arg_ptr</span><span class="p">);</span>
+  <span class="n">va_end</span><span class="p">(</span><span class="n">arg_ptr</span><span class="p">);</span>
+
+  <span class="c1">// output to the serial console through the 'Serial'</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">write</span><span class="p">((</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">,</span> <span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">len</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>このコードはかつて <a href="https://github.com/embedded-kiddie/beauto-rover-arm/blob/main/src/sci.c" title="beauto-rover-arm/src/sci.c at main · embedded-kiddie/beauto-rover-arm">LPC-1343 ボードで実装した sci.c</a> からの移植です。<code class="language-plaintext highlighter-rouge">Serial</code> 専用だけど、僕的にはこれで十分です。</p>
+
+<p>当然ですが、<code class="language-plaintext highlighter-rouge">printf()</code> にステップイン出来ました。読みは正しかった様です <img class="emoji" title=":+1:" alt=":+1:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png" height="20" width="20"></p>
+
+<p><img src="/images/2024/04-14/debug-printf-again.jpg" alt="再びprintf()をデバッグ" title="再びprintf()をデバッグ" width="1379" height="862"></p>
+
+<h4 id="minima-と-wifi-の違い">Minima と WiFi の違い！</h4>
+
+<div class="notice clear-both">
+
+<p><strong>Minima</strong> では、出力関数により低レベルな関数 <code class="language-plaintext highlighter-rouge">Serial.write()</code> を使って OK でしたが、<strong>WiFi</strong> では、連続する <code class="language-plaintext highlighter-rouge">printf()</code> 間で<strong>前後の文字が欠落する</strong>という問題に遭遇したので、<code class="language-plaintext highlighter-rouge">Serial.print()</code> を使わざるを得ず、処理時間もかなり異なります。<a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/serial_speed_test" title="Arduino-UNO-R4/serial_speed_test at main · embedded-kiddie/Arduino-UNO-R4">GitHub</a> にテストスケッチを置いたので、気になる方は試してみてください。</p>
+
+<p>また <strong>WiFi</strong> では、初期化待ちの <code class="language-plaintext highlighter-rouge">while(!Serial);</code> は機能せず、<code class="language-plaintext highlighter-rouge">delay(1000);</code> で待つ必要がありました。どちらも <a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/HardwareSerial.h" title="ArduinoCore-API/api/HardwareSerial.h at master · arduino/ArduinoCore-API"><code class="language-plaintext highlighter-rouge">HardwareSerial</code></a> という抽象クラスを継承していますが、<strong>Minima</strong> は <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/usb/SerialUSB.cpp#L119" title="ArduinoCore-renesas/cores/arduino/usb/SerialUSB.cpp at main · arduino/ArduinoCore-renesas">真偽を評価するオペレータがそれなりに実装されている</a> のに対し、 <strong>WiFi</strong> では <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/cores/arduino/Serial.cpp#L135" title="ArduinoCore-renesas/cores/arduino/Serial.cpp at main · arduino/ArduinoCore-renesas">単に <code class="language-plaintext highlighter-rouge">true</code> を返しているだけ</a> だからです。</p>
+
+<p><strong>Minima</strong> と違い <strong>WiFi</strong> の USB は、ARM との間に ESP32-S3-MINI-1-N8 を挟んでいるので、 このような違いが出るのだと思います。回路上の違いを十分検証せず、安易にプログラムを公開すると危険ということを思い知らされました。</p>
+
+
+</div>
+
+<h3 id="printfの書式と動作確認">printfの書式と動作確認</h3>
+
+<p><code class="language-plaintext highlighter-rouge">printf()</code> や <code class="language-plaintext highlighter-rouge">scanf()</code> で押さえるべき書式文字列のフォーマットは次図の通り、<code class="language-plaintext highlighter-rouge">%</code> に続き、フラグ、最小フィールド幅、精度、長さ修飾子、変換指定子で構成されます。</p>
+
+<p><img src="/images/2024/04-14/printf-format.png" alt="`printf()` や `scanf()` の書式" title="printf() や scanf() の書式" class="simple" width="1377" height="398"></p>
+
+<p>それぞれの厳密な仕様はそれなりのボリュームになり、ここには書ききれませんが、Linux 系や <a href="https://zenn.dev/kumamoto/articles/d536ac6df8a544" title="Macでもmanコマンドの出力を日本語/英語切り替え出来るようにする">Mac であれば</a>、シェルからコマンド <code class="language-plaintext highlighter-rouge">man 3 printf</code> を打てば標準 C ライブラリの書式を調べられますし、簡潔にまとめてくれている次のサイトがオススメです。</p>
+
+<ul>
+  <li><a href="https://qiita.com/keitean/items/7cd52af571d27a1173d0" title="C言語 printfのフォーマット指定子 #C - Qiita">C言語 printfのフォーマット指定子</a></li>
+  <li><a href="https://www.k-cube.co.jp/wakaba/server/format.html" title="若葉プログラミング塾 &gt; 知識の玉手箱 &gt; ワンポイントTips &gt; フォーマット指定子一覧">フォーマット指定子一覧</a></li>
+</ul>
+
+<p>今回は出力を検証するために、前者のサンプルコードを使わせてもらいました。どれも記事の記述通りになりましたし、浮動小数点もそれなりに（厳密に仕様通りか未検証という意味）フォーマットしてくれてます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+
+<span class="cp">#ifdef  ARDUINO_UNOR4_WIFI
+</span>  <span class="c1">// UNO R4 WiFi needs to wait for a while to complete Serial initialization.</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// It requires at least 600 ms.</span>
+<span class="cp">#endif
+</span>
+<span class="cp">#define EPSILON 0.00001
+</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">float</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">EPSILON</span><span class="p">;</span> <span class="n">f</span> <span class="o">+=</span> <span class="mf">0.01</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"f = %5.3f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"e = %5.3e</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="p">...</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.980</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">9.800e-01</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">0.990</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">9.900e-01</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="mf">1.000</span>
+<span class="mi">20</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mf">36.438</span> <span class="o">-&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="mf">1.000e+00</span></code></pre></figure>
+
+<h3 id="エスケープシーケンスのテスト">エスケープシーケンスのテスト</h3>
+<p>ついでに IDE のシリアルモニタ側テストとして、<a href="https://qiita.com/PruneMazui/items/8a023347772620025ad6" title="ANSIエスケープシーケンス チートシート #Bash - Qiita">エスケープシーケンス</a> も試してみました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">printf</span><span class="p">(</span><span class="s">"%s%s"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[2J"</span><span class="p">,</span> <span class="s">"</span><span class="se">\33</span><span class="s">[0;0H"</span><span class="p">);</span> <span class="c1">// 画面クリア＋原点に移動</span></code></pre></figure>
+
+<p><a href="https://teratermproject.github.io/" title="Tera Term Open Source Project">Tera Term</a> 並の動作を期待したのですが、これはダメでした。不可視文字も含めてそのまま出てきちゃいます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="mi">20</span><span class="o">:</span><span class="mi">44</span><span class="o">:</span><span class="mf">40.763</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="mi">2</span><span class="n">J</span> <span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="mi">0</span><span class="n">H</span></code></pre></figure>
+
+<p>VSCode のターミナルなら<a href="https://code.visualstudio.com/docs/terminal/advanced" title="Advanced Terminal Usage in Visual Studio Code">対応している気もします</a>が、僕の Mac が古いためか（Late 2013）、環境構築がうまくいかず未確認です。せめて画面クリアや文字色の変更か反転ぐらいできると助かるんですけどネ <img class="emoji" title=":expressionless:" alt=":expressionless:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f611.png" height="20" width="20"></p>
+
+<h3 id="ライブラリ化">ライブラリ化</h3>
+
+<p>デバッグのたびにコピペするのも面倒なので、ライブラリ化しちゃいました。UNO R4 以外の動作確認ができないので R4 用としています → <a href="https://github.com/embedded-kiddie/Printf/releases" title="Releases · embedded-kiddie/Printf">Releases</a></p>
+
+<p>よかったら使ってやってください。</p>
+
+<ol>
+  <li>
+    <p><a href="https://github.com/embedded-kiddie/Printf/releases" title="Releases · embedded-kiddie/Printf">Release</a> から最新版の <span class="inline"><img src="/images/2024/04-09/download-zip.png" width="40.5" height="27" alt="zip ファイル"></span><code class="language-plaintext highlighter-rouge">Source code (zip)</code> をダウンロードします。</p>
+  </li>
+  <li>
+    <p>Arduino IDE メニューの「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」からダウンロードした .zip ファイルを読み込みます。</p>
+  </li>
+  <li>
+    <p>IDE メニューの「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>カスタムライブラリのスケッチ例</strong>」からサンプル <code class="language-plaintext highlighter-rouge">printf</code> を試せます。</p>
+  </li>
+</ol>
+
+<h2 id="serialprintln-の小技">Serial.println() の小技</h2>
+
+<p>SRAM メモリの少ない時代の Arduino では <a href="https://hackingmajenkoblog.wordpress.com/2016/02/04/the-evils-of-arduino-strings/" title="The Evils of Arduino Strings - Majenko's Hardware Hacking Blog">敬遠された</a> らしい <a href="https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/" title="String() - Arduino Reference"><code class="language-plaintext highlighter-rouge">String</code> クラス</a> ですが、ちょっとしたデバッグには <a href="https://docs.arduino.cc/built-in-examples/strings/StringConstructors/" title="Home / Programming / Built-in Examples / String Object Constructors">数値を文字列に変換</a> したり <a href="https://docs.arduino.cc/built-in-examples/strings/StringAdditionOperator/" title="Home / Programming / Built-in Examples / String Addition Operator">他の文字列との足し算</a> ができるので、<code class="language-plaintext highlighter-rouge">println()</code> との組み合わせがイイ感じです。僕はもっぱらコレですネ。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">float</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1415926</span><span class="p">;</span>
+<span class="kt">uint32_t</span> <span class="n">ul</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">;</span>
+<span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"pi = "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">ul</span><span class="p">)</span> <span class="o">+</span> <span class="s">" = 0x"</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">ul</span><span class="p">,</span> <span class="n">HEX</span><span class="p">));</span></code></pre></figure>
+
+<p><a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/String.cpp" title="ArduinoCore-API/api/String.cpp at master · arduino/ArduinoCore-API">クラス内部</a> で引数（コンストラクタ）に応じて <a href="https://qiita.com/xxpisu/items/2c68722d7f1e38f7a4d0" title="dtostrf関数の使い方 #Arduino - Qiita"><code class="language-plaintext highlighter-rouge">dtostrf()</code></a> や <code class="language-plaintext highlighter-rouge">ultoa()</code> を選り分けているので、処理のオーバーヘッドや <a href="https://ja.wikipedia.org/wiki/%E3%83%92%E3%83%BC%E3%83%97%E9%A0%98%E5%9F%9F" title="ヒープ領域 - Wikipedia">ヒープメモリ</a> へのフットプリントもそれなりと思いますが、小数点以下の桁数指定や基数変換ができたりする多才な奴です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="mo">02</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mf">19.513</span> <span class="o">-&gt;</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1416</span><span class="p">,</span> <span class="mi">1234</span> <span class="o">=</span> <span class="mh">0x4d2</span></code></pre></figure>
+
+<p>Arduino の <a href="https://www.arduino.cc/reference/en/language/variables/data-types/stringobject/" title="String() - Arduino Reference"><code class="language-plaintext highlighter-rouge">String</code> クラス</a> は <a href="https://cpprefjp.github.io/international-standard.html" title="C++国際標準規格 - cpprefjp C++日本語リファレンス">C++ の標準規格</a> に比べてメソッド数が少ないものの、ハードウェアに依存しない <a href="https://github.com/arduino/ArduinoCore-API" title="arduino/ArduinoCore-API: Hardware independent layer of the Arduino cores defining the official API">ArduinoCore-API</a> レイヤに属しているので、どのアーキテクチャのボードでもそれなりに動くハズです。</p>
+
+<h2 id="printfの行方は">printfの行方は？</h2>
+
+<p>さて冒頭の件に戻りますが、以下の２つの疑問が湧いてきます。</p>
+
+<ul>
+  <li>なぜ空の <code class="language-plaintext highlighter-rouge">printf()</code> が定義されているのか</li>
+  <li>どこで定義されているのか</li>
+</ul>
+
+<p>Arduino 新参者で UNO R4 しか持ってない僕には歴史的な経緯はわかりませんが、<a href="https://playground.arduino.cc/Main/Printf/" title="Arduino Playground - Printf">Arduino Playground - Printf</a> の冒頭には「<strong>stdio および（それを出力先とする）printf() は Arduino 環境に組み込まれていません…</strong>」とハッキリ書かれています。</p>
+
+<p>メモリが少なく、また多くのアーキテクチャを抱える Arduino が <code class="language-plaintext highlighter-rouge">printf()</code> ではなく、より単純な <code class="language-plaintext highlighter-rouge">print()</code> と <code class="language-plaintext highlighter-rouge">println()</code> をベースラインにしたことは理解できます。</p>
+
+<p>では「stdio を組み込んでいない」のはなぜか？ 以下は私の勝手な解釈です。</p>
+
+<p>OS が載るシステムでは、システムをオペレートするための標準入出力 I/F として、<code class="language-plaintext highlighter-rouge">stdin</code> や <code class="language-plaintext highlighter-rouge">stdout</code>、<code class="language-plaintext highlighter-rouge">stderr</code> という抽象化された仮想の標準端末を必要とします。</p>
+
+<p>一方デフォルトで OS が載らない Arduino ですが、<a href="https://www.arduino.cc/reference/en/language/functions/communication/serial/" title="Serial - Arduino Reference">Serial</a>、<a href="https://reference.arduino.cc/reference/en/libraries/liquidcrystal/" title="LiquidCrystal - Arduino Reference">LiquidCrystal</a>、<a href="https://www.arduino.cc/reference/en/libraries/ethernet/" title="Ethernet - Arduino Reference">Ethernet</a> や <a href="https://reference.arduino.cc/reference/en/libraries/wifi/wificlient/" title="WiFi - WiFiClient() - Arduino Reference">WiFi</a> といったデバイスクラスは、<a href="https://www.arduino.cc/reference/en/language/functions/communication/stream/" title="Stream - Arduino Reference">Stream クラス</a> から <a href="https://www.arduino.cc/reference/en/language/functions/communication/print/" title="Print - Arduino Reference">Print クラス</a> を継承しているので、これらを元にすれば stdio を <code class="language-plaintext highlighter-rouge">Serial</code> に決めることも可能だったハズです。</p>
+
+<p>それでも stdio を一意に決めていないのは、標準入出力 I/F として物理層に何を載せるか、「決めるのはお前だゾ」と暗に言われているように僕には思えます。生粋の組込系的発想ですかね。</p>
+
+<p>とはいえ、単純に未定義にしないのは親切心か、はたまた余計なお世話か？… 未だに見つからない定義箇所と共に謎は残ります。まぁ、どうでもイイことですが…</p>
+
+<p>以上、中途半ばな謎解きと小技でした <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20"></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/04/12/background-tone-player.html" title="前の記事：Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介">← Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/04/17/how-to-use-toragi-writer.html" title="次の記事：Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足">Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/04/14/printf-for-arduino-uno-r4.html" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/04/14/printf-for-arduino-uno-r4.html";this.page.identifier="/2024/04/14/printf-for-arduino-uno-r4.html"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

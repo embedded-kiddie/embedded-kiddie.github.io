@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ビュートローバーARMでベアメタルからのライントレース - ハーフスクラッチ開発の勧め | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ビュートローバーARMでベアメタルからのライントレース - ハーフスクラッチ開発の勧め" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="何かメカ的に動くものが作りたくて ビュートローバーARM というのを購入しました。" />
+<meta property="og:description" content="何かメカ的に動くものが作りたくて ビュートローバーARM というのを購入しました。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev.html" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev.html" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-03-12T07:25:54+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ビュートローバーARMでベアメタルからのライントレース - ハーフスクラッチ開発の勧め" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-09-27T11:28:23+09:00","datePublished":"2024-03-12T07:25:54+09:00","description":"何かメカ的に動くものが作りたくて ビュートローバーARM というのを購入しました。","headline":"ビュートローバーARMでベアメタルからのライントレース - ハーフスクラッチ開発の勧め","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev.html"},"url":"https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ビュートローバーARMでベアメタルからのライントレース - ハーフスクラッチ開発の勧め</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-03-12T07:25:54+09:00" itemprop="datePublished">Mar 12, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>何かメカ的に動くものが作りたくて <a href="https://www.vstone.co.jp/products/beauto_rover/" title="Beauto Rover H8/ARM ビュートローバー - ヴイストン株式会社">ビュートローバーARM</a> というのを購入しました。</p>
+
+<p>恥ずかしながらデモ走行の動画です。制御性はイマイチですが、<a href="https://www.youtube.com/watch?v=liuNBOXGJxg" title="T-SQUARE 『Truth』 × 360 Reality Audio - スペシャルビデオ - YouTube">T-SQUARE の TRUTH</a> を奏でながら走行するローバーを見ながら F1 監督の気分を味わっています。</p>
+
+<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="ja" dir="ltr">ビュートローバーARMのライントレース・ソフトウェア - ハーフスクラッチ開発の勧め<a href="https://t.co/q0I5bCi0YE">https://t.co/q0I5bCi0YE</a> <a href="https://t.co/YdKTqa6xzn">pic.twitter.com/YdKTqa6xzn</a></p>&mdash; Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1767330699332530660?ref_src=twsrc%5Etfw">March 11, 2024</a></blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>画面左上で「ピッ」と鳴ってるのは Arduino Uno で作ったラップタイマーです。<a href="https://amzn.asia/d/czTh7l0" title="Amazon.co.jp: OSOYOO Arduino用 Raspberry Pi 5 対応 IR赤外線障害物回避 センサモジュール アルドゥイーノ スマート カー ロボット用 10PCSセット : 産業・研究開発用品">fc-51 赤外線モジュール</a> と <a href="https://amzn.asia/d/gyudCEt" title="Amazon.co.jp: DiyStudio 2 個 0.96 OLED i2c インチ有機モジュール IIC/I2Cインターフェース LCD SSD1306ドライバー 128X64解像度ホワイトディスプレイ，適用インターフェース VCC, GND, SCL, SDA : パソコン・周辺機器">SSD1306 OLED</a> のサンプルスケッチをコピペして <a href="https://www.arduino.cc/reference/en/language/functions/time/millis/" title="millis() - Arduino Reference"><code class="language-plaintext highlighter-rouge">millis()</code></a> を呼び出せば、タイマーの基本部分はアッという間に出来てしまいます。様々なモジュールとサンプルプログラムを組み合わせオリジナル作品を創るのが、この手の醍醐味ですね。</p>
+
+<p>今日日、ライントレースは小学生でもプログラムするので、偉そうなことは言えませんが、Arduino とかは CPU のアーキテクチャとかレジスタとか知らなくてもガンガンプログラムできちゃうし、AI を適切な指示をすれば回路とかプログラムが手に入ります。</p>
+
+<p>でも、やっぱり 部品や CPU のデータシートとかユーザーマニュアルとかと格闘しながらのモノづくりは楽しい！ ロボコンにハマる人の気持ちが分かります。</p>
+
+<p>その楽しさを共有したく、<a href="https://github.com/embedded-kiddie/beauto-rover-arm" title="embedded-kiddie/beauto-rover-arm: ビュートローバーのソフトウェア">Githubに上げたソフト</a> の紹介文と一部Cソースコードの概要を <a href="https://chat.openai.com/" title="ChatGPT">ChatGPT</a> にマークダウンで書くよう指示したら、次のようになりました。
+<br /></p>
+
+<hr />
+<p><br /></p>
+
+<h2 id="beauto-rover-arm---電子工作の新たな冒険への扉">Beauto Rover ARM - 電子工作の新たな冒険への扉</h2>
+
+<p><strong>Beauto Rover ARM</strong>は、Vstone社製のハーフスクラッチ開発を奨励するライントレース用ソフトウェアです。このソフトウェアは、VstoneのビュートローバーARMに同梱されている<code class="language-plaintext highlighter-rouge">vs-wrc103.c</code>ライブラリを使わず、LPC1343のCPU依存部分を活用して、電子工作と組み込みプログラミングの楽しさを提供します。</p>
+
+<h3 id="魅力的な特徴">魅力的な特徴</h3>
+
+<ul>
+  <li>
+    <p><strong>ハーフスクラッチ開発の勧め</strong>: ビュートローバーARMはセンサ入力やモーター制御をサポートする素材で、C言語初学者やロボット愛好者に最適です。しかし、このソフトウェアはさらに一歩進んで、A/D変換やPWM、割り込み、タイマー、スリープモードなどCPUの機能を学ぶ絶好の機会を提供します。</p>
+  </li>
+  <li>
+    <p><strong>広範な電子工作の知識獲得</strong>: ビュートローバーARMを用いたハードウェアの実験を通じて、PWMの活用や赤外線センサの特性など、電子工作に関する知識が深まります。デバッグも<code class="language-plaintext highlighter-rouge">printf</code>を使用して可能になっており、学習効果を最大化します。</p>
+  </li>
+  <li>
+    <p><strong>独自の開発環境</strong>: コードベースの開発において、モジュールの抽象化やアプリケーション構築の容易さを重視しています。ユーザーはハーフスクラッチ開発を通じて、自身の目的や目標に合わせた開発が可能です。</p>
+  </li>
+</ul>
+
+<h3 id="学習へのサポート">学習へのサポート</h3>
+
+<ul>
+  <li><strong>ユーザーフレンドリーなWikiページ</strong>: <a href="https://github.com/embedded-kiddie/beauto-rover-arm/wiki">Wikiページ</a>では、開発環境の準備から<code class="language-plaintext highlighter-rouge">printf()</code>デバッグのステップまでを詳細に解説。初学者から上級者まで、誰でも手軽に活用できます。</li>
+</ul>
+
+<p><strong>Beauto Rover ARM</strong>は、電子工作の新たな冒険への扉を開き、組み込みプログラミングの面白さを発見するための理想的なツールです。興味を持った方は、ぜひ詳細をチェックしてみてください！</p>
+
+<h1 id="clkc-ソースコード概要">clk.c ソースコード概要</h1>
+
+<p><code class="language-plaintext highlighter-rouge">clk.c</code> ソースコードは、マイクロコントローラ上でのクロック構成に関連する機能を実装しています。以下はコードでカバーされている主な機能の要約です：</p>
+
+<ol>
+  <li>
+    <p><strong>クロックの初期化</strong>: <code class="language-plaintext highlighter-rouge">clkInit()</code> 関数はマイクロコントローラのクロックシステムを初期化し、主システムクロック周波数、ペリフェラルクロック周波数、およびその他の関連パラメータを設定します。</p>
+  </li>
+  <li>
+    <p><strong>クロックソースの選択</strong>: マイクロコントローラのアーキテクチャと機能に応じて、クロックソース（内部発振子、外部クリスタルなど）を選択し、クロック分周器を設定するための関数やマクロが含まれる場合があります。</p>
+  </li>
+  <li>
+    <p><strong>ペリフェラルクロックの構成</strong>: コードには個々のペリフェラルクロックを設定するための関数が含まれる場合があり、電力管理や機能要件に応じてそれらを有効または無効にすることができます。</p>
+  </li>
+  <li>
+    <p><strong>クロックの監視と制御</strong>: 一部の場合、実行時にクロック周波数やソースを監視および制御する機能が含まれる場合があります。これにより、ダイナミックなクロック調整が可能になります。</p>
+  </li>
+  <li>
+    <p><strong>エラー処理</strong>: クロックの初期化や構成が失敗した場合を扱うためのエラーチェックメカニズムが含まれる場合があり、診断目的のためにエラーコードやステータスインジケータが提供されます。</p>
+  </li>
+</ol>
+
+<p>全体として、<code class="language-plaintext highlighter-rouge">clk.c</code> ソースコードは、マイクロコントローラ上のクロックシステムのセットアップと管理を容易にし、さまざまなシステムコンポーネントやペリフェラルの正確なタイミングと同期を確保します。</p>
+
+<hr />
+<p><br />
+う〜ん、言いたいことが伝わるかどうか微妙、「新たな冒険への扉」とか「魅力的な特徴」とか赤面モノだし、修正が必要な箇所も多いけど、プロンプトの工夫次第で楽できるカモと思った次第です。</p>
+
+<p>もちろん、ただ楽をするための技術ではなく、より生産性を上げ高い付加価値を生むための技術なのですが、一方で、ARM のユーザーマニュアルとかを読み解いていると、「よく、こんな複雑なレジスタ体系を考えたものだなぁ」と、作った人達の能力のすごさに感心します。</p>
+
+<p>そういう人達の能力を学習した <a href="https://gigazine.net/news/20230704-ai-design-risc-v-cpu/" title="AIを使用してRISC-V CPUを人間のチームより約1000倍速く設計することに中国の研究チームが成功 - GIGAZINE">AI による CPU 設計</a> も実用化は時間の問題なのでしょうが、凡人の僕としては、すごい人達のことを考えながらのハーフスクラッチ開発をお勧めする次第です。</p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/03/13/micon-board-comparison.html" title="次の記事：ビュートローバーARMとArduino Uno R4のマイコン比較">ビュートローバーARMとArduino Uno R4のマイコン比較 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev.html"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2024/03/12/half-scrach-dev.html" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/03/12/half-scrach-dev.html";this.page.identifier="/2024/03/12/half-scrach-dev.html"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。" />
+<meta property="og:description" content="先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/07/01/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/07/01/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-07-01T12:45:27+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-07-02T06:28:09+09:00","datePublished":"2024-07-01T12:45:27+09:00","description":"先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。","headline":"RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/07/01/"},"url":"https://embedded-kiddie.github.io/2024/07/01/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-07-01T12:45:27+09:00" itemprop="datePublished">Jul 1, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>先日、UNO R4 WiFi のファームウェア更新をしたところ、Arduino IDE と通信ができなくなり、思わず「自治体の小型家電回収ボックス行きか !?」と青くなりましたが、気を取り直し、色々と調べたことを共有したいと思います。</p>
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>Arduino ボードの WiFi ファームウェアのアップデートに関するドキュメントは、以下の３つがありますが、UNO R4 WiFi 向けは後の２つです。</p>
+
+<ol>
+  <li>
+<a href="https://docs.arduino.cc/software/ide-v2/tutorials/ide-v2-fw-cert-uploader/" title="Software tools - Adruino Docs">Updating Firmware version and Uploading Certificates</a> （最終更新：2024/01/17）</li>
+  <li>
+<a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/esp32-upload/" title="UNO R4 WiFi Custom Firmware Upload to ESP32 (Advanced)">UNO R4 WiFi Custom Firmware Upload to ESP32 (Advanced)</a> （最終更新：2023/11/14）</li>
+  <li>
+<a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi" title="Update the connectivity module firmware on UNO R4 WiFi – Arduino Help Center">Update the connectivity module firmware on UNO R4 WiFi</a> （最終更新：2024/04/11）</li>
+</ol>
+
+<p>本項では最新の「3.」を元に、以下の項目について調査結果を報告します。</p>
+
+<h3 id="目次">目次</h3>
+
+<ul>
+  <li><a href="#wifi-%E3%83%95%E3%82%A1%E3%83%BC%E3%83%A0%E3%82%A6%E3%82%A7%E3%82%A2%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95">WiFi ファームウェアバージョンの確認方法</a></li>
+  <li><a href="#%E5%A4%B1%E6%95%97%E3%81%97%E3%81%AA%E3%81%84-wifi-%E3%83%95%E3%82%A1%E3%83%BC%E3%83%A0%E3%82%A6%E3%82%A7%E3%82%A2%E3%81%AE%E6%9B%B4%E6%96%B0%E6%96%B9%E6%B3%95">失敗しない WiFi ファームウェアの更新方法</a></li>
+  <li><a href="#%E6%9B%B4%E6%96%B0%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%97%E3%81%9F%E6%99%82%E3%81%AE%E3%83%AA%E3%82%AB%E3%83%90%E3%83%AA%E6%96%B9%E6%B3%95">更新に失敗した時のリカバリ方法</a></li>
+  <li><a href="#uno-r4-wifi-%E3%81%8C%E6%8A%B1%E3%81%88%E3%82%8B%E4%BA%8B%E6%83%85">UNO R4 WiFi が抱える事情</a></li>
+</ul>
+
+<h2 id="wifi-ファームウェアバージョンの確認方法">WiFi ファームウェアバージョンの確認方法</h2>
+
+<p>次のコードで確認することができます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;WiFiS3.h&gt;</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// UNO R4 WiFi は、Serial 初期化完了まで少なくとも 600 ms 必要</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Latest: "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">WIFI_FIRMWARE_LATEST_VERSION</span><span class="p">));</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Yours : "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">WiFi</span><span class="p">.</span><span class="n">firmwareVersion</span><span class="p">()));</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>本稿執筆時点の Arduino IDE バージョンは 2.3.2 では、次のように表示されるハズです。ちなみに <a href="https://github.com/arduino/uno-r4-wifi-usb-bridge/releases/tag/0.4.1" title="Release Release 0.4.1 · arduino/uno-r4-wifi-usb-bridge">0.4.1 は 2024年2月16日の更新</a> です。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Latest: 0.4.1
+Yours : 0.4.1</code></pre></figure>
+
+<h2 id="失敗しない-wifi-ファームウェアの更新方法">失敗しない WiFi ファームウェアの更新方法</h2>
+
+<p><a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi" title="Update the connectivity module firmware on UNO R4 WiFi – Arduino Help Center">Update the connectivity module firmware on UNO R4 WiFi</a> には、ファームウェアの更新方法として以下の４つが挙げられています。</p>
+
+<ul>
+  <li>Arduino IDE の Firmware Updater による更新</li>
+  <li>
+<a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> から OTA（Over The Air）による更新</li>
+  <li>アップデート用スクリプトによる更新</li>
+  <li>espflash による更新</li>
+</ul>
+
+<p>既に Arduino Cloud を利用していれば最新版に更新されているハズなので、ここでは最もベーシックな <strong>Firmware Updater</strong> による更新を、注意事項と共に解説します。</p>
+
+<h3 id="firmware-updater">Firmware Updater</h3>
+
+<p>「なんだ、実行するだけだろ」と思ったせっかちなアナタ、チョット待ってください。UNO R4 WiFi には他のボードには無い事情があり、ちゃんと以下のステップに従わないと、僕のように慌てふためくことになります。</p>
+
+<h4 id="1-bareminimum-スケッチをアップロードする">1. BareMinimum スケッチをアップロードする</h4>
+
+<p>IDE のメニューから「<strong>ファイル</strong> → <strong>スケッチ例</strong> → <strong>01.Basics</strong> → <strong>BareMinimum</strong>」を開き、コンパイルした後、書き込みます。</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-01/01-BareMinimum.jpg" title="BareMinimum" data-lightbox="image">
+    <img src="/images/2024/07-01/01-BareMinimum-small.jpg" alt="BareMinimum" width="459" height="297">
+    <figcaption>BareMinimum</figcaption>
+  </a>
+  <a href="/images/2024/07-01/02-CompileUpload.jpg" title="BareMinimum" data-lightbox="image">
+    <img src="/images/2024/07-01/02-CompileUpload-small.jpg" alt="BareMinimum" width="474" height="296">
+    <figcaption>コンパイルと書き込み</figcaption>
+  </a>
+</figure>
+
+<p>新規スケッチを開いても良いでしょう。とにかく何もしない空のスケッチが必要です。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="p">}</span></code></pre></figure>
+
+<h4 id="2-ide-とボード間の-usb-接続を完全に断ち切る">2. IDE とボード間の USB 接続を完全に断ち切る</h4>
+
+<figure class="float-left">
+  <a href="/images/2024/07-01/03-Unconnected.jpg" title="「出力」を閉じ、[未接続] を確認" data-lightbox="image">
+    <img src="/images/2024/07-01/03-Unconnected-small.jpg" alt="「出力」を閉じ、[未接続] を確認" width="459" height="287">
+    <figcaption>「出力」を閉じ、[未接続] を確認</figcaption>
+  </a>
+</figure>
+
+<p>一旦ボードから USB ケーブルを完全に抜き、電源を OFF した後、IDE も終了させます。再び IDE を開き、シリアルモニタが閉じていること確認しましす。また複数の IDE が立ち上がっている場合も１つだけ残して他は全て閉じます。</p>
+
+<p>さらに最下端のステータスバーで「<strong>出力</strong>」コンソールを閉じ、ステータスが <strong>[未接続]</strong> となっていることを確認します。</p>
+
+<h4 id="3-firmware-updater-を実行する">3. Firmware Updater を実行する</h4>
+
+<p>IDE のメニュから「<strong>ツール</strong> → <strong>Firmware Updater</strong>」を選択します。続いて USB ケーブルを挿し電源を入れると「<strong>ボードを選択</strong>」が選べるようになります。UNO R4 WiFi を選択したら <strong>アップデートを確認</strong> を押し、<strong>ファームウェアのバージョンを選択</strong>します。この時、ダウングレードも可能です。</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-01/04-FirmwareUpdate.jpg" title="Firmware Updater を起動" data-lightbox="image">
+    <img src="/images/2024/07-01/04-FirmwareUpdate-small.jpg" alt="Firmware Updater を起動" width="459" height="287">
+    <figcaption>Firmware Updater を起動</figcaption>
+  </a>
+  <a href="/images/2024/07-01/05-SelectBoard.jpg" title="ボードを選択" data-lightbox="image">
+    <img src="/images/2024/07-01/05-SelectBoard-small.jpg" alt="ボードを選択" width="459" height="287">
+    <figcaption>ボードを選択</figcaption>
+  </a>
+  <a href="/images/2024/07-01/06-SelectVersion.jpg" title="ファームウェアのバージョンを選択" data-lightbox="image">
+    <img src="/images/2024/07-01/06-SelectVersion-small.jpg" alt="ファームウェアのバージョンを選択" width="459" height="287">
+    <figcaption>ファームウェアのバージョンを選択</figcaption>
+  </a>
+</figure>
+
+<h4 id="4-インストールを実行">4. インストールを実行</h4>
+
+<p><strong>インストール</strong> を開始すると、約１分弱で完了します。</p>
+
+<p>運悪く（＝ボードと IDE 間の USB 接続を完全に断ち切れなかった）インストールに失敗したら、次の <a href="#%E6%9B%B4%E6%96%B0%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%97%E3%81%9F%E6%99%82%E3%81%AE%E3%83%AA%E3%82%AB%E3%83%90%E3%83%AA%E6%96%B9%E6%B3%95">更新に失敗した時のリカバリ方法</a> からの再インストールが必要です。</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-01/07-Installing.jpg" title="インストール開始" data-lightbox="image">
+    <img src="/images/2024/07-01/07-Installing-small.jpg" alt="インストール開始" width="459" height="287">
+    <figcaption>インストール開始</figcaption>
+  </a>
+  <a href="/images/2024/07-01/08-InstallSuccess.jpg" title="インストール成功" data-lightbox="image">
+    <img src="/images/2024/07-01/08-InstallSuccess-small.jpg" alt="インストール成功" width="459" height="287">
+    <figcaption>インストール成功</figcaption>
+  </a>
+  <a href="/images/2024/07-01/09-InstallFail.jpg" title="インストール失敗" data-lightbox="image">
+    <img src="/images/2024/07-01/09-InstallFail-small.jpg" alt="インストール失敗" width="459" height="287">
+    <figcaption>インストール失敗</figcaption>
+  </a>
+</figure>
+
+<h4 id="5-usb-ケーブルを差し直す">5. USB ケーブルを差し直す</h4>
+
+<p>インストール後は「ESP ダウンロードモード」という、IDE と RA4M1 が USB 接続できないモードのままなので、USB ケーブルを抜き、再び差し込んで電源を入れ直す必要があります。</p>
+
+<p>またインストール失敗時は、何をやっても IDE と RA4M1 は繋がらない状態になります。<strong>リセットボタンのダブルクリックも効かず、LED の点滅を繰り返すだけの状態</strong> に陥ります。この場合も念のため USB ケーブルの抜き差しはしておきましょう。</p>
+
+<figure style="text-align:center">
+  <img src="/images/2024/07-01/no-device-found.png" title="No device found on cu.usbmodem... Failed uploading: uploading error: exit status 1" alt="No device found on cu.usbmodem... Failed uploading: uploading error: exit status 1" width="2137" height="466">
+  <figcaption style="max-width:100%">No device found on cu.usbmodem... Failed uploading: uploading error: exit status 1</figcaption>
+</figure>
+
+<h2 id="更新に失敗した時のリカバリ方法">更新に失敗した時のリカバリ方法</h2>
+
+<p><a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi" title="Update the connectivity module firmware on UNO R4 WiFi – Arduino Help Center">Update the connectivity module firmware on UNO R4 WiFi</a> には <a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi#use-the-updater-script" title="Update the connectivity module firmware on UNO R4 WiFi – Arduino Help Center">アップデート用スクリプト</a> と <a href="https://support.arduino.cc/hc/en-us/articles/9670986058780-Update-the-connectivity-module-firmware-on-UNO-R4-WiFi#run-espflash-directly" title="Update the connectivity module firmware on UNO R4 WiFi – Arduino Help Center">espflash</a> の直接実行の２通りが示されています。<a href="https://github.com/arduino/uno-r4-wifi-usb-bridge/tree/main/unor4wifi-updater#troubleshooting" title="uno-r4-wifi-usb-bridge/unor4wifi-updater at main · arduino/uno-r4-wifi-usb-bridge">前者が失敗した時の最後の砦として後者が紹介されている</a> ので、ここでは後者でリカバリを試みることにします。</p>
+
+<h3 id="espflash-の直接実行">espflash の直接実行</h3>
+
+<h4 id="1-pc-の下準備">1. PC の下準備</h4>
+
+<ul>
+  <li>
+<strong>IDE が立ち上がっていると更新に失敗する</strong> ので、終了させておきます。</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">espflash</code> の起動時に USB デバイス名の選択を間違えないよう、できるだけ PC から USB デバイスを抜いておきます。</li>
+  <li>GitHub から OS 毎の <a href="https://github.com/arduino/uno-r4-wifi-usb-bridge/releases/tag/0.4.1">最新版アップデート用スクリプト</a> をダウンロード＆解凍します。</li>
+</ul>
+<figure style="text-align:center">
+  <span>
+    <img src="/images/2024/07-01/downloaded-updater.png" alt="" width="1110" height="453">
+    <figcaption style="max-width:100%">ダウンロード＆解凍されたアップデート用スクリプト（MacOS の場合）</figcaption>
+  </span>
+</figure>
+
+<h4 id="2-esp-ダウンロードモードの設定">2. ESP ダウンロードモードの設定</h4>
+
+<p>次の写真にある通り、ESP ヘッダ端子の４番ピン（ESP Download）と６番ピン（GND）を、<a href="https://akizukidenshi.com/catalog/g/g103687/" title="ジャンパーピン黒(2.54mmピッチ): ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">ジャンパーピン</a> か <a href="https://akizukidenshi.com/catalog/g/g103475/" title="ブレッドボード・ジャンパー延長ワイヤ(メス-メス) 15cm黒: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">メス−メスのジャンパーワイヤ</a> でショートさせます。</p>
+
+<p><img src="/images/2024/07-01/esp32-data-pins.png" alt="ESP ヘッダピンのショート" title="ESP ヘッダーピンのショート" width="830" height="430"></p>
+
+<h4 id="3-ボードと-pc-の接続">3. ボードと PC の接続</h4>
+
+<p>UNO R4 WiFi を PC と USB ケーブルで接続し、ボードに電源を供給します。</p>
+
+<h4 id="4-ターミナルまたはシェルの起動">4. ターミナル（またはシェル）の起動</h4>
+
+<p>解凍したアップデート用スクリプトのフォルダで、ターミナルソフト（またはシェル）を起動します。</p>
+
+<ul>
+  <li>Windows の場合<br>
+フォルダの余白で 「<code class="language-plaintext highlighter-rouge">Shift</code> キー」＋「<strong>右クリック</strong> → <strong>PowerShellウィンドウをここで開く</strong>」</li>
+  <li>MacOS の場合<br>
+フォルダを「<strong>右クリック</strong> → <strong>サービス</strong> → <strong>フォルダに新規ターミナル</strong>」</li>
+  <li>ご参考<br>
+<a href="https://aadojo.alterbooth.com/entry/2023/01/17/110000" title="特定のディレクトリでターミナルをかんたんに開く方法！【Win / Mac どちらも紹介！】 - Alternative Architecture DOJO">特定のディレクトリでターミナルをかんたんに開く方法！【Win / Mac どちらも紹介！】</a>
+</li>
+</ul>
+
+<h4 id="5-espflash-の起動">5. espflash の起動</h4>
+
+<p>ターミナル（またはシェル）から次のコマンドで <code class="language-plaintext highlighter-rouge">espflash</code> を起動します。</p>
+
+<ul>
+  <li>Windows</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">bin\espflash</span><span class="w"> </span><span class="nx">write-bin</span><span class="w"> </span><span class="nt">-b</span><span class="w"> </span><span class="nx">115200</span><span class="w"> </span><span class="nx">0x0</span><span class="w"> </span><span class="p">(</span><span class="n">Get-Item</span><span class="w"> </span><span class="o">.</span><span class="nx">\firmware\UNOR4-WIFI-S3-</span><span class="o">*.</span><span class="nf">bin</span><span class="p">)</span><span class="o">.</span><span class="nf">FullName</span></code></pre></figure>
+
+<ul>
+  <li>MacOS / Linux</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./bin/espflash write-bin <span class="nt">-b</span> 115200 0x0 firmware/UNOR4-WIFI-S3-<span class="k">*</span>.bin</code></pre></figure>
+
+<p>おそらく Windows、MacOS とも下のような警告が出るでしょう。</p>
+
+<figure class="flex">
+  <a href="/images/2024/07-01/security-windows.png" title="セキュリティ警告（Windows）" data-lightbox="image">
+    <img src="/images/2024/07-01/security-windows.png" alt="セキュリティ警告（Windows）" width="427" height="400">
+    <figcaption>セキュリティ警告（Windows）</figcaption>
+  </a>
+  <a href="/images/2024/07-01/security-macos.png" title="セキュリティ警告（MacOS）" data-lightbox="image">
+    <img src="/images/2024/07-01/security-macos.png" alt="セキュリティ警告（MacOS）" width="376" height="399">
+    <figcaption>セキュリティ警告（MacOS）</figcaption>
+  </a>
+</figure>
+
+<p>Windows の場合は「<strong>詳細情報</strong>」を開き「<strong>実行</strong>」を押します。MacOS の場合は、次のコマンドを実行し、再び <code class="language-plaintext highlighter-rouge">espflash</code> を起動します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">chmod </span>a+x update.command <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>xattr <span class="nt">-d</span> com.apple.quarantine bin/espflash <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>xattr <span class="nt">-d</span> com.apple.quarantine bin/unor4wifi-reboot-macos</code></pre></figure>
+
+<h4 id="6-usb-ドライバの選択">6. USB ドライバの選択</h4>
+
+<p><code class="language-plaintext highlighter-rouge">espflash</code> からは、下のようなメッセージと共に USB ドライバを選択するよう促されるので、矢印キーで「❯」を上下させ、正しいドライバ名（<code class="language-plaintext highlighter-rouge">/dev/cu.usbmodem...</code>）を選択します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>2024-06-25T09:18:07Z INFO <span class="o">]</span> 🚀 A new version of espflash is available: v3.1.0
+<span class="o">[</span>2024-06-25T09:18:07Z INFO <span class="o">]</span> Detected 2 serial ports
+<span class="o">[</span>2024-06-25T09:18:07Z INFO <span class="o">]</span> Ports which match a known common dev board are highlighted
+<span class="o">[</span>2024-06-25T09:18:07Z INFO <span class="o">]</span> Please <span class="k">select </span>a port
+❯ /dev/cu.usbmodemDC5475EAF4182 - UNO WiFi R4 CMSIS_DAP
+  /dev/tty.usbmodemDC5475EAF4182 - UNO WiFi R4 CMSIS_DAP</code></pre></figure>
+
+<p>その後、書き込みが始まり、次のようになれば終了です。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>2024-06-25T08:38:17Z INFO <span class="o">]</span> Serial port: <span class="s1">'/dev/cu.usbmodem14201'</span>
+<span class="o">[</span>2024-06-25T08:38:17Z INFO <span class="o">]</span> Connecting...
+<span class="o">[</span>2024-06-25T08:38:17Z INFO <span class="o">]</span> Using flash stub
+Chip <span class="nb">type</span>:         esp32s3 <span class="o">(</span>revision v0.2<span class="o">)</span>
+Crystal frequency: 40MHz
+Flash size:        8MB
+Features:          WiFi, BLE
+MAC address:       xx:xx:xx:xx:xx:xx
+<span class="o">[</span>00:00:15] <span class="o">[========================================]</span>     877/877     0x0</code></pre></figure>
+
+<p>また以下のようなエラーが出ることがあります。 IDE が立ち上がっていないか、または正しい USB デバイス名を確認し、再度 <code class="language-plaintext highlighter-rouge">espflash</code> を起動します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Error: espflash::timeout
+
+  × Error <span class="k">while </span>connecting to device
+  ╰─▶ Timeout <span class="k">while </span>running FlashDeflateData <span class="nb">command</span></code></pre></figure>
+
+<h2 id="uno-r4-wifi-が抱える事情">UNO R4 WiFi が抱える事情</h2>
+
+<p>今回、失敗する理由と確実に成功させる手順を見出すにために下記を読み漁った結果、RA4M1 と ESP32-S3 が互いに影響を及ぼし合う関係が見えてきました。本記事には僕の「推測」も入っていますが、単なる「憶測」ではなく、これらに書かれた記述を読み解いてみた結果です。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/arduino/arduino-ide/issues/2060" title="Firmware update fails if Serial Monitor/Plotter is open · Issue #2060 · arduino/arduino-ide">Firmware update fails if Serial Monitor/Plotter is open #2060</a> (2023年5月)</li>
+  <li>
+<a href="https://github.com/arduino/arduino-ide/issues/2220" title="Display output from Arduino Firmware Uploader · Issue #2220 · arduino/arduino-ide">Display output from Arduino Firmware Uploader #2220</a> (2023年7月)</li>
+  <li>
+<a href="https://forum.arduino.cc/t/arduino-uno-r4-wifi-firmware-updater/1167083" title="Arduino UNO R4 WIFI firmware updater - UNO R4 WiFi - Arduino Forum">Arduino UNO R4 WIFI firmware updater</a> (2023年9月)</li>
+  <li>
+<a href="https://forum.arduino.cc/t/i-cant-update-the-firmware-on-my-arduino-uno-r4-wifi/1180604" title="I can't update the firmware on my Arduino Uno R4 WiFi - UNO R4 WiFi - Arduino Forum">I can’t update the firmware on my Arduino Uno R4 WiFi</a> (2023年10月)</li>
+  <li>
+<a href="https://forum.arduino.cc/t/please-upgrade-the-firmware/1187822" title="Please upgrade the firmware - UNO R4 WiFi - Arduino Forum">Please upgrade the firmware</a> (2023年11月)</li>
+  <li>
+<a href="https://forum.arduino.cc/t/arduino-uno-r4-wifi-firmware-update-fail/1198103" title="Arduino UNO R4 WIFI firmware update fail - UNO R4 WiFi - Arduino Forum">Arduino UNO R4 WIFI firmware update fail</a> (2023年12月)</li>
+  <li>
+<a href="https://forum.arduino.cc/t/uno-r4-wifi-weak-signal-no-way-to-set-tx-power-on-esp32-s3/1239925" title="Uno R4 Wifi weak signal; no way to set TX power on ESP32-S3 - UNO R4 WiFi - Arduino Forum">Uno R4 Wifi weak signal; no way to set TX power on ESP32-S3</a> (2024年3月)</li>
+  <li>
+<a href="https://forum.arduino.cc/t/error-when-updating-the-connectivity-module-firmware-on-uno-r4-wifi/1274533" title="Error when updating the connectivity module firmware on UNO R4 WiFi - UNO R4 WiFi - Arduino Forum">Error when updating the connectivity module firmware on UNO R4 WiFi</a> (2024年6月)</li>
+</ul>
+
+<p>読み間違えがあれば、ご指摘いただければと思います</p>
+
+<h3 id="ra4m1-が-esp32-s3-に及ぼす影響">RA4M1 が ESP32-S3 に及ぼす影響</h3>
+
+<p>まずは UNO R4 WiFi の回路図による事実確認です。次の図は、<a href="https://www.onsemi.jp/products/interfaces/analog-switches/NLASB3157" title="NLASB3157">NLASB3157</a> というアナログスイッチ IC 周りの回路図です。USB の作動信号ライン（<code class="language-plaintext highlighter-rouge">USB_D_P</code>、<code class="language-plaintext highlighter-rouge">USB_D_N</code>）が、RA4M1 の <code class="language-plaintext highlighter-rouge">P408</code> または <code class="language-plaintext highlighter-rouge">SJ1</code>（基板裏面の <code class="language-plaintext highlighter-rouge">RAM4M1 USB</code> 半田ブリッジジャンパ）によって切り替え可能になっている事が分かります。</p>
+
+<figure style="text-align:center">
+  <img class="simple" src="/images/2024/07-01/AnalogSwitch.png" alt="NLASB3157 アナログスイッチによる USB の切り替え" width="1900" height="700">
+  <figcaption style="max-width:100%">NLASB3157 アナログスイッチによる USB の切り替え</figcaption>
+</figure>
+
+<p><strong>Firmware Updater</strong> 実行時、ファームウェアデータを IDE から ESP32-S3 に流しているときは <code class="language-plaintext highlighter-rouge">P408</code> は <code class="language-plaintext highlighter-rouge">LOW</code> のハズです。しかし、RA4M1 も USB に接続しようと <code class="language-plaintext highlighter-rouge">P408</code> を <code class="language-plaintext highlighter-rouge">HIGH</code> に切り替えるような事があると、送出中のファームウェアデータが途切れることになります。</p>
+
+<p>RA4M1 の USB 通信周りのソースコードを読み切れていないので推測になりますが、これが「<a href="#2-ide-%E3%81%A8%E3%83%9C%E3%83%BC%E3%83%89%E9%96%93%E3%81%AE-usb-%E6%8E%A5%E7%B6%9A%E3%82%92%E5%AE%8C%E5%85%A8%E3%81%AB%E6%96%AD%E3%81%A1%E5%88%87%E3%82%8B">2. IDE とボード間の USB 接続を完全に断ち切る</a>」という手順が必要な理由だと思います。</p>
+
+<p>この問題は、UNO R4 WiFi が日本に出回る（2023年10月）以前から <a href="https://github.com/arduino/arduino-ide/issues/2060" title="Firmware update fails if Serial Monitor/Plotter is open · Issue #2060 · arduino/arduino-ide">IDE 開発の公式 GitHub で issue に上がっていましたが</a>、<a href="https://github.com/arduino/arduino-ide/issues/2220" title="Display output from Arduino Firmware Uploader · Issue #2220 · arduino/arduino-ide">アプリケーションによる USB 通信の問題</a> もあり、IDE だけではどうにもならない問題と思われます。</p>
+
+<h3 id="esp32-s3-が-ra4m1-に及ぼす影響">ESP32-S3 が RA4M1 に及ぼす影響</h3>
+
+<p>一方、ESP32-S3 と RA4M1 との間には <a href="https://www.ti.com/product/ja-jp/TXB0108/part-details/TXB0108DQSR">TXB0108DQSR</a> という UART のレベル変換を行う IC があり、ESP32-S3 側から RA4M1 をリセットすることが可能になっています。恐らく RA4M1 にプログラムを書き込む際、「<strong>IDE</strong> → <strong>アナログスイッチ IC</strong> → <strong>ESP32-S3 (USB)</strong> → <strong>レベル変換 IC</strong> → <strong>RA4M1 (UART)</strong>」という経路を辿り<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>、その後リセットをかけるための仕掛けでしょう。</p>
+
+<figure style="text-align:center">
+  <img class="simple" src="/images/2024/07-01/LevelTranslator.jpg" alt="TXB0108DQSR による UART のレベル変換" width="1900" height="730">
+  <figcaption style="max-width:100%">TXB0108DQSR による UART のレベル変換</figcaption>
+</figure>
+
+<p>「<a href="#5-usb-%E3%82%B1%E3%83%BC%E3%83%96%E3%83%AB%E3%82%92%E5%B7%AE%E3%81%97%E7%9B%B4%E3%81%99">5. USB ケーブルを差し直す</a>」で「<strong>インストール失敗時は、何をやっても IDE と RA4M1 は繋がらない状態になります。リセットボタンのダブルクリックも効かず、LED の点滅を繰り返すだけの状態に陥ります</strong>」と書きましたが、これは ESP-32 が RA4M1 のリセットを繰り返しているために起きる事象ではないかと推測しています。</p>
+
+<h3 id="serialprint-が遅いのはなぜ">Serial.print が遅いのはなぜ？</h3>
+
+<p>UNO R4 WiFi の <code class="language-plaintext highlighter-rouge">Serial.print()</code> や <code class="language-plaintext highlighter-rouge">Serial.println()</code> は Minima に比べ、とてつもなく遅い事が観測できます。例えば、<a href="https://ja.wikipedia.org/wiki/%E3%82%B8%E3%83%A3%E3%83%90%E3%82%A6%E3%82%A9%E3%83%83%E3%82%AF%E3%81%AE%E8%A9%A9" title="ジャバウォックの詩 - Wikipedia">ルイスキャロルの詩</a> の一節を <code class="language-plaintext highlighter-rouge">Serial.print</code> するだけの次のコードを実行してみます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cm">/*
+  Minima
+    ** Serial Speed Test **
+    !Serial = 1
+    Twas brillig and the slithy toves did gyre and gimble in the wabe...
+    Total Time : 207
+
+  WiFi
+    ** Serial Speed Test **
+    !Serial = 0
+    Twas brillig and the slithy toves did gyre and gimble in the wabe...
+    Total Time : 69792
+*/</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// put your setup code here, to run once:</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">9600</span><span class="p">);</span>
+  <span class="kt">bool</span> <span class="n">t</span> <span class="o">=</span> <span class="o">!</span><span class="n">Serial</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+
+<span class="cp">#ifdef  ARDUINO_UNOR4_WIFI
+</span>  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// It requires at least 600 ms to complete Serial initialization.</span>
+<span class="cp">#endif
+</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">** Serial Speed Test **"</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"!Serial = "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+
+  <span class="kt">uint32_t</span> <span class="n">start</span> <span class="o">=</span> <span class="n">micros</span><span class="p">();</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Twas brillig and the slithy toves did gyre and gimble in the wabe.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+  <span class="kt">uint32_t</span> <span class="n">finish</span> <span class="o">=</span> <span class="n">micros</span><span class="p">();</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Total Time : "</span> <span class="o">+</span> <span class="n">String</span><span class="p">(</span><span class="n">finish</span> <span class="o">-</span> <span class="n">start</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{}</span></code></pre></figure>
+
+<p>結果は次の通りです（単位はμs）。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Minima [μs]</th>
+      <th style="text-align: right">WiFi [μs]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">207</td>
+      <td style="text-align: right">69792</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>上記コードは Minima の <code class="language-plaintext highlighter-rouge">Serial</code> と <code class="language-plaintext highlighter-rouge">Serial1</code> の速度違いが議論されているスレッド <a href="https://forum.arduino.cc/t/the-r4-serial-problem/1255584" title="The R4 Serial Problem - UNO R4 Minima - Arduino Forum">The R4 Serial Problem</a> からの引用です。同スレッドに示された計測結果は次の通りで、<strong>Minima の <code class="language-plaintext highlighter-rouge">Serial1.print()</code> は WiFi の <code class="language-plaintext highlighter-rouge">Serial.print()</code> とほぼ同じ速度</strong> を示しています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Serial [μs]</th>
+      <th style="text-align: right">Serial1 [μs]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">254</td>
+      <td style="text-align: right">68782</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>この結果が意味するのは、どちらも UART を使用しているということです。「なるほど、UNO R4 WiFi の <code class="language-plaintext highlighter-rouge">Serial</code> は ESP32-S3 を経由しているのね」とは簡単に納得できず、当然「なぜ、<code class="language-plaintext highlighter-rouge">P408</code> を <code class="language-plaintext highlighter-rouge">HIGH</code> にして直接 USB と繋がないの？」という疑問が湧いてきます。</p>
+
+<p>この辺りの仕組みはまだ解明できていませんが、UNO R4 WiFi と ESP32-S3 が抱える事情の１つとして挙げておきたいと思います。</p>
+
+<p>※ <strong>2024年7月2日 追記</strong>
+タイムリーなことに、フォーラムに <a href="https://forum.arduino.cc/t/more-on-the-serial-topic/1277064" title="More on the Serial topic - UNO R4 WiFi - Arduino Forum">More on the Serial topic</a> という UNO R4 WiFi についてのスレッドが立ったので、<code class="language-plaintext highlighter-rouge">Serial.print()</code> が遅い理由を聞きました。やはりレベル変換 IC を介して ESP32-S3 と通信する UART クラスが原因とのこと。もう一方のアナログスイッチ経由でつながる USB クラスについては、超長いスレッドを紹介されました。何か新しい発見があれば別途報告しますネ。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>IDE メニューの中で１つだけ英語のままの <strong>Firmware Updater</strong> が気になり、実行しちゃったところから今回の調査となりました。未確認ですが、USB を介さずネットワーク経由でファームウェアを送れる <a href="https://cloud.arduino.cc/" title="Arduino Cloud - Build, Control, Monitor Your IoT Projects">Arduino Cloud</a> であれば安全にアップデートできると思います。</p>
+
+<p>それにしても「アップデートに失敗しました。もう一度試してください」のメッセージは、初心者には不親切過ぎます。何度試しても結果は変わらないのですから。実行前に注意書きとか警告が欲しいですよね <img class="emoji" title=":man_cook:" alt=":man_cook:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f373.png" height="20" width="20"></p>
+
+<hr>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p><a href="https://toragi.cqpub.co.jp/wp-content/uploads/p069-15.pdf">トランジスタ技術 2024年1月号 第1部 新定番の登場！Arduino Uno R4入門 / 第1章 5Vで使えて高性能！ 新生Arduino Uno R4 / P.72 Arduino UNO R4 のハードウェア構成 - CQ出版社</a> <a href="#fnref:1" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/06/28/" title="前の記事：Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編">← Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/07/12/" title="次の記事：UNO R4でサーボモータがカクカクする問題とライブラリの更新">UNO R4でサーボモータがカクカクする問題とライブラリの更新 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/07/01/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/07/01/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/07/01/";this.page.identifier="/2024/07/01/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

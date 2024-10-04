@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/09/04/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/09/04/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-09-04T07:30:43+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-09-04T07:30:43+09:00","datePublished":"2024-09-04T07:30:43+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/09/04/"},"url":"https://embedded-kiddie.github.io/2024/09/04/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-09-04T07:30:43+09:00" itemprop="datePublished">Sep 4, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/images/2024/09-04/ThermalCamera.jpg" alt="製作したサーモグラフィカメラ" title="製作したサーモグラフィカメラ"></p>
+
+<p><a href="/2024/08/15/" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編 - Embedded Kiddie">前回</a>、<a href="https://www.melexis.com/en/product/MLX90640/Far-Infrared-Thermal-Sensor-Array" title="Far Infrared Thermal Sensor Array (32x24 RES) I Melexis">MLX90640</a> と UNO R4 で動作確認をしましたが、バラックのままでは実用的じゃないので、今回はカメラとしての製作過程を書きたいと思います。</p>
+
+<h2 id="ハードウェア再選定">ハードウェア再選定</h2>
+
+<figure class="float-left">
+  <a href="/images/2024/08-15/AliExpress.jpg" title="AliExpressでのお買い物" data-lightbox="image">
+    <img src="/images/2024/08-15/AliExpress-small.jpg" alt="AliExpressでのお買い物" width="524" height="458">
+    <figcaption>AliExpressでのお買い物</figcaption>
+  </a>
+</figure>
+
+<p>3V 程度でバッテリー駆動でき、超解像とまではいかないまでも、<a href="https://www.melexis.com/en/product/MLX90640/Far-Infrared-Thermal-Sensor-Array" title="Far Infrared Thermal Sensor Array (32x24 RES) I Melexis">MLX90640</a>（32×24画素）の補間やスムージングなどの画像処理をこなせる性能を想定し、ESP32 の開発ボードを手配していましたが、より小型で <a href="https://www.sg-micro.com/jpproduct/SGM40567" title="SGM40567データシートおよび製品情報 - SGMICRO">バッテリー充電管理用チップ</a> を搭載した <a href="https://www.seeedstudio.com/XIAO-ESP32S3-p-5627.html" title="High-Performance Dev Board with Wi-Fi and BLE - XIAO ESP32S3">Seeed Studio XIAO ESP32S3</a> を採用することにしました。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/XIAO-with-LiPo-Battery.jpg" title="Seeed Studio XIAO ESP32S3" data-lightbox="image">
+    <img class="simple" src="/images/2024/09-04/XIAO-with-LiPo-Battery-small.jpg" alt="Seeed Studio XIAO ESP32S3" width="460" height="414">
+    <figcaption>Seeed StudioのWikiページから</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/#battery-usage" title="Getting Started with Seeed Studio XIAO ESP32S3 (Sense) - Seeed Studio Wiki">Seeed Studio の Wiki ページ</a> には、3.7V のリチウムポリマーバッテリーを繋ぐ例が載っていて、充電の度にバッテリーを外す煩わしさもなく、そのまま USB で充電できるのがイイ感じです。3.7V とは言え、無負荷状態でバッテリー端子間電圧を測定すると 4.2V ほど出ているので、XIAO のバッテリー接続時の定格入力電圧が 4.2V になっている理由と思われます。</p>
+
+<div class="clear-both"></div>
+
+<p>またバッテリーの稼働時間を見積もると、購入した 2.4インチ LCD の消費電流を 100mA 前後（LCD Wiki に掲載された <a href="http://www.lcdwiki.com/2.4inch_SPI_Module_ILI9341_SKU:MSP2402#Product_Documentation" title="2.4inch SPI Module ILI9341 SKU:MSP2402 - LCD wiki">類似品のスペックシート</a> による）なので、計算上は 400mAh 程度の小型の Li-Po でも３時間程度は持つことになり、今回の目的には十分です。</p>
+
+<p>ただ Wiki ページに “<strong>We recommend you to purchase qualified rechargeable 3.7V lithium battery.</strong>” とある通り、充電中の発火リスクが怖いです。今回は、ラジコン機器輸入卸売販売を生業とする日本の会社 <a href="https://www.gforce-hobby.jp/" title="ドローン・ラジコン製品のジーフォース/G-FORCE公式サイト - G-FORCE - 株式会社ジーフォース">G-FORCE</a> が扱う 380mAh の Li-Po を <a href="https://amzn.asia/d/7oHj0DQ" title="Amazon - ジーフォース Li-Poバッテリー (3.7V 380mAh) G024H ［日本正規品］ - ラジコン・ドローン 通販">Amazon で購入</a> しました。「日本正規品」とありますが、どうなんでしょう。いずれにしても膨らみには要注意です。</p>
+
+<h2 id="改めてxiao-での動作確認">改めて、XIAO での動作確認</h2>
+
+<h3 id="ワイヤリング">ワイヤリング</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/MLX90640-XIAO-ESP32.jpg" title="XIAO、MLX90640、LCDのワイヤリング" data-lightbox="image">
+    <img src="/images/2024/09-04/MLX90640-XIAO-ESP32-small.jpg" alt="XIAO、MLX90640、LCDのワイヤリング" width="500" height="462">
+    <figcaption style="max-width:500px">XIAO、MLX90640、LCDの<br>ワイヤリング</figcaption>
+  </a>
+</figure>
+
+<p>今までワイヤリングを描くのに <a href="https://fritzing.org/" title="Welcome to Fritzing">Fritzing</a> のβ版を使ってましたが、最近はもっぱら <a href="https://app.cirkitdesigner.com/project/837fd6ec-a7d8-4381-a41f-4b953adefee0" title="Cirkit Designer - Design Circuits">Cirkit Designer</a> で描いてます。パーツが足りないときは <a href="https://forum.fritzing.org/" title="fritzing forum">Fritzing のフォーラム</a> などで見つけた <code class="language-plaintext highlighter-rouge">.fzpz</code> ファイルがインポート出来ます（出来ないものもあります…）。回路図は描けませんが、直角に曲げるワイヤリングが簡単に描け、イイ感じです。</p>
+
+<p>ESP32 を採用したことで、UNO R4 で必要だった分圧抵抗やレベル変換も無くなりスッキリしました。I2C と SPI をピン仕様に合わせて接続するだけです。</p>
+
+<p>表に出ている XIAO の 11 本の GPIO ピンのうち、I2C と SPI で 10 本を使っています。残り 1 本のピンを何に使うか少し迷いましたが、次の３候補のうち、「<code class="language-plaintext highlighter-rouge">T-IRQ</code> 監視」を選択しました。割り込みを使ってもソフトウェア的なメリットは殆どありませんが、<code class="language-plaintext highlighter-rouge">T-IRQ</code> を余らせておくのも何なので繋げちゃた感じなので、将来は設変するカモです。</p>
+
+<ul>
+  <li>
+    <p>LCD バックライトの減光制御<br>
+消費電力が大きい LCD バックライトを PWM 制御で減光し、バッテリーを長持ちさせます。</p>
+  </li>
+  <li>
+    <p>バッテリー電圧の監視<br>
+分圧回路やレベル変換を通して ADC でバッテリー電圧を監視し、充電の目安にします。</p>
+  </li>
+  <li>
+    <p>タッチスクリーンの <code class="language-plaintext highlighter-rouge">T-IRQ</code> 監視<br>
+スクリーンがタッチされたことを知らせる割り込み信号です。</p>
+  </li>
+</ul>
+
+<h3 id="ブレッドボードを使った動作確認">ブレッドボードを使った動作確認</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/XIAO-Breadboard.jpg" title="ディスプレイ、タッチスクリーン、SDカードの動作確認" data-lightbox="image">
+    <img src="/images/2024/09-04/XIAO-Breadboard-small.jpg" alt="ディスプレイ、タッチスクリーン、SDカードの動作確認" width="616" height="462">
+    <figcaption style="max-width:600px">ディスプレイ、タッチスクリーン、<br>SDカードの動作確認</figcaption>
+  </a>
+</figure>
+
+<p>ディスプレイ、タッチスクリーン、SD カード I/F の３つのデバイスがあるワケですが、それぞれにライブラリが複数あり、どれを使うか、なぜそれを使うかなど、迷うところです。</p>
+
+<p>とりあえず今回は、確実に ”<strong>動くセット</strong>” を見つけることを優先しました。さらに各々は単独で動作 OK でも、３つ全部動かすと NG になる場合も考えられます。</p>
+
+<div class="clear-both"></div>
+
+<p>そこで３つを１つにまとめた「<strong>温度画像表示中にスクリーンにタッチすると、SD カードに <code class="language-plaintext highlighter-rouge">hello.txt</code> を書き込む</strong>」という、<a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/quick-dirty/MLX90640" title="Arduino-XIAO-ESP32/MLX90640 at quick-dirty · embedded-kiddie/Arduino-XIAO-ESP32">クイック＆ダーティなプログラム</a> で動作確認しました。以下は、動作 OK だったライブラリ達です。どれも Arduino IDE のボードマネージャやライブラリマネージャからインストールが可能で、スケッチ例から簡単に参照することが出来ます。</p>
+
+<ul>
+  <li>
+    <p>ディスプレイ<br>
+<a href="https://github.com/adafruit/Adafruit-GFX-Library" title="adafruit/Adafruit-GFX-Library: Adafruit GFX graphics core Arduino library, this is the 'core' class that all our other graphics libraries derive from">adafruit/Adafruit-GFX-Library</a> と <a href="https://github.com/adafruit/Adafruit-ST7735-Library" title='adafruit/Adafruit-ST7735-Library: This is a library for the Adafruit 1.8" SPI display http://www.adafruit.com/products/358  and http://www.adafruit.com/products/618'>adafruit/Adafruit-ST7735-Library</a> を使用しました。ピン配を変えるだけで前回 UNO R4 用に作成したプログラムそのままです。</p>
+  </li>
+  <li>
+    <p>タッチスクリーン<br>
+<a href="https://github.com/PaulStoffregen/XPT2046_Touchscreen" title="PaulStoffregen/XPT2046_Touchscreen: Touchscreen Arduino Library for XPT2046 Touch Controller Chip">PaulStoffregen/XPT2046_Touchscreen</a> が、<code class="language-plaintext highlighter-rouge">T-IRQ</code> を含めたデバイス特有の設定が不要で、スケッチ例 <a href="https://github.com/PaulStoffregen/XPT2046_Touchscreen/tree/master/examples/TouchTestIRQ" title="XPT2046_Touchscreen/examples/TouchTestIRQ at master · PaulStoffregen/XPT2046_Touchscreen">TouchTestIRQ</a> が難なく動作しました。</p>
+  </li>
+  <li>
+    <p>SD カード<br>
+<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">espressif/arduino-esp32/libraries/SD</a> のスケッチ例 <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD/examples/SD_Test" title="arduino-esp32/libraries/SD/examples/SD_Test at master · espressif/arduino-esp32">SD_Test</a> が、UNO R4 で出ていたエラーもなく動作しました。</p>
+  </li>
+</ul>
+
+<p>また <a href="https://github.com/adafruit/Adafruit_MLX90640" title="adafruit/Adafruit_MLX90640: MLX90640 library functions">adafruit/Adafruit_MLX90640</a> ですが、I2C のクロック設定を変えたところ、ほぼ 16 FPS で動作させることができました。</p>
+
+<h2 id="カメラの製作">カメラの製作</h2>
+
+<p>いよいよカメラの組み立てです。一番大きい 2.4 インチ LCD を中心に、LCD 面から見て左側に USB を出す事を要件に各部品をレイアウトしました。</p>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/Camera-Wiring.jpg" title="XIAO、MLX90640、LCDの実体配線図" data-lightbox="image">
+    <img src="/images/2024/09-04/Camera-Wiring-small.jpg" alt="XIAO、MLX90640、LCDの実体配線図" width="580" height="310">
+    <figcaption>XIAO、MLX90640、LCDの<br>実体配線図</figcaption>
+  </a>
+</figure>
+
+<p>結果、クロスするワイヤリングが多く、配線に苦労しました 😮‍💨 実体配線図では分かり難いですが、両面スルーホールの基板を使い、表面に LCD を、裏面に XIAO と MLX90640、Li-Po バッテリーとバッテリー用 ON/OFF スイッチを配置しています。</p>
+
+<div class="clear-both"></div>
+
+<p>さて、工作はあまり得意ではないので大したことは書けませんが、簡単に製作過程を書き留めておきたいと思います。</p>
+
+<h3 id="両面スルーホール基板の切断">両面スルーホール基板の切断</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/Universal-Plate.jpg" title="両面スルーホール基板の切断" data-lightbox="image">
+    <img src="/images/2024/09-04/Universal-Plate-small.jpg" alt="両面スルーホール基板の切断" width="540" height="480">
+    <figcaption>両面スルーホール基板の切断</figcaption>
+  </a>
+</figure>
+
+<p>秋月電子の <a href="https://akizukidenshi.com/catalog/g/g113155/" title="両面スルーホールユニバーサル基板 7*9: 基板・ブレッドボード・ラグ板 秋月電子通商-電子部品・ネット通販">両面スルーホールユニバーサル基板 7*9</a> の丸いランドの中心間を <a href="https://www.olfa.co.jp/products/790.html" title="ＰカッターＬ型｜オルファ株式会社 【公式サイト】">オルファ ＰカッターＬ型</a> で、両面からガシガシと削っていきます。ある程度削れたらパキッと折り、スルーホール断面のメッキが見えなくなる程度にまでりヤスリがけします。</p>
+
+<p>ランド間の基板だけの部分をカットした方が良かったのかもしれません。何れにしても、超音波カッターが欲しくなる骨の折れる作業です。</p>
+
+<h3 id="ピンソケットの切断">ピンソケットの切断</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/Pinsocket-Cutting.jpg" title="ピンソケットの切断" data-lightbox="image">
+    <img src="/images/2024/09-04/Pinsocket-Cutting-small.jpg" alt="ピンソケットの切断" width="589" height="479">
+    <figcaption>ピンソケットの切断</figcaption>
+  </a>
+</figure>
+
+<p>配線の関係上、部品を直接ハンダ付けするわけにはいかず、全体の厚みが増えるのを覚悟の上でピンソケットを使いました。非分割タイプの場合、カッターで切れ目を入れて割るのですが、必ずカットした部分のピンが無駄になります。</p>
+
+<p>次からは、秋月電子の <a href="https://akizukidenshi.com/catalog/g/g105779/" title="分割ロングピンソケット 1×42 (42P): ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">分割ロングピンソケット 1×42 (42P)</a> を使いたいと思います 😉</p>
+
+<h3 id="li-poバッテリーの端子加工">Li-Poバッテリーの端子加工</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/Li-Po-Battery.jpg" title="リチウムポリマーバッテリーの端子加工" data-lightbox="image">
+    <img src="/images/2024/09-04/Li-Po-Battery-small.jpg" alt="リチウムポリマーバッテリーの端子加工" width="634" height="479">
+    <figcaption>Li-Poバッテリーの端子加工</figcaption>
+  </a>
+</figure>
+
+<p>元々ラジコン用のコネクタ付きを購入したため、秋月電子で購入できる JST 2mm タイプのコネクタに付け替えました。</p>
+
+<ul>
+  <li><a href="https://akizukidenshi.com/catalog/g/g112795/" title="PHコネクター ハウジング 2P PHR-2: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">PHコネクター ハウジング 2P PHR-2</a></li>
+  <li><a href="https://akizukidenshi.com/catalog/g/g112795/" title="PHコネクター ハウジング 2P PHR-2: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">PHコネクター コンタクト SPH-002T-P0.5L</a></li>
+  <li><a href="https://akizukidenshi.com/catalog/g/g112633/" title="PHコネクター ベース付ポスト サイド型 2P S2B-PH-K-S: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">PHコネクター ベース付ポスト サイド型 2P S2B-PH-K-S</a></li>
+</ul>
+
+<p>上記なら <a href="https://www.seeedstudio.com/Seeeduino-XIAO-Expansion-board-p-4746.html" title="Seeed Studio XIAO Expansion board for XIAO Series with Grove OLED - IIC, Uart, Analog/Digital - Seeed Studio">Seeed Studio の XIAO 用拡張ボード</a> のバッテリー端子とも合いますが、コンタクトピンがとても小さいため、圧着用のかしめ工具がないと厳しいと思います。僕の場合、<a href="https://iwiss.co.jp/product/sn-2549/" title="SN-2549 Wire Crimping Tool Range 0.08-0.5/0.25/0.5/1.0mm2(28-18AWG)">IWISS SN-2549</a> の最も小さいダイスでかしめました。</p>
+
+<p>また元々バッテリーから出ているリード線が太く、コンタクトピンがハウジングの奥まで入らず、ベースコネクタとの嵌合が不完全だったので、コネクタと基板の間に数ミリのゴムシートを挿入して抑える羽目になりました。<a href="https://densenkan.com/know/densen10.html" title="AWG換算表 - 電線の知識 - 電線・ケーブルの購入なら電線館.com">AWD20 〜 AWG24</a> など外径が 1mm 未満のリード線に付け替えるなどした方が良さそうです。</p>
+
+<p>コネクタを付け替えるときは、１本づつ確実に付け替えましょう。くれぐれも２本まとめてニッパーで切るなどして火花を散らせないように…</p>
+
+<h3 id="配線導通チェック">配線＆導通チェック</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/Mounting-Parts.jpg" title="XIAO、MLX90640、LCDの搭載前後" data-lightbox="image">
+    <img src="/images/2024/09-04/Mounting-Parts-small.jpg" alt="XIAO、MLX90640、LCDの搭載前後" width="738" height="479">
+    <figcaption>XIAO、MLX90640、LCDの搭載</figcaption>
+  </a>
+</figure>
+
+<p>両面スルーホールを駆使し、何とか配線しました 😅。繋がるべきところが繋がり、繋がっちゃイケナイところは繋がっていない事をテスターで確認します。僕の場合、ハンダ付け不良が２箇所、配線ミスによるリワークが１箇所ありました。</p>
+
+<p>全てが完了し、火入れの瞬間は緊張しますが、ちゃんと動いた時の嬉しさは格別です <img class="emoji" title=":coffee:" alt=":coffee:" src="https://github.githubassets.com/images/icons/emoji/unicode/2615.png" height="20" width="20"></p>
+
+<h3 id="化粧板の取り付け">化粧板の取り付け</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/Panels.jpg" title="前後パネルの取り付け" data-lightbox="image">
+    <img src="/images/2024/09-04/Panels-small.jpg" alt="前後パネルの取り付け" width="655" height="480">
+    <figcaption>前後パネルの取り付け</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://www.tamiya.com/japan/products/70003/index.html" title="タミヤ 楽しい工作シリーズ プラバンセット - タミヤ">タミヤの楽しい工作シリーズ プラバンセット</a> があったので、1.2mm の板を P カッターや電動ドリルを駆使して取り付けます。ご覧の通りの加工精度なので、やっぱり超音波カッターが欲しいです。</p>
+
+<h3 id="バッテリーの動作確認">バッテリーの動作確認</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/09-04/Battery-Charge.jpg" title="Li-Poバッテリー充電中" data-lightbox="image">
+    <img src="/images/2024/09-04/Battery-Charge-small.jpg" alt="Li-Poバッテリー充電中" width="800" height="480">
+    <figcaption>Li-Poバッテリー充電中</figcaption>
+  </a>
+</figure>
+
+<p>バッテリースイッチを ON にした状態で USB を繋ぐと XIAO の赤い LED が点滅し充電が始まり、完了すると消灯します。充電中も LCD のバックライトが点灯し続けるので、OFF スイッチをつけた方が良いかもしれません。また充電完了時に自動でスリープモードに入れたいのですが、<a href="https://files.seeedstudio.com/wiki/SeeedStudio-XIAO-ESP32S3/res/XIAO_ESP32S3_SCH_v1.2.pdf" title="Seeed Studio XIAO ESP32S3 Schematic">回路図</a> を見ても <a href="https://www.sg-micro.com/jpproduct/SGM40567" title="SGM40567データシートおよび製品情報 - SGMICRO">充電管理チップ</a> にアクセスする手段がなく、無理っぽいです。</p>
+
+<p>放電については事前の予想通り(?)、満充電から LCD のバックライトが消えるまでおよそ3時間20分ほどでした。ちょっと誤算だったのは、再び充電が完了するまで4時間10分ほどかかった事です。回路図では充電時の電流が 110mA 程度なので発火のリスクは高くないと思いますが、Li-Po バッテリーは放電／充電／保存／廃棄それぞれに注意が必要なので（ただいま勉強中）、<a href="https://github.com/G6EJD/ESP32-DC-Voltage-Measurement/tree/master" title="G6EJD/ESP32-DC-Voltage-Measurement: Using an ESP32 to measure a range of DC voltages using a voltage divider add-on.">この例を参考に</a> 電圧を監視できるようにしておいた方が良さそうです。</p>
+
+<h2 id="製作費のまとめ">製作費のまとめ</h2>
+
+<p>ここまでの部品購入費をまとめてみます。スズメッキ線、ジャンパー線、プラ板、プラねじ、六角スペーサなど、元々所有していたものは除いています。また単価が ¥5 や ¥10 の部品を１つだけ購入したワケではなく、実際には送料を含めて＋αのコストがかかっています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">部品</th>
+      <th style="text-align: center">購入先</th>
+      <th style="text-align: right">価格</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Seeed Studio XIAO ESP32S3</td>
+      <td style="text-align: center"><a href="https://akizukidenshi.com/catalog/g/g118078/" title="Seeed Studio XIAO ESP32S3: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">秋月電子</a></td>
+      <td style="text-align: right">¥1,300</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">MLX90640ブレイクアウトボード</td>
+      <td style="text-align: center"><a href="https://ja.aliexpress.com/item/1005006674751991.html" title="MLX90640カメラモジュール熱画像温度センサー32x24 ir赤外線配列体温計32*24センサーGY-MCU90640 - AliExpress 502">AliExpress</a></td>
+      <td style="text-align: right">¥5,330</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2.4インチ LCD with タッチスクリーン、SDカードI/F</td>
+      <td style="text-align: center"><a href="https://ja.aliexpress.com/item/1005006198656280.html" title='Spi tft LCDシリアルポートモジュール (arduino用) 、2.4 "、240x320、5v、3.3v、pbcアダプター、マイクロsd、ili9341、st7789、タッチ付きホワイトLED - AliExpress 502'>AliExpress</a></td>
+      <td style="text-align: right">¥159</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">両面スルーホールユニバーサル基板 7×9</td>
+      <td style="text-align: center"><a href="https://akizukidenshi.com/catalog/g/g113155/" title="両面スルーホールユニバーサル基板 7*9: 基板・ブレッドボード・ラグ板 秋月電子通商-電子部品・ネット通販">秋月電子</a></td>
+      <td style="text-align: right">¥90</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">PHコネクター ハウジング</td>
+      <td style="text-align: center"><a href="https://akizukidenshi.com/catalog/g/g112795/" title="PHコネクター ハウジング 2P PHR-2: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">秋月電子</a></td>
+      <td style="text-align: right">¥5</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">PHコネクター コンタクト</td>
+      <td style="text-align: center"><a href="https://akizukidenshi.com/catalog/g/g112809/" title="PHコネクター コンタクト SPH-002T-P0.5L: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">秋月電子</a></td>
+      <td style="text-align: right">¥40</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">PHコネクター ベース付ポスト サイド型</td>
+      <td style="text-align: center"><a href="https://akizukidenshi.com/catalog/g/g112633/" title="PHコネクター ベース付ポスト サイド型 2P S2B-PH-K-S: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">秋月電子</a></td>
+      <td style="text-align: right">¥10</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">スライドスイッチ</td>
+      <td style="text-align: center"><a href="https://akizukidenshi.com/catalog/g/g115370/" title="スライドスイッチ ISH-1260-HA-G: 制御部品・駆動部品 秋月電子通商-電子部品・ネット通販">秋月電子</a></td>
+      <td style="text-align: right">¥25</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">3.7V 380mAh 25C Li-Poバッテリー</td>
+      <td style="text-align: center"><a href="https://amzn.asia/d/eZF7dKR" title="Amazon｜ジーフォース Li-Poバッテリー (3.7V 380mAh) G024H ［日本正規品］｜ラジコン・ドローン 通販">Amazon</a></td>
+      <td style="text-align: right">￥837</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>締めて ¥7,796＋α… それなりの出費でした <img class="emoji" title=":hugs:" alt=":hugs:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f917.png" height="20" width="20"></p>
+
+<h2 id="さて次のステップは">さて、次のステップは…</h2>
+
+<p>温度画像の見た目を滑らかにする画像処理、スクリーンタッチ時のメニュー処理、温度画像の SD カード保存など、ソフトウェア開発としてまだまだやるべき事が沢山あり、当分の間は楽しめそうです <img class="emoji" title=":sparkles:" alt=":sparkles:" src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png" height="20" width="20"></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/08/15/" title="前の記事：基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編">← 基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/10/04/" title="次の記事：基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編（１）">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編（１） →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/09/04/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/09/04/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/09/04/";this.page.identifier="/2024/09/04/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

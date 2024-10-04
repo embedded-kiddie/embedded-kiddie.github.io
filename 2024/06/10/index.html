@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="前回の記事の最後 でも少し触れましたが、Arduino コア開発の Issues や プルリク、フォーラム などで活躍中の Delta-G 氏 による、UNO R4 静電容量式タッチセンシングユニット（Capacitive Touch Sensing Unit、略して CTSU）用ライブラリの R4_Touch を試した結果を共有します。" />
+<meta property="og:description" content="前回の記事の最後 でも少し触れましたが、Arduino コア開発の Issues や プルリク、フォーラム などで活躍中の Delta-G 氏 による、UNO R4 静電容量式タッチセンシングユニット（Capacitive Touch Sensing Unit、略して CTSU）用ライブラリの R4_Touch を試した結果を共有します。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/06/10/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/06/10/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-06-10T07:45:14+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-06-10T07:45:14+09:00","datePublished":"2024-06-10T07:45:14+09:00","description":"前回の記事の最後 でも少し触れましたが、Arduino コア開発の Issues や プルリク、フォーラム などで活躍中の Delta-G 氏 による、UNO R4 静電容量式タッチセンシングユニット（Capacitive Touch Sensing Unit、略して CTSU）用ライブラリの R4_Touch を試した結果を共有します。","headline":"Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/06/10/"},"url":"https://embedded-kiddie.github.io/2024/06/10/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" integrity="sha256-fl23kUuX5ZajbBq7Z8zH8XT4u3HTjJqIxVsmLtFzf5c=" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-06-10T07:45:14+09:00" itemprop="datePublished">Jun 10, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><a href="/2024/06/03/#%E3%81%8A%E3%81%BE%E3%81%91" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前回の記事の最後</a> でも少し触れましたが、Arduino コア開発の <a href="https://github.com/arduino/ArduinoCore-renesas/issues?q=involves%3Adelta-G" title="Issues · arduino/ArduinoCore-renesas">Issues</a> や <a href="https://github.com/arduino/ArduinoCore-renesas/pulls?q=involves%3Adelta-G" title="Pull requests · arduino/ArduinoCore-renesas">プルリク</a>、<a href="https://forum.arduino.cc/u/delta_g/summary" title="プロファイル - Delta_G - Arduino Forum">フォーラム</a> などで活躍中の <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> による、UNO R4 静電容量式タッチセンシングユニット（<strong>C</strong>apacitive <strong>T</strong>ouch <strong>S</strong>ensing <strong>U</strong>nit、略して CTSU）用ライブラリの <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> を試した結果を共有します。</p>
+
+<p>本記事では、フォーラムにおける次の３つのトピックスを参照しています。</p>
+
+<ul>
+  <li><a href="https://forum.arduino.cc/t/lets-play-with-the-ctsu/1187758" title="Let's play with the CTSU! - UNO R4 Minima - Arduino Forum">Let’s play with the CTSU!</a></li>
+  <li><a href="https://forum.arduino.cc/t/capacitive-touch-current-reference/1268532" title="Capacitive Touch Current Reference - General Electronics - Arduino Forum">Capacitive Touch Current Reference</a></li>
+  <li><a href="https://forum.arduino.cc/t/lovebutton-touch-sense-library-for-r4-minima-and-r4-wifi/1190017" title="LoveButton Touch Sense library for R4 Minima and R4 WiFi - Programming Questions - Arduino Forum">LoveButton Touch Sense library for R4 Minima and R4 WiFi</a></li>
+</ul>
+
+<h2 id="ctsu-の動作原理">CTSU の動作原理</h2>
+
+<p>CTSU の正確な解説は、<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">Renesas RA4M1グループ ユーザーズマニュアル ハードウェア編</a> の P.1444「41.3.1 計測動作原理」に譲るとして、ここではマニュアルを読むのが面倒な人向けに <img class="emoji" title=":roll_eyes:" alt=":roll_eyes:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f644.png" height="20" width="20">、私の理解を解説をしたいと思います。</p>
+
+<h3 id="タッチの検出原理">タッチの検出原理</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/06-10/TouchScreen_projective_capacitive.jpg" title="" data-lightbox="image">
+    <img src="/images/2024/06-10/TouchScreen_projective_capacitive.small.png" alt="" width="458" height="332">
+  </a>
+  <figcaption>By <a href="//commons.wikimedia.org/wiki/User:Mercury13" title="User:Mercury13">Mercury13</a> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=4105874" title="File:TouchScreen projective capacitive.svg - Wikimedia Commons">Link</a></figcaption>
+</figure>
+
+<p>人体はコンデンサに例えることができ、その静電容量は 100pF <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> とも 200pF <sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup> とも言われています。</p>
+
+<p>このためタッチ電極に指が近づくと、元々回路周辺にある静電容量（<a href="https://ja.wikipedia.org/wiki/%E5%AF%84%E7%94%9F%E5%AE%B9%E9%87%8F" title="寄生容量 - Wikipedia">寄生容量</a>）に人体の静電容量が加わります。この静電容量の変化を観測することでタッチを検出します。</p>
+
+<div class="clear-both"></div>
+
+<p>一般にコンデンサの静電容量の測り方として、定電流で充電した時の基準電圧に達するまでの時間を測定するという方法がありますが <sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote" rel="footnote">3</a></sup>、CTSU では、基準電圧で充放電を高速に繰り返した時の <a href="https://www.marutsu.co.jp/contents/shop/marutsu/mame/204.html" title="スイッチト・キャパシタ・フィルタとその応用 -原理と実験機設計編- − マルツオンライン">スイッチドキャパシタフィルタ</a> に流れる電流量を ICO（電流制御発振器、Intensity of Current Controlled Oscillator）に供給し、同電流に比例した周波数で生成されたクロックパルスを一定時間カウンタ回路が数え、そのカウント値をレジスタに出力します。</p>
+
+<p>つまり、直接的に静電容量を測定するのではなく、電極に指を置く前後のカウンタ値の差で、タッチを検出するワケです。</p>
+
+<p><img src="/images/2024/06-10/CTSU.jpg" alt="CTSU 計測回路 - スイッチドキャパシタフィルタとICO" title="CTSU 計測回路 - スイッチドキャパシタフィルタとICO" width="1070" height="580" class="simple"></p>
+
+<div class="quote clear-both">
+
+<p>スイッチドキャパシタフィルタは、一般にアナログ信号を帯域制限するローパスフィルタとして使われますが、CTSU では、「<strong>コンデンサへの充放電をスイッチで切り替えることで抵抗のような働きをする特性</strong>」（<a href="https://techweb.rohm.co.jp/product/power-device/si/18325/" title="リアクタンスとは？ 「電気回路の流れにくさ」 - 交流（AC）の基礎 - TechWeb">交流回路における容量性リアクタンス</a>）を利用します。即ち、<strong>コンデンサへの電荷の移動</strong>を等価な<strong>抵抗に流れる電流</strong>に置き換えます。</p>
+
+<p>この時の等価抵抗は <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>π</mi><mi>f</mi><mi>C</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">R = \frac{1}{2 \pi fC}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.3262em;vertical-align:-0.4811em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">π</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight" style="margin-right:0.07153em;">C</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4811em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> で表され、オームの法則より <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>=</mo><mfrac><mi>V</mi><mi>R</mi></mfrac><mo>=</mo><mn>2</mn><mi>π</mi><mi>f</mi><mi>C</mi><mi>V</mi></mrow><annotation encoding="application/x-tex">I = \frac{V}{R} = 2 \pi fCV</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2173em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8723em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> となります（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> は基準電圧を、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span> はスイッチング周波数を、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span> は測定対象の容量を表す）。</p>
+
+<p>つまり、電流 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi></mrow><annotation encoding="application/x-tex">I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span> と容量 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span> は比例関係にあるため、静電容量 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span> を求める代わりに、電流 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi></mrow><annotation encoding="application/x-tex">I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span> の変化を観測することでタッチを判定するワケです。</p>
+
+</div>
+
+<h3 id="検出原理に基づく-ctsu-のポイント">検出原理に基づく CTSU のポイント</h3>
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">ユーザーマニュアル</a> には、初期設定フローや状態遷移、各計測モードの処理フローが説明されていますが、どれも相当に複雑ですし、CTSU のレジスタも多数あります。</p>
+
+<p>一方、上記の測定原理からは、次の５つのパラメータがポイントとなることが推察されます。</p>
+
+<ul>
+  <li>タッチ電極を含む寄生容量の初期値</li>
+  <li>充放電ためのセンサ駆動パルスの周波数</li>
+  <li>ICO による電流→周波数変換の比例係数</li>
+  <li>カウンタによるクロックパルスの計測時間</li>
+  <li>タッチの有無を判定するクロックパルスの変化量</li>
+</ul>
+
+<p>これらの項目を押さえつつ、組み込まれた回路を正しく動作させる手順を辿れば、複雑な CTSU の処理フローとレジスタの関係を理解するのに役立つのではないかと考えています。</p>
+
+<p>この想定が正しいか否かはまだ分かりませんが、何よりまず、実際に動作する回路を製作し、その後に <a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> のフローに沿ってプログラミングされた <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> の助けを借りて、CTSU の動作を紐解いていく、という手順で進めたいと思います。</p>
+
+<h2 id="試作した回路">試作した回路</h2>
+
+<p>CTSU では、個々のタッチ電極でタッチの有無を検出する「自己容量方式」と、マトリックス状に配置した２つの電極間の差を取ることで寄生容量をキャンセルする「相互容量方式」の２つの計測方式を含め、３つの計測モードが使用可能です。</p>
+
+<ul>
+  <li>
+    <p>自己容量シングルスキャンモード<br>
+１つのタッチセンシング端子に対し、センサ駆動パルスの High 期間に、自己容量方式で１回の計測を行うモード</p>
+  </li>
+  <li>
+    <p>自己容量マルチスキャンモード<br>
+全てのタッチセンシング端子に対し、センサ駆動パルスの High 期間に、自己容量方式で１回の計測を行うモード</p>
+  </li>
+  <li>
+    <p>相互容量フルスキャンモード<br>
+全てのタッチセンシング端子に対し、センサ駆動パルスの立ち上がり、立ち下がり両エッジで、相互容量方式の２回の計測を行うモード</p>
+  </li>
+</ul>
+
+<p>まずは、「自己容量方式マルチスキャンモード」で原理確認することとします。</p>
+
+<h3 id="io-端子仕様の確認">I/O 端子仕様の確認</h3>
+
+<p><a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> の P.62「端子機能」から、CTSU に割り当てられたタッチセンシング端子（以下、TS 端子と表記）を確認します。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>機能</th>
+      <th>TS 端子名</th>
+      <th>入出力</th>
+      <th>説明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>CTSU</td>
+      <td>TS00 ~ TS13, TS17 ~ TS22,<br>TS27 ~ TS31, TS34, TS35</td>
+      <td>入力</td>
+      <td>静電容量式タッチセンシング端子</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>TSCAP</td>
+      <td>-</td>
+      <td>タッチドライバ用の二次電源端子</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>同じく P.438「入出力端子機能のレジスタ設定」から、上記端子と Minima／WiFi のピン番号との対応を調べます。<code class="language-plaintext highlighter-rouge">Dn</code> はデジタルピンを、<code class="language-plaintext highlighter-rouge">An</code> はアナログピンを表します。</p>
+
+<details>
+<summary><h4 id="ts2pin">TS 端子と Minima／WiFi ピン番号の対応表</h4></summary>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>TS 端子</th>
+      <th>割り当てられた I/O 端子</th>
+      <th>Minima ピン番号</th>
+      <th>WiFi ピン番号</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>TS00</td>
+      <td>P204</td>
+      <td>LOVE</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>TS02</td>
+      <td>P303</td>
+      <td><code class="language-plaintext highlighter-rouge">D9</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D9</code></td>
+    </tr>
+    <tr>
+      <td>TS06</td>
+      <td>P410</td>
+      <td>-</td>
+      <td>D12</td>
+    </tr>
+    <tr>
+      <td>TS07</td>
+      <td>P411</td>
+      <td>-</td>
+      <td>D11</td>
+    </tr>
+    <tr>
+      <td>TS08</td>
+      <td>P302</td>
+      <td><code class="language-plaintext highlighter-rouge">D1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D1</code></td>
+    </tr>
+    <tr>
+      <td>TS09</td>
+      <td>P301</td>
+      <td><code class="language-plaintext highlighter-rouge">D0</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D0</code></td>
+    </tr>
+    <tr>
+      <td>TS11</td>
+      <td>P304</td>
+      <td><code class="language-plaintext highlighter-rouge">D8</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D8</code></td>
+    </tr>
+    <tr>
+      <td>TS12</td>
+      <td>P111</td>
+      <td>D13</td>
+      <td>D6</td>
+    </tr>
+    <tr>
+      <td>TS13</td>
+      <td>P104</td>
+      <td>D3</td>
+      <td>D2</td>
+    </tr>
+    <tr>
+      <td>TS21</td>
+      <td>P000</td>
+      <td><code class="language-plaintext highlighter-rouge">A1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">A1</code></td>
+    </tr>
+    <tr>
+      <td>TS22</td>
+      <td>P001</td>
+      <td><code class="language-plaintext highlighter-rouge">A2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">A2</code></td>
+    </tr>
+    <tr>
+      <td>TS27</td>
+      <td>P113</td>
+      <td>-</td>
+      <td>LOVE</td>
+    </tr>
+    <tr>
+      <td>TS34</td>
+      <td>P105</td>
+      <td><code class="language-plaintext highlighter-rouge">D2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">D3</code></td>
+    </tr>
+    <tr>
+      <td>TSCAP</td>
+      <td>P203, P205, P112</td>
+      <td>D10</td>
+      <td>D7</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+<p>また、どのピンがタッチセンサに使えるか一目で判るよう、逆引きの表も作ってみました。</p>
+
+<details>
+<summary><h4 id="pin2ts">Minima／WiFi のピン番号と TS 端子の対応表</h4></summary>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>デジタルピン</th>
+      <th>アナログピン</th>
+      <th>Minima TS 端子</th>
+      <th>WiFi TS 端子</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D0</code></td>
+      <td>-</td>
+      <td>TS09</td>
+      <td>TS09</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D1</code></td>
+      <td>-</td>
+      <td>TS08</td>
+      <td>TS08</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D2</code></td>
+      <td>-</td>
+      <td>TS34</td>
+      <td>TS13</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D3</code></td>
+      <td>-</td>
+      <td>TS13</td>
+      <td>TS34</td>
+    </tr>
+    <tr>
+      <td>D6</td>
+      <td>-</td>
+      <td>-</td>
+      <td>TS12</td>
+    </tr>
+    <tr>
+      <td>D7</td>
+      <td>-</td>
+      <td>-</td>
+      <td>TSCAP</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D8</code></td>
+      <td>-</td>
+      <td>TS11</td>
+      <td>TS11</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">D9</code></td>
+      <td>-</td>
+      <td>TS02</td>
+      <td>TS02</td>
+    </tr>
+    <tr>
+      <td>D10</td>
+      <td>-</td>
+      <td>TSCAP</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>D11</td>
+      <td>-</td>
+      <td>-</td>
+      <td>TS07</td>
+    </tr>
+    <tr>
+      <td>D12</td>
+      <td>-</td>
+      <td>-</td>
+      <td>TS06</td>
+    </tr>
+    <tr>
+      <td>D13</td>
+      <td>-</td>
+      <td>TS12</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>(D15)</td>
+      <td><code class="language-plaintext highlighter-rouge">A1</code></td>
+      <td>TS21</td>
+      <td>TS21</td>
+    </tr>
+    <tr>
+      <td>(D16)</td>
+      <td><code class="language-plaintext highlighter-rouge">A2</code></td>
+      <td>TS22</td>
+      <td>TS22</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+<p><code class="language-plaintext highlighter-rouge">TSCAP</code> には基準電圧を安定させるデカップリングキャパシタ（パスコン）を接続します。<a href="https://www.renesas.com/jp/ja/document/mah/renesas-ra4m1-group-users-manual-hardware?r=1054146" title="RA4M1 - 48MHz Arm® Cortex®-M4 と LCDコントローラおよびHMI用静電容量式タッチセンサ搭載 32 ビットマイクロコントローラ - Renesas">マニュアル</a> P.1635 「48.11 CTSU 特性」の表から、10nF ± 10% のコンデンサを、Minima は <code class="language-plaintext highlighter-rouge">D10</code> ピンと <code class="language-plaintext highlighter-rouge">GND</code> ピンの間に、WiFi では <code class="language-plaintext highlighter-rouge">D7</code> ピンと <code class="language-plaintext highlighter-rouge">GND</code> ピンの間に外付けします。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">項目</th>
+      <th style="text-align: center">シンボル</th>
+      <th style="text-align: center">Min</th>
+      <th style="text-align: center">Typ</th>
+      <th style="text-align: center">Max</th>
+      <th style="text-align: center">単位</th>
+      <th style="text-align: center">条件</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">TSCAP 端子に接続された外付け容量</td>
+      <td style="text-align: center">Ctscap</td>
+      <td style="text-align: center">9</td>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">11</td>
+      <td style="text-align: center">nF</td>
+      <td style="text-align: center">VCC = AVCC0 = 1.8~5.5V</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="タッチ電極部の試作">タッチ電極部の試作</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/06-10/1st-lot.jpg" title="試作１回目：タッチセンサ部" data-lightbox="image">
+    <img src="/images/2024/06-10/1st-lot-small.jpg" alt="試作１回目：タッチセンサ部" width="460" height="379">
+  </a>
+  <figcaption>試作１回目：タッチセンサ部</figcaption>
+</figure>
+
+<p>あまり深くは考えずに、ユニバーサル基板に厚さ 0.3mm、1cm 角の銅板を貼り付けてみました。これはコレで、電極に直接指を触れさせた時の動作を確認することは出来ましたが、カバーを付けることを考えなかったので… 失敗でした <img class="emoji" title=":sweat_smile:" alt=":sweat_smile:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f605.png" height="20" width="20"></p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2024/06-10/2nd-lot.jpg" title="試作２回目：タッチセンサ部パーツ" data-lightbox="image">
+    <img src="/images/2024/06-10/2nd-lot-small.jpg" alt="試作２回目：タッチセンサ部パーツ" width="459" height="326">
+  </a>
+  <figcaption>試作２回目：タッチセンサ部パーツ</figcaption>
+</figure>
+
+<p>気を取り直し、２回目の試作は、カバー（0.3mm 厚のプラ板）を取り付けた時のデコボコ感を減らすために学校教育工作用紙で銅板を囲い、写真のように試作してみました。</p>
+
+<p>より実用的にするには、タッチ電極を含めてプリント基板を作っちゃうのが良いですね。</p>
+
+<div class="clear-both"></div>
+
+<figure class="flex">
+  <a href="/images/2024/06-10/2nd-lot-part1.jpg" title="試作２回目：センサ基板 - 裏面" data-lightbox="image">
+    <img src="/images/2024/06-10/2nd-lot-part1-small.jpg" alt="試作２回目：センサ基板 - 裏面" width="459" height="326">
+  </a>
+  <a href="/images/2024/06-10/2nd-lot-part2.jpg" title="試作２回目：センサ基板 - 表面" data-lightbox="image">
+    <img src="/images/2024/06-10/2nd-lot-part2-small.jpg" alt="試作２回目：センサ基板 - 表面" width="459" height="326">
+  </a>
+  <a href="/images/2024/06-10/2nd-lot-part3.jpg" title="試作２回目：センサ基板 - 組み上げ" data-lightbox="image">
+    <img src="/images/2024/06-10/2nd-lot-part3-small.jpg" alt="試作２回目：センサ基板 - 組み上げ" width="459" height="326">
+  </a>
+</figure>
+
+<div class="clear-both"></div>
+
+<p>デカップリングキャパシタは、手持ちの 10nF（0.01μF）セラミックコンデンサを、またタッチの確認用に６個の LED を外付けしました（LED に接続する抵抗値は、<a href="https://cc.cqpub.co.jp/system/contents/3464/" title="LEDに抵抗を接続する理由 - CQ出版社 オンライン・サポート・サイト CQ connect">この記事</a> を参照すると良いですョ）。</p>
+
+<p>ブレッドボード右上の小さなブレークアウト基板は、USBシリアル変換モジュール <a href="https://akizukidenshi.com/catalog/g/g108461/" title="FT234X 超小型USBシリアル変換モジュール: 半導体 秋月電子通商-電子部品・ネット通販">FT234X</a> で、<a href="/2024/06/03/" title="Arduino UNO R4の周辺回路レジスタをモニターするプログラム - Embedded Kiddie">前の記事</a> で製作した <a href="https://github.com/embedded-kiddie/PeripheralMonitor" title="embedded-kiddie/PeripheralMonitor: Arduino UNO R4 Minima/WiFi peripheral register monitor though the external serial I/F (Serial1) at D0(RX)/D1(TX).">PeripheralMonitor</a> で CTSU レジスタを観察するためのものです。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-10/passcon.jpg" title="0.01μF パスコン" data-lightbox="image">
+    <img src="/images/2024/06-10/passcon-small.jpg" alt="0.01μF パスコン" width="460" height="345">
+  </a>
+  <a href="/images/2024/06-10/LED-part.jpg" title="確認用 LED と USB シリアル変換モジュール" data-lightbox="image">
+    <img src="/images/2024/06-10/LED-part-small.jpg" alt="確認用 LED と USB シリアル変換モジュール" width="458" height="344">
+  </a>
+  <a href="/images/2024/06-10/wifi-touch.jpg" title="UNO R4 + タッチセンサ" data-lightbox="image">
+    <img src="/images/2024/06-10/wifi-touch-small.jpg" alt="UNO R4 + タッチセンサ" width="459" height="344">
+  </a>
+</figure>
+
+<h2 id="テストプログラムの実行">テストプログラムの実行</h2>
+
+<h3 id="ライブラリのインストール">ライブラリのインストール</h3>
+
+<p>この記事を書いている最中にも <a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> がアップデートされ、正式版として <a href="https://github.com/delta-G/R4_Touch/releases" title="Releases · delta-G/R4_Touch">1.0 がリリース</a> されました。作者である <a href="https://github.com/delta-G" title="delta-G (David)">Delta-G 氏</a> はこのところ連チャンで投稿を続けていて、精力的な活動振りがよく分かります。</p>
+
+<ol>
+  <li>
+<a href="https://github.com/delta-G/R4_Touch/archive/refs/tags/v1.0.zip" title="Release v1.0 · delta-G/R4_Touch">最新の .ZIP ファイル</a> をダウンロードします。</li>
+  <li>Arduino IDE メニューから「<strong>スケッチ</strong> → <strong>ライブラリをインクルード</strong> → <strong>.ZIP形式のライブラリをインストール…</strong>」を実行し、ダウンロードしたファイルを読み込ませます。</li>
+</ol>
+
+<h3 id="テストプログラムの実行-1">テストプログラムの実行</h3>
+
+<p>ライブラリ R4_Touch の例題 <code class="language-plaintext highlighter-rouge">Simple Touch Example.ino</code> を開くと、Minima あるいは WiFi の基板裏面にある <code class="language-plaintext highlighter-rouge">LOVE</code> ピンでの動作確認ができます。</p>
+
+<p>静電気放電（<a href="https://toshiba.semicon-storage.com/jp/semiconductor/knowledge/faq/diode_tvs-diodes/what-is-electrostatic-discharge-esd.html" title="静電気放電（ESD : Electrostatic Discharge）とは何ですか？ - 東芝デバイス＆ストレージ株式会社 - 日本">ESD</a>）でボードが逝かないよう、<code class="language-plaintext highlighter-rouge">LOVE</code> ピンには直に触れず、何かでカバーするよう注意が促されています。</p>
+
+<p>僕は試作したタッチ電極と LED を使い、<a href="#%E3%82%BF%E3%83%83%E3%83%81%E3%81%AE%E6%A4%9C%E5%87%BA%E5%8E%9F%E7%90%86">タッチの検出原理</a> で解説したカウンタ値を読み込む、次のようなコードで実験を行いました。Minima でも WiFi でも動作するピンを選んでいます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="cp">#include</span> <span class="cpf">"R4_Touch.h"</span><span class="cp">
+</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+  <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+<span class="cp">#ifdef  ARDUINO_UNOR4_WIFI
+</span>  <span class="n">delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// UNO R4 WiFi needs at least 600 ms to complete Serial initialization.</span>
+<span class="cp">#endif
+</span>
+  <span class="c1">// LED の初期化</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="p">;</span> <span class="c1">// 以下、略</span>
+
+  <span class="c1">// タッチセンサ部の初期化</span>
+  <span class="n">setTouchMode</span><span class="p">(</span> <span class="mi">9</span><span class="p">);</span>
+  <span class="n">setTouchMode</span><span class="p">(</span> <span class="mi">8</span><span class="p">);</span>
+  <span class="p">;</span> <span class="c1">// 以下、略</span>
+
+  <span class="n">TouchSensor</span><span class="o">::</span><span class="n">start</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="c">#if 0
+  // 各タッチパッドの値を出力する
+  Serial.print("   " + String(touchRead( 9)));
+  Serial.print("   " + String(touchRead( 8)));
+  ; // 以下、略
+  Serial.println();
+  delay(500);
+#else</span>
+  <span class="c1">// 各タッチパッドの値をに応じて LED を点灯／消灯させる</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">touchRead</span><span class="p">(</span> <span class="mi">9</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">18500</span> <span class="o">?</span> <span class="n">HIGH</span> <span class="o">:</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="n">touchRead</span><span class="p">(</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">19000</span> <span class="o">?</span> <span class="n">HIGH</span> <span class="o">:</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="p">;</span> <span class="c1">// 以下、略</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="cp">#endif
+</span><span class="p">}</span></code></pre></figure>
+
+<p>見てお分かりの通り、<code class="language-plaintext highlighter-rouge">loop()</code> 前半の <code class="language-plaintext highlighter-rouge">#if</code> 文で、タッチ前後のカウンタ値を確認し、後半で各電極に閾値を設定して LED を光らせています。</p>
+
+<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560">
+<p lang="ja" dir="ltr">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU)の動作原理と試し方<a href="https://t.co/Nufe4UJaKZ">https://t.co/Nufe4UJaKZ</a> <a href="https://t.co/ObSY4MBUgx">pic.twitter.com/ObSY4MBUgx</a></p>— Kingsman (@EmbeddedKiddie) <a href="https://twitter.com/EmbeddedKiddie/status/1799938333709348903?ref_src=twsrc%5Etfw">June 9, 2024</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>次の図に、試作１回目のベアメタルでの状態と、試作２回目のカバーを被せた状態で、タッチ前後のカウンタ値の変化を観測した結果を示します。中央の２列はアナログピンのカウンタ値で、寄生容量に相当するタッチ前のカウンタ値が、明らかに他のピンと異なりました。</p>
+
+<figure class="flex">
+  <a href="/images/2024/06-10/touch-baremetal.png" title="ベアメタルでのタッチ結果" data-lightbox="image">
+    <img src="/images/2024/06-10/touch-baremetal-small.jpg" alt="ベアメタルでのタッチ結果" width="460" height="319">
+  </a>
+  <a href="/images/2024/06-10/touch-covered.jpg" title="カバー後のタッチ結果" data-lightbox="image">
+    <img src="/images/2024/06-10/touch-covered-small.jpg" alt="カバー後のタッチ結果" width="460" height="319">
+  </a>
+</figure>
+
+<p>また、デカップリングコンデンサの有無でもカウンタ値が大きく異なりました。</p>
+
+<p>これらの結果から、次のことが推察できます。</p>
+
+<ul>
+  <li>タッチ電極や回路構成によって、カウンタ値が異なる</li>
+  <li>デジタルピンとアナログピンで、カウンタ値が異なる</li>
+  <li>カバーの厚みや材質によっても、カウンタ値が異なる</li>
+</ul>
+
+<p>また人体の静電容量は個人差もあるハズなので、安定して検出するには、カウンタ値のベースラインと判定閾値のキャリブレーションが必要であることが分かりました。電極の経年劣化にも耐えられるよう、<a href="#%E6%A4%9C%E5%87%BA%E5%8E%9F%E7%90%86%E3%81%AB%E5%9F%BA%E3%81%A5%E3%81%8F-ctsu-%E3%81%AE%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88">検出原理に基づく CTSU のポイント</a>で推察したパラメータを自動で設定できる、セルフキャリブレーションが組めればベストですね。</p>
+
+<p>とりあえず今回はここまでとし、次回以降、<a href="https://github.com/delta-G/R4_Touch" title="delta-G/R4_Touch: Capacitive Touch Sensing for the Arduino UNO-R4">R4_Touch</a> のソースコードとユーザーマニュアルに記載された CTSU の処理フローを見比べながら、CTSU レジスタの使い方を紐解いてみたいと思います <img class="emoji" title=":sunflower:" alt=":sunflower:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f33b.png" height="20" width="20"></p>
+
+<h2 id="おまけ">おまけ</h2>
+
+<p>タッチ電極部を作成した後になっちゃったんですが、次の２つのアプリケーションノートを読みました。</p>
+
+<ul>
+  <li><a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-microcontrollers-ctsu-capacitive-touch-electrode-design-guide?r=1054146" title="静電容量センサマイコン 静電容量タッチ電極デザインガイド - RENESAS アプリケーションノート">静電容量センサマイコン 静電容量タッチ電極デザインガイド</a></li>
+  <li><a href="https://www.renesas.com/jp/ja/document/apn/capacitive-sensor-microcontrollers-ctsu-capacitive-touch-introduction-guide?r=1054146" title="静電容量センサマイコン 静電容量タッチ導入ガイド - RENESAS アプリケーションノート">静電容量センサマイコン 静電容量タッチ導入ガイド</a></li>
+</ul>
+
+<p>それらによると、TS 端子とタッチ電極間は、突入電流低減のためにダンピング抵抗を接続してくださいとのことです。また色々な電極や配線パターンのデザイン要件が載っているので、プリント基板を起こす際など、参考にすると良いと思います。</p>
+
+<h2 id="参考文献">参考文献</h2>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p><a href="http://www.iesj.org/content/files/pdf/papers/23/23-4-191.pdf" title="帯電した人体からの初期放電電荷量 増井 典明、村上 晋也、谷 辰夫 静電気学会誌 23,4 (1999) 191-197">帯電した人体からの初期放電電荷量</a> <a href="#fnref:1" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p><a href="https://phys-edu.net/wp/?p=35649" title="電気人間の3000Vの静電気は怖くない？ - 科学のネタ帳">電気人間の3000Vの静電気は怖くない？</a> <a href="#fnref:2" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+    <li id="fn:3" role="doc-endnote">
+      <p><a href="https://www.hioki.co.jp/jp/products/listUse/?category=42#:~:text=%E3%83%86%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%AE%E9%9D%99%E9%9B%BB%E5%AE%B9%E9%87%8F%E6%B8%AC%E5%AE%9A%E5%8E%9F%E7%90%86" title="テスターの機能と使い方 - 製品情報 - Hioki">テスターの静電容量測定原理</a> <a href="#fnref:3" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/06/03/" title="前の記事：Arduino UNO R4の周辺回路レジスタをモニターするプログラム">← Arduino UNO R4の周辺回路レジスタをモニターするプログラム</a>
+    </p>
+
+    <p class="next">
+      <a href="/2024/06/16/" title="次の記事：Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編 →</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/06/10/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/06/10/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/06/10/";this.page.identifier="/2024/06/10/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>
