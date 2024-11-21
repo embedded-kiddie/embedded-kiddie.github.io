@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="前回、次のような機能目標を立てました。" />
+<meta property="og:description" content="前回、次のような機能目標を立てました。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/11/21/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/11/21/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-11-21T11:04:59+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-11-21T11:04:59+09:00","datePublished":"2024-11-21T11:04:59+09:00","description":"前回、次のような機能目標を立てました。","headline":"基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/11/21/"},"url":"https://embedded-kiddie.github.io/2024/11/21/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-11-21T11:04:59+09:00" itemprop="datePublished">Nov 21, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><a href="/2024/10/04" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編｜Embedded Kiddie">前回</a>、次のような機能目標を立てました。</p>
+
+<ul>
+  <li>温度画像を擬似カラーで表示する機能、<span class="strong">特定ポイントの温度を表示する機能</span>
+</li>
+  <li>測定の温度範囲や表示の解像度など、<span class="strong">各種設定を変更し保存するメニュー機能</span>
+</li>
+  <li>温度画像や擬似カラー画像を SD カードに <span class="strong">ファイルとして保存し表示する機能</span>
+</li>
+</ul>
+
+<p>現段階では「表示ができるようになった」程度で、ソフトの作り込みが全然なので、改めて課題と欲しい機能を整理してみました。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>課題</th>
+      <th>希望（機能要件）／願望（非機能要件）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>レンダリング</td>
+      <td>- 最大解像度だとフレームレートが遅い<br>- 解像度下げるには、再コンパイルが必要</td>
+      <td>- <span class="strong">メニューで変更可能にしたい</span><br>- <span class="strong">クールな GUI が欲しい！</span>
+</td>
+    </tr>
+    <tr>
+      <td>温度測定範囲</td>
+      <td>- 20℃〜35℃固定 → 変更は再コンパイル<br>- 温度画像のカラー分解能が荒い<br>- 特定ポイントの温度が分からない</td>
+      <td>- <span class="strong">メニューで変更可能にしたい</span><br>- タッチした点の温度を表示したい<br>- カラーパレットを無段階化したい</td>
+    </tr>
+    <tr>
+      <td>温度画像</td>
+      <td>- キャプチャするインターフェースがない<br>- 本体で保存データの閲覧／削除が出来ない<br>- 動画を保存したい！</td>
+      <td>- <span class="strong">タッチで温度画像を表示したい</span><br>- <span class="strong">ファイル管理やサムネール表示が欲しい</span><br>- 生データを連続保存する機能が欲しい</td>
+    </tr>
+    <tr>
+      <td>タッチパネル</td>
+      <td>- キャリブレーションは別プログラム<br>- キャリブレーション結果がプログラム埋め込み</td>
+      <td>- <span class="strong">キャリブレーション出来る様にしたい</span><br>- <span class="strong">結果を Flash に保存したい</span>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ということで、今回は「メニュー機能」の作り込みについて書きたいと思います！</p>
+
+<h2 id="arduino-用ライブラリの調査">Arduino 用ライブラリの調査</h2>
+
+<p>例によって、まずは Arduino 環境で使えるライブラリの調査からです。</p>
+
+<h3 id="gui-ライブラリ">GUI ライブラリ</h3>
+
+<ul>
+  <li><a href="https://github.com/KrisKasprzak/Adafruit_ILI9341_Menu/" title="KrisKasprzak/Adafruit_ILI9341_Menu: Menu code for Adafruit_ILI9341-based displays"><strong>Adafruit_ILI9341_Menu</strong></a></li>
+</ul>
+<figure class="float-left">
+  <a href="/images/2024/11-21/Adafruit_ILI9341_Menu.jpg" title="Adafruit_ILI9341_Menu" data-lightbox="image">
+    <img src="/images/2024/11-21/Adafruit_ILI9341_Menu-small.jpg" alt="Adafruit_ILI9341_Menu" width="500" height="300">
+    <figcaption>Adafruit_ILI9341_Menu</figcaption>
+  </a>
+</figure>
+
+<p>タイトルバーとリストボックスで構成され、シンプルな操作で設定項目の編集が可能なライブラリです。<a href="https://github.com/adafruit/Adafruit-GFX-Library" title="adafruit/Adafruit-GFX-Library: Adafruit GFX graphics core Arduino library, this is the 'core' class that all our other graphics libraries derive from">Adafruit-GFX-Library</a> 用なので、この <a href="https://github.com/KrisKasprzak/Adafruit_ILI9341_Menu/pull/6" title="Generalize and add TFT_eSPI support by judge2005 · Pull Request #6 · KrisKasprzak/Adafruit_ILI9341_Menu">プルリク</a> の様に TFT_eSPI や LovyanGFX への移植が必要ですが、それほど大変ではなさそうです。</p>
+
+<p>リストボックスだけで完結するなら選択肢としてアリですが、今回の件では＋αのプログラミングが必要になりそうです。</p>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li><a href="https://github.com/ImpulseAdventure/GUIslice" title="ImpulseAdventure/GUIslice: GUIslice drag &amp; drop embedded GUI in C for touchscreen TFT on Arduino, Raspberry Pi, ARM, ESP8266 / ESP32 / M5stack using Adafruit-GFX / TFT_eSPI / UTFT / SDL"><strong>GUIslice</strong></a></li>
+</ul>
+<figure class="float-left">
+  <a href="GUIslice.jpg" title="GUIslice" data-lightbox="image">
+    <img src="/images/2024/11-21/GUIslice-small.jpg" alt="GUIslice Builder" width="478 " height="310">
+    <figcaption>GUIslice Builder</figcaption>
+  </a>
+</figure>
+
+<p>軽量でオープンソースな GUI ライブラリです。豊富に用意されたウィジェットは、そのほとんどが Flash 上に配置されるよう構成されていて、RAM を圧迫しない作りとのことです。また Windows や MacOS、Linux で動作する、ドラッグ＆ドロップで GUI が作れる <abbr title="What you see is what you get">WYSIWYG</abbr> なツール <a href="https://github.com/ImpulseAdventure/GUIslice/wiki/GUIslice-Builder" title="GUIslice Builder · ImpulseAdventure/GUIslice Wiki">GUIslice Builder</a> が提供されていて、レイアウトの手間を大幅に削減してくれます。</p>
+
+<p>ドキュメントも <a href="https://impulseadventure.github.io/GUIslice/index.html" title="GUIslice: GUIslice library">オンライン</a> だけじゃなく、合わせると 800 ページ近くになるリファレンスやユーザーガイドの PDF もあり、しっかりしていています。ウィジェットのデザインはクールさに欠けますが、かなりの力作です！</p>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li><a href="https://lvgl.io/" title="LVGL - Light and Versatile Embedded Graphics Library"><strong>LVGL</strong></a></li>
+</ul>
+<figure class="float-left">
+  <a href="/images/2024/11-21/LVGL.jpg" title="LVGL" data-lightbox="image">
+    <img src="/images/2024/11-21/LVGL-small.jpg" alt="LVGL" width="597 " height="362">
+    <figcaption>LVGL - Light and Versatile Graphics Library</figcaption>
+  </a>
+</figure>
+
+<p>フリーで商用利用も可能なオープンソースなライブラリです。Arduino 用は <a href="https://docs.lvgl.io/master/details/integration/framework/arduino.html" title="Arduino — LVGL  documentation">ESP32 と TFT_eSPI が推奨</a> されてますが、<a href="https://x.com/lovyan03/status/1398996044688486407" title="らびやんさんの投稿">LovyanGFX でも動きそう</a> です。</p>
+
+<p>サンプルを見る限り、スタイルシートの代わりに関数群を組み合わせてデザインするイメージでしょうか。ただ日本語の情報がほとんどなく、学習コストはかなり高そうで、僕では簡単な <a href="https://github.com/lvgl/lvgl/blob/master/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino" title="lvgl/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino at master · lvgl/lvgl">Arduino 用スケッチ例</a> さえ動かせず、今回は断念です <span style="font-size:1.4em">😭</span>。</p>
+
+<p>悔しさのあまり勢いで <abbr title="Cheap Yellow Display">CYD</abbr> を <a href="https://ja.aliexpress.com/item/1005006470918908.html">AliExpress で購入</a> しちゃいました。<a href="https://randomnerdtutorials.com/projects-esp32/" title="250+ ESP32 Projects, Tutorials and Guides with Arduino IDE​｜Random Nerd Tutorials">この辺のチュートリアル</a> を参考に、そのうちリベンジしたいと思ってます <img class="emoji" title=":fish_cake:" alt=":fish_cake:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f365.png" height="20" width="20"></p>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li><a href="https://squareline.io/" title="SquareLine Studio - Design and build UIs with ease"><strong>SquareLine Studio</strong></a></li>
+</ul>
+<figure class="float-left">
+  <a href="/images/2024/11-21/square-line.jpg" title="SquareLine Studio" data-lightbox="image">
+    <img src="/images/2024/11-21/square-line.jpg" alt="SquareLine Studio" width="597" height="397">
+    <figcaption>SquareLine Studio</figcaption>
+  </a>
+</figure>
+
+<p>グラフィックライブラリに <a href="https://github.com/Bodmer/TFT_eSPI" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">TFT_eSPI</a> と <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> を、レンダリングフレームワークに <a href="https://github.com/lvgl/lvgl" title="lvgl/lvgl: Embedded graphics library to create beautiful UIs for any MCU, MPU and display type.">LVGL</a> を採用している、かなりクールなツールですが、オープンソースでガッツリとビジネス利用しています。<a href="https://squareline.io/pricing/licenses" title="SquareLine Studio - Design and build UIs with ease">ライセンスのページ</a> には、個人利用は生涯無料のように書いてありますが、30日でライセンス切れになる可能性大ですね。LVGL が動かないので今回は軽くパスです。</p>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li><a href="https://vision.squareline.io/" title="SquareLine Vision - From Vision to Product"><strong>SquareLine Vision</strong></a></li>
+</ul>
+<figure class="float-left">
+  <a href="/images/2024/11-21/square-vision.jpg" title="SquareLine Vision" data-lightbox="image">
+    <img src="/images/2024/11-21/square-vision.jpg" alt="SquareLine Vision" width="595" height="432">
+    <figcaption>SquareLine Vision</figcaption>
+  </a>
+</figure>
+
+<p>前述の SquareLine Studio の新バージョンです。組み込み系に加え、<a href="https://ja.vuejs.org/" title="Vue.js - The Progressive JavaScript Framework｜Vue.js">Vue.js</a> や <a href="https://ja.react.dev/" title="React">REACT</a> など Web 系の UI フレームワークも取り込もうとしている意欲的なツールです。</p>
+
+<p>SquareLine はこれまで LVGL と協力関係にありましたが、2024年2月、「<a href="https://blog.lvgl.io/2024-02-12/sls-break-up" title="LVGL ends its collaboration with SquareLine Studio｜LVGL’s Blog">LVGL と縁を切り独自路線を歩む事になった</a>」ようです。LVGL 側も負けじと <a href="https://blog.lvgl.io/2024-07-05/work-begun-on-lvgl-ui-editor" title="Work began on LVGL’s UI Editor｜LVGL’s Blo">UI ツールのリリース計画を発表</a> しているので、そちらに期待ですネ。</p>
+
+<h3 id="タッチイベント-ライブラリ">タッチイベント ライブラリ</h3>
+
+<p>ココまで GUI ライブラリを調べてきて、「自作するっきゃない？」と思い始めました。そうなるとタップやスワイプなど、タッチスクリーン上のイベントを識別するライブラリも必要になりそうです。という事で、この件も調べてみました。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/GerLech/TouchEvent" title="GerLech/TouchEvent: An ARDUINO library to poll touchscreen based on XPT 2046 controller and call functions on certain events"><strong>TouchEvent</strong></a><br>
+ダブルタップなども識別できるのですが、残念ながら <a href="https://github.com/PaulStoffregen/XPT2046_Touchscreen" title="PaulStoffregen/XPT2046_Touchscreen: Touchscreen Arduino Library for XPT2046 Touch Controller Chip">XPT2046_Touchscreen</a> 専用です。タッチが検出可能な TFT_eSPI や LovyanGFX との重複利用も考えられますが、肝心のキャリブレーションがサポートされていないので、別途 <a href="https://github.com/ardnew/XPT2046_Calibrated" title="ardnew/XPT2046_Calibrated: XPT2046_Touchscreen library fork with calibration support">XPT2046_Calibrated</a> などのライブラリが必要です。</li>
+</ul>
+
+<p>という事で、本件も含めて自作を決意するに至った次第です。こりゃ大変だ〜 <span style="font-size:1.4em">😮‍💨</span></p>
+
+<h2 id="今回製作した-ui-モックアップのご紹介">今回製作した UI モックアップのご紹介</h2>
+
+<p>文章で説明するより動画の方が分かり易いと思い、初めて音声付きの動画を作成しました。12分と少々長く、滑舌が悪く聴きづらいところがありますが、再録は面倒なのでご勘弁を <img class="emoji" title=":bow:" alt=":bow:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f647.png" height="20" width="20"></p>
+
+<figure class="flex">
+  <iframe width="722" height="406" src="https://www.youtube.com/embed/9El-2NYCDNU" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</figure>
+
+<h3 id="各コンポーネントのご紹介">各コンポーネントのご紹介</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/11-21/Overall-flow.jpg" title="コンポーネントの全体概要" data-lightbox="image">
+    <img src="/images/2024/11-21/Overall-flow-small.jpg" alt="コンポーネントの全体概要" width="645" height="430">
+    <figcaption>コンポーネントの全体概要</figcaption>
+  </a>
+</figure>
+
+<p>さて、作成した各コンポーネントをチョットだけ詳しく、一部コードを交えて紹介しますが、コードそのものよりもコメントでイメージが伝わればと思います。</p>
+
+<p>また動画で使った「コンポーネントの全体概要」を再掲するので、合わせてご覧ください。</p>
+
+<h4 id="イベント-マネージャー">イベント マネージャー</h4>
+
+<p>TFT_eSPI または LovyanGFX が提供するメソッド <code class="language-plaintext highlighter-rouge">getTouch()</code> で、タップやダブルタップ、スワイプといったイベントを識別するコンポーネントです。識別するイベントを次のように定義しています。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
+  <span class="n">EVENT_NONE</span>    <span class="o">=</span> <span class="p">(</span><span class="mh">0x00</span><span class="p">),</span> <span class="c1">// 非タッチ状態を 'HIGH' とみなす</span>
+  <span class="n">EVENT_RISING</span>  <span class="o">=</span> <span class="p">(</span><span class="mh">0x01</span><span class="p">),</span> <span class="c1">// タッチ状態   --&gt; 非タッチ状態</span>
+  <span class="n">EVENT_FALLING</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x02</span><span class="p">),</span> <span class="c1">// 非タッチ状態 --&gt; タッチ状態</span>
+  <span class="n">EVENT_TOUCHED</span> <span class="o">=</span> <span class="p">(</span><span class="mh">0x04</span><span class="p">),</span> <span class="c1">// タッチ状態   --&gt; タッチ状態</span>
+  <span class="n">EVENT_TAP2</span>    <span class="o">=</span> <span class="p">(</span><span class="mh">0x08</span><span class="p">),</span> <span class="c1">// ダブルタップ</span>
+
+  <span class="c1">// エイリアス</span>
+  <span class="n">EVENT_INIT</span>    <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_NONE</span><span class="p">),</span>
+  <span class="n">EVENT_UP</span>      <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_RISING</span><span class="p">),</span>
+  <span class="n">EVENT_DOWN</span>    <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_FALLING</span><span class="p">),</span>
+  <span class="n">EVENT_DRAG</span>    <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_FALLING</span> <span class="o">|</span> <span class="n">EVENT_TOUCHED</span><span class="p">),</span>
+  <span class="n">EVENT_TAP</span>     <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_FALLING</span> <span class="o">|</span> <span class="n">EVENT_RISING</span><span class="p">),</span>
+  <span class="n">EVENT_CLICK</span>   <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_FALLING</span> <span class="o">|</span> <span class="n">EVENT_RISING</span><span class="p">),</span>
+  <span class="n">EVENT_CHANGE</span>  <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_FALLING</span> <span class="o">|</span> <span class="n">EVENT_RISING</span><span class="p">),</span>
+  <span class="n">EVENT_SELECT</span>  <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_FALLING</span> <span class="o">|</span> <span class="n">EVENT_TAP2</span><span class="p">),</span>
+  <span class="n">EVENT_ALL</span>     <span class="o">=</span> <span class="p">(</span><span class="n">EVENT_FALLING</span> <span class="o">|</span> <span class="n">EVENT_RISING</span> <span class="o">|</span> <span class="n">EVENT_TOUCHED</span><span class="p">),</span>
+<span class="p">}</span> <span class="n">Event_t</span><span class="p">;</span></code></pre></figure>
+
+<p>基本は「立ち下がり（<code class="language-plaintext highlighter-rouge">FALLING</code>）」、「立ち上がり（<code class="language-plaintext highlighter-rouge">RISING</code>）」、「タッチ（<code class="language-plaintext highlighter-rouge">TOUCHED</code>）」で、アプリケーションの用途に合わせこれらを組みわせたエイリアスを定義しています。またダブルタップ（<code class="language-plaintext highlighter-rouge">TAP2</code>）は、一定時間内の <code class="language-plaintext highlighter-rouge">FALLING</code> と <code class="language-plaintext highlighter-rouge">RISING</code> をカウントして識別します。</p>
+
+<p>このコンポーネントが返すのは、次のような識別したイベントと座標の組みです。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">typedef</span> <span class="k">struct</span> <span class="nc">Touch</span> <span class="p">{</span>
+  <span class="n">Event_t</span>     <span class="n">event</span><span class="p">;</span>  <span class="c1">// Detected event</span>
+  <span class="kt">uint16_t</span>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>   <span class="c1">// The coordinates where the event fired</span>
+<span class="p">}</span> <span class="n">Touch_t</span><span class="p">;</span></code></pre></figure>
+
+<p>また必要かどうか分かりませんが、メカスイッチ同様、デバウンス処理を入れています。今回はタッチデバイスからの割り込み信号 <code class="language-plaintext highlighter-rouge">T-IRQ</code> を有効にしているので、ちゃんとオシロスコープで観測すべきですが、今後の課題です。</p>
+
+<p>余談ですが、LovyanGFX の場合、<code class="language-plaintext highlighter-rouge">getTouch()</code> の第３引数で「読み込み回数」を指定すると、観測した座標の中央値を返してくれるようなのですが、試してはいません。細かいところまで作り込んであるのはサスガです。</p>
+
+<h4 id="ウィジェット">ウィジェット</h4>
+
+<p>まずはスクリーンとウィジェットの構成です。メインスクリーンを例にとれば、最終イメージに対し背景となる画像を１枚用意し、その上に「ウィジェット領域」とその中で「受け付けるイベントの種類」を定義しています。</p>
+
+<figure class="flex">
+  <a href="/images/2024/11-21/main-screen.jpg" title="メインスクリーンの構成" data-lightbox="image">
+    <img class="simple" src="/images/2024/11-21/main-screen.jpg" alt="メインスクリーンの構成" width="1955" height="544">
+    <figcaption>メインスクリーンの構成</figcaption>
+  </a>
+</figure>
+
+<p>上記の考え方を実現するため、各ウィジェットを次のような構造体で定義します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// ウィジェット画像の定義</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+  <span class="k">const</span> <span class="kt">uint8_t</span>   <span class="o">*</span><span class="n">data</span><span class="p">;</span>  <span class="c1">// ウィジェット画像配列へのポインタ</span>
+  <span class="k">const</span> <span class="kt">size_t</span>    <span class="n">size</span><span class="p">;</span>   <span class="c1">// ウィジェット画像のデータサイズ</span>
+<span class="p">}</span> <span class="n">Image_t</span><span class="p">;</span>
+
+<span class="c1">// ウィジェットの定義</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">Widget</span> <span class="p">{</span>
+  <span class="k">const</span> <span class="kt">uint16_t</span>  <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>   <span class="c1">// ウィジェット領域の開始座標</span>
+  <span class="k">const</span> <span class="kt">uint16_t</span>  <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>   <span class="c1">// ウィジェット領域の縦横幅</span>
+  <span class="k">const</span> <span class="n">Image_t</span>   <span class="o">*</span><span class="n">image</span><span class="p">;</span> <span class="c1">// ウィジェット画像へのポインタ</span>
+  <span class="k">const</span> <span class="n">Event_t</span>   <span class="n">target_event</span><span class="p">;</span> <span class="c1">// 受け付けるイベントの種類</span>
+  <span class="kt">void</span>            <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="k">const</span> <span class="k">struct</span> <span class="nc">Widget</span> <span class="o">*</span><span class="n">widget</span><span class="p">,</span> <span class="k">const</span> <span class="n">Touch_t</span> <span class="o">&amp;</span><span class="n">touch</span><span class="p">);</span>  <span class="c1">// コールバック関数</span>
+<span class="p">}</span> <span class="n">Widget_t</span><span class="p">;</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">callback()</code> の第１引数は自分自身へのポインタで、後述するウィジェットマネージャーから渡されます（クラス化しウィジェットをオブジェクトとして生成する段取りを踏めば不要ですが、今回はそんな面倒なことをしていないため、必要となっています）。</p>
+
+<p>さて実際のメインスクリーンは、この構造体を配列にして、次のように定義しています。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="k">static</span> <span class="k">constexpr</span> <span class="n">Widget_t</span> <span class="n">widget_main</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">{</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">320</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="n">image_main</span><span class="p">,</span>        <span class="n">EVENT_NONE</span><span class="p">,</span> <span class="n">onMainScreen</span>        <span class="p">},</span>
+  <span class="p">{</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span>              <span class="n">EVENT_ALL</span><span class="p">,</span>  <span class="n">onMainInside</span>        <span class="p">},</span>
+  <span class="p">{</span> <span class="mi">258</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="mi">62</span><span class="p">,</span> <span class="mi">134</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span>              <span class="n">EVENT_ALL</span><span class="p">,</span>  <span class="n">onMainOutside</span>       <span class="p">},</span>
+  <span class="p">{</span>   <span class="mi">0</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span>  <span class="mi">45</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span>              <span class="n">EVENT_ALL</span><span class="p">,</span>  <span class="n">onMainThermograph</span>   <span class="p">},</span>
+  <span class="p">{</span> <span class="mi">265</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span>  <span class="mi">50</span><span class="p">,</span>  <span class="mi">50</span><span class="p">,</span> <span class="n">image_icon_camera</span><span class="p">,</span> <span class="n">EVENT_UP</span><span class="p">,</span>   <span class="n">onMainCapture</span>       <span class="p">},</span>
+  <span class="p">{</span> <span class="mi">265</span><span class="p">,</span> <span class="mi">185</span><span class="p">,</span>  <span class="mi">50</span><span class="p">,</span>  <span class="mi">50</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span>              <span class="n">EVENT_ALL</span><span class="p">,</span>  <span class="n">onMainConfiguration</span> <span class="p">},</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>背景のスクリーン画像も１つのウィジェットで、<code class="language-plaintext highlighter-rouge">image_main</code> が示す <code class="language-plaintext highlighter-rouge">Image_t</code> 配列へのポインタで紐づけます。またカメラのアイコン画像 <code class="language-plaintext highlighter-rouge">image_icon_camera</code> は、状況や設定に応じて４種類を切り替えるため、４つの画像を紐付けます。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// メインスクリーンの背景画像</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="n">Image_t</span> <span class="n">image_main</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span> <span class="n">screen_main</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">screen_main</span><span class="p">)</span> <span class="p">},</span> <span class="p">};</span> <span class="c1">// 320 x 240</span>
+
+<span class="c1">// カメラアイコンの画像</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="n">Image_t</span> <span class="n">image_icon_camera</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">{</span> <span class="n">icon_camera1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">icon_camera1</span><span class="p">)</span> <span class="p">},</span> <span class="c1">// カメラアイコン（50 x 50）</span>
+  <span class="p">{</span> <span class="n">icon_camera2</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">icon_camera2</span><span class="p">)</span> <span class="p">},</span> <span class="c1">// スクリーンキャプチャ中のアイコン（50 x 50）</span>
+  <span class="p">{</span> <span class="n">icon_video</span><span class="p">,</span>   <span class="k">sizeof</span><span class="p">(</span><span class="n">icon_video</span>  <span class="p">)</span> <span class="p">},</span> <span class="c1">// ビデオアイコン（50 x 50）</span>
+  <span class="p">{</span> <span class="n">icon_stop</span><span class="p">,</span>    <span class="k">sizeof</span><span class="p">(</span><span class="n">icon_stop</span>   <span class="p">)</span> <span class="p">},</span> <span class="c1">// 録画中アイコン（50 x 50）</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>ウィジェット画像へのポインタに <code class="language-plaintext highlighter-rouge">NULL</code> が指定されているのは、画像が不要あるいは既に背景画像に描かれているウィジェットで、「ウィジェット領域」と「受け付けるイベントの種類」、および「コールバック関数」だけを持ちます。</p>
+
+<p>そしてこれらの全データは、<a href="https://qiita.com/saltheads/items/dd65935878a0901fe9e7" title="constexprとconstを正しく使い分ける #C++11 - Qiita"><code class="language-plaintext highlighter-rouge">constexpr</code> 宣言により、Flash 上に配置</a> されます。</p>
+
+<h5 id="ウィジェット画像について">ウィジェット画像について</h5>
+
+<p>フォーマットは全て PNG としています。TFT_eSPI の場合は別途 <a href="https://github.com/bitbank2/PNGdec" title="bitbank2/PNGdec: An optimized PNG decoder suitable for microcontrollers and PCs">PNGdec ライブラリ</a> が必要ですが、RGB565 フォーマットに比べ画像サイズを小さく出来、Flash の占有率を減らせます。</p>
+
+<p>また画像のデータ変換は、Lang-ship さんの「<a href="https://lang-ship.com/blog/work/lovyangfx-5-png/" title="LovyanGFX入門 その5 画像描画 ｜ Lang-ship">LovyanGFX入門 その5 画像描画</a>」を参考に、提供して下さっているツールを使わせて頂きました。色々なデータ変換に対応していて、出力データをそのままヘッダーファイルに埋め込める、大変便利なツールです。感謝です <img class="emoji" title=":1st_place_medal:" alt=":1st_place_medal:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f947.png" height="20" width="20"></p>
+
+<figure class="flex">
+  <a href="/images/2024/11-21/lang-ship.jpg" title="画像データ変換ツール" data-lightbox="image">
+    <img src="/images/2024/11-21/lang-ship.jpg" alt="画像データ変換ツール" width="1200" height="440">
+    <figcaption>画像データ変換ツール</figcaption>
+  </a>
+</figure>
+
+<figure class="float-left">
+  <a href="/images/2024/11-21/TFT_eSPI-PNGdec.jpg" title="カメラ、歯車アイコン右横のゴミ" data-lightbox="image">
+    <img src="/images/2024/11-21/TFT_eSPI-PNGdec-small.jpg" alt="カメラ、歯車アイコン右横のゴミ" width="515" height="380">
+    <figcaption>カメラ、歯車アイコン右横のゴミ</figcaption>
+  </a>
+</figure>
+
+<p>さらにちょっとした Tips ですが、フリーのツール（僕の場合はサブスク化される前の ImageOptim）で <a href="https://www.google.com/search?q=png+%E8%BB%BD%E9%87%8F%E5%8C%96+%E3%83%84%E3%83%BC%E3%83%AB" title="png 軽量化 ツール - Google 検索">PNG 画像を軽量化</a> しています。ただし TFT_eSPI で使う PNGdec では、軽量化した画像を表示するとゴミが現れることがあるので要注意です。軽量化しなければ正しく表示されます。</p>
+
+<h5 id="各ウィジェットの概要">各ウィジェットの概要</h5>
+
+<p>詳細は割愛しますが、イメージをお伝えすべく、主要なウィジェットの概要と設計時のメモを画像で示します。</p>
+
+<ul>
+  <li><strong>スクロールバー付きリストボックス</strong></li>
+</ul>
+<figure class="float-left">
+  <a href="/images/2024/11-21/listbox-with-scrollbar.png" title="スクロールバー付きリストボックス" data-lightbox="image">
+    <img src="/images/2024/11-21/listbox-with-scrollbar-small.jpg" alt="スクロールバー付きリストボックス" width="652" height="312">
+    <figcaption>スクロールバー付きリストボックス</figcaption>
+  </a>
+</figure>
+
+<p>SD カードのファイル管理に使うウィジェットで、カード内のファイルを C++11 の <a href="https://cpprefjp.github.io/reference/vector/vector.html" title="vector - cpprefjp C++日本語リファレンス"><code class="language-plaintext highlighter-rouge">std:vector</code></a> でリスト化し、全ファイルを想定した仮想キャンバスと、表示用のスプライト画像との関係からスクロールバーの長さと位置を決めています。図中、大文字のシンボルは、このウィジェットのプロパティです。</p>
+
+<p>タップ時のサムネイル表示は <code class="language-plaintext highlighter-rouge">EVENT_FALLING</code> で、またダブルタップ時のディレクトリ移動は <code class="language-plaintext highlighter-rouge">EVENT_TAP2</code> で、それぞれのイベントをコールバック関数内で判定し処理しています。</p>
+
+<ul>
+  <li><strong>スライダー</strong></li>
+</ul>
+<figure class="float-left flex">
+  <a href="/images/2024/11-21/slider.png" title="スライダーの構成" data-lightbox="image">
+    <img src="/images/2024/11-21/slider-small.jpg" alt="スライダーの構成" width="580" height="250">
+    <figcaption>スライダーの構成</figcaption>
+  </a>
+</figure>
+
+<p>スライダーは「バー」と「ノブ」の２種類の画像で構成します。さらに「ノブ」は有効化／無効化の２つを用意します。</p>
+
+<p>今回「バー」は「ノブ」より細くしていますが、画像の縦幅を合わせ、「バー」の背景をスクリーンの背景と同色で塗りつぶしています。こうする事で「ノブ」を重ねた時のアンチエイリアシングを画像編集ソフトに任せられます。グラフィックライブラリ側のアンチエイリアシング機能を使うよりも、この方式の方が表示時の速度と綺麗さの面で有利かと思います。</p>
+
+<p>イケてない点としては、長さの異なる「バー」は、それぞれ専用画像の作成が必要という仕様で作っちゃった事です <img class="emoji" title=":persevere:" alt=":persevere:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f623.png" height="20" width="20"> クラス化する場合には、要改善ですね。</p>
+
+<ul>
+  <li><strong>チェックボックス、ラジオボタン、トグルボタン</strong></li>
+</ul>
+<figure class="float-left">
+  <a href="/images/2024/11-21/buttons.png" title="ボタン群" data-lightbox="image">
+    <img src="/images/2024/11-21/buttons-small.jpg" alt="ボタン群" width="475" height="155">
+    <figcaption>ボタン群</figcaption>
+  </a>
+</figure>
+
+<p>これらのウィジェットは、見た目以外にそれほど大きな違いはありません。ただラジオボタンだけは、一つが選択された時にグループ内の他のボタンにメッセージを送る処理をコールバック関数に記述しています。</p>
+
+<ul>
+  <li><strong>アニメーション</strong></li>
+</ul>
+<figure class="float-left">
+  <a href="/images/2024/11-21/animation.png" title="アニメーションの仕組み" data-lightbox="image">
+    <img src="/images/2024/11-21/animation-small.jpg" alt="アニメーションの仕組み" width="600" height="340">
+    <figcaption>アニメーションの仕組み</figcaption>
+  </a>
+</figure>
+
+<p>ユーザー操作への反応として単純なアニメーションを実装しました。省メモリのため、アイコン画像より少し大きな領域に対し横１ライン分のバッファを用意し、 <code class="language-plaintext highlighter-rouge">EVENT_FALLING</code> の場合は下から順に、<code class="language-plaintext highlighter-rouge">EVENT_RISING</code> では上から順に、それぞれ <code class="language-plaintext highlighter-rouge">readRect()</code> でコピーし <code class="language-plaintext highlighter-rouge">pushImage()</code> でズラしています。これでも十分に高速に実行可能です。</p>
+
+<h4 id="ウィジェット-マネージャー">ウィジェット マネージャー</h4>
+
+<p>主な役割は以下の２つです。</p>
+
+<ul>
+  <li>イベントマネージャが識別したイベントと座標を元に該当するウィジェットを特定し、コールバック関数を呼び出す役割です。以下にコードの抜粋を示します。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// フォーカスされたウィジェット</span>
+<span class="k">static</span> <span class="n">Widget_t</span> <span class="k">const</span><span class="o">*</span> <span class="n">focus</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+<span class="c1">// イベントマネージャーが識別したイベントを元に該当するウィジェットを特定し、コールバックを実行する</span>
+<span class="k">static</span> <span class="kt">bool</span> <span class="nf">widget_event</span><span class="p">(</span><span class="k">const</span> <span class="n">Widget_t</span> <span class="o">*</span><span class="n">widgets</span><span class="p">,</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">n_widgets</span><span class="p">,</span> <span class="n">Touch_t</span> <span class="o">&amp;</span><span class="n">touch</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">Event_t</span> <span class="n">event</span> <span class="o">=</span> <span class="n">touch</span><span class="p">.</span><span class="n">event</span><span class="p">;</span>
+
+  <span class="c1">// フォーカスされたウィジェットが空の場合</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">focus</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n_widgets</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+
+      <span class="c1">// 発生したイベントが、ウィジェットの「受け付けるイベントの種類」と合致したら、</span>
+      <span class="k">if</span> <span class="p">((</span><span class="n">touch</span><span class="p">.</span><span class="n">event</span> <span class="o">&amp;</span> <span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">target_event</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// 「ウィジェット領域」内のイベントかどうかをチェックし、</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">touch</span><span class="p">.</span><span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">touch</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span> <span class="o">&amp;&amp;</span>
+            <span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="n">touch</span><span class="p">.</span><span class="n">y</span> <span class="o">&amp;&amp;</span> <span class="n">touch</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">+</span> <span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+
+          <span class="c1">// 該当するウィジェットとしてフォーカスを当てる</span>
+          <span class="n">focus</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">widgets</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+          <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// 発生したイベントが、フォーカスされたウィジェットの「受け付けるイベントの種類」と合致したら、</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">focus</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">touch</span><span class="p">.</span><span class="n">event</span> <span class="o">&amp;</span> <span class="n">focus</span><span class="o">-&gt;</span><span class="n">target_event</span><span class="p">))</span> <span class="p">{</span>
+
+    <span class="c1">// 余計なイベントはマスクし、</span>
+    <span class="n">touch</span><span class="p">.</span><span class="n">event</span> <span class="o">=</span> <span class="p">(</span><span class="n">Event_t</span><span class="p">)(</span><span class="n">touch</span><span class="p">.</span><span class="n">event</span> <span class="o">&amp;</span> <span class="n">focus</span><span class="o">-&gt;</span><span class="n">target_event</span><span class="p">);</span>
+
+    <span class="c1">// コールバック関数を実行する</span>
+    <span class="n">focus</span><span class="o">-&gt;</span><span class="n">callback</span><span class="p">(</span><span class="n">focus</span><span class="p">,</span> <span class="n">touch</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="c1">// 発生したイベントが「立ち上がり」の場合は、フォーカスをリセットする</span>
+  <span class="n">focus</span> <span class="o">=</span> <span class="p">(</span><span class="n">event</span> <span class="o">&amp;</span> <span class="n">EVENT_RISING</span> <span class="o">?</span> <span class="nb">NULL</span> <span class="o">:</span> <span class="n">focus</span><span class="p">);</span>
+
+  <span class="k">return</span> <span class="p">(</span><span class="n">focus</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span> <span class="c1">// フォーカスが当たっている場合は true、外れれば false</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">focus</code>（<a href="https://tyfkda.github.io/blog/2018/08/14/c-const.html" title="【C】constポインタは何が上書き不可なのか - Kludge Factory"><code class="language-plaintext highlighter-rouge">const Widget_t*</code> じゃなくて <code class="language-plaintext highlighter-rouge">Widget_t const*</code> です！</a>）は、スクロールバーやスライダーの操作中にウィジェット領域から外れてもフォーカスし続けるための変数です。またこの変数は、スクリーンが遷移した時にリセットの必要があるため、ファイル内でグローバルとしています。</p>
+
+<ul>
+  <li>もう一つはスクリーンの状態遷移を管理する役割です。例えばスクリーンが遷移した場合、フォーカスをリセットし、各ウィジェットに初期化のメッセージを送ります。メッセージを受け取ったウィジェットでは主に、設定値に応じた描画を行います。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="c1">// ウィジェットを初期化するためのイベントメッセージ</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="n">Touch_t</span> <span class="n">doInit</span> <span class="o">=</span> <span class="p">{</span> <span class="n">EVENT_INIT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+
+<span class="c1">// 指定されたスクリーンに属するウィジェットを初期化する</span>
+<span class="kt">void</span> <span class="nf">widget_setup</span><span class="p">(</span><span class="n">State_t</span> <span class="n">screen</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+  <span class="n">Widget_t</span> <span class="k">const</span> <span class="o">*</span><span class="n">widget</span><span class="p">;</span>
+
+  <span class="c1">// フォーカスされたウィジェットをリセットする</span>
+  <span class="n">focus</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+  <span class="c1">// 指定されたスクリーンのウィジェット配列を取得し、</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">widget_get</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">widget</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">))</span> <span class="p">{</span>
+
+    <span class="c1">// 各ウィジェットに初期化のイベントメッセージを送る</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">,</span> <span class="n">widget</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">widget</span><span class="o">-&gt;</span><span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">widget</span><span class="o">-&gt;</span><span class="n">callback</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">doInit</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="さて">さて…</h2>
+
+<p>普通は GUI のウィジェットをプログラミングする時、クラス化するのが当然なんでしょうが、慣れ親しんだ <a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/Widgets" title="Arduino-XIAO-ESP32/Widgets at main · embedded-kiddie/Arduino-XIAO-ESP32">C 言語スタイルで作ってしまいました</a>。結果、構造のシンプルさだけが取り柄で、再利用性は最低です <img class="emoji" title=":sweat_drops:" alt=":sweat_drops:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a6.png" height="20" width="20"></p>
+
+<p>最初は、スキル向上のために C++ でクラス化にチャレンジするか迷ったんですが、ポンコツな車輪の再発明に時間を費やすより、とにかく一品モノとしてとっとと仕上げ、LVGL などの優れた車輪に習熟する方が勉強になるかと考えた次第です（見苦しいイイワケです）。</p>
+
+<p>とは言えかなりの時間を費やしてしまいました。年内に仕上げられるか危ういところですが、年明けには 1550 円の <abbr title="Cheap Yellow Display">CYD</abbr> で LVGL のプログラミングが楽しめるよう頑張ります <img class="emoji" title=":sunrise:" alt=":sunrise:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f305.png" height="20" width="20"></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/10/04/" title="前の記事：基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編">← 基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/11/21/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/11/21/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/11/21/";this.page.identifier="/2024/11/21/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

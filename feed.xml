@@ -8,7 +8,21 @@
     
       
       <item>
-        <title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編（１）</title>
+        <title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編</title>
+        
+          <description>&lt;p&gt;&lt;a href=&quot;/2024/10/04&quot; title=&quot;基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編｜Embedded Kiddie&quot;&gt;前回&lt;/a&gt;、次のような機能目標を立てました。&lt;/p&gt;
+</description>
+        
+        <pubDate>Thu, 21 Nov 2024 11:04:59 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2024/11/21/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2024/11/21/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編</title>
         
           <description>&lt;h2 id=&quot;作りたい機能と要件の再整理&quot;&gt;作りたい機能と要件の再整理&lt;/h2&gt;
 </description>
