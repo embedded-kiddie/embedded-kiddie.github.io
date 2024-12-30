@@ -8,6 +8,21 @@
     
       
       <item>
+        <title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編</title>
+        
+          <description>&lt;p&gt;タイトル通り、何とか年内に完成と言える所まで漕ぎ着けました。日々少しつづとは言え、&lt;a href=&quot;/2024/08/15/&quot; title=&quot;基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編｜Embedded Kiddie&quot;&gt;UNO R4 での動作確認&lt;/a&gt; から &lt;a href=&quot;/2024/11/21/&quot; title=&quot;基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編｜Embedded Kiddie&quot;&gt;GUI モックアップ作成&lt;/a&gt; を経て約５ヶ月、長かったです &lt;span class=&quot;emoji&quot;&gt;😮‍💨&lt;/span&gt;&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Mon, 30 Dec 2024 16:35:05 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2024/12/30/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2024/12/30/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編</title>
         
           <description>&lt;p&gt;&lt;a href=&quot;/2024/10/04&quot; title=&quot;基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編｜Embedded Kiddie&quot;&gt;前回&lt;/a&gt;、次のような機能目標を立てました。&lt;/p&gt;

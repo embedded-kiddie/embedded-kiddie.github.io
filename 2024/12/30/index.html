@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="タイトル通り、何とか年内に完成と言える所まで漕ぎ着けました。日々少しつづとは言え、UNO R4 での動作確認 から GUI モックアップ作成 を経て約５ヶ月、長かったです 😮‍💨" />
+<meta property="og:description" content="タイトル通り、何とか年内に完成と言える所まで漕ぎ着けました。日々少しつづとは言え、UNO R4 での動作確認 から GUI モックアップ作成 を経て約５ヶ月、長かったです 😮‍💨" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2024/12/30/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2024/12/30/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-12-30T16:35:05+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2024-12-30T16:35:05+09:00","datePublished":"2024-12-30T16:35:05+09:00","description":"タイトル通り、何とか年内に完成と言える所まで漕ぎ着けました。日々少しつづとは言え、UNO R4 での動作確認 から GUI モックアップ作成 を経て約５ヶ月、長かったです 😮‍💨","headline":"基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2024/12/30/"},"url":"https://embedded-kiddie.github.io/2024/12/30/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2024-12-30T16:35:05+09:00" itemprop="datePublished">Dec 30, 2024
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>タイトル通り、何とか年内に完成と言える所まで漕ぎ着けました。日々少しつづとは言え、<a href="/2024/08/15/" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編｜Embedded Kiddie">UNO R4 での動作確認</a> から <a href="/2024/11/21/" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編｜Embedded Kiddie">GUI モックアップ作成</a> を経て約５ヶ月、長かったです <span class="emoji">😮‍💨</span></p>
+
+<h2 id="これまでの検討経緯">これまでの検討経緯</h2>
+
+<p>まずはこの５ヶ月間に実施した、検討用リポジトリのまとめです。</p>
+
+<ol>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/Arduino-UNO-R4/tree/main/MLX90640" title="Arduino-UNO-R4/MLX90640 at main · embedded-kiddie/Arduino-UNO-R4">Arduino-UNO-R4/MLX90640</a></strong><br>
+  MLX90640 センサボードの動作確認を行ったコードです。この時点ではまだ UNO R4 しか所有していませんでした。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/GFXbenchmark" title="Arduino-XIAO-ESP32/GFXbenchmark at main · embedded-kiddie/Arduino-XIAO-ESP32">GFX ライブラリのベンチマーク</a></strong><br>
+  新たに入手した <a href="https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/" title="Getting Started with Seeed Studio XIAO ESP32S3 Series | Seeed Studio Wiki">XIAO ESP32-S3</a> で４つの GFX ライブラリのベンチマークを実施し、ターゲットを <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> と <a href="https://github.com/Bodmer/TFT_eSPI" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">TFT_eSPI</a> の２つに絞り込みむこととしました。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/GFX_Touch_SD_Interoperability" title="Arduino-XIAO-ESP32/GFX_Touch_SD_Interoperability at main · embedded-kiddie/Arduino-XIAO-ESP32">SD カードライブラリの動作検証</a></strong><br>
+  各 GFX ライブラリと、<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">Espressif 標準の SD カードライブラリ</a> や <a href="https://github.com/greiman/SdFat" title="greiman/SdFat: Arduino FAT16/FAT32 exFAT Library">SdFat</a> との相互運用性を検証しました。この時の検討結果とは異なり、現在は SdFat の方が高速で、動画を 16 FPS で記録出来ています。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/FreeRTOS" title="Arduino-XIAO-ESP32/FreeRTOS at main · embedded-kiddie/Arduino-XIAO-ESP32">Arduino-XIAO-ESP32/FreeRTOS</a></strong><br>
+  ESP32 の２つのコアを同期、非同期で動かす実験です。検討の結果、センサ入力をコア１、レンダリングをコア０で、セマフォとメッセージキューを使って同期的に動かす仕様に決定しました。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/MLX90640_GUI_mockup" title="Arduino-XIAO-ESP32/MLX90640_GUI_mockup at main · embedded-kiddie/Arduino-XIAO-ESP32">Arduino-XIAO-ESP32/MLX90640_GUI_mockup</a></strong><br>
+  当初目論んだ <a href="https://lvgl.io/" title="LVGL — Light and Versatile Embedded Graphics Library">LVGL</a> を動かせなかったため、独自に作成した GUI のモックアップです。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/MLX90640Viewer" title="embedded-kiddie/MLX90640Viewer: MLX90640 Raw Filer Viewer">MLX90640Viewer</a></strong><br>
+  <a href="https://processing.org/" title="Welcome to Processing! / Processing.org">Processing</a> で作成した、MLX90640 専用の動画再生ビューワーです。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/Arduino-XIAO-ESP32/tree/main/MLX90640" title="Arduino-XIAO-ESP32/MLX90640 at main · embedded-kiddie/Arduino-XIAO-ESP32">Arduino-XIAO-ESP32/MLX90640</a></strong><br>
+  今回の最終成果物であるサーモグラフィカメラのリポジトリです。</p>
+  </li>
+</ol>
+
+<h2 id="最終仕様のまとめ">最終仕様のまとめ</h2>
+
+<p>若干のジャンクなノウハウを含め、改良点について書き留めたいと思います。</p>
+
+<h3 id="スプライトによるレンダリングの高速化">スプライトによるレンダリングの高速化</h3>
+
+<p>従来は <code class="language-plaintext highlighter-rouge">drawPixel()</code> や <code class="language-plaintext highlighter-rouge">fillRect()</code> メソッドで直接ディスプレイのインスタンスに描画していましたが、一旦メモリ上に生成したスプライトに描画した後、<code class="language-plaintext highlighter-rouge">pushSprite()</code> で一気に転送するようにした所、描画時間を劇的に高速化（168msec → 48msec）できました。</p>
+
+<figure class="flex">
+  <a href="/images/2024/12-30/sprite-before-after.jpg" title="スプライト適用前後のフレームレート" data-lightbox="image">
+    <img class="simple" src="/images/2024/12-30/sprite-before-after.jpg" alt="スプライト適用前後のフレームレート" width="1200" height="520">
+    <figcaption style="min-width: 400px">スプライト適用前後のフレームレート</figcaption>
+  </a>
+</figure>
+
+<p>さらに DMA 転送も効かせたかったのですが、以下の理由により断念しています。</p>
+
+<h4 id="lovyangfx-の-dma-転送について">LovyanGFX の DMA 転送について</h4>
+
+<p>ソースコードを完全に読み切れてはいませんが、<code class="language-plaintext highlighter-rouge">initDMA()</code> により、<code class="language-plaintext highlighter-rouge">writePixels()</code>、<code class="language-plaintext highlighter-rouge">writePixelsDMA()</code>、<code class="language-plaintext highlighter-rouge">pushPixelsDMA()</code>、<code class="language-plaintext highlighter-rouge">pushImage()</code>、<code class="language-plaintext highlighter-rouge">pushImageDMA()</code> および <code class="language-plaintext highlighter-rouge">pushSprite()</code> の DMA 転送が有効になるようです（まだ他にもあるカモですが…）。</p>
+
+<p>ただし、ラングシップさんの「<a href="https://lang-ship.com/blog/work/esp32-heap-1/" title="ESP32のヒープメモリ管理 その1 | Lang-ship">ESP32のヒープメモリ管理 その1</a>」によれば、</p>
+
+<blockquote>
+  <p>DMA対応メモリは、SPIやI2Sなどにハードウエアを利用したDMA転送で使える領域のメモリです。
+SPI接続のPSRAMはDMA転送で利用できないので除外されます。</p>
+</blockquote>
+
+<p>とのことです。事実、<a href="https://github.com/lovyan03/LovyanGFX/blob/master/src/lgfx/v1/LGFX_Sprite.hpp#L148" title="LovyanGFX/src/lgfx/v1/LGFX_Sprite.hpp at master · lovyan03/LovyanGFX"><code class="language-plaintext highlighter-rouge">LGFX_Sprite::setPsram(true)</code></a> などでスプライトを PSRAM 上に生成した場合、<a href="https://github.com/lovyan03/LovyanGFX/blob/master/src/lgfx/v1/LGFX_Sprite.hpp#L421-L425" title="LovyanGFX/src/lgfx/v1/LGFX_Sprite.hpp at master · lovyan03/LovyanGFX"><code class="language-plaintext highlighter-rouge">push_sprite()</code></a> の定義により、DMA が無効となっています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">push_sprite</span><span class="o">(</span><span class="nc">LovyanGFX</span><span class="o">*</span> <span class="n">dst</span><span class="o">,</span> <span class="n">int32_t</span> <span class="n">x</span><span class="o">,</span> <span class="n">int32_t</span> <span class="n">y</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">transp</span> <span class="o">=</span> <span class="nl">pixelcopy_t:</span><span class="o">:</span><span class="no">NON_TRANSP</span><span class="o">)</span>
+<span class="o">{</span>
+  <span class="n">pixelcopy_t</span> <span class="nf">p</span><span class="o">(</span><span class="n">_img</span><span class="o">,</span> <span class="n">dst</span><span class="o">-&gt;</span><span class="n">getColorDepth</span><span class="o">(),</span> <span class="n">getColorDepth</span><span class="o">(),</span> <span class="n">dst</span><span class="o">-&gt;</span><span class="n">hasPalette</span><span class="o">(),</span> <span class="n">_palette</span><span class="o">,</span> <span class="n">transp</span><span class="o">);</span>
+  <span class="n">dst</span><span class="o">-&gt;</span><span class="n">pushImage</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">_panel_sprite</span><span class="o">.</span><span class="na">_panel_width</span><span class="o">,</span> <span class="n">_panel_sprite</span><span class="o">.</span><span class="na">_panel_height</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">p</span><span class="o">,</span> <span class="n">_panel_sprite</span><span class="o">.</span><span class="na">getSpriteBuffer</span><span class="o">()-&gt;</span><span class="n">use_dma</span><span class="o">());</span> <span class="c1">// DMA disable with use SPIRAM</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>今回、192×144 ピクセルのスプライトまでは主メモリ上に確保でき DMA が効きましたが、256×192 ピクセル（単純計算で 256×192×2 (RGB565) = 96KB）が確保できず「黒い画面」となりました。GUI 関連で相当数の静的変数を宣言しているためメモリ不足となったようです。そこで止むを得ず DMA は断念し、スプライトは PSRAM 上に確保することにしました。</p>
+
+<p>ちなみに 192×144 ピクセルで <code class="language-plaintext highlighter-rouge">initDMA()</code> を無効化／有効化した時のレンダリング結果を以下に示します。僅か 2msec（26msec → 24msec）ほどですが、確かに効果はありました。</p>
+
+<figure class="flex">
+  <a href="/images/2024/12-30/sprite-dma-off-on.jpg" title="スプライトに対する DMA の効果" data-lightbox="image">
+    <img class="simple" src="/images/2024/12-30/sprite-dma-off-on.jpg" alt="スプライトに対する DMA の効果" width="1200" height="520">
+    <figcaption style="min-width: 400px">スプライトに対する DMA の効果</figcaption>
+  </a>
+</figure>
+
+<h4 id="tft_espi-の-dma-転送について">TFT_eSPI の DMA 転送について</h4>
+
+<p>どんな場合に <code class="language-plaintext highlighter-rouge">TFT_eSPI::initDMA(true)</code> が効くのか、LovyanGFX ほどソースコードを読み切れてはいませんが、わずかながら効果がありました（256×192 ピクセルの場合）。LovyanGFX と同様、DMA を有効にした場合、<a href="https://github.com/Bodmer/TFT_eSPI/blob/master/Extensions/Sprite.cpp#L165-L176" title="TFT_eSPI/Extensions/Sprite.cpp at master · Bodmer/TFT_eSPI">下記コード</a>によりスプライトは PSRAM 上には生成されません。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="k">if</span> <span class="n">defined</span> <span class="o">(</span><span class="no">ESP32</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">defined</span> <span class="o">(</span><span class="no">CONFIG_SPIRAM_SUPPORT</span><span class="o">)</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="n">psramFound</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">_psram_enable</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">_tft</span><span class="o">-&gt;</span><span class="n">DMA_Enabled</span><span class="o">)</span>
+    <span class="o">{</span>
+      <span class="n">ptr8</span> <span class="o">=</span> <span class="o">(</span> <span class="n">uint8_t</span><span class="o">*)</span> <span class="n">ps_calloc</span><span class="o">(</span><span class="n">frames</span> <span class="o">*</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="n">frames</span><span class="o">,</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">uint16_t</span><span class="o">));</span>
+      <span class="c1">//Serial.println("PSRAM");</span>
+    <span class="o">}</span>
+    <span class="k">else</span>
+<span class="err">#</span><span class="n">endif</span>
+    <span class="o">{</span>
+      <span class="n">ptr8</span> <span class="o">=</span> <span class="o">(</span> <span class="n">uint8_t</span><span class="o">*)</span> <span class="n">calloc</span><span class="o">(</span><span class="n">frames</span> <span class="o">*</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="n">frames</span><span class="o">,</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">uint16_t</span><span class="o">));</span>
+      <span class="c1">//Serial.println("Normal RAM");</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>逆に <code class="language-plaintext highlighter-rouge">TFT_eSPI::initDMA(false)</code> の場合には、<a href="https://github.com/Bodmer/TFT_eSPI/blob/master/TFT_eSPI.cpp#L477-L481" title="TFT_eSPI/TFT_eSPI.cpp at master · Bodmer/TFT_eSPI">TFT_eSPI コンストラクタ中の設定</a> によりスプライトが PSRAM 上に確保されます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="k">if</span> <span class="n">defined</span> <span class="o">(</span><span class="no">ESP32</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">defined</span> <span class="o">(</span><span class="no">CONFIG_SPIRAM_SUPPORT</span><span class="o">)</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">psramFound</span><span class="o">())</span> <span class="n">_psram_enable</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// Enable the use of PSRAM (if available)</span>
+  <span class="k">else</span>
+<span class="err">#</span><span class="n">endif</span>
+  <span class="n">_psram_enable</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span></code></pre></figure>
+
+<p>ただし <code class="language-plaintext highlighter-rouge">CONFIG_SPIRAM_SUPPORT</code> は、ESP-IDF の <a href="https://espressif-docs.readthedocs-hosted.com/projects/esp-idf/en/stable/api-reference/kconfig.html" title="Project Configuration — ESP-IDF Programming Guide v4.1 documentation">ビルド時に定義されるシンボル</a> で、Arduino IDE でのコンパイル時には未定義となります（<code class="language-plaintext highlighter-rouge">CONFIG_SPIRAM</code> は参照可）。恐らく ESP-IDF の古いバージョンからの仕様変更に追従できていない TFT_eSPI のバグでしょう。</p>
+
+<p>LavyanGFX とは違い、256×192 ピクセルのスプライトを主メモリ上に確保しても「黒い画面」にはなりませんが、やはりメモリ不足の懸念があるので DMA は有効化せず、<code class="language-plaintext highlighter-rouge">User_Setup.h</code> に以下を追加してスプライトを PSRAM 上に確保する設定としています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Allocate a memory area for Sprite</span>
+<span class="c1">// https://github.com/Bodmer/TFT_eSPI/blob/master/Extensions/Sprite.cpp#L165-L172</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">CONFIG_SPIRAM_SUPPORT</span> <span class="c1">// originally defined as CONFIG_SPIRAM in esp-idf sdkconfig</span></code></pre></figure>
+
+<h4 id="本当に-psram-では-dma-が効かないのか">本当に PSRAM では DMA が効かないのか？</h4>
+
+<p>ラングシップさんの情報を疑うワケではありませんが、出典を調べないと気が済まないタチなので…。特に ESP32 は派生がいくつかあるので、ESP32-S3 について調べてみました。出典は「<a href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_technical_reference_manual_en.pdf" title="esp32-s3_technical_reference_manual_en.pdf">ESP32-S3 Technical Reference Manual Version 1.6</a>（2024-12-10版）」です。</p>
+
+<p>「3. GDMA Controller (GDMA)」には以下の記述があります。</p>
+
+<p>原文：</p>
+<blockquote>
+  <p>General Direct Memory Access (GDMA) is a feature that allows peripheral-to-memory, memory-to-peripheral,
+and memory-to-memory data transfer at a high speed. The CPU is not involved in the GDMA transfer, and
+therefore it becomes more efficient with less workload.</p>
+</blockquote>
+
+<p>日本語訳：</p>
+<blockquote>
+  <p>GDMA (General Direct Memory Access) は、周辺機器からメモリ、メモリから周辺機器、
+メモリからメモリへのデータ転送を高速に実行できる機能です。CPU は GDMA 転送に
+関与しないため、作業負荷が軽減され、効率が向上します。</p>
+</blockquote>
+
+<p>一方、無印 ESP32 の <a href="https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf" title="esp32_technical_reference_manual_en.pdf">Technical Reference Manual Version 5.2</a>（2024.08版）には、GDMA の記述は一切ありません。</p>
+
+<p>また「3.4.9 Accessing External RAM」には、外部 RAM の特定アドレスで GDMA が効きそうな記述があります。</p>
+
+<p>原文：</p>
+<blockquote>
+  <p>Any transmit and receive channels of GDMA can access 0x3C000000 ~ 0x3DFFFFFF in external RAM.</p>
+</blockquote>
+
+<p>日本語訳：</p>
+<blockquote>
+  <p>GDMA の送信および受信チャネルはすべて、外部 RAM の 0x3C000000 ～ 0x3DFFFFFF にアクセスできます。</p>
+</blockquote>
+
+<figure class="float-left">
+  <a href="/images/2024/12-30/ESP32-S3-memory-map.png" title="ESP32-S3 のメモリマップ" data-lightbox="image">
+    <img src="/images/2024/12-30/ESP32-S3-memory-map.jpg" alt="ESP32-S3 のメモリマップ" width="530" height="450">
+    <figcaption>ESP32-S3 のメモリマップ</figcaption>
+  </a>
+</figure>
+
+<p>そこで <a href="https://dl.espressif.com/public/esp32s3-mm.pdf" title="esp32s3-mm.pdf">ESP32-S3 のメモリマップ</a> を観ると、<code class="language-plaintext highlighter-rouge">0x3C000000</code> ～ <code class="language-plaintext highlighter-rouge">0x3DFFFFFF</code> は PSRAM 領域であることが分かります。</p>
+
+<p>（このメモリマップは、Espressif 開発者ポータルの2024年8月20日付け記事「<a href="https://developer.espressif.com/blog/esp32-memory-map-101/" title="ESP32's family Memory Map 101 · Espressif Developer Portal">ESP32’s family Memory Map 101</a>」に掲載されたマップとは、かなり異なっています）</p>
+
+<div class="clear-both"></div>
+
+<p>次に LovyanGFX を対象に、以下のコードでスプライトを PSRAM 上に確保し、そのアドレスを調べてみます（諸々省略しています）。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="no">LGFX</span> <span class="n">lcd</span><span class="o">;</span>
+<span class="n">LGFX_Sprite</span> <span class="nf">lcd_sprite</span><span class="o">(&amp;</span><span class="n">lcd</span><span class="o">);</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="n">psramInit</span><span class="o">())</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"\nThe PSRAM is correctly initialized.\n"</span><span class="o">));</span>
+<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"\nPSRAM does not work.\n"</span><span class="o">));</span>
+<span class="o">}</span>
+
+<span class="n">lcd_sprite</span><span class="o">.</span><span class="na">setPsram</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+<span class="n">lcd_sprite</span><span class="o">.</span><span class="na">createSprite</span><span class="o">(</span><span class="mi">256</span><span class="o">,</span> <span class="mi">192</span><span class="o">);</span> <span class="c1">// or createSprite(w, h, true);</span>
+
+<span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Sprite buffer adrs : 0x%X\n"</span><span class="o">,</span> <span class="n">lcd_sprite</span><span class="o">.</span><span class="na">getBuffer</span><span class="o">());</span>
+<span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Sprite buffer len  : %d\n"</span><span class="o">,</span>   <span class="n">lcd_sprite</span><span class="o">.</span><span class="na">bufferLength</span><span class="o">());</span>
+
+<span class="n">lcd_sprite</span><span class="o">.</span><span class="na">deleteSprite</span><span class="o">();</span></code></pre></figure>
+
+<p>結果は次の通り、GDMA の対象領域に入っていることが分かりました。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Sprite</span> <span class="n">buffer</span> <span class="n">adrs</span> <span class="o">:</span> <span class="mh">0x3C08BC08</span>
+<span class="nc">Sprite</span> <span class="n">buffer</span> <span class="n">len</span>  <span class="o">:</span> <span class="mi">98304</span></code></pre></figure>
+
+<p>ということで、少なくとも ESP32-S3 には GDMA という機構があり、PSRAM でも DMA が効く可能性があることが分かりました。この件は、継続調査としたいと思います <img class="emoji" title=":v:" alt=":v:" src="https://github.githubassets.com/images/icons/emoji/unicode/270c.png" height="20" width="20"></p>
+
+<h3 id="フレームレートとノイズ">フレームレートとノイズ</h3>
+
+<p><a href="https://www.melexis.com/en/documents/documentation/datasheets/datasheet-mlx90640" title="Datasheet for MLX90640 I Melexis">MLX90640 のデータシート</a> 「12.3. Noise performance and resolution」に掲載されたフレームレートとノイズの関係を示すグラフ（Ta = 25°C）によれば、高フレームレートほどノイズの影響を受け易く、バラツキの標準偏差（RMS 値）が大きくなることが分かります。</p>
+
+<figure class="flex">
+  <a href="/images/2024/12-30/frame-rate-noise.jpg" title="フレームレートとノイズの関係" data-lightbox="image">
+    <img class="simple" src="/images/2024/12-30/frame-rate-noise.jpg" alt="フレームレートとノイズの関係" width="1000" height="470">
+    <figcaption>フレームレートとノイズの関係</figcaption>
+  </a>
+</figure>
+
+<p>とかく高フレームレートに注目しがちですが、今回の主目的である「基板の温度分布測定」には低フレームレートによる観測が適しています。そこで対象に合わせてフレームレートを設定できるようにしました。実際の画像を見れば、その効果は一目瞭然と思います。</p>
+
+<figure class="flex">
+  <a href="/images/2024/12-30/1fps-16fps.jpg" title="フレームレートの設定メニューと実際の画像" data-lightbox="image">
+    <img class="simple" src="/images/2024/12-30/1fps-16fps.jpg" alt="フレームレートの設定メニューと実際の画像" width="900" height="260">
+    <figcaption style="min-width: 400px">フレームレートの設定メニューと実際の画像</figcaption>
+  </a>
+</figure>
+
+<h3 id="ヒートマップ">ヒートマップ</h3>
+
+<p>MLX60960 用ライブラリ <a href="https://github.com/adafruit/Adafruit_MLX90640/blob/master/examples/MLX90640_arcadaCam/MLX90640_arcadaCam.ino" title="Adafruit_MLX90640/examples/MLX90640_arcadaCam/MLX90640_arcadaCam.ino at master · adafruit/Adafruit_MLX90640">Adafruit_MLX90640 の例題</a> には、紫 〜 赤まで虹色のヒートマップが定義されています。これはコレで境界がハッキリして分かり易いものの、温度の変化に対する明るさの変化が直感的ではありません。そこで <a href="https://matplotlib.org/stable/users/explain/colors/colormaps.html" title="Choosing Colormaps in Matplotlib — Matplotlib 3.10.0 documentation">Matplotlib</a> のカラーマップから <code class="language-plaintext highlighter-rouge">inferno</code>（「灼熱地獄」と言うネーミングがお気に入りです）の RGB 値をサンプリングしました。</p>
+
+<figure class="flex">
+  <a href="/images/2024/12-30/matplotlib-heatmap.jpg" title="Matplotlib のカラーマップ" data-lightbox="image">
+    <img class="simple" src="/images/2024/12-30/matplotlib-heatmap.jpg" alt="Matplotlib のカラーマップ" width="1150" height="290">
+    <figcaption>Matplotlib のカラーマップ</figcaption>
+  </a>
+</figure>
+
+<figure class="float-left">
+  <a href="/images/2024/12-30/heatmap-inferno.jpg" title="Inferno の RGB グラフ" data-lightbox="image">
+    <img src="/images/2024/12-30/heatmap-inferno.jpg" alt="Inferno の RGB グラフ" width="850" height="630">
+    <figcaption>Inferno の RGB グラフ</figcaption>
+  </a>
+</figure>
+
+<p>作成したRGB グラフを元に、カラーマップを任意の階調数で作れるよう、各値を多項式近似しました。B（青）をそれなりに再現するには６次以上が必要ですが、R（赤）、G（緑）と同じ３次多項式での近似としています。実際、2.4 インチ、16ビット（RGB565）のディスプレイでは区別できません。</p>
+
+<h3 id="温度画像データの記録と再現">温度画像データの記録と再現</h3>
+
+<p><a href="https://learn.adafruit.com/mlx90640-thermal-image-recording" title="Overview｜MLX90640 Thermal Camera with Image Recording｜Adafruit Learning System">Adafruit の記事</a> に刺激を受け、キャプチャ画面をビットマップに保存する機能に加え、連続画像を記録する機能を実装しました。記事では１フレームずつビットマップを保存していますが、32×24×4 (float) バイトの連続した生データを１つのファイルとして SD カードに保存する仕様としています。</p>
+
+<p>また本体内にビットマップのサムネイル表示と動画再生の機能を実装し、さらに PC 上で再生可能なビューワー <a href="https://github.com/embedded-kiddie/MLX90640Viewer" title="embedded-kiddie/MLX90640Viewer: MLX90640 Raw Filer Viewer">MLX90640Viewer</a> も作成しました。</p>
+
+<p>ビューワーのレンダリング部分（バイリニア補間＋ヒートマップ）は本体から移植し、本体の動画再生部分はビューワーから逆移植しています <span class="emoji">💫</span></p>
+
+<figure class="flex">
+  <a href="/images/2024/12-30/thumbnail-playback.gif" title="ファイルエクスプローラー" data-lightbox="image">
+    <img src="/images/2024/12-30/thumbnail-playback.gif" alt="ファイルエクスプローラー" width="285" height="173">
+    <figcaption>ファイルエクスプローラー</figcaption>
+  </a>
+  <a href="/images/2024/12-30/MLX90640Viewer.gif" title="MLX90640Viewer" data-lightbox="image">
+    <img src="/images/2024/12-30/MLX90640Viewer.gif" alt="MLX90640Viewer" width="285" height="173">
+    <figcaption>MLX90640Viewer</figcaption>
+  </a>
+</figure>
+
+<p>ビューワーのプログラミングは基本 Java ですが、ESP32（あるいは大抵の Arduino ボード）のバイトオーダーはリトルエンディアンで、Java はビッグエンディアンなので変換が必要です。この変換は JPCERT の「<a href="https://www.jpcert.or.jp/java-rules/fio12-j.html" title="FIO12-J. リトルエンディアン形式のデータを読み書きするメソッドを用意する">FIO12-J. リトルエンディアン形式のデータを読み書きするメソッドを用意する</a>」を参考にしました。</p>
+
+<h3 id="個体情報の確認">個体情報の確認</h3>
+
+<figure class="float-left">
+  <a href="/images/2024/12-30/information-screen.png" title="個体の識別情報" data-lightbox="image">
+    <img src="/images/2024/12-30/information-screen.png" alt="個体の識別情報" width="320" height="240">
+    <figcaption>個体の識別情報</figcaption>
+  </a>
+</figure>
+
+<p>メモリの使用状況とか、ファイルエクスプローラーで使ってる便利な <a href="https://cpprefjp.github.io/reference/vector/vector.html" title="vector - cpprefjp C++日本語リファレンス"><code class="language-plaintext highlighter-rouge">std::vector</code></a> や <a href="https://cpprefjp.github.io/reference/algorithm/sort.html" title="sort - cpprefjp C++日本語リファレンス"><code class="language-plaintext highlighter-rouge">std::sort</code></a> のサポート状況とかを知りたかったので組み込んでみました。</p>
+
+<p>ハッキリ言ってどーでもよい機能なのですが、参考資料と共に一応紹介しておきますネ。</p>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li>
+<a href="https://www.freertos.org/Documentation/02-Kernel/04-API-references/03-Task-utilities/04-uxTaskGetStackHighWaterMark" title="uxTaskGetStackHighWaterMark, uxTaskGetStackHighWaterMark2 - FreeRTOS™">uxTaskGetStackHighWaterMark</a><br>
+タスクの残りスタックサイズを得る FreeRTOS の関数。</li>
+  <li>
+<a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/misc_system_api.html" title="Miscellaneous System APIs - ESP32 -  — ESP-IDF Programming Guide v5.3.2 documentation">Miscellaneous System APIs</a><br>
+Espressif 公式の ESP-IDF プログラミングガイド。ソフトウェアによるリセット、MAC アドレスやメモリ関連情報の取得方法、チップや ESP-IDF のバージョン取得方法など、諸々。</li>
+  <li>
+<a href="https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/Esp.h" title="arduino-esp32/cores/esp32/Esp.h at master · espressif/arduino-esp32">ESP.h</a><br>
+複雑な構成の ESP32 メモリ情報を簡単に取得するための便利 API 集。</li>
+  <li>
+<a href="https://forum.arduino.cc/t/which-version-of-c-is-currently-supported/1285868/13" title="Which version of c++ is currently supported - J-M-L の #13 - Programming - Arduino Forum">Which version of c++ is currently supported</a><br>
+Arduino フォーラムに投稿された、GNU C++ サポートバージョンの情報。</li>
+</ul>
+
+<details>
+<summary>ESP32 個体情報を出力する参考コード</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 別ファイルで定義されたグローバル変数</span>
+<span class="n">extern</span> <span class="n">Adafruit_MLX90640</span> <span class="n">mlx</span><span class="o">;</span>
+<span class="n">extern</span> <span class="n">TaskHandle_t</span> <span class="n">taskHandle</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+
+<span class="c1">// C++バージョンの情報</span>
+<span class="kd">const</span> <span class="n">struct</span> <span class="o">{</span>
+  <span class="n">uint32_t</span> <span class="n">ver</span><span class="o">;</span>
+  <span class="kt">char</span><span class="o">*</span>    <span class="n">std</span><span class="o">;</span> 
+<span class="o">}</span> <span class="n">cpp</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="o">{</span><span class="mi">199711</span><span class="o">,</span> <span class="s">"C++03"</span><span class="o">},</span>
+  <span class="o">{</span><span class="mi">201103</span><span class="o">,</span> <span class="s">"C++11"</span><span class="o">},</span>
+  <span class="o">{</span><span class="mi">201402</span><span class="o">,</span> <span class="s">"C++14"</span><span class="o">},</span>
+  <span class="o">{</span><span class="mi">201703</span><span class="o">,</span> <span class="s">"C++17"</span><span class="o">},</span>
+  <span class="o">{</span><span class="mi">202002</span><span class="o">,</span> <span class="s">"C++20"</span><span class="o">},</span>
+  <span class="o">{</span><span class="mi">202302</span><span class="o">,</span> <span class="s">"C++23"</span><span class="o">},</span>
+  <span class="o">{</span><span class="mi">203000</span><span class="o">,</span> <span class="s">"C++xx"</span><span class="o">},</span>
+<span class="o">};</span>
+
+<span class="kt">char</span> <span class="o">*</span><span class="n">cpp_ver</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">cpp</span><span class="o">)</span> <span class="o">/</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">cpp</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">cpp</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">ver</span> <span class="o">&lt;=</span> <span class="n">__cplusplus</span> <span class="o">&amp;&amp;</span> <span class="n">__cplusplus</span> <span class="o">&lt;</span> <span class="n">cpp</span><span class="o">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">].</span><span class="na">ver</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">cpp_ver</span> <span class="o">=</span> <span class="n">cpp</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">std</span><span class="o">;</span>
+    <span class="k">break</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">printf</span><span class="o">(</span><span class="s">"MLX90640 S/N: %04X%04X%04X\n"</span><span class="o">,</span> <span class="n">mlx</span><span class="o">.</span><span class="na">serialNumber</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">mlx</span><span class="o">.</span><span class="na">serialNumber</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">mlx</span><span class="o">.</span><span class="na">serialNumber</span><span class="o">[</span><span class="mi">2</span><span class="o">]);</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"MCU model   : %s R%d\n"</span><span class="o">,</span> <span class="no">ESP</span><span class="o">.</span><span class="na">getChipModel</span><span class="o">(),</span> <span class="no">ESP</span><span class="o">.</span><span class="na">getChipRevision</span><span class="o">());</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"ESP-IDF ver : %d.%d.%d %s\n"</span><span class="o">,</span> <span class="no">ESP_IDF_VERSION_MAJOR</span><span class="o">,</span> <span class="no">ESP_IDF_VERSION_MINOR</span><span class="o">,</span> <span class="no">ESP_IDF_VERSION_PATCH</span><span class="o">,</span> <span class="n">cpp_ver</span><span class="o">);</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"Task 1 stack: %7d\n"</span><span class="o">,</span> <span class="n">uxTaskGetStackHighWaterMark</span><span class="o">(</span><span class="n">taskHandle</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"Task 2 stack: %7d\n"</span><span class="o">,</span> <span class="n">uxTaskGetStackHighWaterMark</span><span class="o">(</span><span class="n">taskHandle</span><span class="o">[</span><span class="mi">1</span><span class="o">]));</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"Heap total  : %7d\n"</span><span class="o">,</span> <span class="no">ESP</span><span class="o">.</span><span class="na">getHeapSize</span><span class="o">());</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"Heap lowest : %7d\n"</span><span class="o">,</span> <span class="no">ESP</span><span class="o">.</span><span class="na">getMinFreeHeap</span><span class="o">());</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"PSRAM total : %7d\n"</span><span class="o">,</span> <span class="no">ESP</span><span class="o">.</span><span class="na">getPsramSize</span><span class="o">());</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"PSRAM lowest: %7d\n"</span><span class="o">,</span> <span class="no">ESP</span><span class="o">.</span><span class="na">getMinFreePsram</span><span class="o">());</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"Sketch free : %7d\n"</span><span class="o">,</span> <span class="no">ESP</span><span class="o">.</span><span class="na">getFreeSketchSpace</span><span class="o">());</span>
+<span class="n">printf</span><span class="o">(</span><span class="s">"Sketch size : %7d\n"</span><span class="o">,</span> <span class="no">ESP</span><span class="o">.</span><span class="na">getSketchSize</span><span class="o">());</span></code></pre></figure>
+
+
+</details>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>内容</th>
+      <th>例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MCU model</td>
+      <td>MCUのモデル記号、チップのリビジョン番号</td>
+      <td><code class="language-plaintext highlighter-rouge">ESP32-S3 R2</code></td>
+    </tr>
+    <tr>
+      <td>ESP-IDF ver</td>
+      <td>ESP-IDFのバージョン番号 / C++バージョン番号</td>
+      <td><code class="language-plaintext highlighter-rouge">5.3.2 C++17</code></td>
+    </tr>
+    <tr>
+      <td>Task 1 stack</td>
+      <td>タスク１スタックの <strong>起動後最小サイズ</strong> <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>
+</td>
+      <td><code class="language-plaintext highlighter-rouge">5000</code></td>
+    </tr>
+    <tr>
+      <td>Task 2 stack</td>
+      <td>タスク２スタックの <strong>起動後最小サイズ</strong> <sup id="fnref:1:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>
+</td>
+      <td><code class="language-plaintext highlighter-rouge">5848</code></td>
+    </tr>
+    <tr>
+      <td>Heap total</td>
+      <td>ヒープメモリの総サイズ</td>
+      <td><code class="language-plaintext highlighter-rouge">176140</code></td>
+    </tr>
+    <tr>
+      <td>Heap lowest</td>
+      <td>ヒープメモリの <strong>起動後最小サイズ</strong> <sup id="fnref:1:2" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>
+</td>
+      <td><code class="language-plaintext highlighter-rouge">122996</code></td>
+    </tr>
+    <tr>
+      <td>PSRAM total</td>
+      <td>PSRAMの総サイズ</td>
+      <td><code class="language-plaintext highlighter-rouge">8388608</code></td>
+    </tr>
+    <tr>
+      <td>PSRAM lowest</td>
+      <td>PSRAMの <strong>起動後最小サイズ</strong> <sup id="fnref:1:3" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup>
+</td>
+      <td><code class="language-plaintext highlighter-rouge">8242332</code></td>
+    </tr>
+    <tr>
+      <td>Sketch free</td>
+      <td>スケッチ用の空きサイズ</td>
+      <td><code class="language-plaintext highlighter-rouge">3342336</code></td>
+    </tr>
+    <tr>
+      <td>Sketch size</td>
+      <td>スケッチのサイズ</td>
+      <td><code class="language-plaintext highlighter-rouge">559328</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ちょっと紛らわしいのですが、「C++バージョン番号」は、スケッチをコンパイルする時の xtensa 用 GNU コンパイラのバージョンです。ESP-IDF 自体は C++23 でビルドされています（出典：<a href="https://docs.espressif.com/projects/esp-idf/en/v5.3.1/esp32/api-guides/cplusplus.html" title="C++ Support - ESP32 -  — ESP-IDF Programming Guide v5.3.1 documentation">ESP-IDF Programming Guide / C++ Support</a>）。</p>
+
+<p><a href="https://github.com/espressif/arduino-esp32/releases/tag/3.1.0" title="Release Arduino Release v3.1.0 based on ESP-IDF v5.3.2 · espressif/arduino-esp32">Espressif の ESP32 ボードパッケージ 3.1.0</a> では GNU コンパイラ <a href="https://gcc.gnu.org/gcc-13/" title="GCC 13 Release Series - GNU Project">13.2.0</a> が使われていて、僕の Intel Mac では C++17（13.2.0 のデフォルト）でした。個体情報ではないので組み込む必要は全くないのですが、前バージョンの <a href="https://github.com/espressif/arduino-esp32/releases/tag/3.0.7" title="Release Arduino Release v3.0.7 based on ESP-IDF v5.1.4+ · espressif/arduino-esp32">3.0.7</a> が C++20 相当 <span class="emoji">😳</span>（なぜ？）でしたので…</p>
+
+<p>ちなみに他のバージョンが必要な場合（例えば <code class="language-plaintext highlighter-rouge">-std=c++20</code>）は <code class="language-plaintext highlighter-rouge">platform.txt</code> で設定可能です。ただし 13.2.0 の マニュアルには</p>
+
+<blockquote>
+  <p>Support is experimental, and could change in incompatible ways in future releases.
+<br>
+サポートは実験的なものであり、将来のリリースでは互換性のない方法で変更される可能性があります。</p>
+</blockquote>
+
+<p>とあるので、ご注意を。</p>
+
+<h2 id="-お遊びデモ">😎 お遊びデモ</h2>
+
+<p>新しいカメラを手にすると、色々と写したくなりますよね。我が家の愛犬とかご近所さんとか、撮影してみました。</p>
+
+<figure class="flex">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/FFbE1BNb92w?si=UVRIinjQJv_ZarND" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</figure>
+
+<p>まぁ、<a href="https://ja.wikipedia.org/wiki/%E3%82%B5%E3%83%BC%E3%83%A2%E3%83%91%E3%82%A4%E3%83%AB" title="サーモパイル - Wikipedia">サーモパイルアレイ</a> の限界で、<a href="https://www.flir.jp/discover/rd-science/high-speed-thermal-cameras--the-need-for-speed/" title="高速赤外線カメラ – 速度の必要性｜Teledyne FLIR">マイクロボロメータ</a> には敵いませんネ <img class="emoji" title=":hugs:" alt=":hugs:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f917.png" height="20" width="20"></p>
+
+<h2 id="さて">さて…</h2>
+
+<p>発熱が激しいという RPi 5 を購入したので、どんな具合か見たいというのが元々の目的だったのですが、未だ箱に入ったまま放置です。ま、正月休みにゆっくりと組み上げます。</p>
+
+<p>また、LVGL にもリベンジしたいですね。LovyanGFX で動作させることが目標なので、成功したら報告したいと思います。</p>
+
+<p>来年も良い年になりますように <span style="font-size: 2em; vertical-align: middle;"><img class="emoji" title=":bamboo:" alt=":bamboo:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f38d.png" height="20" width="20"></span></p>
+
+<hr>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>「起動後最小サイズ」とは、電源投入から参照時点まででアロケートされた最大のメモリサイズを総サイズから差し引いた値。 “watermark”（透かし）と呼ばれる定型パターンを元に算出していると思われます。 <a href="#fnref:1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#fnref:1:1" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a> <a href="#fnref:1:2" class="reversefootnote" role="doc-backlink">↩<sup>3</sup></a> <a href="#fnref:1:3" class="reversefootnote" role="doc-backlink">↩<sup>4</sup></a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/11/21/" title="前の記事：基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編">← 基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2024/12/30/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2024/12/30/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2024/12/30/";this.page.identifier="/2024/12/30/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>
