@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/02/05/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/02/05/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-02-05T17:11:22+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-02-05T17:11:22+09:00","datePublished":"2025-02-05T17:11:22+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/02/05/"},"url":"https://embedded-kiddie.github.io/2025/02/05/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc;background-color:#8e1519}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper">
+<a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewbox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger">
+<a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a>
+</div>
+      </nav>
+</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-02-05T17:11:22+09:00" itemprop="datePublished">Feb 5, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/images/2025/02-05/Two-thermo-cameras.jpg" alt="２台のサーモグラフィカメラ" title="２台のサーモグラフィカメラ" width="1250" height="800"></p>
+
+<p><a href="https://lvgl.io/" title="LVGL — Light and Versatile Embedded Graphics Library">LVGL</a> の学習用に「黄色い基板」を <a href="https://ja.aliexpress.com/item/1005004502250619.html" title="Wi-Fi,Bluetooth,2.8インチのタッチスクリーンを備えたコネクテッドボード,240x320ディスプレイ画面,2.8インチのLCDモジュール,部屋用 - AliExpress">AliExpress</a> で購入したところ、1500円台という格安にもかかわらず意外と使えそうということがわかりました。</p>
+
+<p>ただ運悪くハズレを引いたので、再度の技適ガチャは覚悟の上で「lvgl開発ボード」と謳われた品を <a href="https://ja.aliexpress.com/item/1005006470918908.html" title='Esp32 arduino lvgl開発ボード、2.8 "スマートディスプレイ画面、2.8" タッチルーム付きLCDタフトモジュール、WifiおよびBluetooth - AliExpress'>再手配</a> しました。またハズレた方は「<a href="https://www.jh1lhv.tokyo/entry/2020/12/14/194627" title="国内の技適なしマイコン、特例届出を行いました - JH1LHVの雑記帳">国内の技適なしマイコン、特例届出を行いました</a>」を参考に、「<a href="https://www.tele.soumu.go.jp/j/sys/others/exp-sp/index.htm" title="総務省 電波利用ポータル｜その他｜技適未取得機器を用いた実験等の特例制度">技適未取得機器を用いた実験等の特例制度</a>」を申請中です。</p>
+
+<p>ちょーどその頃、下記のようなお問い合わせを頂きました。そこで LVGL の学習は一旦脇に置き、CYD でも動くプログラムに再構成したので、ここに共有したいと思います <span class="emoji">✌</span></p>
+
+<p><img src="/images/2025/02-05/Disqus.png" alt="お問い合わせ" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編｜Embedded Kiddie" width="850" height="250"></p>
+
+<h2 id="ハードウェア">ハードウェア</h2>
+
+<h3 id="2432s028rいわゆる-cheap-yellow-display-について">2432S028R、いわゆる Cheap Yellow Display について</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/02-05/CYD-back.jpg" title="再手配した 2432S028R の背面" data-lightbox="image">
+    <img src="/images/2025/02-05/CYD-back-small-450.jpg" alt="再手配した 2432S028R の背面" width="750" height="450">
+    <figcaption>再手配した 2432S028R の背面</figcaption>
+  </a>
+</figure>
+
+<p>ラングシップさんの「<a href="https://lang-ship.com/blog/work/esp32-lcd/" title="黄色いESP32液晶ボードシリーズまとめ｜Lang-ship">黄色いESP32液晶ボードシリーズまとめ｜Lang-ship</a>」や「<a href="https://randomnerdtutorials.com/esp32-cheap-yellow-display-cyd-pinout-esp32-2432s028r/" title="ESP32 Cheap Yellow Display (CYD) Pinout (ESP32-2432S028R)｜Random Nerd Tutorials">ESP32 Cheap Yellow Display (CYD) Pinout (ESP32-2432S028R)｜Random Nerd Tutorials</a>」が詳しく、大いに参考にさせてもらいました。</p>
+
+<p>本章では、<a href="/2024/12/30/" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編｜Embedded Kiddie">XIAO 版サーモグラフィカメラ</a> の移植に必要な、I2C 接続とバッテリー駆動についての調査結果を報告します。</p>
+
+<h3 id="mlx90640-の-i2c-接続">MLX90640 の I2C 接続</h3>
+
+<p>「拡張 I/O コネクタ」の <code class="language-plaintext highlighter-rouge">P3</code> と <code class="language-plaintext highlighter-rouge">CN1</code> のうち、3.3V と GND が来ている <code class="language-plaintext highlighter-rouge">CN1</code> で I2C 接続が可能です。回路図では <code class="language-plaintext highlighter-rouge">CN1</code> の３番ピンがどこにも接続されていませんが、下記情報や基板のシルク印刷により、IO22 に接続されていることが分かります。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display" title="witnessmenow/ESP32-Cheap-Yellow-Display: Building a community around a cheap ESP32 Display with a touch screen">witnessmenow/ESP32-Cheap-Yellow-Display</a>
+    <ol>
+      <li>
+<a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/discussions/32" title="I2C support? · witnessmenow/ESP32-Cheap-Yellow-Display · Discussion #32">I2C support? #32</a> … I2C に関する調査</li>
+      <li>
+<a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/blob/main/ADDONS.md#wiring" title="ESP32-Cheap-Yellow-Display/ADDONS.md at main · witnessmenow/ESP32-Cheap-Yellow-Display">Wires - ADDONS.md</a> … <code class="language-plaintext highlighter-rouge">CN1</code> のピン配</li>
+      <li>
+<a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/tree/main/OriginalDocumentation/5-Schematic" title="ESP32-Cheap-Yellow-Display/OriginalDocumentation/5-Schematic at main · witnessmenow/ESP32-Cheap-Yellow-Display">回路図</a> … 中国サイトからダウンロードした技術資料</li>
+    </ol>
+  </li>
+</ul>
+
+<p>下記図中のワイヤー色は、CYD に同梱された JST 1.25mm コネクタ付きワイヤーの色です。</p>
+
+<figure class="flex">
+  <a href="/images/2025/02-05/CYD-P3-j.jpg" title="コネクタ P3 のピン配" data-lightbox="image">
+    <img src="/images/2025/02-05/CYD-P3-j-small.jpg" alt="コネクタ P3 のピン配" width="550" height="350">
+    <figcaption>コネクタ P3 のピン配</figcaption>
+  </a>
+  <a href="/images/2025/02-05/CYD-CN1-j.jpg" title="コネクタ CN1 のピン配" data-lightbox="image">
+    <img src="/images/2025/02-05/CYD-CN1-j-small.jpg" alt="コネクタ CN1 のピン配" width="550" height="350">
+    <figcaption>コネクタ CN1 のピン配</figcaption>
+  </a>
+</figure>
+
+<p>上記「2. <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/blob/main/ADDONS.md#wiring" title="ESP32-Cheap-Yellow-Display/ADDONS.md at main · witnessmenow/ESP32-Cheap-Yellow-Display">Wires - ADDONS.md</a>」と今回作成のプログラムでは、I2C 用の <code class="language-plaintext highlighter-rouge">SDA</code> と <code class="language-plaintext highlighter-rouge">SCL</code> のピン設定を逆にしているので注意してください。ハード上の接続とソフト上の設定が合っていればどちらでも動作しますが、僕としては CYD 用ボードパッケージ <code class="language-plaintext highlighter-rouge">ESP32-2432S028 CYD</code>（後述）で読み込まれる <a href="https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h" title="arduino-esp32/variants/jczn_2432s028r/pins_arduino.h at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">pins_arduino.h</code></a> に準拠した設定にすべきと考えています。</p>
+
+<p>さて <code class="language-plaintext highlighter-rouge">CN1</code> の２番ピン（IO27、今回 <code class="language-plaintext highlighter-rouge">SDA</code> に割り当て）は、内部的に 10KΩ でプルアップされていますが、３番ピン（IO22、今回 <code class="language-plaintext highlighter-rouge">SCL</code> に割り当て）はノーケアです。これらは外部から見れば I2C の要件に合致していないので、外付けでもプルアップすべきと思います。</p>
+
+<p>実際には「プルアップ無し」でも動作することは確認しましたが、<a href="/2024/10/04/#mlx90640--xiaoesp32s3%E3%81%AE-i2c-%E9%80%9A%E4%BF%A1%E4%BB%95%E6%A7%98" title="基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編｜Embedded Kiddie">ソフトウェア編</a> でも触れた通り、<code class="language-plaintext highlighter-rouge">SDA</code>、<code class="language-plaintext highlighter-rouge">SCL</code> とも 1KΩ でプルアップすれば 信号の立ち上がりがシャープになります。</p>
+
+<figure class="flex">
+  <a href="/images/2025/02-05/MLX90640-SCL-0K.jpg" title="SCL 観測結果（プルアップなし）" data-lightbox="image">
+    <img src="/images/2025/02-05/MLX90640-SCL-0K-small.jpg" alt="SCL 観測結果（プルアップなし）" width="512" height="300">
+    <figcaption>SCL 観測結果（プルアップなし）</figcaption>
+  </a>
+  <a href="/images/2025/02-05/MLX90640-SCL-1K.jpg" title="SCL 観測結果（プルアップあり）" data-lightbox="image">
+    <img src="/images/2025/02-05/MLX90640-SCL-1K-small.jpg" alt="SCL 観測結果（プルアップあり）" width="512" height="300">
+    <figcaption>SCL 観測結果（プルアップあり）</figcaption>
+  </a>
+  <a href="/images/2025/02-05/MLX90640-pullup.jpg" title="SCL/SDAを1KΩでプルアップ" data-lightbox="image">
+    <img src="/images/2025/02-05/MLX90640-pullup-small.jpg" alt="SCL/SDAを1KΩでプルアップ" width="400" height="300">
+    <figcaption>SCL/SDAを1KΩでプルアップ</figcaption>
+  </a>
+</figure>
+
+<p>ちなみに、アナログ／デジタル入出力用と思われる <code class="language-plaintext highlighter-rouge">P3</code> の１番ピンは、バックライト制御用の IO21 に接続されているため、 <code class="language-plaintext highlighter-rouge">CN1</code> を I2C 用とした場合に使える GPIO は、両コネクタに共通の IO22 を除いた IO35 だけとなることを書き添えておきます。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ピン No</th>
+      <th>CN1</th>
+      <th>P3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>3.3V</td>
+      <td>IO21 → バックライト制御用</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>IO27 → I2C SDA に割り当て</td>
+      <td>IO22 → CN1 で I2C に割り当て</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>IO22 → I2C SCL に割り当て</td>
+      <td>IO35 → <strong>デジタル入出力のみ可</strong>
+</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>GND</td>
+      <td>GND</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="バッテリー駆動">バッテリー駆動</h3>
+
+<p>CYD をカメラとして使うにはバッテリー駆動が必須ですよネ。ということで下記を参考に Li-Po と充電器を手配し、実験してみました。</p>
+
+<ul>
+  <li>
+<a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display" title="witnessmenow/ESP32-Cheap-Yellow-Display: Building a community around a cheap ESP32 Display with a touch screen">witnessmenow/ESP32-Cheap-Yellow-Display</a>
+    <ul>
+      <li><a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/issues/47" title="Need a solution/method for battery powering CYDs · Issue #47 · witnessmenow/ESP32-Cheap-Yellow-Display">Need a solution/method for battery powering CYDs #47</a></li>
+      <li><a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/discussions/87" title="Rechargeable battery situation for ESP32-CYD · witnessmenow/ESP32-Cheap-Yellow-Display · Discussion #87">Rechargeable battery situation for ESP32-CYD #87</a></li>
+    </ul>
+  </li>
+  <li><a href="https://forum.arduino.cc/t/tp4056-lithium-charger-module-modification-to-add-power-sharing/1008473" title="TP4056 lithium charger module - modification to add power sharing - General Electronics - Arduino Forum">TP4056 lithium charger module - modification to add power sharing</a></li>
+</ul>
+
+<h4 id="li-po-バッテリーの接続">Li-Po バッテリーの接続</h4>
+
+<figure class="float-left">
+  <a href="/images/2025/02-05/CYD-P1.jpg" title="コネクタ P1 / P5" data-lightbox="image">
+    <img src="/images/2025/02-05/CYD-P1-small.jpg" alt="コネクタ P1 / P5" width="240" height="300">
+    <figcaption>コネクタ P1 / P5</figcaption>
+  </a>
+</figure>
+
+<p>バッテリーは、USB 端子横の（シリアル入出力と共通の）<code class="language-plaintext highlighter-rouge">P1</code>（旧バージョン）または <code class="language-plaintext highlighter-rouge">P5</code>（新バージョン）に接続可能です。回路図上の <code class="language-plaintext highlighter-rouge">Q1</code> は P チャネルのパワー MOSFET で、逆接保護用と思われます。</p>
+
+<p>試しに 3.7V の Li-Po を直に接続してみたところ、MLX90640 の出力にブロックノイズが乗ったような状態となりました。未確認ですが、I2C に十分な電圧が出力できていないためと思われます。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2025/02-05/ChargerType.jpg" title="充放電統合／昇圧タイプ" data-lightbox="image">
+    <img src="/images/2025/02-05/ChargerType-small.jpg" alt="充放電統合／昇圧タイプ" width="537" height="300">
+    <figcaption>充放電統合／昇圧タイプ</figcaption>
+  </a>
+</figure>
+
+<p>ということで、昇圧回路付き、かつ充放電統合タイプの充電器を AliExpress で探し、USB-C タイプとブレークアウト基板のタイプをそれぞれ１個づつ、お試して購入してみました（送料の方が高かったデス <span class="emoji">😅</span>）</p>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li>
+<strong>USB-C タイプ</strong>
+    <ul>
+      <li><a href="https://ja.aliexpress.com/item/1005006867044573.html" title="リチウム電池充電器ボード,DIyキット部品,タイプc,usb,3.7v,4.2v,1a,5w,li-ion 18650,dc,ステップアップブーストモジュール,tp4056 - AliExpress">リチウム電池充電器ボード,DIyキット部品,タイプc,usb,3.7v,4.2v,1a,5w,li-ion 18650,dc,ステップアップブーストモジュール,tp4056</a></li>
+    </ul>
+  </li>
+  <li>
+<strong>ブレークアウト基板タイプ</strong>
+    <ul>
+      <li><a href="https://ja.aliexpress.com/item/32986237635.html" title="MH-CD42 DC 5v 2.1aモバイルパワーディボード4.2v充電/放電 (ブースト)/バッテリー保護/インジケータモジュール3.7vリチウム18650 - AliExpress">MH-CD42 DC 5v 2.1aモバイルパワーディボード4.2v充電/放電 (ブースト)/バッテリー保護/インジケータモジュール3.7vリチウム18650</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>Amazon なら「バッテリー充放電統合モジュール」を商品検索すれば、類似品が出て来ると思います。動作は未確認なので、ご利用は自己責任でお願いします。</p>
+
+<h4 id="動作検証">動作検証</h4>
+
+<p>ブレークアウト基板タイプは、USB のメスが手元になく給電が難しかったので、USB-C タイプで実験してみました。</p>
+
+<p>購入した充電器には Vout 調整トリマが付いています。テスターで Vout を測ると 5.7V 出ていたので、時計ドライバーでトリマを調整し 5.0V に合わせる必要がありました。また Li-Po を接続する ±B 端子からは 4.2V が出ていることが確認できました。</p>
+
+<figure class="flex">
+  <a href="/images/2025/02-05/BatteryCircuit.jpg" title="Li-Po バッテリーの充電回路" data-lightbox="image">
+    <img src="/images/2025/02-05/BatteryCircuit-small.jpg" alt="Li-Po バッテリーの充電回路" width="800" height="300">
+    <figcaption>Li-Po バッテリーの充電回路</figcaption>
+  </a>
+  <a href="/images/2025/02-05/BatteryTestBed.jpg" title="動作検証の様子" data-lightbox="image">
+    <img src="/images/2025/02-05/BatteryTestBed-small.jpg" alt="動作検証の様子" width="800" height="300">
+    <figcaption>動作検証の様子</figcaption>
+  </a>
+</figure>
+
+<figure class="float-left">
+  <a href="/images/2025/02-05/TP4056-thermograph.jpg" title="TP4056 のサーモグラフ" data-lightbox="image">
+    <img src="/images/2025/02-05/TP4056-thermograph-small.jpg" alt="TP4056 のサーモグラフ" width="640" height="480">
+    <figcaption>TP4056 のサーモグラフ</figcaption>
+  </a>
+</figure>
+
+<p>次に発熱状況を調べるため、10分程度の動作後に作成したカメラで可視化してみました。カメラと対象との間に空気層があるため、実際の温度は表示温度よりもう少し高いと思いますが、問題は無さそうです（TP4056 動作温度：-40℃〜85℃）。</p>
+
+<p>また Li-Po の充電が完了すると青色の LED が点灯しますが、負荷（CDY）をオンにしてしばらくすると赤色に変わったので、多少 Li-Po からの持ち出しが発生しているのかもしれません。</p>
+
+<p>そこからさらに赤色のまま充電が完了しそうにない振る舞いが見られましたが、CYD をオフしてしばらくすると青色に戻りました。ちょっとした回路定数のバラつきが原因かもしれませんが、放電しながらの充電は出来ているようです。</p>
+
+<h4 id="パッケージングの課題">パッケージングの課題</h4>
+
+<p>Li-Po 用の 5V 系充電器はどれも小さく、どうやってカメラとしてパッケージングするかが課題になると思います。加工が難しいですが、micro-USB と USB-C の両方付いた新しい基板なら、micro-USB の方をパターンカットし、ブレークアウト基板タイプの充電器を使うのがベストと思いますが、どうでしょう…</p>
+
+<h4 id="端子について">端子について</h4>
+
+<figure class="float-left">
+  <a href="/images/2025/02-05/LiPo-Battery.jpg" title="Li-Po バッテリーの異なる端子" data-lightbox="image">
+    <img src="/images/2025/02-05/LiPo-Battery-small.jpg" alt="Li-Po バッテリーの異なる端子" width="600" height="300">
+    <figcaption>Li-Po バッテリーの異なる端子</figcaption>
+  </a>
+</figure>
+
+<p>Li-Po バッテリーの端子は、それぞれの用途に応じて 1.25mm、PH (2mm)、XH (2.5mm) があるようですが、どれでも対応できるよう部品を持っておくのが吉と思います。</p>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li>
+<strong>JST PH</strong><br>
+ピンピッチが 2mm なので、取り扱いが楽です。
+    <ul>
+      <li>
+<a href="https://akizukidenshi.com/catalog/g/g112802/" title="PHコネクター ベース付ポスト トップ型 2P B2B-PH-K-S: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">PHコネクター ベース付ポスト トップ型 2P B2B-PH-K-S</a> 秋月電子 1個￥10(税込)</li>
+      <li>
+<a href="https://akizukidenshi.com/catalog/g/g112633/" title="PHコネクター ベース付ポスト サイド型 2P S2B-PH-K-S: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">PHコネクター ベース付ポスト サイド型 2P S2B-PH-K-S</a> 秋月電子 1個￥10(税込)</li>
+    </ul>
+  </li>
+  <li>
+<strong>JST 1.25mm</strong><br>
+CYD に周辺機器を接続するには２ピンと４ピンが必要です。先端が半田メッキされたワイヤー付きなので、圧着工具なしで使えるので便利です。
+    <ul>
+      <li>
+<a href="https://amzn.asia/d/iSYe4my" title="Amazon.co.jp: Youmile 10Pairs 26AWG JST 1.25mm プラグコネクタケーブル2/3/4ピンメスオスJSTコネクタLEDストリップ/ RC用200mmワイヤ : おもちゃ">Youmile 10Pairs 26AWG JST 1.25mm プラグコネクタケーブル2/3/4ピンメスオスJSTコネクタLEDストリップ/ RC用200mmワイヤ</a> Amazon ￥749 税込</li>
+    </ul>
+  </li>
+  <li>
+<strong>ご参考</strong>
+    <ul>
+      <li><a href="https://fumimaker.net/entry/2024/02/23/215931" title="電子工作で使われる圧着端子コネクタと圧着工具 - fumiLab">電子工作で使われる圧着端子コネクタと圧着工具</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="ソフトウエア">ソフトウエア</h2>
+
+<p>ソースコード一式を GitHub リポジトリ「<a href="https://github.com/embedded-kiddie/MLX90640" title="embedded-kiddie/MLX90640"><code class="language-plaintext highlighter-rouge">embedded-kiddie/MLX90640</code></a>」に上げました。現状はドキュメント（README.md）が未整備なので、インストール、設定、キャリブレーションの各方法について取り急ぎ解説したいと思います。</p>
+
+<p>想定する環境は以下の通りです。</p>
+
+<ul>
+  <li>Arduino IDE : <a href="https://www.arduino.cc/en/software" title="Software｜Arduino">2.3.4</a>
+</li>
+  <li>ボードパッケージ : esp32 by Espressif Systems : <a href="https://github.com/espressif/arduino-esp32/releases/tag/3.1.1" title="Release Arduino Release v3.1.1 based on ESP-IDF v5.3.2 · espressif/arduino-esp32">3.1.1</a>
+</li>
+  <li>グラフィックスライブラリ
+    <ul>
+      <li>LovyanGFX : <a href="https://github.com/lovyan03/LovyanGFX/releases/tag/1.2.0" title="Release 1.2.0 · lovyan03/LovyanGFX">1.2.0</a>
+</li>
+      <li>TFT_eSPI : <a href="https://github.com/Bodmer/TFT_eSPI/releases/tag/V2.5.43" title="Release Bug fixes · Bodmer/TFT_eSPI">2.5.43</a>
+</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="インストール">インストール</h3>
+
+<p>まず、コンパイルが可能になるまでの手順を示します。</p>
+
+<figure class="float-left">
+  <a href="/images/2025/02-05/Install-Download.jpg" title="Code → Download ZIP" data-lightbox="image">
+    <img src="/images/2025/02-05/Install-Download-small.jpg" alt="Code → Download ZIP" width="600" height="225">
+    <figcaption>Code → Download ZIP</figcaption>
+  </a>
+</figure>
+
+<p>１．リポジトリから<a href="https://github.com/embedded-kiddie/MLX90640/archive/refs/heads/main.zip" title="Download ZIP">コードをダウンロード</a>し、解凍すると <code class="language-plaintext highlighter-rouge">MLX90640-main</code> というフォルダができるので、<code class="language-plaintext highlighter-rouge">MLX90640</code> にリネーム後、ご自分のスケッチ用フォルダに移します。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2025/02-05/Install-SelectBoard.jpg" title="他のボードとポートを選択" data-lightbox="image">
+    <img src="/images/2025/02-05/Install-SelectBoard-small.jpg" alt="他のボードとポートを選択" width="600" height="225">
+    <figcaption>他のボードとポートを選択</figcaption>
+  </a>
+</figure>
+
+<p>２．<code class="language-plaintext highlighter-rouge">MLX90640/MLX90640.ino</code> を開き、Arduino IDE メニューの「他のボードとポートを選択」から <code class="language-plaintext highlighter-rouge">ESP32-2432S028R CYD</code> を選択、CYD が接続されたポートを設定します。</p>
+
+<p>これにより、CYD 用の <a href="https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h" title="arduino-esp32/variants/jczn_2432s028r/pins_arduino.h at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">pins_arduino.h</code></a> が読み込まれるようになります。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left flex">
+  <a href="/images/2025/02-05/Install-Tools.jpg" title="Tools の確認" data-lightbox="image">
+    <img src="/images/2025/02-05/Install-Tools.jpg" alt="Tools の確認" width="517" height="630">
+    <figcaption>Tools の確認</figcaption>
+  </a>
+</figure>
+
+<p>３．IDE のツールメニューから、<code class="language-plaintext highlighter-rouge">Partition Shceme</code> と <code class="language-plaintext highlighter-rouge">Upload Speed</code> を確認します。</p>
+
+<p>パーティションは、タッチスクリーンのキャリブレーション結果を Flash に保存する場合、少なくとも２つが切られていることが必要ですが、コード中に埋め込むことも可能なので、必須ではありません。</p>
+
+<p>またアップロードのボーレート <code class="language-plaintext highlighter-rouge">921600</code> は少し下げます。Mac や Linux では <code class="language-plaintext highlighter-rouge">460800</code>、Windows では <code class="language-plaintext highlighter-rouge">512000</code> が <a href="https://raw.githubusercontent.com/espressif/arduino-esp32/refs/heads/master/boards.txt">board.txt</a> に設定された適切な値と思います。</p>
+
+<h3 id="設定">設定</h3>
+
+<p>続いて IDE で <a href="https://github.com/embedded-kiddie/MLX90640/blob/main/MLX90640.ino" title="MLX90640/MLX90640.ino at main · embedded-kiddie/MLX90640">MLX90640.ino</a> を開き、次のステップに従い構成を設定します。CYD の場合、Step 2. でカメラの向きを設定すれば、後はデフォルトのままで OK だと思います。</p>
+
+<h4 id="step-1-デバッグ用シリアル出力の設定">Step 1: デバッグ用シリアル出力の設定</h4>
+
+<p>不具合でも起きない限り、変更する必要ありません。</p>
+
+<details>
+<summary>MLX90640.ino 10〜18行目</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*--------------------------------------------------------------------------------
+ * Step 1: Configure serial output for debugging
+ *--------------------------------------------------------------------------------*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">DEBUG</span> <span class="kc">false</span>
+<span class="err">#</span><span class="k">if</span>     <span class="no">DEBUG</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DBG_EXEC</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="n">x</span>
+<span class="err">#</span><span class="k">else</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DBG_EXEC</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+
+</details>
+
+<h4 id="step-2-動作の設定">Step 2: 動作の設定</h4>
+
+<p>バイリニア補間、マルチタスクの設定はそのままで OK です。<code class="language-plaintext highlighter-rouge">ENA_OUTWARD_CAMERA</code> は、MLX90640 が内向き（自撮り）の場合は <code class="language-plaintext highlighter-rouge">false</code> を、外向きの場合は <code class="language-plaintext highlighter-rouge">true</code> を設定します。</p>
+
+<details>
+<summary>MLX90640.ino 20〜25行目</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*--------------------------------------------------------------------------------
+ * Step 2: Configure operational settings
+ *--------------------------------------------------------------------------------*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">ENA_INTERPOLATION</span>   <span class="kc">true</span>  <span class="c1">// Enable interpolation</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">ENA_MULTITASKING</span>    <span class="kc">true</span>  <span class="c1">// Enable multi-task by FreeRTOS</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">ENA_OUTWARD_CAMERA</span>  <span class="kc">false</span> <span class="c1">// Camera orientation (true: Outward, false: Selfie)</span></code></pre></figure>
+
+
+</details>
+
+<h4 id="step-3-グラフィックスライブラリの設定">Step 3: グラフィックスライブラリの設定</h4>
+
+<p>CYD では <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> のみ有効としているので、そのままで OK です。新旧どちらの CYD でも LovyanGFX の自動設定を有効にしています。</p>
+
+<details>
+<summary>MLX90640.ino 27〜49行目</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*--------------------------------------------------------------------------------
+ * Step 3: Select GFX Library
+ *--------------------------------------------------------------------------------*/</span>
+<span class="err">#</span><span class="k">if</span>   <span class="mi">1</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">USE_LOVYAN_GFX</span>
+<span class="cm">/*--------------------------------------------------------------------------------
+ * LovyanGFX
+ * Note: Currently 'AUTODETECT' only works for 'ESP32 2432S028R'.
+ * For other boards you need to configure appropriately to fit your device.
+ * See https://github.com/lovyan03/LovyanGFX/blob/master/src/lgfx/boards.hpp
+ *--------------------------------------------------------------------------------*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">USE_AUTODETECT</span>  <span class="kc">true</span>
+
+<span class="err">#</span><span class="k">else</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">USE_TFT_ESPI</span>
+<span class="cm">/*--------------------------------------------------------------------------------
+ * TFT_eSPI
+ * It does not allow the display and touch screen to be on different SPI buses.
+ *--------------------------------------------------------------------------------*/</span>
+<span class="err">#</span><span class="n">ifdef</span> <span class="no">ARDUINO_ESP32_2432S028R</span>
+<span class="err">#</span><span class="n">error</span> <span class="nc">Not</span> <span class="n">yet</span> <span class="n">supported</span>  <span class="c1">// CYD needs XPT2046_Touchscreen library</span>
+<span class="err">#</span><span class="n">endif</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+
+</details>
+
+<h5 id="ご参考">ご参考</h5>
+
+<p><a href="https://github.com/Bodmer/TFT_eSPI" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">TFT_eSPI</a> のタッチ機能が使えず <a href="https://github.com/PaulStoffregen/XPT2046_Touchscreen" title="PaulStoffregen/XPT2046_Touchscreen: Touchscreen Arduino Library for XPT2046 Touch Controller Chip">XPT2046_Touchscreen</a> が必要になる理由です。</p>
+<ul>
+  <li><a href="https://github.com/Bodmer/TFT_eSPI/discussions/3123" title="SPI for display use different pins as SPI for touch support (e.g. ESP32-Cheap-Yellow-Display) · Bodmer/TFT_eSPI · Discussion #3123">SPI for display use different pins as SPI for touch support (e.g. ESP32-Cheap-Yellow-Display) #3123</a></li>
+</ul>
+
+<h4 id="step-4-キャリブレーション用データの保存先設定">Step 4: キャリブレーション用データの保存先設定</h4>
+
+<p>本プログラムでは、タッチスクリーンのキャリブレーション用データの保存に <a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/tutorials/preferences.html" title="Preferences -  -  — Arduino ESP32 latest documentation">Preferences</a> を利用し Flash に保存するオプションを用意しています。キャリブレーション時に再コンパイルが不要な <code class="language-plaintext highlighter-rouge">true</code> を推奨しますが、デフォルトは <code class="language-plaintext highlighter-rouge">false</code> としています。</p>
+
+<details>
+<summary>MLX90640.ino 51〜55行目</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*--------------------------------------------------------------------------------
+ * Step 4: Configure flash memory setting to save touch calibration data
+ *--------------------------------------------------------------------------------*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">USE_PREFERENCES</span> <span class="kc">false</span></code></pre></figure>
+
+
+</details>
+
+<h4 id="step-5-解像度の設定">Step 5: 解像度の設定</h4>
+
+<p>性能の低い CPU 向けの設定なので、CYD ではデフォルトのままで OK です。</p>
+
+<details>
+<summary>MLX90640.ino 57〜68行目</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*--------------------------------------------------------------------------------
+ * Step 5: Configure resolution settings
+ *--------------------------------------------------------------------------------*/</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">ENA_INTERPOLATION</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">INTERPOLATE_SCALE</span> <span class="mi">8</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BOX_SIZE</span>          <span class="mi">1</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">REFRESH_RATE</span>      <span class="o">(</span><span class="no">ENA_MULTITASKING</span> <span class="o">?</span> <span class="no">MLX90640_32_HZ</span> <span class="o">:</span> <span class="no">MLX90640_16_HZ</span><span class="o">)</span>
+<span class="err">#</span><span class="k">else</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">INTERPOLATE_SCALE</span> <span class="mi">1</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BOX_SIZE</span>          <span class="mi">8</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">REFRESH_RATE</span>      <span class="o">(</span><span class="no">ENA_MULTITASKING</span> <span class="o">?</span> <span class="no">MLX90640_32_HZ</span> <span class="o">:</span> <span class="no">MLX90640_16_HZ</span><span class="o">)</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+
+</details>
+
+<h3 id="タッチスクリーンのキャリブレーション">タッチスクリーンのキャリブレーション</h3>
+
+<p>Step 4. で <code class="language-plaintext highlighter-rouge">USE_PREFERENCES</code> を <code class="language-plaintext highlighter-rouge">false</code> に設定した場合の埋め込み方法を説明します。<code class="language-plaintext highlighter-rouge">true</code> に設定した場合は埋め込みデータは無視されるので、単にキャリブレーションを実行するだけで OK です。</p>
+
+<figure class="float-left">
+  <a href="/images/2025/02-05/TouchCalibration.jpg" title="キャリブレーションの実行" data-lightbox="image">
+    <img src="/images/2025/02-05/TouchCalibration-small.jpg" alt="キャリブレーションの実行" width="500" height="300">
+    <figcaption>キャリブレーションの実行</figcaption>
+  </a>
+</figure>
+
+<p>１．コンパイル＆アップロード後にプログラムが起動すると、タッチスクリーンのキャリブレーション画面に移るので、矢印をタッチする前にシリアルモニターを開いてください。</p>
+
+<div class="clear-both"></div>
+
+<p>２．四隅を順にタッチすると、シリアルモニターに以下のようなテキストが出力されるので、選択してコピーします。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// LovyanGFX</span>
+<span class="o">.</span><span class="na">cal</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">303</span><span class="o">,</span> <span class="mi">3765</span><span class="o">,</span> <span class="mi">311</span><span class="o">,</span> <span class="mi">179</span><span class="o">,</span> <span class="mi">3808</span><span class="o">,</span> <span class="mi">3757</span><span class="o">,</span> <span class="mi">3764</span><span class="o">,</span> <span class="mi">196</span> <span class="o">},</span></code></pre></figure>
+
+<p>３．IDE から <a href="https://github.com/embedded-kiddie/MLX90640/blob/main/touch.hpp" title="MLX90640/touch.hpp at main · embedded-kiddie/MLX90640">touch.hpp</a> を開き、コピーしたテキストを該当箇所に上書きでペーストします。再コンパイル後は、キャリブレーションは実行されず、通常のカメラ機能が起動します。</p>
+
+<details>
+<summary>touch.hpp 31〜54行目</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*--------------------------------------------------------------------------------
+ * Touch panel calibration parameters
+ * When 'USE_PREFERENCES' is 'false', the calibration result must be embedded.
+ *--------------------------------------------------------------------------------*/</span>
+<span class="n">TouchConfig_t</span> <span class="n">tch_cnf</span> <span class="o">=</span> <span class="o">{</span>
+<span class="err">#</span><span class="k">if</span>   <span class="n">defined</span> <span class="o">(</span><span class="no">LOVYANGFX_HPP_</span><span class="o">)</span>
+
+  <span class="c1">// LovyanGFX</span>
+  <span class="o">.</span><span class="na">cal</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span> <span class="o">},</span>
+
+<span class="err">#</span><span class="n">elif</span> <span class="nf">defined</span> <span class="o">(</span><span class="n">_TFT_eSPIH_</span><span class="o">)</span>
+
+  <span class="c1">// TFT_eSPI</span>
+  <span class="o">.</span><span class="na">cal</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">},</span>
+
+<span class="err">#</span><span class="k">else</span> <span class="c1">// defined (_XPT2046_Touchscreen_h_)</span>
+
+  <span class="c1">// XPT2046_Touchscreen</span>
+  <span class="o">.</span><span class="na">cal</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">0</span><span class="o">,</span> <span class="o">},</span>
+
+<span class="err">#</span><span class="n">endif</span>
+
+  <span class="o">.</span><span class="na">offset</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">0</span><span class="o">,</span> <span class="o">},</span>
+<span class="o">};</span></code></pre></figure>
+
+
+</details>
+
+<p>以上です。お疲れ様でした <span class="emoji">🙂</span></p>
+
+<h2 id="tips">Tips</h2>
+
+<p>ドキュメントの整備はボチボチ進めていきますが、ここでは幾つか Tips を紹介しておきます。</p>
+
+<h3 id="i2c-の不具合">I2C の不具合</h3>
+
+<figure class="float-left">
+  <img src="/images/2025/02-05/I2C-Error.png" alt="I2C のエラー" width="320" height="240">
+</figure>
+
+<p>I2C でエラーが発生すると、画面に <code class="language-plaintext highlighter-rouge">Failed</code> が表示されます。この場合、ハード的な接続か、ピン配を再確認してください。</p>
+
+<p>特に <code class="language-plaintext highlighter-rouge">SDA</code> と <code class="language-plaintext highlighter-rouge">SCL</code> を逆に設定すると、<code class="language-plaintext highlighter-rouge">Failed</code> の表示と共にリブートし続ける事象にハマります。この場合は一旦電源を切り、Boot ボタンを押しながら電源を入れ直し、正しく設定したスケッチを再アップロードしてください。</p>
+
+<h3 id="メインスクリーンのタッチ動作">メインスクリーンのタッチ動作</h3>
+
+<figure class="float-left flex">
+  <a href="/images/2025/02-05/WidgetArea.png" title="幾つかのウィジェット領域" data-lightbox="image">
+    <img src="/images/2025/02-05/WidgetArea-small.png" alt="幾つかのウィジェット領域" width="640" height="480">
+    <figcaption>幾つかのウィジェット領域</figcaption>
+  </a>
+</figure>
+
+<p>画面は、特定の領域を占める幾つかのウィジェットで構成されていて、それぞれクリック時の機能が決まっています。</p>
+
+<p>ここでは２つの機能について補足的な説明をします。</p>
+
+<h4 id="特定点のサンプリング">特定点のサンプリング</h4>
+
+<p>「Ａ」の領域をクリックすると、クリック地点の温度を表示します。数秒のウィンドー幅を持つ移動平均的なフィルターが適用されるので、安定するまで待ってください。また表示を消す場合は、領域「Ｂ」をクリックします。</p>
+
+<h4 id="サーモグラフィ画面へのショートカット">サーモグラフィ画面へのショートカット</h4>
+
+<p>領域「Ｃ」をクリックすると、表示温度の設定画面にショートカットします。</p>
+
+<h3 id="起動時のデフォルト設定を変更する">起動時のデフォルト設定を変更する</h3>
+
+<p>自由度は少ないですが、以下のコードを直接編集することで、幾つか変更が可能です。</p>
+
+<details>
+<summary>mlx.hpp 85〜94行</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">constexpr</span> <span class="n">MLXConfig_t</span> <span class="n">mlx_ini</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="o">.</span><span class="na">interpolation</span>  <span class="o">=</span> <span class="no">INTERPOLATE_SCALE</span><span class="o">,</span>  <span class="c1">// 1, 2, 4, 6, 8</span>
+  <span class="o">.</span><span class="na">box_size</span>       <span class="o">=</span> <span class="no">BOX_SIZE</span><span class="o">,</span>           <span class="c1">// 1, 2, 4, 8</span>
+  <span class="o">.</span><span class="na">refresh_rate</span>   <span class="o">=</span> <span class="no">REFRESH_RATE</span><span class="o">,</span>       <span class="c1">// sampline frequency (32Hz, 16Hz, 8Hz, 4Hz, 2Hz)</span>
+  <span class="o">.</span><span class="na">color_scheme</span>   <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>                  <span class="c1">// 0: rainbow, 1: inferno</span>
+  <span class="o">.</span><span class="na">marker_mode</span>    <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>                  <span class="c1">// 0: off, 1: min/max, 2: picked up by user</span>
+  <span class="o">.</span><span class="na">range_auto</span>     <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>              <span class="c1">// automatic measurement of temperature min/max</span>
+  <span class="o">.</span><span class="na">range_min</span>      <span class="o">=</span> <span class="no">MINTEMP</span><span class="o">,</span>            <span class="c1">// minimum temperature (20 deg)</span>
+  <span class="o">.</span><span class="na">range_max</span>      <span class="o">=</span> <span class="no">MAXTEMP</span><span class="o">,</span>            <span class="c1">// maximum temperature (35 deg)</span>
+<span class="o">};</span></code></pre></figure>
+
+
+</details>
+
+<h2 id="実は">実は…</h2>
+
+<p>冒頭の写真にあるように、画角 110°の近距離用（MLX90640 BAA）と画角 55°の中距離用（MLX90640 BAB）の２つの MLX90640 を持っています。</p>
+
+<p>中距離用は、室内の温度分布とかを可視化しています。床付近と天井とでは 2℃〜 4℃ ほども違うことがあり、エアコンの風向きを変えたりサーキュレーターで循環させたりと、暖房効率の向上に一役買ってます <img class="emoji" title=":snowman_with_snow:" alt=":snowman_with_snow:" src="https://github.githubassets.com/images/icons/emoji/unicode/2603.png" height="20" width="20"></p>
+
+<p>さて本件関連の今後ですが、<a href="https://github.com/embedded-kiddie/MLX90640Viewer" title="embedded-kiddie/MLX90640Viewer: MLX90640 Raw Filer Viewer">MLX90640Viewer</a> の使い勝手が悪いので、<a href="https://processing.org/" title="Welcome to Processing! / Processing.org">Processing</a> のプログラミングで GUI の改善をユルユルと進めようかと思っているところです <img class="emoji" title=":fish_cake:" alt=":fish_cake:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f365.png" height="20" width="20"></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2024/12/30/" title="前の記事：基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編">← 基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread">
+<span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2025/02/05/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム"></button>
+</div>
+<a class="u-url" href="/2025/02/05/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li>
+<li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li>
+</ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list">
+<li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li>
+<li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+<li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li>
+</ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const b=document.querySelector("#js-pagetop");b.addEventListener("click",c=>{function e(a){null==d&&(d=a);a-=d;var f=a/500;window.scrollTo(0,g-g*(1===f?1:-Math.pow(2,-10*f)+1));500>a?requestAnimationFrame(e):window.scroll(h)}c.stopPropagation();const h={top:0,left:0},g=window.scrollY;let d=null;window.scroll(h);requestAnimationFrame(e)});window.addEventListener("scroll",c=>{1<window.scrollY?b.classList.add("fadeIn"):b.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(c)});document.querySelector("#open_disqus").addEventListener("click",a=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/02/05/";this.page.identifier="/2025/02/05/"};a=document;const b=a.createElement("script");b.src="https://embedded-kiddie.disqus.com/embed.js";b.setAttribute("data-timestamp",+new Date);(a.head||a.body).appendChild(b)});const t=document.querySelector("#disqus-comment-count"),commentCount={done:!1,show:function(a){a=t.getBoundingClientRect();a.top<=window.innerHeight&&0<=a.bottom&&(this.done=!0,a=document.createElement("script"),a.id="dsq-count-scr",a.src="https://embedded-kiddie.disqus.com/count.js",t.appendChild(a))}};})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

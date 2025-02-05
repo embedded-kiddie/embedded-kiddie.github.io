@@ -8,6 +8,20 @@
     
       
       <item>
+        <title>ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました</title>
+        
+          <description>&lt;p&gt;&lt;img src=&quot;/images/2025/02-05/Two-thermo-cameras.jpg&quot; alt=&quot;２台のサーモグラフィカメラ&quot; title=&quot;２台のサーモグラフィカメラ&quot; width=&quot;1250&quot; height=&quot;800&quot; /&gt;&lt;/p&gt;
+</description>
+        
+        <pubDate>Wed, 05 Feb 2025 17:11:22 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/02/05/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/02/05/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編</title>
         
           <description>&lt;p&gt;タイトル通り、何とか年内に完成と言える所まで漕ぎ着けました。日々少しつづとは言え、&lt;a href=&quot;/2024/08/15/&quot; title=&quot;基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編｜Embedded Kiddie&quot;&gt;UNO R4 での動作確認&lt;/a&gt; から &lt;a href=&quot;/2024/11/21/&quot; title=&quot;基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編｜Embedded Kiddie&quot;&gt;GUI モックアップ作成&lt;/a&gt; を経て約５ヶ月、長かったです &lt;span class=&quot;emoji&quot;&gt;😮‍💨&lt;/span&gt;&lt;/p&gt;
