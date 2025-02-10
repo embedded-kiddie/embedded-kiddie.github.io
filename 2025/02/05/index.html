@@ -515,7 +515,7 @@ CYD に周辺機器を接続するには２ピンと４ピンが必要です。�
 <p>３．IDE から <a href="https://github.com/embedded-kiddie/MLX90640/blob/main/touch.hpp" title="MLX90640/touch.hpp at main · embedded-kiddie/MLX90640">touch.hpp</a> を開き、コピーしたテキストを該当箇所に上書きでペーストします。再コンパイル後は、キャリブレーションは実行されず、通常のカメラ機能が起動します。</p>
 
 <details>
-<summary>touch.hpp 31〜54行目</summary>
+<summary>touch.hpp 25〜48行目</summary>
 
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*--------------------------------------------------------------------------------
@@ -528,15 +528,15 @@ CYD に周辺機器を接続するには２ピンと４ピンが必要です。�
   <span class="c1">// LovyanGFX</span>
   <span class="o">.</span><span class="na">cal</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span> <span class="o">},</span>
 
-<span class="err">#</span><span class="n">elif</span> <span class="nf">defined</span> <span class="o">(</span><span class="n">_TFT_eSPIH_</span><span class="o">)</span>
+<span class="err">#</span><span class="n">elif</span> <span class="nf">defined</span> <span class="o">(</span><span class="n">_XPT2046_Touchscreen_h_</span><span class="o">)</span>
+
+  <span class="c1">// XPT2046_Touchscreen</span>
+  <span class="o">.</span><span class="na">cal</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">},</span>
+
+<span class="err">#</span><span class="k">else</span>
 
   <span class="c1">// TFT_eSPI</span>
   <span class="o">.</span><span class="na">cal</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">},</span>
-
-<span class="err">#</span><span class="k">else</span> <span class="c1">// defined (_XPT2046_Touchscreen_h_)</span>
-
-  <span class="c1">// XPT2046_Touchscreen</span>
-  <span class="o">.</span><span class="na">cal</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">0</span><span class="o">,</span> <span class="o">},</span>
 
 <span class="err">#</span><span class="n">endif</span>
 
