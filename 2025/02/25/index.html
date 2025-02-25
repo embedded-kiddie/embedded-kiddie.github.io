@@ -156,7 +156,7 @@ SC8002B は、高出力、高忠実度のアプリケーション向けに設計
 
 <p>また「<a href="https://blog.goo.ne.jp/naoki_sgc/e/a1c73d8972cf3bf48a39ae7277aee51a" title="Wiiリモコンにつなげるゲームコントローラーを作る - レトロでハードな物語">Wiiリモコンにつなげるゲームコントローラーを作る</a>」で、接続時の暗号を解読したライブラリが紹介されてますが、我が家の Wii リモコンが行方不明で残念ながら試せてません。</p>
 
-<p>I2C アドレスは、ヌンチャクと NES Classic Mini が <code class="language-plaintext highlighter-rouge">0x52</code> です。一方クラシックコントローラーを <a href="https://playground.arduino.cc/Main/I2cScanner/" title="Arduino Playground - I2cScanner">I2C Scanner</a> にかけてみると、次のように多くの I2C スレーブがぶら下がっていることが分かります。ボタンの数が多いので分散処理しているのだと思います。</p>
+<p>I2C アドレスは、ヌンチャクと NES Classic Mini が <code class="language-plaintext highlighter-rouge">0x52</code> です。一方クラシックコントローラーを <a href="https://playground.arduino.cc/Main/I2cScanner/" title="Arduino Playground - I2cScanner">I2C Scanner</a> にかけてみると、次のように多くの I2C スレーブがぶら下がっていることが分かります。ボタンの数が多いので分散させているのだと思います。</p>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Scanning</span><span class="o">...</span>
 <span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x01</span>  <span class="o">!</span>
@@ -606,9 +606,7 @@ I2S / DAC のサポートは、ESP32 ボード パッケージ バージョン 2
       <a href="/" title="Home に戻る">Home に戻る</a>
     </p>    
   </div>
-<div id="disqus_thread"></div>
-  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/02/25/",this.page.identifier="/2025/02/25/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/02/25/" hidden></a>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2025/02/25/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2025/02/25/" hidden></a>
 </article>
 
       </div>
