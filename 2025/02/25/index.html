@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/02/25/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/02/25/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-02-25T11:01:36+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-02-25T11:01:36+09:00","datePublished":"2025-02-25T11:01:36+09:00","description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/02/25/"},"url":"https://embedded-kiddie.github.io/2025/02/25/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-02-25T11:01:36+09:00" itemprop="datePublished">Feb 25, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><img src="/images/2025/02-25/I2C-Controllers.jpg" alt="I2C コントローラー" /></p>
+
+<p><a href="/2025/02/05/" title="ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました｜Embedded Kiddie">前回の取り組み</a> で、”黄色い基板”（Cheap Yellow Display、以下 CYD）の I2C 接続方法が分かったので、色々と試したくなりました。そこで本記事では、<a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/blob/main/PROJECTS.md" title="ESP32-Cheap-Yellow-Display/PROJECTS.md at main · witnessmenow/ESP32-Cheap-Yellow-Display">ESP32-Cheap-Yellow-Display</a> に紹介されている <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/tree/main/Examples/Projects/TetrisWithNunchuck" title="ESP32-Cheap-Yellow-Display/Examples/Projects/TetrisWithNunchuck at main · witnessmenow/ESP32-Cheap-Yellow-Display">Tetris with Nunchuck</a> と <a href="https://github.com/harbaum/galagino" title="harbaum/galagino: A Galaga, Pac-Man and Donkey Kong arcade emulator for the ESP32">Galagino</a> を参考に、各種コントローラーの動作検証を報告したいと思います。</p>
+
+<p>ちなみに、実際の Galagino の動作例は以下をご参照ください。</p>
+
+<ul>
+  <li><a href="https://burariweb.info/electronic-work/esp32-retro-arcad-game-console.html" title="【電子工作 /  ESP32】昔懐かしのレトロアーケードゲームをESP32で動かす！面白いオープンソースプロジェクトです。｜ぶらり＠web走り書き">【電子工作 / ESP32】昔懐かしのレトロアーケードゲームをESP32で動かす！面白いオープンソースプロジェクトです。</a></li>
+  <li><a href="https://k-nobukun.cocolog-nifty.com/blog/2024/10/post-3ff2fc.html" title="ESP32：昔のアーケードゲームが遊べるgalaginoの製作: my little topics">ESP32：昔のアーケードゲームが遊べるgalaginoの製作</a></li>
+</ul>
+
+<h2 id="ハードウェア編">ハードウェア編</h2>
+
+<h3 id="cyd">CYD</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/02-25/CYD-Type.jpg" title="２種類の２種類のESP32-2432S028R" data-lightbox="image">
+    <img src="/images/2025/02-25/CYD-Type-small.jpg" alt="２種類のESP32-2432S028R" width="500" height="330" />
+    <figcaption>２種類のESP32-2432S028R</figcaption>
+  </a>
+</figure>
+
+<p>2.8 インチ版の ESP32-2432S028R には２種類あるようで要注意です。旧版と思われるのは micro-USB が１つで ILI9341 を搭載し、新版と思しきは USB が micro と Type-C、パネルに ST7789 を搭載しています。最初に購入したのが <a href="https://ja.aliexpress.com/item/1005004502250619.html" title="Wi-Fi,Bluetooth,2.8インチのタッチスクリーンを備えたコネクテッドボード,240x320ディスプレイ画面,2.8インチのLCDモジュール,部屋用 - AliExpress">Sunton Store の旧版</a> で、技適なしのハズレでした。同じく AliExpress で次に購入したのが <a href="https://ja.aliexpress.com/item/1005006470918908.html" title="Esp32 arduino lvgl開発ボード、2.8 &quot;スマートディスプレイ画面、2.8&quot; タッチルーム付きLCDタフトモジュール、WifiおよびBluetooth - AliExpress">新版</a> で、これはアタリでした。</p>
+
+<figure class="float-left">
+  <a href="/images/2025/02-25/CYD-Fake-Mark.jpg" title="なんちゃって技適マーク？" data-lightbox="image">
+    <img src="/images/2025/02-25/CYD-Fake-Mark-small.jpg" alt="なんちゃって技適マーク？" width="550" height="340" />
+    <figcaption>なんちゃって技適マーク？</figcaption>
+  </a>
+</figure>
+
+<p>ただ必ずしも新版がアタリとは限らず、肉眼では判別できないほど小さく刻印されたブツもあるようで、とてもスリリングな技適ガチャになってます。</p>
+
+<h3 id="スピーカー">スピーカー</h3>
+
+<p>回路図を見ると、”<a href="https://jlcpcb.com/partdetail/Shenzhen_FumanElec-SC8002B/C82124" title="SC8002B｜Shenzhen Fuman Elec｜Audio Amplifiers｜JLCPCB">SC8002B</a>” というオーディオアンプ IC が載っていて、「SPEAK」と書かれた JST 1.25mm オス２ピンの端子につながっています。</p>
+
+<p>以下は中国語で書かれた SC8002B データシートの日本語訳です。</p>
+
+<blockquote>
+  <p>SC8002Bはシャットダウンモードを備えたオーディオアンプ IC です。 5V 入力電圧で動作する場合、
+負荷 (4Ω) の最大出力電力は 2.5W です。ポータブルデバイスの場合、VDD がシャットダウン端子に
+作用すると、SC8002B はシャットダウン モードに入ります。このとき、消費電力は非常に低く、IQ は
+わずか 0.6uA です。
+SC8002B は、高出力、高忠実度のアプリケーション向けに設計されたオーディオ アンプ IC です。
+周辺部品が少なく、入力電圧 2.0V～5.0V で動作可能です。</p>
+</blockquote>
+
+<figure class="flex">
+  <a href="/images/2025/02-25/CYD-Speaker.jpg" title="スピーカー端子と回路図" data-lightbox="image">
+    <img src="/images/2025/02-25/CYD-Speaker-small.jpg" alt="スピーカー端子と回路図" width="500" height="415" />
+    <figcaption>スピーカー端子と回路図</figcaption>
+  </a>
+  <a href="/images/2025/02-25/CYD-Tetris.jpg" title="CYDにスピーカーを接続" data-lightbox="image">
+    <img src="/images/2025/02-25/CYD-Tetris-small.jpg" alt="CYDにスピーカーを接続" width="500" height="415" />
+    <figcaption>CYDにスピーカーを接続</figcaption>
+  </a>
+</figure>
+
+<p>ということで、外付けのアンプなどは不要で「SPEAK」にスピーカーを直接接続できますが、結構な出力なので、8Ω 1W の <a href="https://akizukidenshi.com/catalog/g/g112587/" title="ブレッドボード用ダイナミックスピーカー: 受動部品 秋月電子通商-電子部品・ネット通販">ブレッドボード用ダイナミックスピーカー</a> を接続する際に 200Ω の半固定抵抗で出力を絞っています。</p>
+
+<h3 id="コントローラー">コントローラー</h3>
+
+<p>I2C 接続が可能なコントローラーは、任天堂や Adafruit 製品、micro:bit 用や自作版など、情報源には事欠きません。今回は Arduino との接続が容易でライブラリが揃っている任天堂系と Adafruit 製品を接続し、動作を検証してみました。</p>
+
+<h4 id="wii-および-nes-用コントローラー">Wii および NES 用コントローラー</h4>
+
+<figure class="flex">
+  <img class="simple" src="/images/2025/02-25/NintendoController.jpg" alt="Nintendo コントローラー" width="1470" height="360" />
+</figure>
+
+<p><a href="https://www.nintendo.co.jp/wii/controllers/index.html" title="Wii｜コントローラ">Wii コントローラーのページ</a> や <a href="https://www.nintendo.com/en-gb/Support/Nintendo-Switch/Which-Controllers-Are-Compatible-With-Nintendo-Classic-Mini-Nintendo-Entertainment-System-1518565.html" title="Which Controllers Are Compatible With Nintendo Classic Mini: Nintendo Entertainment System?｜Support｜Nintendo UK">NES Classic Mini 互換コントローラーのページ</a> に紹介されているモノのうち、自宅にあったヌンチャクとクラシックコントローラー、そして Amazon で購入した並行輸入品の <a href="https://amzn.asia/d/eJDEF0q" title="Amazon.co.jp: 海外版 NESクラシックミニ / Wiiコントローラー レトロスタイル コントローラー［cxd1663］［並行輸入品］: ゲーム">NES Classic Mini（￥1,880）</a> について動作を確認しました（動作未確認ですが、<a href="https://amzn.asia/d/i4QWfcV" title="Amazon｜OSTENT 有線コントローラー ゲームパッド 任天堂 NES ミニクラシックエディションファミコンミニコンソール用｜ファミリーコンピュータ">納期がちょっと遅いけど安い￥749</a> もあります）。</p>
+
+<figure class="float-left">
+  <a href="/images/2025/02-25/NintendoExtensionCtrl.jpg" title="任天堂コントローラ用ライブラリ" data-lightbox="image">
+    <img src="/images/2025/02-25/NintendoExtensionCtrl-small.jpg" alt="任天堂コントローラ用ライブラリ" width="560" height="350" />
+    <figcaption>任天堂コントローラ用ライブラリ</figcaption>
+  </a>
+</figure>
+
+<p>これらは冒頭に紹介した <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/tree/main/Examples/Projects/TetrisWithNunchuck" title="ESP32-Cheap-Yellow-Display/Examples/Projects/TetrisWithNunchuck at main · witnessmenow/ESP32-Cheap-Yellow-Display">Tetris</a> と <a href="https://github.com/harbaum/galagino" title="harbaum/galagino: A Galaga, Pac-Man and Donkey Kong arcade emulator for the ESP32">Galagino</a> で使われている <a href="https://github.com/dmadison/NintendoExtensionCtrl" title="dmadison/NintendoExtensionCtrl: Arduino library for communicating with Nintendo extension controllers">NintendoExtensionCtrl</a> で簡単に動かすことができます。</p>
+
+<p>また CYD との接続は、AliExpress で購入できる１個 30円 程度の <a href="https://ja.aliexpress.com/w/wholesale-%E3%83%8C%E3%83%B3%E3%83%81%E3%83%A3%E3%82%AF-%E3%82%A2%E3%83%80%E3%83%97%E3%82%BF%E3%83%BC.html" title="Wiichuck-ヌンチャクアダプター,アダプター,拡張ボード,シールドモジュール,arduino用i2C,DIY">ヌンチャクアダプター</a> や、スイッチサイエンスで買える <a href="https://www.switch-science.com/products/7905" title="STEMMA QT/Qwiic互換 Wiiヌンチャクアダプタボード — スイッチサイエンス">Adafruit STEMMA QT/Qwiic互換 Wiiヌンチャクアダプタボード（税込 ¥735）</a> が簡単です。</p>
+
+<div class="clear-both"></div>
+
+<figure class="flex">
+  <a href="/images/2025/02-25/NunchukAdapter-Aliexpress.jpg" title="ヌンチャクアダプター" data-lightbox="image">
+    <img src="/images/2025/02-25/NunchukAdapter-Aliexpress-small.jpg" alt="ヌンチャクアダプター" width="374" height="350" />
+    <figcaption>ヌンチャクアダプター</figcaption>
+  </a>
+  <a href="/images/2025/02-25/NunchukAdapter-Adafruit.jpg" title="Adafruit Wii Nunchuck Breakout Adapter" data-lightbox="image">
+    <img src="/images/2025/02-25/NunchukAdapter-Adafruit-small.jpg" alt="Adafruit Wii Nunchuck Breakout Adapter" width="450" height="350" />
+    <figcaption>Wii Nunchuck Breakout Adapter</figcaption>
+  </a>
+  <a href="/images/2025/02-25/NunchukAdapter-CYD.jpg" title="アダプターとCYDの接続" data-lightbox="image">
+    <img src="/images/2025/02-25/NunchukAdapter-CYD-small.jpg" alt="アダプターとCYDの接続" width="570" height="350" />
+    <figcaption>アダプターとCYDの接続</figcaption>
+  </a>
+</figure>
+
+<p>また「<a href="https://blog.goo.ne.jp/naoki_sgc/e/a1c73d8972cf3bf48a39ae7277aee51a" title="Wiiリモコンにつなげるゲームコントローラーを作る - レトロでハードな物語">Wiiリモコンにつなげるゲームコントローラーを作る</a>」で、接続時の暗号を解読したライブラリが紹介されてますが、我が家の Wii リモコンが行方不明で残念ながら試せてません。</p>
+
+<p>I2C アドレスは、ヌンチャクと NES Classic Mini が <code class="language-plaintext highlighter-rouge">0x52</code> です。一方クラシックコントローラーを <a href="https://playground.arduino.cc/Main/I2cScanner/" title="Arduino Playground - I2cScanner">I2C Scanner</a> にかけてみると、次のように多くの I2C スレーブがぶら下がっていることが分かります。ボタンの数が多いので分散処理しているのだと思います。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Scanning</span><span class="o">...</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x01</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x02</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x03</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x04</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x05</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x06</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x07</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x52</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x78</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x79</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x7A</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x7B</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x7C</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x7D</span>  <span class="o">!</span>
+<span class="no">I2C</span> <span class="n">device</span> <span class="n">found</span> <span class="n">at</span> <span class="n">address</span> <span class="mh">0x7E</span>  <span class="o">!</span>
+<span class="n">done</span></code></pre></figure>
+
+<h4 id="adafruit-mini-i2c-gamepad-with-seesaw---stemma-qt--qwiic">Adafruit Mini I2C Gamepad with seesaw - STEMMA QT / Qwiic</h4>
+
+<figure class="float-left">
+  <a href="/images/2025/02-25/Adafruit-Connect.jpg" title="Adafruit Mini I2C Gamepad" data-lightbox="image">
+    <img src="/images/2025/02-25/Adafruit-Connect-small.jpg" alt="Adafruit Mini I2C Gamepad" width="500" height="265" />
+    <figcaption>Adafruit Mini I2C Gamepad</figcaption>
+  </a>
+</figure>
+
+<p>コレ、手の大きいガイジンに操作できるの？ってぐらいに小さいです。<a href="https://www.switch-science.com/products/9115" title="STEMMA QT / Qwiic互換 seesaw ミニ I2Cゲームパッド — スイッチサイエンス">スイッチサイエンス（¥1,602）</a>（僕で最後だったようで、売り切れ中）か <a href="https://www.digikey.jp/ja/products/detail/adafruit-industries-llc/5743/20370632" title="5743 Adafruit Industries LLC｜開発ボード、キット、プログラマ｜DigiKey">DigiKey（¥1,217）</a> で入手可能です。また JST SH 1.0mm ピッチの Qwiic コネクタは、秋月電子の <a href="https://akizukidenshi.com/catalog/g/g115885/" title="コネクター付コード 4P 黒赤青黄: ケーブル・コネクター 秋月電子通商-電子部品・ネット通販">コネクター付コード 4P 黒赤青黄（￥100）</a> が便利です。</p>
+
+<p>サムスティックが滑りやすいという方には、<a href="https://www.amazon.co.jp/s?k=switch+%E3%82%B8%E3%83%A7%E3%82%A4%E3%82%B9%E3%83%86%E3%82%A3%E3%83%83%E3%82%AF+%E3%82%AB%E3%83%90%E3%83%BC" title="Amazon.co.jp : switch ジョイスティック カバー">Switch 用</a> がピッタリ嵌ります。</p>
+
+<p>I2C 接続するには <a href="https://github.com/adafruit/Adafruit_Seesaw" title="adafruit/Adafruit_Seesaw: Arduino library driver for seesaw multi-use chip">Adafruit_Seesaw</a> が必要ですが、色々な周辺機器に対応するためか、実行速度が他に比べて少し遅いです。そのためこのゲームパッドに必須なパーツだけを残してスリム化した <a href="https://github.com/embedded-kiddie/Gamepad_Seesaw" title="embedded-kiddie/Gamepad_Seesaw: A high-speed version of the Adafruit_Seesaw library for Adafruit Mini I2C Gamepad. Especially recommended for Galagino.">Gamepad_Seesaw</a> を作成してみました（後述）。</p>
+
+<h4 id="自作編">自作編</h4>
+
+<figure class="float-left">
+  <img src="/images/2025/02-25/naoki_sgc.jpg" alt="エミュレータ用に作ったI2Cゲームコントローラー" width="320" height="213" />
+</figure>
+
+<p>PIC マイコンを使った例が「<a href="https://blog.goo.ne.jp/naoki_sgc/e/9cc141b1669d2cc924880b2b51a07124" title="エミュレータ用に作ったI2Cゲームコントローラー - レトロでハードな物語">エミュレータ用に作ったI2Cゲームコントローラー</a>」に紹介されています。こーいうのをベアメタルから作れちゃう人って尊敬します。</p>
+
+<p>ソースコードが公開されているので、<a href="https://www.nxp.com/docs/ja/user-guide/UM10204.pdf" title="UM10204 I2C バス仕様およびユーザーマニュアル">I2C プロトコル</a> と付き合わせれば勉強になると思います。</p>
+
+<h4 id="番外編">番外編</h4>
+
+<figure class="float-left">
+  <a href="/images/2025/02-25/Gamepads.jpg" title="その他のコントローラー達" data-lightbox="image">
+    <img src="/images/2025/02-25/Gamepads-small.jpg" alt="その他のコントローラー達" width="500" height="230" />
+    <figcaption>その他のコントローラー達</figcaption>
+  </a>
+</figure>
+
+<p>メカ工作が苦手な僕は、どうしても既製品に目が行きます <span class="emoji">😅</span></p>
+
+<p>赤い基板は <a href="https://amzn.asia/d/23Gkgn4" title="Amazon.co.jp: Ren He 2個セット JoyStick Shield ジョイスティック シールド 拡張ボード 模擬 キーボードとマウス機能 ゲームパッド モジュール ボード Arduino適用 : パソコン・周辺機器">Amazon で２個で￥749</a> でした。MINIMA に被せると微妙に SCL/SDA が引き出しにくくなるので、CYD との接続は <a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/qwiic/" title="Arduino UNO R4 WiFi Qwiic Connector">R4 WiFi の Qwiic</a> を使うのが良さげです。またドイツ語ですが、<a href="https://funduino.de/nr-24-joystick-modul-v1-a" title="Joystick Modul V1.A &#8211; Funduino &#8211; Kits und Anleitungen für Arduino">Funduino のページ</a> に使い方が載ってます。</p>
+
+<p>残りの２つは micro:bit 用で、<a href="https://akizukidenshi.com/catalog/g/g117960/" title="GAME Controller for micro:bit: 開発ツール・ボード 秋月電子通商-電子部品・ネット通販">秋月電子（￥2,780）</a> や <a href="https://www.digikey.jp/ja/products/detail/dfrobot/DFR0536/8827829" title="DFR0536 DFRobot｜開発ボード、キット、プログラマ｜DigiKey">DegiKey（¥3,230）</a> で買えますが、別途 micro:bit が載ったボードが必要です。Arduino をマスターに、micro:bit をスレーブにする例を <a href="https://www.cytron.io/tutorial/i2c-communication-between-microbit-and-arduino" title="I2C Communication between micro:bit and Arduino">I2C Communication between micro:bit and Arduino</a> に見つけましたが、いつの日か BLE で無線化するかもと思い、ピックアップしてみました（でも多分…やらない <span class="emoji">😏</span>）</p>
+
+<h2 id="ソフトウェア編">ソフトウェア編</h2>
+
+<p>本章では、ヌンチャクコントローラーからの入力を捌く <a href="https://github.com/harbaum/galagino/blob/main/galagino/Nunchuck.h" title="galagino/galagino/Nunchuck.h at main · harbaum/galagino">Galagino の Nunchuck.h</a> を参考に、２タイプのコントローラを検証するサンプルコードを紹介します。テトリスの場合は、<a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/blob/main/Examples/Projects/TetrisWithNunchuck/TetrisWithNunchuck.ino#L390-L420" title="ESP32-Cheap-Yellow-Display/Examples/Projects/TetrisWithNunchuck/TetrisWithNunchuck.ino at main · witnessmenow/ESP32-Cheap-Yellow-Display">初期化部分</a> と <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/blob/main/Examples/Projects/TetrisWithNunchuck/TetrisWithNunchuck.ino#L390-L420" title="ESP32-Cheap-Yellow-Display/Examples/Projects/TetrisWithNunchuck/TetrisWithNunchuck.ino at main · witnessmenow/ESP32-Cheap-Yellow-Display">入力部分</a> を置き換えれば容易に移植可能と思います。</p>
+
+<p>実行環境は以下を想定しています。</p>
+
+<ul>
+  <li>ESP32 Espressif ボードパッケージが 3.x の場合
+    <ul>
+      <li>ボードタイプに <strong><code class="language-plaintext highlighter-rouge">ESP32-2432S028R CYD</code></strong> を選択</li>
+    </ul>
+  </li>
+  <li>ESP32 Espressif ボードパッケージが 2.x の場合
+    <ul>
+      <li>ボードタイプに <strong><code class="language-plaintext highlighter-rouge">ESP32 Dev Module</code></strong> を選択</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="wii-クラシックコントローラー">Wii クラシックコントローラー</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/02-25/Wii-ClassicController.jpg" title="Wii クラシックコントローラー" data-lightbox="image">
+    <img src="/images/2025/02-25/Wii-ClassicController-small.jpg" alt="Wii クラシックコントローラー" width="600" height="450" />
+    <figcaption>Wii クラシックコントローラー</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://github.com/dmadison/NintendoExtensionCtrl" title="dmadison/NintendoExtensionCtrl: Arduino library for communicating with Nintendo extension controllers">NintendoExtensionCtrl</a> を Arduino IDE ライブラリマネージャからインストールしてください。</p>
+
+<p>次に新規スケッチを開き、下記のサンプルコードを貼り付けてからコンパイル＆アップロードし、動作を確認してください。シリアルモニターにコントローラーのデバッグ情報が出力されれば成功です。</p>
+
+<p>サンプルコードではＡ、Ｂ、スタート、十字の各ボタンと、左ジョイスティックを割り当てていますが、ヌンチャクコントローラーと同じ出力の範囲内でお好きにカスタマイズ可能です。</p>
+
+<details class="clear-both">
+<summary>サンプルコード</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">Arduino</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">Wire</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">NintendoExtensionCtrl</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="kd">static</span> <span class="nc">ClassicController</span> <span class="n">classic</span><span class="o">;</span>
+
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// Galagino 用の定義</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// https://github.com/harbaum/galagino/blob/main/galagino/config.h</span>
+<span class="err">#</span><span class="n">ifndef</span> <span class="no">NUNCHUCK_MOVE_THRESHOLD</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">NUNCHUCK_MOVE_THRESHOLD</span> <span class="mi">30</span>
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="err">#</span><span class="n">ifndef</span> <span class="no">NUNCHUCK_SDA</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">NUNCHUCK_SDA</span> <span class="no">D27</span> <span class="c1">// or 22 (SCL)</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">NUNCHUCK_SCL</span> <span class="no">SCL</span> <span class="c1">// or 27 (D27)</span>
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="c1">// https://github.com/harbaum/galagino/blob/main/galagino/emulation.h</span>
+<span class="err">#</span><span class="n">ifndef</span> <span class="no">BUTTON_LEFT</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_LEFT</span>  <span class="mh">0x01</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_RIGHT</span> <span class="mh">0x02</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_UP</span>    <span class="mh">0x04</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_DOWN</span>  <span class="mh">0x08</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_FIRE</span>  <span class="mh">0x10</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_START</span> <span class="mh">0x20</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_COIN</span>  <span class="mh">0x40</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_EXTRA</span> <span class="mh">0x80</span>
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// Wii クラシックコントローラー用の定義</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="kd">static</span> <span class="kt">int</span> <span class="n">nunchuck_move_threshold</span> <span class="o">=</span> <span class="no">NUNCHUCK_MOVE_THRESHOLD</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">nunchuckSetup</span><span class="o">()</span> <span class="o">{</span>
+
+  <span class="nc">Wire</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">NUNCHUCK_SDA</span><span class="o">,</span> <span class="no">NUNCHUCK_SCL</span><span class="o">);</span>
+
+  <span class="n">classic</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+
+  <span class="k">while</span> <span class="o">(!</span><span class="n">classic</span><span class="o">.</span><span class="na">connect</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Classic Controller not detected!"</span><span class="o">);</span>
+    <span class="n">delay</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">unsigned</span> <span class="kt">char</span> <span class="nf">getNunchuckInput</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kt">boolean</span> <span class="n">success</span> <span class="o">=</span> <span class="n">classic</span><span class="o">.</span><span class="na">update</span><span class="o">();</span>  <span class="c1">// Get new data from the controller</span>
+
+  <span class="k">if</span> <span class="o">(!</span><span class="n">success</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// Ruh roh</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Controller disconnected!"</span><span class="o">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="k">else</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">joyX</span> <span class="o">=</span> <span class="n">classic</span><span class="o">.</span><span class="na">leftJoyX</span><span class="o">();</span>
+    <span class="kt">int</span> <span class="n">joyY</span> <span class="o">=</span> <span class="n">classic</span><span class="o">.</span><span class="na">leftJoyY</span><span class="o">();</span>
+
+    <span class="k">return</span> <span class="o">((</span><span class="n">joyX</span> <span class="o">&lt;</span> <span class="mi">127</span> <span class="o">-</span> <span class="n">nunchuck_move_threshold</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_LEFT</span>  <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">((</span><span class="n">joyX</span> <span class="o">&gt;</span> <span class="mi">127</span> <span class="o">+</span> <span class="n">nunchuck_move_threshold</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_RIGHT</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">((</span><span class="n">joyY</span> <span class="o">&gt;</span> <span class="mi">127</span> <span class="o">+</span> <span class="n">nunchuck_move_threshold</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_UP</span>    <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">((</span><span class="n">joyY</span> <span class="o">&lt;</span> <span class="mi">127</span> <span class="o">-</span> <span class="n">nunchuck_move_threshold</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_DOWN</span>  <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">(</span><span class="n">classic</span><span class="o">.</span><span class="na">dpadLeft</span><span class="o">()</span>   <span class="o">?</span> <span class="no">BUTTON_LEFT</span>  <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">(</span><span class="n">classic</span><span class="o">.</span><span class="na">dpadRight</span><span class="o">()</span>  <span class="o">?</span> <span class="no">BUTTON_RIGHT</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">(</span><span class="n">classic</span><span class="o">.</span><span class="na">dpadUp</span><span class="o">()</span>     <span class="o">?</span> <span class="no">BUTTON_UP</span>    <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">(</span><span class="n">classic</span><span class="o">.</span><span class="na">dpadDown</span><span class="o">()</span>   <span class="o">?</span> <span class="no">BUTTON_DOWN</span>  <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">(</span><span class="n">classic</span><span class="o">.</span><span class="na">buttonB</span><span class="o">()</span>    <span class="o">?</span> <span class="no">BUTTON_FIRE</span>  <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">(</span><span class="n">classic</span><span class="o">.</span><span class="na">buttonA</span><span class="o">()</span>    <span class="o">?</span> <span class="no">BUTTON_EXTRA</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+           <span class="o">(</span><span class="n">classic</span><span class="o">.</span><span class="na">buttonPlus</span><span class="o">()</span> <span class="o">?</span> <span class="no">BUTTON_EXTRA</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// setup and loop</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="n">nunchuckSetup</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{</span>
+  <span class="n">uint8_t</span> <span class="n">input</span> <span class="o">=</span> <span class="n">getNunchuckInput</span><span class="o">();</span>
+  <span class="n">classic</span><span class="o">.</span><span class="na">printDebug</span><span class="o">();</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<h3 id="adafruit-mini-i2c-gamepad-with-seesaw">Adafruit Mini I2C Gamepad with seesaw</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/02-25/Adafruit-Gamepad.jpg" title="Adafruit Mini I2C Gamepad" data-lightbox="image">
+    <img src="/images/2025/02-25/Adafruit-Gamepad-small.jpg" alt="Adafruit Mini I2C Gamepad" width="600" height="400" />
+    <figcaption>Adafruit Mini I2C Gamepad</figcaption>
+  </a>
+</figure>
+
+<p>ライブラリマネージャで <a href="https://github.com/adafruit/Adafruit_Seesaw" title="adafruit/Adafruit_Seesaw: Arduino library driver for seesaw multi-use chip">Adafruit_Seesaw</a> をインストールするか、<a href="https://github.com/embedded-kiddie/Gamepad_Seesaw" title="embedded-kiddie/Gamepad_Seesaw: A high-speed version of the Adafruit_Seesaw library for Adafruit Mini I2C Gamepad. Especially recommended for Galagino.">Gamepad_Seesaw</a> から <a href="https://github.com/embedded-kiddie/Gamepad_Seesaw/blob/main/Gamepad_seesaw.hpp" title="Gamepad_Seesaw/Gamepad_seesaw.hpp at main · embedded-kiddie/Gamepad_Seesaw">Gamepad_seesaw.hpp</a> をスケッチの実行フォルダにコピーしてください。</p>
+
+<p>両ライブラリとも <a href="https://github.com/adafruit/Adafruit_BusIO" title="adafruit/Adafruit_BusIO: Arduino library for I2C &amp; SPI abstractions">Adafruit_BusIO</a> が必要なので、合わせてインストールしてください。</p>
+
+<details class="clear-both">
+<summary>サンプルコード</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">Arduino</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">Wire</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="err">#</span><span class="k">if</span>   <span class="kc">true</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// Adafruit_BusIO and Adafruit_Seesaw are required.</span>
+<span class="c1">// https://github.com/adafruit/Adafruit_BusIO</span>
+<span class="c1">// https://github.com/adafruit/Adafruit_Seesaw</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">Adafruit_seesaw</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="kd">static</span> <span class="n">Adafruit_seesaw</span> <span class="n">seesaw</span><span class="o">;</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">I2C_CONFIG</span>  <span class="mh">0x50</span>
+
+<span class="err">#</span><span class="k">else</span>
+
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// Adafruit_BusIO and Gamepad_Seesaw are required.</span>
+<span class="c1">// https://github.com/adafruit/Adafruit_BusIO</span>
+<span class="c1">// https://github.com/adafruit/Adafruit_Seesaw</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"Gamepad_seesaw.hpp"</span>
+<span class="kd">static</span> <span class="n">Gamepad_seesaw</span> <span class="n">seesaw</span><span class="o">;</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">I2C_CONFIG</span>  <span class="mh">0x50</span><span class="o">,</span> <span class="no">NUNCHUCK_SDA</span><span class="o">,</span> <span class="no">NUNCHUCK_SCL</span><span class="o">,</span> <span class="mi">400000</span>
+
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="c1">// Adafruit Mini I2C Gamepad 用の定義</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">GAMEPAD_BUTTON_X</span>      <span class="mi">6</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">GAMEPAD_BUTTON_Y</span>      <span class="mi">2</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">GAMEPAD_BUTTON_A</span>      <span class="mi">5</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">GAMEPAD_BUTTON_B</span>      <span class="mi">1</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">GAMEPAD_BUTTON_SELECT</span> <span class="mi">0</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">GAMEPAD_BUTTON_START</span>  <span class="mi">16</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">IS_PRESSED</span><span class="o">(</span><span class="n">in</span><span class="o">,</span> <span class="n">bit</span><span class="o">)</span>   <span class="o">(!((</span><span class="n">in</span><span class="o">)</span> <span class="o">&amp;</span> <span class="o">(</span><span class="mi">1</span><span class="no">UL</span> <span class="o">&lt;&lt;</span> <span class="o">(</span><span class="n">bit</span><span class="o">))))</span>
+
+<span class="kd">static</span> <span class="n">uint32_t</span> <span class="n">button_mask</span> <span class="o">=</span>
+  <span class="o">(</span><span class="mi">1</span><span class="no">UL</span> <span class="o">&lt;&lt;</span> <span class="no">GAMEPAD_BUTTON_X</span>     <span class="o">)</span> <span class="o">|</span>
+  <span class="o">(</span><span class="mi">1</span><span class="no">UL</span> <span class="o">&lt;&lt;</span> <span class="no">GAMEPAD_BUTTON_Y</span>     <span class="o">)</span> <span class="o">|</span>
+  <span class="o">(</span><span class="mi">1</span><span class="no">UL</span> <span class="o">&lt;&lt;</span> <span class="no">GAMEPAD_BUTTON_A</span>     <span class="o">)</span> <span class="o">|</span>
+  <span class="o">(</span><span class="mi">1</span><span class="no">UL</span> <span class="o">&lt;&lt;</span> <span class="no">GAMEPAD_BUTTON_B</span>     <span class="o">)</span> <span class="o">|</span>
+  <span class="o">(</span><span class="mi">1</span><span class="no">UL</span> <span class="o">&lt;&lt;</span> <span class="no">GAMEPAD_BUTTON_START</span> <span class="o">)</span> <span class="o">|</span>
+  <span class="o">(</span><span class="mi">1</span><span class="no">UL</span> <span class="o">&lt;&lt;</span> <span class="no">GAMEPAD_BUTTON_SELECT</span><span class="o">);</span>
+
+<span class="c1">// https://qiita.com/ryohji/items/5a7aa375c134528fc7c4</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">BCD</span><span class="o">(</span><span class="n">c</span><span class="o">)</span> <span class="o">(</span><span class="mi">5</span> <span class="o">*</span> <span class="o">(</span><span class="mi">5</span> <span class="o">*</span> <span class="o">(</span><span class="mi">5</span> <span class="o">*</span> <span class="o">(</span><span class="mi">5</span> <span class="o">*</span> <span class="o">(</span><span class="mi">5</span> <span class="o">*</span> <span class="o">(</span><span class="mi">5</span> <span class="o">*</span> <span class="o">(</span><span class="mi">5</span> <span class="o">*</span> <span class="o">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">128</span><span class="o">)</span> <span class="o">+</span> <span class="o">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">64</span><span class="o">))</span> <span class="o">+</span> <span class="o">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">32</span><span class="o">))</span> <span class="o">+</span> <span class="o">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">16</span><span class="o">))</span> <span class="o">+</span> <span class="o">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">8</span><span class="o">))</span> <span class="o">+</span> <span class="o">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">4</span><span class="o">))</span> <span class="o">+</span> <span class="o">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">2</span><span class="o">))</span> <span class="o">+</span> <span class="o">(</span><span class="n">c</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">))</span>
+
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// Galagino 用の定義</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// https://github.com/harbaum/galagino/blob/main/galagino/config.h</span>
+<span class="err">#</span><span class="n">ifndef</span> <span class="no">NUNCHUCK_MOVE_THRESHOLD</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">NUNCHUCK_MOVE_THRESHOLD</span> <span class="mi">30</span>
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="err">#</span><span class="n">ifndef</span> <span class="no">NUNCHUCK_SDA</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">NUNCHUCK_SDA</span> <span class="no">D27</span> <span class="c1">// or 22 (SCL)</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">NUNCHUCK_SCL</span> <span class="no">SCL</span> <span class="c1">// or 27 (D27)</span>
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="c1">// https://github.com/harbaum/galagino/blob/main/galagino/emulation.h</span>
+<span class="err">#</span><span class="n">ifndef</span> <span class="no">BUTTON_LEFT</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_LEFT</span>  <span class="mh">0x01</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_RIGHT</span> <span class="mh">0x02</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_UP</span>    <span class="mh">0x04</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_DOWN</span>  <span class="mh">0x08</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_FIRE</span>  <span class="mh">0x10</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_START</span> <span class="mh">0x20</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_COIN</span>  <span class="mh">0x40</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">BUTTON_EXTRA</span> <span class="mh">0x80</span>
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// Adafruit Mini I2C Gamepad 用の定義</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="kd">static</span> <span class="kt">int</span> <span class="n">nunchuck_move_threshold</span> <span class="o">=</span> <span class="no">NUNCHUCK_MOVE_THRESHOLD</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">nunchuckSetup</span><span class="o">()</span> <span class="o">{</span>
+
+  <span class="nc">Wire</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">NUNCHUCK_SDA</span><span class="o">,</span> <span class="no">NUNCHUCK_SCL</span><span class="o">);</span>
+
+  <span class="k">while</span> <span class="o">(!</span><span class="n">seesaw</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">I2C_CONFIG</span><span class="o">))</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"ERROR: Gamepad connection failed."</span><span class="o">);</span>
+    <span class="n">delay</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">uint32_t</span> <span class="n">version</span> <span class="o">=</span> <span class="o">((</span><span class="n">seesaw</span><span class="o">.</span><span class="na">getVersion</span><span class="o">()</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="o">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">version</span> <span class="o">!=</span> <span class="mi">5743</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Wrong firmware loaded? "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">version</span><span class="o">));</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="n">seesaw</span><span class="o">.</span><span class="na">pinModeBulk</span><span class="o">(</span><span class="n">button_mask</span><span class="o">,</span> <span class="no">INPUT_PULLUP</span><span class="o">);</span>
+  <span class="n">seesaw</span><span class="o">.</span><span class="na">setGPIOInterrupts</span><span class="o">(</span><span class="n">button_mask</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+<span class="err">#</span><span class="n">ifdef</span>  <span class="no">LIB_SEESAW_H</span>
+  <span class="nc">Wire</span><span class="o">.</span><span class="na">setClock</span><span class="o">(</span><span class="mi">400000</span><span class="o">);</span>
+<span class="err">#</span><span class="n">endif</span>
+<span class="o">}</span>
+
+<span class="n">unsigned</span> <span class="kt">char</span> <span class="nf">getNunchuckInput</span><span class="o">()</span> <span class="o">{</span>
+  <span class="kt">int</span> <span class="n">joyX</span> <span class="o">=</span> <span class="mi">1023</span> <span class="o">-</span> <span class="n">seesaw</span><span class="o">.</span><span class="na">analogRead</span><span class="o">(</span><span class="mi">14</span><span class="o">);</span>
+  <span class="kt">int</span> <span class="n">joyY</span> <span class="o">=</span> <span class="mi">1023</span> <span class="o">-</span> <span class="n">seesaw</span><span class="o">.</span><span class="na">analogRead</span><span class="o">(</span><span class="mi">15</span><span class="o">);</span>
+
+  <span class="n">uint32_t</span> <span class="n">buttons</span> <span class="o">=</span> <span class="n">seesaw</span><span class="o">.</span><span class="na">digitalReadBulk</span><span class="o">(</span><span class="n">button_mask</span><span class="o">);</span>
+
+  <span class="k">return</span> <span class="o">((</span><span class="n">joyX</span> <span class="o">&lt;</span> <span class="mi">511</span> <span class="o">-</span> <span class="n">nunchuck_move_threshold</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_LEFT</span>  <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+         <span class="o">((</span><span class="n">joyX</span> <span class="o">&gt;</span> <span class="mi">511</span> <span class="o">+</span> <span class="n">nunchuck_move_threshold</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_RIGHT</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+         <span class="o">((</span><span class="n">joyY</span> <span class="o">&gt;</span> <span class="mi">511</span> <span class="o">+</span> <span class="n">nunchuck_move_threshold</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_UP</span>    <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+         <span class="o">((</span><span class="n">joyY</span> <span class="o">&lt;</span> <span class="mi">511</span> <span class="o">-</span> <span class="n">nunchuck_move_threshold</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_DOWN</span>  <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+         <span class="o">(</span><span class="no">IS_PRESSED</span><span class="o">(</span><span class="n">buttons</span><span class="o">,</span> <span class="no">GAMEPAD_BUTTON_B</span> <span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_FIRE</span>  <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+         <span class="o">(</span><span class="no">IS_PRESSED</span><span class="o">(</span><span class="n">buttons</span><span class="o">,</span> <span class="no">GAMEPAD_BUTTON_A</span> <span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_EXTRA</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+         <span class="o">(</span><span class="no">IS_PRESSED</span><span class="o">(</span><span class="n">buttons</span><span class="o">,</span> <span class="no">GAMEPAD_BUTTON_SELECT</span><span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_EXTRA</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">|</span>
+         <span class="o">(</span><span class="no">IS_PRESSED</span><span class="o">(</span><span class="n">buttons</span><span class="o">,</span> <span class="no">GAMEPAD_BUTTON_START</span> <span class="o">)</span> <span class="o">?</span> <span class="no">BUTTON_EXTRA</span> <span class="o">:</span> <span class="mi">0</span><span class="o">)</span> <span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="c1">// setup and loop</span>
+<span class="c1">//---------------------------------------------------------------------------</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="n">nunchuckSetup</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{</span>
+  <span class="n">uint8_t</span> <span class="n">input</span> <span class="o">=</span> <span class="n">getNunchuckInput</span><span class="o">();</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%08d\n"</span><span class="o">,</span> <span class="no">BCD</span><span class="o">(</span><span class="n">input</span><span class="o">));</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<p>このコード、サムスティックを色々動かしてみると分かりますが、「横」や「縦」に入れたつもりでも「斜め」が出力されることが度々起こります。「斜め」が必要なシューティングゲームの場合には反応が良くてイイのですが、「縦横」の動きしかないゲームの場合に「斜め」が出力されると、移動方向が変わらずストレスになっちゃいます。</p>
+
+<p>一番手っ取り早い対策は、ゲームに応じて閾値 <code class="language-plaintext highlighter-rouge">nunchuck_move_threshold</code> を変えることです。例えば Galagino の場合、<code class="language-plaintext highlighter-rouge">nunchuckSetup()</code> に以下を追加すれば OK でしょう。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">ifndef</span> <span class="no">SINGLE_MACHINE</span>
+  <span class="n">extern</span> <span class="n">signed</span> <span class="kt">char</span> <span class="n">machine</span><span class="o">;</span>                         <span class="c1">// `machine` は galagino.ino に定義されています</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">machine</span> <span class="o">==</span> <span class="no">MCH_GALAGA</span> <span class="o">||</span> <span class="n">machine</span> <span class="o">==</span> <span class="no">MCH_1942</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// `MCH_*`   は emulation.h  に定義されています</span>
+    <span class="n">nunchuck_move_threshold</span> <span class="o">=</span> <span class="mi">30</span><span class="o">;</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">nunchuck_move_threshold</span> <span class="o">=</span> <span class="mi">255</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<h3 id="応答時間">応答時間</h3>
+
+<p>ライブラリとコントローラーの組み合わせで、１回のスキャンにかかり処理時間を比べてみました（1000回分の平均値）。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ライブラリ</th>
+      <th>コントローラー</th>
+      <th>応答時間</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>NintendoExtensionCtrl</td>
+      <td>Nunchuk</td>
+      <td>1233 μsec</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>NES Classic Mini</td>
+      <td>1349 μsec</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><strong>Classic controller</strong></td>
+      <td><strong>1491 μsec</strong></td>
+    </tr>
+    <tr>
+      <td>Adafruit_seesaw</td>
+      <td><strong>Adafruit Mini I2C Gamepad</strong></td>
+      <td><strong>2482 μsec</strong></td>
+    </tr>
+    <tr>
+      <td>Gamepad_seesaw</td>
+      <td>^</td>
+      <td>1198 μsec</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>注目して欲しいのは Wii クラシックコントローラーと Adafruit のゲームパッドで、僅か 1msec ほどの差ですが、エミュレーターにとってはこれが致命的とも言える遅延になり得ます。これが <a href="https://github.com/embedded-kiddie/Gamepad_Seesaw" title="embedded-kiddie/Gamepad_Seesaw: A high-speed version of the Adafruit_Seesaw library for Adafruit Mini I2C Gamepad. Especially recommended for Galagino.">Gamepad_seesaw</a> を作成した理由です <span class="emoji">🤟</span></p>
+
+<h3 id="番外編-1">番外編</h3>
+
+<p>ところで、<a href="https://github.com/harbaum/galagino/blob/main/README.md#software" title="galagino/README.md at main · harbaum/galagino">Galagino の README.md</a> には次のような注意喚起が書かれています。</p>
+
+<blockquote>
+  <p><strong>重要なお知らせ２：</strong>
+I2S / DAC のサポートは、ESP32 ボード パッケージ バージョン 2.0.10 以上では機能していないようです。
+きれいなサウンドを得るには、ESP32 ボード パッケージ 2.0.9 以前を使用してください。</p>
+</blockquote>
+
+<p>一方、作者が指摘した 2.0.10 の問題（<a href="https://github.com/espressif/arduino-esp32/issues/8467" title="Crackling sound on i2s with internal DAC since 2.0.10 · Issue #8467 · espressif/arduino-esp32">Issue #8467</a>）は <a href="https://github.com/espressif/arduino-esp32/releases/tag/2.0.12" title="Release Arduino Release v2.0.12 based on ESP-IDF v4.4.5 · espressif/arduino-esp32">2.0.12 で解決</a> されているので、2.0.12 以上なら OK と思います。また I2S ドライバーは 2.X から 3.X へのバージョンアップ時に <a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/migration_guides/2.x_to_3.0.html#i2s" title="Migration from 2.x to 3.0 -  -  &mdash; Arduino ESP32 latest documentation">完全に再設計されリファクタリングされました</a> が、本記事執筆時点の最新版（3.1.3）ではまだ後方互換性が残っていて、（音質は別として）音は出ると思います（無責任 <span class="emoji">😜</span>）。</p>
+
+<p>さて、ソースコードを眺めていて CYD で動かすには幾つかの注意点があることに気付いたので書き留めておきたいと思います。</p>
+
+<h4 id="configh">【config.h】</h4>
+
+<p>まず <a href="https://github.com/harbaum/galagino/blob/main/galagino/config.h#L32" title="galagino/galagino/config.h at main · harbaum/galagino">32行目</a> のコメントアウトを外します。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">CHEAP_YELLOW_DISPLAY_CONF</span></code></pre></figure>
+
+<p>ST7789 を搭載した新版の CYD では <a href="https://github.com/harbaum/galagino/blob/main/galagino/config.h#L39" title="galagino/galagino/config.h at main · harbaum/galagino">68行目</a> は 80MHz の設定で OK でしょう。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">TFT_SPICLK</span> <span class="mi">80000000</span> <span class="c1">// 40 Mhz. Some displays cope with 80 Mhz</span></code></pre></figure>
+
+<p>同時に <a href="https://github.com/harbaum/galagino/blob/main/galagino/config.h#L96-L97" title="galagino/galagino/config.h at main · harbaum/galagino">78行目</a> をコメントアウトします。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// #define TFT_ILI9341 // define for ili9341, otherwise st7789</span></code></pre></figure>
+
+<p>また本記事の接続図では CYD のピン配を逆にしているので、<a href="https://github.com/harbaum/galagino/blob/main/galagino/config.h#L96-L97" title="galagino/galagino/config.h at main · harbaum/galagino">96〜97行目</a> を変更します。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">NUNCHUCK_SDA</span> <span class="mi">27</span> <span class="c1">// 22</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">NUNCHUCK_SCL</span> <span class="mi">22</span> <span class="c1">// 27</span></code></pre></figure>
+
+<h4 id="videocpp">【video.cpp】</h4>
+
+<p>ST7789 で色の反転が不要な場合は、<a href="https://github.com/harbaum/galagino/blob/main/galagino/video.cpp#L104" title="galagino/galagino/video.cpp at main · harbaum/galagino">104行目</a> の <code class="language-plaintext highlighter-rouge">0x21</code> を <code class="language-plaintext highlighter-rouge">0x20</code> に変更します。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">  <span class="mh">0x20</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>                          <span class="c1">// INV OFF</span></code></pre></figure>
+
+<p>またはコメントアウトしても良いでしょう。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//0x21, 0,                          // INV ON</span></code></pre></figure>
+
+<h2 id="懐かしのアーケードゲームで遊ぶには">懐かしのアーケードゲームで遊ぶには？</h2>
+
+<p>さて、勢いで幾つか安めのコントローラーや部品を買って散財しちゃいましたが、著作権法に触れる恐れなくゲームを楽しむなら、すでに Switch を持ってる僕としては <a href="https://store-jp.nintendo.com/search?q=%E3%82%A2%E3%83%BC%E3%82%B1%E3%83%BC%E3%83%89%E3%82%A2%E3%83%BC%E3%82%AB%E3%82%A4%E3%83%96%E3%82%B9" title="アーケードアーカイブス｜My Nintendo Store（マイニンテンドーストア）">My Nintendo Store アーケードアーカイブス</a> がベストというのが今回のオチです。</p>
+
+<p>今回がキッカケで、<a href="https://store-jp.nintendo.com/item/software/D70010000043806" title="アーケードアーカイブス ゼビウス｜My Nintendo Store（マイニンテンドーストア）">ゼビウス</a> や <a href="https://store-jp.nintendo.com/item/software/D70010000048955" title="アーケードアーカイブス ドラゴンスピリット｜My Nintendo Store（マイニンテンドーストア）">ドラスピ</a> をダウンロードして楽しんでます <span class="emoji">🤗</span></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/02/05/" title="前の記事：ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました">← ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2025/02/25/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2025/02/25/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let c=document.getElementsByTagName("pre"),b=Array(c.length),m=Array(c.length);for(let a=0;a<c.length;a++)b[a]=l.cloneNode(!0),b[a].addEventListener("click",()=>{let d=window.getSelection(),f=b[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),c[a].addEventListener("mouseenter",()=>{c[a].appendChild(b[a]);b[a].appendChild(e)}),c[a].addEventListener("mouseleave",()=>{b[a].remove()}),c[a].addEventListener("scroll",()=>{b[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{b[a].style.visibility="visible"},500);b[a].style.right=-c[a].scrollLeft+"px"});const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/02/25/";this.page.identifier="/2025/02/25/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+</body>
+</html>

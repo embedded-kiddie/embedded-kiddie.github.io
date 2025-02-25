@@ -8,6 +8,20 @@
     
       
       <item>
+        <title>ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン</title>
+        
+          <description>&lt;p&gt;&lt;img src=&quot;/images/2025/02-25/I2C-Controllers.jpg&quot; alt=&quot;I2C コントローラー&quot; /&gt;&lt;/p&gt;
+</description>
+        
+        <pubDate>Tue, 25 Feb 2025 11:01:36 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/02/25/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/02/25/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました</title>
         
           <description>&lt;p&gt;&lt;img src=&quot;/images/2025/02-05/Two-thermo-cameras.jpg&quot; alt=&quot;２台のサーモグラフィカメラ&quot; title=&quot;２台のサーモグラフィカメラ&quot; width=&quot;1250&quot; height=&quot;800&quot; /&gt;&lt;/p&gt;
