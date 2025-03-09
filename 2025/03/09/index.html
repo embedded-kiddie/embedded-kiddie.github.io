@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Arduino 環境で LVGL を試したくて、ディスプレイや SD カードの面倒な配線が不要な “黄色い基板”（以下 CYD）を購入しました。ただ最初に入手した品がハズレだったため、結果的に２種類の2.8インチ版を手にする事に…。" />
+<meta property="og:description" content="Arduino 環境で LVGL を試したくて、ディスプレイや SD カードの面倒な配線が不要な “黄色い基板”（以下 CYD）を購入しました。ただ最初に入手した品がハズレだったため、結果的に２種類の2.8インチ版を手にする事に…。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/03/09/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/03/09/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-03-09T11:40:33+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-03-09T11:40:33+09:00","datePublished":"2025-03-09T11:40:33+09:00","description":"Arduino 環境で LVGL を試したくて、ディスプレイや SD カードの面倒な配線が不要な “黄色い基板”（以下 CYD）を購入しました。ただ最初に入手した品がハズレだったため、結果的に２種類の2.8インチ版を手にする事に…。","headline":"ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/03/09/"},"url":"https://embedded-kiddie.github.io/2025/03/09/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-03-09T11:40:33+09:00" itemprop="datePublished">Mar 9, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Arduino 環境で <a href="https://lvgl.io/" title="LVGL — Light and Versatile Embedded Graphics Library">LVGL</a> を試したくて、ディスプレイや SD カードの面倒な配線が不要な “黄色い基板”（以下 CYD）を購入しました。ただ最初に入手した品がハズレだったため、結果的に２種類の2.8インチ版を手にする事に…。</p>
+
+<p>どうせならと言うことで、LVGL に深入りする前に CYD を使いこなす上での次の２つのお題を片付けておく事にしました。</p>
+
+<ul>
+  <li>２種類の LCD ドライバ IC（ILI9341、ST7789）の SPI クロック周波数と描画速度の比較</li>
+  <li>２本しか無い SPI バスで３つのデバイス（LCD、タッチパネル、SD カード）を扱う方法</li>
+</ul>
+
+<p>今回はまず、前者に関する調査結果を報告したいと思います。</p>
+
+<h2 id="ili9341-と-st7789-の-spi-クロック周波数">ILI9341 と ST7789 の SPI クロック周波数</h2>
+
+<p>CYD のように LCD を搭載したボード限定ですが、僕がお気に入りの <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> には、自動でボードの種類を識別し、<a href="https://github.com/lovyan03/LovyanGFX/blob/master/src/lgfx_user/LGFX_ESP32_sample.hpp" title="LovyanGFX/src/lgfx_user/LGFX_ESP32_sample.hpp at master · lovyan03/LovyanGFX">パラメータ</a> を設定してくれるとても便利な機能があります。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">LGFX_AUTODETECT</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">LovyanGFX</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span></code></pre></figure>
+
+<p>この仕組みを利用し、設定されたパラメータをダンプするよう <a href="https://github.com/lovyan03/LovyanGFX/blob/master/src/lgfx/v1_autodetect/LGFX_AutoDetect_ESP32_all.hpp" title="LovyanGFX/src/lgfx/v1_autodetect/LGFX_AutoDetect_ESP32_all.hpp at master · lovyan03/LovyanGFX">コード</a> に手を加えて得られたのが次の２つです。１つ目は Micro-USB が１つのタイプ（ILI9341）、２つ目は Micro-USB と USB-C の２つを備えたタイプ（ST7789）です。</p>
+
+<div class="quote clear-both">
+
+<p>SPI のピン番号は、ボードタイプに <code class="language-plaintext highlighter-rouge">ESP32-2432S028R CYD</code> を設定すると読み込まれる <a href="https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h" title="arduino-esp32/variants/jczn_2432s028r/pins_arduino.h at master · espressif/arduino-esp32"><code>pins_arduino.h</code></a> の定義済みシンボルに置き換えています。</p>
+
+</div>
+
+<details>
+<summary>LGFX_ESP32_2432S028R_CYD_1USB.hpp (ILI9341)</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">pragma</span> <span class="n">once</span>
+
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">LovyanGFX</span><span class="o">.</span><span class="na">hpp</span><span class="o">&gt;</span>
+
+<span class="c1">// ESP32-2432S028R で LovyanGFX を独自設定で利用する場合の設定</span>
+<span class="c1">// ファイル名例：LGFX_ESP32_2432S028R_CYD_1USB.hpp</span>
+<span class="c1">//</span>
+<span class="c1">// ピン設定は、以下を元にしています</span>
+<span class="c1">// ボードタイプ：ESP32_2432S028R CYD</span>
+<span class="c1">// https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h</span>
+
+<span class="c1">/// 独自の設定を行うクラスを、LGFX_Deviceから派生して作成します。</span>
+<span class="kd">class</span> <span class="nc">LGFX</span> <span class="o">:</span> <span class="kd">public</span> <span class="nl">lgfx:</span><span class="o">:</span><span class="n">LGFX_Device</span>
+<span class="o">{</span>
+  <span class="nl">lgfx:</span><span class="o">:</span><span class="n">Panel_ILI9341</span>   <span class="n">_panel_instance</span><span class="o">;</span>  <span class="c1">// 接続するパネルの型にあったインスタンスを用意します。</span>
+  <span class="nl">lgfx:</span><span class="o">:</span><span class="n">Bus_SPI</span>         <span class="n">_bus_instance</span><span class="o">;</span>    <span class="c1">// SPIバスのインスタンス</span>
+  <span class="nl">lgfx:</span><span class="o">:</span><span class="n">Light_PWM</span>       <span class="n">_light_instance</span><span class="o">;</span>  <span class="c1">// バックライト制御が可能な場合はインスタンスを用意します。</span>
+  <span class="nl">lgfx:</span><span class="o">:</span><span class="n">Touch_XPT2046</span>   <span class="n">_touch_instance</span><span class="o">;</span>  <span class="c1">// タッチスクリーンの型にあったインスタンスを用意します。</span>
+
+<span class="kd">public</span><span class="o">:</span>
+  <span class="c1">// コンストラクタを作成し、ここで各種設定を行います。</span>
+  <span class="no">LGFX</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span>
+  <span class="o">{</span>
+    <span class="o">{</span> <span class="c1">// バス制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_bus_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>  <span class="c1">// バス設定用の構造体を取得します。</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_host</span> <span class="o">=</span> <span class="no">HSPI_HOST</span><span class="o">;</span>           <span class="c1">// 使用するSPIを選択  ESP32-S2,C3 : SPI2_HOST or SPI3_HOST / ESP32 : VSPI_HOST or HSPI_HOST</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_mode</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>                   <span class="c1">// SPI通信モードを設定 (0 ~ 3)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq_write</span> <span class="o">=</span> <span class="mi">40000000</span><span class="o">;</span>          <span class="c1">// 送信時のSPIクロック (最大80MHz, 80MHzを整数で割った値に丸められます)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq_read</span>  <span class="o">=</span> <span class="mi">16000000</span><span class="o">;</span>          <span class="c1">// 受信時のSPIクロック</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_3wire</span>  <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>             <span class="c1">// 受信をMOSIピンで行う場合はtrueを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">use_lock</span>   <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>              <span class="c1">// トランザクションロックを使用する場合はtrueを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">dma_channel</span> <span class="o">=</span> <span class="no">SPI_DMA_CH_AUTO</span><span class="o">;</span>  <span class="c1">// 使用するDMAチャンネルを設定 (0=DMA不使用 / 1=1ch / 2=ch / SPI_DMA_CH_AUTO=自動設定)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_sclk</span> <span class="o">=</span> <span class="no">CYD_TFT_SCK</span><span class="o">;</span>         <span class="c1">// SPIのSCLKピン番号を設定 (14)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_mosi</span> <span class="o">=</span> <span class="no">CYD_TFT_MOSI</span><span class="o">;</span>        <span class="c1">// SPIのMOSIピン番号を設定 (13)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_miso</span> <span class="o">=</span> <span class="no">CYD_TFT_MISO</span><span class="o">;</span>        <span class="c1">// SPIのMISOピン番号を設定 (12)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_dc</span>   <span class="o">=</span> <span class="no">CYD_TFT_DC</span><span class="o">;</span>          <span class="c1">// SPIのD/Cピン番号を設定  (2)</span>
+
+      <span class="n">_bus_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>          <span class="c1">// 設定値をバスに反映します。</span>
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">setBus</span><span class="o">(&amp;</span><span class="n">_bus_instance</span><span class="o">);</span> <span class="c1">// バスをパネルにセットします。</span>
+    <span class="o">}</span>
+
+    <span class="o">{</span> <span class="c1">// 表示パネル制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_panel_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>  <span class="c1">// 表示パネル設定用の構造体を取得します。</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_cs</span>           <span class="o">=</span> <span class="no">CYD_TFT_CS</span><span class="o">;</span>    <span class="c1">// CSが接続されているピン番号   (15)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_rst</span>          <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>            <span class="c1">// RSTが接続されているピン番号  (-1 = disable)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_busy</span>         <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>            <span class="c1">// BUSYが接続されているピン番号 (-1 = disable)</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">panel_width</span>      <span class="o">=</span>   <span class="mi">240</span><span class="o">;</span>  <span class="c1">// 実際に表示可能な幅</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">panel_height</span>     <span class="o">=</span>   <span class="mi">320</span><span class="o">;</span>  <span class="c1">// 実際に表示可能な高さ</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_x</span>         <span class="o">=</span>     <span class="mi">0</span><span class="o">;</span>  <span class="c1">// パネルのX方向オフセット量</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_y</span>         <span class="o">=</span>     <span class="mi">0</span><span class="o">;</span>  <span class="c1">// パネルのY方向オフセット量</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_rotation</span>  <span class="o">=</span>     <span class="mi">2</span><span class="o">;</span>  <span class="c1">// 回転方向の値のオフセット 0~7 (4~7は上下反転)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">dummy_read_pixel</span> <span class="o">=</span>     <span class="mi">8</span><span class="o">;</span>  <span class="c1">// ピクセル読出し前のダミーリードのビット数</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">dummy_read_bits</span>  <span class="o">=</span>     <span class="mi">1</span><span class="o">;</span>  <span class="c1">// ピクセル以外のデータ読出し前のダミーリードのビット数</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">readable</span>         <span class="o">=</span>  <span class="kc">true</span><span class="o">;</span>  <span class="c1">// データ読出しが可能な場合 trueに設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">invert</span>           <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// パネルの明暗が反転してしまう場合 trueに設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">rgb_order</span>        <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// パネルの赤と青が入れ替わってしまう場合 trueに設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">dlen_16bit</span>       <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// 16bitパラレルやSPIでデータ長を16bit単位で送信するパネルの場合 trueに設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">bus_shared</span>       <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// SDカードとバスを共有している場合 trueに設定(drawJpgFile等でバス制御を行います)</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">memory_width</span>     <span class="o">=</span>   <span class="mi">240</span><span class="o">;</span>  <span class="c1">// ドライバICがサポートしている最大の幅</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">memory_height</span>    <span class="o">=</span>   <span class="mi">320</span><span class="o">;</span>  <span class="c1">// ドライバICがサポートしている最大の高さ</span>
+
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="o">{</span> <span class="c1">// バックライト制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_light_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>  <span class="c1">// バックライト設定用の構造体を取得します。</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_bl</span> <span class="o">=</span> <span class="no">CYD_TFT_BL</span><span class="o">;</span>      <span class="c1">// バックライトが接続されているピン番号 (21)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">invert</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>           <span class="c1">// バックライトの輝度を反転させる場合 true</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq</span>   <span class="o">=</span> <span class="mi">12000</span><span class="o">;</span>           <span class="c1">// バックライトのPWM周波数</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pwm_channel</span> <span class="o">=</span> <span class="mi">7</span><span class="o">;</span>          <span class="c1">// 使用するPWMのチャンネル番号</span>
+
+      <span class="n">_light_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">setLight</span><span class="o">(&amp;</span><span class="n">_light_instance</span><span class="o">);</span>  <span class="c1">// バックライトをパネルにセットします。</span>
+    <span class="o">}</span>
+
+    <span class="o">{</span> <span class="c1">// タッチスクリーン制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_touch_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">x_min</span>      <span class="o">=</span>  <span class="mi">240</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最小のX値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">x_max</span>      <span class="o">=</span> <span class="mi">3800</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最大のX値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">y_min</span>      <span class="o">=</span> <span class="mi">3700</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最小のY値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">y_max</span>      <span class="o">=</span>  <span class="mi">200</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最大のY値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_int</span>    <span class="o">=</span> <span class="no">CYD_TP_IRQ</span><span class="o">;</span>  <span class="c1">// INTが接続されているピン番号 (36)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">bus_shared</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>       <span class="c1">// 画面と共通のバスを使用している場合 trueを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_rotation</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>      <span class="c1">// 表示とタッチの向きのが一致しない場合の調整 0~7の値で設定</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_host</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>            <span class="c1">// 使用するSPIを選択 (HSPI_HOST or VSPI_HOST)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq</span> <span class="o">=</span> <span class="mi">1000000</span><span class="o">;</span>           <span class="c1">// SPIクロックを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_sclk</span> <span class="o">=</span> <span class="no">CYD_TP_CLK</span><span class="o">;</span>    <span class="c1">// SCLKが接続されているピン番号 (25)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_mosi</span> <span class="o">=</span> <span class="no">CYD_TP_MOSI</span><span class="o">;</span>   <span class="c1">// MOSIが接続されているピン番号 (32)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_miso</span> <span class="o">=</span> <span class="no">CYD_TP_MISO</span><span class="o">;</span>   <span class="c1">// MISOが接続されているピン番号 (39)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_cs</span>   <span class="o">=</span> <span class="no">CYD_TP_CS</span><span class="o">;</span>     <span class="c1">//   CSが接続されているピン番号 (33)</span>
+
+      <span class="n">_touch_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">setTouch</span><span class="o">(&amp;</span><span class="n">_touch_instance</span><span class="o">);</span>  <span class="c1">// タッチスクリーンをパネルにセットします。</span>
+    <span class="o">}</span>
+
+    <span class="n">setPanel</span><span class="o">(&amp;</span><span class="n">_panel_instance</span><span class="o">);</span> <span class="c1">// 使用するパネルをセットします。</span>
+  <span class="o">}</span>
+<span class="o">};</span></code></pre></figure>
+
+
+</details>
+
+<details>
+<summary>LGFX_ESP32_2432S028R_CYD_2USB.hpp (ST7789)</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">pragma</span> <span class="n">once</span>
+
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">LovyanGFX</span><span class="o">.</span><span class="na">hpp</span><span class="o">&gt;</span>
+
+<span class="c1">// ESP32-2432S028R で LovyanGFX を独自設定で利用する場合の設定</span>
+<span class="c1">// ファイル名例：LGFX_ESP32_2432S028R_CYD_1USB.hpp</span>
+<span class="c1">//</span>
+<span class="c1">// ピン設定は、以下を元にしています</span>
+<span class="c1">// ボードタイプ：ESP32_2432S028R CYD</span>
+<span class="c1">// https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h</span>
+
+<span class="c1">/// 独自の設定を行うクラスを、LGFX_Deviceから派生して作成します。</span>
+<span class="kd">class</span> <span class="nc">LGFX</span> <span class="o">:</span> <span class="kd">public</span> <span class="nl">lgfx:</span><span class="o">:</span><span class="n">LGFX_Device</span>
+<span class="o">{</span>
+  <span class="nl">lgfx:</span><span class="o">:</span><span class="n">Panel_ST7789</span>    <span class="n">_panel_instance</span><span class="o">;</span>  <span class="c1">// 接続するパネルの型にあったインスタンスを用意します。</span>
+  <span class="nl">lgfx:</span><span class="o">:</span><span class="n">Bus_SPI</span>         <span class="n">_bus_instance</span><span class="o">;</span>    <span class="c1">// SPIバスのインスタンス</span>
+  <span class="nl">lgfx:</span><span class="o">:</span><span class="n">Light_PWM</span>       <span class="n">_light_instance</span><span class="o">;</span>  <span class="c1">// バックライト制御が可能な場合はインスタンスを用意します。</span>
+  <span class="nl">lgfx:</span><span class="o">:</span><span class="n">Touch_XPT2046</span>   <span class="n">_touch_instance</span><span class="o">;</span>  <span class="c1">// タッチスクリーンの型にあったインスタンスを用意します。</span>
+
+<span class="kd">public</span><span class="o">:</span>
+  <span class="c1">// コンストラクタを作成し、ここで各種設定を行います。</span>
+  <span class="no">LGFX</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span>
+  <span class="o">{</span>
+    <span class="o">{</span> <span class="c1">// バス制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_bus_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>  <span class="c1">// バス設定用の構造体を取得します。</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_host</span> <span class="o">=</span> <span class="no">HSPI_HOST</span><span class="o">;</span>           <span class="c1">// 使用するSPIを選択  ESP32-S2,C3 : SPI2_HOST or SPI3_HOST / ESP32 : VSPI_HOST or HSPI_HOST</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_mode</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>                   <span class="c1">// SPI通信モードを設定 (0 ~ 3)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq_write</span> <span class="o">=</span> <span class="mi">80000000</span><span class="o">;</span>          <span class="c1">// 送信時のSPIクロック (最大80MHz, 80MHzを整数で割った値に丸められます)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq_read</span>  <span class="o">=</span> <span class="mi">16000000</span><span class="o">;</span>          <span class="c1">// 受信時のSPIクロック</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_3wire</span>  <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>             <span class="c1">// 受信をMOSIピンで行う場合はtrueを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">use_lock</span>   <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>              <span class="c1">// トランザクションロックを使用する場合はtrueを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">dma_channel</span> <span class="o">=</span> <span class="no">SPI_DMA_CH_AUTO</span><span class="o">;</span>  <span class="c1">// 使用するDMAチャンネルを設定 (0=DMA不使用 / 1=1ch / 2=ch / SPI_DMA_CH_AUTO=自動設定)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_sclk</span> <span class="o">=</span> <span class="no">CYD_TFT_SCK</span><span class="o">;</span>         <span class="c1">// SPIのSCLKピン番号を設定 (14)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_mosi</span> <span class="o">=</span> <span class="no">CYD_TFT_MOSI</span><span class="o">;</span>        <span class="c1">// SPIのMOSIピン番号を設定 (13)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_miso</span> <span class="o">=</span> <span class="no">CYD_TFT_MISO</span><span class="o">;</span>        <span class="c1">// SPIのMISOピン番号を設定 (12)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_dc</span>   <span class="o">=</span> <span class="no">CYD_TFT_DC</span><span class="o">;</span>          <span class="c1">// SPIのD/Cピン番号を設定  (2)</span>
+
+      <span class="n">_bus_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>          <span class="c1">// 設定値をバスに反映します。</span>
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">setBus</span><span class="o">(&amp;</span><span class="n">_bus_instance</span><span class="o">);</span> <span class="c1">// バスをパネルにセットします。</span>
+    <span class="o">}</span>
+
+    <span class="o">{</span> <span class="c1">// 表示パネル制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_panel_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>  <span class="c1">// 表示パネル設定用の構造体を取得します。</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_cs</span>           <span class="o">=</span> <span class="no">CYD_TFT_CS</span><span class="o">;</span>    <span class="c1">// CSが接続されているピン番号   (15)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_rst</span>          <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>            <span class="c1">// RSTが接続されているピン番号  (-1 = disable)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_busy</span>         <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>            <span class="c1">// BUSYが接続されているピン番号 (-1 = disable)</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">panel_width</span>      <span class="o">=</span>   <span class="mi">240</span><span class="o">;</span>  <span class="c1">// 実際に表示可能な幅</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">panel_height</span>     <span class="o">=</span>   <span class="mi">320</span><span class="o">;</span>  <span class="c1">// 実際に表示可能な高さ</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_x</span>         <span class="o">=</span>     <span class="mi">0</span><span class="o">;</span>  <span class="c1">// パネルのX方向オフセット量</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_y</span>         <span class="o">=</span>     <span class="mi">0</span><span class="o">;</span>  <span class="c1">// パネルのY方向オフセット量</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_rotation</span>  <span class="o">=</span>     <span class="mi">0</span><span class="o">;</span>  <span class="c1">// 回転方向の値のオフセット 0~7 (4~7は上下反転)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">dummy_read_pixel</span> <span class="o">=</span>    <span class="mi">16</span><span class="o">;</span>  <span class="c1">// ピクセル読出し前のダミーリードのビット数</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">dummy_read_bits</span>  <span class="o">=</span>     <span class="mi">1</span><span class="o">;</span>  <span class="c1">// ピクセル以外のデータ読出し前のダミーリードのビット数</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">readable</span>         <span class="o">=</span>  <span class="kc">true</span><span class="o">;</span>  <span class="c1">// データ読出しが可能な場合 trueに設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">invert</span>           <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// パネルの明暗が反転してしまう場合 trueに設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">rgb_order</span>        <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// パネルの赤と青が入れ替わってしまう場合 trueに設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">dlen_16bit</span>       <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// 16bitパラレルやSPIでデータ長を16bit単位で送信するパネルの場合 trueに設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">bus_shared</span>       <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// SDカードとバスを共有している場合 trueに設定(drawJpgFile等でバス制御を行います)</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">memory_width</span>     <span class="o">=</span>   <span class="mi">240</span><span class="o">;</span>  <span class="c1">// ドライバICがサポートしている最大の幅</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">memory_height</span>    <span class="o">=</span>   <span class="mi">320</span><span class="o">;</span>  <span class="c1">// ドライバICがサポートしている最大の高さ</span>
+
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="o">{</span> <span class="c1">// バックライト制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_light_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>  <span class="c1">// バックライト設定用の構造体を取得します。</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_bl</span> <span class="o">=</span> <span class="no">CYD_TFT_BL</span><span class="o">;</span>      <span class="c1">// バックライトが接続されているピン番号 (21)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">invert</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>           <span class="c1">// バックライトの輝度を反転させる場合 true</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq</span>   <span class="o">=</span> <span class="mi">12000</span><span class="o">;</span>           <span class="c1">// バックライトのPWM周波数</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pwm_channel</span> <span class="o">=</span> <span class="mi">7</span><span class="o">;</span>          <span class="c1">// 使用するPWMのチャンネル番号</span>
+
+      <span class="n">_light_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">setLight</span><span class="o">(&amp;</span><span class="n">_light_instance</span><span class="o">);</span>  <span class="c1">// バックライトをパネルにセットします。</span>
+    <span class="o">}</span>
+
+    <span class="o">{</span> <span class="c1">// タッチスクリーン制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_touch_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">x_min</span>      <span class="o">=</span>  <span class="mi">240</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最小のX値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">x_max</span>      <span class="o">=</span> <span class="mi">3800</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最大のX値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">y_min</span>      <span class="o">=</span> <span class="mi">3700</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最小のY値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">y_max</span>      <span class="o">=</span>  <span class="mi">200</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最大のY値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_int</span>    <span class="o">=</span> <span class="no">CYD_TP_IRQ</span><span class="o">;</span>  <span class="c1">// INTが接続されているピン番号 (36)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">bus_shared</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>       <span class="c1">// 画面と共通のバスを使用している場合 trueを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_rotation</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>      <span class="c1">// 表示とタッチの向きのが一致しない場合の調整 0~7の値で設定</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_host</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>            <span class="c1">// 使用するSPIを選択 (HSPI_HOST or VSPI_HOST)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq</span> <span class="o">=</span> <span class="mi">1000000</span><span class="o">;</span>           <span class="c1">// SPIクロックを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_sclk</span> <span class="o">=</span> <span class="no">CYD_TP_CLK</span><span class="o">;</span>    <span class="c1">// SCLKが接続されているピン番号 (25)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_mosi</span> <span class="o">=</span> <span class="no">CYD_TP_MOSI</span><span class="o">;</span>   <span class="c1">// MOSIが接続されているピン番号 (32)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_miso</span> <span class="o">=</span> <span class="no">CYD_TP_MISO</span><span class="o">;</span>   <span class="c1">// MISOが接続されているピン番号 (39)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_cs</span>   <span class="o">=</span> <span class="no">CYD_TP_CS</span><span class="o">;</span>     <span class="c1">//   CSが接続されているピン番号 (33)</span>
+
+      <span class="n">_touch_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">setTouch</span><span class="o">(&amp;</span><span class="n">_touch_instance</span><span class="o">);</span>  <span class="c1">// タッチスクリーンをパネルにセットします。</span>
+    <span class="o">}</span>
+
+    <span class="n">setPanel</span><span class="o">(&amp;</span><span class="n">_panel_instance</span><span class="o">);</span> <span class="c1">// 使用するパネルをセットします。</span>
+  <span class="o">}</span>
+<span class="o">};</span></code></pre></figure>
+
+
+</details>
+
+<p><code class="language-plaintext highlighter-rouge">diff</code> コマンドで両者の差分を取ると、次のようになります（僕はこれらを１つのファイルにまとめ、<a href="https://x.com/lovyan03" title="X">ココ</a> に掲載されたシンボル定義 <code class="language-plaintext highlighter-rouge">DISPLAY_CYD_2USB</code> で <a href="https://github.com/embedded-kiddie/MLX90640/blob/main/boards/LGFX_ESP32_2432S028R_CYD.hpp#L18-L22" title="MLX90640/boards/LGFX_ESP32_2432S028R_CYD.hpp at main · embedded-kiddie/MLX90640">切り替えてます</a>）。</p>
+
+<figure class="highlight"><pre><code class="language-diff" data-lang="diff">% diff LGFX_ESP32_2432S028R_CYD_1USB.hpp LGFX_ESP32_2432S028R_CYD_2USB.hpp 
+<span class="p">17c17
+</span><span class="gd">&lt;   lgfx::Panel_ILI9341   _panel_instance;  // 接続するパネルの型にあったインスタンスを用意します。
+</span><span class="p">---
+</span><span class="gi">&gt;   lgfx::Panel_ST7789    _panel_instance;  // 接続するパネルの型にあったインスタンスを用意します。
+</span><span class="p">31c31
+</span><span class="gd">&lt;       cfg.freq_write = 40000000;          // 送信時のSPIクロック (最大80MHz, 80MHzを整数で割った値に丸められます)
+</span><span class="p">---
+</span><span class="gi">&gt;       cfg.freq_write = 80000000;          // 送信時のSPIクロック (最大80MHz, 80MHzを整数で割った値に丸められます)
+</span><span class="p">56,57c56,57
+</span><span class="gd">&lt;       cfg.offset_rotation  =     2;  // 回転方向の値のオフセット 0~7 (4~7は上下反転)
+&lt;       cfg.dummy_read_pixel =     8;  // ピクセル読出し前のダミーリードのビット数
+</span><span class="p">---
+</span><span class="gi">&gt;       cfg.offset_rotation  =     0;  // 回転方向の値のオフセット 0~7 (4~7は上下反転)
+&gt;       cfg.dummy_read_pixel =    16;  // ピクセル読出し前のダミーリードのビット数
+</span><span class="p">92c92
+</span><span class="gd">&lt;       cfg.offset_rotation = 0;      // 表示とタッチの向きのが一致しない場合の調整 0~7の値で設定
+</span><span class="p">---
+</span><span class="gi">&gt;       cfg.offset_rotation = 2;      // 表示とタッチの向きのが一致しない場合の調整 0~7の値で設定</span></code></pre></figure>
+
+<div class="notice clear-both">
+
+<p>これらの設定が他の ILI9431 や ST7789 に適用可能とは限りません。僕の経験では、単体の ST7789 ディプレイで <code class="language-plaintext highlighter-rouge">dummy_read_pixel</code> をデフォルトの <code class="language-plaintext highlighter-rouge">8</code> から <code class="language-plaintext highlighter-rouge">16</code> に変えたところ、スクリーンキャプチャ（＝画素値の読み出し）時に色がシフトしてしまいました。</p>
+
+</div>
+
+<p>上記から分かる通り、LovyanGFX の自動設定では ILI9341 の SPI クロック周波数（40MHz）を ST7789（80MHz）の 1/2 に設定してます。各パネルのデータシートを見ると、書き込み時のクロック周期として ILI9341 が 100ns（10MHz）、ST7789 は 66ns（約 15MHz）が「<strong>最小値</strong>」として示されているだけで、最大値の規定がありません。</p>
+
+<figure class="flex">
+  <a href="/images/2025/03-09/ClockSpec-ILI9341.jpg" title="ILI9341 クロック仕様" data-lightbox="image">
+    <img src="/images/2025/03-09/ClockSpec-ILI9341-small.jpg" alt="ILI9341 クロック仕様" width="350" height="490" />
+    <figcaption>ILI9341 クロック仕様</figcaption>
+  </a>
+  <a href="/images/2025/03-09/ClockSpec-ST7789.jpg" title="ST7789 クロック仕様" data-lightbox="image">
+    <img src="/images/2025/03-09/ClockSpec-ST7789-small.jpg" alt="ST7789 クロック仕様" width="350" height="490" />
+    <figcaption>ST7789 クロック仕様</figcaption>
+  </a>
+</figure>
+
+<p>おそらく 40MHz とか 80MHz とかの値は、<a href="https://x.com/lovyan03" title="X">らびやんさん</a> をはじめ多くの先人達の経験に基づく値と思われます。例えば <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/tree/main" title="witnessmenow/ESP32-Cheap-Yellow-Display: Building a community around a cheap ESP32 Display with a touch screen">witnessmenow/ESP32-Cheap-Yellow-Display</a> では、TFT_eSPI 用の値として <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/blob/main/DisplayConfig/User_Setup.h#L359" title="ESP32-Cheap-Yellow-Display/DisplayConfig/User_Setup.h at main · witnessmenow/ESP32-Cheap-Yellow-Display">ILI9341 タイプ</a>、 <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/blob/main/DisplayConfig/CYD2USB/User_Setup.h" title="ESP32-Cheap-Yellow-Display/DisplayConfig/CYD2USB/User_Setup.h at main · witnessmenow/ESP32-Cheap-Yellow-Display">ST7789 タイプ</a> ともに <code class="language-plaintext highlighter-rouge">55MHz</code> が設定されています。</p>
+
+<div class="notice clear-both">
+
+<p>手元の CYD で <a href="https://github.com/Bodmer/TFT_eSPI/tree/master/examples/320%20x%20240/TFT_graphicstest_PDQ" title="TFT_eSPI/examples/320 x 240/TFT_graphicstest_PDQ at master · Bodmer/TFT_eSPI">TFT_eSPI のベンチマーク用スケッチ</a> を 55MHz に設定しても、40MHz と有意なさは見られませんでした。どこかで（調べろよ、オィ<span class="emoji">😅</span>）40MHz の倍数で丸められているようです。</p>
+
+</div>
+
+<h2 id="描画性能の実験">描画性能の実験</h2>
+
+<p>先人達の経験値を信じないわけではありませんが、鵜呑みにして「ILI9341 より ST7789 の方が速い！」と結論づけるのもナニなので、<a href="https://github.com/Bodmer/TFT_eSPI/tree/master/examples/320%20x%20240/TFT_graphicstest_PDQ" title="TFT_eSPI/examples/320 x 240/TFT_graphicstest_PDQ at master · Bodmer/TFT_eSPI">TFT_eSPI のベンチマーク用スケッチ</a> を LovyanGFX でも動くようにして、SPI クロック周波数を変えてテストしてみました。</p>
+
+<p>結果はご覧の通り、ILI9341 も 80MHz で動作し、ST7789 と同等のスコアを示しました。</p>
+
+<figure class="flex">
+  <div>
+    <img src="/images/2025/03-09/ILI9341-40MHz.png" alt="ILI9341 SPI クロック 40MHz" width="240" height="320" />
+    <figcaption>ILI9341 SPI クロック 40MHz</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/03-09/ILI9341-80MHz.png" alt="ILI9341 SPI クロック 80MHz" width="240" height="320" />
+    <figcaption>ILI9341 SPI クロック 80MHz</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/03-09/ST7789-80MHz.png" alt="ST7789 SPI クロック 80MHz" width="240" height="320" />
+    <figcaption>ST7789 SPI クロック 80MHz</figcaption>
+  </div>
+</figure>
+
+<p>念の為、各テスト結果を 24 ビットのビットマップ画像に保存し、40MHz と 80MHz で比較したところ、完全に一致しました（ただし ILI9341 と ST7789 とでは、幾つかの画像で目視ではほぼ区別がつかない程度の差（RGB 値で 1 ビット）が見られた）。</p>
+
+<p>一方 LovyanGFX の例題スケッチ <a href="https://github.com/lovyan03/LovyanGFX/tree/master/examples/Sprite/RotatedZoomSample" title="LovyanGFX/examples/Sprite/RotatedZoomSample at master · lovyan03/LovyanGFX">RotatedZoomSample</a> では、ILI9341 の 80MHz で同期が乱れたような画像になっちゃいました。</p>
+
+<figure class="flex">
+  <div>
+    <img src="/images/2025/03-09/RotatedZoom-ILI9341-40MHz.jpg" alt="RotatedZoom ILI9341 40MHz" width="240" height="320" />
+    <figcaption>RotatedZoom ILI9341 40MHz</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/03-09/RotatedZoom-ILI9341-80MHz.jpg" alt="RotatedZoom ILI9341 80MHz" width="240" height="320" />
+    <figcaption>RotatedZoom ILI9341 80MHz</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/03-09/RotatedZoom-ST7789-80MHz.jpg" alt="RotatedZoom ST7789 80MHz" width="240" height="320" />
+    <figcaption>RotatedZoom ST7789 80MHz</figcaption>
+  </div>
+</figure>
+
+<p>この例題スケッチではスプライトが使われているので、メモリからパネルへのデータ転送時にタイミング的な不整合が生じたのでしょう。DMA は明示的に有効化してませんが、デフォルトで働いていたのかも知れません（調べろよ、オィ <span class="emoji">😠</span>）</p>
+
+<p>これらの結果から、使用する関数次第で 40MHz が上限の場合もあれば、80MHz が可能な場合もある事が分かります。逆に言えば、ILI9341 であっても 40MHz に固執する必要はなく、条件次第で 80MHz で高速化を狙えるという事です。</p>
+
+<h3 id="ili9341オーバークロックして大丈夫">ILI9341、オーバークロックして大丈夫？</h3>
+
+<p>どこからがオーバークロックなのかハッキリしませんが、<a href="https://github.com/Bodmer/TFT_eSPI/tree/master/examples/320%20x%20240/TFT_graphicstest_PDQ" title="TFT_eSPI/examples/320 x 240/TFT_graphicstest_PDQ at master · Bodmer/TFT_eSPI">TFT_graphicstest_PDQ</a> の全ての待ち時間をゼロにして３時間連続稼働した、なんちゃって耐久試験（Alexa に聞いたら室温は22度でした）を行いました。</p>
+
+<figure class="flex">
+  <div>
+    <img src="/images/2025/03-09/Durability.gif" alt="80MHz 連続描画の耐久試験" width="285" height="173" />
+    <figcaption>80MHz 連続描画の耐久試験</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/03-09/PanelSurface.png" alt="ボードのオモテ面" width="232" height="174" />
+    <figcaption>ボードのオモテ面</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/03-09/PanelBack.png" alt="ボードの基板面" width="232" height="174" />
+    <figcaption>ボードの基板面</figcaption>
+  </div>
+</figure>
+
+<p>パネルの中のドライバ IC を直接測温することは出来ませんが、表も裏も特段に熱くなることもなく正常に機能しています。まぁ、ILI9341 も ST7789 もチップの作りとしては似たり寄ったりなのでしょう（よく知りもせず、いい加減なヤツ <span class="emoji">🙄</span>）</p>
+
+<h2 id="次回は">次回は…</h2>
+
+<p>もしかしたら LVGL＋ILI9341 でも 80MHz で動かせるかも？という期待を持ちつつ、今回はココまでとします。</p>
+
+<p>次回は、冒頭に挙げた２番目の気になる項目「２本しか無い SPI バスで３つの SPI デバイスを扱う方法」を掘り下げたいと思います。３つのうち２つしか使えないなんて、有り得ないですからネ <span class="emoji">🤡</span></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/02/25/" title="前の記事：ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン">← ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/03/09/",this.page.identifier="/2025/03/09/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/03/09/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/03/09/";this.page.identifier="/2025/03/09/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>

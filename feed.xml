@@ -8,6 +8,21 @@
     
       
       <item>
+        <title>ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較</title>
+        
+          <description>&lt;p&gt;Arduino 環境で &lt;a href=&quot;https://lvgl.io/&quot; title=&quot;LVGL — Light and Versatile Embedded Graphics Library&quot;&gt;LVGL&lt;/a&gt; を試したくて、ディスプレイや SD カードの面倒な配線が不要な “黄色い基板”（以下 CYD）を購入しました。ただ最初に入手した品がハズレだったため、結果的に２種類の2.8インチ版を手にする事に…。&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sun, 09 Mar 2025 11:40:33 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/03/09/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/03/09/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン</title>
         
           <description>&lt;p&gt;&lt;img src=&quot;/images/2025/02-25/I2C-Controllers.jpg&quot; alt=&quot;I2C コントローラー&quot; /&gt;&lt;/p&gt;
