@@ -5,21 +5,22 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Embedded Kiddie | 組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</title>
+<title>WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法 | Embedded Kiddie</title>
 <meta name="generator" content="Jekyll v4.3.3" />
-<meta property="og:title" content="Embedded Kiddie" />
+<meta property="og:title" content="WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法" />
 <meta name="author" content="Kingsman" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
-<meta property="og:description" content="組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。" />
-<link rel="canonical" href="https://embedded-kiddie.github.io/" />
-<meta property="og:url" content="https://embedded-kiddie.github.io/" />
+<meta name="description" content="Arduino で ESP32 のプログラムを開発中、一度は Guru Meditation Error など、強制的にリセットがかかってしまう Exception was unhandled な経験をしたことがあると思います。" />
+<meta property="og:description" content="Arduino で ESP32 のプログラムを開発中、一度は Guru Meditation Error など、強制的にリセットがかかってしまう Exception was unhandled な経験をしたことがあると思います。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/03/23/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/03/23/" />
 <meta property="og:site_name" content="Embedded Kiddie" />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-03-23T15:23:06+09:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Embedded Kiddie" />
+<meta property="twitter:title" content="WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"Kingsman"},"description":"組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。","headline":"Embedded Kiddie","name":"Embedded Kiddie","url":"https://embedded-kiddie.github.io/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-03-23T15:23:06+09:00","datePublished":"2025-03-23T15:23:06+09:00","description":"Arduino で ESP32 のプログラムを開発中、一度は Guru Meditation Error など、強制的にリセットがかかってしまう Exception was unhandled な経験をしたことがあると思います。","headline":"WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/03/23/"},"url":"https://embedded-kiddie.github.io/2025/03/23/"}</script>
 <!-- End Jekyll SEO tag -->
 
   <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
@@ -42,157 +43,135 @@
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <div class="items-list">
-      <h2 id="year-2025">2025</h2>
-      <ul>
-        <li class="one-liner">
-          <time datetime="2025-03-23">Mar 23</time>
-          <a href="/2025/03/23/">WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2025-03-09">Mar 09</time>
-          <a href="/2025/03/09/">ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2025-02-25">Feb 25</time>
-          <a href="/2025/02/25/">ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2025-02-05">Feb 05</time>
-          <a href="/2025/02/05/">ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました</a>
-        </li>
-    </ul>
-      <h2 id="year-2024">2024</h2>
-      <ul>
-        <li class="one-liner">
-          <time datetime="2024-12-30">Dec 30</time>
-          <a href="/2024/12/30/">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 完成編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-11-21">Nov 21</time>
-          <a href="/2024/11/21/">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - GUI編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-10-04">Oct 04</time>
-          <a href="/2024/10/04/">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - ソフトウエア編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-09-04">Sep 04</time>
-          <a href="/2024/09/04/">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - カメラ製作編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-08-15">Aug 15</time>
-          <a href="/2024/08/15/">基板の温度分布測定用にArduinoでサーモグラフィカメラを作る - 動作確認編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-08-08">Aug 08</time>
-          <a href="/2024/08/08/">Blink Without DelayパターンとFinite State Machineで作るArduinoのブロック崩し</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-07-22">Jul 22</time>
-          <a href="/2024/07/22/">Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-07-12">Jul 12</time>
-          <a href="/2024/07/12/">UNO R4でサーボモータがカクカクする問題とライブラリの更新</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-07-01">Jul 01</time>
-          <a href="/2024/07/01/">RA4M1とESP32-S3が抱える事情とUNO R4 WiFiファームウェアアップデート</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-06-28">Jun 28</time>
-          <a href="/2024/06/28/">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 感圧センシング編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-06-22">Jun 22</time>
-          <a href="/2024/06/22/">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - キャリブレーション編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-06-16">Jun 16</time>
-          <a href="/2024/06/16/">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 基本編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-06-10">Jun 10</time>
-          <a href="/2024/06/10/">Arduino UNO R4 静電容量式タッチセンシングユニット(CTSU) - 導入編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-06-03">Jun 03</time>
-          <a href="/2024/06/03/">Arduino UNO R4の周辺回路レジスタをモニターするプログラム</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-05-16">May 16</time>
-          <a href="/2024/05/16/">Jekyllで数式:MathJaxとKaTeXを比べたらJekTexが良かった</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-05-07">May 07</time>
-          <a href="/2024/05/07/">Arduino UNO R4ユーザーに朗報、ソースコードデバッグが可能に！</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-04-23">Apr 23</time>
-          <a href="/2024/04/23/">サーバー不要、GitHub Pagesで使えるコメントシステムのホスティングサービス集</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-04-17">Apr 17</time>
-          <a href="/2024/04/17/how-to-use-toragi-writer.html">Arduino UNO R4 Minima/WiFiでソースコードデバッグするまでのまとめと補足</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-04-14">Apr 14</time>
-          <a href="/2024/04/14/printf-for-arduino-uno-r4.html">Arduino UNO R4のデバッグ・printfの行方の謎とprintlnの小技</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-04-12">Apr 12</time>
-          <a href="/2024/04/12/background-tone-player.html">Arduino UNO R4用バックグラウンドミュージック再生ライブラリの紹介</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-04-09">Apr 09</time>
-          <a href="/2024/04/09/arduino-r4-callback-timer.html">BGM再生用に作成したArduino UNO R4用タイマライブラリの解説</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-04-04">Apr 04</time>
-          <a href="/2024/04/04/arduino-blink-with-bgm.html">Lチカしながら音楽再生・Arduino UNO R4のタイマと割り込みとクロック事情</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-26">Mar 26</time>
-          <a href="/2024/03/26/how-to-debug-with-lpcexpresso.html">ビュートローバーARMでソースコードデバッグする方法 - LPCXpresso編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-24">Mar 24</time>
-          <a href="/2024/03/24/arduino-debug-with-toragi.html">Arduino UNO R4をトラ技ARMライタでソースコードデバッグ…うっ動いた!?</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-23">Mar 23</time>
-          <a href="/2024/03/23/debug-probe-for-beauto-rover.html">ビュートローバーARMでソースコードデバッグする方法 - デバッグ・プローブ編</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-17">Mar 17</time>
-          <a href="/2024/03/17/items-for-line-trace-dev.html">ライントレースのプログラム開発を楽しむためのアイテム</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-16">Mar 16</time>
-          <a href="/2024/03/16/arduino-lap-timer.html">Arduinoでライントレース用ラップタイマーを作る</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-15">Mar 15</time>
-          <a href="/2024/03/15/items-for-electronic-hobbyists.html">電子工作初心者の僕が買い揃えた14＋αのアイテム</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-14">Mar 14</time>
-          <a href="/2024/03/14/printf-debug.html">ビュートローバーでprintfデバッグ、ついでに赤外線センサの特性を測る</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-13">Mar 13</time>
-          <a href="/2024/03/13/micon-board-comparison.html">ビュートローバーARMとArduino Uno R4のマイコン比較</a>
-        </li>
-    <li class="one-liner">
-          <time datetime="2024-03-12">Mar 12</time>
-          <a href="/2024/03/12/half-scrach-dev.html">ビュートローバーARMでベアメタルからのライントレース - ハーフスクラッチ開発の勧め</a>
-        </li></ul>
-    
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-03-23T15:23:06+09:00" itemprop="datePublished">Mar 23, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Arduino で ESP32 のプログラムを開発中、一度は <code class="language-plaintext highlighter-rouge">Guru Meditation Error</code> など、強制的にリセットがかかってしまう <code class="language-plaintext highlighter-rouge">Exception was unhandled</code> な経験をしたことがあると思います。</p>
+
+<p>そんな時、従来は <a href="https://github.com/me-no-dev/EspExceptionDecoder" title="me-no-dev/EspExceptionDecoder: Exception Stack Trace Decoder for ESP8266 and ESP32">Exception Stack Trace Decoder</a> や <a href="https://romly.com/blog/esp32_addr2line/" title="ESP32が落ちた（強制リセット）時にBacktraceから該当コードを調べる">addr2line</a> が利用されてきたと思いますが、前者の <code class="language-plaintext highlighter-rouge">.jar</code> ファイルは僕の環境で動かないし、後者は CLI が面倒。</p>
+
+<p>と言うことで、ドラッグ＆ドロップ＋コピペ OK の Web サイト <a href="https://maximeborges.github.io/esp-stacktrace-decoder/" title="ESP Stack trace decoder">ESP Stack trace decoder</a> を紹介します。</p>
+
+<figure class="flex">
+  <div>
+    <img src="/images/2025/03-23/Stack-trace-decoder.jpg" alt="ESP Stack trace decoder" width="1200" height="850" />
+    <figcaption>ESP Stack trace decoder</figcaption>
   </div>
-</div>
+</figure>
+
+<h2 id="esp-stack-trace-decoder-の使い方">ESP Stack trace decoder の使い方</h2>
+
+<ol>
+  <li>
+    <p><a href="https://maximeborges.github.io/esp-stacktrace-decoder/" title="ESP Stack trace decoder">Web サイト</a> を開きます。</p>
+  </li>
+  <li>
+    <p>「<strong>ファイルを選択</strong>」のボタンに <code class="language-plaintext highlighter-rouge">.elf</code> ファイルをドラッグ＆ドロップします。</p>
+  </li>
+  <li>
+    <p>Arduino IDE のシリアルモニタから <code class="language-plaintext highlighter-rouge">Backtrace:</code> の16進数の塊をコピーし、<code class="language-plaintext highlighter-rouge">Stack trace:</code> に貼り付けます。</p>
+
+    <figure class="flex">
+   <img src="/images/2025/03-23/Backtrace.jpg" alt="Backtraceをコピー" width="1200" height="780" />
+ </figure>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Run!</code> ボタンでアドレスと関数の行番号リストが <code class="language-plaintext highlighter-rouge">Output:</code> に表示されるので、エラーの発生経路を追跡します。</p>
+  </li>
+</ol>
+
+<h2 id="elf-ファイルの見つけ方">ELF ファイルの見つけ方</h2>
+
+<p>Arduino IDE のバージョン 2.3.4 前後でキャッシュフォルダが異なるので、コンパイル時の情報を見るのが一番確実な方法です。</p>
+
+<ol>
+  <li>
+    <p>IDE メニューから「<strong>Arduino IDE</strong> &gt; <strong>基本設定…</strong>」からダイアログを開きます。</p>
+  </li>
+  <li>
+    <p>「<strong>より詳細な情報を表示する</strong>」の「<strong>コンパイル</strong>」をチェックし、「<strong>OK(O)</strong>」します。</p>
+
+    <figure class="flex">
+   <img src="/images/2025/03-23/Preference.jpg" alt="基本設定" width="1200" height="760" />
+ </figure>
+  </li>
+  <li>
+    <p>「<strong>検証</strong>」ボタン <span class="inline"><img src="/images/2025/03-23/Verify.png" title="検証ボタン" alt="検証ボタン" /></span> で再コンパイルします。</p>
+  </li>
+  <li>
+    <p>「<strong>出力</strong>」タブから「<code class="language-plaintext highlighter-rouge">プロジェクト名.ino.elf</code>」を含む行、あるいは「<strong>以前コンパイルされたファイルを使用中：</strong>」の行からキャッシュフォルダへのパスをコピーします。</p>
+
+    <figure class="flex">
+   <img src="/images/2025/03-23/Compile.jpg" alt="キャッシュフォルダのコピー" width="1200" height="540" />
+ </figure>
+  </li>
+  <li>
+    <p>コピーしたパスをエクスプローラー（Windows）またはファインダー（Mac）で開いたら、「<code class="language-plaintext highlighter-rouge">プロジェクト名.ino.elf</code>」を検索します。</p>
+
+    <figure class="flex">
+   <img src="/images/2025/03-23/ELF-file-Search.jpg" alt="" width="1200" height="620" />
+ </figure>
+  </li>
+</ol>
+
+<h3 id="elf-ファイルへの素早いアクセス方法">ELF ファイルへの素早いアクセス方法</h3>
+
+<p>Arduino キャッシュフォルダへのショートカット（Windows）またはエイリアス（Mac）を作成しておくのが良いでしょう。</p>
+
+<h4 id="windows-の場合">Windows の場合</h4>
+
+<p>エクスプローラーのアドレスバーに <code class="language-plaintext highlighter-rouge">%localappdata%</code> を入力し、上記でコピーしたパスを辿るのが手っ取り早いと思います。</p>
+
+<h4 id="mac-os-の場合">Mac OS の場合</h4>
+
+<p>ファインダーを開き、<code class="language-plaintext highlighter-rouge">Shift + Command ⌘ + G</code> またはメニューの「<strong>移動</strong> &gt; <strong>フォルダへ移動…</strong>」からダイアログを開き、コピーしたフォルダへのパスをペーストします。</p>
+
+<p>ブラウザから「<strong>ファイルを選択</strong>」した場合は、<code class="language-plaintext highlighter-rouge">Shift + Command ⌘ + .</code>（ピリオド）で隠しフォルダを表示し、「<strong>Macintosh HD</strong>」から辿ると良いでしょう。</p>
+
+<figure class="flex">
+  <img src="/images/2025/03-23/ELF-file-select.jpg" alt="ELFファイルの選択" width="1200" height="750" />
+</figure>
+
+<h2 id="esp-stack-trace-decoder-って">ESP Stack trace decoder って？</h2>
+
+<p>このクールなサイトは、<a href="https://github.com/maximeborges/esp-stacktrace-decoder" title="maximeborges/esp-stacktrace-decoder: A Rust ESP stack trace decoder that can also runs in your browser thanks to WebAssembly">maximeborges/esp-stacktrace-decoder</a> の GitHub Pages にホストされています。</p>
+
+<p><a href="https://www.rust-lang.org/ja" title="Rustプログラミング言語">Rust</a> の <a href="https://developer.mozilla.org/ja/docs/WebAssembly" title="MDN Web Docs">WebAssembly</a> アプリケーションとして作成されていて、サーバーへのホスト方法も解説されているので、自分専用を作ることも可能と思います。</p>
+
+<p>余談ですが、つい先日までちょっとした不具合があり、修正用の PR も放置されていたので、これを機会に Rust の勉強も兼ねて自分でホストしようと試みたのですが、僕の Mac が古いためか Rust がうまくインストール出来ませんでした <span class="emoji">💦</span></p>
+
+<p>でも <a href="https://github.com/maximeborges/esp-stacktrace-decoder/pull/5#issuecomment-2745010489" title="Relax address regex by pzich · Pull Request #5 · maximeborges/esp-stacktrace-decoder">お願いしたら直ぐに対応してくれました</a> <span class="emoji">⛳️</span> メデタシ、メデタシ。</p>
+
+<h3 id="参考">参考</h3>
+
+<ul>
+  <li><a href="https://forum.arduino.cc/t/ide-2-3-4-change-of-cache-directory/1332455" title="[IDE 2.3.4] Change of cache directory? - IDE 2.x - Arduino Forum">[IDE 2.3.4] Change of cache directory?</a></li>
+  <li><a href="https://romly.com/blog/esp32_addr2line/" title="ESP32が落ちた（強制リセット）時にBacktraceから該当コードを調べる">ESP32が落ちた（強制リセット）時にBacktraceから該当コードを調べる</a></li>
+</ul>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/03/09/" title="前の記事：ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較">← ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/03/23/",this.page.identifier="/2025/03/23/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/03/23/" hidden></a>
+</article>
+
       </div>
     </main>
 <footer class="site-footer h-card">
@@ -219,6 +198,8 @@
   <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
 </footer>
 
-<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));})();</script>
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/03/23/";this.page.identifier="/2025/03/23/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
 </body>
 </html>
