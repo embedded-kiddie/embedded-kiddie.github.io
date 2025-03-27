@@ -210,7 +210,7 @@
 
 <p>SPI 例題スケッチ <a href="https://github.com/espressif/arduino-esp32/blob/master/libraries/SPI/examples/SPI_Multiple_Buses/SPI_Multiple_Buses.ino" title="arduino-esp32/libraries/SPI/examples/SPI_Multiple_Buses/SPI_Multiple_Buses.ino at master · espressif/arduino-esp32">SPI_Multiple_Buses</a> の変則版で（<a href="#figure5">図５</a>）、<a href="https://docs.arduino.cc/tutorials/communication/SPITransaction/" title="Tutorials / SPITransaction Method">SPI トランザクション</a> を想定外な方法で使うのですが、スクリーンキャプチャ（＝LCD から画素値を読み込みながら SD カードに書き出す処理）がうまく動かない（＝画素値の読み込みが出来ない）だけで、なぜか SD カードへの読み書きだけなら出来ちゃいます。</p>
 
-<p>実際には、<code class="language-plaintext highlighter-rouge">User_Setup.h</code> で <code class="language-plaintext highlighter-rouge">TFT_MISO</code> の定義をコメントアウトするだけです。こーすると、LCD には <code class="language-plaintext highlighter-rouge">MOSI</code> を介して出力するだけ、タッチパネルからは <code class="language-plaintext highlighter-rouge">MISO</code>を介して読み込むだけになり、それぞれが競合しない？のか、機能しちゃいます <span class="emoji">🥳</span></p>
+<p>実際には、<code class="language-plaintext highlighter-rouge">User_Setup.h</code> で <code class="language-plaintext highlighter-rouge">TFT_MISO</code> の定義をコメントアウト（トライステートのハイインピーダンス状態）するだけです。こーすると、LCD には <code class="language-plaintext highlighter-rouge">MOSI</code> を介して出力するだけ、タッチパネルからは <code class="language-plaintext highlighter-rouge">MISO</code>を介して読み込むだけになり、それぞれが競合しない？のか、機能します <span class="emoji">🥳</span></p>
 
 <p>この場合、<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">Espressif 標準の SD ライブラリ</a> はデフォルトの SPI バスである <code class="language-plaintext highlighter-rouge">VSPI</code> に接続されるので、ディスプレイもタッチパネルも <code class="language-plaintext highlighter-rouge">HSPI</code> に接続するのが良いと思います。</p>
 
@@ -252,15 +252,6 @@
   <span class="n">touchscreen</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="n">touchscreenSPI</span><span class="o">);</span>
   <span class="o">...</span>
 <span class="o">}</span></code></pre></figure>
-
-<div class="notice clear-both">
-
-<h4>追加の情報</h4>
-<p>LCD の <code class="language-plaintext highlighter-rouge">MISO</code> ピン（12）は宙ぶらりんにせず、次の様にリセットピンに接続しておくべきかもしれません。</p>
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define TFT_RST  12
-</span></code></pre></div></div>
-
-</div>
 
 <h2 id="spi-デバイスの適切な配置について">SPI デバイスの適切な配置について</h2>
 
