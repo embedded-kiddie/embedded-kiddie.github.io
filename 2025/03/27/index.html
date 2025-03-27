@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028R (CYD)でLVGL - 2つのSPIバスでLCD、タッチ、SDを共存させる方法 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028R (CYD)でLVGL - 2つのSPIバスでLCD、タッチ、SDを共存させる方法" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="ESP32-DevKit 系の開発ボードでは、LCD、タッチパネル、SD カードの３つの SPI デバイスを（ユーザーに解放された）２つの SPI バスで動かす場合、LCD とタッチパネルを１つのバスに、SD カードをもう１つのバスに接続する構成が一般的かと思います（図１）。" />
+<meta property="og:description" content="ESP32-DevKit 系の開発ボードでは、LCD、タッチパネル、SD カードの３つの SPI デバイスを（ユーザーに解放された）２つの SPI バスで動かす場合、LCD とタッチパネルを１つのバスに、SD カードをもう１つのバスに接続する構成が一般的かと思います（図１）。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/03/27/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/03/27/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-03-27T11:14:03+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028R (CYD)でLVGL - 2つのSPIバスでLCD、タッチ、SDを共存させる方法" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-03-27T11:14:03+09:00","datePublished":"2025-03-27T11:14:03+09:00","description":"ESP32-DevKit 系の開発ボードでは、LCD、タッチパネル、SD カードの３つの SPI デバイスを（ユーザーに解放された）２つの SPI バスで動かす場合、LCD とタッチパネルを１つのバスに、SD カードをもう１つのバスに接続する構成が一般的かと思います（図１）。","headline":"ESP32 2432S028R (CYD)でLVGL - 2つのSPIバスでLCD、タッチ、SDを共存させる方法","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/03/27/"},"url":"https://embedded-kiddie.github.io/2025/03/27/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028R (CYD)でLVGL - 2つのSPIバスでLCD、タッチ、SDを共存させる方法</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-03-27T11:14:03+09:00" itemprop="datePublished">Mar 27, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>ESP32-DevKit 系の開発ボードでは、LCD、タッチパネル、SD カードの３つの SPI デバイスを（ユーザーに解放された）２つの SPI バスで動かす場合、LCD とタッチパネルを１つのバスに、SD カードをもう１つのバスに接続する構成が一般的かと思います（<a href="#figure1">図１</a>）。</p>
+
+<p>例えば <a href="https://github.com/Bodmer/TFT_eSPI" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">TFT_eSPI</a> では、LCD とタッチパネルの <code class="language-plaintext highlighter-rouge">SCK</code>、<code class="language-plaintext highlighter-rouge">MOSI</code>、<code class="language-plaintext highlighter-rouge">MISO</code> は共通が前提です。また XIAO や SuperMini など小型のボードでは SD カードも共通にせざるを得ません（<a href="#figure2">図２</a>）。</p>
+
+<div class="quote clear-both">
+
+<p>本記事では旧来の「マスター／スレーブ」ではなく「メイン／サブ」と表記しています。</p>
+
+</div>
+
+<figure class="flex">
+  <a id="figure1" href="/images/2025/03-27/SPI-1.jpg" title="図１ TFT_eSPI の使用例" data-lightbox="image">
+    <img src="/images/2025/03-27/SPI-1-small.jpg" alt="図１ TFT_eSPI の使用例" width="500" height="305" />
+    <figcaption>図１ TFT_eSPI の使用例</figcaption>
+  </a>
+  <a id="figure2" href="/images/2025/03-27/SPI-2.jpg" title="図２ TFT_eSPI + XIAO" data-lightbox="image">
+    <img src="/images/2025/03-27/SPI-2-small.jpg" alt="図２ TFT_eSPI + XIAO" width="500" height="305" />
+    <figcaption>図２ TFT_eSPI + XIAO</figcaption>
+  </a>
+  <a id="figure3" href="/images/2025/03-27/SPI-3.jpg" title="図３ TFT_eSPI + CYD" data-lightbox="image">
+    <img src="/images/2025/03-27/SPI-3-small.jpg" alt="図３ TFT_eSPI + CYD" width="500" height="305" />
+    <figcaption>図３ TFT_eSPI + CYD</figcaption>
+  </a>
+</figure>
+
+<p>一方 LCD、タッチパネル、SD カードが１つのボードに載った ESP32 2432S028R（以下 <abbr title="Cheap Yellow Display">CYD</abbr>）のピン配は次の通りで、<code class="language-plaintext highlighter-rouge">SCK</code>、<code class="language-plaintext highlighter-rouge">MOSI</code>、<code class="language-plaintext highlighter-rouge">MISO</code> がそれぞれ 別々の GPIO に接続されているため共通にすることができず、SPI バスが１つ不足します（<a href="#figure3">図３</a>）。</p>
+
+<div class="quote clear-both">
+
+<p><code class="language-plaintext highlighter-rouge">CYD_*</code> は、ボードタイプに「<a href="https://github.com/espressif/arduino-esp32/tree/master/variants/jczn_2432s028r" title="arduino-esp32/variants/jczn_2432s028r at master · espressif/arduino-esp32">ESP32-2432S028R CYD</a>」を選択した時に読み込まれる <code class="language-plaintext highlighter-rouge">pins_arduino.h</code> で定義されるシンボルです。</p>
+
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>信号名＼デバイス</th>
+      <th>ディスプレイ</th>
+      <th>タッチパネル</th>
+      <th>SDカード</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>SCK</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TFT_SCK</code> (14)</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TP_CLK</code> (25)</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_SD_SCK</code> (18)</td>
+    </tr>
+    <tr>
+      <td>MOSI</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TFT_MOSI</code> (13)</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TP_MOSI</code> (32)</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_SD_MOSI</code> (23)</td>
+    </tr>
+    <tr>
+      <td>MISO</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TFT_MISO</code> (12)</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TP_MISO</code> (39)</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_SD_MISO</code> (19)</td>
+    </tr>
+    <tr>
+      <td>CS</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TFT_CS</code> (15)</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TP_CS</code> (33)</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_SD_SS</code> (5)</td>
+    </tr>
+    <tr>
+      <td>DC</td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TFT_DC</code> (2)</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>IRQ</td>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">CYD_TP_IRQ</code> (36)</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>では、どうやって３つの SPI デバイスを共存させれば良いのか？ ─ その答えは <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> にありました。</p>
+
+<h2 id="lovyangfx-の解決法">LovyanGFX の解決法</h2>
+
+<p><a href="#figure1">図１</a>の様に１つの SPI メインに複数の SPI サブノードが接続されている場合、各ノード仕様に合わせた設定（クロック周波数、ビット列の並び、及びクロックパルス動作モード）、いわゆるトランザクションを <a href="https://github.com/espressif/arduino-esp32/blob/3cbc405edf2448cf1d77b0a30a5e62ddab806a85/libraries/SPI/src/SPI.h#L27-L35" title="arduino-esp32/libraries/SPI/src/SPI.h at 3cbc405edf2448cf1d77b0a30a5e62ddab806a85 · espressif/arduino-esp32">spiSettings()</a> で切り替えて通信を行います。</p>
+
+<p>一方タッチパネルの <code class="language-plaintext highlighter-rouge">SCK</code>、<code class="language-plaintext highlighter-rouge">MOSI</code>、<code class="language-plaintext highlighter-rouge">MISO</code> は他と被らず独立しているので、一度トランザクションを設定すれば切り替える必要がありません。</p>
+
+<p>LovyanGFX では、<a href="https://github.com/lovyan03/LovyanGFX/blob/master/src/lgfx_user/LGFX_ESP32_sample.hpp#L180-L197" title="LovyanGFX/src/lgfx_user/LGFX_ESP32_sample.hpp at master · lovyan03/LovyanGFX">設定ファイル</a> 中の「<strong>タッチスクリーン制御の設定 → 使用するSPIを選択 (HSPI_HOST or VSPI_HOST)</strong>」にある <code class="language-plaintext highlighter-rouge">cfg.spi_host</code> を <code class="language-plaintext highlighter-rouge">-1</code> にすることで、このモードで XPT2046 と SPI 通信することが可能になります。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="o">{</span> <span class="c1">// タッチスクリーン制御の設定を行います。</span>
+      <span class="n">auto</span> <span class="n">cfg</span> <span class="o">=</span> <span class="n">_touch_instance</span><span class="o">.</span><span class="na">config</span><span class="o">();</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">x_min</span>      <span class="o">=</span>  <span class="mi">240</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最小のX値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">x_max</span>      <span class="o">=</span> <span class="mi">3800</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最大のX値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">y_min</span>      <span class="o">=</span> <span class="mi">3700</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最小のY値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">y_max</span>      <span class="o">=</span>  <span class="mi">200</span><span class="o">;</span>        <span class="c1">// タッチスクリーンから得られる最大のY値(生の値)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_int</span>    <span class="o">=</span> <span class="no">CYD_TP_IRQ</span><span class="o">;</span>  <span class="c1">// INTが接続されているピン番号 (36)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">bus_shared</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>       <span class="c1">// 画面と共通のバスを使用している場合 trueを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">offset_rotation</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>      <span class="c1">// 表示とタッチの向きのが一致しない場合の調整 0~7の値で設定</span>
+
+      <span class="n">cfg</span><span class="o">.</span><span class="na">spi_host</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>            <span class="c1">// 使用するSPIを選択 (HSPI_HOST or VSPI_HOST)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">freq</span> <span class="o">=</span> <span class="mi">1000000</span><span class="o">;</span>           <span class="c1">// SPIクロックを設定</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_sclk</span> <span class="o">=</span> <span class="no">CYD_TP_CLK</span><span class="o">;</span>    <span class="c1">// SCLKが接続されているピン番号 (25)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_mosi</span> <span class="o">=</span> <span class="no">CYD_TP_MOSI</span><span class="o">;</span>   <span class="c1">// MOSIが接続されているピン番号 (32)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_miso</span> <span class="o">=</span> <span class="no">CYD_TP_MISO</span><span class="o">;</span>   <span class="c1">// MISOが接続されているピン番号 (39)</span>
+      <span class="n">cfg</span><span class="o">.</span><span class="na">pin_cs</span>   <span class="o">=</span> <span class="no">CYD_TP_CS</span><span class="o">;</span>     <span class="c1">//   CSが接続されているピン番号 (33)</span>
+
+      <span class="n">_touch_instance</span><span class="o">.</span><span class="na">config</span><span class="o">(</span><span class="n">cfg</span><span class="o">);</span>
+      <span class="n">_panel_instance</span><span class="o">.</span><span class="na">setTouch</span><span class="o">(&amp;</span><span class="n">_touch_instance</span><span class="o">);</span>  <span class="c1">// タッチスクリーンをパネルにセットします。</span>
+    <span class="o">}</span></code></pre></figure>
+
+<figure class="float-left">
+  <a id="figure4" href="/images/2025/03-27/SPI-4.jpg" title="図４ LovyanGFXの動作" data-lightbox="image">
+    <img src="/images/2025/03-27/SPI-4-small.jpg" alt="図４ LovyanGFXの動作" width="500" height="305" />
+    <figcaption>図４ LovyanGFXの動作</figcaption>
+  </a>
+</figure>
+
+<p>このモードでは、<code class="language-plaintext highlighter-rouge">CS</code>、<code class="language-plaintext highlighter-rouge">MOSI</code>、<code class="language-plaintext highlighter-rouge">MISO</code> に割り当てられた GPIO を直接叩く、いわゆる <a href="https://en.wikipedia.org/wiki/Bit_banging" title="Bit banging - Wikipedia">ビットバン</a> によってタッチパネルの情報をソフトウェアで読み取ります（<a href="#figure4">図４</a>）。</p>
+
+<p>また <a href="/2025/03/09/" title="ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較｜Embedded Kiddie">前回</a> 調べた通り、<code class="language-plaintext highlighter-rouge">LGFX_AUTODETECT</code> を設定すれば自動でこのモードにしてくれます。とっても便利ですネ <span class="emoji">🤗</span></p>
+
+<h2 id="tft_espi-の場合は">TFT_eSPI の場合は？</h2>
+
+<p><a href="https://lvgl.io/" title="LVGL Light and Versatile Embedded Graphics Library">LVGL</a> には、予め TFT_eSPI 用のサンプルコードが組み込まれていて、例えば <a href="https://randomnerdtutorials.com/lvgl-cheap-yellow-display-esp32-2432s028r/" title="LVGL (Light Versatile Graphics Library) ESP32 Cheap Yellow Display (ESP32-2432S028R)｜Random Nerd Tutorials">Random Nerd のチュートリアル</a> を参考すれば簡単に CYD で LVGL を走らせることができます。</p>
+
+<p>TFT_eSPI もタッチ機能を持っていますが、<a href="#figure1">図１</a>が前提で<a href="#figure3">図３</a>の接続ができず、CYD では機能しません。そこで同チュートリアルでは <a href="https://github.com/PaulStoffregen/XPT2046_Touchscreen" title="PaulStoffregen/XPT2046_Touchscreen: Touchscreen Arduino Library for XPT2046 Touch Controller Chip">XPT2046_Touchscreen</a> を <a href="#figure3">図３</a>の形で繋いでいます。ただし SD カードを組み込むことが出来ません。</p>
+
+<figure class="float-left">
+  <a href="/images/2025/03-27/XPT2046_Bitbang.jpg" title="XPT2046_Bitbang_Slim" data-lightbox="image">
+    <img src="/images/2025/03-27/XPT2046_Bitbang-small.jpg" alt="XPT2046_Bitbang_Slim" width="600" height="470" />
+    <figcaption>XPT2046_Bitbang_Slim</figcaption>
+  </a>
+</figure>
+
+<p>このため CYD のまとめリポジトリ <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display" title="witnessmenow/ESP32-Cheap-Yellow-Display: Building a community around a cheap ESP32 Display with a touch screen">ESP32-Cheap-Yellow-Display</a> では、LovyanGFX 同様にビットバン方式をとる <a href="https://github.com/TheNitek/XPT2046_Bitbang_Arduino_Library" title="TheNitek/XPT2046_Bitbang_Arduino_Library: A software implementation of SPI to access the XPT2046 on the 2432S028 board and similar">XPT2046_Bitbang_Slim</a> を <a href="https://github.com/witnessmenow/ESP32-Cheap-Yellow-Display/blob/main/TROUBLESHOOTING.md#display-touch-and-sd-card-are-not-working-at-the-same-time" title="ESP32-Cheap-Yellow-Display/TROUBLESHOOTING.md at main · witnessmenow/ESP32-Cheap-Yellow-Display">推奨しています</a>。</p>
+
+<p>このライブラリは、グラフィカルなキャリブレーション機能が無い（数値を直接いじる）上に、座標系の回転が未実装だし、何より精度の低い抵抗膜方式では外れ値を除外するフィルターが必要だったりと、何かと面倒です。</p>
+
+<p>以前紹介した <a href="https://github.com/embedded-kiddie/MLX90640" title="embedded-kiddie/MLX90640">サーモグラフィカメラ</a> では、これらの問題に対処するため新たに <a href="https://github.com/embedded-kiddie/MLX90640/blob/main/boards/XPT2046_ScreenPoint.h" title="MLX90640/boards/XPT2046_ScreenPoint.h at main · embedded-kiddie/MLX90640">ラッパークラス</a> を作成しましたが、LVGL で SD カードを使う場合、そーまでして TFT_eSPI を使う理由が見当たりません <span class="emoji">😑</span></p>
+
+<h3 id="条件付きで動作させる方法">条件付きで動作させる方法</h3>
+
+<p>どーしても TFT_eSPI を使いたい場合は、保証は出来ませんが条件付きで SD カードの読み書きが可能になる方法があります。</p>
+
+<figure class="float-left">
+  <a id="figure5" href="/images/2025/03-27/SPI-5.jpg" title="図５ ２つのSPIClassインスタンス" data-lightbox="image">
+    <img src="/images/2025/03-27/SPI-5-small.jpg" alt="図５ ２つのSPIClassインスタンス" width="500" height="305" />
+    <figcaption>図５ ２つのSPIClassインスタンス</figcaption>
+  </a>
+</figure>
+
+<p>SPI 例題スケッチ <a href="https://github.com/espressif/arduino-esp32/blob/master/libraries/SPI/examples/SPI_Multiple_Buses/SPI_Multiple_Buses.ino" title="arduino-esp32/libraries/SPI/examples/SPI_Multiple_Buses/SPI_Multiple_Buses.ino at master · espressif/arduino-esp32">SPI_Multiple_Buses</a> の変則版で（<a href="#figure5">図５</a>）、<a href="https://docs.arduino.cc/tutorials/communication/SPITransaction/" title="Tutorials / SPITransaction Method">SPI トランザクション</a> を想定外な方法で使うのですが、スクリーンキャプチャ（＝LCD から画素値を読み込みながら SD カードに書き出す処理）がうまく動かない（＝画素値の読み込みが出来ない）だけで、なぜか SD カードへの読み書きだけなら出来ちゃいます。</p>
+
+<p>実際には、<code class="language-plaintext highlighter-rouge">User_Setup.h</code> で <code class="language-plaintext highlighter-rouge">TFT_MISO</code> の定義をコメントアウトするだけです。こーすると、LCD には <code class="language-plaintext highlighter-rouge">MOSI</code> を介して出力するだけ、タッチパネルからは <code class="language-plaintext highlighter-rouge">MISO</code>を介して読み込むだけになり、それぞれが競合しない？のか、機能しちゃいます <span class="emoji">🥳</span></p>
+
+<p>この場合、<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">Espressif 標準の SD ライブラリ</a> はデフォルトの SPI バスである <code class="language-plaintext highlighter-rouge">VSPI</code> に接続されるので、ディスプレイもタッチパネルも <code class="language-plaintext highlighter-rouge">HSPI</code> に接続するのが良いと思います。</p>
+
+<ul>
+  <li>TFT_eSPI の <code class="language-plaintext highlighter-rouge">User_Setup.h</code></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h</span>
+<span class="c1">// #define TFT_MISO CYD_TFT_MISO   // 12</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TFT_MOSI</span> <span class="no">CYD_TFT_MOSI</span>   <span class="c1">// 13</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TFT_SCLK</span> <span class="no">CYD_TFT_SCK</span>    <span class="c1">// 14</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TFT_CS</span>   <span class="no">CYD_TFT_CS</span>     <span class="c1">// 15</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TFT_DC</span>   <span class="no">CYD_TFT_DC</span>     <span class="c1">//  2</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TFT_RST</span>  <span class="o">-</span><span class="mi">1</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TOUCH_CS</span> <span class="o">-</span><span class="mi">1</span>
+<span class="o">...</span>
+<span class="c1">// The ESP32 has 2 free SPI ports i.e. VSPI and HSPI, the VSPI is the default.</span>
+<span class="c1">// If the VSPI port is in use and pins are not accessible (e.g. TTGO T-Beam)</span>
+<span class="c1">// then uncomment the following line:</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">USE_HSPI_PORT</span></code></pre></figure>
+
+<ul>
+  <li>XTP2046_Touchscreen の設定</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">XPT2046_IRQ</span>   <span class="no">CYD_TP_IRQ</span>  <span class="c1">// 36</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">XPT2046_MOSI</span>  <span class="no">CYD_TP_MOSI</span> <span class="c1">// 32</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">XPT2046_MISO</span>  <span class="no">CYD_TP_MISO</span> <span class="c1">// 39</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">XPT2046_CLK</span>   <span class="no">CYD_TP_CLK</span>  <span class="c1">// 25</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">XPT2046_CS</span>    <span class="no">CYD_TP_CS</span>   <span class="c1">// 33</span>
+
+<span class="nc">SPIClass</span> <span class="n">touchscreenSPI</span> <span class="o">=</span> <span class="nc">SPIClass</span><span class="o">(</span><span class="no">HSPI</span><span class="o">);</span>
+<span class="n">XPT2046_Touchscreen</span> <span class="nf">touchscreen</span><span class="o">(</span><span class="no">XPT2046_CS</span><span class="o">,</span> <span class="no">XPT2046_IRQ</span><span class="o">);</span>
+<span class="o">...</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="o">...</span>
+  <span class="n">touchscreenSPI</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">XPT2046_CLK</span><span class="o">,</span> <span class="no">XPT2046_MISO</span><span class="o">,</span> <span class="no">XPT2046_MOSI</span><span class="o">,</span> <span class="no">XPT2046_CS</span><span class="o">);</span>
+  <span class="n">touchscreen</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="n">touchscreenSPI</span><span class="o">);</span>
+  <span class="o">...</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="spi-デバイスの適切な配置について">SPI デバイスの適切な配置について</h2>
+
+<p>Espressif のドキュメント「<a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/sdspi_share.html" title="Sharing the SPI Bus Among SD Cards and Other SPI Devices - ESP32 -  &mdash; ESP-IDF Programming Guide latest documentation">Sharing the SPI Bus Among SD Cards and Other SPI Devices</a>」には、比較的低い周波数で動作する SD カードを他のデバイスと SPI バスを共有する場合の注意事項と対策が解説されています。</p>
+
+<p>事実僕も、TFT_eSPI を<a href="#figure2">図２</a>の接続で使うとスクリーンキャプチャが正しく保存できないという事象を経験し、未だに解決できていません。「混ぜるな、危険！」とまでは言いませんが、<a href="#figure1">図１</a>か<a href="#figure4">図４</a>の様に、ディスプレイと SD カードは別々の SPI バスに接続するのが良いと思います。</p>
+
+<p>それと余談ですが、ESP32 のチップって、無印（？）以外にも C2, C3, C6, H2, P4, S2, S3 といった派生があり、SPI バスの定義が微妙に異なるので要注意です。</p>
+
+<ul>
+  <li><a href="https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-spi.h#L31-L43" title="arduino-esp32/cores/esp32/esp32-hal-spi.h at master · espressif/arduino-esp32">esp32-hal-spi.h</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">ifdef</span> <span class="no">CONFIG_IDF_TARGET_ESP32S2</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">FSPI</span> <span class="mi">1</span>  <span class="c1">//SPI 1 bus. ESP32S2: for external memory only (can use the same data lines but different SS)</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">HSPI</span> <span class="mi">2</span>  <span class="c1">//SPI 2 bus. ESP32S2: external memory or device  - it can be matrixed to any pins</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">SPI2</span> <span class="mi">2</span>  <span class="c1">// Another name for ESP32S2 SPI 2</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">SPI3</span> <span class="mi">3</span>  <span class="c1">//SPI 3 bus. ESP32S2: device only - it can be matrixed to any pins</span>
+<span class="err">#</span><span class="n">elif</span> <span class="no">CONFIG_IDF_TARGET_ESP32</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">FSPI</span> <span class="mi">1</span>  <span class="c1">//SPI 1 bus attached to the flash (can use the same data lines but different SS)</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">HSPI</span> <span class="mi">2</span>  <span class="c1">//SPI 2 bus normally mapped to pins 12 - 15, but can be matrixed to any pins</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">VSPI</span> <span class="mi">3</span>  <span class="c1">//SPI 3 bus normally attached to pins 5, 18, 19 and 23, but can be matrixed to any pins</span>
+<span class="err">#</span><span class="k">else</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">FSPI</span> <span class="mi">0</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">HSPI</span> <span class="mi">1</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<ul>
+  <li><a href="https://github.com/espressif/arduino-esp32/blob/master/libraries/SPI/src/SPI.cpp#L333-L337" title="arduino-esp32/libraries/SPI/src/SPI.cpp at master · espressif/arduino-esp32">SPI.cpp</a></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="k">if</span> <span class="no">CONFIG_IDF_TARGET_ESP32</span>
+<span class="nc">SPIClass</span> <span class="nf">SPI</span><span class="o">(</span><span class="no">VSPI</span><span class="o">);</span>
+<span class="err">#</span><span class="k">else</span>
+<span class="nc">SPIClass</span> <span class="nf">SPI</span><span class="o">(</span><span class="no">FSPI</span><span class="o">);</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<h2 id="今回の結論">今回の結論</h2>
+
+<p>色々と書きましたが、要は <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> 一択で OK、かつ初期化時にボードを自動認識する <code class="language-plaintext highlighter-rouge">LGFX_AUTODETECT</code> でタッチ検出にビットバンを機能させましょう <span class="emoji">👍</span> が今回の結論です。</p>
+
+<p>と言うことで、<a href="/2025/03/09/" title="ESP32 2432S028R (CYD)でLVGL - ILI9341 vs ST7789 速度比較｜Embedded Kiddie">前回</a> と今回で LVGL を動かす準備が整いました。次回は LVGL について分かったことや LovyanGFX でデモを動かす手順などを報告予定です。</p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/03/23/" title="前の記事：WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法">← WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/03/27/",this.page.identifier="/2025/03/27/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/03/27/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/03/27/";this.page.identifier="/2025/03/27/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
