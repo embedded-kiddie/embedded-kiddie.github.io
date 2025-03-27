@@ -253,6 +253,15 @@
   <span class="o">...</span>
 <span class="o">}</span></code></pre></figure>
 
+<div class="notice clear-both">
+
+<h4>追加の情報</h4>
+<p>LCD の <code class="language-plaintext highlighter-rouge">MISO</code> ピン（12）は宙ぶらりんにせず、次の様にリセットピンに接続しておくべきかもしれません。</p>
+<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define TFT_RST  12
+</span></code></pre></div></div>
+
+</div>
+
 <h2 id="spi-デバイスの適切な配置について">SPI デバイスの適切な配置について</h2>
 
 <p>Espressif のドキュメント「<a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/sdspi_share.html" title="Sharing the SPI Bus Among SD Cards and Other SPI Devices - ESP32 -  &mdash; ESP-IDF Programming Guide latest documentation">Sharing the SPI Bus Among SD Cards and Other SPI Devices</a>」には、比較的低い周波数で動作する SD カードを他のデバイスと SPI バスを共有する場合の注意事項と対策が解説されています。</p>
