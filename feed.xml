@@ -22,7 +22,7 @@
     
       
       <item>
-        <title>WebベースのESP Stack trace decoderがクールで便利！素早くエラーをトレースする方法</title>
+        <title>WebベースのESP Stack Trace Decoderがクールで便利！素早くエラーをトレースする方法</title>
         
           <description>&lt;p&gt;Arduino で ESP32 のプログラムを開発中、一度は &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Guru Meditation Error&lt;/code&gt; など、強制的にリセットがかかってしまう &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Exception was unhandled&lt;/code&gt; な経験をしたことがあると思います。&lt;/p&gt;
 </description>
