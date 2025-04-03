@@ -8,6 +8,20 @@
     
       
       <item>
+        <title>ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を上げる（１）</title>
+        
+          <description>&lt;h2 id=&quot;はじめに&quot;&gt;はじめに&lt;/h2&gt;
+</description>
+        
+        <pubDate>Thu, 03 Apr 2025 11:02:06 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/04/03/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/04/03/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>ESP32 2432S028R (CYD)でLVGL - 2つのSPIバスでLCD、タッチ、SDを共存させる方法</title>
         
           <description>&lt;p&gt;ESP32-DevKit 系の開発ボードでは、LCD、タッチパネル、SD カードの３つの SPI デバイスを（ユーザーに解放された）２つの SPI バスで動かす場合、LCD とタッチパネルを１つのバスに、SD カードをもう１つのバスに接続する構成が一般的かと思います（&lt;a href=&quot;#figure1&quot;&gt;図１&lt;/a&gt;）。&lt;/p&gt;

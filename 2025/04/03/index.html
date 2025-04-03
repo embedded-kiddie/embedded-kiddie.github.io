@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を上げる（１） | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を上げる（１）" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="はじめに" />
+<meta property="og:description" content="はじめに" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/04/03/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/04/03/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-04-03T11:02:06+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を上げる（１）" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-04-03T11:02:06+09:00","datePublished":"2025-04-03T11:02:06+09:00","description":"はじめに","headline":"ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を上げる（１）","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/04/03/"},"url":"https://embedded-kiddie.github.io/2025/04/03/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を上げる（１）</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-04-03T11:02:06+09:00" itemprop="datePublished">Apr 3, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="はじめに">はじめに</h2>
+
+<p>始めは <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> で <a href="https://lvgl.io/" title="LVGL — Light and Versatile Embedded Graphics Library">LVGL</a> を立ち上げるだけのつもりが、ふと、とあるマジックナンバーが気になり、タイトル通りのことを試すことになりました。</p>
+
+<p>１回目の本記事では、LVGL の美麗なデモを元に、タイトルのベースラインとなるプログラムを作成します。さらに GUI の応答性を測る指標として、フレームレートと画像の転送時間に着目し、画像メモリの設定を最適化する条件を検討したいと思います。</p>
+
+<h2 id="lvgl-の全体概要">LVGL の全体概要</h2>
+
+<figure class="float-left" id="figure1">
+  <a href="/images/2025/04-04/LVGL-overview.jpg" title="LVGLの全体概要" data-lightbox="image">
+    <img src="/images/2025/04-04/LVGL-overview-small.jpg" alt="" width="600" height="445" />
+    <figcaption>図１ LVGLの全体概要</figcaption>
+  </a>
+</figure>
+
+<p><a href="#figure1">図１</a>は <a href="https://docs.lvgl.io/master/intro/getting_started.html" title="Getting Started &mdash; LVGL  documentation">LVGL のドキュメント</a> から拝借し、日本語に意訳した全体概要の図です。</p>
+
+<p>LVGL 本体は、Web ブラウザの <a href="https://developer.mozilla.org/ja/docs/Web/API/Document_Object_Model/Using_the_Document_Object_Model" title="ドキュメントオブジェクトモデルの使用 - Web API｜MDN">DOM ツリー</a> 同様、UI 要素であるウィジェットのツリーを構築します。ツリーの各ノードは親子関係持ち、例えばボタンは文字を表示するラベルを子に持つことが出来ます。こうしたツリー構造により、ユーザーの操作に応じて更新すべきウィジェットを効率的に特定します。</p>
+
+<p>また LVGL 本体は、様々な機器で動作できるようハードウェアから独立し、アプリケーションとの役割を明確にしています。この LVGL 本体とアプリケーションとの接点として押さえるべきポイントが、赤枠で囲った３つの要素 ─ <strong>UI 入力</strong>、<strong>時間管理</strong>、そして<strong>パネルへの出力</strong>です。</p>
+
+<h3 id="ui-入力">UI 入力</h3>
+
+<p>LVGL では、タッチパネルやマウスなどのポインティングデバイスの他、組み込み機器を対象にエンコーダーやボタンといった <a href="https://docs.lvgl.io/master/details/main-modules/indev.html" title="Input Device (lv_indev) &mdash; LVGL  documentation">入力デバイスの型</a> が定義されていて、コールバック関数を介して入力デバイスの状態変化を LVGL に伝える仕組みとなっています。</p>
+
+<p>アプリケーションは、例えばタッチパネルの監視をコールバック関数に登録し、各 UI 要素（ウィジェット）に対するユーザー要求のビジネスロジックを <a href="https://ja.wikipedia.org/wiki/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E9%A7%86%E5%8B%95%E5%9E%8B%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" title="イベント駆動型プログラミング - Wikipedia">イベント駆動型</a> で実装します。あとは LVGL が良きに計らってくれます。</p>
+
+<h3 id="時間管理">時間管理</h3>
+
+<p>ミリ単位の正確な時間を刻むのはハードウェアの役割です。アプリケーションは、<a href="https://docs.lvgl.io/master/details/integration/adding-lvgl-to-your-project/connecting_lvgl.html#tick-interface" title="Connecting LVGL to Your Hardware &mdash; LVGL  documentation">時間管理用 API</a> 介して LVGL からの経過時間の問い合わせに応えたり、ディプレイパネルの更新にかかった時間を申告したりすることがその役割となります。</p>
+
+<h3 id="パネルへの出力">パネルへの出力</h3>
+
+<p>ウィジェットを描画用の画像メモリにレンダリングするまでは LVGL の役割ですが、メモリ中のデータをディスプレイに転送するのはアプリケーション側の役割です。</p>
+
+<p>組み込み向けにメジャーなドライバの <a href="https://docs.lvgl.io/master/details/integration/driver/index.html" title="Drivers &mdash; LVGL  documentation">ドキュメント</a> や コード（<a href="https://github.com/lvgl/lvgl/tree/master/src/drivers/display" title="lvgl/src/drivers/display at master · lvgl/lvgl">ココ</a> とか <a href="https://github.com/lvgl/lv_drivers" title="lvgl/lv_drivers: TFT and touch pad drivers for LVGL embedded GUI library">ココ</a>）が提供されていますが、Arduino 環境では TFT_eSPI が <a href="https://docs.lvgl.io/master/details/integration/framework/arduino.html#set-up-drivers" title="Arduino &mdash; LVGL  documentation">推奨されています</a>。「データをディスプレイに転送する」だけで、TFT_eSPI が持つリッチな機能は使わないので何とも勿体無いハナシですが、お手軽に試すことが出来ます。</p>
+
+<h4 id="レンダリングとパネルへの出力との関係を可視化">「レンダリング」と「パネルへの出力」との関係を可視化</h4>
+
+<p>ここで、LVGL が担当する「レンダリング」とアプリケーションが担当する「パネルへの出力」を可視化したデモを提示します。</p>
+
+<figure class="flex">
+  <video controls="" muted="" width="640" height="360">
+    <source src="https://embedded-kiddie.github.io/images/2025/04-04/demo-rendering.mp4" type="video/mp4" />
+  </video>
+</figure>
+
+<p>映像中の矩形は LVGL が指定した更新すべき領域で、毎フレームごとに枠を「赤→緑→青」に変色しています。色が変化しなくなった領域は更新の必要が無くなったことを示しています。</p>
+
+<p>スクロール時には横長の矩形領域が縦に並び画面全体を更新します。一方スクロールの停止時は、スタイルが変化した領域だけが更新されている様子が分かると思います。このように幾つかの矩形領域に分割することで省メモリを実現をすると共に、GPU などの H/W がある場合には並列処理によるレンダリングを可能にしています。</p>
+
+<p>LVGL の Issues では、CPU と GPU の連携、CPU によるソフトウェアレンダリング、マルチコアによる並列化、そしてこれらを統括するレンダリングの最適化戦略などが議論されています。</p>
+
+<ul>
+  <li><a href="https://github.com/lvgl/lvgl/issues/3643#issuecomment-1236702656" title="Multi-threaded drawing · Issue #3643 · lvgl/lvgl">Multi-threaded drawing #3643</a></li>
+  <li><a href="https://github.com/lvgl/lvgl/issues/3700" title="［multi-threaded-drawing］Discussion about drawing tasks · Issue #3700 · lvgl/lvgl">[multi-threaded-drawing] Discussion about drawing tasks #3700</a></li>
+  <li><a href="https://github.com/lvgl/lvgl/issues/4016" title="［Parallel rendering］General discussion · Issue #4016 · lvgl/lvgl">[Parallel rendering] General discussion #4016</a></li>
+</ul>
+
+<p>これらを読むと、全てをソフトウェアでレンダリングしなければならない ESP32 では、DMA はもちろん２コアの活用 ─ 特に矩形領域の分割数と並列化によるダブルバッファの活用が機敏な GUI を実現するカギとなることが予想出来ます。</p>
+
+<p>何はともあれ、まずはベースラインとなるデモを動かすことから始めたいと思います。</p>
+
+<h2 id="lvgl-のデモを動かす">LVGL のデモを動かす</h2>
+
+<p>何はともあれ、まずはデモを動かすことが先決です。</p>
+
+<p>LVGL の <a href="https://docs.lvgl.io/master/details/integration/framework/arduino.html#set-up-drivers" title="Arduino &mdash; LVGL  documentation">ドキュメント</a> には <a href="https://github.com/Bodmer/TFT_eSPI" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">TFT_eSPI</a> 向けの手順が記載されていますが、僕の最終目標は <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> で動かすことなので、多少のアレンジをしています。</p>
+
+<h3 id="1-動作環境">1. 動作環境</h3>
+
+<p>動作確認したそれぞれのバージョンは以下の通りです。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>パッケージ</th>
+      <th>バージョン</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Arduino IDE</td>
+      <td>2.3.4</td>
+    </tr>
+    <tr>
+      <td>ESP32 by Espressif Systems</td>
+      <td>3.1.3</td>
+    </tr>
+    <tr>
+      <td>LVGL</td>
+      <td>9.2.2</td>
+    </tr>
+    <tr>
+      <td>TFT_eSPI</td>
+      <td>2.5.43</td>
+    </tr>
+    <tr>
+      <td>XPT2046_Touchscreen</td>
+      <td>1.4</td>
+    </tr>
+    <tr>
+      <td>LovyanGFX</td>
+      <td>1.2.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>今回は LVGL のサンプルスケッチ <a href="https://github.com/lvgl/lvgl/tree/master/examples/arduino/LVGL_Arduino" title="lvgl/examples/arduino/LVGL_Arduino at master · lvgl/lvgl">LVGL_Arduino</a> をベースに、TFT_eSPI 版と LovyanGFX 版を作成しました。これらは GitHub リポジトリ <a href="https://github.com/embedded-kiddie/LVGL_Arduino_FastRendering" title="embedded-kiddie/LVGL_Arduino_FastRendering: Run the LVGL demo with TFT_eSPI and LovyanGFX.">LVGL_Arduino_FastRendering</a> に上げたので、ご活用ください。</p>
+
+<div class="notice clear-both">
+
+<p>現在 LovyanGFX 版は <a href="https://github.com/espressif/arduino-esp32/releases/tag/3.2.0" title="Release Arduino Release v3.2.0 based on ESP-IDF v5.4.1 · espressif/arduino-esp32">esp32 by Espressif v3.2.0 (ESP-IDF v5.4.1)</a> でランタイムエラーが発生しています。<a href="https://github.com/lovyan03/LovyanGFX/issues/693" title="Updating to ESP32 by Espressif v3.2.0 (ESP-IDF v5.4) causes runtime errors when using LGFX_AUTODETECT · Issue #693 · lovyan03/LovyanGFX">LovyanGFX の issue</a> に上げていますが、<a href="https://github.com/espressif/arduino-esp32/releases/tag/3.1.3" title="Release Arduino Release v3.1.3 based on ESP-IDF v5.3 · espressif/arduino-esp32">v3.1.3</a> でお試し下さい。</p>
+
+</div>
+
+<h3 id="2-ボードの設定">2. ボードの設定</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/04-04/SelectBoard.png" title="CYD 用ボードの設定" data-lightbox="image">
+    <img src="/images/2025/04-04/SelectBoard-small.jpg" alt="CYD 用ボードの設定" width="550" height="400" />
+    <figcaption>CYD 用ボードの設定</figcaption>
+  </a>
+  <a href="/images/2025/04-04/IDE-Tools.jpg" title="ツールの設定" data-lightbox="image">
+    <img src="/images/2025/04-04/IDE-Tools-small.jpg" alt="ツールの設定" width="438" height="375" />
+    <figcaption>ツールの設定</figcaption>
+  </a>
+</figure>
+
+<p>CYD 用のボードタイプとして <code class="language-plaintext highlighter-rouge">ESP32-2432S028R CYD</code> を選択します。<a href="https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h" title="arduino-esp32/variants/jczn_2432s028r/pins_arduino.h at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">pins_arduino.h</code></a> が読み込まれ、CYD 用のピン配が設定されます。</p>
+
+<p>CYD 以外のボードの場合は、以降の手順で <code class="language-plaintext highlighter-rouge">CYD_*</code> を適切な GPIO 番号に置き換えてください。</p>
+
+<p><br />CYD では書き込み時のボーレートに <code class="language-plaintext highlighter-rouge">460800</code> を選択します。またデフォルトのフラッシュ ROM サイズではギリギリか不足する可能性があるため、パーティションスキームを取り敢えず <code class="language-plaintext highlighter-rouge">Huge APP</code> に設定するのが吉です。</p>
+
+<h3 id="3-lvgl-の設定">3. LVGL の設定</h3>
+
+<h4 id="31-lv_confh-の作成">3.1. <code class="language-plaintext highlighter-rouge">lv_conf.h</code> の作成</h4>
+
+<p>ライブラリフォルダに LVGL をインストールし、<code class="language-plaintext highlighter-rouge">lvgl</code> 直下の <code class="language-plaintext highlighter-rouge">lv_conf_template.h</code> をすぐ上のフォルダに <code class="language-plaintext highlighter-rouge">lv_conf.h</code> としてコピーします（LVGL のバージョンアップ時にも設定を残すための措置だと思います）。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">libraries</span>
+<span class="err">├──</span> <span class="p">...</span>
+<span class="err">├──</span> <span class="n">lv_conf</span><span class="p">.</span><span class="n">h</span> <span class="c1">// &lt;-- ココに `lv_conf_template.h` をコピーして編集する</span>
+<span class="err">├──</span> <span class="n">lvgl</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">demos</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">docs</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">env_support</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">examples</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="p">...</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">lv_conf_template</span><span class="p">.</span><span class="n">h</span> <span class="c1">// ライブラリフォルダ直下に `lv_conf.h` としてコピーする</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="p">...</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">scripts</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">src</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">tests</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">zephyr</span>
+<span class="err">└──</span> <span class="p">...</span></code></pre></figure>
+
+<h4 id="32-lv_confh-の編集">3.2. <code class="language-plaintext highlighter-rouge">lv_conf.h</code> の編集</h4>
+
+<p>適当なエディタで <code class="language-plaintext highlighter-rouge">lv_conf.h</code> を開き、下記を参考に設定を変更します。バージョンアップの度に行数が増減するので、シンボル名を検索して該当箇所を見つけてください。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">lv_conf.h</code> の設定を有効化する（14〜15行目付近）</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/* clang-format off */</span>
+<span class="err">#</span><span class="k">if</span> <span class="mi">1</span> <span class="cm">/*Set it to "1" to enable content*/</span></code></pre></figure>
+
+<ul>
+  <li>以下、デモを動かすのに必要なシンボルと設定値を示します。</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>セクション</th>
+      <th>シンボル</th>
+      <th style="text-align: center">値</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FONT USAGE</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_FONT_MONTSERRAT_12</code></td>
+      <td style="text-align: center">1</td>
+      <td><code class="language-plaintext highlighter-rouge">lv_demo_music()</code>に必要</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_FONT_MONTSERRAT_14</code></td>
+      <td style="text-align: center">1</td>
+      <td>デフォルト</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_FONT_MONTSERRAT_16</code></td>
+      <td style="text-align: center">1</td>
+      <td><code class="language-plaintext highlighter-rouge">lv_demo_music()</code>に必要</td>
+    </tr>
+    <tr>
+      <td>OTHERS</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_USE_SYSMON</code></td>
+      <td style="text-align: center">1</td>
+      <td>以下の表示に必要な指標をモニタリング</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_USE_PERF_MONITOR</code></td>
+      <td style="text-align: center">1</td>
+      <td>フレームレートを表示</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_USE_MEM_MONITOR</code></td>
+      <td style="text-align: center">1</td>
+      <td>メモリ使用状況を表示</td>
+    </tr>
+    <tr>
+      <td>DEVICES</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_USE_TFT_ESPI</code></td>
+      <td style="text-align: center">0</td>
+      <td>TFT_eSPI用のコードをリンクしない</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_USE_ST7789 </code></td>
+      <td style="text-align: center">1</td>
+      <td>使用するディスプレイドライバを有効化</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_USE_ILI9341</code></td>
+      <td style="text-align: center">1</td>
+      <td>^（複数指定可）</td>
+    </tr>
+    <tr>
+      <td>DEMO USAGE</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_USE_DEMO_WIDGETS</code></td>
+      <td style="text-align: center">1</td>
+      <td><code class="language-plaintext highlighter-rouge">lv_demo_widgets()</code>に必要なコードをリンク</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_USE_DEMO_MUSIC</code></td>
+      <td style="text-align: center">1</td>
+      <td><code class="language-plaintext highlighter-rouge">lv_demo_music()</code>に必要なコードをリンク</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_DEMO_MUSIC_LANDSCAPE</code></td>
+      <td style="text-align: center">1</td>
+      <td><code class="language-plaintext highlighter-rouge">lv_demo_music()</code>をランドスケープで表示</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td><code class="language-plaintext highlighter-rouge">LV_DEMO_MUSIC_AUTO_PLAY</code></td>
+      <td style="text-align: center">1</td>
+      <td><code class="language-plaintext highlighter-rouge">lv_demo_music()</code>を自動再生</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="33-demos-と-examples-の配置変更">3.3. <code class="language-plaintext highlighter-rouge">demos</code> と <code class="language-plaintext highlighter-rouge">examples</code> の配置変更</h4>
+
+<p>両フォルダを <code class="language-plaintext highlighter-rouge">src</code> の下に移動またはコピーします。本記事執筆時点の v9.2.2 では <a href="https://github.com/lvgl/lvgl/issues/6778" title="cpp fatal error: ../../src/themes/lv_theme_private.h: No such file or directory · Issue #6778 · lvgl/lvgl">Issue #6778</a> が未反映のため、デモのコンパイル時に幾つかファイルの修正が必要です。修正前のファイルを残しておきたい場合はコピーが良いかも知れません。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">libraries</span>
+<span class="err">├──</span> <span class="p">...</span>
+<span class="err">├──</span> <span class="n">lv_conf</span><span class="p">.</span><span class="n">h</span>
+<span class="err">├──</span> <span class="n">lvgl</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">demos</span>     <span class="c1">// `src` に移動またはコピーします</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">docs</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">env_support</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">examples</span>  <span class="c1">// `src` に移動またはコピーします</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="p">...</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">lv_conf_template</span><span class="p">.</span><span class="n">h</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="p">...</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">scripts</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">src</span>
+<span class="err">│  </span> <span class="err">│</span>    <span class="err">├──</span> <span class="n">demos</span>    <span class="c1">// ココに移動またはコピーします</span>
+<span class="err">│  </span> <span class="err">│</span>    <span class="err">└──</span> <span class="n">examples</span> <span class="c1">// ココに移動またはコピーします</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">tests</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">zephyr</span>
+<span class="err">└──</span> <span class="p">...</span></code></pre></figure>
+
+<h3 id="4-tft_espi-版デモの構築">4. TFT_eSPI 版デモの構築</h3>
+
+<p><a href="https://github.com/embedded-kiddie/LVGL_Arduino_FastRendering/tree/main/LVGL_Arduino_LovyanGFX" title="LVGL_Arduino_FastRendering/LVGL_Arduino_LovyanGFX at main · embedded-kiddie/LVGL_Arduino_FastRendering">LovyanGFX 版</a> に先立ち、動作確認と比較テスト用に <a href="https://github.com/embedded-kiddie/LVGL_Arduino_FastRendering/tree/main/LVGL_Arduino_TFT_eSPI" title="LVGL_Arduino_FastRendering/LVGL_Arduino_TFT_eSPI at main · embedded-kiddie/LVGL_Arduino_FastRendering">TFT_eSPI 版</a> を構築しました。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">LVGL_Arduino_FastRendering</span>
+<span class="err">└──</span> <span class="n">LVGL_Arduino_TFT_eSPI</span>
+ <span class="err">  </span> <span class="err">├──</span> <span class="n">LVGL_Arduino_TFT_eSPI</span><span class="p">.</span><span class="n">ino</span>
+ <span class="err">  </span> <span class="err">├──</span> <span class="n">User_Setup</span><span class="p">.</span><span class="n">h</span>
+ <span class="err">  </span> <span class="err">└──</span> <span class="n">lv_tft_espi</span><span class="p">.</span><span class="n">hpp</span></code></pre></figure>
+
+<p>コードの説明は割愛しますが <span class="emoji">😜</span>、ポイントは以下の通りです。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">lv_conf.h</code> で <code class="language-plaintext highlighter-rouge">LV_USE_TFT_ESPI</code> を有効にしなくても動作するよう、<a href="https://github.com/lvgl/lvgl/blob/master/src/drivers/display/tft_espi/lv_tft_espi.cpp" title="lvgl/src/drivers/display/tft_espi/lv_tft_espi.cpp at master · lvgl/lvgl">lv_tft_espi.cpp</a> をローカルに <code class="language-plaintext highlighter-rouge">.hpp</code> としてコピーし、若干の修正をかけています。</li>
+  <li><a href="https://randomnerdtutorials.com/cheap-yellow-display-esp32-2432s028r/" title="ESP32 Cheap Yellow Display Board (ESP32-2432S028R)｜Random Nerd Tutorials">Random Nerd チュートリアル</a> を参考に <a href="https://github.com/PaulStoffregen/XPT2046_Touchscreen" title="PaulStoffregen/XPT2046_Touchscreen: Touchscreen Arduino Library for XPT2046 Touch Controller Chip">XPT2046_Touchscreen</a>（CYD ではディスプレイと異なる SPI バスに接続）を追加しています。</li>
+  <li>スクリーンの向きを変える場合は <code class="language-plaintext highlighter-rouge">TFT_ROTATION</code> を変更して下さい（<code class="language-plaintext highlighter-rouge">TFT_HOR_RES</code> と <code class="language-plaintext highlighter-rouge">TFT_VER_RES</code> は変えない）。</li>
+  <li>CYD 用の <code class="language-plaintext highlighter-rouge">User_Setup.h</code> を定義してあります。デモと例題の動作に不必要なコードは極力削除しています。</li>
+</ul>
+
+<div class="quote clear-both">
+
+<h5>コンパイルエラーの修正方法</h5>
+<p>最新版 の LVGL でも <a href="https://github.com/lvgl/lvgl/issues/6778" title="cpp fatal error: ../../src/themes/lv_theme_private.h: No such file or directory · Issue #6778 · lvgl/lvgl">Issue #6778</a> の修正が未反映の場合、コンパイルでエラーになるので、該当箇所をエディタで開き、<code class="language-plaintext highlighter-rouge">#include</code> の相対パスから <code class="language-plaintext highlighter-rouge">/src</code> を削除します。</p>
+
+<ul>
+  <li>修正前の例
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span><span class="n">include</span> <span class="s">"../../src/themes/lv_theme_private.h"</span>
+</code></pre></div>    </div>
+  </li>
+  <li>修正後の例
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span><span class="n">include</span> <span class="s">"../../themes/lv_theme_private.h"</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+</div>
+
+<p>全てのエラーを修正し、次のように起動すれば成功です <span class="emoji">👍</span></p>
+
+<ul>
+  <li><a href="https://github.com/lvgl/lvgl/tree/master/demos/widgets" title="lvgl/demos/widgets at master · lvgl/lvgl"><code>lv_demo_widgets()</code></a>
+    <figure class="flex">
+  <img src="/images/2025/04-04/demo-widgets-1.jpg" alt="Profile" width="30%" />
+  <img src="/images/2025/04-04/demo-widgets-2.png" alt="Analytics" width="30%" />
+  <img src="/images/2025/04-04/demo-widgets-3.jpg" alt="Shop" width="30%" />
+</figure>
+  </li>
+  <li><a href="https://github.com/lvgl/lvgl/tree/master/demos/music" title="lvgl/demos/music at master · lvgl/lvgl"><code>lv_demo_music()</code></a>
+    <figure class="flex">
+  <img src="/images/2025/04-04/demo-music-1.jpg" alt="Music Player" width="30%" />
+  <img src="/images/2025/04-04/demo-music-2.jpg" alt="Music List" width="30%" />
+  <img src="/images/2025/04-04/demo-music-3.png" alt="Average FPS" width="30%" />
+</figure>
+  </li>
+</ul>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0;">
+<summary>システムモニタの読み方</summary>
+
+
+<ul style="margin-bottom: 0;">
+  <li>メモリ（左下）
+    <ul>
+      <li>上段：<code>lv_conf.h</code> で設定された <code>LV_MEM_SIZE</code> 中の使用量とその割合％</li>
+      <li>下段：最大使用量と断片化の割合％</li>
+    </ul>
+  </li>
+  <li>パフォーマンス（右下）
+    <ul>
+      <li>上段：フレームレートの平均値と CPU 使用率</li>
+      <li>下段：１フレームの平均処理時間（レンダリング時間｜パネルへの転送時間）</li>
+    </ul>
+  </li>
+</ul>
+
+</details>
+
+</div>
+
+<h3 id="5-lovyangfx-版デモの構築">5. LovyanGFX 版デモの構築</h3>
+
+<p>応答性向上のベースラインとして <a href="https://github.com/embedded-kiddie/LVGL_Arduino_FastRendering/tree/main/LVGL_Arduino_LovyanGFX" title="LVGL_Arduino_FastRendering/LVGL_Arduino_LovyanGFX at main · embedded-kiddie/LVGL_Arduino_FastRendering">LovyanGFX 版</a> を構築します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">LVGL_Arduino_FastRendering</span>
+<span class="err">└──</span> <span class="n">LVGL_Arduino_LovyanGFX</span>
+ <span class="err">  </span> <span class="err">└──</span> <span class="n">LVGL_Arduino_LovyanGFX</span><span class="p">.</span><span class="n">ino</span></code></pre></figure>
+
+<p>以下、LVGL のサンプルスケッチ <a href="https://github.com/lvgl/lvgl/tree/master/examples/arduino/LVGL_Arduino" title="lvgl/examples/arduino/LVGL_Arduino at master · lvgl/lvgl">LVGL_Arduino</a> の修正点を説明します。</p>
+
+<h4 id="デモ用スケッチの作成">デモ用スケッチの作成</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.ino</code> 中の <code class="language-plaintext highlighter-rouge">#if LV_USE_TFT_ESPI</code> 〜 <code class="language-plaintext highlighter-rouge">#endif</code> ディレクティブを以下と差し替えます。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">LGFX_AUTODETECT</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">LovyanGFX</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span></code></pre></figure>
+
+<ul>
+  <li>次にデモ用のヘッダファイルを有効にします。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//#include &lt;examples/lv_examples.h&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">demos</span><span class="o">/</span><span class="n">lv_demos</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span></code></pre></figure>
+
+<ul>
+  <li>縦横の解像度は LovyanGFX に合わせます。スクリーンの向きを変える場合は <code class="language-plaintext highlighter-rouge">TFT_HOR_RES</code> と <code class="language-plaintext highlighter-rouge">TFT_VER_RES</code> はそのままで、<code class="language-plaintext highlighter-rouge">TFT_ROTATION</code> を変更して下さい。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*Set to your screen resolution and rotation*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TFT_HOR_RES</span>   <span class="mi">240</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TFT_VER_RES</span>   <span class="mi">320</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">TFT_ROTATION</span>  <span class="no">LV_DISPLAY_ROTATION_0</span> <span class="c1">// LV_DISPLAY_ROTATION_{0|90|180|270}</span></code></pre></figure>
+
+<ul>
+  <li>画像メモリ <code class="language-plaintext highlighter-rouge">draw_buf</code> の元は配列 <code class="language-plaintext highlighter-rouge">uint32_t draw_buf[DRAW_BUF_SIZE / 4]</code> でしたが、動的に割り当てるためポインタ <code class="language-plaintext highlighter-rouge">uint8_t *draw_buf</code> に変更します（理由は後述）。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DRAW_BUF_SIZE</span> <span class="o">(</span><span class="no">TFT_HOR_RES</span> <span class="o">*</span> <span class="no">TFT_VER_RES</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">*</span> <span class="o">(</span><span class="no">LV_COLOR_DEPTH</span> <span class="o">/</span> <span class="mi">8</span><span class="o">))</span>
+<span class="kd">static</span> <span class="n">uint8_t</span> <span class="o">*</span><span class="n">draw_buf</span><span class="o">;</span></code></pre></figure>
+
+<ul>
+  <li>「パネルへの出力」用コールバック関数 <code class="language-plaintext highlighter-rouge">my_disp_flush()</code> を置き換えます。出力用の関数 <code class="language-plaintext highlighter-rouge">pushPixelsDMA()</code> は <code class="language-plaintext highlighter-rouge">pushImageDMA()</code> でも動作しますが、前者の方が若干高速です。</li>
+</ul>
+
+<details style="margin-left:1em">
+<summary>my_disp_flush()</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/* LVGL calls it when a rendered image needs to copied to the display*/</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">my_disp_flush</span><span class="o">(</span><span class="n">lv_display_t</span> <span class="o">*</span><span class="n">disp</span><span class="o">,</span> <span class="kd">const</span> <span class="n">lv_area_t</span> <span class="o">*</span><span class="n">area</span><span class="o">,</span> <span class="n">uint8_t</span> <span class="o">*</span><span class="n">px_map</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">uint32_t</span> <span class="n">w</span> <span class="o">=</span> <span class="n">lv_area_get_width</span><span class="o">(</span><span class="n">area</span><span class="o">);</span>
+  <span class="n">uint32_t</span> <span class="n">h</span> <span class="o">=</span> <span class="n">lv_area_get_height</span><span class="o">(</span><span class="n">area</span><span class="o">);</span>
+
+  <span class="n">tft</span><span class="o">.</span><span class="na">setAddrWindow</span><span class="o">(</span><span class="n">area</span><span class="o">-&gt;</span><span class="n">x1</span><span class="o">,</span> <span class="n">area</span><span class="o">-&gt;</span><span class="n">y1</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">h</span><span class="o">);</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">pushPixelsDMA</span><span class="o">((</span><span class="nl">lgfx:</span><span class="o">:</span><span class="n">rgb565_t</span> <span class="o">*)</span><span class="n">px_map</span><span class="o">,</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span><span class="o">);</span>
+
+  <span class="cm">/*Call it to tell LVGL you are ready*/</span>
+  <span class="n">lv_display_flush_ready</span><span class="o">(</span><span class="n">disp</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<ul>
+  <li>続いて <code class="language-plaintext highlighter-rouge">my_touchpad_read()</code> にタッチを読み取るコードを追加します。より汎用的にするために <code class="language-plaintext highlighter-rouge">switch()</code> 文で振り分けていますが、向きを動的に変えなければ該当する向きのコードだけで OK です。</li>
+</ul>
+
+<details style="margin-left:1em">
+<summary>my_touchpad_read()</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*Read the touchpad*/</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">my_touchpad_read</span><span class="o">(</span><span class="n">lv_indev_t</span> <span class="o">*</span><span class="n">indev</span><span class="o">,</span> <span class="n">lv_indev_data_t</span> <span class="o">*</span><span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">uint16_t</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">;</span>
+  <span class="n">bool</span> <span class="n">touched</span> <span class="o">=</span> <span class="n">tft</span><span class="o">.</span><span class="na">getTouch</span><span class="o">(&amp;</span><span class="n">x</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">y</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">touched</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Serial.printf("Released\n");</span>
+    <span class="n">data</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="no">LV_INDEV_STATE_RELEASED</span><span class="o">;</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">data</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="no">LV_INDEV_STATE_PRESSED</span><span class="o">;</span>
+
+    <span class="k">switch</span> <span class="o">(</span><span class="n">tft</span><span class="o">.</span><span class="na">getRotation</span><span class="o">())</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nl">LV_DISPLAY_ROTATION_0:</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+      <span class="k">case</span> <span class="nl">LV_DISPLAY_ROTATION_90:</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="no">TFT_VER_RES</span> <span class="o">-</span> <span class="n">x</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+      <span class="k">case</span> <span class="nl">LV_DISPLAY_ROTATION_180:</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="no">TFT_HOR_RES</span> <span class="o">-</span> <span class="n">x</span><span class="o">;</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="no">TFT_VER_RES</span> <span class="o">-</span> <span class="n">y</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+      <span class="k">case</span> <span class="nl">LV_DISPLAY_ROTATION_270:</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="no">TFT_HOR_RES</span> <span class="o">-</span> <span class="n">y</span><span class="o">;</span>
+        <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"x: %d (%d), y: %d (%d)\n"</span><span class="o">,</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">data</span><span class="o">-&gt;</span><span class="n">point</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="n">y</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<ul>
+  <li>また TFT_eSPI 版に倣い、パネル回転時のコールバック関数を追加します。</li>
+</ul>
+
+<details style="margin-left:1em">
+<summary>resolution_changed_event_cb()</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kt">void</span> <span class="nf">resolution_changed_event_cb</span><span class="o">(</span><span class="n">lv_event_t</span> <span class="o">*</span><span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">lv_display_t</span> <span class="o">*</span><span class="n">disp</span> <span class="o">=</span> <span class="o">(</span><span class="n">lv_display_t</span> <span class="o">*)</span><span class="n">lv_event_get_target</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+  <span class="n">lv_display_rotation_t</span> <span class="n">rot</span> <span class="o">=</span> <span class="n">lv_display_get_rotation</span><span class="o">(</span><span class="n">disp</span><span class="o">);</span>
+
+  <span class="cm">/* handle rotation */</span>
+  <span class="k">switch</span> <span class="o">(</span><span class="n">rot</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nl">LV_DISPLAY_ROTATION_0:</span>
+      <span class="n">tft</span><span class="o">.</span><span class="na">setRotation</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="cm">/* Portrait orientation */</span>
+      <span class="k">break</span><span class="o">;</span>
+    <span class="k">case</span> <span class="nl">LV_DISPLAY_ROTATION_90:</span>
+      <span class="n">tft</span><span class="o">.</span><span class="na">setRotation</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="cm">/* Landscape orientation */</span>
+      <span class="k">break</span><span class="o">;</span>
+    <span class="k">case</span> <span class="nl">LV_DISPLAY_ROTATION_180:</span>
+      <span class="n">tft</span><span class="o">.</span><span class="na">setRotation</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span> <span class="cm">/* Portrait orientation, flipped */</span>
+      <span class="k">break</span><span class="o">;</span>
+    <span class="k">case</span> <span class="nl">LV_DISPLAY_ROTATION_270:</span>
+      <span class="n">tft</span><span class="o">.</span><span class="na">setRotation</span><span class="o">(</span><span class="mi">3</span><span class="o">);</span> <span class="cm">/* Landscape orientation, flipped */</span>
+      <span class="k">break</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<ul>
+  <li>タッチパネルの <a href="https://github.com/lovyan03/LovyanGFX/blob/master/examples/HowToUse/2_user_setting/2_user_setting.ino#L211-L226" title="LovyanGFX/examples/HowToUse/2_user_setting/2_user_setting.ino at master · lovyan03/LovyanGFX">キャリブレーション</a> を行う関数 <code class="language-plaintext highlighter-rouge">calibrate_touch()</code> を追加します。</li>
+</ul>
+
+<details style="margin-left:1em">
+<summary>calibrate_touch()</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Calibrate touch when enabled (optional)</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">calibrate_touch</span><span class="o">(</span><span class="n">uint16_t</span> <span class="n">cal</span><span class="o">[</span><span class="mi">8</span><span class="o">])</span> <span class="o">{</span>
+  <span class="c1">// Draw guide text on the screen.</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">setTextDatum</span><span class="o">(</span><span class="nl">textdatum_t:</span><span class="o">:</span><span class="n">middle_center</span><span class="o">);</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">drawString</span><span class="o">(</span><span class="s">"touch the arrow marker."</span><span class="o">,</span> <span class="n">tft</span><span class="o">.</span><span class="na">width</span><span class="o">()</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">,</span> <span class="n">tft</span><span class="o">.</span><span class="na">height</span><span class="o">()</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="o">);</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">setTextDatum</span><span class="o">(</span><span class="nl">textdatum_t:</span><span class="o">:</span><span class="n">top_left</span><span class="o">);</span>
+
+  <span class="c1">// You will need to calibrate by touching the four corners of the screen.</span>
+  <span class="n">uint16_t</span> <span class="n">fg</span> <span class="o">=</span> <span class="no">TFT_WHITE</span><span class="o">;</span>
+  <span class="n">uint16_t</span> <span class="n">bg</span> <span class="o">=</span> <span class="no">TFT_BLACK</span><span class="o">;</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">tft</span><span class="o">.</span><span class="na">isEPD</span><span class="o">())</span> <span class="o">{</span>  <span class="c1">// Electronic Paper Display</span>
+    <span class="nl">std:</span><span class="o">:</span><span class="n">swap</span><span class="o">(</span><span class="n">fg</span><span class="o">,</span> <span class="n">bg</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">tft</span><span class="o">.</span><span class="na">calibrateTouch</span><span class="o">(</span><span class="n">cal</span><span class="o">,</span> <span class="n">fg</span><span class="o">,</span> <span class="n">bg</span><span class="o">,</span> <span class="nl">std:</span><span class="o">:</span><span class="n">max</span><span class="o">(</span><span class="n">tft</span><span class="o">.</span><span class="na">width</span><span class="o">(),</span> <span class="n">tft</span><span class="o">.</span><span class="na">height</span><span class="o">())</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="o">);</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"\nuint16_t cal[8] = { "</span><span class="o">);</span>
+  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%d%s"</span><span class="o">,</span> <span class="n">cal</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">7</span> <span class="o">?</span> <span class="s">", "</span> <span class="o">:</span> <span class="s">" };\n"</span><span class="o">));</span>
+  <span class="o">}</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"tft.setTouchCalibrate(cal);\n"</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">setup()</code> 直前には、初期化用の関数 <code class="language-plaintext highlighter-rouge">tft_init()</code> を追加します。<code class="language-plaintext highlighter-rouge">if (true) {…}</code> を修正し、キャリブレーションの実行を制御して下さい。</li>
+</ul>
+
+<details style="margin-left:1em">
+<summary>tft_init()</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kt">void</span> <span class="nf">tft_init</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">init</span><span class="o">();</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">initDMA</span><span class="o">();</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">setColorDepth</span><span class="o">(</span><span class="mi">16</span><span class="o">);</span>  <span class="c1">// Set to 16-bit RGB565</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="n">tft</span><span class="o">.</span><span class="na">touch</span><span class="o">())</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kd">const</span> <span class="n">uint16_t</span> <span class="n">cal</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span>
+        <span class="mi">240</span><span class="o">,</span>   <span class="c1">// x_min</span>
+        <span class="mi">3700</span><span class="o">,</span>  <span class="c1">// y_min</span>
+        <span class="mi">240</span><span class="o">,</span>   <span class="c1">// x_min</span>
+        <span class="mi">200</span><span class="o">,</span>   <span class="c1">// y_max</span>
+        <span class="mi">3800</span><span class="o">,</span>  <span class="c1">// x_max</span>
+        <span class="mi">3700</span><span class="o">,</span>  <span class="c1">// y_min</span>
+        <span class="mi">3800</span><span class="o">,</span>  <span class="c1">// x_max</span>
+        <span class="mi">200</span>    <span class="c1">// y_max</span>
+      <span class="o">};</span>
+      <span class="n">tft</span><span class="o">.</span><span class="na">setTouchCalibrate</span><span class="o">((</span><span class="n">uint16_t</span><span class="o">*)</span><span class="n">cal</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="n">uint16_t</span> <span class="n">cal</span><span class="o">[</span><span class="mi">8</span><span class="o">];</span>
+      <span class="n">calibrate_touch</span><span class="o">(</span><span class="n">cal</span><span class="o">);</span>
+      <span class="n">tft</span><span class="o">.</span><span class="na">setTouchCalibrate</span><span class="o">(</span><span class="n">cal</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Touch device not found."</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<ul>
+  <li>最後は <code class="language-plaintext highlighter-rouge">setup()</code> と <code class="language-plaintext highlighter-rouge">loop()</code> です。<a href="https://www.youtube.com/@ThatProject" title="That Project - YouTube">That Project</a> を運営する <a href="https://github.com/0015/ThatProject/blob/master/ESP32_LVGL/LVGL9/LVGL9_Ep06_Air_Sensor_UI/LVGL9_Ep06_Air_Sensor_UI.ino" title="ThatProject/ESP32_LVGL/LVGL9/LVGL9_Ep06_Air_Sensor_UI/LVGL9_Ep06_Air_Sensor_UI.ino at master · 0015/ThatProject">Eric さんのコード</a> を参考に、画像メモリ <code class="language-plaintext highlighter-rouge">draw_buf</code> をヒープ領域から動的に割り当てているところがミソです。</li>
+</ul>
+
+<details style="margin-left:1em">
+<summary>setup() と loop()</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">);</span>
+
+  <span class="n">tft_init</span><span class="o">();</span>
+  <span class="n">lv_init</span><span class="o">();</span>
+
+  <span class="cm">/*Set a tick source so that LVGL will know how much time elapsed. */</span>
+  <span class="n">lv_tick_set_cb</span><span class="o">(</span><span class="n">my_tick</span><span class="o">);</span>
+
+  <span class="cm">/* register print function for debugging */</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_USE_LOG</span> <span class="o">!=</span> <span class="mi">0</span>
+  <span class="n">lv_log_register_print_cb</span><span class="o">(</span><span class="n">my_print</span><span class="o">);</span>
+<span class="err">#</span><span class="n">endif</span>
+
+  <span class="n">lv_display_t</span> <span class="o">*</span><span class="n">disp</span> <span class="o">=</span> <span class="n">lv_display_create</span><span class="o">(</span><span class="no">TFT_HOR_RES</span><span class="o">,</span> <span class="no">TFT_VER_RES</span><span class="o">);</span>
+  <span class="n">lv_display_add_event_cb</span><span class="o">(</span><span class="n">disp</span><span class="o">,</span> <span class="n">resolution_changed_event_cb</span><span class="o">,</span> <span class="no">LV_EVENT_RESOLUTION_CHANGED</span><span class="o">,</span> <span class="no">NULL</span><span class="o">);</span>
+  <span class="n">lv_display_set_rotation</span><span class="o">(</span><span class="n">disp</span><span class="o">,</span> <span class="o">(</span><span class="n">lv_display_rotation_t</span><span class="o">)</span><span class="no">TFT_ROTATION</span><span class="o">);</span>
+  <span class="n">lv_display_set_flush_cb</span><span class="o">(</span><span class="n">disp</span><span class="o">,</span> <span class="n">my_disp_flush</span><span class="o">);</span>
+
+  <span class="c1">// 画像メモリをヒープ領域から動的に割り当てる</span>
+  <span class="n">draw_buf</span> <span class="o">=</span> <span class="o">(</span><span class="n">uint8_t</span><span class="o">*)</span><span class="n">heap_caps_malloc</span><span class="o">(</span><span class="no">DRAW_BUF_SIZE</span><span class="o">,</span> <span class="no">MALLOC_CAP_DMA</span> <span class="o">|</span> <span class="no">MALLOC_CAP_INTERNAL</span><span class="o">);</span>
+  <span class="n">lv_display_set_buffers</span><span class="o">(</span><span class="n">disp</span><span class="o">,</span> <span class="n">draw_buf</span><span class="o">,</span> <span class="no">NULL</span><span class="o">,</span> <span class="no">DRAW_BUF_SIZE</span><span class="o">,</span> <span class="no">LV_DISPLAY_RENDER_MODE_PARTIAL</span><span class="o">);</span>
+
+  <span class="cm">/*Initialize the input device driver*/</span>
+  <span class="n">lv_indev_t</span> <span class="o">*</span><span class="n">indev</span> <span class="o">=</span> <span class="n">lv_indev_create</span><span class="o">();</span>
+  <span class="n">lv_indev_set_type</span><span class="o">(</span><span class="n">indev</span><span class="o">,</span> <span class="no">LV_INDEV_TYPE_POINTER</span><span class="o">);</span> <span class="cm">/*Touchpad should have POINTER type*/</span>
+  <span class="n">lv_indev_set_read_cb</span><span class="o">(</span><span class="n">indev</span><span class="o">,</span> <span class="n">my_touchpad_read</span><span class="o">);</span>
+
+<span class="err">#</span><span class="k">if</span> <span class="n">defined</span><span class="o">(</span><span class="no">LV_DEMOS_H</span><span class="o">)</span>
+
+  <span class="n">lv_demo_widgets</span><span class="o">();</span>
+  <span class="c1">//lv_demo_music();</span>
+
+<span class="err">#</span><span class="n">elif</span> <span class="nf">defined</span><span class="o">(</span><span class="no">LV_EXAMPLES_H</span><span class="o">)</span>
+
+  <span class="n">lv_example_arc_1</span><span class="o">();</span>
+  <span class="c1">//lv_example_checkbox_1();</span>
+
+<span class="err">#</span><span class="n">endif</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Setup done"</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{</span>
+  <span class="n">lv_timer_handler</span><span class="o">();</span> <span class="cm">/* let the GUI do its work */</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<div class="quote clear-both">
+
+<h5>画像メモリの動的割り当てについて</h5>
+
+<p><a href="https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf" title="esp32_technical_reference_manual_en.pdf">Technical Reference Manual Version 5.3</a>（2025.01版）1.3.2.6 DMA によれば、</p>
+
+<blockquote>
+  <p>DMA uses the same addressing as the CPU data bus to read and write Internal SRAM 1 and Internal SRAM 2.
+This means DMA uses an address range of 0x3FFE_0000 ~ 0x3FFF_FFFF to read and write Internal SRAM 1
+and 0x3FFA_E000 ~ 0x3FFD_FFFF to read and write Internal SRAM 2.<br />
+<strong>In the ESP32, 13 peripherals are equipped with DMA.</strong></p>
+</blockquote>
+
+<blockquote>
+  <p>DMA は、CPU データ バスと同じアドレス指定を使用し、内部 SRAM 1 と内部 SRAM 2 の読み書きを
+行います。つまり DMA は内部 SRAM 1 に 0x3FFE_0000 ～ 0x3FFF_FFFF のアドレス範囲を使用し、
+内部 SRAM 2 に 0x3FFA_E000 ～ 0x3FFD_FFFF を使用します。<br />
+<strong>ESP32 には 13 個の周辺機器が DMA を搭載しています。</strong>（訳：Google 翻訳）</p>
+</blockquote>
+
+<p>とあり、SRAM1 または SRAM2 と SPI 間で DMA が効くように書かれています。</p>
+
+<figure class="float-left">
+  <a href="/images/2025/04-04/esp-dram.jpg" title="ESP32 DRAM メモリマップ" data-lightbox="image">
+    <img src="/images/2025/04-04/esp-dram-small.jpg" alt="" width="600" height="245" />
+    <figcaption>ESP32 DRAM メモリマップ</figcaption>
+  </a>
+</figure>
+
+<p><code class="language-plaintext highlighter-rouge">heap_caps_malloc()</code> でヒープ領域（SRAM1）に割り当てられるメモリも、<a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">BSS セグメント</a>（SRAM2）に配置される配列 <code class="language-plaintext highlighter-rouge">draw_buf[…]</code> も、どちらも DMA が効くアドレスの範囲内です（<a href="https://developer.espressif.com/blog/esp32-programmers-memory-model/#dram-organisation" title="ESP32 Programmers’ Memory Model &#183; Developer Portal">ESP32 のメモリマップ</a> 参照）。</p>
+
+<div class="clear-both"></div>
+
+<p>ただし後者はあまり大きなメモリを確保できないという違いがあり、画像メモリを最適化する際の制約事項になるため、これを嫌って動的割り当てとしています。</p>
+
+</div>
+
+<h2 id="画像メモリのサイズとフレームレート">画像メモリのサイズとフレームレート</h2>
+
+<p>さて本章では、フレームレートの向上に繋がる画像メモリサイズの適切な条件を見出すために行った実験の結果を示します。</p>
+
+<p>画像メモリのサイズは以下の様に定義されています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DRAW_BUF_SIZE</span> <span class="o">(</span><span class="no">TFT_HOR_RES</span> <span class="o">*</span> <span class="no">TFT_VER_RES</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">*</span> <span class="o">(</span><span class="no">LV_COLOR_DEPTH</span> <span class="o">/</span> <span class="mi">8</span><span class="o">))</span></code></pre></figure>
+
+<p>画像のフォーマットが  RGB565 の場合、<code class="language-plaintext highlighter-rouge">LV_COLOR_DEPTH</code> は <code class="language-plaintext highlighter-rouge">16</code> となり、<strong>マジックナンバー <code class="language-plaintext highlighter-rouge">10</code></strong> により、画像メモリのサイズは１フレームの 1/10 になります。これは <a href="#レンダリングとパネルへの出力との関係を可視化">先に示したビデオ</a>
+における最大10個の各矩形領域のサイズに該当します。</p>
+
+<p>上記コード中のコメントにある通り、この設定で「大抵の場合はうまく機能します」が、<code class="language-plaintext highlighter-rouge">10</code> という数字は、<a href="https://github.com/lvgl/lvgl/issues/3643#issuecomment-1236702656" title="Multi-threaded drawing · Issue #3643 · lvgl/lvgl">Issue #3643</a> の次のような議論が元になっていると考えられます（分かり易い一文を切り出しましたが、かなり複雑なアルゴリズムを議論してます <span class="emoji">😳</span>）。</p>
+
+<blockquote>
+  <p>Let say 4 out the 10 areas were working with the GPU and remaining 6 is CPU only or mixed where the GPU can help with some parts.</p>
+</blockquote>
+
+<blockquote>
+  <p>たとえば、10 個の領域のうち 4 個は GPU を使用して動作し、残りの 6 個は CPU のみ、または GPU が一部の部分で役立つ混合領域であるとします。（訳：Google 翻訳）</p>
+</blockquote>
+
+<p>ここでの CPU 処理は、ソフトウェアによるレンダリングを意味しています。つまり <code class="language-plaintext highlighter-rouge">10</code> は、分割された領域の幾つかはハードウェアで並列処理されることを想定した数字というワケです。</p>
+
+<p>一方 ESP32 では２つのコアを使っても並列に処理できる領域は高々２個です。そこで分割数を <code class="language-plaintext highlighter-rouge">5</code> や <code class="language-plaintext highlighter-rouge">2</code> に変えたところ、若干フレームレートが上がりました。SPI の転送速度自体は変わらないので、分割数が減った分、LVGL を含めたやり取りの <strong>オーバーヘッドが少なくなった</strong> 結果と推測できます。</p>
+
+<ul>
+  <li><a href="https://github.com/lvgl/lvgl/tree/master/demos/music" title="lvgl/demos/music at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">lv_demo_music()</code></a>（括弧内は画像メモリのサイズおよび１フレーム分の平均転送時間）
+    <figure class="flex">
+  <div>
+    <img src="/images/2025/04-04/demo-08FPS.png" alt="10分割 (15KB), 8FPS (17.4ms)" width="96%" />
+    <figcaption>10分割 (15KB), 8FPS (17.4ms)</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/04-04/demo-09FPS.png" alt="5分割 (30KB), 9FPS (16.6ms)" width="96%" />
+    <figcaption>5分割 (30KB), 9FPS (16.6ms)</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/04-04/demo-10FPS.png" alt="2分割 (75KB), 10FPS (16.1ms)" width="96%" />
+    <figcaption>2分割 (75KB), 10FPS (16.1ms)</figcaption>
+  </div>
+</figure>
+  </li>
+</ul>
+
+<p>ちなみにこの「分割レンダリングモード」は、以下の様に <a href="https://docs.lvgl.io/master/details/main-modules/display/setup.html#draw-buffer-s" title="Setting Up Your Display(s) &mdash; LVGL  documentation"><code class="language-plaintext highlighter-rouge">lv_display_set_buffers()</code></a> に <code class="language-plaintext highlighter-rouge">LV_DISPLAY_RENDER_MODE_PARTIAL</code> を指定することで動作します。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">lv_display_set_buffers</span><span class="o">(</span><span class="n">disp</span><span class="o">,</span> <span class="n">draw_buf</span><span class="o">,</span> <span class="no">NULL</span><span class="o">,</span> <span class="no">DRAW_BUF_SIZE</span><span class="o">,</span> <span class="no">LV_DISPLAY_RENDER_MODE_PARTIAL</span><span class="o">);</span></code></pre></figure>
+
+<p>分割しない「全画面レンダリングモード」もありますが、残念ながら CYD ではフレームメモリとして全画面分は確保できません。</p>
+
+<h3 id="実験結果から言えること">実験結果から言えること</h3>
+
+<p>以上の実験結果から、「画像サイズの最適化」については、次のことが言えると考えています。</p>
+
+<ul>
+  <li>マジックナンバー <code class="language-plaintext highlighter-rouge">10</code> は、１フレームにおけるレンダリング領域の分割数を表す</li>
+  <li>分割数は、ハードウェアで並列化できるレンダリング領域の個数を想定している</li>
+  <li>分割数が小さくするとオーバーヘッドも小さくなるが、画像メモリが大きくなる</li>
+  <li>∴ アプリ全体でメモリ容量の許す限り分割数を小さくすれば応答性を上げられる</li>
+</ul>
+
+<h2 id="次回は">次回は…</h2>
+
+<p>LVGL のドキュメントには、「<a href="https://docs.lvgl.io/master/details/main-modules/display/setup.html#two-buffers" title="Setting Up Your Display(s) &mdash; LVGL  documentation">DMA を活かしたダブルバッファ化が有効</a>」と書かれています。</p>
+
+<p>LovyanGFX の <a href="https://github.com/lovyan03/LovyanGFX?tab=readme-ov-file#%E6%A6%82%E8%A6%81-overview">概要 Overview.</a> にも「DMA 転送を用いた通信動作中の別処理実行」とあり、「パネルへの出力」中も LVGL にレンダリングを継続させることでスループットの向上が期待できるというワケです。</p>
+
+<p>ただ実際に実験をしてみると、今のままダブルバッファ化しても殆ど効果はみられず、本格的にマルチコアを活用する必要がありそうです。</p>
+
+<p>ということで、次回は「画像メモリのダブルバッファ化とマルチコア／マルチタスク化による応答性の向上」についてレポートしたいと思います <span class="emoji">🌸</span></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/03/27/" title="前の記事：ESP32 2432S028R (CYD)でLVGL - 2つのSPIバスでLCD、タッチ、SDを共存させる方法">← ESP32 2432S028R (CYD)でLVGL - 2つのSPIバスでLCD、タッチ、SDを共存させる方法</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/04/03/",this.page.identifier="/2025/04/03/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/04/03/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/04/03/";this.page.identifier="/2025/04/03/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
