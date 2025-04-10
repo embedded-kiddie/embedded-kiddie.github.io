@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２） | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２）" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="前回は…" />
+<meta property="og:description" content="前回は…" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/04/10/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/04/10/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-04-10T16:07:32+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２）" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-04-10T16:07:32+09:00","datePublished":"2025-04-10T16:07:32+09:00","description":"前回は…","headline":"ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２）","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/04/10/"},"url":"https://embedded-kiddie.github.io/2025/04/10/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２）</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-04-10T16:07:32+09:00" itemprop="datePublished">Apr 10, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="前回は">前回は…</h2>
+
+<p>LVGL の全体概要における「レンダリングエンジン」と「パネルへの出力」、および介在する「画像メモリ」との関係性を紐解いてきました。</p>
+
+<p>また Arduino 用 LVGL のスケッチ例 <a href="https://github.com/lvgl/lvgl/tree/master/examples/arduino/LVGL_Arduino" title="lvgl/examples/arduino/LVGL_Arduino at master · lvgl/lvgl">LVGL_Arduino</a> で、「画像メモリ」のサイズを決めている「分割数＝マジックナンバー <code class="language-plaintext highlighter-rouge">10</code>」について考察と実験を行い、GUI の応答性を「最適化」するための検討を行いました。</p>
+
+<div class="quote clear-both">
+
+<h5 style="margin-bottom: 0.5em;">画像メモリのサイズと分割数に関する検討結果</h5>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DRAW_BUF_SIZE</span> <span class="o">(</span><span class="no">TFT_HOR_RES</span> <span class="o">*</span> <span class="no">TFT_VER_RES</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">*</span> <span class="o">(</span><span class="no">LV_COLOR_DEPTH</span> <span class="o">/</span> <span class="mi">8</span><span class="o">))</span></code></pre></figure>
+
+<ul style="margin-bottom:0">
+  <li>マジックナンバー <code>10</code> は、１フレームにおけるレンダリング領域の分割数を表す</li>
+  <li>分割数は、ハードウェアで並列化できるレンダリング領域の個数を想定している</li>
+  <li>分割数が小さくなるとオーバーヘッドは小さくなるが、画像メモリが大きくなる</li>
+  <li>∴ アプリ全体でメモリ容量の許す限り分割数を小さくすれば応答性を上げられる</li>
+</ul>
+
+</div>
+
+<p>今回はこれに加え、以下を追加すべく検証を行いたいと思います。</p>
+
+<ul>
+  <li>ダブルバッファ化とマルチコア／マルチタスク化でスループットを上げられる</li>
+</ul>
+
+<h2 id="ダブルバッファとマルチコアによる並列化">ダブルバッファとマルチコアによる並列化</h2>
+
+<p>LVGL には <a href="https://docs.lvgl.io/master/details/main-modules/display/setup.html#flush-wait-callback" title="Setting Up Your Display(s) &mdash; LVGL  documentation"><code class="language-plaintext highlighter-rouge">lv_display_set_flush_wait_cb()</code></a> という関数があり、その説明はこうです。</p>
+
+<blockquote>
+  <p><strong>However with the help of <code class="language-plaintext highlighter-rouge">lv_display_set_flush_wait_cb()</code> a custom wait callback be set for flushing.</strong>
+<strong>This callback can use a semaphore, mutex, or anything else to optimize waiting for the flush to be completed</strong>.
+The callback need not call <code class="language-plaintext highlighter-rouge">lv_display_flush_ready()</code> since the caller takes care of that (clearing the display’s flushing flag) when your callback returns.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong><code class="language-plaintext highlighter-rouge">lv_display_set_flush_wait_cb()</code> を使用すると、フラッシュ用のカスタム待機コールバックを設定できます。</strong>
+<strong>このコールバックは、セマフォ、ミューテックス、またはその他の手段を使用して、フラッシュが完了するまでの</strong>
+<strong>待機を最適化できます</strong>。コールバックが返されたときに呼び出し元がその処理 (ディスプレイのフラッシュ 
+フラグのクリア) を行うため、コールバックは <code class="language-plaintext highlighter-rouge">lv_display_flush_ready()</code> を呼び出す必要はありません。
+（訳：Google 翻訳）</p>
+</blockquote>
+
+<p>う〜ん、実装イメージが湧きにくい説明ですが、「フラッシュ用のカスタム待機コールバック」を待機する <a href="https://github.com/lvgl/lvgl/blob/master/src/core/lv_refr.c#L1331-L1353" title="lvgl/src/core/lv_refr.c at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">wait_for_flushing()</code></a> の次のような処理を見ると謎が解けます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">if</span><span class="o">(</span><span class="n">disp</span><span class="o">-&gt;</span><span class="n">flush_wait_cb</span><span class="o">)</span> <span class="o">{</span>       <span class="c1">// 「フラッシュ用のカスタム待機コールバック」が設定されている場合、</span>
+  <span class="k">if</span><span class="o">(</span><span class="n">disp</span><span class="o">-&gt;</span><span class="n">flushing</span><span class="o">)</span> <span class="o">{</span>          <span class="c1">// ディスプレイパネルに転送すべき画像データがあれば、</span>
+    <span class="n">disp</span><span class="o">-&gt;</span><span class="n">flush_wait_cb</span><span class="o">(</span><span class="n">disp</span><span class="o">);</span>  <span class="c1">// 画像データの転送が完了するまで待機する（＝ブロックされる）</span>
+    <span class="n">disp</span><span class="o">-&gt;</span><span class="n">flushing</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>         <span class="c1">// lv_display_flush_ready() の代わりに転送完了をマークする</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+<span class="k">else</span> <span class="o">{</span>                          <span class="c1">// 「フラッシュ用のカスタム待機コールバック」が未設定の場合は、</span>
+  <span class="k">while</span><span class="o">(</span><span class="n">disp</span><span class="o">-&gt;</span><span class="n">flushing</span><span class="o">);</span>        <span class="c1">// lv_display_flush_ready() による転送完了の通知をポーリングする</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>ポイントは上記コード３行目の <code class="language-plaintext highlighter-rouge">disp-&gt;flush_wait_cb(disp);</code> で、セマフォのリリースを待つようにコールバック関数を実装すれば、<a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%B3%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81" title="コンテキストスイッチ - Wikipedia">コンテキストスイッチ</a> によるレンダリングタスクの切り替えが可能になります。この仕組みを図にすると次の様になるハズです。</p>
+
+<figure class="flex">
+  <a href="/images/2025/04-10/MultiCore-Overview.png" title="ダブルバッファ化とマルチコアの活用" data-lightbox="image">
+    <img class="simple" src="/images/2025/04-10/MultiCore-Overview.png" alt="ダブルバッファ化とマルチコアの活用" width="1200" height="320" />
+    <figcaption style="min-width:300px">ダブルバッファ化とマルチコアの活用</figcaption>
+  </a>
+</figure>
+
+<p>とは言え、並列化の実装を議論している <a href="https://github.com/lvgl/lvgl/issues/4016" title="［Parallel rendering］General discussion · Issue #4016 · lvgl/lvgl">[Parallel rendering] General discussion #4016</a> を読んでみても、LVGL のレンダリングがマルチタスク化されているかまでは分かりませんでした。が、少なくともパネルへの出力をコア０に移し、ダブルバッファ化することでスループットは上がるハズです！</p>
+
+<h2 id="プログラムの作成と実行">プログラムの作成と実行</h2>
+
+<p>前回作成したベースライン <a href="https://github.com/embedded-kiddie/LVGL_Arduino_FastRendering/tree/main/LVGL_Arduino_LovyanGFX" title="LVGL_Arduino_FastRendering/LVGL_Arduino_LovyanGFX at main · embedded-kiddie/LVGL_Arduino_FastRendering">LVGL_Arduino_LovyanGFX</a> を元に、<a href="https://github.com/embedded-kiddie/LVGL_Arduino_FastRendering/tree/main/LVGL_Arduino_MultiCore" title="LVGL_Arduino_FastRendering/LVGL_Arduino_MultiCore at main · embedded-kiddie/LVGL_Arduino_FastRendering">LVGL_Arduino_MultiCore</a> を作成します。</p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++"><span class="n">LVGL_Arduino_FastRendering</span>
+<span class="err">├──</span> <span class="n">LVGL_Arduino_LovyanGFX</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">LVGL_Arduino_LovyanGFX</span><span class="p">.</span><span class="n">ino</span>
+<span class="err">└──</span> <span class="n">LVGL_Arduino_MultiCore</span>
+    <span class="err">└──</span> <span class="n">LVGL_Arduino_MultiCore</span><span class="p">.</span><span class="n">ino</span></code></pre></figure>
+
+<h3 id="ベースラインの改修">ベースラインの改修</h3>
+
+<h4 id="分割数とバッファ数の設定">分割数とバッファ数の設定</h4>
+
+<p><code class="language-plaintext highlighter-rouge">DRAW_BUF_N_BUFS</code> を <code class="language-plaintext highlighter-rouge">1</code> にすれば、シングル版との比較テストができるようにしました。また残念ながら分割数２では、容量オーバーでダブルバッファ分のメモリが確保できませんでした。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">DRAW_BUF_N_BUFS</span>     <span class="mi">2</span> <span class="c1">// バッファ数（1 or 2）</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">DRAW_BUF_N_DIVS</span>     <span class="mi">3</span> <span class="c1">// 分割数（2 〜 10）</span></code></pre></figure>
+
+<h4 id="画像メモリの定義">画像メモリの定義</h4>
+
+<p>従来のマジックナンバー <code class="language-plaintext highlighter-rouge">10</code> を <code class="language-plaintext highlighter-rouge">DRAW_BUF_N_DIVS</code> で置き換え、また画像メモリへのポインタはダブルバッファ分の配列に変更してます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DRAW_BUF_SIZE</span> <span class="o">(</span><span class="no">TFT_HOR_RES</span> <span class="o">*</span> <span class="no">TFT_VER_RES</span> <span class="o">/</span> <span class="no">DRAW_BUF_N_DIVS</span> <span class="o">*</span> <span class="o">(</span><span class="no">LV_COLOR_DEPTH</span> <span class="o">/</span> <span class="mi">8</span><span class="o">))</span>
+<span class="kd">static</span> <span class="n">uint8_t</span><span class="o">*</span> <span class="n">draw_buf</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> <span class="no">NULL</span><span class="o">,</span> <span class="o">};</span></code></pre></figure>
+
+<h4 id="パネルへの出力用タスクの設定">パネルへの出力用タスクの設定</h4>
+
+<p>以下の関数を追加します。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">flush_init()</code><br />
+「更新すべき矩形領域」用のメッセージキューと「更新完了を通知」するセマフォを生成し、コア０に「パネルへの出力」を行う <code class="language-plaintext highlighter-rouge">flush_task()</code> を追加します。</li>
+  <li><code class="language-plaintext highlighter-rouge">flush_task()</code><br />
+メッセージキューから「更新すべき矩形領域」を取り出し、「パネルへの出力」を完了したらセマフォをリリースします。</li>
+  <li><code class="language-plaintext highlighter-rouge">flush_wait()</code><br />
+<code class="language-plaintext highlighter-rouge">lv_display_set_flush_wait_cb()</code> で設定されるべきコールバック関数で、呼び出し元をブロックするためにセマフォがリリースされるまで待つだけの関数です。</li>
+</ul>
+
+<details style="margin-left:1em">
+<summary>マルチコア／マルチタスクの設定</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//----------------------------------------------------------------------</span>
+<span class="c1">// パネルへの出力用タスクの設定</span>
+<span class="c1">//----------------------------------------------------------------------</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">FLUSH_TASK_STACK_SZ</span> <span class="mi">2048</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">FLUSH_TASK_PRIORITY</span> <span class="mi">1</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">FLUSH_TASK_CORE</span>     <span class="mi">0</span>
+
+<span class="n">typedef</span> <span class="n">struct</span> <span class="o">{</span>
+  <span class="n">int32_t</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">h</span><span class="o">;</span>
+  <span class="n">uint8_t</span> <span class="o">*</span><span class="n">buf</span><span class="o">;</span>
+<span class="o">}</span> <span class="n">MessageQueue_t</span><span class="o">;</span>
+
+<span class="c1">// Message queues and semaphores for handshaking</span>
+<span class="kd">static</span> <span class="n">TaskHandle_t</span> <span class="n">taskHandle</span><span class="o">;</span>
+<span class="kd">static</span> <span class="n">QueueHandle_t</span> <span class="n">queHandle</span><span class="o">;</span>
+<span class="kd">static</span> <span class="n">SemaphoreHandle_t</span> <span class="n">semHandle</span><span class="o">;</span>
+
+<span class="n">inline</span> <span class="kt">void</span> <span class="nf">flush_draw_buf</span><span class="o">(</span><span class="n">uint16_t</span> <span class="n">x</span><span class="o">,</span> <span class="n">uint16_t</span> <span class="n">y</span><span class="o">,</span> <span class="n">uint16_t</span> <span class="n">w</span><span class="o">,</span> <span class="n">uint16_t</span> <span class="n">h</span><span class="o">,</span> <span class="n">uint8_t</span> <span class="o">*</span><span class="n">buf</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">setAddrWindow</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">w</span><span class="o">,</span> <span class="n">h</span><span class="o">);</span>
+  <span class="n">tft</span><span class="o">.</span><span class="na">pushPixelsDMA</span><span class="o">((</span><span class="nl">lgfx:</span><span class="o">:</span><span class="n">rgb565_t</span> <span class="o">*)</span><span class="n">buf</span><span class="o">,</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span><span class="o">);</span>  <span class="c1">// { startWrite(); writePixelsDMA(data, len); endWrite(); }</span>
+<span class="o">}</span>
+
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">flush_task</span><span class="o">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">pvParameters</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">MessageQueue_t</span> <span class="n">queue</span><span class="o">;</span>
+  <span class="k">while</span> <span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">xQueueReceive</span><span class="o">(</span><span class="n">queHandle</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">queue</span><span class="o">,</span> <span class="n">portMAX_DELAY</span><span class="o">)</span> <span class="o">!=</span> <span class="n">pdTRUE</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"unable to receive queue."</span><span class="o">);</span>
+      <span class="k">continue</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">flush_draw_buf</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="na">x</span><span class="o">,</span> <span class="n">queue</span><span class="o">.</span><span class="na">y</span><span class="o">,</span> <span class="n">queue</span><span class="o">.</span><span class="na">w</span><span class="o">,</span> <span class="n">queue</span><span class="o">.</span><span class="na">h</span><span class="o">,</span> <span class="n">queue</span><span class="o">.</span><span class="na">buf</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">xSemaphoreGive</span><span class="o">(</span><span class="n">semHandle</span><span class="o">)</span> <span class="o">!=</span> <span class="n">pdTRUE</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"unable to give semaphore."</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">flush_wait</span><span class="o">(</span><span class="n">lv_display_t</span> <span class="o">*</span><span class="n">disp</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">xSemaphoreTake</span><span class="o">(</span><span class="n">semHandle</span><span class="o">,</span> <span class="n">portMAX_DELAY</span><span class="o">)</span> <span class="o">!=</span> <span class="n">pdTRUE</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"unable to take semaphore."</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">static</span> <span class="n">bool</span> <span class="nf">flush_init</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">semHandle</span> <span class="o">=</span> <span class="n">xSemaphoreCreateBinary</span><span class="o">();</span>
+  <span class="n">queHandle</span> <span class="o">=</span> <span class="n">xQueueCreate</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">MessageQueue_t</span><span class="o">));</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">queHandle</span> <span class="o">==</span> <span class="no">NULL</span> <span class="o">||</span> <span class="n">semHandle</span> <span class="o">==</span> <span class="no">NULL</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"unable to create queue or semaphore."</span><span class="o">);</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="c1">// Set up sender task in core 1 and start immediately</span>
+  <span class="n">bool</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">xTaskCreatePinnedToCore</span><span class="o">(</span>
+      <span class="n">flush_task</span><span class="o">,</span> <span class="s">"flush_task"</span><span class="o">,</span>
+      <span class="no">FLUSH_TASK_STACK_SZ</span><span class="o">,</span>  <span class="c1">// The stack size</span>
+      <span class="no">NULL</span><span class="o">,</span>                 <span class="c1">// Pass reference to a variable describing the task number</span>
+      <span class="no">FLUSH_TASK_PRIORITY</span><span class="o">,</span>  <span class="c1">// priority</span>
+      <span class="o">&amp;</span><span class="n">taskHandle</span><span class="o">,</span>          <span class="c1">// Pass reference to task handle</span>
+      <span class="no">FLUSH_TASK_CORE</span>
+  <span class="o">);</span>
+
+  <span class="k">return</span> <span class="o">(</span><span class="n">ret</span> <span class="o">==</span> <span class="n">pdPASS</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<h4 id="フラッシュディスパッチャーの定義">フラッシュディスパッチャーの定義</h4>
+
+<p>元は「パネルへの出力」を担当していた <code class="language-plaintext highlighter-rouge">my_disp_flush()</code> を <code class="language-plaintext highlighter-rouge">flush_task()</code> のディスパッチ担当に役割変更します。</p>
+
+<details style="margin-left:1em">
+<summary><code>my_disp_flush()</code></summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/* LVGL calls it when a rendered image needs to copied to the display*/</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">my_disp_flush</span><span class="o">(</span><span class="n">lv_display_t</span> <span class="o">*</span><span class="n">disp</span><span class="o">,</span> <span class="kd">const</span> <span class="n">lv_area_t</span> <span class="o">*</span><span class="n">area</span><span class="o">,</span> <span class="n">uint8_t</span> <span class="o">*</span><span class="n">px_map</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">MessageQueue_t</span> <span class="n">queue</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="n">area</span><span class="o">-&gt;</span><span class="n">x1</span><span class="o">,</span>
+    <span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">area</span><span class="o">-&gt;</span><span class="n">y1</span><span class="o">,</span>
+    <span class="o">.</span><span class="na">w</span> <span class="o">=</span> <span class="n">lv_area_get_width</span><span class="o">(</span><span class="n">area</span><span class="o">),</span>
+    <span class="o">.</span><span class="na">h</span> <span class="o">=</span> <span class="n">lv_area_get_height</span><span class="o">(</span><span class="n">area</span><span class="o">),</span>
+    <span class="o">.</span><span class="na">buf</span> <span class="o">=</span> <span class="n">px_map</span>
+  <span class="o">};</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">xQueueSend</span><span class="o">(</span><span class="n">queHandle</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">queue</span><span class="o">,</span> <span class="n">portMAX_DELAY</span><span class="o">)</span> <span class="o">!=</span> <span class="n">pdTRUE</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"unable to send queue."</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<h4 id="コア０の初期化とダブルバッファの設定">コア０の初期化とダブルバッファの設定</h4>
+
+<p>初期化関数 <code class="language-plaintext highlighter-rouge">flush_init()</code> を呼び出し、画像メモリ用のダブルバッファを設定するコードを <code class="language-plaintext highlighter-rouge">setup()</code> に追加します。</p>
+<details style="margin-left:1em">
+<summary><code>setup()</code></summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="o">...</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">flush_init</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"unable to initialize flush task."</span><span class="o">);</span>
+    <span class="k">while</span> <span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="n">delay</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="o">...</span>
+  <span class="n">lv_display_set_flush_wait_cb</span><span class="o">(</span><span class="n">disp</span><span class="o">,</span> <span class="n">flush_wait</span><span class="o">);</span>
+
+  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">DRAW_BUF_N_BUFS</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="n">draw_buf</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">uint8_t</span><span class="o">*)</span><span class="n">heap_caps_malloc</span><span class="o">(</span><span class="no">DRAW_BUF_SIZE</span><span class="o">,</span> <span class="no">MALLOC_CAP_DMA</span> <span class="o">|</span> <span class="no">MALLOC_CAP_INTERNAL</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">lv_display_set_buffers</span><span class="o">(</span><span class="n">disp</span><span class="o">,</span> <span class="n">draw_buf</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">draw_buf</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="no">DRAW_BUF_SIZE</span><span class="o">,</span> <span class="no">LV_DISPLAY_RENDER_MODE_PARTIAL</span><span class="o">);</span>
+  <span class="o">...</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<h3 id="実行結果">実行結果</h3>
+
+<div class="notice clear-both">
+
+<p>現在 <a href="https://github.com/espressif/arduino-esp32/releases/tag/3.2.0" title="Release Arduino Release v3.2.0 based on ESP-IDF v5.4.1 · espressif/arduino-esp32">esp32 by Espressif v3.2.0 (ESP-IDF v5.4.1)</a> でランタイムエラーが発生しています。<a href="https://github.com/lovyan03/LovyanGFX/issues/693" title="Updating to ESP32 by Espressif v3.2.0 (ESP-IDF v5.4) causes runtime errors when using LGFX_AUTODETECT · Issue #693 · lovyan03/LovyanGFX">LovyanGFX の issue</a> に上げていますが、コンパイルは <a href="https://github.com/espressif/arduino-esp32/releases/tag/3.1.3" title="Release Arduino Release v3.1.3 based on ESP-IDF v5.3 · espressif/arduino-esp32">v3.1.3</a> まででお試しください。</p>
+
+</div>
+
+<p><a href="https://github.com/lvgl/lv_demos/tree/master/src/lv_demo_music" title="lv_demos/src/lv_demo_music at master · lvgl/lv_demos"><code class="language-plaintext highlighter-rouge">lv_demo_music()</code></a> を <a href="/2025/04/04/#画像メモリのサイズとフレームレート" title="ESP32 2432S028R (CYD)でLVGL - 画像メモリの最適化とマルチコアによる高速化（１）｜Embedded Kiddie">前回のシングルバッファ版</a> と比べてみました。</p>
+
+<ul>
+  <li>シングルバッファ版（括弧内は画像メモリのサイズおよび１フレーム分の平均転送時間）
+    <figure class="flex">
+  <div>
+    <img src="/images/2025/04-03/demo-08FPS.png" alt="10分割 (15KB), 8FPS (17.4ms)" width="96%" />
+    <figcaption>10分割 (15KB), 8FPS (17.4ms)</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/04-03/demo-09FPS.png" alt="5分割 (30KB), 9FPS (16.6ms)" width="96%" />
+    <figcaption>5分割 (30KB), 9FPS (16.6ms)</figcaption>
+  </div>
+  <div>
+  <img src="/images/2025/04-03/demo-10FPS.png" alt="2分割 (75KB), 10FPS (16.1ms)" width="96%" />
+    <figcaption>2分割 (75KB), 10FPS (16.1ms)</figcaption>
+  </div>
+</figure>
+  </li>
+  <li>ダブルバッファ版（括弧内は画像メモリのサイズおよび１フレーム分の平均転送時間）
+    <figure class="flex">
+  <div>
+    <img src="/images/2025/04-10/demo-mc-09FPS.png" alt="10分割 (30KB), 9FPS (16.2ms)" width="96%" />
+    <figcaption>10分割 (30KB), 9FPS (16.2ms)</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/04-10/demo-mc-11FPS.png" alt="5分割 (60KB), 11FPS (15.9ms)" width="96%" />
+    <figcaption>5分割 (60KB), 11FPS (15.9ms)</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/04-10/demo-mc-12FPS.png" alt="3分割 (100KB), 12FPS (15.8ms)" width="96%" />
+    <figcaption>3分割 (100KB), 12FPS (15.8ms)</figcaption>
+  </div>
+</figure>
+  </li>
+</ul>
+
+<p>それぞれの版を横に見ていくと、分割数が少なくなることで「パネルへの転送」を呼び出す回数が減り、関数コールのオーバーヘッドが小さくなってると考えられます。</p>
+
+<p>また各版を縦で比べると、予想通りスループットが向上したことが分かります。特にパネル右下のパフォーマンス表示を見ると、見かけ上、「パネルへの転送」時間がほぼゼロに観測されていることが見て取れます。</p>
+
+<figure class="flex">
+  <div>
+    <img src="/images/2025/04-10/demo-buf-single.jpg" alt="シングルバッファ 10分割" width="320" height="240" />
+    <figcaption>シングルバッファ 10分割</figcaption>
+  </div>
+  <div>
+    <img src="/images/2025/04-10/demo-buf-double.jpg" alt="ダブルバッファ 3分割" width="320" height="240" />
+    <figcaption>ダブルバッファ 3分割</figcaption>
+  </div>
+</figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0;">
+<summary>システムモニタの読み方</summary>
+
+
+<ul style="margin-bottom: 0;">
+  <li>メモリ（左下）
+    <ul>
+      <li>上段：<code>lv_conf.h</code> で設定された <code>LV_MEM_SIZE</code> 中の使用量とその割合％</li>
+      <li>下段：最大使用量と断片化の割合％</li>
+    </ul>
+  </li>
+  <li>パフォーマンス（右下）
+    <ul>
+      <li>上段：フレームレートの平均値と CPU 使用率</li>
+      <li>下段：１フレームの平均処理時間（レンダリング時間｜パネルへの転送時間）</li>
+    </ul>
+  </li>
+</ul>
+
+</details>
+
+</div>
+
+<p>正直、体感上は微妙ですが、オリジナルの 8FPS が 最大で 12FPS に応答性が 1.5倍 上がったと考えれば、まぁ御の字でしょう <span class="emoji">😉</span> 次の動画では、１フレーム当たりの平均処理時間の最大値がおよそ 110msec → 80msec と、約 30msec 程度小さくなっています。</p>
+
+<figure class="flex">
+  <div>
+    <video controls="" muted="" width="320" height="240">
+      <source src="https://embedded-kiddie.github.io/images/2025/04-10/movie-FPS08.mp4" type="video/mp4" />
+    </video>
+    <figcaption>シングルバッファ 10分割</figcaption>
+  </div>
+  <div>
+    <video controls="" muted="" width="320" height="240">
+      <source src="https://embedded-kiddie.github.io/images/2025/04-10/movie-FPS12.mp4" type="video/mp4" />
+    </video>
+    <figcaption>ダブルバッファ 3分割</figcaption>
+  </div>
+</figure>
+
+<p>ただし３分割のダブルバッファ版は、ヒープの残りが約 84KB <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> になるので、アプリによってはキツイかもしれませんネ。</p>
+
+<h2 id="改めてマジックナンバー-10-を考える">改めて、マジックナンバー 10 を考える</h2>
+
+<p>GPU のプログラミング経験が無いので推測になりますが、ハードウェアで並列化できるレンダリング数と省メモリが必要な安価な MCU とのバランスを考えれば、<code class="language-plaintext highlighter-rouge">10</code> は絶妙な数値だと思います。逆に <code class="language-plaintext highlighter-rouge">10</code> だからこそ、辛うじて ESP32 でも動作が可能になっているとも言えます。</p>
+
+<p>でも GPU に限らずハードウェアによるレンダリング機能を搭載した組み込み機器って、結構ハイエンドだと思うのですが、どうなんでしょう？</p>
+
+<p>余談ですが、<a href="https://github.com/lvgl/lvgl/issues/4016#issuecomment-1560673700" title="v9.3 planning · Issue #6763 · lvgl/lvgl">開発者さん曰く</a>「クレイジーな機能を使わなければ、V9 を最小限に設定できます。角丸四角形、テキスト、画像の描画は依然として軽量です」とのことですが、LVGL V8 → V9 で <code class="language-plaintext highlighter-rouge">LV_MEM_SIZE</code> が 48MB から 64MB に増えました。</p>
+
+<p>また <a href="https://github.com/lvgl/lvgl/issues/4016#issuecomment-1557192334" title="[Parallel rendering] General discussion · Issue #4016 · lvgl/lvgl">この辺り</a> の「パフォーマンス、優れた機能、省メモリのうち、優先すべき２つは？」的な議論とか、「<a href="https://github.com/lvgl/lvgl/issues/6763" title="v9.3 planning · Issue #6763 · lvgl/lvgl">V9.3 では MPU に力を入れるゾ</a>」的な計画など、ますます多くのメモリが要求されるようになるのは確実だと思います <span class="emoji">😮‍💨</span></p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>２回に渡り LVGL の応答性を上げる方法を探ってきました。まとめ直すと次の様になります。</p>
+
+<div class="quote clear-both">
+
+<ul style="margin-bottom:0">
+  <li>マジックナンバー <code>10</code> は、１フレームにおけるレンダリング領域の分割数を表す</li>
+  <li>分割数は、ハードウェアで並列化できるレンダリング領域の個数を想定している</li>
+  <li>分割数が小さくなるとオーバーヘッドは小さくなるが、画像メモリが大きくなる</li>
+  <li>ダブルバッファ化とマルチコア／マルチタスク化でスループットを上げられる</li>
+  <li>アプリ全体でメモリ容量の許す限り分割数を小さくすれば応答性を上げられる</li>
+</ul>
+
+</div>
+
+<p>また１フレームにかかる処理時間の短縮効果は、次の様に最大で 30mse 程度になりました。</p>
+
+<ul>
+  <li>ダブルバッファ化＋マルチコア／マルチタスク化で 15msec 前後</li>
+  <li>分割数の小さくすることで最大 15msec 程度</li>
+</ul>
+
+<p>分割数については、GPU など特別なハードウェアを持たず全てをソフトウェアでレンダリングする ESP32 では、正直なところ</p>
+
+<p style="style=margin: auto; display: block; font-size:1.4em;" align="center">
+並列化の効果が限定的な ESP32 で、分割数 10 はチョット多過ぎ
+</p>
+
+<p>と言うのが個人的な見解です。</p>
+
+<p>とは言えダブルバッファ化も効果が薄く、マルチタスクなリアルタイムアプリ ─ 例えば以前に作った <a href="https://github.com/embedded-kiddie/MLX90640" title="embedded-kiddie/MLX90640">サーモグラフィカメラ</a> もコア０にタスクを１個追加しているので、LVGL でさらに増えるとなるとタスク管理に苦労しそうです。</p>
+
+<p>ということで、次は本丸の GUI デザインにチャレンジすべく、MP3 プレーヤーを仕込み中の今日この頃です <span class="emoji">🌲🤧🌲</span></p>
+
+<hr />
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p><a href="https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32/api-reference/system/misc_system_api.html#heap-memory" title="Miscellaneous System APIs - ESP32 -  &mdash; ESP-IDF Programming Guide v5.4 documentation"><code class="language-plaintext highlighter-rouge">esp_get_minimum_free_heap_size()</code></a> による観測 <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/04/03/" title="前の記事：ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（１）">← ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（１）</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/04/10/",this.page.identifier="/2025/04/10/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/04/10/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/04/10/";this.page.identifier="/2025/04/10/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>

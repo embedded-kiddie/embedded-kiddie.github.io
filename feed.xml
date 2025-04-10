@@ -8,6 +8,20 @@
     
       
       <item>
+        <title>ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２）</title>
+        
+          <description>&lt;h2 id=&quot;前回は&quot;&gt;前回は…&lt;/h2&gt;
+</description>
+        
+        <pubDate>Thu, 10 Apr 2025 16:07:32 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/04/10/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/04/10/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（１）</title>
         
           <description>&lt;h2 id=&quot;はじめに&quot;&gt;はじめに&lt;/h2&gt;
