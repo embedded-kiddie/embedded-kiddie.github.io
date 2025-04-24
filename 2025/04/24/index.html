@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="LVGL の練習にシンプルな GUI で MP3 プレイヤーを作ろうと思い立ち、色々と情報を漁ってました。CYD の情報は豊富だし、音を鳴らす方法なんて簡単に見つかるだろうとタカを括ってましたが、コレが中々どうして、結構な調べ甲斐のあるテーマでした。" />
+<meta property="og:description" content="LVGL の練習にシンプルな GUI で MP3 プレイヤーを作ろうと思い立ち、色々と情報を漁ってました。CYD の情報は豊富だし、音を鳴らす方法なんて簡単に見つかるだろうとタカを括ってましたが、コレが中々どうして、結構な調べ甲斐のあるテーマでした。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/04/24/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/04/24/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-04-24T10:41:06+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-04-24T10:41:06+09:00","datePublished":"2025-04-24T10:41:06+09:00","description":"LVGL の練習にシンプルな GUI で MP3 プレイヤーを作ろうと思い立ち、色々と情報を漁ってました。CYD の情報は豊富だし、音を鳴らす方法なんて簡単に見つかるだろうとタカを括ってましたが、コレが中々どうして、結構な調べ甲斐のあるテーマでした。","headline":"ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/04/24/"},"url":"https://embedded-kiddie.github.io/2025/04/24/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-04-24T10:41:06+09:00" itemprop="datePublished">Apr 24, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p><a href="https://lvgl.io/" title="LVGL — Light and Versatile Embedded Graphics Library">LVGL</a> の練習にシンプルな GUI で MP3 プレイヤーを作ろうと思い立ち、色々と情報を漁ってました。CYD の情報は豊富だし、音を鳴らす方法なんて簡単に見つかるだろうとタカを括ってましたが、コレが中々どうして、結構な調べ甲斐のあるテーマでした。</p>
+
+<p>今回ようやく <code class="language-plaintext highlighter-rouge">.mp3</code> や <code class="language-plaintext highlighter-rouge">.m4a</code>、<code class="language-plaintext highlighter-rouge">.wav</code> といったオーディオファイルを再生することができたので、まずは基本動作編としてお披露目したいと思います。</p>
+
+<h2 id="１cyd-で音を鳴らすには">１．CYD で音を鳴らすには…</h2>
+
+<h3 id="internal-dac-を利用する">Internal DAC を利用する</h3>
+
+<p>ボードタイプが <a href="https://github.com/espressif/arduino-esp32/blob/master/variants/esp32/pins_arduino.h#L45-L46" title="arduino-esp32/variants/esp32/pins_arduino.h at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">ESP32 Dev Module</code></a> で設定される標準的な ESP32 開発ボードでは、GPIO25 と GPIO26 が DAC の出力ピンに割り当てられています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kd">const</span> <span class="n">uint8_t</span> <span class="no">DAC1</span> <span class="o">=</span> <span class="mi">25</span><span class="o">;</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="n">uint8_t</span> <span class="no">DAC2</span> <span class="o">=</span> <span class="mi">26</span><span class="o">;</span></code></pre></figure>
+
+<figure class="float-left">
+  <a href="/images/2025/04-24/CYD-Speaker.jpg" title="スピーカー端子と回路図" data-lightbox="image">
+    <img src="/images/2025/04-24/CYD-Speaker-small.jpg" alt="スピーカー端子と回路図" width="600" height="440" />
+    <figcaption>スピーカー端子と回路図</figcaption>
+  </a>
+</figure>
+
+<p>一方 CYD では、GPIO25 はタッチパネルの <code class="language-plaintext highlighter-rouge">CLK</code> に、GPIO26 はオーディオアンプ IC の <a href="https://jlcpcb.com/partdetail/Shenzhen_FumanElec-SC8002B/C82124" title="SC8002B｜Shenzhen Fuman Elec｜Audio Amplifiers｜JLCPCB">SC8002B</a> にそれぞれ内部的に接続されていてます。</p>
+
+<p>これらの GPIO は、ボードタイプに <a href="https://github.com/espressif/arduino-esp32/blob/master/variants/jczn_2432s028r/pins_arduino.h#L62" title="arduino-esp32/variants/jczn_2432s028r/pins_arduino.h at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">ESP32-2432S028R CYD</code></a> を選択することで、次のシンボルが利用可能となります。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">CYD_TP_CLK</span>    <span class="mi">25</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">CYD_AUDIO_OUT</span> <span class="mi">26</span></code></pre></figure>
+
+<p>試しに「SPEAK」端子にスピーカーを接続し、IDE から「<a href="https://docs.arduino.cc/built-in-examples/digital/toneMelody/" title="Play a Melody using the tone() function"><strong>ファイル</strong> &gt; <strong>スケッチ例</strong> &gt; <strong>02.Digital</strong> &gt; <strong>toneMelody</strong></a>」を開き、<a href="https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/Tone.cpp" title="arduino-esp32/cores/esp32/Tone.cpp at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">tone()</code> と <code class="language-plaintext highlighter-rouge">noTone()</code></a> に指定された <code class="language-plaintext highlighter-rouge">8</code> を <code class="language-plaintext highlighter-rouge">26</code> に変更すれば、お馴染みのメロディを聞くことが出来ます。</p>
+
+<h3 id="外付けの-dac-やアンプを利用する">外付けの DAC やアンプを利用する</h3>
+
+<p>以下の２つのサイトには、標準的な ESP32 開発ボードの GPIO25（<code class="language-plaintext highlighter-rouge">DAC1</code>）、GPIO26（<code class="language-plaintext highlighter-rouge">DAC2</code>）の代わりに拡張 I/O 端子の 22 番ピンと RGB LED の一部のピンを流用し、オーディオアンプのブレイクアウトボードを外付けする方法が紹介されています。</p>
+
+<ul>
+  <li>Piotr Zapart さんの <a href="https://github.com/hexeguitar/ESP32_TFT_PIO?tab=readme-ov-file#audio-i2s-mod" title="hexeguitar/ESP32_TFT_PIO: Example project for the ESP32-2432S028 &quot;Cheap Yellow Display&quot; board.">Audio I2S mod</a></li>
+  <li>macsbug さんの <a href="https://macsbug.wordpress.com/2022/08/20/web-radio-esp32-2432s028-i2s/" title="Web Radio ESP32-2432S028-I2S｜macsbug">Web Radio ESP32-2432S028-I2S</a></li>
+</ul>
+
+<p>音質が良くなりそうだし、ステレオ化も魅力的ですが、今回は見送りです <span class="emoji">😓</span></p>
+
+<h2 id="２音の歪み改善">２．音の歪み改善</h2>
+
+<p>「<a href="/2025/02/25/" title="ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン｜Embedded Kiddie">ESP32 2432S028R (CYD)＋任天堂コントローラー＝懐かしのアーケードゲームマシン</a>」では放置してましたが、スピーカー端子から出る音は歪みが酷く、音楽を聴くには耐え難いほどです。まずはこれを何とかしなくちゃです。</p>
+
+<div class="clear-both"></div>
+
+<p>手元の２つのタイプで、オーディオアンプ IC <a href="https://jlcpcb.com/partdetail/Shenzhen_FumanElec-SC8002B/C82124" title="SC8002B｜Shenzhen Fuman Elec｜Audio Amplifiers｜JLCPCB">SC8002B</a> 周りの回路定数を確認すると、回路図では本来 47KΩ と 22KΩ の R7 と R8 が、2 USB タイプでは何と 0Ω になってます <span class="emoji">😳</span></p>
+
+<ul>
+  <li>1 USB タイプ（ILI9341、技適なし、<a href="https://www.tele.soumu.go.jp/j/sys/others/exp-sp/" title="総務省 電波利用ポータル｜その他｜技適未取得機器を用いた実験等の特例制度">特例届出済み</a>）</li>
+  <li>2 USB タイプ（ST7789、技適あり、<a href="https://ja.aliexpress.com/item/1005006470918908.html" title="240*320 スマート表示画面 2.8 インチ LCD TFT モジュールタッチ WROOM">Aliexpress の DIYUSER</a> で購入）</li>
+</ul>
+
+<figure class="flex">
+  <a href="/images/2025/04-24/Registers-1USB.jpg" title="アンプ周りの R, C（1USBタイプ）" data-lightbox="image">
+    <img src="/images/2025/04-24/Registers-1USB-small.jpg" alt="アンプ周りの R, C（1USBタイプ）" width="600" height="450" />
+    <figcaption>アンプ周りの R, C（1USBタイプ）</figcaption>
+  </a>
+  <a href="/images/2025/04-24/Registers-2USB.jpg" title="アンプ周りの R, C（2USBタイプ）" data-lightbox="image">
+    <img src="/images/2025/04-24/Registers-2USB-small.jpg" alt="アンプ周りの R, C（2USBタイプ）" width="600" height="450" />
+    <figcaption>アンプ周りの R, C（2USBタイプ）</figcaption>
+  </a>
+</figure>
+
+<p>Piotr Zapart さんの「<a href="https://github.com/hexeguitar/ESP32_TFT_PIO?tab=readme-ov-file#audio-amp-gain-mod" title="hexeguitar/ESP32_TFT_PIO: Example project for the ESP32-2432S028 &quot;Cheap Yellow Display&quot; board.">Audio amp gain mod</a>」では R7、R8 の付け替えが推奨されていますが、0603 は小さ過ぎて換装できる気がしません。そこで試しに R9（これは回路図通り 68KΩ）と並列に半固定抵抗を付けて調整したところ、アンプ IC に 2KΩ を直付けすることで何とか聞くに耐えられる程度には改善しました <span class="emoji">😮‍💨</span></p>
+
+<div class="clear-both"></div>
+
+<figure class="flex">
+  <a href="/images/2025/04-24/CYD_Audio2_0.gif" title="出典：hexeguitar/ESP32_TFT_PIO" data-lightbox="image">
+    <img src="/images/2025/04-24/CYD_Audio2_0-small.jpg" alt="出典：hexeguitar/ESP32_TFT_PIO" width="550" height="260" />
+    <figcaption>出典：<cite>hexeguitar/ESP32_TFT_PIO</cite></figcaption>
+  </a>
+  <a href="/images/2025/04-24/GainAdjust.jpg" title="アンプゲインの調整" data-lightbox="image">
+    <img src="/images/2025/04-24/GainAdjust-small.jpg" alt="アンプゲインの調整" width="550" height="260" />
+    <figcaption>アンプゲインの調整</figcaption>
+  </a>
+</figure>
+
+<div class="quote clear-both">
+
+<figure class="float-left">
+  <div>
+    <img class="simple" src="/images/2025/04-24/0603-SMD-Registers.jpg" alt="0603 SMD抵抗器キット" width="679" height="509" />
+    <figcaption>一生使いきれない0603のセット</figcaption>
+  </div>
+</figure>
+
+<p>結局 R7、R8 の換装にチャレンジしました。47KΩ と 22KΩ だけとはいかず、Amazon で <a href="https://amzn.asia/d/bdfSRxr" title="Amazon.co.jp: PENGLIN 4000個 0603 SMD抵抗器キット SMDチップ抵抗器 10Ω~910kΩ 5% 80値 各50個 : 産業・研究開発用品">0603 のセット（￥1,399）</a> を購入。歪みは改善しましたが、逆にノイズが気になる様に。そこで 68KΩ の R9 と並列に 47KΩ をアンプ IC に直付けし再びアンプゲインを下げたところ、満足できる音質になりました（注：インピーダンス 4Ω のスピーカーを接続した時の個人的感覚です）。メデタシ、メデタシ <span class="emoji">😇</span></p>
+
+</div>
+
+<h2 id="３i2s-オーディオライブラリ">３．I2S オーディオライブラリ</h2>
+
+<p>CYD の Internal DAC で音を鳴らせるライブラリーを探しました。</p>
+
+<p>Espressif の Arduino ESP32 ドキュメント “<strong>Migration from 2.x to 3.0</strong>” によると、ボードパッケージ <a href="https://github.com/espressif/arduino-esp32/releases/tag/3.0.0" title="Release Arduino Release v3.0.0 based on ESP-IDF v5.1.4 · espressif/arduino-esp32">3.0.0（ESP-IDF 5.1）</a> で I2S ドライバが「<a href="https://docs.espressif.com/projects/arduino-esp32/en/latest/migration_guides/2.x_to_3.0.html#i2s" title="Migration from 2.x to 3.0 -  -  &mdash; Arduino ESP32 latest documentation">完全に再設計されリファクタリングされた</a>」とあります。</p>
+
+<p>そのため <a href="https://github.com/espressif/arduino-esp32/releases/tag/2.0.17" title="Release Arduino Release v2.0.17 based on ESP-IDF v4.4.7 · espressif/arduino-esp32">2.0.17（ESP-IDF v4.4.7）</a> の前後でコンパイルに問題が出たり、動作が変わったりということが起きている様です。</p>
+
+<h3 id="esp32-audioi2s">ESP32-audioI2S</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/04-24/ESP32-AudioI2S.jpg" title="ESP32-audioI2Sの混乱っぷり" data-lightbox="image">
+    <img src="/images/2025/04-24/ESP32-AudioI2S-small.jpg" alt="ESP32-audioI2Sの混乱っぷり" width="600" height="270" />
+    <figcaption>ESP32-audioI2Sの混乱っぷり</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://github.com/schreibfaul1/ESP32-audioI2S" title="schreibfaul1/ESP32-audioI2S: Play mp3 files from SD via I2S">ESP32-audioI2S</a> は、ESP32 用の I2S ライブラリとして最も利用されていると思われます。ただし、<a href="https://arduino.github.io/arduino-cli/1.2/library-specification/#libraryproperties-file-format" title="Library specification - Arduino CLI">library.properties</a> の記述に不整合があり、IDE のライブラリマネージャーと GitHub 上にホストされたリリースバージョンが乖離しています。</p>
+
+<div class="clear-both"></div>
+
+<p>ライブラリマネージャー上の <code class="language-plaintext highlighter-rouge">3.0.13</code>（GitHub 上は <code class="language-plaintext highlighter-rouge">3.1.0</code>） では、リリースノートの「<a href="https://github.com/schreibfaul1/ESP32-audioI2S/releases/tag/3.1.0" title="Release 3.1.0 · schreibfaul1/ESP32-audioI2S"><em>no longer supports an internal DAC</em></a>」の通り <code class="language-plaintext highlighter-rouge">Audio</code> クラスのコンストラクタから Internal DAC の指定が削除されています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Audio</span> <span class="o">:</span> <span class="kd">private</span> <span class="nc">AudioBuffer</span> <span class="o">{</span>
+    <span class="nc">AudioBuffer</span> <span class="nc">InBuff</span><span class="o">;</span> <span class="c1">// instance of input buffer</span>
+  <span class="kd">public</span><span class="o">:</span>
+    <span class="nc">Audio</span><span class="o">(</span><span class="n">uint8_t</span> <span class="n">i2sPort</span> <span class="o">=</span> <span class="no">I2S_NUM_0</span><span class="o">);</span>
+    <span class="o">~</span><span class="nc">Audio</span><span class="o">();</span>
+    <span class="o">...</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>一方 <code class="language-plaintext highlighter-rouge">2.0.0</code>（GitHub 上は <code class="language-plaintext highlighter-rouge">3.0.12</code>）では Internal DAC がサポートされていていますが、ESP32 by Espressif のボードパッケージ <a href="https://github.com/espressif/arduino-esp32/releases/tag/2.0.17" title="Release Arduino Release v2.0.17 based on ESP-IDF v4.4.7 · espressif/arduino-esp32">2.0.17（ESP-IDF v4.4.7）</a>が必要です。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Audio</span> <span class="o">:</span> <span class="kd">private</span> <span class="nc">AudioBuffer</span> <span class="o">{</span>
+    <span class="nc">AudioBuffer</span> <span class="nc">InBuff</span><span class="o">;</span> <span class="c1">// instance of input buffer</span>
+  <span class="kd">public</span><span class="o">:</span>
+    <span class="nc">Audio</span><span class="o">(</span><span class="n">bool</span> <span class="n">internalDAC</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">uint8_t</span> <span class="n">channelEnabled</span> <span class="o">=</span> <span class="mi">3</span><span class="o">,</span> <span class="n">uint8_t</span> <span class="n">i2sPort</span> <span class="o">=</span> <span class="no">I2S_NUM_0</span><span class="o">);</span> <span class="c1">// #99</span>
+    <span class="o">~</span><span class="nc">Audio</span><span class="o">();</span>
+    <span class="o">...</span>
+<span class="o">}</span></code></pre></figure>
+
+<p><a href="https://www.farmsoft.jp/1993/" title="ESP32-2432S028 音声ファイル再生 with Arduino IDE ｜farmsoft">farmsoft さんの記事</a> にサンプルスケッチが示されていたので試してみましたが、オーディオファイルの情報は正しく読み取るものの、残念ながら本記事の執筆時点では音が出ませんでした。次のコードで <a href="https://docs.espressif.com/projects/esp-idf/en/v3.3/api-reference/peripherals/i2s.html#_CPPv423I2S_DAC_CHANNEL_LEFT_EN" title="I2S &mdash; ESP-IDF Programming Guide v3.3 documentation">GIPI26 を有効化</a> しているハズなのですが…</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Audio</span> <span class="nf">audio</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="no">I2S_DAC_CHANNEL_LEFT_EN</span><span class="o">);</span></code></pre></figure>
+
+<p>I2S の使い方をもっと研究しないとダメですね。とりあえずこのライブラリの使用は断念です <span class="emoji">😩</span></p>
+
+<h3 id="esp32-i2s-audio-library">ESP32 I2S audio library</h3>
+
+<p>「<a href="#２音の歪み改善">音の歪み改善</a>」でも紹介した Piotr Zapart さんの <a href="https://github.com/hexeguitar/ESP32_TFT_PIO/tree/main/Examples/CYD28_BaseProject/lib/CYD_Audio" title="ESP32_TFT_PIO/Examples/CYD28_BaseProject/lib/CYD_Audio at main · hexeguitar/ESP32_TFT_PIO">ESP32 I2S audio library</a> は、前述の <a href="https://github.com/schreibfaul1/ESP32-audioI2S" title="schreibfaul1/ESP32-audioI2S: Play mp3 files from SD via I2S">ESP32-audioI2S</a> をベースに CYD 用に改修したライブラリです。</p>
+
+<p>動作条件は限られますが、いい感じで音が出たので、その利用方法を順に説明します。</p>
+
+<h4 id="動作条件">動作条件</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>ソフトウェア</th>
+      <th>動作条件</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Arduino IDE</td>
+      <td>2.3.4 〜 2.3.6 で確認済み</td>
+    </tr>
+    <tr>
+      <td>ESP32 by Espressif ボードバッケージ</td>
+      <td>2.0.17 を推奨 <sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup></td>
+    </tr>
+    <tr>
+      <td>ボードタイプ</td>
+      <td><code class="language-plaintext highlighter-rouge">ESP32 Dev Module</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="インストール方法">インストール方法</h4>
+
+<ol>
+  <li>
+    <p>Piotr Zapart さんのリポジトリから <a href="https://github.com/hexeguitar/ESP32_TFT_PIO/archive/refs/heads/main.zip">ESP32_TFT_PIO-main.zip</a> を落とし解凍します。</p>
+  </li>
+  <li>
+    <p>解凍したフォルダから <a href="https://github.com/hexeguitar/ESP32_TFT_PIO/tree/main/Examples/CYD28_BaseProject/lib" title="ESP32_TFT_PIO/Examples/CYD28_BaseProject/lib at main · hexeguitar/ESP32_TFT_PIO"><code class="language-plaintext highlighter-rouge">ESP32_TFT_PIO-main/Examples/CYD28_BaseProject/lib/</code></a> 中の <code class="language-plaintext highlighter-rouge">CYD_Audio</code> を <a href="https://docs.arduino.cc/software/ide-v1/tutorials/installing-libraries/#manual-installation" title="Home / Software / Installing Libraries">ライブラリフォルダにインストール</a> します。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">CYD_Audio</code> は <a href="https://platformio.org/" title="Your Gateway to Embedded Software Development Excellence · PlatformIO">PlatformIO</a> 用に作られているので、Arduino 環境で利用できるよう以下の <a href="https://github.com/embedded-kiddie/ESP32_TFT_PIO/blob/arduino/Examples/CYD28_BaseProject/lib/CYD_Audio/library.properties" title="ESP32_TFT_PIO/Examples/CYD28_BaseProject/lib/CYD_Audio/library.properties at arduino · embedded-kiddie/ESP32_TFT_PIO"><code class="language-plaintext highlighter-rouge">library.properties</code></a> をインストールしたフォルダに保存します。</p>
+  </li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">name=CYD_Audio
+version=1.0.0
+author=Piotr Zapart
+maintainer=hexeguitar www.hexefx.com
+sentence=Audio library for the CYD series display+ESP32 board, based on work of schreibfaul1
+paragraph=Audio library for the CYD series display+ESP32 board, based on work of schreibfaul1
+category=Signal Input/Output
+url=https://github.com/hexeguitar/ESP32_TFT_PIO/tree/main/Examples/CYD28_BaseProject/lib/CYD_Audio
+architectures=*</code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">CYD_Audio</code> フォルダの構成は以下のようになります。</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">CYD_Audio
+├── keywords.txt
+├── library.json
+├── library.properties    &lt;-- Arduino環境用に追加
+├── readme.md
+└── src
+    ├── CYD_Audio.cpp
+    ├── CYD_Audio.h
+    ├── CYD_DSP.cpp
+    ├── CYD_DSP.h
+    ├── CYD_audioCustom.cpp
+    ├── aac_decoder/
+    ├── flac_decoder/
+    ├── mp3_decoder/
+    ├── opus_decoder/
+    └── vorbis_decoder/</code></pre></figure>
+
+<h4 id="ライブラリの動作仕様">ライブラリの動作仕様</h4>
+
+<p>このライブラリがどの様に動作するかを次の図に描いてみました。</p>
+
+<p>ユーザー I/F 用のコードをコア１で、オーディオ再生用のタスク <code class="language-plaintext highlighter-rouge">audioTask()</code> をコア０で動作させるのが、このライブラリの典型的な利用方法です。ちょうど「<strong>リモコンと CD プレイヤー</strong>」をイメージすると分かり易いかもしれません。</p>
+
+<figure class="flex">
+  <a href="/images/2025/04-24/LibraryStructure.png" title="ライブラリの動作イメージ" data-lightbox="image">
+    <img class="simple" src="/images/2025/04-24/LibraryStructure.png" alt="ライブラリの動作イメージ" width="1200" height="400" />
+    <figcaption>ライブラリの動作イメージ</figcaption>
+  </a>
+</figure>
+
+<p>コア間はメッセージキューで結ばれ、コア１からコマンドを送り、コア０の <code class="language-plaintext highlighter-rouge">audioTask()</code> がレスポンスを返します。また同タスクは１回に１つのコマンドだけを処理するよう、セマフォで自身を排他制御しています。</p>
+
+<p>コマンドの送受信を担当するのが <a href="https://github.com/hexeguitar/ESP32_TFT_PIO/tree/main/Examples/CYD28_BaseProject/src" title="ESP32_TFT_PIO/Examples/CYD28_BaseProject/src at main · hexeguitar/ESP32_TFT_PIO">Examples</a> 中の <a href="https://github.com/embedded-kiddie/ESP32_TFT_PIO/blob/arduino/Arduino/CYD_MP3Player_Basic/CYD28_audio.h" title="ESP32_TFT_PIO/Arduino/CYD_MP3Player_Basic/CYD28_audio.h at arduino · embedded-kiddie/ESP32_TFT_PIO">CYD28_audio.h</a>、<a href="https://github.com/embedded-kiddie/ESP32_TFT_PIO/blob/arduino/Arduino/CYD_MP3Player_Basic/CYD28_audio.cpp" title="ESP32_TFT_PIO/Arduino/CYD_MP3Player_Basic/CYD28_audio.cpp at arduino · embedded-kiddie/ESP32_TFT_PIO">CYD28_audio.cpp</a> で、次のようなインターフェースが用意されています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>インターフェース関数</th>
+      <th>動作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">void audioInit(void)</code></td>
+      <td>コア０でタスク <code class="language-plaintext highlighter-rouge">audioTask()</code> を起動します</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bool audioConnecttoSD(…)</code></td>
+      <td>microSD 内のオーディオファイルを再生します</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bool audioConnecttohost(…)</code></td>
+      <td>Web ラジオをストリーミング再生します <sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote" rel="footnote">2</a></sup></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bool audioConnecttoSpeech(…)</code></td>
+      <td>Google サービスでテキスト to スピーチを実行します</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bool audioIsPlaying(void)</code></td>
+      <td>再生中か否かを問い合わせます</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">void audioStopSong(void)</code></td>
+      <td>再生を停止します</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">void audioSetVolume(uint8_t vol)</code></td>
+      <td>ボリュームを指定します（0〜21）</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">uint8_t audioGetVolumePerCent(void)</code></td>
+      <td>現在のボリュームを取得します（0〜100%）</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">uint32_t audioGetRMS(void)</code></td>
+      <td>信号の実行値（Root Mean Square）を取得します</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>RMS</strong> については <a href="https://oto-to-mimi.com/mixing/about-peak-and-rms/" title="音の大きさの指標。Peak（ピーク）とRMSについて : OTO-to-MIMI">コチラ</a> を参照してください。<a href="https://ja.wikipedia.org/wiki/VU%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC" title="VUメーター - Wikipedia">VU メーター</a> などのギミックを実装するときに使います。</p>
+
+<p>続いてこれらの関数を使ったサンプルスケッチを説明します。</p>
+
+<h4 id="サンプルスケッチの説明">サンプルスケッチの説明</h4>
+
+<p>最もシンプルな例を <a href="https://github.com/embedded-kiddie/ESP32_TFT_PIO/blob/arduino/Arduino/CYD_MP3Player_Basic/CYD_MP3Player_Basic.ino" title="ESP32_TFT_PIO/Arduino/CYD_MP3Player_Basic/CYD_MP3Player_Basic.ino at arduino · embedded-kiddie/ESP32_TFT_PIO"><code class="language-plaintext highlighter-rouge">CYD_MP3Player_Basic</code></a> に作ってみました。</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">CYD_MP3Player_Basic
+├── CYD28_audio.cpp           &lt;-- オリジナルのExamplesからコピー
+├── CYD28_audio.h             &lt;-- オリジナルのExamplesからコピー
+└── CYD_MP3Player_Basic.ino</code></pre></figure>
+
+<p>注意すべきは <code class="language-plaintext highlighter-rouge">audioInit()</code> の実行後、コア０側の準備が整った頃合いを見計らってからコマンドを発行する必要があるという点です。例では 10msec の遅延を入れています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="s">"CYD28_audio.h"</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">);</span>
+
+  <span class="k">if</span> <span class="o">(!</span><span class="no">SD</span><span class="o">.</span><span class="na">begin</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Cannot begin SD."</span><span class="o">);</span>
+    <span class="k">while</span> <span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">audioInit</span><span class="o">();</span>
+  <span class="n">delay</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span> <span class="c1">// Wait until the task on Core 1 is ready to receive a command</span>
+  <span class="n">audioConnecttoSD</span><span class="o">(</span><span class="s">"/sample.mp3"</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
+
+<p>また LVGL 化に向けてもう少し実用的な例題を <a href="https://github.com/embedded-kiddie/CYD_MP3Player" title="embedded-kiddie/CYD_MP3Player: MP3 player with internal DAC for Cheap Yellow Display">CYD_MP3Player</a> に作りつつあるので、良かったら参考にしてください。</p>
+
+<h4 id="入出力デバイスの設定">入出力デバイスの設定</h4>
+
+<ul>
+  <li>
+    <p><strong>出力バイスの設定</strong><br />
+外付けの DAC やアンプを利用する場合は、<a href="https://github.com/embedded-kiddie/ESP32_TFT_PIO/blob/arduino/Arduino/CYD_MP3Player_Basic/CYD28_audio.h" title="ESP32_TFT_PIO/Arduino/CYD_MP3Player_Basic/CYD28_audio.h at arduino · embedded-kiddie/ESP32_TFT_PIO"><code class="language-plaintext highlighter-rouge">CYD28_audio.h</code></a> または <a href="https://github.com/embedded-kiddie/ESP32_TFT_PIO/blob/arduino/Arduino/CYD_MP3Player_Basic/CYD28_audio.cpp" title="ESP32_TFT_PIO/Arduino/CYD_MP3Player_Basic/CYD28_audio.cpp at arduino · embedded-kiddie/ESP32_TFT_PIO"><code class="language-plaintext highlighter-rouge">CYD28_audio.cpp</code></a> のどちらかに <code class="language-plaintext highlighter-rouge">#define USE_I2S_DAC</code> を追加します。</p>
+  </li>
+  <li>
+    <p><strong>SdFat の設定</strong><br />
+<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">ESP32 標準の SD ライブラリ</a> に替えて <a href="https://github.com/greiman/SdFat" title="greiman/SdFat: Arduino FAT16/FAT32 exFAT Library">SdFat</a> を利用する場合は、<a href="https://github.com/hexeguitar/ESP32_TFT_PIO/blob/main/Examples/CYD28_BaseProject/lib/CYD_Audio/src/CYD_Audio.h#L13" title="ESP32_TFT_PIO/Examples/CYD28_BaseProject/lib/CYD_Audio/src/CYD_Audio.h at main · hexeguitar/ESP32_TFT_PIO"><code class="language-plaintext highlighter-rouge">CYD_Audio.h</code></a> で <code class="language-plaintext highlighter-rouge">#define SDFATFS_USED</code> を有効化する必要があります。またファイル名に日本語を使うには <a href="https://github.com/greiman/SdFat/blob/master/src/SdFatConfig.h#L36-L37" title="SdFat/src/SdFatConfig.h at master · greiman/SdFat">SdFatConfig.h</a> の編集も必要です（ESP32 標準の SD ライブラリでは不要）。</p>
+  </li>
+</ul>
+
+<h4 id="既知の問題点">既知の問題点</h4>
+
+<p><code class="language-plaintext highlighter-rouge">CYD_Audio</code> ライブラリの動作条件を ESP32 ボードパッケージの <a href="https://github.com/espressif/arduino-esp32/releases/tag/2.0.17" title="Release Arduino Release v2.0.17 based on ESP-IDF v4.4.7 · espressif/arduino-esp32">2.0.17（ESP-IDF v4.4.7）</a>としているのは、<a href="https://github.com/espressif/arduino-esp32/releases/tag/3.1.3" title="Release Arduino Release v3.1.3 based on ESP-IDF v5.3 · espressif/arduino-esp32">3.1.3（ESP-IDF v5.3）</a>または本記事執筆時点で最新の <a href="https://github.com/espressif/arduino-esp32/releases/tag/3.2.0" title="Release Arduino Release v3.2.0 based on ESP-IDF v5.4.1 · espressif/arduino-esp32">3.2.0（ESP-IDF v5.3）</a>（おそらく 3.0.0 以上）で以下の問題が生じるためです。</p>
+
+<h5 id="コンパイル時のエラー">コンパイル時のエラー</h5>
+
+<p>次のシンボルが未定義となります。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nl">error:</span> <span class="err">'</span><span class="no">FUNC_GPIO0_CLK_OUT1</span><span class="err">'</span> <span class="n">was</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="k">this</span> <span class="n">scope</span>
+<span class="nl">error:</span> <span class="err">'</span><span class="no">FUNC_U0RXD_CLK_OUT2</span><span class="err">'</span> <span class="n">was</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="k">this</span> <span class="n">scope</span>
+<span class="nl">error:</span> <span class="err">'</span><span class="no">FUNC_U0TXD_CLK_OUT3</span><span class="err">'</span> <span class="n">was</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="k">this</span> <span class="n">scope</span>
+<span class="nl">error:</span> <span class="err">'</span><span class="no">PERIPHS_IO_MUX_GPIO0_U</span><span class="err">'</span> <span class="n">was</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="k">this</span> <span class="n">scope</span>
+<span class="nl">error:</span> <span class="err">'</span><span class="no">PERIPHS_IO_MUX_U0RXD_U</span><span class="err">'</span> <span class="n">was</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="k">this</span> <span class="n">scope</span>
+<span class="nl">error:</span> <span class="err">'</span><span class="no">PIN_CTRL</span><span class="err">'</span> <span class="n">was</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="k">this</span> <span class="n">scope</span>
+<span class="nl">error:</span> <span class="err">'</span><span class="no">PIN_FUNC_SELECT</span><span class="err">'</span> <span class="n">was</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="k">this</span> <span class="n">scope</span></code></pre></figure>
+
+<p>このエラーは CYD には必要ない <a href="https://github.com/schreibfaul1/ESP32-audioI2S/wiki#which-external-dacs-can-be-used" title="home · schreibfaul1/ESP32-audioI2S Wiki"><code class="language-plaintext highlighter-rouge">i2s_mclk_pin_select()</code></a> を無効化すれば解消しますが、さらに関数引数の型の不一致で怒られます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nl">error:</span> <span class="n">invalid</span> <span class="n">conversion</span> <span class="n">from</span> <span class="err">'</span><span class="n">int32_t</span><span class="o">*</span><span class="err">'</span> <span class="o">{</span><span class="n">aka</span> <span class="err">'</span><span class="kt">long</span> <span class="kt">int</span><span class="o">*</span><span class="err">'</span><span class="o">}</span> <span class="n">to</span> <span class="err">'</span><span class="kt">int</span><span class="o">*</span><span class="err">'</span>
+<span class="nl">error:</span> <span class="n">invalid</span> <span class="n">conversion</span> <span class="n">from</span> <span class="err">'</span><span class="n">int32_t</span><span class="o">*</span><span class="err">'</span> <span class="o">{</span><span class="n">aka</span> <span class="err">'</span><span class="kt">long</span> <span class="kt">int</span><span class="o">*</span><span class="err">'</span><span class="o">}</span> <span class="n">to</span> <span class="err">'</span><span class="kd">const</span> <span class="kt">int</span><span class="o">*</span><span class="err">'</span></code></pre></figure>
+
+<p>実際の修正については <a href="https://github.com/embedded-kiddie/ESP32_TFT_PIO/commit/8c49390e9b7cfcf176f64e57bcbe0d6e6a828168#diff-c99e7e6de399b0599ee7bb24270b22c9b52fc5451deaccf75a5214f932e86ecb" title="Add sample sketch for Arduino and modified CYD_Audio to fix for ESP32… · embedded-kiddie/ESP32_TFT_PIO@8c49390">コチラ</a> を参照ください。</p>
+
+<h5 id="コンパイル時の警告">コンパイル時の警告</h5>
+
+<p>非推奨となった I2S 関連の警告が出ます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">warning</span> <span class="s">"legacy adc driver is deprecated, please migrate to use esp_adc/adc_oneshot.h and esp_adc/adc_continuous.h for oneshot mode and continuous mode drivers respectively"</span>
+<span class="err">#</span><span class="n">warning</span> <span class="s">"This set of I2S APIs has been deprecated, please include 'driver/i2s_std.h', 'driver/i2s_pdm.h' or 'driver/i2s_tdm.h' instead. if you want to keep using the old APIs and ignore this warning, you can enable 'Suppress legacy driver deprecated warning' option under 'I2S Configuration' menu in Kconfig"</span></code></pre></figure>
+
+<h5 id="ランタイム時の警告">ランタイム時の警告</h5>
+
+<p>スケッチの起動時に次の様な警告がシリアルモニタに出力されます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">i2s</span><span class="o">(</span><span class="n">legacy</span><span class="o">):</span> <span class="n">i2s_calculate_adc_dac_clock</span><span class="o">(</span><span class="mi">764</span><span class="o">):</span> <span class="n">sample</span> <span class="n">rate</span> <span class="n">is</span> <span class="n">too</span> <span class="n">small</span><span class="o">,</span> <span class="n">the</span> <span class="n">mclk</span> <span class="n">division</span> <span class="n">exceed</span> <span class="n">the</span> <span class="n">maximum</span> <span class="n">value</span> <span class="mi">255</span>
+<span class="n">i2s</span><span class="o">(</span><span class="n">legacy</span><span class="o">):</span> <span class="n">i2s_calculate_clock</span><span class="o">(</span><span class="mi">859</span><span class="o">):</span> <span class="no">ADC</span><span class="o">/</span><span class="no">DAC</span> <span class="n">clock</span> <span class="n">calculate</span> <span class="n">failed</span></code></pre></figure>
+
+<h5 id="再生開始時の異音">再生開始時の異音</h5>
+
+<p>曲の再生開始時に耳障りな「ボツッ」という異音が出ます。この対策としてフェードイン処理が施されていますが、機能するのは 2.0.17 までです。</p>
+
+<h2 id="４だんすぴ-で試聴">４．「だんすぴ 🔊」で試聴</h2>
+
+<p>何とか音を鳴らすことが出来たので、今回のために「<a href="http://nfjapan.com/%e6%96%b0%e8%a3%bd%e5%93%81%e3%81%ae%e3%81%94%e6%a1%88%e5%86%85/%e3%83%80%e3%83%b3%e3%83%9c%e3%83%bc%e3%83%ab%e8%a3%bd%e3%82%b9%e3%83%94%e3%83%bc%e3%82%ab%e3%83%bc%e8%87%aa%e4%bd%9c%e3%82%a8%e3%83%b3%e3%82%af%e3%83%ad%e3%83%bc%e3%82%b8%e3%83%a3%e3%83%bc%e3%82%ad/" title="ダンボール製スピーカー自作エンクロージャーキット「だんすぴkit」を新発売｜新製品のご案内｜North Flat Japan（株式会社ノースフラットジャパン公式）">だんすぴ</a>」（¥680）と 2.5 インチ 4Ω 15W フルレンジ（¥550／個）を Amazon でセット購入、机上に置いて聴いています。</p>
+
+<p>「だんすぴ」自体はそう悪くないのですが、<del>最大音量にすると明らかに歪みが残っているのが分かりますし、</del> （← 歪みはかなり改善しました）静かな曲だとノイズが気になります。</p>
+
+<p>まぁ、オーディオマニアじゃないので、何かしながら聴き流す BGM 程度なら十分です。</p>
+
+<p>ということで、これで心置きなく LVGL で GUI の作成にチャレンジできると思います <span class="emoji">🎉</span></p>
+
+<hr />
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>2.0.17 を推奨としている理由については「<a href="#既知の問題点">既知の問題点</a>」を参照願います。 <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:2" role="doc-endnote">
+      <p>Web ラジオのストリーミング再生には PSRAM の増設が必要です、残念！ <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/04/10/" title="前の記事：ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２）">← ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２）</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/04/24/",this.page.identifier="/2025/04/24/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/04/24/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/04/24/";this.page.identifier="/2025/04/24/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>

@@ -269,7 +269,7 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
 
   <span class="c1">// タイマーのプールから使えるタイマーを取得します</span>
   <span class="c1">// 強制的に AGT_TIMER を使うには、`type = AGT_TIMER; channel = 1;` とします</span>
-  <span class="n">uint8_t</span> <span class="n">type</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+  <span class="n">uint8_t</span> <span class="n">type</span><span class="o">;</span>
   <span class="kt">int</span> <span class="n">channel</span> <span class="o">=</span> <span class="nl">FspTimer:</span><span class="o">:</span><span class="n">get_available_timer</span><span class="o">(</span><span class="n">type</span><span class="o">);</span> <span class="c1">// GPT_TIMER が優先して取得されます</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">channel</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
     <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Cannot get timer."</span><span class="o">);</span>
@@ -283,16 +283,6 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
   <span class="n">fsp_timer</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">TIMER_MODE_ONE_SHOT</span><span class="o">,</span> <span class="n">type</span><span class="o">,</span> <span class="n">channel</span><span class="o">,</span> <span class="mf">100.0</span> <span class="cm">/* [Hz] */</span><span class="o">,</span> <span class="mf">50.0</span> <span class="cm">/* [%] */</span><span class="o">,</span> <span class="nc">IrqCallback</span><span class="o">,</span> <span class="n">nullptr</span><span class="o">);</span>
 
 <span class="err">#</span><span class="k">else</span>
-
-  <span class="c1">// まず取得したタイマーの発信源となる周辺回路用クロック（PCLK）の周波数を取得します</span>
-  <span class="n">uint32_t</span> <span class="n">freq_hz</span><span class="o">;</span>
-  <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="no">GPT_TIMER</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">freq_hz</span> <span class="o">=</span> <span class="n">R_FSP_SystemClockHzGet</span><span class="o">(</span><span class="no">FSP_PRIV_CLOCK_PCLKD</span><span class="o">);</span>
-    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"GPT channel "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">channel</span><span class="o">)</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">freq_hz</span><span class="o">)</span> <span class="o">+</span> <span class="s">" Hz"</span><span class="o">);</span>
-  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-    <span class="n">freq_hz</span> <span class="o">=</span> <span class="n">R_FSP_SystemClockHzGet</span><span class="o">(</span><span class="no">FSP_PRIV_CLOCK_PCLKB</span><span class="o">);</span>
-    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"AGT channel "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">channel</span><span class="o">)</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">freq_hz</span><span class="o">)</span> <span class="o">+</span> <span class="s">" Hz"</span><span class="o">);</span>
-  <span class="o">}</span>
 
   <span class="cm">/* PCLK の分周比は以下の様に定義されています
      https://github.com/arduino/ArduinoCore-renesas/blob/main/variants/MINIMA/includes/ra/fsp/inc/api/r_timer_api.h#L130-L144
@@ -311,11 +301,31 @@ Lチカしながら大好きな <a href="https://www.youtube.com/watch?v=liuNBOX
       TIMER_SOURCE_DIV_1024 = 10,        ///&lt; Timer clock source divided by 1024
   } timer_source_div_t;
   */</span>
+
+  <span class="c1">// 取得したタイマーの発信源となる周辺回路用クロック（PCLK）の周波数を取得し分周比を設定します</span>
+  <span class="n">uint32_t</span> <span class="n">clock_hz</span><span class="o">;</span>
+  <span class="n">timer_source_div_t</span> <span class="n">src_div</span><span class="o">;</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="no">GPT_TIMER</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">clock_hz</span> <span class="o">=</span> <span class="n">R_FSP_SystemClockHzGet</span><span class="o">(</span><span class="no">FSP_PRIV_CLOCK_PCLKD</span><span class="o">);</span>
+    <span class="n">src_div</span> <span class="o">=</span> <span class="no">TIMER_SOURCE_DIV_1024</span><span class="o">;</span> <span class="c1">// 1, 4, 16, 64, 256, 1024</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"GPT_TIMER "</span><span class="o">);</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">clock_hz</span> <span class="o">=</span> <span class="n">R_FSP_SystemClockHzGet</span><span class="o">(</span><span class="no">FSP_PRIV_CLOCK_PCLKB</span><span class="o">);</span>
+    <span class="n">src_div</span> <span class="o">=</span> <span class="no">TIMER_SOURCE_DIV_8</span><span class="o">;</span> <span class="c1">// 1, 2, 8</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"AGT_TIMER "</span><span class="o">);</span>
+  <span class="o">}</span>
+
   <span class="c1">// 10 msec 分のクロック数を算出します</span>
-  <span class="n">uint32_t</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">round</span><span class="o">((</span><span class="mf">10.0f</span> <span class="cm">/* [msec] */</span> <span class="o">/</span> <span class="mf">1000.0f</span><span class="o">)</span> <span class="o">*</span> <span class="n">freq_hz</span> <span class="o">/</span> <span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="no">TIMER_SOURCE_DIV_1024</span><span class="o">));</span> <span class="c1">// 1024 = 1 &lt;&lt; 10</span>
+  <span class="n">uint32_t</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">round</span><span class="o">((</span><span class="mf">10.0f</span> <span class="cm">/* msec */</span> <span class="o">/</span> <span class="mf">1000.0f</span><span class="o">)</span> <span class="o">*</span> <span class="n">clock_hz</span> <span class="o">/</span> <span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">src_div</span><span class="o">));</span>
 
   <span class="c1">// 分周比を合わせ、10 msec（100 Hz）のワンショットタイマーをセットします（カウントは０からスタート）</span>
-  <span class="n">fsp_timer</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">TIMER_MODE_ONE_SHOT</span><span class="o">,</span> <span class="n">type</span><span class="o">,</span> <span class="n">channel</span><span class="o">,</span> <span class="n">counts</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="no">TIMER_SOURCE_DIV_1024</span><span class="o">,</span> <span class="nc">IrqCallback</span><span class="o">,</span> <span class="n">nullptr</span><span class="o">);</span>
+  <span class="n">fsp_timer</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">TIMER_MODE_ONE_SHOT</span><span class="o">,</span> <span class="n">type</span><span class="o">,</span> <span class="n">channel</span><span class="o">,</span> <span class="n">counts</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">src_div</span><span class="o">,</span> <span class="nc">IrqCallback</span><span class="o">,</span> <span class="n">nullptr</span><span class="o">);</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"channel:"</span>  <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">channel</span><span class="o">));</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">", clock:"</span>  <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">clock_hz</span><span class="o">));</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">", div:"</span>    <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">src_div</span><span class="o">));</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">", counts:"</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">counts</span><span class="o">)</span> <span class="o">+</span> <span class="s">"\n"</span><span class="o">);</span>
 
 <span class="err">#</span><span class="n">endif</span>
 
