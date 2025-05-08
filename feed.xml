@@ -8,6 +8,20 @@
     
       
       <item>
+        <title>LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など</title>
+        
+          <description>&lt;h2 id=&quot;１はじめに&quot;&gt;１．はじめに&lt;/h2&gt;
+</description>
+        
+        <pubDate>Thu, 08 May 2025 09:18:55 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/05/08/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/05/08/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編</title>
         
           <description>&lt;p&gt;&lt;a href=&quot;https://lvgl.io/&quot; title=&quot;LVGL — Light and Versatile Embedded Graphics Library&quot;&gt;LVGL&lt;/a&gt; の練習にシンプルな GUI で MP3 プレイヤーを作ろうと思い立ち、色々と情報を漁ってました。CYD の情報は豊富だし、音を鳴らす方法なんて簡単に見つかるだろうとタカを括ってましたが、コレが中々どうして、結構な調べ甲斐のあるテーマでした。&lt;/p&gt;

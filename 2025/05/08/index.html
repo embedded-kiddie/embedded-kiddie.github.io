@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="１．はじめに" />
+<meta property="og:description" content="１．はじめに" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/05/08/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/05/08/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-05-08T09:18:55+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-05-08T09:18:55+09:00","datePublished":"2025-05-08T09:18:55+09:00","description":"１．はじめに","headline":"LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/05/08/"},"url":"https://embedded-kiddie.github.io/2025/05/08/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Japanese&family=Hachi+Maru+Pop&family=Mochiy+Pop+One">
+<style>
+  .noto {font-family: 'Noto Sans Japanese'; font-size: 32px;}
+  .hach {font-family: 'Hachi Maru Pop'; font-size: 32px;}
+  .moch {font-family: 'Mochiy Pop One'; font-size: 32px;}
+</style>
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-05-08T09:18:55+09:00" itemprop="datePublished">May 8, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="１はじめに">１．はじめに</h2>
+
+<p>公式ドキュメントの <a href="https://docs.lvgl.io/9.2/overview/font.html" title="Fonts &mdash; LVGL  documentation">Fonts</a> によれば、LVGL に新たにフォント組み込む方法として</p>
+
+<ul>
+  <li>① <a href="https://lvgl.io/tools/fontconverter" title="Font Converter - LVGL">Font Converter</a> で予め特定サイズのビットマップフォントを作成しておく方法</li>
+  <li>② <a href="https://freetype.org/" title="The FreeType Project">FreeType</a> でリアルタイムにビットマップフォントを作成する方法</li>
+</ul>
+
+<p>の２つが解説されています。どちらも <a href="https://ja.wikipedia.org/wiki/TrueType" title="TrueType - Wikipedia"><abbr title="True Type Font">TTF</abbr></a> または <a href="https://ja.wikipedia.org/wiki/Web_Open_Font_Format" title="Web Open Font Format - Wikipedia"><abbr title="Web Open Font Format">WOFF</abbr></a> が利用可能ですが、今回は ① の方法と <a href="https://fonts.google.com/?lang=ja_Jpan" title="Browse Fonts - Google Fonts">Google Font</a> で、日本語フォントを利用する方法を掘り下げてみました。</p>
+
+<p>想定は Arduino 環境の ESP32 で、実際の動作確認は ESP32-2432S028R（いわゆる <abbr title="Cheap Yellow Display">CYD</abbr>）と以下で行いました。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>コンポーネント</th>
+      <th>バージョン</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Arduino IDE</td>
+      <td><a href="https://github.com/arduino/arduino-ide/releases/tag/2.3.4" title="Release 2.3.4 · arduino/arduino-ide">2.3.4 (CLI 1.1.1)</a></td>
+    </tr>
+    <tr>
+      <td>ESP32 by Espressf</td>
+      <td><a href="https://github.com/espressif/arduino-esp32/releases/tag/3.2.0" title="Release Arduino Release v3.2.0 based on ESP-IDF v5.4.1 · espressif/arduino-esp32">3.2.0 (ESP-IDF v5.4.1)</a></td>
+    </tr>
+    <tr>
+      <td>LittleFS</td>
+      <td><a href="https://github.com/espressif/arduino-esp32/releases/tag/3.2.0" title="Release Arduino Release v3.2.0 based on ESP-IDF v5.4.1 · espressif/arduino-esp32">同上</a></td>
+    </tr>
+    <tr>
+      <td>arduino-littlefs-upload</td>
+      <td><a href="https://github.com/earlephilhower/arduino-littlefs-upload/releases/tag/1.5.4" title="Release Release 1.5.4 - ESP32 comment and OTA fix · earlephilhower/arduino-littlefs-upload">1.5.4</a></td>
+    </tr>
+    <tr>
+      <td>LVGL</td>
+      <td><a href="https://github.com/lvgl/lvgl/releases/tag/v9.2.2" title="Release Release v9.2.2 · lvgl/lvgl">9.2.2</a></td>
+    </tr>
+    <tr>
+      <td>LovyanGFX</td>
+      <td><a href="https://github.com/lovyan03/LovyanGFX/releases/tag/1.2.7" title="Release 1.2.7 · lovyan03/LovyanGFX">1.2.7</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="２フォント見本">２．フォント見本</h2>
+
+<p>まずは <a href="https://fonts.google.com/?lang=ja_Jpan" title="Browse Fonts - Google Fonts">Google Font</a> から適当に３つのフォントを選び、2.8 インチ LCD に表示させた結果のスクリーンショットを提示します。</p>
+
+<p>ここでの主眼は、高性能な PC での表示と <a href="https://ja.wikipedia.org/wiki/%E8%89%B2%E6%B7%B1%E5%BA%A6#%E3%83%8F%E3%82%A4%E3%82%AB%E3%83%A9%E3%83%BC%EF%BC%8815/16%E3%83%93%E3%83%83%E3%83%88%EF%BC%89" title="色深度 - Wikipedia">RGB565</a> ディスプレイの見え方の違いを示すことで、各フォントファミリーに対して３段あるサンプルテキストの上から順に、12ピクセル、14ピクセル、16ピクセルの文字を表示させています。</p>
+
+<p>元のフォントが細過ぎず太過ぎず、かつ表示するフォントの１画素当たりの階調数（<abbr title="Bit Per Pixel">bpp</abbr>）が２ビット以上、できれば bpp = 4 が見た目に望ましいことを感じてもらえればと思います。</p>
+
+<p>ただし bpp が増えれば、当然データサイズも倍々で増えるので、特に複数のフォントサイズが欲しい場合、ESP32 の Flash に収まる容量に制限する必要があります。</p>
+
+<ul>
+  <li><a href="https://fonts.google.com/noto/specimen/Noto+Sans+JP?lang=ja_Jpan" title="Noto Sans Japanese - Google Fonts">Noto Sans Japanese</a><br />
+TrueType：<span class="noto">自らに勝つ事こそ、最も難しい勝利。</span></li>
+</ul>
+
+<figure class="flex" style="margin-left:1em">
+  <a href="/images/2025/05-08/1-Noto_Sans_JP_1bit.png" title="Noto Sans Japanese (bpp=1)" data-lightbox="image">
+    <img src="/images/2025/05-08/1-Noto_Sans_JP_1bit.png" alt="Noto Sans Japanese (bpp=1)" width="320" height="240" />
+    <figcaption>Noto Sans Japanese (bpp=1)</figcaption>
+  </a>
+  <a href="/images/2025/05-08/1-Noto_Sans_JP_2bit.png" title="Noto Sans Japanese (bpp=2)" data-lightbox="image">
+    <img src="/images/2025/05-08/1-Noto_Sans_JP_2bit.png" alt="Noto Sans Japanese (bpp=2)" width="320" height="240" />
+    <figcaption>Noto Sans Japanese (bpp=2)</figcaption>
+  </a>
+  <a href="/images/2025/05-08/1-Noto_Sans_JP_4bit.png" title="Noto Sans Japanese (bpp=4)" data-lightbox="image">
+    <img src="/images/2025/05-08/1-Noto_Sans_JP_4bit.png" alt="Noto Sans Japanese (bpp=4)" width="320" height="240" />
+    <figcaption>Noto Sans Japanese (bpp=4)</figcaption>
+  </a>
+</figure>
+
+<ul>
+  <li><a href="https://fonts.google.com/specimen/Hachi+Maru+Pop?lang=ja_Jpan" title="Hachi Maru Pop - Google Fonts">Hachi Maru Pop</a><br />
+TrueType：<span class="hach">自らに勝つ事こそ、最も難しい勝利。</span></li>
+</ul>
+
+<figure class="flex" style="margin-left:1em">
+  <a href="/images/2025/05-08/5-Hachi_Maru_Pop_1bit.png" title="Hachi Maru Pop (bpp=1)" data-lightbox="image">
+    <img src="/images/2025/05-08/5-Hachi_Maru_Pop_1bit.png" alt="Hachi Maru Pop (bpp=1)" width="320" height="240" />
+    <figcaption>Hachi Maru Pop (bpp=1)</figcaption>
+  </a>
+  <a href="/images/2025/05-08/5-Hachi_Maru_Pop_2bit.png" title="Hachi Maru Pop (bpp=2)" data-lightbox="image">
+    <img src="/images/2025/05-08/5-Hachi_Maru_Pop_2bit.png" alt="Hachi Maru Pop (bpp=2)" width="320" height="240" />
+    <figcaption>Hachi Maru Pop (bpp=2)</figcaption>
+  </a>
+  <a href="/images/2025/05-08/5-Hachi_Maru_Pop_4bit.png" title="Hachi Maru Pop (bpp=4)" data-lightbox="image">
+    <img src="/images/2025/05-08/5-Hachi_Maru_Pop_4bit.png" alt="Hachi Maru Pop (bpp=4)" width="320" height="240" />
+    <figcaption>Hachi Maru Pop (bpp=4)</figcaption>
+  </a>
+</figure>
+
+<ul>
+  <li><a href="https://fonts.google.com/specimen/Mochiy+Pop+One?lang=ja_Jpan" title="Mochiy Pop One - Google Fonts">Mochiy Pop One</a><br />
+TrueType：<span class="moch">自らに勝つ事こそ、最も難しい勝利。</span></li>
+</ul>
+
+<figure class="flex" style="margin-left:1em">
+  <a href="/images/2025/05-08/6-Mochiy_Pop_One_1bit.png" title="Mochiy Pop One (bpp=1)" data-lightbox="image">
+    <img src="/images/2025/05-08/6-Mochiy_Pop_One_1bit.png" alt="Mochiy Pop One (bpp=1)" width="320" height="240" />
+    <figcaption>Mochiy Pop One (bpp=1)</figcaption>
+  </a>
+  <a href="/images/2025/05-08/6-Mochiy_Pop_One_2bit.png" title="Mochiy Pop One (bpp=2)" data-lightbox="image">
+    <img src="/images/2025/05-08/6-Mochiy_Pop_One_2bit.png" alt="Mochiy Pop One (bpp=2)" width="320" height="240" />
+    <figcaption>Mochiy Pop One (bpp=2)</figcaption>
+  </a>
+  <a href="/images/2025/05-08/6-Mochiy_Pop_One_4bit.png" title="Mochiy Pop One (bpp=4)" data-lightbox="image">
+    <img src="/images/2025/05-08/6-Mochiy_Pop_One_4bit.png" alt="Mochiy Pop One (bpp=4)" width="320" height="240" />
+    <figcaption>Mochiy Pop One (bpp=4)</figcaption>
+  </a>
+</figure>
+
+<h2 id="３lvgl-font-converter-の使い方">３．LVGL Font Converter の使い方</h2>
+
+<p>続いて <a href="https://ja.wikipedia.org/wiki/TrueType" title="TrueType - Wikipedia"><abbr title="True Type Font">TTF</abbr></a> または <a href="https://ja.wikipedia.org/wiki/Web_Open_Font_Format" title="Web Open Font Format - Wikipedia"><abbr title="Web Open Font Format">WOFF</abbr></a> からフォントのビットマップデータを作成する <a href="https://lvgl.io/tools/fontconverter" title="Font Converter - LVGL">Font Converter</a> の使い方を紹介します。</p>
+
+<h3 id="31-設定">3.1 設定</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/05-08/LVGL-FontConverter.jpg" title="LVGL Font Converter" data-lightbox="image">
+    <img src="/images/2025/05-08/LVGL-FontConverter-small.jpg" alt="LVGL Font Converter" width="600" height="490" />
+    <figcaption>LVGL Font Converter</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://docs.lvgl.io/9.2/overview/font.html" title="Fonts &mdash; LVGL  documentation">Font Converter</a> はとても便利で優れたツールですが、全部で 11 ある設定項目の使い方次第で作成されるデータサイズが大きく左右されます。</p>
+
+<p>そこで、データサイズを抑えつつ見た目も損なわないフォントデータの作成方法をご紹介したいと思います。</p>
+
+<div class="clear-both"></div>
+
+<h4 id="name">Name</h4>
+
+<p>ソースファイル中で参照する <a href="https://docs.lvgl.io/9.2/API/font/lv_font.html#_CPPv49lv_font_t" title="lv_font.h &mdash; LVGL  documentation"><code class="language-plaintext highlighter-rouge">lv_font_t</code></a> 型の変数名を設定します。当然、変数名に使用可能な文字しか使えません。また「<a href="http://akirahitosi.blog.fc2.com/blog-entry-25.html" title="LVGLで外部のフォントを読み込ませ表示させる。（日本語表示有り） - 備忘録">LVGLで外部のフォントを読み込ませ表示させる。（日本語表示有り）</a>」で解説されている通り、ここでの指定がすべて大文字化された <code class="language-plaintext highlighter-rouge">#define</code> 文が設定されるので、小文字で設定するのが吉です。</p>
+
+<h4 id="size">Size</h4>
+
+<p>作成するフォントのピクセルサイズ（高さ）を指定します。</p>
+
+<h4 id="bpp">Bpp</h4>
+
+<p>１画素あたりの階調数（<strong>B</strong>it <strong>P</strong>er <strong>P</strong>ixel）を指定します。<code class="language-plaintext highlighter-rouge">8-bit-per-pixel</code> まで指定可能ですが、RGB565 では無駄になるだけなので、<code class="language-plaintext highlighter-rouge">4-bit-per-pixel</code> 以下に設定しましょう。</p>
+
+<h4 id="fallback">Fallback</h4>
+
+<p>データに無い文字が指定された場合に表示される「□（四角）」の替わりに使う、代替フォントを変数名で指定します。例えば、半角英数字を含まないフォントを作成し、LVGL のデフォルトフォント（変数名 <code class="language-plaintext highlighter-rouge">lv_font_montserrat_14</code>）を指定することで、データサイズを削減できる場合があります。</p>
+
+<h4 id="output-format">Output format</h4>
+
+<p>作成するフォントデータの形式を、C ソースファイル、またはバイナリデータから選択します。それぞれの使い方は「<a href="#４日本語フォントの組み込みと表示方法">４．日本語フォントの組み込みと表示方法</a>」で解説します。</p>
+
+<h4 id="ttfwoff-font">TTF/WOFF font</h4>
+
+<p>元となるフォントの <code class="language-plaintext highlighter-rouge">.ttf</code> または <code class="language-plaintext highlighter-rouge">.woff</code> ファイルを指定します。</p>
+
+<h4 id="range">Range</h4>
+
+<p>作成する文字の <a href="https://ja.wikipedia.org/wiki/Unicode" title="Unicode - Wikipedia">ユニコード</a> を、範囲を指定する場合は「<code class="language-plaintext highlighter-rouge">-</code>（半角のマイナス）」で、複数を指定する場合は「<code class="language-plaintext highlighter-rouge">,</code>（半角のカンマ）」で区切って指定します。</p>
+
+<p><a href="https://qiita.com/tkymt/items/014d3da2f2ebc2c8d06e" title="TextMesh Pro　すべての日本語フォントをUnicode Rangeで作ってみよう #Unity - Qiita">Qiita の記事</a> を参考に、ユニコードの範囲と対応する文字種を整理してみました。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>ユニコード範囲</th>
+      <th>文字種</th>
+      <th>例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="emoji">🙂</span></td>
+      <td><code class="language-plaintext highlighter-rouge">0x0020-0x007</code></td>
+      <td>半角空白、半角記号、半角英数字</td>
+      <td><code class="language-plaintext highlighter-rouge">123!"#$%'(){}[]&lt;&gt;?</code></td>
+    </tr>
+    <tr>
+      <td><span class="emoji">😄</span></td>
+      <td><code class="language-plaintext highlighter-rouge">0x3040-0x30FF</code></td>
+      <td>全角空白、ひらがな、全角カナ</td>
+      <td><code class="language-plaintext highlighter-rouge">あいうえおアイウエオ</code></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">0x3280-0x33FF</code></td>
+      <td>全角特殊記号</td>
+      <td><code class="language-plaintext highlighter-rouge">㊀㊁㊂①②③㋿㎖㎝㍿</code></td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">0x4E00-0x9FF</code></td>
+      <td>CJK 統合漢字</td>
+      <td>中国、日本、韓国で使用される漢字</td>
+    </tr>
+    <tr>
+      <td><span class="emoji">😄</span></td>
+      <td><code class="language-plaintext highlighter-rouge">0xFF00-0xFF9F</code></td>
+      <td>全角記号、全角英数字、半角カナ</td>
+      <td><code class="language-plaintext highlighter-rouge">１２３！”＃＄％’（）｛｝［］＜＞？</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>顔文字は僕の推奨で、「<span class="emoji">🙂</span>」は LVGL の組み込みフォントで代替可能な文字、「<span class="emoji">😄</span>」は入れておいた方が良いと思う文字です。</p>
+
+<figure class="float-left">
+  <a href="/images/2025/05-08/SpecialSymbols.jpg" title="全角特殊記号" data-lightbox="image">
+    <img src="/images/2025/05-08/SpecialSymbols-small.jpg" alt="全角特殊記号" width="700" height="450" />
+    <figcaption>全角特殊記号</figcaption>
+  </a>
+</figure>
+
+<p><code class="language-plaintext highlighter-rouge">0x3280-0x33FF</code> の全角特殊記号は、通常でも使わないと思いますし、またどうやって入力するのか不明な文字が多いので、含めなくて良いと思う範囲です。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2025/05-08/unicode.jpg" title="日本語以外の漢字を含む区画" data-lightbox="image">
+    <img src="/images/2025/05-08/unicode-small.jpg" alt="日本語以外の漢字を含む区画" width="350" height="450" />
+    <figcaption>日本語以外の漢字を含む区画</figcaption>
+  </a>
+</figure>
+
+<p>また <code class="language-plaintext highlighter-rouge">0x4E00-0x9FF</code> の CJK 統合漢字は、「<a href="https://www.seiai.ed.jp/sys/text/csb11/chs03/s03a060.html" title="Unicode と JIS">Unicode と JIS</a>」で解説されている通り、日本語以外の「漢字」を含み、かつ（全区画のコードが埋まってるワケではありませんが…）膨大な文字数になります。</p>
+
+<p>全体のデータサイズを抑えるには、次の <strong>Symbol</strong> で必要な文字だけを指定するのがオススメです。</p>
+
+<div class="clear-both"></div>
+
+<h4 id="symbols">Symbols</h4>
+
+<p>予め表示するコンテンツが決まっていれば、ここに必要な文字を入力します。そうでない場合も、JIS や 文化庁が定めた文字セットを使うのがオススメです。ちょっと面倒でしたが、それぞれ元資料から対象の文字だけを抽出し、テキスト化したデータセットを作成しました。</p>
+
+<ul>
+  <li><a href="https://www.pcinfo.jpo.go.jp/site/3_support/pdf/zenkaku.pdf">特許庁 電子出願ソフトサポートサイト JIS-X0208-1997 コード表</a></li>
+</ul>
+
+<details style="margin-left: 1em">
+<summary>第１水準漢字 テキストデータ（2965文字）</summary>
+
+
+<figure class="highlight"><pre><code class="language-txt" data-lang="txt">亜唖娃阿哀愛挨姶逢葵茜穐悪握渥旭葦芦鯵梓圧斡扱宛姐虻飴絢綾鮎或院陰隠韻吋右宇烏羽
+迂雨卯鵜窺丑碓臼渦嘘唄欝蔚鰻姥厩浦瓜閏噂云運押旺横欧殴王翁襖鴬鴎黄岡沖荻億屋憶臆
+桶牡乙俺卸恩温穏音下化仮何魁晦械海灰界皆絵芥蟹開階貝凱劾外咳害崖慨概涯碍蓋街該鎧
+骸浬馨蛙粥刈苅瓦乾侃冠寒刊勘勧巻喚堪姦完官寛干幹患感慣憾換敢柑桓棺款歓機帰毅気汽
+畿祈季稀紀徽規記貴起軌輝飢騎鬼亀偽儀妓宜戯技擬欺犠疑供侠僑兇競共凶協匡卿叫喬境峡
+強彊怯恐恭挟教橋況狂狭矯胸脅興蕎郷掘窟沓靴轡窪熊隈粂栗繰桑鍬勲君薫訓群軍郡卦袈祁
+係傾刑兄啓圭珪型検権牽犬献研硯絹県肩見謙賢軒遣鍵険顕験鹸元原厳幻弦減源玄現絃舷后
+喉坑垢好孔孝宏工巧巷幸広庚康弘恒慌抗拘控攻昂晃更杭校梗構江洪此頃今困坤墾婚恨懇昏
+昆根梱混痕紺艮魂些佐叉唆嵯左差査沙瑳砂詐鎖察拶撮擦札殺薩雑皐鯖捌錆鮫皿晒三傘参山
+惨撒散桟燦珊産算纂蚕讃賛次滋治爾璽痔磁示而耳自蒔辞汐鹿式識鴫竺軸宍雫七叱執失嫉室
+悉湿漆宗就州修愁拾洲秀秋終繍習臭舟蒐衆襲讐蹴輯週酋酬集醜什住充十従戎勝匠升召哨商
+唱嘗奨妾娼宵将小少尚庄床廠彰承抄招掌捷昇昌昭晶松梢拭植殖燭織職色触食蝕辱尻伸信侵
+唇娠寝審心慎振新晋森榛浸深申疹真澄摺寸世瀬畝是凄制勢姓征性成政整星晴棲栖正清牲生
+盛精聖声製西誠繊羨腺舛船薦詮賎践選遷銭銑閃鮮前善漸然全禅繕膳糎噌塑岨措曾曽楚臓蔵
+贈造促側則即息捉束測足速俗属賊族続卒袖其揃存孫尊損村遜他多叩但達辰奪脱巽竪辿棚谷
+狸鱈樽誰丹単嘆坦担探旦歎淡湛炭短端箪綻耽帖帳庁弔張彫徴懲挑暢朝潮牒町眺聴脹腸蝶調
+諜超跳銚長頂鳥勅捗直朕邸鄭釘鼎泥摘擢敵滴的笛適鏑溺哲徹撤轍迭鉄典填天展店添纏甜貼
+転顛董蕩藤討謄豆踏逃透鐙陶頭騰闘働動同堂導憧撞洞瞳童胴萄道銅峠鴇匿如尿韮任妊忍認
+濡禰祢寧葱猫熱年念捻撚燃粘乃廼之埜嚢悩濃納能脳膿函箱硲箸肇筈櫨幡肌畑畠八鉢溌発醗
+髪伐罰抜筏閥鳩噺塙蛤隼伴判半反鼻柊稗匹疋髭彦膝菱肘弼必畢筆逼桧姫媛紐百謬俵彪標氷
+漂瓢票表評豹福腹複覆淵弗払沸仏物鮒分吻噴墳憤扮焚奮粉糞紛雰文聞丙併兵塀幣平法泡烹
+砲縫胞芳萌蓬蜂褒訪豊邦鋒飽鳳鵬乏亡傍剖坊妨帽忘忙房暴望某漫蔓味未魅巳箕岬密蜜湊蓑
+稔脈妙粍民眠務夢無牟矛霧鵡椋婿娘冥名命諭輸唯佑優勇友宥幽悠憂揖有柚湧涌猶猷由祐裕
+誘遊邑郵雄融夕予余与痢裏裡里離陸律率立葎掠略劉流溜琉留硫粒隆竜龍侶慮旅虜了亮僚両
+凌蓮連錬呂魯櫓炉賂路露労婁廊弄朗楼榔浪漏牢狼篭老聾蝋郎六麓禄肋録粟袷安庵按暗案闇
+鞍杏以伊位依偉囲夷委威尉惟意慰易椅為畏異移維緯胃雲荏餌叡営嬰影映曳栄永泳洩瑛盈穎
+頴英衛詠鋭液疫益駅悦謁越閲榎厭円伽価佳加可嘉夏嫁家寡科暇果架歌河火珂禍禾稼箇花苛
+茄荷華菓蝦課嘩貨垣柿蛎鈎劃嚇各廓拡撹格核殻獲確穫覚角赫較郭閣隔革学岳楽額顎掛笠樫
+汗漢澗潅環甘監看竿管簡緩缶翰肝艦莞観諌貫還鑑間閑関陥韓館舘丸含岸祇義蟻誼議掬菊鞠
+吉吃喫桔橘詰砧杵黍却客脚虐逆丘久仇休及吸宮弓急救鏡響饗驚仰凝尭暁業局曲極玉桐粁僅
+勤均巾錦斤欣欽琴禁禽筋緊芹菌衿襟契形径恵慶慧憩掲携敬景桂渓畦稽系経継繋罫茎荊蛍計
+詣警軽頚鶏芸迎鯨言諺限乎個古呼固姑孤己庫弧戸故枯湖狐糊袴股胡菰虎誇跨鈷雇顧鼓五互
+浩港溝甲皇硬稿糠紅紘絞綱耕考肯肱腔膏航荒行衡講貢購郊酵鉱砿鋼閤降裟坐座挫債催再最
+哉塞妻宰彩才採栽歳済災采犀砕砦祭斎細菜裁載際剤在酸餐斬暫残仕仔伺使刺司史嗣四士始
+姉姿子屍市師志思指支孜斯施旨枝止疾質実蔀篠偲柴芝屡蕊縞舎写射捨赦斜煮社紗者謝車遮
+蛇邪借勺尺杓灼爵柔汁渋獣縦重銃叔夙宿淑祝縮粛塾熟出術述俊峻春瞬竣舜駿准循旬楯殉淳
+樟樵沼消渉湘焼焦照症省硝礁祥称章笑粧紹肖菖蒋蕉衝裳訟証詔詳象賞醤神秦紳臣芯薪親診
+身辛進針震人仁刃塵壬尋甚尽腎訊迅陣靭笥諏須酢図厨誓請逝醒青静斉税脆隻席惜戚斥昔析
+石積籍績脊責赤跡蹟碩切拙接摂折設狙疏疎礎祖租粗素組蘇訴阻遡鼠僧創双叢倉喪壮奏爽宋
+層匝惣想捜掃挿掻太汰詑唾堕妥惰打柁舵楕陀駄騨体堆対耐岱帯待怠態戴替泰滞胎腿苔袋貸
+胆蛋誕鍛団壇弾断暖檀段男談値知地弛恥智池痴稚置致蜘遅馳築畜竹筑蓄沈珍賃鎮陳津墜椎
+槌追鎚痛通塚栂掴槻佃漬柘辻蔦綴鍔椿潰坪壷嬬紬爪吊点伝殿澱田電兎吐堵塗妬屠徒斗杜渡
+登菟賭途都鍍砥砺努度土奴怒倒党冬得徳涜特督禿篤毒独読栃橡凸突椴届鳶苫寅酉瀞噸屯惇
+敦沌豚遁頓呑曇鈍農覗蚤巴把播覇杷波派琶破婆罵芭馬俳廃拝排敗杯盃牌背肺輩配倍培媒梅
+叛帆搬斑板氾汎版犯班畔繁般藩販範釆煩頒飯挽晩番盤磐蕃蛮匪卑否妃庇廟描病秒苗錨鋲蒜
+蛭鰭品彬斌浜瀕貧賓頻敏瓶不付埠夫婦富冨布府怖扶敷弊柄並蔽閉陛米頁僻壁癖碧別瞥蔑箆
+偏変片篇編辺返遍便勉娩弁鞭保舗鋪棒冒紡肪膨謀貌貿鉾防吠頬北僕卜墨撲朴牧睦穆釦勃没
+殆堀幌奔本翻凡盆明盟迷銘鳴姪牝滅免棉綿緬面麺摸模茂妄孟毛猛盲網耗蒙儲木黙目杢勿餅
+誉輿預傭幼妖容庸揚揺擁曜楊様洋溶熔用窯羊耀葉蓉要謡踊遥陽養慾抑欲寮料梁涼猟療瞭稜
+糧良諒遼量陵領力緑倫厘林淋燐琳臨輪隣鱗麟瑠塁涙累論倭和話歪賄脇惑枠鷲亙亘鰐詫藁蕨
+椀湾碗腕萎衣謂違遺医井亥域育郁磯一壱溢逸稲茨芋鰯允印咽員因姻引飲淫胤蔭園堰奄宴延
+怨掩援沿演炎焔煙燕猿縁艶苑薗遠鉛鴛塩於汚甥凹央奥往応迦過霞蚊俄峨我牙画臥芽蛾賀雅
+餓駕介会解回塊壊廻快怪悔恢懐戒拐改橿梶鰍潟割喝恰括活渇滑葛褐轄且鰹叶椛樺鞄株兜竃
+蒲釜鎌噛鴨栢茅萱巌玩癌眼岩翫贋雁頑顔願企伎危喜器基奇嬉寄岐希幾忌揮机旗既期棋棄朽
+求汲泣灸球究窮笈級糾給旧牛去居巨拒拠挙渠虚許距鋸漁禦魚亨享京謹近金吟銀九倶句区狗
+玖矩苦躯駆駈駒具愚虞喰空偶寓遇隅串櫛釧屑屈劇戟撃激隙桁傑欠決潔穴結血訣月件倹倦健
+兼券剣喧圏堅嫌建憲懸拳捲伍午呉吾娯後御悟梧檎瑚碁語誤護醐乞鯉交佼侯候倖光公功効勾
+厚口向項香高鴻剛劫号合壕拷濠豪轟麹克刻告国穀酷鵠黒獄漉腰甑忽惚骨狛込材罪財冴坂阪
+堺榊肴咲崎埼碕鷺作削咋搾昨朔柵窄策索錯桜鮭笹匙冊刷死氏獅祉私糸紙紫肢脂至視詞詩試
+誌諮資賜雌飼歯事似侍児字寺慈持時酌釈錫若寂弱惹主取守手朱殊狩珠種腫趣酒首儒受呪寿
+授樹綬需囚収周準潤盾純巡遵醇順処初所暑曙渚庶緒署書薯藷諸助叙女序徐恕鋤除傷償鉦鍾
+鐘障鞘上丈丞乗冗剰城場壌嬢常情擾条杖浄状畳穣蒸譲醸錠嘱埴飾逗吹垂帥推水炊睡粋翠衰
+遂酔錐錘随瑞髄崇嵩数枢趨雛据杉椙菅頗雀裾窃節説雪絶舌蝉仙先千占宣専尖川戦扇撰栓栴
+泉浅洗染潜煎煽旋穿箭線操早曹巣槍槽漕燥争痩相窓糟総綜聡草荘葬蒼藻装走送遭鎗霜騒像
+増憎退逮隊黛鯛代台大第醍題鷹滝瀧卓啄宅托択拓沢濯琢託鐸濁諾茸凧蛸只逐秩窒茶嫡着中
+仲宙忠抽昼柱注虫衷註酎鋳駐樗瀦猪苧著貯丁兆凋喋寵釣鶴亭低停偵剃貞呈堤定帝底庭廷弟
+悌抵挺提梯汀碇禎程締艇訂諦蹄逓凍刀唐塔塘套宕島嶋悼投搭東桃梼棟盗淘湯涛灯燈当痘祷
+等答筒糖統到奈那内乍凪薙謎灘捺鍋楢馴縄畷南楠軟難汝二尼弐迩匂賑肉虹廿日乳入楳煤狽
+買売賠陪這蝿秤矧萩伯剥博拍柏泊白箔粕舶薄迫曝漠爆縛莫駁麦彼悲扉批披斐比泌疲皮碑秘
+緋罷肥被誹費避非飛樋簸備尾微枇毘琵眉美斧普浮父符腐膚芙譜負賦赴阜附侮撫武舞葡蕪部
+封楓風葺蕗伏副復幅服圃捕歩甫補輔穂募墓慕戊暮母簿菩倣俸包呆報奉宝峰峯崩庖抱捧放方
+朋摩磨魔麻埋妹昧枚毎哩槙幕膜枕鮪柾鱒桝亦俣又抹末沫迄侭繭麿万慢満尤戻籾貰問悶紋門
+匁也冶夜爺耶野弥矢厄役約薬訳躍靖柳薮鑓愉愈油癒沃浴翌翼淀羅螺裸来莱頼雷洛絡落酪乱
+卵嵐欄濫藍蘭覧利吏履李梨理璃類令伶例冷励嶺怜玲礼苓鈴隷零霊麗齢暦歴列劣烈裂廉恋憐
+漣煉簾練聯</code></pre></figure>
+
+
+</details>
+
+<details style="margin-left: 1em">
+<summary>第２水準漢字 テキストデータ（3390文字）</summary>
+
+
+<figure class="highlight"><pre><code class="language-txt" data-lang="txt">弌丐丕个丱丶丼丿乂乖乘亂亅豫亊舒弍于亞亟亠亢亰亳亶从仍仄仆仂仗僉僊傳僂僖僞僥僭僣
+僮價僵儉儁儂儖儕儔儚儡儺儷儼儻儿兀兒兌兔兢竸辧劬劭劼劵勁勍勗勞勣勦飭勠勳勵勸勹匆
+匈甸匍匐匏匕匚匣匯匱匳匸區咫哂咤咾咼哘哥哦唏唔哽哮哭哺哢唹啀啣啌售啜啅啖啗唸唳啝
+喙喀咯喊圈國圍圓團圖嗇圜圦圷圸坎圻址坏坩埀垈坡坿垉垓垠垳垤垪垰埃埆埔埒奸妁妝佞侫
+妣妲姆姨姜妍姙姚娥娟娑娜娉娚婀婬婉娵娶婢婪媚媼媾嫋嫂屐屏孱屬屮乢屶屹岌岑岔妛岫岻
+岶岼岷峅岾峇峙峩峽峺峭嶌峪崋崕崗嵜廖廣廝廚廛廢廡廨廩廬廱廳廰廴廸廾弃弉彝彜弋弑弖
+弩弭弸彁彈彌彎弯悄悛悖悗悒悧悋惡悸惠惓悴忰悽惆悵惘慍愕愆惶惷愀惴惺愃愡惻惱愍愎戞
+戡截戮戰戲戳扁扎扞扣扛扠扨扼抂抉找抒抓抖拔抃抔拗拑抻拏拿拆擔據擒擅擇撻擘擂擱擧舉
+擠擡抬擣擯攬擶擴擲擺攀擽攘攜攅攤攣攫攴攵攷曄暸曖曚曠昿曦曩曰曵曷朏朖朞朦朧霸朮朿
+朶杁朸朷杆杞杠杙杣杤枉杰棔棧棕椶椒椄棗棣椥棹棠棯椨椪椚椣椡棆楹楷楜楸楫楔楾楮椹楴
+椽楙椰檗蘗檻櫃櫂檸檳檬櫞櫑櫟檪櫚櫪櫻欅蘖櫺欒欖鬱欟欸欷盜欹飮歇歃歉歐沺泛泯泙泪洟
+衍洶洫洽洸洙洵洳洒洌浣涓浤浚浹浙涎涕濤涅淹渕渊涵淇漾漓滷澆潺潸澁澀潯潛濳潭澂潼潘
+澎澑濂潦澳澣澡澤澹濆澪濟濕濬濔濘燹燿爍爐爛爨爭爬爰爲爻爼爿牀牆牋牘牴牾犂犁犇犒犖
+犢犧犹犲狃狆狄瓠瓣瓧瓩瓮瓲瓰瓱瓸瓷甄甃甅甌甎甍甕甓甞甦甬甼畄畍畊畉畛畆畚畩畤癲癶
+癸發皀皃皈皋皎皖皓皙皚皰皴皸皹皺盂盍盖盒盞盡盥盧盪蘯盻眈眇磧磚磽磴礇礒礑礙礬礫祀
+祠祗祟祚祕祓祺祿禊禝禧齋禪禮禳禹禺秉秕秧筺笄筍笋筌筅筵筥筴筧筰筱筬筮箝箘箟箍箜箚
+箋箒箏筝箙篋篁篌篏箴篆紂紜紕紊絅絋紮紲紿紵絆絳絖絎絲絨絮絏絣經綉絛綏絽綛綺綮綣綵
+緇綽罅罌罍罎罐网罕罔罘罟罠罨罩罧罸羂羆羃羈羇羌羔羞羝羚羣羯羲羹羮羶隋腆脾腓腑胼腱
+腮腥腦腴膃膈膊膀膂膠膕膤膣腟膓膩膰膵膾膸膽臀臂膺茵茴茖茲茱荀茹荐荅茯茫茗茘莅莚莪
+莟莢莖茣莎莇莊荼莵荳荵莠莉莨菴蕁蘂蕋蕕薀薤薈薑薊薨蕭薔薛藪薇薜蕷蕾薐藉薺藏薹藐藕
+藝藥藜藹蘊蘓蝓蝣蝪蠅螢螟螂螯蟋螽蟀蟐雖螫蟄螳蟇蟆螻蟯蟲蟠蠏蠍蟾蟶蟷蠎蟒蠑蠖襦襤襭
+襪襯襴襷襾覃覈覊覓覘覡覩覦覬覯覲覺覽覿觀觚觜觝觧觴觸訃訖譟譬譯譴譽讀讌讎讒讓讖讙
+讚谺豁谿豈豌豎豐豕豢豬豸豺貂貉貅貊貍貎蹇蹉蹌蹐蹈蹙蹤蹠踪蹣蹕蹶蹲蹼躁躇躅躄躋躊躓
+躑躔躙躪躡躬躰軆躱躾遏遐遑遒逎遉逾遖遘遞遨遯遶隨遲邂遽邁邀邊邉邏邨邯邱邵郢郤扈郛
+鄂錙錢錚錣錺錵錻鍜鍠鍼鍮鍖鎰鎬鎭鎔鎹鏖鏗鏨鏥鏘鏃鏝鏐鏈鏤鐚鐔鐓鐃陝陟陦陲陬隍隘隕
+隗險隧隱隲隰隴隶隸隹雎雋雉雍襍雜霍雕雹霄霆霈霓顱顴顳颪颯颱颶飄飃飆飩飫餃餉餒餔餘
+餡餝餞餤餠餬餮餽餾饂饉饅饐饋髻鬆鬘鬚鬟鬢鬣鬥鬧鬨鬩鬪鬮鬯鬲魄魃魏魍魎魑魘魴鮓鮃鮑
+鮖鮗鮟鮠鮨鵝鵞鵤鵑鵐鵙鵲鶉鶇鶫鵯鵺鶚鶤鶩鶲鷄鷁鶻鶸鶺鷆鷏鷂鷙鷓鷸鷦鷭鷯鷽堯槇遙瑤
+凜熙仞仭仟价伉佚估佛佝佗佇佶侈侏侘佻佩佰侑佯來侖儘俔俟俎俘俛俑俚俐俤兩兪兮冀冂囘
+册冉冏冑冓冕冖冤冦冢冩冪冫决冱冲冰况冽凅凉凛几處凩凭卆卅丗卉卍凖卞卩卮夘卻卷厂厖
+厠厦厥厮厰厶參簒雙叟曼燮叮叨叭叺吁吽喟啻啾喘喞單啼喃喩喇喨嗚嗅嗟嗄嗜嗤嗔嘔嗷嘖嗾
+嗽嘛嗹噎噐營嘴嘶嘲嘸埓堊埖埣堋堙堝塲堡塢塋塰毀塒堽塹墅墹墟墫墺壞墻墸墮壅壓壑壗壙
+壘壥媽嫣嫗嫦嫩嫖嫺嫻嬌嬋嬖嬲嫐嬪嬶嬾孃孅孀孑孕孚孛孥孩孰孳孵學斈孺宀崟崛崑崔崢崚
+崙崘嵌嵒嵎嵋嵬嵳嵶嶇嶄嶂嶢嶝嶬嶮嶽嶐嶷嶼巉巍巓巒巖巛彑彖彗彙彡彭彳彷徃徂彿徊很徑
+徇從徙徘徠徨徭徼忖忻忤忸忱忝悳忿怡恠慇愾愨愧慊愿愼愬愴愽慂慄慳慷慘慙慚慫慴慯慥慱
+慟慝慓慵憙憖憇憬憔憚拈拜拌拊拂拇抛拉挌拮拱挧挂挈拯拵捐挾捍搜捏掖掎掀掫捶掣掏掉掟
+掵捫收攸畋效敖敕敍敘敞敝敲數斂斃變斛斟斫斷旃旆旁旄旌旒旛旙无旡旱杲昊枩杼杪枌枋枦
+枡枅枷柯枴柬枳柩枸柤柞柝柢柮枹柎柆柧檜栞框栩桀桍栲桎楡楞楝榁楪榲榮槐榿槁槓榾槎寨
+槊槝榻槃榧樮榑榠榜榕榴槞槨樂樛槿權槹歙歔歛歟歡歸歹歿殀殄殃殍殘殕殞殤殪殫殯殲殱殳
+殷殼毆毋毓毟毬毫毳毯淦涸淆淬淞淌淨淒淅淺淙淤淕淪淮渭湮渮渙湲湟渾渣湫渫湶湍渟湃渺
+湎渤濱濮濛瀉瀋濺瀑瀁瀏濾瀛瀚潴瀝瀘瀟瀰瀾瀲灑灣炙炒炯烱炬炸炳炮烟烋烝狎狒狢狠狡狹
+狷倏猗猊猜猖猝猴猯猩猥猾獎獏默獗獪獨獰獸獵獻獺珈玳珎畧畫畭畸當疆疇畴疊疉疂疔疚疝
+疥疣痂疳痃疵疽疸疼疱痍痊痒痙痣痞痾痿眄眩眤眞眥眦眛眷眸睇睚睨睫睛睥睿睾睹瞎瞋瞑瞠
+瞞瞰瞶瞹瞿瞼瞽瞻矇矍秬秡秣稈稍稘稙稠稟禀稱稻稾稷穃穗穉穡穢穩龝穰穹穽窈窗窕窘窖窩
+竈窰篝篩簑簔篦篥籠簀簇簓篳篷簗簍篶簣簧簪簟簷簫簽籌籃籔籏籀籐籘籟籤籖綫總綢綯緜綸
+綟綰緘緝緤緞緻緲緡縅縊縣縡縒縱縟縉縋縢繆繦縻縵縹繃縷羸譱翅翆翊翕翔翡翦翩翳翹飜耆
+耄耋耒耘耙耜耡耨耿耻聊聆聒聘聚聟聢聨臉臍臑臙臘臈臚臟臠臧臺臻臾舁舂舅與舊舍舐舖舩
+舫舸舳艀艙艘艝艚艟艤萓菫菎菽萃菘萋菁菷萇菠菲萍萢萠莽萸蔆菻葭萪萼蕚蒄葷葫蒭葮蒂葩
+葆萬蘋藾藺蘆蘢蘚蘰蘿虍乕虔號虧虱蚓蚣蚩蚪蚋蚌蚶蚯蛄蛆蚰蛉蠣蚫蛔蛞蛩蛬蠕蠢蠡蠱蠶蠹
+蠧蠻衄衂衒衙衞衢衫袁衾袞衵衽袵衲袂袗袒袮袙袢袍袤袰袿訐訌訛訝訥訶詁詛詒詆詈詼詭詬
+詢誅誂誄誨誡誑誥誦誚誣諄諍諂諚諫諳諧貔豼貘戝貭貪貽貲貳貮貶賈賁賤賣賚賽賺賻贄贅贊
+贇贏贍贐齎贓賍贔贖赧軅軈軋軛軣軼軻軫軾輊輅輕輒輙輓輜輟輛輌輦輳輻輹轅轂輾轌轉轆轎
+轗轜鄒鄙鄲鄰酊酖酘酣酥酩酳酲醋醉醂醢醫醯醪醵醴醺釀釁釉釋釐釖釟釡釛釼鐇鐐鐶鐫鐵鐡
+鐺鑁鑒鑄鑛鑠鑢鑞鑪鈩鑰鑵鑷鑽鑚鑼鑾钁鑿閂閇閊閔閖閘閙霎霑霏霖霙霤霪霰霹霽霾靄靆靈
+靂靉靜靠靤靦靨勒靫靱靹鞅靼鞁靺鞆鞋鞏饑饒饌饕馗馘馥馭馮馼駟駛駝駘駑駭駮駱駲駻駸騁
+騏騅駢騙騫騷驅驂驀驃鮴鯀鯊鮹鯆鯏鯑鯒鯣鯢鯤鯔鯡鰺鯲鯱鯰鰕鰔鰉鰓鰌鰆鰈鰒鰊鰄鰮鰛鰥
+鰤鰡鸚鸛鸞鹵鹹鹽麁麈麋麌麒麕麑麝麥麩麸麪麭靡黌黎黏黐黔黜點黝黠黥黨黯俥倚倨倔倪倥
+倅伜俶倡倩倬俾俯們倆偃假會偕偐偈做偖偬偸傀傚傅傴傲凰凵凾刄刋刔刎刧刪刮刳刹剏剄剋
+剌剞剔剪剴剩剳剿剽劍劔劒剱劈劑辨呀听吭吼吮吶吩吝呎咏呵咎呟呱呷呰咒呻咀呶咄咐咆哇
+咢咸咥咬哄哈咨噫噤嘯噬噪嚆嚀嚊嚠嚔嚏嚥嚮嚶嚴囂嚼囁囃囀囈囎囑囓囗囮囹圀囿圄圉壜壤
+壟壯壺壹壻壼壽夂夊夐夛梦夥夬夭夲夸夾竒奕奐奎奚奘奢奠奧奬奩它宦宸寃寇寉寔寐寤實寢
+寞寥寫寰寶寳尅將專對尓尠尢尨尸尹屁屆屎屓巫已巵帋帚帙帑帛帶帷幄幃幀幎幗幔幟幢幤幇
+幵并幺麼广庠廁廂廈廐廏怙怐怩怎怱怛怕怫怦怏怺恚恁恪恷恟恊恆恍恣恃恤恂恬恫恙悁悍惧
+悃悚憊憑憫憮懌懊應懷懈懃懆憺懋罹懍懦懣懶懺懴懿懽懼懾戀戈戉戍戌戔戛捩掾揩揀揆揣揉
+插揶揄搖搴搆搓搦搶攝搗搨搏摧摯摶摎攪撕撓撥撩撈撼昃旻杳昵昶昴昜晏晄晉晁晞晝晤晧晨
+晟晢晰暃暈暎暉暄暘暝曁暹曉暾暼梳栫桙档桷桿梟梏梭梔條梛梃檮梹桴梵梠梺椏梍桾椁棊椈
+棘椢椦棡椌棍槲槧樅榱樞槭樔槫樊樒櫁樣樓橄樌橲樶橸橇橢橙橦橈樸樢檐檍檠檄檢檣麾氈氓
+气氛氤氣汞汕汢汪沂沍沚沁沛汾汨汳沒沐泄泱泓沽泗泅泝沮沱沾滿渝游溂溪溘滉溷滓溽溯滄
+溲滔滕溏溥滂溟潁漑灌滬滸滾漿滲漱滯漲滌烙焉烽焜焙煥煕熈煦煢煌煖煬熏燻熄熕熨熬燗熹
+熾燒燉燔燎燠燬燧燵燼玻珀珥珮珞璢琅瑯琥珸琲琺瑕琿瑟瑙瑁瑜瑩瑰瑣瑪瑶瑾璋璞璧瓊瓏瓔
+珱痼瘁痰痺痲痳瘋瘍瘉瘟瘧瘠瘡瘢瘤瘴瘰瘻癇癈癆癜癘癡癢癨癩癪癧癬癰矗矚矜矣矮矼砌砒
+礦砠礪硅碎硴碆硼碚碌碣碵碪碯磑磆磋磔碾碼磅磊磬窶竅竄窿邃竇竊竍竏竕竓站竚竝竡竢竦
+竭竰笂笏笊笆笳笘笙笞笵笨笶筐籥籬籵粃粐粤粭粢粫粡粨粳粲粱粮粹粽糀糅糂糘糒糜糢鬻糯
+糲糴糶糺紆縲縺繧繝繖繞繙繚繹繪繩繼繻纃緕繽辮繿纈纉續纒纐纓纔纖纎纛纜缸缺聳聲聰聶
+聹聽聿肄肆肅肛肓肚肭冐肬胛胥胙胝胄胚胖脉胯胱脛脩脣脯腋艢艨艪艫舮艱艷艸艾芍芒芫芟
+芻芬苡苣苟苒苴苳苺莓范苻苹苞茆苜茉苙葯葹萵蓊葢蒹蒿蒟蓙蓍蒻蓚蓐蓁蓆蓖蒡蔡蓿蓴蔗蔘
+蔬蔟蔕蔔蓼蕀蕣蕘蕈蛟蛛蛯蜒蜆蜈蜀蜃蛻蜑蜉蜍蛹蜊蜴蜿蜷蜻蜥蜩蜚蝠蝟蝸蝌蝎蝴蝗蝨蝮蝙
+袱裃裄裔裘裙裝裹褂裼裴裨裲褄褌褊褓襃褞褥褪褫襁襄褻褶褸襌褝襠襞諤諱謔諠諢諷諞諛謌
+謇謚諡謖謐謗謠謳鞫謦謫謾謨譁譌譏譎證譖譛譚譫赭赱赳趁趙跂趾趺跏跚跖跌跛跋跪跫跟跣
+跼踈踉跿踝踞踐踟蹂踵踰踴蹊轢轣轤辜辟辣辭辯辷迚迥迢迪迯邇迴逅迹迺逑逕逡逍逞逖逋逧
+逶逵逹迸釵釶鈞釿鈔鈬鈕鈑鉞鉗鉅鉉鉤鉈銕鈿鉋鉐銜銖銓銛鉚鋏銹銷鋩錏鋺鍄錮閠閨閧閭閼
+閻閹閾闊濶闃闍闌闕闔闖關闡闥闢阡阨阮阯陂陌陏陋陷陜陞鞐鞜鞨鞦鞣鞳鞴韃韆韈韋韜韭齏
+韲竟韶韵頏頌頸頤頡頷頽顆顏顋顫顯顰騾驕驍驛驗驟驢驥驤驩驫驪骭骰骼髀髏髑髓體髞髟髢
+髣髦髯髫髮髴髱髷鰰鱇鰲鱆鰾鱚鱠鱧鱶鱸鳧鳬鳰鴉鴈鳫鴃鴆鴪鴦鶯鴣鴟鵄鴕鴒鵁鴿鴾鵆鵈黴
+黶黷黹黻黼黽鼇鼈皷鼕鼡鼬鼾齊齒齔齣齟齠齡齦齧齬齪齷齲齶龕龜龠</code></pre></figure>
+
+
+</details>
+
+<ul>
+  <li><a href="https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/kanji/" title="文化庁｜国語施策・日本語教育｜国語施策情報｜内閣告示・内閣訓令｜常用漢字表（平成22年内閣告示第2号）">文化庁 常用漢字 平成22年内閣告示第2号</a></li>
+</ul>
+
+<details style="margin-left: 1em">
+<summary>常用漢字 テキストデータ（2136文字）</summary>
+
+
+<figure class="highlight"><pre><code class="language-txt" data-lang="txt">亜哀挨愛曖悪握圧扱宛嵐安案暗以衣位囲医依委威為畏胃尉異移萎偉椅彙意違維慰遺緯域育
+一壱逸茨芋引印因咽姻員院淫陰飲隠韻右宇羽雨唄鬱畝浦運雲永泳英映栄営詠影鋭衛易疫益
+液駅悦越謁閲円延沿炎怨宴媛援園煙猿遠鉛塩演縁艶汚王凹央応往押旺欧殴桜翁奥横岡屋億
+憶臆虞乙俺卸音恩温穏下化火加可仮何花佳価果河苛科架夏家荷華菓貨渦過嫁暇禍靴寡歌箇
+稼課蚊牙瓦我画芽賀雅餓介回灰会快戒改怪拐悔海界皆械絵開階塊楷解潰壊懐諧貝外劾害崖
+涯街慨蓋該概骸垣柿各角拡革格核殻郭覚較隔閣確獲嚇穫学岳楽額顎掛潟括活喝渇割葛滑褐
+轄且株釜鎌刈干刊甘汗缶完肝官冠巻看陥乾勘患貫寒喚堪換敢棺款間閑勧寛幹感漢慣管関歓
+監緩憾還館環簡観韓艦鑑丸含岸岩玩眼頑顔願企伎危机気岐希忌汽奇祈季紀軌既記起飢鬼帰
+基寄規亀喜幾揮期棋貴棄毀旗器畿輝機騎技宜偽欺義疑儀戯擬犠議菊吉喫詰却客脚逆虐九久
+及弓丘旧休吸朽臼求究泣急級糾宮救球給嗅窮牛去巨居拒拠挙虚許距魚御漁凶共叫狂京享供
+協況峡挟狭恐恭胸脅強教郷境橋矯鏡競響驚仰暁業凝曲局極玉巾斤均近金菌勤琴筋僅禁緊錦
+謹襟吟銀区句苦駆具惧愚空偶遇隅串屈掘窟熊繰君訓勲薫軍郡群兄刑形系径茎係型契計恵啓
+掲渓経蛍敬景軽傾携継詣慶憬稽憩警鶏芸迎鯨隙劇撃激桁欠穴血決結傑潔月犬件見券肩建研
+県倹兼剣拳軒健険圏堅検嫌献絹遣権憲賢謙鍵繭顕験懸元幻玄言弦限原現舷減源厳己戸古呼
+固股虎孤弧故枯個庫湖雇誇鼓錮顧五互午呉後娯悟碁語誤護口工公勾孔功巧広甲交光向后好
+江考行坑孝抗攻更効幸拘肯侯厚恒洪皇紅荒郊香候校耕航貢降高康控梗黄喉慌港硬絞項溝鉱
+構綱酵稿興衡鋼講購乞号合拷剛傲豪克告谷刻国黒穀酷獄骨駒込頃今困昆恨根婚混痕紺魂墾
+懇左佐沙査砂唆差詐鎖座挫才再災妻采砕宰栽彩採済祭斎細菜最裁債催塞歳載際埼在材剤財
+罪崎作削昨柵索策酢搾錯咲冊札刷刹拶殺察撮擦雑皿三山参桟蚕惨産傘散算酸賛残斬暫士子
+支止氏仕史司四市矢旨死糸至伺志私使刺始姉枝祉肢姿思指施師恣紙脂視紫詞歯嗣試詩資飼
+誌雌摯賜諮示字寺次耳自似児事侍治持時滋慈辞磁餌璽鹿式識軸七𠮟失室疾執湿嫉漆質実芝
+写社車舎者射捨赦斜煮遮謝邪蛇尺借酌釈爵若弱寂手主守朱取狩首殊珠酒腫種趣寿受呪授需
+儒樹収囚州舟秀周宗拾秋臭修袖終羞習週就衆集愁酬醜蹴襲十汁充住柔重従渋銃獣縦叔祝宿
+淑粛縮塾熟出述術俊春瞬旬巡盾准殉純循順準潤遵処初所書庶暑署緒諸女如助序叙徐除小升
+少召匠床抄肖尚招承昇松沼昭宵将消症祥称笑唱商渉章紹訟勝掌晶焼焦硝粧詔証象傷奨照詳
+彰障憧衝賞償礁鐘上丈冗条状乗城浄剰常情場畳蒸縄壌嬢錠譲醸色拭食植殖飾触嘱織職辱尻
+心申伸臣芯身辛侵信津神唇娠振浸真針深紳進森診寝慎新審震薪親人刃仁尽迅甚陣尋腎須図
+水吹垂炊帥粋衰推酔遂睡穂随髄枢崇数据杉裾寸瀬是井世正生成西声制姓征性青斉政星牲省
+凄逝清盛婿晴勢聖誠精製誓静請整醒税夕斥石赤昔析席脊隻惜戚責跡積績籍切折拙窃接設雪
+摂節説舌絶千川仙占先宣専泉浅洗染扇栓旋船戦煎羨腺詮践箋銭潜線遷選薦繊鮮全前善然禅
+漸膳繕狙阻祖租素措粗組疎訴塑遡礎双壮早争走奏相荘草送倉捜挿桑巣掃曹曽爽窓創喪痩葬
+装僧想層総遭槽踪操燥霜騒藻造像増憎蔵贈臓即束足促則息捉速側測俗族属賊続卒率存村孫
+尊損遜他多汰打妥唾堕惰駄太対体耐待怠胎退帯泰堆袋逮替貸隊滞態戴大代台第題滝宅択沢
+卓拓託濯諾濁但達脱奪棚誰丹旦担単炭胆探淡短嘆端綻誕鍛団男段断弾暖談壇地池知値恥致
+遅痴稚置緻竹畜逐蓄築秩窒茶着嫡中仲虫沖宙忠抽注昼柱衷酎鋳駐著貯丁弔庁兆町長挑帳張
+彫眺釣頂鳥朝貼超腸跳徴嘲潮澄調聴懲直勅捗沈珍朕陳賃鎮追椎墜通痛塚漬坪爪鶴低呈廷弟
+定底抵邸亭貞帝訂庭逓停偵堤提程艇締諦泥的笛摘滴適敵溺迭哲鉄徹撤天典店点展添転塡田
+伝殿電斗吐妬徒途都渡塗賭土奴努度怒刀冬灯当投豆東到逃倒凍唐島桃討透党悼盗陶塔搭棟
+湯痘登答等筒統稲踏糖頭謄藤闘騰同洞胴動堂童道働銅導瞳峠匿特得督徳篤毒独読栃凸突届
+屯豚頓貪鈍曇丼那奈内梨謎鍋南軟難二尼弐匂肉虹日入乳尿任妊忍認寧熱年念捻粘燃悩納能
+脳農濃把波派破覇馬婆罵拝杯背肺俳配排敗廃輩売倍梅培陪媒買賠白伯拍泊迫剝舶博薄麦漠
+縛爆箱箸畑肌八鉢発髪伐抜罰閥反半氾犯帆汎伴判坂阪板版班畔般販斑飯搬煩頒範繁藩晩番
+蛮盤比皮妃否批彼披肥非卑飛疲秘被悲扉費碑罷避尾眉美備微鼻膝肘匹必泌筆姫百氷表俵票
+評漂標苗秒病描猫品浜貧賓頻敏瓶不夫父付布扶府怖阜附訃負赴浮婦符富普腐敷膚賦譜侮武
+部舞封風伏服副幅復福腹複覆払沸仏物粉紛雰噴墳憤奮分文聞丙平兵併並柄陛閉塀幣弊蔽餅
+米壁璧癖別蔑片辺返変偏遍編弁便勉歩保哺捕補舗母募墓慕暮簿方包芳邦奉宝抱放法泡胞俸
+倣峰砲崩訪報蜂豊飽褒縫亡乏忙坊妨忘防房肪某冒剖紡望傍帽棒貿貌暴膨謀頰北木朴牧睦僕
+墨撲没勃堀本奔翻凡盆麻摩磨魔毎妹枚昧埋幕膜枕又末抹万満慢漫未味魅岬密蜜脈妙民眠矛
+務無夢霧娘名命明迷冥盟銘鳴滅免面綿麺茂模毛妄盲耗猛網目黙門紋問冶夜野弥厄役約訳薬
+躍闇由油喩愉諭輸癒唯友有勇幽悠郵湧猶裕遊雄誘憂融優与予余誉預幼用羊妖洋要容庸揚揺
+葉陽溶腰様瘍踊窯養擁謡曜抑沃浴欲翌翼拉裸羅来雷頼絡落酪辣乱卵覧濫藍欄吏利里理痢裏
+履璃離陸立律慄略柳流留竜粒隆硫侶旅虜慮了両良料涼猟陵量僚領寮療瞭糧力緑林厘倫輪隣
+臨瑠涙累塁類令礼冷励戻例鈴零霊隷齢麗暦歴列劣烈裂恋連廉練錬呂炉賂路露老労弄郎朗浪
+廊楼漏籠六録麓論和話賄脇惑枠湾腕</code></pre></figure>
+
+
+</details>
+
+<p>Font Converter の良い点は、例えば JIS 第１水準と第２水準をマルっとコピペしても、ちゃんと全部を処理してくれるところです。<code class="language-plaintext highlighter-rouge">0x4E00-0x9FF</code> の全区画を指定するより、よっぽど先方のサーバーに負荷を掛けずに軽量のフォントデータが得られます <span class="emoji">👍</span></p>
+
+<h4 id="その他の設定">その他の設定</h4>
+
+<p>ちょうど中間に３つのチェックボックスがありますが、僕は試していませんので悪しからず。ここでは公式の <a href="https://docs.lvgl.io/9.2/overview/font.html#subpixel-rendering" title="Fonts &mdash; LVGL  documentation">解説</a> を意訳するにとどめさせて下さい <span class="emoji">😅</span></p>
+
+<ul>
+  <li>
+    <p><strong>Font compression</strong><br />
+bpp が大きい場合に有効にすると良い様ですが、レンダリングが 30% 程度遅くなります。</p>
+  </li>
+  <li>
+    <p><strong>Horizontal subpixel rendering</strong><br />
+LCD の RGB 各画素が水平方向に並んでいる場合に効果のある <a href="https://ja.wikipedia.org/wiki/%E3%82%B5%E3%83%96%E3%83%94%E3%82%AF%E3%82%BB%E3%83%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%AA%E3%83%B3%E3%82%B0" title="サブピクセルレンダリング - Wikipedia">サブピクセルレンダリング</a> を有効にします。水平方向の解像度が仮想的に３倍相当になるとのことです。</p>
+  </li>
+  <li>
+    <p><strong>アイコンのグレースケール化</strong><br />
+PC では <span class="emoji">🍁</span> とか <span class="emoji">🙆‍♂️</span> などカラー化されたアイコン文字が入力出来ますが、どうやらコレらをグレースケール化するチェックボックスの様です。当然カラー情報を含んだフォントファイルが必要と思います。</p>
+  </li>
+</ul>
+
+<h3 id="32-flash-メモリ容量の見積もり">3.2 Flash メモリ容量の見積もり</h3>
+
+<p>現在試作中の <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/tree/main/LVGL/LVGL_Arduino_MP3Player" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_MP3Player at main · embedded-kiddie/Arduino-CYD-2432S028R">MP3Player</a> 用に、幾つかのパターンでバイナリファイルを作成し、容量を見積もってみました。表中の 「<span class="emoji">😄</span>」は推奨する文字範囲を示し、<strong>Fallback</strong> にはそれぞれ代替フォントとして <code class="language-plaintext highlighter-rouge">lv_font_montserrat_12</code>、<code class="language-plaintext highlighter-rouge">lv_font_montserrat_14</code> を指定しています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ユニコード範囲 (bpp)</th>
+      <th style="text-align: right">12ピクセル 容量</th>
+      <th style="text-align: right">14ピクセル 容量</th>
+      <th style="text-align: right">合計容量</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="emoji">😄</span>＋0x4E00-0x9FFF (bpp = 2)</td>
+      <td style="text-align: right">588,604</td>
+      <td style="text-align: right">735,428</td>
+      <td style="text-align: right">1,324,032</td>
+    </tr>
+    <tr>
+      <td><span class="emoji">😄</span>＋JIS 第１水準＋第２水準 (bpp = 4)</td>
+      <td style="text-align: right">535,264</td>
+      <td style="text-align: right">686,324</td>
+      <td style="text-align: right">1,221,588</td>
+    </tr>
+    <tr>
+      <td><span class="emoji">😄</span>＋JIS 第１水準 (bpp = 4)</td>
+      <td style="text-align: right">260,480</td>
+      <td style="text-align: right">333,684</td>
+      <td style="text-align: right">594,164</td>
+    </tr>
+    <tr>
+      <td><span class="emoji">😄</span>＋文化庁 常用漢字 (bpp = 4)</td>
+      <td style="text-align: right">193,228</td>
+      <td style="text-align: right">247,092</td>
+      <td style="text-align: right">440,320</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>１番目のパターンでは、パーティションを <code class="language-plaintext highlighter-rouge">Huge APP (3MB No OTA/1MB SPIFFS)</code> に設定しても <code class="language-plaintext highlighter-rouge">APP</code> 領域には収まりませんでした。</p>
+
+<p>２番目のパターンは何とか <code class="language-plaintext highlighter-rouge">APP</code> 領域に収まりましたが、曲名やアーティスト名、アルバム名には第１水準までで十分かと思いますし、一般的には常用漢字のセットで十分カモです。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Sketch</span> <span class="n">uses</span> <span class="mi">3121430</span> <span class="n">bytes</span> <span class="o">(</span><span class="mi">99</span><span class="o">%)</span> <span class="n">of</span> <span class="n">program</span> <span class="n">storage</span> <span class="n">space</span><span class="o">.</span> <span class="nc">Maximum</span> <span class="n">is</span> <span class="mi">3145728</span> <span class="n">bytes</span><span class="o">.</span>
+<span class="nc">Global</span> <span class="n">variables</span> <span class="n">use</span> <span class="mi">118508</span> <span class="n">bytes</span> <span class="o">(</span><span class="mi">36</span><span class="o">%)</span> <span class="n">of</span> <span class="n">dynamic</span> <span class="n">memory</span><span class="o">,</span> <span class="n">leaving</span> <span class="mi">209172</span> <span class="n">bytes</span> <span class="k">for</span> <span class="n">local</span> <span class="n">variables</span><span class="o">.</span> <span class="nc">Maximum</span> <span class="n">is</span> <span class="mi">327680</span> <span class="n">bytes</span><span class="o">.</span></code></pre></figure>
+
+<h2 id="４作成したフォントの組み込み方法">４．作成したフォントの組み込み方法</h2>
+
+<p>いよいよ、タイトルに掲げた３つの組み込み方法についての説明です。それぞれにメリット／デメリットがあるので、実行環境に合った方法を選択して下さい。</p>
+
+<h3 id="41-lvgl-ライブラリに組み込む">4.1. LVGL ライブラリに組み込む</h3>
+
+<p>作成した C ソースファイルに定義された <a href="https://docs.lvgl.io/9.2/API/font/lv_font.html#_CPPv49lv_font_t" title="lv_font.h &mdash; LVGL  documentation"><code class="language-plaintext highlighter-rouge">lv_font_t</code></a> 型の変数を組み込む方法です。</p>
+
+<p>この方法のメリットは、複数のプロジェクトで共通に作成したフォントが利用可能になることですが、LVGL のバージョンアップ毎に組み込み直す必要があることがデメリットとなります。</p>
+
+<ul>
+  <li><strong>生成した C ソースファイルの修正と配置</strong><br />
+ファイル先頭の <code class="language-plaintext highlighter-rouge">#include "lvgl/lvgl.h"</code> を <code class="language-plaintext highlighter-rouge">#include "../../lvgl.h"</code> に修正し、LVGL のライブラリフォルダ <a href="https://github.com/lvgl/lvgl/tree/master/src/font" title="lvgl/src/font at master · lvgl/lvgl">lvgl/src/core/font/</a> の下に配置します。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">ifdef</span> <span class="no">LV_LVGL_H_INCLUDE_SIMPLE</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"lvgl.h"</span>
+<span class="err">#</span><span class="k">else</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"../../lvgl.h"</span> <span class="c1">// &lt;-- "lvgl/lvgl.h" を修正</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<ul>
+  <li><strong>フォント変数の宣言</strong><br />
+<a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L607-L616" title="lvgl/lv_conf_template.h at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">lv_conf.h</code></a> 中のシンボル <code class="language-plaintext highlighter-rouge">LV_FONT_CUSTOM_DECLARE</code> に作成したフォント変数の宣言を追加します。次の例では <code class="language-plaintext highlighter-rouge">noto_sans_jp_12</code> と <code class="language-plaintext highlighter-rouge">noto_sans_jp_14</code> を追加しています。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** Optionally declare custom fonts here.
+ *
+ *  You can use any of these fonts as the default font too and they will be available
+ *  globally.  Example:
+ *
+ *  @code
+ *  #define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(my_font_1) LV_FONT_DECLARE(my_font_2)
+ *  @endcode
+ */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_FONT_CUSTOM_DECLARE</span>  <span class="nf">LV_FONT_DECLARE</span><span class="o">(</span><span class="n">noto_sans_jp_12</span><span class="o">)</span> <span class="no">LV_FONT_DECLARE</span><span class="o">(</span><span class="n">noto_sans_jp_14</span><span class="o">)</span></code></pre></figure>
+
+<h3 id="42-スケッチ毎に組み込む">4.2. スケッチ毎に組み込む</h3>
+
+<p>前述の「<a href="#lvgl-ライブラリに組み込む">LVGL ライブラリに組み込む</a>」とはメリット／デメリットが真逆になります。</p>
+
+<ul>
+  <li><strong>生成した C ソースファイルの修正と配置</strong><br />
+<code class="language-plaintext highlighter-rouge">lvgl.h</code> が正しく読み込まれるよう、ファイル先頭で <code class="language-plaintext highlighter-rouge">LV_LVGL_H_INCLUDE_SIMPLE</code> の定義を追加し、修正後のファイルを <code class="language-plaintext highlighter-rouge">.ino</code> ファイルと共にスケッチフォルダに配置します。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">LV_LVGL_H_INCLUDE_SIMPLE</span>  <span class="c1">// &lt;-- 追加する</span>
+<span class="err">#</span><span class="n">ifdef</span>  <span class="no">LV_LVGL_H_INCLUDE_SIMPLE</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"lvgl.h"</span>
+<span class="err">#</span><span class="k">else</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"lvgl/lvgl.h"</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<ul>
+  <li><strong>フォント変数の宣言</strong><br />
+使用するフォントをヘッダファイルなどで宣言します。例えば変数 <code class="language-plaintext highlighter-rouge">noto_sans_jp_12</code> と <code class="language-plaintext highlighter-rouge">noto_sans_jp_14</code> を追加する場合は次の様にします。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="no">LV_FONT_DECLARE</span><span class="o">(</span><span class="n">noto_sans_jp_12</span><span class="o">);</span>
+<span class="no">LV_FONT_DECLARE</span><span class="o">(</span><span class="n">noto_sans_jp_14</span><span class="o">);</span></code></pre></figure>
+
+<h3 id="43-ファイルシステムを利用する">4.3. ファイルシステムを利用する</h3>
+
+<p>３つ目は、<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/LittleFS" title="arduino-esp32/libraries/LittleFS at master · espressif/arduino-esp32">LittleFS</a> や <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">SD</a> にフォントの <code class="language-plaintext highlighter-rouge">.bin</code> データを配置し、ランタイム時に RAM 上に展開する方法です。少量の <code class="language-plaintext highlighter-rouge">.bin</code> データであれば SRAM 上に展開することもあり得ますが、PSRAM を使うのが現実的でしょう。</p>
+
+<p>ここでは少々面倒な LittleFS を使う方法を、順を追って説明します。</p>
+
+<ul>
+  <li>
+    <p><strong>フォントデータを準備する</strong><br />
+<code class="language-plaintext highlighter-rouge">.ino</code> ファイルのあるスケッチフォルダに <code class="language-plaintext highlighter-rouge">data</code> フォルダを作成し、生成したバイナリの <code class="language-plaintext highlighter-rouge">.bin</code> ファイルを入れます。</p>
+  </li>
+  <li>
+    <p><strong>フォントデータを Flash に転送する</strong><br />
+パーティション設定で <code class="language-plaintext highlighter-rouge">.bin</code> データを格納するのに十分なサイズの <code class="language-plaintext highlighter-rouge">SPIFFS</code> 領域を確保し、<a href="https://github.com/earlephilhower/arduino-littlefs-upload/releases/tag/1.5.4" title="Release Release 1.5.4 - ESP32 comment and OTA fix · earlephilhower/arduino-littlefs-upload">arduino-littlefs-upload</a> などで <code class="language-plaintext highlighter-rouge">data</code> 中のフォントデータを Flash に転送します。</p>
+  </li>
+</ul>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>LittleFS 用 Flash 転送プラグインについて</summary>
+
+
+<p>今回 LittleFS の扱いが初めてだったので、プラグインを色々と調べました。厄介なことに主要なプラグインが複数見つり、またその派生も多数あるため、更新状況や「<a href="https://docs.github.com/ja/repositories/viewing-activity-and-data-for-your-repository/understanding-connections-between-repositories" title="リポジトリ間の接続を理解する - GitHub Docs"><strong>Insights</strong> &gt; <strong>Network</strong></a>」などを確認し、使うプラグインを決めました。</p>
+
+<ul>
+  <li>
+    <p><a href="https://github.com/earlephilhower/arduino-littlefs-upload" title="earlephilhower/arduino-littlefs-upload: Build and uploads LittleFS filesystems for the Arduino-Pico RP2040, RP2350, ESP8266, and ESP32 cores under Arduino IDE 2.2.1 or higher">https://github.com/earlephilhower/arduino-littlefs-upload</a><br />
+<a href="https://forum.arduino.cc/t/list-of-plugins-compatible-with-arduino-ide-2-0/1264298" title="List of plugins compatible with Arduino IDE 2.0 - IDE 2.x - Arduino Forum">Arduino のフォーラム</a> で紹介され、<a href="https://github.com/MicSG-dev/list-of-compatible-plugins-with-arduino-ide-2-x" title="MicSG-dev/list-of-compatible-plugins-with-arduino-ide-2-x: List of plugins compatible with Arduino IDE 2.0">Arduino IDE 2.x 互換プラグインのリスト</a> に掲載されたプラグイン。</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/me-no-dev/arduino-esp32fs-plugin" title="me-no-dev/arduino-esp32fs-plugin: Arduino plugin for uploading files to ESP32 file system">https://github.com/me-no-dev/arduino-esp32fs-plugin</a><br />
+Espressif の中の人？ <a href="https://github.com/espressif/arduino-esp32" title="espressif/arduino-esp32: Arduino core for the ESP32">ESP32 のコア開発</a> でよく見かける人が開発したプラグイン。</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/lorol/arduino-esp32fs-plugin" title="lorol/arduino-esp32fs-plugin: Arduino plugin for uploading files to ESP32 file system">https://github.com/lorol/arduino-esp32fs-plugin</a><br />
+LittleFS の元々の開発者？ <code class="language-plaintext highlighter-rouge">me-no-dev</code> のプラグインをフォークしたバージョン。</p>
+  </li>
+</ul>
+
+<p>僕は１番目の <a href="https://github.com/earlephilhower/arduino-littlefs-upload/releases/tag/1.5.4" title="Release Release 1.5.4 - ESP32 comment and OTA fix · earlephilhower/arduino-littlefs-upload">arduino-littlefs-upload</a> をチョイスしました。以下そのインストール方法と使い方です。</p>
+
+<ol>
+  <li>
+    <p>一旦 Arduino IDE を終了します。</p>
+  </li>
+  <li>
+    <p>最新版の <code class="language-plaintext highlighter-rouge">.vsix</code> ファイルをダウンロードし、<a href="https://support.arduino.cc/hc/en-us/articles/4415103213714-Find-sketches-libraries-board-cores-and-other-files-on-your-computer#configuration-folder-(.arduinoide)" title="Find sketches, libraries, board cores, and other files on your computer &ndash; Arduino Help Center"><code class="language-plaintext highlighter-rouge">.arduinoIDE</code> フォルダ</a> 下の<code class="language-plaintext highlighter-rouge">plugins</code> フォルダ（無ければ作成）に <code class="language-plaintext highlighter-rouge">.vsix</code> ファイルを入れます。</p>
+  </li>
+  <li>
+    <p>IDE の再起動後、該当のスケッチを開き、キーボードショートカット <code><kbd><strong>Ctrl</strong></kbd></code>＋<code><kbd><strong>Shift</strong></kbd></code>＋<code><kbd><strong>P</strong></kbd></code>（Mac の場合は <code><kbd><strong>⌘</strong></kbd></code>＋<code><kbd><strong>Shift</strong></kbd></code>＋<code><kbd><strong>P</strong></kbd></code>）で <a href="https://support.arduino.cc/hc/en-us/articles/4402771781522-Change-text-and-display-size-settings-in-Arduino-IDE#change-settings-in-user-or-workspace-settings" title="Change text and display size settings in Arduino IDE &ndash; Arduino Help Center">コマンドパレット</a> を表示させます。  <img src="/images/2025/05-08/LittleFS1.jpg" title="コマンドパレット" alt="コマンドパレット" width="1200" height="750" /></p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">Upload LittleFS to Pico/ESP8266/ESP32</code> を選択し、<code class="language-plaintext highlighter-rouge">data</code> フォルダ中のファイルを Flash に転送します。  <img src="/images/2025/05-08/LittleFS2.jpg" title="コマンドパレット" alt="コマンドパレット" width="1200" height="750" /></p>
+  </li>
+</ol>
+
+<p>転送時にシリアルモニタが開いていると失敗するので、閉じておきましょう。</p>
+
+<p>また「ボード情報が得れない」、「<code class="language-plaintext highlighter-rouge">data</code> フォルダが未定義」などのエラーが生じた場合、一旦他のボードタイプ（任意）を開き再び元のボードタイプに戻す → IDE を再起動するなどして、転送に必要な情報を IDE に再設定させます。</p>
+
+<p>僕の場合は、コマンドパレットにプラグインが現れず、パソコンを再起動したら直った、なんてこともありました <span class="emoji">😅</span></p>
+
+</details>
+
+</div>
+
+<ul>
+  <li><strong>LittleFS 用ファイルシステムを LVGL に設定する</strong><br />
+LVGL ではストレージデバイスの物理層を抽象化した <a href="https://docs.lvgl.io/9.2/overview/fs.html" title="File system &mdash; LVGL  documentation">ファイルシステム</a> を構築することができ、各デバイスをアルファベット１文字の「ドライブレター」で区別します。この仕組みを有効にするため、<a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L875-L880" title="lvgl/lv_conf_template.h at master · lvgl/lvgl">lv_conf.h</a> で以下の設定を行います。（<strong>注：</strong><a href="https://github.com/lvgl/lvgl/blob/release/v9.2/lv_conf_template.h#L761-L765" title="lvgl/lv_conf_template.h at release/v9.2 · lvgl/lvgl">v9.2 の lv_conf.h</a> では <code class="language-plaintext highlighter-rouge">LV_FS_ARDUINO_ESP_LITTLEFS_PATH</code> はまだ未設定で、v9.3 以降向けと思われます）</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** API for Arduino LittleFs. */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_FS_ARDUINO_ESP_LITTLEFS</span> <span class="mi">1</span>          <span class="c1">// &lt;-- 有効化する</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_USE_FS_ARDUINO_ESP_LITTLEFS</span>
+    <span class="err">#</span><span class="n">define</span> <span class="no">LV_FS_ARDUINO_ESP_LITTLEFS_LETTER</span> <span class="sc">'L'</span> <span class="c1">// &lt;-- LittleFSを識別する任意のアルファベット</span>
+    <span class="err">#</span><span class="n">define</span> <span class="no">LV_FS_ARDUINO_ESP_LITTLEFS_PATH</span> <span class="s">""</span>    <span class="c1">// &lt;-- ドライブのルートから作業フォルダまでのパス</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<ul>
+  <li><strong>PSRAM を使用する場合の設定をする</strong><br />
+少し古いですが、<a href="https://github.com/lvgl/lvgl/issues/3244#issuecomment-1089198153" title="ESP32 PSRAM configure for LVGL  · Issue #3244 · lvgl/lvgl">ESP32 PSRAM configure for LVGL #3244</a> に寄せられた情報が v9.2 でも有効で、<a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L77-L83" title="lvgl/lv_conf_template.h at master · lvgl/lvgl">lv_conf.h</a> に <a href="https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-psram.h#L38" title="arduino-esp32/cores/esp32/esp32-hal-psram.h at master · espressif/arduino-esp32">ps_malloc()</a> の設定を追加します。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** Set an address for the memory pool instead of allocating it as a normal array. Can be in external SRAM too. */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_MEM_ADR</span> <span class="mi">0</span>     <span class="cm">/**&lt; 0: unused*/</span>
+<span class="cm">/* Instead of an address give a memory allocator that will be called to get a memory pool for LVGL. E.g. my_malloc */</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_MEM_ADR</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="err">#</span><span class="n">define</span> <span class="no">LV_MEM_POOL_INCLUDE</span> <span class="o">&lt;</span><span class="n">esp32</span><span class="o">-</span><span class="n">hal</span><span class="o">-</span><span class="n">psram</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span> <span class="c1">// &lt;-- ココを修正</span>
+    <span class="err">#</span><span class="n">define</span> <span class="no">LV_MEM_POOL_ALLOC</span>   <span class="n">ps_malloc</span>           <span class="c1">// &lt;-- ココを修正</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<ul>
+  <li><strong>フォントデータをメモリに展開する</strong><br />
+次のコード例の参考に <code class="language-plaintext highlighter-rouge">lv_font_t</code> 型のデータを作成します。</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">lv_font_t</span> <span class="o">*</span><span class="n">my_font</span> <span class="o">=</span> <span class="n">lv_binfont_create</span><span class="o">(</span><span class="s">"L:/noto_sans_jp_12.bin"</span><span class="o">);</span>
+<span class="k">if</span><span class="o">(</span><span class="n">my_font</span> <span class="o">==</span> <span class="no">NULL</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
+
+<span class="cm">/* 作成したフォントをスタイルに反映する（表示中はフォントデータをキープすること）*/</span>
+
+<span class="cm">/* 表示が終了し、フォントデータが不要になったら解放できる */</span>
+<span class="n">lv_binfont_destroy</span><span class="o">(</span><span class="n">my_font</span><span class="o">);</span></code></pre></figure>
+
+<h3 id="44-サンプルプログラム">4.4. サンプルプログラム</h3>
+
+<p>冒頭に示したフォント見本を表示するプログラムを <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/tree/main/LVGL/LVGL_Arduino_FontManager" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FontManager at main · embedded-kiddie/Arduino-CYD-2432S028R">LVGL_Arduino_FontManager</a> に上げてあります。ヤッツケで作ったので実用的ではありませんが、「<a href="#42-スケッチ毎に組み込む">4.2. スケッチ毎に組み込む</a>」と「<a href="#43-ファイルシステムを利用する">4.3. ファイルシステムを利用する</a>」を試しているので、部分的には参考になると思います。</p>
+
+<p>ただ PSRAM が使えない <abbr title="Cheap Yellow Display">CYD</abbr> で試しているため、LittleFS 利用時のフォントデータは SRAM 上に展開しています（LVGL オリジナルの <code class="language-plaintext highlighter-rouge">lv_malloc()</code> が使われているハズ）。</p>
+
+<h2 id="終わりに">終わりに…</h2>
+
+<figure class="float-left">
+  <a href="/images/2025/05-08/FontForge.jpg" title="Font Forge" data-lightbox="image">
+    <img src="/images/2025/05-08/FontForge-small.jpg" alt="Font Forge" width="600" height="330" />
+    <figcaption>Font Forge</figcaption>
+  </a>
+</figure>
+
+<p>余談ですが、<code class="language-plaintext highlighter-rouge">.ttf</code> ファイルの中身を覗くには <a href="https://fontforge.org/" title="FontForge Open Source Font Editor">FontForge</a> が便利でした。今回紹介した文字以外にも面白い文字が見つかるカモです。</p>
+
+<div class="clear-both"></div>
+
+<p>さて、<a href="/2025/04/24/" title="ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編｜Embedded Kiddie">前回</a> でオーディオファイルの再生を、今回で曲名やアーティスト名の日本語表示ができました。</p>
+
+<p>絵心のない僕なのでへっぽこな GUI ですが、<a href="https://squareline.io/" title="SquareLine Studio - Design and build UIs with ease">SquareLine Studio</a> の 30 日トライアル期間内で何とかテンプレート的なコードの生成も出来ました。現在は少しずつ中身を埋めているところです <span class="emoji">🎶</span></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/04/24/" title="前の記事：ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編">← ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/05/08/",this.page.identifier="/2025/05/08/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/05/08/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/05/08/";this.page.identifier="/2025/05/08/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
