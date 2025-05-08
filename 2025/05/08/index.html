@@ -190,7 +190,7 @@ TrueType：<span class="moch">自らに勝つ事こそ、最も難しい勝利�
   </a>
 </figure>
 
-<p><a href="https://docs.lvgl.io/9.2/overview/font.html" title="Fonts &mdash; LVGL  documentation">Font Converter</a> はとても便利で優れたツールですが、全部で 11 ある設定項目の使い方次第で作成されるデータサイズが大きく左右されます。</p>
+<p><a href="https://lvgl.io/tools/fontconverter" title="Font Converter - LVGL">Font Converter</a> はとても便利で優れたツールですが、全部で 11 ある設定項目の使い方次第で作成されるデータサイズが大きく左右されます。</p>
 
 <p>そこで、データサイズを抑えつつ見た目も損なわないフォントデータの作成方法をご紹介したいと思います。</p>
 
@@ -214,7 +214,7 @@ TrueType：<span class="moch">自らに勝つ事こそ、最も難しい勝利�
 
 <h4 id="output-format">Output format</h4>
 
-<p>作成するフォントデータの形式を、C ソースファイル、またはバイナリデータから選択します。それぞれの使い方は「<a href="#４日本語フォントの組み込みと表示方法">４．日本語フォントの組み込みと表示方法</a>」で解説します。</p>
+<p>作成するフォントデータの形式を、C ソースファイル、またはバイナリデータから選択します。それぞれの使い方は「<a href="#４作成したフォントの組み込み方法">４．作成したフォントの組み込み方法</a>」で解説します。</p>
 
 <h4 id="ttfwoff-font">TTF/WOFF font</h4>
 
@@ -653,7 +653,7 @@ PC では <span class="emoji">🍁</span> とか <span class="emoji">🙆‍♂�
 
 <h3 id="42-スケッチ毎に組み込む">4.2. スケッチ毎に組み込む</h3>
 
-<p>前述の「<a href="#lvgl-ライブラリに組み込む">LVGL ライブラリに組み込む</a>」とはメリット／デメリットが真逆になります。</p>
+<p>前述の「<a href="#41-lvgl-ライブラリに組み込む">4.1. LVGL ライブラリに組み込む</a>」とはメリット／デメリットが真逆になります。</p>
 
 <ul>
   <li><strong>生成した C ソースファイルの修正と配置</strong><br />
@@ -736,7 +736,7 @@ LittleFS の元々の開発者？ <code class="language-plaintext highlighter-ro
 
 <p>また「ボード情報が得れない」、「<code class="language-plaintext highlighter-rouge">data</code> フォルダが未定義」などのエラーが生じた場合、一旦他のボードタイプ（任意）を開き再び元のボードタイプに戻す → IDE を再起動するなどして、転送に必要な情報を IDE に再設定させます。</p>
 
-<p>僕の場合は、コマンドパレットにプラグインが現れず、パソコンを再起動したら直った、なんてこともありました <span class="emoji">😅</span></p>
+<p>またある時はコマンドパレットにプラグインが現れず、パソコンを再起動したら直った、なんてこともありました <span class="emoji">😅</span></p>
 
 </details>
 
@@ -814,9 +814,7 @@ LVGL ではストレージデバイスの物理層を抽象化した <a href="ht
       <a href="/" title="Home に戻る">Home に戻る</a>
     </p>    
   </div>
-<div id="disqus_thread"></div>
-  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/05/08/",this.page.identifier="/2025/05/08/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/05/08/" hidden></a>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2025/05/08/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2025/05/08/" hidden></a>
 </article>
 
       </div>
