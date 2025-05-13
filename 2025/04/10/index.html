@@ -228,7 +228,7 @@ The callback need not call <code class="language-plaintext highlighter-rouge">lv
     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
   <span class="o">}</span>
 
-  <span class="c1">// コア１に転送タスクを生成し、即座に起動する</span>
+  <span class="c1">// コア０に転送タスクを生成し、即座に起動する</span>
   <span class="n">bool</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">xTaskCreatePinnedToCore</span><span class="o">(</span>
       <span class="n">flush_task</span><span class="o">,</span> <span class="s">"flush_task"</span><span class="o">,</span>
       <span class="no">FLUSH_TASK_STACK_SZ</span><span class="o">,</span>  <span class="c1">// The stack size</span>
