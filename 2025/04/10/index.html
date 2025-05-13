@@ -210,7 +210,7 @@ The callback need not call <code class="language-plaintext highlighter-rouge">lv
   <span class="o">}</span>
 <span class="o">}</span>
 
-<span class="c1">// LVGL による画像メモリの更新をブロックする関数</span>
+<span class="c1">// 画像データの転送が完了するまで待機する（＝ブロックされる）関数</span>
 <span class="kd">static</span> <span class="kt">void</span> <span class="nf">flush_wait</span><span class="o">(</span><span class="n">lv_display_t</span> <span class="o">*</span><span class="n">disp</span><span class="o">)</span> <span class="o">{</span>
   <span class="c1">// 転送終了が通知されるまで待機する</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">xSemaphoreTake</span><span class="o">(</span><span class="n">semHandle</span><span class="o">,</span> <span class="n">portMAX_DELAY</span><span class="o">)</span> <span class="o">!=</span> <span class="n">pdTRUE</span><span class="o">)</span> <span class="o">{</span>
