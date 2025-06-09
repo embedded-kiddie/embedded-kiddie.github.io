@@ -625,7 +625,7 @@ PC では <span class="emoji">🍁</span> とか <span class="emoji">🙆‍♂�
 <p>この方法のメリットは、複数のプロジェクトで共通に作成したフォントが利用可能になることですが、LVGL のバージョンアップ毎に組み込み直す必要があることがデメリットとなります。</p>
 
 <ul>
-  <li><strong>生成した C ソースファイルの修正と配置</strong><br />
+  <li><strong>Font Converter で生成した C ソースファイルの修正と配置</strong><br />
 ファイル先頭の <code class="language-plaintext highlighter-rouge">#include "lvgl/lvgl.h"</code> を <code class="language-plaintext highlighter-rouge">#include "../../lvgl.h"</code> に修正し、LVGL のライブラリフォルダ <a href="https://github.com/lvgl/lvgl/tree/master/src/font" title="lvgl/src/font at master · lvgl/lvgl">lvgl/src/core/font/</a> の下に配置します。</li>
 </ul>
 
@@ -656,7 +656,7 @@ PC では <span class="emoji">🍁</span> とか <span class="emoji">🙆‍♂�
 <p>前述の「<a href="#41-lvgl-ライブラリに組み込む">4.1. LVGL ライブラリに組み込む</a>」とはメリット／デメリットが真逆になります。</p>
 
 <ul>
-  <li><strong>生成した C ソースファイルの修正と配置</strong><br />
+  <li><strong>Font Converter で生成した C ソースファイルの修正と配置</strong><br />
 <code class="language-plaintext highlighter-rouge">lvgl.h</code> が正しく読み込まれるよう、ファイル先頭で <code class="language-plaintext highlighter-rouge">LV_LVGL_H_INCLUDE_SIMPLE</code> の定義を追加し、修正後のファイルを <code class="language-plaintext highlighter-rouge">.ino</code> ファイルと共にスケッチフォルダに配置します。</li>
 </ul>
 
