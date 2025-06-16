@@ -8,6 +8,21 @@
     
       
       <item>
+        <title>LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法</title>
+        
+          <description>&lt;h2 id=&quot;はじめに&quot;&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;&lt;abbr title=&quot;Cheap Yellow Display&quot;&gt;CYD&lt;/abbr&gt; で現在作成中の MP3 プレイヤーで、SD カードに保存したアルバムのカバー写真を表示したく、悪戦苦闘してました。&lt;/p&gt;
+</description>
+        
+        <pubDate>Mon, 16 Jun 2025 12:04:20 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/06/16/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/06/16/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など</title>
         
           <description>&lt;h2 id=&quot;１はじめに&quot;&gt;１．はじめに&lt;/h2&gt;

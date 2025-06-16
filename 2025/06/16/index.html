@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="はじめに CYD で現在作成中の MP3 プレイヤーで、SD カードに保存したアルバムのカバー写真を表示したく、悪戦苦闘してました。" />
+<meta property="og:description" content="はじめに CYD で現在作成中の MP3 プレイヤーで、SD カードに保存したアルバムのカバー写真を表示したく、悪戦苦闘してました。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/06/16/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/06/16/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-06-16T12:04:20+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-06-16T12:04:20+09:00","datePublished":"2025-06-16T12:04:20+09:00","description":"はじめに CYD で現在作成中の MP3 プレイヤーで、SD カードに保存したアルバムのカバー写真を表示したく、悪戦苦闘してました。","headline":"LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/06/16/"},"url":"https://embedded-kiddie.github.io/2025/06/16/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-06-16T12:04:20+09:00" itemprop="datePublished">Jun 16, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="はじめに">はじめに</h2>
+<p><abbr title="Cheap Yellow Display">CYD</abbr> で現在作成中の MP3 プレイヤーで、SD カードに保存したアルバムのカバー写真を表示したく、悪戦苦闘してました。</p>
+
+<p><a href="https://lvgl.io/" title="LVGL — Light and Versatile Embedded Graphics Library">LVGL</a> には <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">ESP32 標準の SD ライブラリ</a> で <code class="language-plaintext highlighter-rouge">.bmp</code> や <code class="language-plaintext highlighter-rouge">.jpg</code>、<code class="language-plaintext highlighter-rouge">.png</code> などの <a href="https://docs.lvgl.io/master/details/main-modules/fs.html#use-drives-for-images" title="File System (lv_fs_drv) - LVGL 9.3 documentation">画像ファイルをデコードする機能</a> がありますが、残念ながらファイル名が英数字だけとか 8 文字以内（拡張子を除く）とかの制限付きです（また何より遅い！）。そこで <a href="https://github.com/greiman/SdFat" title="greiman/SdFat: Arduino FAT16/FAT32 exFAT Library">SdFat</a> 用のドライバを作成することにしました。</p>
+
+<p>ドライバの作成自体は LVGL が標準装備する <a href="https://github.com/lvgl/lvgl/blob/master/src/libs/fsdrv/lv_fs_arduino_sd.cpp" title="lvgl/src/libs/fsdrv/lv_fs_arduino_sd.cpp at master · lvgl/lvgl">SD ライブラリ用ドライバ</a> を元にすればそう難しくないのですが、MP3 プレイヤー向けにはもう１つクリアすべき課題があります。</p>
+
+<h2 id="ストリーミング再生とレンダリングの両立">ストリーミング再生とレンダリングの両立</h2>
+
+<p>「<a href="/2025/04/03/" title="ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（１）｜Embedded Kiddie">ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（１）</a>」で分析した通り、LVGL ではレンダリング用のバッファを画面全体の 1/10 のサイズに留める事で省メモリを実現しています。</p>
+
+<figure class="float-left">
+  <a href="/images/2025/06-16/rendering.jpg" title="分割されたレンダリング領域" data-lightbox="image">
+    <img src="/images/2025/06-16/rendering-small.jpg" alt="分割されたレンダリング領域" width="298" height="225" />
+    <figcaption>分割されたレンダリング領域</figcaption>
+  </a>
+</figure>
+
+<p>このことは、例えば１枚の画像が割り当てられたウィジェットをレンダリングするのに、複数回そのリソースを読み込む必要があることを意味します。画像データが Flash 上にある場合は十分早い速度で読み込むことが可能ですが、SD カード上にある場合は、その読み込み速度が問題となります。</p>
+
+<div class="clear-both"></div>
+
+<p>さらに MP3 プレイヤーの場合、曲のストリーミング再生中に別セクタの画像ファイルを時分割で読み込むといった芸当ができないため、新たな課題が生じます。</p>
+
+<p>この課題を LVGL のデモ <a href="https://github.com/lvgl/lvgl/tree/master/demos/music" title="lvgl/demos/music at master · lvgl/lvgl">music</a> で説明すると次の様になります。</p>
+
+<ul>
+  <li>曲の再生中に、スワイプでプレイリストを表示する GUI の実装を想定します。</li>
+  <li>再生開始前に SD カードから画像（下図の <strong style="color:red">赤枠</strong>）をウィジェットに読み込みます。</li>
+  <li>画面遷移中も同ウィジェットを更新するため、SD カードへのアクセスが発生します。</li>
+  <li>するとストリーミング再生が中断し、エラー割り込みが発生、プログラムが落ちます。</li>
+</ul>
+
+<figure class="flex">
+  <a href="/images/2025/06-16/screen-transition.jpg" title="再生中にプレイリストに遷移" data-lightbox="image">
+    <img class="simple" src="/images/2025/06-16/screen-transition.jpg" alt="再生中にプレイリストに遷移" width="1200" height="400" />
+    <figcaption style="min-width:600px">再生中にウィジェットを更新するとストリーミングが中断する！</figcaption>
+  </a>
+</figure>
+
+<p>この課題をやっつけるには、一度読み込んだ画像データを何らかの方法で内部にキャッシュすることが必要で、LVGL では以下の２つの方法が考えられます。</p>
+
+<ol>
+  <li>
+    <p><strong><a href="https://docs.lvgl.io/master/details/widgets/canvas.html" title="Canvas (lv_canvas) - LVGL 9.3 documentation">Canvas</a> ウィジェットを使う</strong><br />
+  <a href="https://github.com/Bodmer/TFT_eSPI?tab=readme-ov-file#sprites" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">TFT_eSPI</a> や <a href="https://github.com/lovyan03/LovyanGFX?tab=readme-ov-file#%E4%BD%BF%E3%81%84%E6%96%B9-how-to-use" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> で言う “スプライト” に相当するウィジェットです。読み込んだ画像データを静的に確保したバッファに保存し、<code class="language-plaintext highlighter-rouge">lv_canvas_set_buffer()</code> でキャンバスのウィジェットに割り当てます。ただし RGB565 の画像でも、縦×横×２バイトと、それなりにメモリを消費します。</p>
+  </li>
+  <li>
+    <p><strong>RAM 上にメモリファイルシステムを作る</strong><br />
+  適度に圧縮した jpeg のファイルイメージをメモリ上に作成し On The Fly でデコードします。LVGL ではデコードに <a href="https://elm-chan.org/fsw/tjpgd/" title="TJpgDec - Tiny JPEG Decompressor">TJpgDec</a> が使えるので、メモリのフットプリントも小さく、1. より省メモリを実現できる可能性があります。</p>
+  </li>
+</ol>
+
+<p>今回は、LVGL や MP3 を再生する <a href="https://github.com/hexeguitar/ESP32_TFT_PIO/tree/main/Examples/CYD28_BaseProject/lib/CYD_Audio" title="ESP32_TFT_PIO/Examples/CYD28_BaseProject/lib/CYD_Audio at main · hexeguitar/ESP32_TFT_PIO">ESP32 I2S audio library</a> が結構メモリを消費するので、2. の方法で実現することにしました。</p>
+
+<h2 id="sdfat-を使ったファイルシステムの作成">SdFat を使ったファイルシステムの作成</h2>
+
+<p>LVGL では ESP32 用に <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/LittleFS" title="arduino-esp32/libraries/LittleFS at master · espressif/arduino-esp32">LittleFS</a> や <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">SD ライブラリ</a> を抽象化する <a href="https://docs.lvgl.io/master/details/main-modules/fs.html" title="File System (lv_fs_drv) - LVGL 9.3 documentation">ファイルシステム</a> が標準で備わっています。そこでまずは 同ライブラリ用ドライバ <a href="https://github.com/lvgl/lvgl/blob/master/src/libs/fsdrv/lv_fs_arduino_sd.cpp" title="lvgl/src/libs/fsdrv/lv_fs_arduino_sd.cpp at master · lvgl/lvgl">lv_fs_arduino_sd.cpp</a> を SdFat 用に移植し動作を確認します。移植自体は、次のメソッドを SdFat 用に改修すれば OK です。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">fs_open()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">fs_close()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">fs_read()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">fs_seek()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">fs_tell()</code></li>
+</ul>
+
+<p>ただし移植に際し一番困ったのは、<a href="https://github.com/lvgl/lvgl/blob/master/src/libs/fsdrv/lv_fs_arduino_sd.cpp#L53-L83" title="lvgl/src/libs/fsdrv/lv_fs_arduino_sd.cpp at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">fs_open()</code></a> の次のコードです。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">fs_open</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">path</span><span class="o">,</span> <span class="n">lv_fs_mode_t</span> <span class="n">mode</span><span class="o">)</span>
+<span class="o">{</span>
+<span class="o">...</span>
+    <span class="nc">File</span> <span class="n">file</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">flags</span><span class="o">);</span> <span class="c1">// ローカル変数に指定ファイルのディスクリプタを設定する</span>
+    <span class="k">if</span><span class="o">(!</span><span class="n">file</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="no">NULL</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nc">SdFile</span> <span class="o">*</span> <span class="n">lf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SdFile</span><span class="o">{</span><span class="n">file</span><span class="o">};</span> <span class="c1">// ローカル変数をグローバルに生成した構造体内に閉じ込める</span>
+
+    <span class="k">return</span> <span class="o">(</span><span class="kt">void</span> <span class="o">*)</span><span class="n">lf</span><span class="o">;</span> <span class="c1">// 生成した構造体を呼び出し元に返す</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>自動変数の <code class="language-plaintext highlighter-rouge">file</code> をグローバルに割り当てた <a href="https://github.com/lvgl/lvgl/blob/master/src/libs/fsdrv/lv_fs_arduino_sd.cpp#L12-L14" title="lvgl/src/libs/fsdrv/lv_fs_arduino_sd.cpp at master · lvgl/lvgl">構造体 <code class="language-plaintext highlighter-rouge">SdFile</code></a> 内に閉じ込めることで、スコープが外れても保持されるようにしていますが、SdFat では次のコンパイルエラーが発生します（実際にはもっと大量のエラーが出力されますが、省略しています）。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nl">error:</span> <span class="n">use</span> <span class="n">of</span> <span class="n">deleted</span> <span class="n">function</span> <span class="err">'</span><span class="nl">FsFile:</span><span class="o">:</span><span class="nc">FsFile</span><span class="o">(</span><span class="kd">const</span> <span class="nc">FsFile</span><span class="o">&amp;)</span><span class="err">'</span>
+   <span class="mi">80</span> <span class="o">|</span>     <span class="nc">SdFile</span> <span class="o">*</span> <span class="n">lf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SdFile</span><span class="o">{</span><span class="n">file</span><span class="o">};</span>
+<span class="o">...</span>
+<span class="o">.../</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">SdFat</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="nc">FsLib</span><span class="o">/</span><span class="nc">FsFile</span><span class="o">.</span><span class="na">h</span><span class="o">:</span><span class="mi">905</span><span class="o">:</span><span class="mi">7</span><span class="o">:</span> <span class="nl">note:</span> <span class="err">'</span><span class="nl">FsFile:</span><span class="o">:</span><span class="nc">FsFile</span><span class="o">(</span><span class="kd">const</span> <span class="nc">FsFile</span><span class="o">&amp;)</span><span class="err">'</span> <span class="n">is</span> <span class="n">implicitly</span> <span class="n">deleted</span> <span class="n">because</span> <span class="n">the</span> <span class="k">default</span> <span class="n">definition</span> <span class="n">would</span> <span class="n">be</span> <span class="n">ill</span><span class="o">-</span><span class="nl">formed:</span>
+  <span class="mi">905</span> <span class="o">|</span> <span class="kd">class</span> <span class="nc">FsFile</span> <span class="o">:</span> <span class="kd">public</span> <span class="nc">StreamFile</span><span class="o">&lt;</span><span class="nc">FsBaseFile</span><span class="o">,</span> <span class="n">uint64_t</span><span class="o">&gt;</span> <span class="o">{</span>
+      <span class="o">|</span>       <span class="o">^~~~~~</span>
+<span class="o">...</span>
+<span class="o">.../</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">SdFat</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="nc">ExFatLib</span><span class="o">/../</span><span class="n">common</span><span class="o">/</span><span class="nc">ArduinoFiles</span><span class="o">.</span><span class="na">h</span><span class="o">:</span><span class="mi">76</span><span class="o">:</span><span class="mi">7</span><span class="o">:</span> <span class="nl">note:</span> <span class="err">'</span><span class="nc">StreamFile</span><span class="o">&lt;</span><span class="nc">FsBaseFile</span><span class="o">,</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">unsigned</span> <span class="kt">int</span><span class="o">&gt;::</span><span class="nc">StreamFile</span><span class="o">(</span><span class="kd">const</span> <span class="nc">StreamFile</span><span class="o">&lt;</span><span class="nc">FsBaseFile</span><span class="o">,</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">unsigned</span> <span class="kt">int</span><span class="o">&gt;&amp;)</span><span class="err">'</span> <span class="n">is</span> <span class="n">implicitly</span> <span class="n">deleted</span> <span class="n">because</span> <span class="n">the</span> <span class="k">default</span> <span class="n">definition</span> <span class="n">would</span> <span class="n">be</span> <span class="n">ill</span><span class="o">-</span><span class="nl">formed:</span>
+   <span class="mi">76</span> <span class="o">|</span> <span class="kd">class</span> <span class="nc">StreamFile</span> <span class="o">:</span> <span class="kd">public</span> <span class="n">stream_t</span><span class="o">,</span> <span class="kd">public</span> <span class="nc">BaseFile</span> <span class="o">{</span>
+      <span class="o">|</span>       <span class="o">^~~~~~~~~~</span></code></pre></figure>
+
+<p>おそらく <code class="language-plaintext highlighter-rouge">FsLib</code> か <code class="language-plaintext highlighter-rouge">FatLib</code> の階層でコンストラクタの定義が不十分なためと思われますが、SdFat に手を入れることなくエラーを解消するには、ローカル変数の <code class="language-plaintext highlighter-rouge">file</code> をスタティックな変数にせざるを得ませんでした。ただし単純に単一の変数としたので、同時に複数のファイルは扱えず、当然スレッドセーフにもなりませんが、今回の使い方では OK としています <span class="emoji">😛</span></p>
+
+<h3 id="ドライバコードの全文と使い方">ドライバコードの全文と使い方</h3>
+
+<p>ということで、移植したコードの全体は次の様になります。</p>
+
+<details>
+<summary>SdFat 用ドライバ</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="s">"lvgl.h"</span>
+
+<span class="c1">// 標準のファイルシステムとの競合を回避</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_USE_FS_ARDUINO_SD</span> <span class="o">==</span> <span class="mi">0</span>
+
+<span class="err">#</span><span class="n">include</span> <span class="s">"SdFat.h"</span>
+
+<span class="cm">/**********************
+ *  STATIC PROTOTYPES
+ **********************/</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">fs_open</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">path</span><span class="o">,</span> <span class="n">lv_fs_mode_t</span> <span class="n">mode</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_close</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_read</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buf</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">btr</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">br</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_write</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buf</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">btw</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">bw</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_seek</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">pos</span><span class="o">,</span> <span class="n">lv_fs_whence_t</span> <span class="n">whence</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_tell</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">pos_p</span><span class="o">);</span>
+
+<span class="c1">// ファイルディスクリプタを静的変数化</span>
+<span class="kd">static</span> <span class="nc">File</span> <span class="n">my_file</span><span class="o">;</span>
+
+<span class="c1">// 互換性のための追加定義</span>
+<span class="kd">enum</span> <span class="nc">SeekMode</span> <span class="o">{</span>
+  <span class="nc">SeekSet</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+  <span class="nc">SeekCur</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span>
+  <span class="nc">SeekEnd</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="o">};</span>
+
+<span class="c1">// ドライブレターの設定</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_FS_ARDUINO_SD_LETTER</span> <span class="sc">'S'</span>
+
+<span class="cm">/**
+ * Register a driver for the SD File System interface
+ */</span>
+<span class="kt">void</span> <span class="nf">lv_fs_arduino_sd_init</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="kd">static</span> <span class="n">lv_fs_drv_t</span> <span class="n">fs_drv</span><span class="o">;</span>
+    <span class="n">lv_fs_drv_init</span><span class="o">(&amp;</span><span class="n">fs_drv</span><span class="o">);</span>
+
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">letter</span> <span class="o">=</span> <span class="no">LV_FS_ARDUINO_SD_LETTER</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">open_cb</span> <span class="o">=</span> <span class="n">fs_open</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">close_cb</span> <span class="o">=</span> <span class="n">fs_close</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">read_cb</span> <span class="o">=</span> <span class="n">fs_read</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">write_cb</span> <span class="o">=</span> <span class="n">fs_write</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">seek_cb</span> <span class="o">=</span> <span class="n">fs_seek</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">tell_cb</span> <span class="o">=</span> <span class="n">fs_tell</span><span class="o">;</span>
+
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_close_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_open_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_read_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
+
+    <span class="n">lv_fs_drv_register</span><span class="o">(&amp;</span><span class="n">fs_drv</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="cm">/**********************
+ *   STATIC FUNCTIONS
+ **********************/</span>
+
+<span class="cm">/**
+ * Open a file
+ * @param drv       pointer to a driver where this function belongs
+ * @param path      path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
+ * @param mode      read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
+ * @return          a file descriptor or NULL on error
+ */</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">fs_open</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">path</span><span class="o">,</span> <span class="n">lv_fs_mode_t</span> <span class="n">mode</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+
+    <span class="kt">int</span> <span class="n">flags</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">mode</span> <span class="o">==</span> <span class="no">LV_FS_MODE_WR</span><span class="o">)</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="no">FILE_WRITE</span><span class="o">;</span>
+    <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">mode</span> <span class="o">==</span> <span class="no">LV_FS_MODE_RD</span><span class="o">)</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="no">FILE_READ</span><span class="o">;</span>
+    <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">mode</span> <span class="o">==</span> <span class="o">(</span><span class="no">LV_FS_MODE_WR</span> <span class="o">|</span> <span class="no">LV_FS_MODE_RD</span><span class="o">))</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="no">FILE_WRITE</span><span class="o">;</span>
+
+    <span class="n">my_file</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">flags</span><span class="o">);</span>
+    <span class="k">if</span><span class="o">(!</span><span class="n">my_file</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="no">NULL</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="o">(</span><span class="kt">void</span> <span class="o">*)&amp;</span><span class="n">my_file</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Close an opened file
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_t variable. (opened with fs_open)
+ * @return          LV_FS_RES_OK: no error or  any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_close</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="n">my_file</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="k">return</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Read data from an opened file
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_t variable.
+ * @param buf       pointer to a memory block where to store the read data
+ * @param btr       number of Bytes To Read
+ * @param br        the real number of read bytes (Byte Read)
+ * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_read</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buf</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">btr</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">br</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="o">*</span><span class="n">br</span> <span class="o">=</span> <span class="n">my_file</span><span class="o">.</span><span class="na">read</span><span class="o">((</span><span class="n">uint8_t</span> <span class="o">*)</span><span class="n">buf</span><span class="o">,</span> <span class="n">btr</span><span class="o">);</span>
+    <span class="k">return</span> <span class="o">(</span><span class="n">int32_t</span><span class="o">)(*</span><span class="n">br</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="no">LV_FS_RES_UNKNOWN</span> <span class="o">:</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Write into a file
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_t variable
+ * @param buf       pointer to a buffer with the bytes to write
+ * @param btw       Bytes To Write
+ * @param bw        the number of real written bytes (Bytes Written)
+ * @return          LV_FS_RES_OK: no error or  any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_write</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buf</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">btw</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">bw</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="o">*</span><span class="n">bw</span> <span class="o">=</span> <span class="n">my_file</span><span class="o">.</span><span class="na">write</span><span class="o">((</span><span class="n">uint8_t</span> <span class="o">*)</span><span class="n">buf</span><span class="o">,</span> <span class="n">btw</span><span class="o">);</span>
+    <span class="k">return</span> <span class="o">(</span><span class="n">int32_t</span><span class="o">)(*</span><span class="n">bw</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="no">LV_FS_RES_UNKNOWN</span> <span class="o">:</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Set the read write pointer. Also expand the file size if necessary.
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_t variable. (opened with fs_open )
+ * @param pos       the new position of read write pointer
+ * @param whence    tells from where to interpret the `pos`. See @lv_fs_whence_t
+ * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_seek</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">pos</span><span class="o">,</span> <span class="n">lv_fs_whence_t</span> <span class="n">whence</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+
+    <span class="nc">SeekMode</span> <span class="n">mode</span> <span class="o">=</span> <span class="nc">SeekSet</span><span class="o">;</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">whence</span> <span class="o">==</span> <span class="no">LV_FS_SEEK_SET</span><span class="o">)</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="nc">SeekSet</span><span class="o">;</span>
+    <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">whence</span> <span class="o">==</span> <span class="no">LV_FS_SEEK_CUR</span><span class="o">)</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="nc">SeekCur</span><span class="o">;</span>
+    <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">whence</span> <span class="o">==</span> <span class="no">LV_FS_SEEK_END</span><span class="o">)</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="nc">SeekEnd</span><span class="o">;</span>
+
+    <span class="kt">int</span> <span class="n">rc</span><span class="o">;</span>
+    <span class="k">switch</span> <span class="o">(</span><span class="n">mode</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nl">SeekSet:</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">my_file</span><span class="o">.</span><span class="na">seekSet</span><span class="o">(</span><span class="n">pos</span><span class="o">);</span>
+        <span class="k">break</span><span class="o">;</span>
+      <span class="k">case</span> <span class="nl">SeekCur:</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">my_file</span><span class="o">.</span><span class="na">seekCur</span><span class="o">(</span><span class="n">pos</span><span class="o">);</span>
+        <span class="k">break</span><span class="o">;</span>
+      <span class="k">case</span> <span class="nl">SeekEnd:</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">my_file</span><span class="o">.</span><span class="na">seekEnd</span><span class="o">(</span><span class="n">pos</span><span class="o">);</span>
+        <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="n">rc</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="no">LV_FS_RES_UNKNOWN</span> <span class="o">:</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Give the position of the read write pointer
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_p variable
+ * @param pos_p     pointer to store the result
+ * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_tell</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">pos_p</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="o">*</span><span class="n">pos_p</span> <span class="o">=</span> <span class="n">my_file</span><span class="o">.</span><span class="na">curPosition</span><span class="o">();</span>
+    <span class="k">return</span> <span class="o">(</span><span class="n">int32_t</span><span class="o">)(*</span><span class="n">pos_p</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="no">LV_FS_RES_UNKNOWN</span> <span class="o">:</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="err">#</span><span class="n">endif</span> <span class="c1">// LV_USE_FS_ARDUINO_SD</span></code></pre></figure>
+
+
+</details>
+
+<p>上記コードを適当な名前で（例えば <code class="language-plaintext highlighter-rouge">my_fs_arduino_sd.cpp</code>）保存します。またデコードする画像ファイルのタイプに合わせ <code class="language-plaintext highlighter-rouge">lv_conf.h</code> を設定します。以下は <a href="https://docs.lvgl.io/master/details/libs/tjpgd.html" title="Tiny JPEG Decompressor (TJpgDec) - LVGL 9.3 documentation">Tiny JPEG Decompressor</a> を使う場合の <a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L925-L927" title="lvgl/lv_conf_template.h at master · lvgl/lvgl">設定</a> です。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** JPG + split JPG decoder library.
+ *  Split JPG is a custom format optimized for embedded systems. */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_TJPGD</span> <span class="mi">1</span></code></pre></figure>
+
+<p><a href="https://github.com/lvgl/lvgl/blob/master/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino" title="lvgl/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino at master · lvgl/lvgl">Arduino 用の <code class="language-plaintext highlighter-rouge">.ino</code> ファイル</a> には、先頭で <a href="https://github.com/greiman/SdFat/blob/master/src/SdFat.h" title="SdFat/src/SdFat.h at master · greiman/SdFat">SdFat.h</a> の <code class="language-plaintext highlighter-rouge">#include</code> とインスタンス <code class="language-plaintext highlighter-rouge">SD</code> を定義し、<code class="language-plaintext highlighter-rouge">setup()</code> の最後を次のようにすれば良いでしょう。</p>
+
+<details>
+<summary>LVGL_Arduino.ino（抜粋）</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="s">"lvgl.h"</span>
+
+<span class="c1">// 標準のファイルシステムとの競合を回避</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_USE_FS_ARDUINO_SD</span> <span class="o">==</span> <span class="mi">0</span>
+  <span class="err">#</span><span class="n">include</span> <span class="s">"SdFat.h"</span>
+  <span class="nc">SdFat</span> <span class="no">SD</span><span class="o">;</span>
+  <span class="n">extern</span> <span class="kt">void</span> <span class="nf">lv_fs_arduino_sd_init</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>
+
+<span class="c1">// 標準のファイルシステムを試す場合</span>
+<span class="err">#</span><span class="k">else</span>
+  <span class="err">#</span><span class="n">include</span> <span class="s">"FS.h"</span>
+  <span class="err">#</span><span class="n">inlucde</span> <span class="s">"SD.h"</span>
+<span class="err">#</span><span class="n">endif</span>
+<span class="o">...</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span>
+<span class="o">{</span>
+    <span class="o">...</span>
+
+    <span class="c1">// SD カード I/F を初期化</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="no">SD</span><span class="o">.</span><span class="na">begin</span><span class="o">())</span> <span class="o">{</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"SD Card Mount Failed"</span><span class="o">);</span>
+      <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">lv_init</span><span class="o">();</span>
+
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_USE_FS_ARDUINO_SD</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">lv_fs_arduino_sd_init</span><span class="o">();</span>
+<span class="err">#</span><span class="n">endif</span>
+
+    <span class="o">...</span>
+
+    <span class="c1">// ウィジェットに画像を設定</span>
+    <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="n">lv_image_create</span><span class="o">(</span><span class="n">lv_screen_active</span><span class="o">());</span>
+    <span class="n">lv_image_set_src</span><span class="o">(</span><span class="n">image</span><span class="o">,</span> <span class="s">"S:/sample.jpg"</span><span class="o">);</span>
+    <span class="n">lv_obj_center</span><span class="o">(</span><span class="n">image</span><span class="o">);</span>
+
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"Setup done"</span> <span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<div class="quote clear-both">
+
+<p>Arduino 用 <code class="language-plaintext highlighter-rouge">.ino</code> ファイルについては「<a href="/2025/04/03/#lvgl-%E3%81%AE%E3%83%87%E3%83%A2%E3%82%92%E5%8B%95%E3%81%8B%E3%81%99" title="ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（１）｜Embedded Kiddie">LVGL のデモを動かす</a>」を参考にしてください。</p>
+
+</div>
+
+<p>ちなみに <a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L903-L908" title="lvgl/lv_conf_template.h at master · lvgl/lvgl">lv_conf.h で次を設定</a> すると標準の SD ライブラリ用コードの動作確認ができます。この場合 <code class="language-plaintext highlighter-rouge">lv_init()</code> で実行される <code class="language-plaintext highlighter-rouge">lv_fs_arduino_sd_init()</code> 以前に SD カードの初期化を行う必要があることに注意してください。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** API for Arduino Sd. */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_FS_ARDUINO_SD</span> <span class="mi">1</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_USE_FS_ARDUINO_SD</span>
+    <span class="err">#</span><span class="n">define</span> <span class="no">LV_FS_ARDUINO_SD_LETTER</span> <span class="sc">'S'</span>   <span class="cm">/**&lt; Set an upper-case driver-identifier letter for this driver (e.g. 'A'). */</span>
+    <span class="err">#</span><span class="n">define</span> <span class="no">LV_FS_ARDUINO_SD_PATH</span> <span class="s">""</span>      <span class="cm">/**&lt; Set the working directory. File/directory paths will be appended to it. */</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<h2 id="ram-上にメモリファイルシステムを作る">RAM 上にメモリファイルシステムを作る</h2>
+
+<p>さて本題の、読み込んだ画像をキャッシュ化する <strong>メモリファイルシステム</strong> の作成です。</p>
+
+<p>元々 LVGL にはメモリファイルシステム用の設定 <a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L883-L887" title="lvgl/lv_conf_template.h at master · lvgl/lvgl">LV_USE_FS_MEMFS</a> とそのソースコード <a href="https://github.com/lvgl/lvgl/blob/master/src/libs/fsdrv/lv_fs_memfs.c" title="lvgl/src/libs/fsdrv/lv_fs_memfs.c at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">lv_fs_memfs.c</code></a> があり、これと前章のコードを混ぜ合わせた様なドライバを作成します。</p>
+
+<p>その仕組みは、<code class="language-plaintext highlighter-rouge">fs_open()</code> 時にマルっとファイルイメージを RAM に保存し、<code class="language-plaintext highlighter-rouge">fs_seek()</code> や <code class="language-plaintext highlighter-rouge">fs_tell()</code> 用のアドレスを管理するという簡単なものです。</p>
+
+<details>
+<summary>SdFat 用メモリファイルシステムのドライバ</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="s">"lvgl.h"</span>
+
+<span class="c1">// 標準のファイルシステムとの競合を回避</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_USE_FS_ARDUINO_SD</span> <span class="o">==</span> <span class="mi">0</span>
+
+<span class="err">#</span><span class="n">include</span> <span class="s">"SdFat.h"</span>
+
+<span class="cm">/**********************
+ *  STATIC PROTOTYPES
+ **********************/</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">fs_open</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">path</span><span class="o">,</span> <span class="n">lv_fs_mode_t</span> <span class="n">mode</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_close</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_read</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buf</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">btr</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">br</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_seek</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">pos</span><span class="o">,</span> <span class="n">lv_fs_whence_t</span> <span class="n">whence</span><span class="o">);</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_tell</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">pos_p</span><span class="o">);</span>
+
+<span class="c1">// キャッシュ用バッファとファイルポインタを管理する構造体と変数を定義</span>
+<span class="n">typedef</span> <span class="n">struct</span> <span class="o">{</span>
+  <span class="kt">char</span> <span class="o">*</span>    <span class="n">path</span><span class="o">;</span>
+  <span class="kt">char</span> <span class="o">*</span>    <span class="n">buffer</span><span class="o">;</span>
+  <span class="n">size_t</span>    <span class="n">size</span><span class="o">;</span>
+  <span class="n">uint32_t</span>  <span class="n">position</span><span class="o">;</span>
+<span class="o">}</span> <span class="n">FsCache_t</span><span class="o">;</span>
+
+<span class="kd">static</span> <span class="n">FsCache_t</span> <span class="n">fs_cache</span> <span class="o">=</span> <span class="o">{};</span>
+
+<span class="c1">// ドライブレターの設定</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_FS_ARDUINO_SD_LETTER</span> <span class="sc">'S'</span>
+
+<span class="cm">/**
+ * Register a driver for the SD File System interface
+ */</span>
+<span class="kt">void</span> <span class="nf">lv_fs_arduino_sd_init</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="kd">static</span> <span class="n">lv_fs_drv_t</span> <span class="n">fs_drv</span><span class="o">;</span>
+    <span class="n">lv_fs_drv_init</span><span class="o">(&amp;</span><span class="n">fs_drv</span><span class="o">);</span>
+
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">letter</span> <span class="o">=</span> <span class="no">LV_FS_ARDUINO_SD_LETTER</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">open_cb</span> <span class="o">=</span> <span class="n">fs_open</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">close_cb</span> <span class="o">=</span> <span class="n">fs_close</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">read_cb</span> <span class="o">=</span> <span class="n">fs_read</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">write_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span> <span class="c1">// 書き込み用メソッドは不要</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">seek_cb</span> <span class="o">=</span> <span class="n">fs_seek</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">tell_cb</span> <span class="o">=</span> <span class="n">fs_tell</span><span class="o">;</span>
+
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_close_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_open_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
+    <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_read_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
+
+    <span class="n">lv_fs_drv_register</span><span class="o">(&amp;</span><span class="n">fs_drv</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="cm">/**********************
+ *   STATIC FUNCTIONS
+ **********************/</span>
+
+<span class="cm">/**
+ * Open a file
+ * @param drv       pointer to a driver where this function belongs
+ * @param path      path to the file beginning with the driver letter (e.g. S:/folder/file.txt)
+ * @param mode      read: FS_MODE_RD, write: FS_MODE_WR, both: FS_MODE_RD | FS_MODE_WR
+ * @return          a file descriptor or NULL on error
+ */</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">fs_open</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">path</span><span class="o">,</span> <span class="n">lv_fs_mode_t</span> <span class="n">mode</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">mode</span><span class="o">);</span>
+
+    <span class="c1">// 別ファイルが指定された場合はキャッシュを解放する</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">path</span> <span class="o">&amp;&amp;</span> <span class="n">strcmp</span><span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">path</span><span class="o">,</span> <span class="n">path</span><span class="o">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">free</span><span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">path</span><span class="o">);</span>
+      <span class="n">fs_cache</span><span class="o">.</span><span class="na">path</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">buffer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">free</span><span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">buffer</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 指定されたファイルのキャッシュが未作成の場合は</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">path</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// ファイル名を保存し、</span>
+      <span class="n">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="n">strlen</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+      <span class="n">fs_cache</span><span class="o">.</span><span class="na">path</span> <span class="o">=</span> <span class="o">(</span><span class="kt">char</span> <span class="o">*)</span><span class="n">heap_caps_malloc</span><span class="o">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="no">MALLOC_CAP_DMA</span> <span class="o">|</span> <span class="no">MALLOC_CAP_INTERNAL</span><span class="o">);</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">path</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">strcpy</span><span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">path</span><span class="o">,</span> <span class="n">path</span><span class="o">);</span>
+      <span class="o">}</span>
+
+      <span class="c1">// ファイルをマルっと保存できるサイズのバッファを確保し、キャッシュする</span>
+      <span class="nc">File</span> <span class="n">file</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="no">FILE_READ</span><span class="o">);</span>
+      <span class="n">size</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">fileSize</span><span class="o">();</span>
+
+      <span class="n">fs_cache</span><span class="o">.</span><span class="na">buffer</span> <span class="o">=</span> <span class="o">(</span><span class="kt">char</span> <span class="o">*)</span><span class="n">heap_caps_malloc</span><span class="o">(</span><span class="n">size</span><span class="o">,</span> <span class="no">MALLOC_CAP_DMA</span> <span class="o">|</span> <span class="no">MALLOC_CAP_INTERNAL</span><span class="o">);</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">buffer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">fs_cache</span><span class="o">.</span><span class="na">size</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">read</span><span class="o">((</span><span class="n">uint8_t</span> <span class="o">*)</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">buffer</span><span class="o">,</span> <span class="n">size</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="n">file</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="c1">// ファイルポインタを初期化</span>
+    <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="k">return</span> <span class="o">(</span><span class="kt">void</span> <span class="o">*)</span><span class="n">drv</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Close an opened file
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_t variable. (opened with fs_open)
+ * @return          LV_FS_RES_OK: no error or  any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_close</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">file_p</span><span class="o">);</span>
+    <span class="k">return</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Read data from an opened file
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_t variable.
+ * @param buf       pointer to a memory block where to store the read data
+ * @param btr       number of Bytes To Read
+ * @param br        the real number of read bytes (Byte Read)
+ * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_read</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">buf</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">btr</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">br</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">file_p</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">+</span> <span class="n">btr</span> <span class="o">&gt;</span> <span class="n">fs_cache</span><span class="o">.</span><span class="na">size</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">btr</span> <span class="o">=</span> <span class="n">fs_cache</span><span class="o">.</span><span class="na">size</span> <span class="o">-</span> <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">memcpy</span><span class="o">(</span><span class="n">buf</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">buffer</span><span class="o">[</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span><span class="o">],</span> <span class="n">btr</span><span class="o">);</span>
+    <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">+=</span> <span class="o">(*</span><span class="n">br</span> <span class="o">=</span> <span class="n">btr</span><span class="o">);</span>
+
+    <span class="k">return</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Set the read write pointer. Also expand the file size if necessary.
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_t variable. (opened with fs_open )
+ * @param pos       the new position of read write pointer
+ * @param whence    tells from where to interpret the `pos`. See @lv_fs_whence_t
+ * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_seek</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="n">pos</span><span class="o">,</span> <span class="n">lv_fs_whence_t</span> <span class="n">whence</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">file_p</span><span class="o">);</span>
+
+    <span class="k">switch</span> <span class="o">(</span><span class="n">whence</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">case</span> <span class="nl">LV_FS_SEEK_CUR:</span>
+        <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">+=</span> <span class="n">pos</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+      <span class="k">case</span> <span class="nl">LV_FS_SEEK_END:</span>
+        <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">=</span> <span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">size</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">-</span> <span class="n">pos</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+      <span class="k">case</span> <span class="nl">LV_FS_SEEK_SET:</span>
+      <span class="k">default</span><span class="o">:</span>
+        <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">=</span> <span class="n">pos</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">&gt;=</span> <span class="n">fs_cache</span><span class="o">.</span><span class="na">size</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span> <span class="o">=</span> <span class="n">fs_cache</span><span class="o">.</span><span class="na">size</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * Give the position of the read write pointer
+ * @param drv       pointer to a driver where this function belongs
+ * @param file_p    pointer to a file_p variable
+ * @param pos_p     pointer to store the result
+ * @return          LV_FS_RES_OK: no error or any error from @lv_fs_res_t enum
+ */</span>
+<span class="kd">static</span> <span class="n">lv_fs_res_t</span> <span class="nf">fs_tell</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">file_p</span><span class="o">,</span> <span class="n">uint32_t</span> <span class="o">*</span> <span class="n">pos_p</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">drv</span><span class="o">);</span>
+    <span class="no">LV_UNUSED</span><span class="o">(</span><span class="n">file_p</span><span class="o">);</span>
+
+    <span class="o">*</span><span class="n">pos_p</span> <span class="o">=</span> <span class="n">fs_cache</span><span class="o">.</span><span class="na">position</span><span class="o">;</span>
+    <span class="k">return</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="err">#</span><span class="n">endif</span> <span class="c1">// LV_USE_FS_ARDUINO_SD</span></code></pre></figure>
+
+
+</details>
+
+<p>使い方は前章と同じです <span class="emoji">👍</span></p>
+
+<h2 id="サンプルコード">サンプルコード</h2>
+
+<p><a href="https://github.com/lovyan03/LovyanGFX?tab=readme-ov-file#%E4%BD%BF%E3%81%84%E6%96%B9-how-to-use" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> と LVGL 9.2.2 および 9.3.0 で動作確認を行なった検証用サンプルを <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/tree/main/LVGL/LVGL_Arduino_Jpeg" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_Jpeg at main · embedded-kiddie/Arduino-CYD-2432S028R">GitHub</a> に保存しています。SD ライブラリの差し替えやキャッシュ機能の検証用で、また何より作成中の MP3 プレイヤーへの組み込みを前提としているため、本記事で提示したコードよりかなり複雑ですが、よかったら参考にしてください。</p>
+
+<figure class="flex">
+  <div>
+    <img class="simple" src="/images/2025/06-16/demo.png" alt="サンプルコードの実行結果" width="320" height="240" />
+    <figcaption>サンプルコードの実行結果</figcaption>
+  </div>
+</figure>
+
+<h2 id="実は">実は…</h2>
+
+<p>冒頭に「悪戦苦闘してました」と書きましたが、TJpgDec 用デコーダの設定 <code class="language-plaintext highlighter-rouge">LV_USE_TJPGD</code> を有効化して MP3 プレイヤーと組み合わせると、プレイリストのスクロール中に次の割り込みエラーが発生してプログラムが落ちる事象と戦ってました <span class="emoji">🥵</span></p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Guru</span> <span class="nc">Meditation</span> <span class="nl">Error:</span> <span class="nc">Core</span>  <span class="mi">1</span> <span class="n">panic</span><span class="err">'</span><span class="n">ed</span> <span class="o">(</span><span class="nc">Double</span> <span class="n">exception</span><span class="o">).</span> </code></pre></figure>
+
+<p>マルチタスク化された描画タスクへの割り込み中に、さらに割り込みエラーが発生する二重のエラーの様で、スタックをトレースすると、LVGL 9.2.2 と 9.3.0 でかなり様子が異なります。</p>
+
+<details>
+<summary>9.2.2 のスタックトレース</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="mh">0x400e7fc5</span><span class="o">:</span> <span class="n">lv_image_decoder_get_info</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">draw</span><span class="o">/</span><span class="n">lv_image_decoder</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">86</span>
+<span class="mh">0x400e6f91</span><span class="o">:</span> <span class="n">lv_draw_image</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">draw</span><span class="o">/</span><span class="n">lv_draw_image</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">107</span>
+<span class="mh">0x401048a9</span><span class="o">:</span> <span class="n">draw_image</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">widgets</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">lv_image</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">794</span>
+<span class="mh">0x401048a9</span><span class="o">:</span> <span class="n">lv_image_event</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">widgets</span><span class="o">/</span><span class="n">image</span><span class="o">/</span><span class="n">lv_image</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">684</span>
+<span class="mh">0x401e1b2d</span><span class="o">:</span> <span class="n">lv_obj_event_base</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_obj_event</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">89</span>
+<span class="mh">0x400dfeb2</span><span class="o">:</span> <span class="n">event_send_core</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_obj_event</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">364</span>
+<span class="mh">0x400dff42</span><span class="o">:</span> <span class="n">lv_obj_send_event</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_obj_event</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">67</span>
+<span class="mh">0x400e4195</span><span class="o">:</span> <span class="n">lv_obj_redraw</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">116</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1032</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1015</span>
+<span class="mh">0x400e424e</span><span class="o">:</span> <span class="n">lv_obj_redraw</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">167</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1032</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1015</span>
+<span class="mh">0x400e424e</span><span class="o">:</span> <span class="n">lv_obj_redraw</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">167</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1032</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1015</span>
+<span class="mh">0x400e424e</span><span class="o">:</span> <span class="n">lv_obj_redraw</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">167</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1032</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1015</span>
+<span class="mh">0x400e424e</span><span class="o">:</span> <span class="n">lv_obj_redraw</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">167</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1032</span>
+<span class="mh">0x400e447d</span><span class="o">:</span> <span class="n">refr_obj</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1015</span>
+<span class="mh">0x400e47ef</span><span class="o">:</span> <span class="n">refr_obj_and_children</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">820</span>
+<span class="mh">0x400e492d</span><span class="o">:</span> <span class="n">refr_area_part</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">753</span>
+<span class="mh">0x400e515c</span><span class="o">:</span> <span class="n">refr_area</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">679</span>
+<span class="mh">0x400e515c</span><span class="o">:</span> <span class="n">refr_invalid_areas</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">586</span>
+<span class="mh">0x400e515c</span><span class="o">:</span> <span class="n">lv_display_refr_timer</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">398</span>
+<span class="mh">0x400fb982</span><span class="o">:</span> <span class="n">lv_timer_exec</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">misc</span><span class="o">/</span><span class="n">lv_timer</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">326</span>
+<span class="mh">0x400fb982</span><span class="o">:</span> <span class="n">lv_timer_handler</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">misc</span><span class="o">/</span><span class="n">lv_timer</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">107</span>
+<span class="mh">0x400fb982</span><span class="o">:</span> <span class="n">lv_timer_handler</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">misc</span><span class="o">/</span><span class="n">lv_timer</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">63</span>
+<span class="mh">0x400dab10</span><span class="o">:</span> <span class="n">loop</span><span class="o">()</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">-</span><span class="no">CYD</span><span class="o">-</span><span class="mi">2432</span><span class="no">S028R</span><span class="o">/</span><span class="no">LVGL</span><span class="o">/</span><span class="n">LVGL_Arduino_MP3Player</span><span class="o">/</span><span class="n">LVGL_Arduino_MP3Player</span><span class="o">.</span><span class="na">ino</span><span class="o">:</span><span class="mi">273</span>
+<span class="mh">0x4013e1c0</span><span class="o">:</span> <span class="n">loopTask</span><span class="o">(</span><span class="kt">void</span><span class="o">*)</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Library</span><span class="o">/</span><span class="nc">Arduino15</span><span class="o">/</span><span class="n">packages</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">hardware</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="mf">3.2</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">cores</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="na">cpp</span><span class="o">:</span><span class="mi">74</span>
+<span class="mh">0x4008d996</span><span class="o">:</span> <span class="n">vPortTaskWrapper</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">freertos</span><span class="o">/</span><span class="nc">FreeRTOS</span><span class="o">-</span><span class="nc">Kernel</span><span class="o">/</span><span class="n">portable</span><span class="o">/</span><span class="n">xtensa</span><span class="o">/</span><span class="n">port</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">139</span></code></pre></figure>
+
+
+</details>
+
+<details>
+<summary>9.3.0 のスタックトレース</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="mh">0x4008ad2c</span><span class="o">:</span> <span class="n">xt_utils_compare_and_set</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">xtensa</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">xt_utils</span><span class="o">.</span><span class="na">h</span><span class="o">:</span><span class="mi">216</span>
+<span class="mh">0x4008ad2c</span><span class="o">:</span> <span class="n">esp_cpu_compare_and_set</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">esp_hw_support</span><span class="o">/</span><span class="n">cpu</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">232</span>
+<span class="mh">0x4008daf3</span><span class="o">:</span> <span class="n">spinlock_acquire</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">esp_hw_support</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">spinlock</span><span class="o">.</span><span class="na">h</span><span class="o">:</span><span class="mi">123</span>
+<span class="mh">0x4008daf3</span><span class="o">:</span> <span class="n">xPortEnterCriticalTimeout</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">freertos</span><span class="o">/</span><span class="nc">FreeRTOS</span><span class="o">-</span><span class="nc">Kernel</span><span class="o">/</span><span class="n">portable</span><span class="o">/</span><span class="n">xtensa</span><span class="o">/</span><span class="n">port</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">479</span>
+<span class="mh">0x40091c39</span><span class="o">:</span> <span class="n">xPortEnterCriticalTimeoutSafe</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">freertos</span><span class="o">/</span><span class="nc">FreeRTOS</span><span class="o">-</span><span class="nc">Kernel</span><span class="o">/</span><span class="n">portable</span><span class="o">/</span><span class="n">xtensa</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">freertos</span><span class="o">/</span><span class="n">portmacro</span><span class="o">.</span><span class="na">h</span><span class="o">:</span><span class="mi">581</span>
+<span class="mh">0x40091c39</span><span class="o">:</span> <span class="n">vPortEnterCriticalSafe</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">freertos</span><span class="o">/</span><span class="nc">FreeRTOS</span><span class="o">-</span><span class="nc">Kernel</span><span class="o">/</span><span class="n">portable</span><span class="o">/</span><span class="n">xtensa</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">freertos</span><span class="o">/</span><span class="n">portmacro</span><span class="o">.</span><span class="na">h</span><span class="o">:</span><span class="mi">588</span>
+<span class="mh">0x40091c39</span><span class="o">:</span> <span class="n">multi_heap_internal_lock</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">heap</span><span class="o">/</span><span class="n">multi_heap</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">164</span>
+<span class="mh">0x40091ddd</span><span class="o">:</span> <span class="n">multi_heap_malloc</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">heap</span><span class="o">/</span><span class="n">multi_heap_poisoning</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">253</span>
+<span class="mh">0x40091ddd</span><span class="o">:</span> <span class="n">multi_heap_malloc</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">heap</span><span class="o">/</span><span class="n">multi_heap_poisoning</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">243</span>
+<span class="mh">0x400837cb</span><span class="o">:</span> <span class="n">aligned_or_unaligned_alloc</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">heap</span><span class="o">/</span><span class="n">heap_caps_base</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">82</span>
+<span class="mh">0x400837cb</span><span class="o">:</span> <span class="n">heap_caps_aligned_alloc_base</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">heap</span><span class="o">/</span><span class="n">heap_caps_base</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">156</span>
+<span class="mh">0x400837e5</span><span class="o">:</span> <span class="n">heap_caps_malloc_base</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">heap</span><span class="o">/</span><span class="n">heap_caps_base</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">176</span>
+<span class="mh">0x40083969</span><span class="o">:</span> <span class="n">heap_caps_malloc</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">heap</span><span class="o">/</span><span class="n">heap_caps</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">84</span>
+<span class="mh">0x401192e9</span><span class="o">:</span> <span class="n">heap_alloc_dma</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">LovyanGFX</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lgfx</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">platforms</span><span class="o">/</span><span class="n">esp32</span><span class="o">/../</span><span class="n">esp32</span><span class="o">/</span><span class="n">common</span><span class="o">.</span><span class="na">hpp</span><span class="o">:</span><span class="mi">107</span>
+<span class="mh">0x401192e9</span><span class="o">:</span> <span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="nl">FlipBuffer:</span><span class="o">:</span><span class="n">getBuffer</span><span class="o">(</span><span class="n">unsigned</span> <span class="kt">int</span><span class="o">)</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">LovyanGFX</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lgfx</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">platforms</span><span class="o">/</span><span class="n">esp32</span><span class="o">/../</span><span class="n">common</span><span class="o">.</span><span class="na">hpp</span><span class="o">:</span><span class="mi">146</span>
+<span class="mh">0x4011942f</span><span class="o">:</span> <span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="nl">Bus_SPI:</span><span class="o">:</span><span class="n">writePixels</span><span class="o">(</span><span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="n">pixelcopy_t</span><span class="o">*,</span> <span class="n">unsigned</span> <span class="kt">long</span><span class="o">)</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">LovyanGFX</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lgfx</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">platforms</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">Bus_SPI</span><span class="o">.</span><span class="na">cpp</span><span class="o">:</span><span class="mi">456</span>
+<span class="mh">0x401eda6d</span><span class="o">:</span> <span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="nl">Panel_LCD:</span><span class="o">:</span><span class="n">writePixels</span><span class="o">(</span><span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="n">pixelcopy_t</span><span class="o">*,</span> <span class="n">unsigned</span> <span class="kt">long</span><span class="o">,</span> <span class="n">bool</span><span class="o">)</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">LovyanGFX</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lgfx</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">panel</span><span class="o">/</span><span class="n">Panel_LCD</span><span class="o">.</span><span class="na">cpp</span><span class="o">:</span><span class="mi">278</span>
+<span class="mh">0x400d8a51</span><span class="o">:</span> <span class="kt">void</span> <span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="nl">LGFXBase:</span><span class="o">:</span><span class="n">writePixelsDMA</span><span class="o">(</span><span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="n">rgb565_t</span> <span class="kd">const</span><span class="o">*,</span> <span class="kt">long</span><span class="o">)</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">LovyanGFX</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lgfx</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="nc">LGFXBase</span><span class="o">.</span><span class="na">hpp</span><span class="o">:</span><span class="mi">338</span>
+<span class="mh">0x400d8a51</span><span class="o">:</span> <span class="kt">void</span> <span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="nl">LGFXBase:</span><span class="o">:</span><span class="n">pushPixelsDMA</span><span class="o">(</span><span class="nl">lgfx:</span><span class="o">:</span><span class="nl">v1:</span><span class="o">:</span><span class="n">rgb565_t</span><span class="o">*,</span> <span class="kt">long</span><span class="o">)</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">LovyanGFX</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">lgfx</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="nc">LGFXBase</span><span class="o">.</span><span class="na">hpp</span><span class="o">:</span><span class="mi">346</span>
+<span class="mh">0x400d8a51</span><span class="o">:</span> <span class="n">my_disp_flush</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">-</span><span class="no">CYD</span><span class="o">-</span><span class="mi">2432</span><span class="no">S028R</span><span class="o">/</span><span class="no">LVGL</span><span class="o">/</span><span class="n">LVGL_Arduino_MP3Player</span><span class="o">/</span><span class="n">LVGL_Arduino_MP3Player</span><span class="o">.</span><span class="na">ino</span><span class="o">:</span><span class="mi">152</span>
+<span class="mh">0x400e4348</span><span class="o">:</span> <span class="n">call_flush_cb</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1409</span>
+<span class="mh">0x400e4348</span><span class="o">:</span> <span class="n">draw_buf_flush</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">1373</span>
+<span class="mh">0x400e54fd</span><span class="o">:</span> <span class="n">refr_invalid_areas</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">635</span>
+<span class="mh">0x400e54fd</span><span class="o">:</span> <span class="n">lv_display_refr_timer</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">lv_refr</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">403</span>
+<span class="mh">0x401021c2</span><span class="o">:</span> <span class="n">lv_timer_exec</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">misc</span><span class="o">/</span><span class="n">lv_timer</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">327</span>
+<span class="mh">0x401021c2</span><span class="o">:</span> <span class="n">lv_timer_handler</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">misc</span><span class="o">/</span><span class="n">lv_timer</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">107</span>
+<span class="mh">0x401021c2</span><span class="o">:</span> <span class="n">lv_timer_handler</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="n">lvgl</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">misc</span><span class="o">/</span><span class="n">lv_timer</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">63</span>
+<span class="mh">0x400da960</span><span class="o">:</span> <span class="n">loop</span><span class="o">()</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">-</span><span class="no">CYD</span><span class="o">-</span><span class="mi">2432</span><span class="no">S028R</span><span class="o">/</span><span class="no">LVGL</span><span class="o">/</span><span class="n">LVGL_Arduino_MP3Player</span><span class="o">/</span><span class="n">LVGL_Arduino_MP3Player</span><span class="o">.</span><span class="na">ino</span><span class="o">:</span><span class="mi">273</span>
+<span class="mh">0x401454d0</span><span class="o">:</span> <span class="n">loopTask</span><span class="o">(</span><span class="kt">void</span><span class="o">*)</span> <span class="n">at</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="err">🤔</span><span class="o">/</span><span class="nc">Library</span><span class="o">/</span><span class="nc">Arduino15</span><span class="o">/</span><span class="n">packages</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">hardware</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="mf">3.2</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">cores</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="na">cpp</span><span class="o">:</span><span class="mi">74</span>
+<span class="mh">0x4008d996</span><span class="o">:</span> <span class="n">vPortTaskWrapper</span> <span class="n">at</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp32</span><span class="o">-</span><span class="n">arduino</span><span class="o">-</span><span class="n">lib</span><span class="o">-</span><span class="n">builder</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">idf</span><span class="o">/</span><span class="n">components</span><span class="o">/</span><span class="n">freertos</span><span class="o">/</span><span class="nc">FreeRTOS</span><span class="o">-</span><span class="nc">Kernel</span><span class="o">/</span><span class="n">portable</span><span class="o">/</span><span class="n">xtensa</span><span class="o">/</span><span class="n">port</span><span class="o">.</span><span class="na">c</span><span class="o">:</span><span class="mi">139</span></code></pre></figure>
+
+
+</details>
+
+<p><a href="https://docs.lvgl.io/9.3/CHANGELOG.html" title="Change Log - LVGL 9.3 documentation">更新履歴</a> にはデコーダ関係の改修が 17 項目も挙がってますが、今回作成したコードを組み込まずとも <code class="language-plaintext highlighter-rouge">LV_USE_TJPGD</code> を有効化するだけでエラーとなるので、本記事で提示したコードには問題がないとは思います… 多分ですが <span class="emoji">🙄</span></p>
+
+<p>事象の発生源であるプレイリストは <a href="https://github.com/lvgl/lvgl/tree/master/demos/music" title="lvgl/demos/music at master · lvgl/lvgl">“music”</a> からの流用で、スクロールの度にヒープメモリを弄るのが原因と睨んでますが、<code class="language-plaintext highlighter-rouge">LV_USE_TJPGD</code> ではなく <code class="language-plaintext highlighter-rouge">LV_USE_BMP</code> を使えばエラーは起きないので、取り敢えずは先に進もうと思います <span class="emoji">😅</span></p>
+
+<figure class="flex">
+  <video id="demo" controls="" muted="" width="240" height="320">
+    <source src="https://embedded-kiddie.github.io/images/2025/06-16/demo.mp4" type="video/mp4" />
+  </video>
+</figure>
+<script type="text/javascript">
+  var vid = document.getElementById("demo");
+  vid.playbackRate = 0.5;
+</script>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/05/08/" title="前の記事：LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など">← LVGLで日本語フォントを使う方法３つ - フォントサイズと見本、容量削減方法など</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/06/16/",this.page.identifier="/2025/06/16/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/06/16/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/06/16/";this.page.identifier="/2025/06/16/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
