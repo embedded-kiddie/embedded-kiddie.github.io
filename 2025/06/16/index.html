@@ -349,6 +349,11 @@
  *  Split JPG is a custom format optimized for embedded systems. */</span>
 <span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_TJPGD</span> <span class="mi">1</span></code></pre></figure>
 
+<p>また次は、<a href="https://docs.lvgl.io/master/details/libs/bmp.html" title="BMP Decoder - LVGL 9.3 documentation">BMP Decoder</a> を使う場合の <a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L922-L923" title="lvgl/lv_conf_template.h at master · lvgl/lvgl">設定</a> です。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** BMP decoder library */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_BMP</span> <span class="mi">1</span></code></pre></figure>
+
 <p><a href="https://github.com/lvgl/lvgl/blob/master/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino" title="lvgl/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino at master · lvgl/lvgl">Arduino 用の <code class="language-plaintext highlighter-rouge">.ino</code> ファイル</a> には、先頭で <a href="https://github.com/greiman/SdFat/blob/master/src/SdFat.h" title="SdFat/src/SdFat.h at master · greiman/SdFat">SdFat.h</a> の <code class="language-plaintext highlighter-rouge">#include</code> とインスタンス <code class="language-plaintext highlighter-rouge">SD</code> を定義し、<code class="language-plaintext highlighter-rouge">setup()</code> の最後を次のようにすれば良いでしょう。</p>
 
 <details>
@@ -751,12 +756,10 @@
     </p>
 
     <p class="next">
-      <a href="/" title="Home に戻る">Home に戻る</a>
+      <a href="/2025/07/16/" title="次の記事：ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装">ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装 →</a>
     </p>    
   </div>
-<div id="disqus_thread"></div>
-  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/06/16/",this.page.identifier="/2025/06/16/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/06/16/" hidden></a>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2025/06/16/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2025/06/16/" hidden></a>
 </article>
 
       </div>

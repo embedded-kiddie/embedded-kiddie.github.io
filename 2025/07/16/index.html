@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="はじめに" />
+<meta property="og:description" content="はじめに" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/07/16/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/07/16/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-07-16T12:32:22+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-07-16T12:32:22+09:00","datePublished":"2025-07-16T12:32:22+09:00","description":"はじめに","headline":"ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/07/16/"},"url":"https://embedded-kiddie.github.io/2025/07/16/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-07-16T12:32:22+09:00" itemprop="datePublished">Jul 16, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="はじめに">はじめに</h2>
+
+<p>マルチコアの MCU やタッチパネル、マイクロ SD カード I/F、さらにはモノラルながらアンプも搭載した <abbr title="Cheap Yellow Display">CYD</abbr> で、これらをフル活用する MP3 プレイヤーを作成しています。</p>
+
+<p>で、曲を管理するプレイリストには、SD カードから拾ったオーディオファイルのパスを文字列として配列に入れていました。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Gravity</span><span class="o">/</span><span class="nc">Gravity</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Gravity</span><span class="o">/</span><span class="nc">Talk</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Gravity</span><span class="o">/...</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Gravity</span><span class="o">/</span><span class="nc">Nada</span> <span class="nc">Sousou</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Gravity</span><span class="o">/</span><span class="nc">Imasugu</span> <span class="nc">Kiss</span> <span class="nc">Me</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Past</span> <span class="nc">Lives</span><span class="o">/</span><span class="nc">Strangers</span> <span class="nc">Again</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Past</span> <span class="nc">Lives</span><span class="o">/</span><span class="nc">The</span> <span class="nc">Fuss</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Past</span> <span class="nc">Lives</span><span class="o">/...</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Past</span> <span class="nc">Lives</span><span class="o">/</span><span class="no">NIJI</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span><span class="o">/</span><span class="nc">Past</span> <span class="nc">Lives</span><span class="o">/</span><span class="nc">Eyes</span> <span class="nc">Like</span> <span class="nc">Guns</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="no">DETOX</span><span class="o">/</span><span class="no">NASTY</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="no">DETOX</span><span class="o">/</span><span class="nc">Dystopia</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="no">DETOX</span><span class="o">/...</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="no">DETOX</span><span class="o">/</span><span class="no">C</span><span class="o">.</span><span class="na">U</span><span class="o">.</span><span class="na">R</span><span class="o">.</span><span class="na">I</span><span class="o">.</span><span class="na">O</span><span class="o">.</span><span class="na">S</span><span class="o">.</span><span class="na">I</span><span class="o">.</span><span class="na">T</span><span class="o">.</span><span class="na">Y</span><span class="o">..</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="no">DETOX</span><span class="o">/</span><span class="nc">The</span> <span class="nc">Pilot</span> <span class="err">＜</span> <span class="n">_3</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Eye</span> <span class="nc">Of</span> <span class="nc">The</span> <span class="nc">Storm</span><span class="o">/</span><span class="nc">Eye</span> <span class="nc">Of</span> <span class="nc">The</span> <span class="nc">Storm</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Eye</span> <span class="nc">Of</span> <span class="nc">The</span> <span class="nc">Storm</span><span class="o">/</span><span class="nc">Stand</span> <span class="nc">Out</span> <span class="nc">Fit</span> <span class="nc">In</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Eye</span> <span class="nc">Of</span> <span class="nc">The</span> <span class="nc">Storm</span><span class="o">/...</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Eye</span> <span class="nc">Of</span> <span class="nc">The</span> <span class="nc">Storm</span><span class="o">/</span><span class="nc">Can</span><span class="err">'</span><span class="n">t</span> <span class="nc">Wait</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Eye</span> <span class="nc">Of</span> <span class="nc">The</span> <span class="nc">Storm</span><span class="o">/</span><span class="nc">The</span> <span class="nc">Last</span> <span class="nc">Time</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Nicheシンドローム</span><span class="o">/</span><span class="nc">Never</span> <span class="nc">Let</span> <span class="nc">This</span> <span class="nc">Go</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Nicheシンドローム</span><span class="o">/</span><span class="n">完全感覚Dreamer</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Nicheシンドローム</span><span class="o">/...</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Nicheシンドローム</span><span class="o">/</span><span class="n">未完成交響曲</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span><span class="o">/</span><span class="nc">Nicheシンドローム</span><span class="o">/</span><span class="nc">Nobody</span><span class="err">'</span><span class="n">s</span> <span class="nc">Home</span><span class="o">.</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Superfly</span><span class="o">/</span><span class="nc">Amazing</span><span class="o">/</span><span class="n">彩り</span> <span class="o">(</span><span class="nc">Mr</span><span class="o">.</span><span class="na">Children</span><span class="o">).</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Superfly</span><span class="o">/</span><span class="nc">Amazing</span><span class="o">/</span><span class="n">果てない空</span> <span class="o">(</span><span class="n">嵐</span><span class="o">).</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Superfly</span><span class="o">/</span><span class="nc">Amazing</span><span class="o">/...</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Superfly</span><span class="o">/</span><span class="nc">Amazing</span><span class="o">/</span><span class="n">たしかなこと</span> <span class="o">(</span><span class="n">小田和正</span><span class="o">).</span><span class="na">m4a</span>
+<span class="o">/</span><span class="no">MP3</span><span class="o">/</span><span class="nc">Superfly</span><span class="o">/</span><span class="nc">Amazing</span><span class="o">/</span><span class="n">メロディー</span> <span class="o">(</span><span class="n">玉置浩二</span><span class="o">).</span><span class="na">m4a</span></code></pre></figure>
+
+<p>これでは明らかにアーティスト名やアルバム名が重複し、メモリを無駄に消費しています。この無駄をなくすことが今回のお題です。</p>
+
+<p>すぐに思いつくのは、<code class="language-plaintext highlighter-rouge">tree</code> コマンドの出力と同様の <a href="https://ja.wikipedia.org/wiki/%E6%9C%A8%E6%A7%8B%E9%80%A0_(%E3%83%87%E3%83%BC%E3%82%BF%E6%A7%8B%E9%80%A0)" title="木構造 (データ構造) - Wikipedia">木構造</a> でデータを管理することです。</p>
+
+<details>
+<summary><code>tree</code> コマンドの出力例</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="no">MP3</span>
+<span class="err">├──</span> <span class="nc">Against</span> <span class="nc">The</span> <span class="nc">Current</span>
+<span class="err">│  </span> <span class="err">├──</span> <span class="nc">Gravity</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">├──</span> <span class="nc">Gravity</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">├──</span> <span class="o">...</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">└──</span> <span class="nc">Imasugu</span> <span class="nc">Kiss</span> <span class="nc">Me</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">│  </span> <span class="err">└──</span> <span class="nc">Past</span> <span class="nc">Lives</span>
+<span class="err">│  </span>     <span class="err">├──</span> <span class="nc">Strangers</span> <span class="nc">Again</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">│  </span>     <span class="err">├──</span> <span class="o">...</span>
+<span class="err">│  </span>     <span class="err">└──</span> <span class="nc">Eyes</span> <span class="nc">Like</span> <span class="nc">Guns</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">├──</span> <span class="no">ONE</span> <span class="no">OK</span> <span class="no">ROCK</span>
+<span class="err">│  </span> <span class="err">├──</span> <span class="no">DETOX</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">├──</span> <span class="no">NASTY</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">├──</span> <span class="o">...</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">└──</span> <span class="nc">The</span> <span class="nc">Pilot</span> <span class="err">＜</span> <span class="n">_3</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">│  </span> <span class="err">├──</span> <span class="nc">Eye</span> <span class="nc">Of</span> <span class="nc">The</span> <span class="nc">Storm</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">├──</span> <span class="nc">Eye</span> <span class="nc">Of</span> <span class="nc">The</span> <span class="nc">Storm</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">├──</span> <span class="o">...</span>
+<span class="err">│  </span> <span class="err">│  </span> <span class="err">└──</span> <span class="nc">The</span> <span class="nc">Last</span> <span class="nc">Time</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">│  </span> <span class="err">└──</span> <span class="nc">Niche</span> <span class="n">シンドローム</span>
+<span class="err">│  </span>     <span class="err">├──</span> <span class="nc">Never</span> <span class="nc">Let</span> <span class="nc">This</span> <span class="nc">Go</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">│  </span>     <span class="err">├──</span> <span class="o">...</span>
+<span class="err">│  </span>     <span class="err">└──</span> <span class="nc">Nobody</span><span class="err">'</span><span class="n">s</span> <span class="nc">Home</span><span class="o">.</span><span class="na">m4a</span>
+<span class="err">└──</span> <span class="nc">Superfly</span>
+    <span class="err">└──</span> <span class="nc">Amazing</span>
+        <span class="err">├──</span> <span class="n">彩り</span> <span class="o">(</span><span class="nc">Mr</span><span class="o">.</span><span class="na">Children</span><span class="o">).</span><span class="na">m4a</span>
+        <span class="err">├──</span> <span class="o">...</span>
+        <span class="err">└──</span> <span class="n">メロディー</span> <span class="o">(</span><span class="n">玉置浩二</span><span class="o">).</span><span class="na">m4a</span></code></pre></figure>
+
+
+</details>
+
+<p>中でも「Ｎ分木」(N-ary tree) の実装を今回の目標としました。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>「N-ary tree」の「ary」って何？と思った方はコチラ <span class="emoji">👈</span></summary>
+
+
+<p>Google に<a href="https://www.google.com/search?q=%E3%80%8CN%E5%88%86%E6%9C%A8%E3%80%8D%E3%81%AE%E8%8B%B1%E8%A8%B3%E3%80%8CN-ary+tree%E3%80%8D%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%80%8Cary%E3%80%8D%E3%81%A8%E3%81%AF%E4%BD%95%E3%81%A7%E3%81%99%E3%81%8B%EF%BC%9F">「Ｎ分木」の英訳「N-ary tree」の「ary」とは何ですか？</a> と尋ねました。</p>
+
+<blockquote>
+  <p>「N-ary tree」の「ary」は、「～の次数」や「～の要素を持つ」という意味で、N個の要素を持つことを表しています。具体的には、N分木の場合、各ノードが最大N個の子ノードを持つことを意味します。
+「ary」は、接尾辞として、ラテン語の「-arius」に由来し、「～に関わる」、「～の性質を持つ」という意味合いを持ちます。この場合、「N個の要素を持つ」という性質を表すために使用されています。例えば、「binary tree」 (二分木) では、各ノードが最大2個の子ノードを持ちます。﻿
+つまり、「N-ary tree」の「ary」は、「N個の子ノードを持つ」というツリーの構造的な特徴を指し示す言葉として使われています。</p>
+</blockquote>
+
+<p>また <a href="https://affixes.org/alpha/a/-ary2.html" title="Affixes: -ary2">ラテン語の「-arius」</a> は、名詞を形容詞にする働きがあるようで、budget（予算）→budgetary（予算上の）、fragment（断片）→fragmentary（断片的な、不完全な）、revolution（革命）→revolutionary（革命的な）などと同じ成り立ちのようです。</p>
+
+</details>
+
+</div>
+
+<h2 id="ライブラリの調査">ライブラリの調査</h2>
+
+<p>世の中にも同様のニーズはあるハズで、見つけたのが次のライブラリです。</p>
+
+<ul>
+  <li><a href="https://github.com/kpeeters/tree.hh" title="kpeeters/tree.hh: An STL-like C++ header-only tree library">tree.hh: an STL-like C++ tree class</a></li>
+</ul>
+
+<figure id="figure1" class="float-left">
+  <a href="/images/2025/07-16/structure.png" title="図１ tree.hh の木構造" data-lightbox="image">
+    <img src="/images/2025/07-16/structure-small.png" alt="図１ tree.hh の木構造" width="500" height="400" />
+    <figcaption>図１ tree.hh の木構造</figcaption>
+  </a>
+</figure>
+
+<p>標準テンプレートライブラリ（<a href="https://ja.wikipedia.org/wiki/Standard_Template_Library" title="Standard Template Library - Wikipedia"><strong>S</strong>tandard <strong>T</strong>emplate <strong>L</strong>ibrary</a>）のように、指定したデータ型をノード内に持つ木を作成できる C++11 に則ったライブラリです。<br />
+<a href="https://github.com/kpeeters/tree.hh/blob/master/doc/main.md" title="tree.hh/doc/main.md at master · kpeeters/tree.hh">ドキュメント</a> には、木の巡回やノードの追加／削除はもちろん、部分木の追加／削除や２つの異なるツリーの比較やマージなどができるとあり、かなりの汎用性を持っています。</p>
+
+<div class="clear-both"></div>
+
+<p>なかなか魅力的なライブラリですが、今回の件には少々オーバスペック気味です。いつか使うかもしれないライブラリとしてストックしておき、今回はアルゴリズムとコーディングの勉強を兼ね、自作することにしました。</p>
+
+<h2 id="今回の要件">今回の要件</h2>
+
+<p>予めオーディオファイルが保存された SD カードを読み込むだけで、ファイルやフォルダの追加／削除機能などは必要なく、前述のライブラリに比べてかなりシンプルになるハズです。</p>
+
+<p>要件としては、次の２つを設定しました。</p>
+
+<h3 id="木の大きさや管理するデータ長">木の大きさや管理するデータ長</h3>
+
+<figure id="figure2" class="float-left">
+  <a href="/images/2025/07-16/FileTree.png" title="図２ ファイルツリー" data-lightbox="image">
+    <img src="/images/2025/07-16/FileTree-small.png" alt="図２ ファイルツリー" width="650" height="300" />
+    <figcaption>図２ ファイルツリー</figcaption>
+  </a>
+</figure>
+
+<p>SD カードの中身は、図２のように構造化され、木の高さや幅は予め決められないとします。また <a href="https://ja.wikipedia.org/wiki/ID3%E3%82%BF%E3%82%B0" title="ID3タグ - Wikipedia">ID3 タグ</a> 仕様によれば、それぞれの文字列長を規定できるかもしれませんが、各ノードに保存される文字列は任意の長さとします。</p>
+
+<h3 id="プレイリスト-gui-との関係性">プレイリスト GUI との関係性</h3>
+
+<figure id="figure3" class="float-left">
+  <a href="/images/2025/07-16/PlayList.jpg" title="図３ ファイルツリーとプレイリスト" data-lightbox="image">
+    <img src="/images/2025/07-16/PlayList-small.jpg" alt="図３ ファイルツリーとプレイリスト" width="500" height="350" />
+    <figcaption>図３ ファイルツリーとプレイリスト</figcaption>
+  </a>
+</figure>
+
+<p>図３のように、末端の葉ノードに紐付いた曲のリストをプレイリストとして表示することを想定します。即ち、葉ノードに対するアーティスト名やアルバム名、ファイルパスが容易に、かつ高速に探索できなければなりません。またプレイリストは、シャッフル再生用に容易に並べ替えられる必要があります。</p>
+
+<h2 id="コードの基本形">コードの基本形</h2>
+
+<p>アルゴリズムとデータ構造の学習支援サイト <a href="https://www.geeksforgeeks.org/" title="GeeksforGeeks｜Your All-in-One Learning Portal">GeeksforGeeks</a> の <a href="https://www.geeksforgeeks.org/dsa/tree-data-structure/" title="Tree Data Structure - GeeksforGeeks">Tree Data Structure</a> には様々な木構造が、そこそこ具体的な C++ のコードと共に解説されています。中でも今回は、<a href="https://www.geeksforgeeks.org/dsa/generic-treesn-array-trees/" title="Introduction to Generic Trees (N-ary Trees) - GeeksforGeeks">Introduction to Generic Trees (N-ary Trees)</a> の <strong>Better Approach</strong> に掲載された次のＮ分木用のクラス定義を元にしました。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">vector</span><span class="o">&gt;</span>
+
+<span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+<span class="kd">public</span><span class="o">:</span>
+  <span class="kt">int</span> <span class="n">data</span><span class="o">;</span>
+  <span class="nl">std:</span><span class="o">:</span><span class="n">vector</span><span class="o">&lt;</span><span class="nc">Node</span><span class="o">*&gt;</span> <span class="n">children</span><span class="o">;</span>
+
+  <span class="nc">Node</span><span class="o">(</span><span class="kt">int</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">};</span></code></pre></figure>
+
+<p>上記と SD カードを再帰的に <a href="https://ja.wikipedia.org/wiki/%E6%B7%B1%E3%81%95%E5%84%AA%E5%85%88%E6%8E%A2%E7%B4%A2" title="深さ優先探索 - Wikipedia">深さ優先探索</a> する <a href="https://github.com/espressif/arduino-esp32/blob/master/libraries/SD/examples/SD_Test/SD_Test.ino#L54-L83" title="arduino-esp32/libraries/SD/examples/SD_Test/SD_Test.ino at master · espressif/arduino-esp32">SD ライブラリの例題関数 <code class="language-plaintext highlighter-rouge">listDir()</code></a> とを組み合わたコードを作ってみました。ただし、末端の葉ノードからルートまで辿れるよう、親ノードへのポインタ <code class="language-plaintext highlighter-rouge">Node* parent</code> を追加しています。</p>
+
+<div class="clear-both"></div>
+
+<p>次のサンプルコードは、ファイル名とクラス名が合ってませんし、<code class="language-plaintext highlighter-rouge">assert()</code> でお茶を濁している箇所がありますが、ご勘弁を…</p>
+
+<details>
+<summary>tree.hpp</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">ifndef</span> <span class="n">_TREE_HPP_</span>
+<span class="err">#</span><span class="n">define</span> <span class="n">_TREE_HPP_</span>
+
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">vector</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">exception</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="k">assert</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">string</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"FS.h"</span>
+
+<span class="cm">/*----------------------------------------------------------------------
+ * クラスの定義
+ *----------------------------------------------------------------------*/</span>
+<span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+<span class="kd">public</span><span class="o">:</span>
+  <span class="nc">Node</span><span class="o">*</span> <span class="n">parent</span><span class="o">;</span>                 <span class="c1">// 親ノードへのポインタ</span>
+  <span class="nl">std:</span><span class="o">:</span><span class="n">string</span> <span class="n">name</span><span class="o">;</span>             <span class="c1">// フォルダ名 or ファイル名</span>
+  <span class="nl">std:</span><span class="o">:</span><span class="n">vector</span><span class="o">&lt;</span><span class="nc">Node</span><span class="o">*&gt;</span> <span class="n">children</span><span class="o">;</span>  <span class="c1">// 子ノードの集合</span>
+
+  <span class="nc">Node</span><span class="o">(</span><span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="o">,</span> <span class="nc">Node</span> <span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="o">~</span><span class="nc">Node</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">auto</span> <span class="o">&amp;</span><span class="n">n</span> <span class="o">:</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">delete</span> <span class="n">n</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 新しいノードを生成し、子ノードの集合に追加する</span>
+  <span class="nc">Node</span><span class="o">*</span> <span class="n">append</span><span class="o">(</span><span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Node</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="k">assert</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">push_back</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">const</span> <span class="nl">std:</span><span class="o">:</span><span class="n">exception</span> <span class="o">&amp;</span><span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">assert</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span> <span class="c1">//  e.what()</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+  <span class="o">}</span>
+
+<span class="kd">private</span><span class="o">:</span>
+  <span class="c1">// 拡張子をチェック</span>
+  <span class="n">bool</span> <span class="nf">check_mp3</span><span class="o">(</span><span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ext</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span><span class="s">".mp3"</span><span class="o">,</span> <span class="s">".m4a"</span><span class="o">,</span> <span class="s">".wav"</span><span class="o">};</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">ext</span><span class="o">)</span> <span class="o">/</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">ext</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">strcmp</span><span class="o">(&amp;</span><span class="n">path</span><span class="o">[</span><span class="n">strlen</span><span class="o">(</span><span class="n">path</span><span class="o">)</span> <span class="o">-</span> <span class="n">strlen</span><span class="o">(</span><span class="n">ext</span><span class="o">[</span><span class="n">i</span><span class="o">])],</span> <span class="n">ext</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="c1">// ファイルシステムを巡回する</span>
+  <span class="kt">void</span> <span class="nf">scan_node</span><span class="o">(</span><span class="nc">File</span> <span class="o">&amp;</span><span class="n">dir</span><span class="o">,</span> <span class="nc">Node</span> <span class="o">*</span><span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="nc">File</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">dir</span><span class="o">.</span><span class="na">openNextFile</span><span class="o">();</span> <span class="n">entry</span><span class="o">;</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">dir</span><span class="o">.</span><span class="na">openNextFile</span><span class="o">())</span> <span class="o">{</span>
+      <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">name</span><span class="o">();</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">isDirectory</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">scan_node</span><span class="o">(</span><span class="n">entry</span><span class="o">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">append</span><span class="o">(</span><span class="n">name</span><span class="o">));</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">check_mp3</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">append</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="n">entry</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+<span class="kd">public</span><span class="o">:</span>
+  <span class="c1">// ファイルツリーを構築する</span>
+  <span class="kt">void</span> <span class="nf">scan_file</span><span class="o">(</span><span class="nc">File</span> <span class="o">&amp;</span><span class="n">dir</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">scan_node</span><span class="o">(</span><span class="n">dir</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+  <span class="o">}</span>
+
+<span class="kd">private</span><span class="o">:</span>
+  <span class="kt">void</span> <span class="nf">print_node</span><span class="o">(</span><span class="nc">Node</span> <span class="o">*</span> <span class="n">node</span><span class="o">,</span> <span class="kt">int</span> <span class="n">indent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">++</span><span class="n">indent</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">auto</span> <span class="o">&amp;</span><span class="n">n</span> <span class="o">:</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">indent</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span> <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"  "</span><span class="o">);</span> <span class="o">}</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%s (%d)\n"</span><span class="o">,</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">.</span><span class="na">c_str</span><span class="o">(),</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">print_node</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">indent</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+<span class="kd">public</span><span class="o">:</span>
+  <span class="c1">// ツリーを巡回し、ノードの情報を出力する</span>
+  <span class="kt">void</span> <span class="nf">print_tree</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%s (%d)\n"</span><span class="o">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">.</span><span class="na">c_str</span><span class="o">(),</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+    <span class="n">print_node</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="err">#</span><span class="n">endif</span> <span class="c1">// _TREE_HPP_</span></code></pre></figure>
+
+
+</details>
+
+<details id="ino1">
+<summary>N_Ary_Tree1.ino</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="s">"SD.h"</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"tree.hpp"</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="no">ROOT_FOLDER</span> <span class="s">"/MP3/"</span> <span class="c1">// ルートフォルダ</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">);</span>
+
+  <span class="k">if</span> <span class="o">(!</span><span class="no">SD</span><span class="o">.</span><span class="na">begin</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Can't initialize SD."</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nc">File</span> <span class="n">dir</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="no">ROOT_FOLDER</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">dir</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Can't open "</span> <span class="no">ROOT_FOLDER</span> <span class="s">"."</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nc">Node</span> <span class="o">*</span><span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="no">ROOT_FOLDER</span><span class="o">);</span>
+  <span class="n">root</span><span class="o">-&gt;</span><span class="n">scan_file</span><span class="o">(</span><span class="n">dir</span><span class="o">);</span>
+  <span class="n">root</span><span class="o">-&gt;</span><span class="n">print_tree</span><span class="o">();</span>
+  <span class="n">delete</span> <span class="n">root</span><span class="o">;</span>
+
+  <span class="n">dir</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"end"</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
+
+
+</details>
+
+<figure id="figure4" class="float-left">
+  <a href="/images/2025/07-16/TraverseNode.jpg" title="図４ 親ノードへのポインタを辿る" data-lightbox="image">
+    <img src="/images/2025/07-16/TraverseNode-small.jpg" alt="図４ 親ノードへのポインタを辿る" width="512" height="265" />
+    <figcaption>図４ 親ノードへのポインタを辿る</figcaption>
+  </a>
+</figure>
+
+<p>ただこのままだと、末端の葉ノードが木に埋め込まれるため、別途プレイリストとの紐付けが必要です。さらに曲のファイルパスを得るには、<code class="language-plaintext highlighter-rouge">Node* parent</code> を辿りながら文字列を逆順に繋げるか、一旦ルートまで辿った後に戻りながら文字列を連結する必要があり、あまり効率が良くありません。</p>
+
+<h2 id="改良版のコード">改良版のコード</h2>
+
+<p>前章の基本形に少し手を加え、木の根（ルート）から目的の葉ノードまで順方向に探索できるように改良します。</p>
+
+<h3 id="アルゴリズムの概要">アルゴリズムの概要</h3>
+
+<ol>
+  <li>
+    <p>構築済みのツリーにおいて、葉ノードに整数のキーを０から順に割り当てます（<a href="#figure5">図５</a>）。指定したキーを持つ葉ノードを探索することがゴールです。</p>
+  </li>
+  <li>
+    <p>親ノードのキーには、子ノードに割り当てられたキーの最大値を割り当てます（<a href="#figure6">図６</a>）。</p>
+  </li>
+  <li>
+    <p>指定のキーを持つ葉ノードを探索するには、ルートから出発し、<code class="language-plaintext highlighter-rouge">ノードのキー ≧ 指定のキー</code> が成立するノードを順に辿ります（<a href="#figure7">図７</a>）。辿り着いた先が葉ノードであれば、それが目的のノードとなります。</p>
+  </li>
+</ol>
+
+<figure class="flex">
+  <a id="figure5" href="/images/2025/07-16/N-ary-Tree1.png" title="図５ 葉ノードにキーを振る" data-lightbox="image">
+    <img src="/images/2025/07-16/N-ary-Tree1-small.png" alt="図５ 葉ノードにキーを振る" width="525" height="225" />
+    <figcaption>図５ 葉ノードにキーを振る</figcaption>
+  </a>
+  <a id="figure6" href="/images/2025/07-16/N-ary-Tree2.png" title="図６ 枝ノードにキーを設定する" data-lightbox="image">
+    <img src="/images/2025/07-16/N-ary-Tree2-small.png" alt="図６ 枝ノードにキーを設定する" width="525" height="225" />
+    <figcaption>図６ 枝ノードにキーを設定する</figcaption>
+  </a>
+  <a id="figure7" href="/images/2025/07-16/N-ary-Tree3.png" title="図７ キーを探索する" data-lightbox="image">
+    <img src="/images/2025/07-16/N-ary-Tree3-small.png" alt="図７ キーを探索する" width="525" height="225" />
+    <figcaption>図７ キーを探索する</figcaption>
+  </a>
+</figure>
+
+<p>前章の基本形に対するこの方法のメリットは、葉ノードとプレイリストの間が整数値の「キー」で紐付けられるだけなので、疎結合<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> となることです。</p>
+
+<p>また探索のアルゴリズムは、前述のＮ分木に対して <a href="https://ja.wikipedia.org/wiki/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%88%86%E6%8E%A2%E7%B4%A2%E6%9C%A8" title="平衡二分探索木 - Wikipedia">平衡二分探索木</a> の一種である <a href="https://ja.wikipedia.org/wiki/B%E6%9C%A8" title="B木 - Wikipedia">Ｂ木</a> や <a href="https://ja.wikipedia.org/wiki/%E8%B5%A4%E9%BB%92%E6%9C%A8" title="赤黒木 - Wikipedia">赤黒木</a> の探索の考え方に近いです。探索にかかる計算量は、枝ノードの探索中は <em>O(log n)</em>、葉ノードに辿り着いてからは <em>O(n)</em> となります。</p>
+
+<p>今回の場合、最後の <em>O(n)</em> の <em>n</em> は、１枚のアルバムに含まれる曲数、即ち高々十数曲程度なので、気にするほどではないと踏んでます <span class="emoji">🧐</span></p>
+
+<h3 id="サンプルコード">サンプルコード</h3>
+
+<p>次の２つは、このアルゴリズムを実現するコードです。</p>
+
+<p><code class="language-plaintext highlighter-rouge">tree.cpp</code> に定義された静的変数は、探索中に発見したフォルダ名を順に繋いてファイルパスを保持するためのグローバル変数です。<a href="https://ja.wikipedia.org/wiki/%E3%83%AA%E3%82%A8%E3%83%B3%E3%83%88%E3%83%A9%E3%83%B3%E3%83%88" title="リエントラント - Wikipedia">リエントラント</a> なコードじゃなくなるのででイケてませんが、発見したパスを再帰関数の引数と戻り値で引き回すのがイヤだったので…。</p>
+
+<p>今回の場合、プレイリストのオブジェクトは高々１つしか存在しないので、問題ナシとしています（言い訳です、ハイ <span class="emoji">😅</span>）</p>
+
+<details>
+<summary>tree.hpp</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">ifndef</span> <span class="n">_TREE_HPP_</span>
+<span class="err">#</span><span class="n">define</span> <span class="n">_TREE_HPP_</span>
+
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">vector</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">exception</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="k">assert</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">string</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"FS.h"</span>
+
+<span class="cm">/*----------------------------------------------------------------------
+ * クラスの定義
+ *----------------------------------------------------------------------*/</span>
+<span class="kd">class</span> <span class="nc">Node</span> <span class="o">{</span>
+<span class="kd">private</span><span class="o">:</span>
+  <span class="kd">static</span> <span class="n">bool</span> <span class="n">found</span><span class="o">;</span>            <span class="c1">// ノード探索用フラグ</span>
+  <span class="kd">static</span> <span class="nl">std:</span><span class="o">:</span><span class="n">string</span> <span class="n">path</span><span class="o">;</span>      <span class="c1">// ファイルパスの探索結果</span>
+  <span class="kd">static</span> <span class="n">uint16_t</span> <span class="n">n_leafs</span><span class="o">;</span>      <span class="c1">// 末端の葉ノード数</span>
+<span class="kd">public</span><span class="o">:</span>
+  <span class="n">uint32_t</span> <span class="n">key</span><span class="o">;</span>                 <span class="c1">// 各ノードに付与されるキー</span>
+  <span class="nl">std:</span><span class="o">:</span><span class="n">string</span> <span class="n">name</span><span class="o">;</span>             <span class="c1">// フォルダ名 or ファイル名</span>
+  <span class="nl">std:</span><span class="o">:</span><span class="n">vector</span><span class="o">&lt;</span><span class="nc">Node</span><span class="o">*&gt;</span> <span class="n">children</span><span class="o">;</span>  <span class="c1">// 子ノードの集合</span>
+
+  <span class="nc">Node</span><span class="o">(</span><span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="o">~</span><span class="nc">Node</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">auto</span> <span class="o">&amp;</span><span class="n">n</span> <span class="o">:</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">delete</span> <span class="n">n</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 末端の葉ノード数</span>
+  <span class="kd">const</span> <span class="n">size_t</span> <span class="nf">size</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">n_leafs</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 新しいノードを生成し、子ノードの集合に追加する</span>
+  <span class="nc">Node</span><span class="o">*</span> <span class="n">append</span><span class="o">(</span><span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Node</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="k">assert</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">push_back</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="kd">const</span> <span class="nl">std:</span><span class="o">:</span><span class="n">exception</span> <span class="o">&amp;</span><span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">assert</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span> <span class="c1">//  e.what()</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
+  <span class="o">}</span>
+
+<span class="kd">private</span><span class="o">:</span>
+  <span class="c1">// 拡張子をチェック</span>
+  <span class="n">bool</span> <span class="nf">check_mp3</span><span class="o">(</span><span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">ext</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span><span class="s">".mp3"</span><span class="o">,</span> <span class="s">".m4a"</span><span class="o">,</span> <span class="s">".wav"</span><span class="o">};</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">ext</span><span class="o">)</span> <span class="o">/</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">ext</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">strcmp</span><span class="o">(&amp;</span><span class="n">path</span><span class="o">[</span><span class="n">strlen</span><span class="o">(</span><span class="n">path</span><span class="o">)</span> <span class="o">-</span> <span class="n">strlen</span><span class="o">(</span><span class="n">ext</span><span class="o">[</span><span class="n">i</span><span class="o">])],</span> <span class="n">ext</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="c1">// ファイルシステムを巡回する</span>
+  <span class="kt">void</span> <span class="nf">scan_node</span><span class="o">(</span><span class="nc">File</span> <span class="o">&amp;</span><span class="n">dir</span><span class="o">,</span> <span class="nc">Node</span> <span class="o">*</span><span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="nc">File</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">dir</span><span class="o">.</span><span class="na">openNextFile</span><span class="o">();</span> <span class="n">entry</span><span class="o">;</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">dir</span><span class="o">.</span><span class="na">openNextFile</span><span class="o">())</span> <span class="o">{</span>
+      <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">name</span><span class="o">();</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">isDirectory</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">scan_node</span><span class="o">(</span><span class="n">entry</span><span class="o">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">append</span><span class="o">(</span><span class="n">name</span><span class="o">));</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">check_mp3</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">node</span><span class="o">-&gt;</span><span class="n">append</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+      <span class="o">}</span>
+      <span class="n">entry</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 各ノードにキーを振る</span>
+  <span class="kt">void</span> <span class="nf">traverse_node</span><span class="o">(</span><span class="nc">Node</span> <span class="o">*</span><span class="n">node</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">auto</span> <span class="o">&amp;</span><span class="n">n</span> <span class="o">:</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">traverse_node</span><span class="o">(</span><span class="n">n</span><span class="o">);</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">n</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">=</span> <span class="n">n_leafs</span><span class="o">++;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">node</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">=</span> <span class="n">n_leafs</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+  <span class="o">}</span>
+
+<span class="kd">public</span><span class="o">:</span>
+  <span class="c1">// ファイルツリーを構築する</span>
+  <span class="kt">void</span> <span class="nf">scan_file</span><span class="o">(</span><span class="nc">File</span> <span class="o">&amp;</span><span class="n">dir</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">scan_node</span><span class="o">(</span><span class="n">dir</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+
+    <span class="n">n_leafs</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">traverse_node</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+  <span class="o">}</span>
+
+<span class="kd">private</span><span class="o">:</span>
+  <span class="c1">// 指定キーを持つ葉ノードを見つける</span>
+  <span class="n">bool</span> <span class="nf">find_node</span><span class="o">(</span><span class="nc">Node</span> <span class="o">*</span> <span class="n">node</span><span class="o">,</span> <span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">auto</span> <span class="o">&amp;</span><span class="n">n</span> <span class="o">:</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// 指定のキーが含まれる？</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">&gt;=</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// さらに子ノードがある？</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+          <span class="n">path</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">"/"</span><span class="o">);</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">find_node</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">found</span><span class="o">;</span>
+          <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="c1">// 目的のキーに到達</span>
+        <span class="k">else</span> <span class="o">{</span>
+          <span class="k">assert</span><span class="o">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">==</span> <span class="n">key</span><span class="o">);</span>
+          <span class="n">path</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">);</span>
+          <span class="n">found</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+          <span class="k">return</span> <span class="n">found</span><span class="o">;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">found</span><span class="o">;</span>
+  <span class="o">}</span>
+
+<span class="kd">public</span><span class="o">:</span>
+  <span class="c1">// 指定のキーを持つ葉ノードを探索し、ファイルパスを返す</span>
+  <span class="nl">std:</span><span class="o">:</span><span class="n">string</span> <span class="nf">find_path</span><span class="o">(</span><span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">;</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">find_node</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">key</span><span class="o">))</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">path</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+<span class="kd">private</span><span class="o">:</span>
+  <span class="kt">void</span> <span class="nf">print_node</span><span class="o">(</span><span class="nc">Node</span> <span class="o">*</span> <span class="n">node</span><span class="o">,</span> <span class="kt">int</span> <span class="n">indent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">++</span><span class="n">indent</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">auto</span> <span class="o">&amp;</span><span class="n">n</span> <span class="o">:</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">indent</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span> <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"  "</span><span class="o">);</span> <span class="o">}</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%s (%d)\n"</span><span class="o">,</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">.</span><span class="na">c_str</span><span class="o">(),</span> <span class="n">n</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">print_node</span><span class="o">(</span><span class="n">n</span><span class="o">,</span> <span class="n">indent</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+<span class="kd">public</span><span class="o">:</span>
+  <span class="c1">// ツリーを巡回し、ノードの情報を出力する</span>
+  <span class="kt">void</span> <span class="nf">print_tree</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%s (%d)\n"</span><span class="o">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="o">.</span><span class="na">c_str</span><span class="o">(),</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">children</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+    <span class="n">print_node</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">};</span>
+
+<span class="err">#</span><span class="n">endif</span> <span class="c1">// _TREE_HPP_</span></code></pre></figure>
+
+
+</details>
+
+<details>
+<summary>tree.cpp</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="s">"tree.hpp"</span>
+
+<span class="cm">/*----------------------------------------------------------------------
+ * 静的メンバ変数の定義
+ *----------------------------------------------------------------------*/</span>
+<span class="n">bool</span>        <span class="nl">Node:</span><span class="o">:</span><span class="n">found</span><span class="o">;</span>    <span class="c1">// ノード探索用フラグ</span>
+<span class="nl">std:</span><span class="o">:</span><span class="n">string</span> <span class="nl">Node:</span><span class="o">:</span><span class="n">path</span><span class="o">;</span>     <span class="c1">// ファイルパスの探索結果</span>
+<span class="n">uint16_t</span>    <span class="nl">Node:</span><span class="o">:</span><span class="n">n_leafs</span><span class="o">;</span>  <span class="c1">// 末端の葉ノード数</span></code></pre></figure>
+
+
+</details>
+
+<p>またファイルパスの探索は、前章 <a href="#ino1"><code class="language-plaintext highlighter-rouge">N_Ary_Tree1.ino</code></a> の <code class="language-plaintext highlighter-rouge">root-&gt;print_tree();</code> を次のコードで置き換えます。</p>
+
+<details id="ino2">
+<summary>N_Ary_Tree2.ino（ファイルパス探索のコードのみ）</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">  <span class="kd">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">size</span><span class="o">();</span>
+  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">key</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">key</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">key</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="nl">std:</span><span class="o">:</span><span class="n">string</span> <span class="n">path</span> <span class="o">=</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">find_path</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"%3d: %s\n"</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">path</span><span class="o">.</span><span class="na">c_str</span><span class="o">());</span>
+  <span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<h2 id="探索性能の比較">探索性能の比較</h2>
+
+<p>基本形と改良版で、１曲当たりの探索時間の平均値を比較してみました。SD カードの中身は、アーティスト数 5、アルバム数 10、曲数は 130 です。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th style="text-align: center">１曲当たりの探索時間 - SD ライブラリ</th>
+      <th style="text-align: center">１曲当たりの探索時間 - SdFat ライブラリ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>基本形</td>
+      <td style="text-align: center">38.3  [μs]</td>
+      <td style="text-align: center">48.8  [μs]</td>
+    </tr>
+    <tr>
+      <td>改良版</td>
+      <td style="text-align: center">15.3  [μs]</td>
+      <td style="text-align: center">14.5  [μs]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>どちらもプレイリストの GUI スクロール時に問題となる値ではありませんが、改良の効果アリという結果になりました <span class="emoji">👍</span></p>
+
+<h2 id="ようやく">ようやく…</h2>
+
+<p>ココまで辿り着きました。</p>
+
+<p>16GB の microSD カードには千数百曲程度が収まるハズなので、お次はプレイリストの編集用 GUI の作成です。全体のツリーから部分木を切り出し、幾つかのプレイリストとして保存するような実装とする予定です。とっても面倒なコーディングとなりそうなので、重い腰が中々上がりません <span class="emoji">😮‍💨</span></p>
+
+<p>また <a href="/2025/04/24/" title="ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編｜Embedded Kiddie">基本動作編</a> では <abbr title="Cheap Yellow Display">CYD</abbr> に外部スピーカーを繋ぎましたが、Bluetooth 化もしたいですし…</p>
+
+<p>ということで、まだまだ時間がかかりそうです <span class="emoji">🍄</span></p>
+
+<hr />
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>疎結合（そけつごう）とは、システムやソフトウェアの構成要素間の依存関係が弱い状態を指します。これにより、各要素が独立して動作しやすくなり、変更や拡張が容易になるというメリットがあります。反対に、要素間の依存関係が強い状態は密結合と呼ばれます。（by Google AI） <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/06/16/" title="前の記事：LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法">← LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2025/07/16/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2025/07/16/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/07/16/";this.page.identifier="/2025/07/16/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>

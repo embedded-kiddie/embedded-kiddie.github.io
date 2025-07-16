@@ -8,6 +8,20 @@
     
       
       <item>
+        <title>ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装</title>
+        
+          <description>&lt;h2 id=&quot;はじめに&quot;&gt;はじめに&lt;/h2&gt;
+</description>
+        
+        <pubDate>Wed, 16 Jul 2025 12:32:22 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/07/16/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/07/16/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>LVGLとSdFatでSDカードから画像ファイルを読み込んで表示する方法</title>
         
           <description>&lt;h2 id=&quot;はじめに&quot;&gt;はじめに&lt;/h2&gt;
