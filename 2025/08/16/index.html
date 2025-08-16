@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028RでLVGL - ExplorerやFinderの様にフォルダを折り畳める UI の実装 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028RでLVGL - ExplorerやFinderの様にフォルダを折り畳める UI の実装" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="図１ Macのファインダー" />
+<meta property="og:description" content="図１ Macのファインダー" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/08/16/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/08/16/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-08-16T11:33:36+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028RでLVGL - ExplorerやFinderの様にフォルダを折り畳める UI の実装" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-08-16T11:33:36+09:00","datePublished":"2025-08-16T11:33:36+09:00","description":"図１ Macのファインダー","headline":"ESP32 2432S028RでLVGL - ExplorerやFinderの様にフォルダを折り畳める UI の実装","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/08/16/"},"url":"https://embedded-kiddie.github.io/2025/08/16/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028RでLVGL - ExplorerやFinderの様にフォルダを折り畳める UI の実装</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-08-16T11:33:36+09:00" itemprop="datePublished">Aug 16, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <figure class="float-left">
+  <a id="figure1" href="/images/2025/08-16/finder.png" title="図１ Macのファインダー" data-lightbox="image">
+    <img src="/images/2025/08-16/finder.png" alt="図１ Macのファインダー" width="400" height="480" />
+    <figcaption>図１ Macのファインダー</figcaption>
+  </a>
+</figure>
+
+<p>「<abbr title="Cheap Yellow Display">CYD</abbr> で MP3 プレイヤ」の続きです <span class="emoji">🙂</span></p>
+
+<p>例えば「夜、寝ながら聴きたいリスト」とか「気分を上げたい時に聴くリスト」など、SD カードに収録されたアルバムから幾つかのパターンに分けたプレイリストを作成する機能を作りたいと思っています。</p>
+
+<p>Windows のエクスプローラーや Mac のファインダーのように一覧でタイトルを見渡せて、フォルダが折り畳め、また複数のタイトルが選択可能な UI が今回の要件です（<a href="#figure1">図１</a>）。</p>
+
+<p>欲張り過ぎですかネ <span class="emoji">😁</span>。</p>
+
+<div class="clear-both"></div>
+
+<h2 id="ウィジェットの選定">ウィジェットの選定</h2>
+
+<p>数ある LVGL のウィジェットから、今回の要件に合いそうなモノをピックアップしてみました。</p>
+
+<h3 id="file-explorer-lv_file_explorer">File Explorer (lv_file_explorer)</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/08-16/lv_file_explorer.gif" title="lv_file_explorer" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_file_explorer.gif" alt="lv_file_explorer" width="640" height="360" />
+    <figcaption>lv_file_explorer</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://docs.lvgl.io/master/details/auxiliary-modules/file_explorer.html" title="ile Explorer - LVGL 9.4 documentation">lv_file_explorer</a> は、ファイルシステムの巡回に適したウィジェットです。クイックアクセス用の <a href="https://docs.lvgl.io/master/details/widgets/table.html" title="Table (lv_table) - LVGL 9.4 documentation">Table (lv_table)</a> と、一覧表示用の <a href="https://docs.lvgl.io/master/details/widgets/list.html" title="List (lv_list) - LVGL 9.4 documentation">List (lv_list)</a> の２ペインの構成が可能ですが、画面の小さな <abbr title="Cheap Yellow Display">CYD</abbr> ではレイアウトが苦しそうです。</p>
+
+<p>また <a href="https://docs.lvgl.io/master/details/libs/fs.html" title="File System Interfaces - LVGL 9.4 documentation">LVGL の抽象化ファイルシステム</a> に合わせた SD カード用 <a href="https://elm-chan.org/fsw/ff/" title="FatFs - Generic FAT Filesystem Module">FatFs</a> ドライバの作成が必要です。</p>
+
+<h3 id="menu-lv_menu">Menu (lv_menu)</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/08-16/lv_menu.gif" title="lv_menu" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_menu.gif" alt="lv_menu" width="640" height="360" />
+    <figcaption>lv_menu</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://docs.lvgl.io/master/details/widgets/menu.html" title="Menu (lv_menu) - LVGL 9.4 documentation">lv_menu</a> ウィジェットは、<a href="https://docs.lvgl.io/master/details/widgets/label.html" title="Label (lv_label) - LVGL 9.4 documentation">Label (lv_label)</a>、<a href="https://docs.lvgl.io/master/details/widgets/button.html" title="Button (lv_button) - LVGL 9.4 documentation">Button (lv_button)</a>、<a href="https://docs.lvgl.io/master/details/widgets/image.html" title="Image (lv_image) - LVGL 9.4 documentation">Image (lv_image)</a> を組み合わせたメニュー用のリストが作成できます。</p>
+
+<p>前述の <a href="#file-explorer-lv_file_explorer">File Explorer</a> 同様、デフォルトではクリック時の動作が別ページへの遷移となっていますが、この動作を「折り畳み」に変えれば目的の UI が作れるかもしれません。</p>
+
+<h3 id="table-lv_table">Table (lv_table)</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/08-16/lv_table.gif" title="lv_table" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_table.gif" alt="lv_table" width="640" height="360" />
+    <figcaption>lv_table</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://docs.lvgl.io/master/details/widgets/table.html" title="Table (lv_table) - LVGL 9.4 documentation">lv_table</a> は、ｎ行ｍ列のテーブルを作成するウィジェットで、テキスト文字列のみを扱うため軽量さが売りです。</p>
+
+<p>トグルスイッチで行を選択する例題が載っています。フォルダ階層ごとの段付けや「折り畳み」ができるか、要確認です <span class="emoji">🤔</span> 今回の第１候補ですネ。</p>
+
+<h3 id="list-lv_list">List (lv_list)</h3>
+
+<figure class="float-left">
+  <a href="/images/2025/08-16/lv_list.gif" title="lv_list" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list.gif" alt="lv_list" width="640" height="360" />
+    <figcaption>lv_list</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://docs.lvgl.io/master/details/widgets/list.html" title="List (lv_list) - LVGL 9.4 documentation">lv_list</a> は、前述の <a href="#menu-lv_menu">Menu</a> 同様、３つのウィジェットを組み合わせたリストが作れるウィジェットです。</p>
+
+<p><a href="https://docs.lvgl.io/master/details/main-modules/animation.html" title="Animation (lv_anim) - LVGL 9.4 documentation">Animation (lv_anim)</a> でクリック時の「折り畳み」が実現できそうなので、今回の第２候補としました <span class="emoji">😊</span></p>
+
+<h2 id="プレイリストの実装と検証">プレイリストの実装と検証</h2>
+
+<p>今回の検証に使用したソフトウェアは次の通りです。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ソフトウェア コンポーネント</th>
+      <th>バージョン</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Arduino IDE</td>
+      <td><a href="https://github.com/arduino/arduino-ide/releases/tag/2.3.4" title="Release 2.3.4 · arduino/arduino-ide">Version 2.3.4</a> *<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup></td>
+    </tr>
+    <tr>
+      <td>esp32 by Espressif Systems</td>
+      <td><a href="https://github.com/espressif/arduino-esp32/releases/tag/3.2.1" title="Release Arduino Release v3.2.1 based on ESP-IDF v5.4.2 · espressif/arduino-esp32">v3.2.1</a> または <a href="https://github.com/espressif/arduino-esp32/releases/tag/3.3.0" title="Release Arduino Release v3.3.0 based on ESP-IDF v5.5.0 · espressif/arduino-esp32">v3.3.0</a></td>
+    </tr>
+    <tr>
+      <td>ボードタイプ</td>
+      <td><a href="https://github.com/espressif/arduino-esp32/tree/master/variants/jczn_2432s028r" title="arduino-esp32/variants/jczn_2432s028r at master · espressif/arduino-esp32">ESP32 Dev Module</a> または <a href="https://github.com/espressif/arduino-esp32/tree/master/variants/esp32" title="arduino-esp32/variants/esp32 at master · espressif/arduino-esp32">ESP32-2432S028R CYD</a></td>
+    </tr>
+    <tr>
+      <td>LVGL</td>
+      <td><a href="https://github.com/lvgl/lvgl/releases/tag/v9.2.2" title="Release Release v9.2.2 · lvgl/lvgl">v9.2.2</a> または <a href="https://github.com/lvgl/lvgl/releases/tag/v9.3.0" title="Release Release v9.3.0 · lvgl/lvgl">v9.3.0</a></td>
+    </tr>
+    <tr>
+      <td>LovyanGFX</td>
+      <td><a href="https://github.com/lovyan03/LovyanGFX/releases/tag/1.2.7" title="Release 1.2.7 · lovyan03/LovyanGFX">1.2.7</a></td>
+    </tr>
+    <tr>
+      <td>SDライブラリ</td>
+      <td><a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">SD</a> または <a href="https://github.com/greiman/SdFat/releases/tag/2.3.0" title="Release Add SDIO support for RP2040/RP2350 · greiman/SdFat">SdFat 2.3.0</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>結論から言えば、第１候補も第２候補も「帯に短し襷に長し」でしたので、両者の「いいとこ取り」をした改善案を作成しています。ですが、まずはそれぞれの特徴を検証した結果を報告したいと思います。</p>
+
+<div class="notice clear-both">
+
+<details style="margin-bottom: 0">
+<summary>LVGL 9.3.0 の警告について</summary>
+
+
+<p>コンパイル時に次の警告が出ます（パスは Mac の場合）。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">/</span><span class="nc">Users</span><span class="o">/&lt;</span><span class="n">user</span><span class="o">&gt;/</span><span class="nc">Library</span><span class="o">/</span><span class="nc">Arduino15</span><span class="o">/</span><span class="n">packages</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">x32</span><span class="o">/</span><span class="mi">2411</span><span class="o">/</span><span class="n">bin</span><span class="o">/../</span><span class="n">lib</span><span class="o">/</span><span class="n">gcc</span><span class="o">/</span><span class="n">xtensa</span><span class="o">-</span><span class="n">esp</span><span class="o">-</span><span class="n">elf</span><span class="o">/</span><span class="mf">14.2</span><span class="o">.</span><span class="mi">0</span><span class="o">/../../../../</span><span class="n">xtensa</span><span class="o">-</span><span class="n">esp</span><span class="o">-</span><span class="n">elf</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="nl">ld:</span> <span class="nl">warning:</span> <span class="o">/</span><span class="nc">Users</span><span class="o">/&lt;</span><span class="n">user</span><span class="o">&gt;/</span><span class="nc">Library</span><span class="o">/</span><span class="nc">Arduino15</span><span class="o">/</span><span class="n">packages</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">x32</span><span class="o">/</span><span class="mi">2411</span><span class="o">/</span><span class="n">bin</span><span class="o">/../</span><span class="n">lib</span><span class="o">/</span><span class="n">gcc</span><span class="o">/</span><span class="n">xtensa</span><span class="o">-</span><span class="n">esp</span><span class="o">-</span><span class="n">elf</span><span class="o">/</span><span class="mf">14.2</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">no</span><span class="o">-</span><span class="n">rtti</span><span class="o">/</span><span class="n">crtn</span><span class="o">.</span><span class="na">o</span><span class="o">:</span> <span class="n">missing</span> <span class="o">.</span><span class="na">note</span><span class="o">.</span><span class="na">GNU</span><span class="o">-</span><span class="n">stack</span> <span class="n">section</span> <span class="n">implies</span> <span class="n">executable</span> <span class="n">stack</span>
+<span class="o">/</span><span class="nc">Users</span><span class="o">/&lt;</span><span class="n">user</span><span class="o">&gt;/</span><span class="nc">Library</span><span class="o">/</span><span class="nc">Arduino15</span><span class="o">/</span><span class="n">packages</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="n">x32</span><span class="o">/</span><span class="mi">2411</span><span class="o">/</span><span class="n">bin</span><span class="o">/../</span><span class="n">lib</span><span class="o">/</span><span class="n">gcc</span><span class="o">/</span><span class="n">xtensa</span><span class="o">-</span><span class="n">esp</span><span class="o">-</span><span class="n">elf</span><span class="o">/</span><span class="mf">14.2</span><span class="o">.</span><span class="mi">0</span><span class="o">/../../../../</span><span class="n">xtensa</span><span class="o">-</span><span class="n">esp</span><span class="o">-</span><span class="n">elf</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="nl">ld:</span> <span class="nl">NOTE:</span> <span class="nc">This</span> <span class="n">behaviour</span> <span class="n">is</span> <span class="n">deprecated</span> <span class="n">and</span> <span class="n">will</span> <span class="n">be</span> <span class="n">removed</span> <span class="n">in</span> <span class="n">a</span> <span class="n">future</span> <span class="n">version</span> <span class="n">of</span> <span class="n">the</span> <span class="n">linker</span></code></pre></figure>
+
+<p><a href="https://www.google.com/search?q=missing+.note.GNU-stack+section+implies+executable+stack">“missing .note.GNU-stack section implies executable stack” を調べると</a>、実行可能なスタック領域にアセンブラコードが配置されるような場合に、「<a href="https://ja.wikipedia.org/wiki/%E3%83%90%E3%83%83%E3%83%95%E3%82%A1%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%95%E3%83%AD%E3%83%BC" title="バッファオーバーフロー - Wikipedia">バッファオーバーフロー</a> などの脆弱性に気をつけろ」ということのようです。</p>
+
+<p>LVGL 9.3.0 との関連性は不明ですが、ESP32-IDF の基本コンポーネント <a href="https://www.google.com/search?q=what+is+newlib-esp32">newlib-esp32</a> の <a href="https://github.com/espressif/newlib-esp32/blob/esp-4.3.0/libgloss/cris/crtn.c" title="newlib-esp32/libgloss/cris/crtn.c at esp-4.3.0 · espressif/newlib-esp32"><code class="language-plaintext highlighter-rouge">crtn.c</code></a> や <a href="https://github.com/espressif/newlib-esp32/blob/esp-4.3.0/libgloss/spu/crtn.S" title="newlib-esp32/libgloss/spu/crtn.S at esp-4.3.0 · espressif/newlib-esp32"><code class="language-plaintext highlighter-rouge">crtn.S</code></a> には、確かにアセンブラコードが含まれています。</p>
+
+<p>まぁ、<a href="https://github.com/espressif/arduino-esp32/security" title="Security Overview · espressif/arduino-esp32">GitHub のセキュリティ</a> は時々覗くとして、趣味程度のアプリなら気にしない、と <abbr title="ある物事の程度や相手の力量を、大したことはないだろうと見くびって、安易に予測したり、甘く見たりすること">高を括ってます <span class="emoji">🙄</span></abbr></p>
+
+</details>
+
+</div>
+
+<h3 id="第１候補の-table-lv_table-で作ってみる">第１候補の Table (lv_table) で作ってみる</h3>
+
+<p>例題 <a href="https://docs.lvgl.io/master/details/widgets/table.html#lightweighted-list-from-table" title="Table (lv_table) - LVGL 9.4 documentation">Lightweighted list from table</a>（<a href="#figure2">図２</a>）のコードを元に、徐々にスタイルを調整し、まずは <a href="#figure3">図３</a> のような見た目にしてみました。</p>
+
+<p><a href="https://docs.lvgl.io/master/details/widgets/table.html" title="Table (lv_table) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_table</code></a> の特徴は、テーブルのセル中にテキストを表示するだけの機能に特化していて、とても「軽量」なことです。200 行の表の作成に数十 ms しかかかりません。注意すべきは、予め作成する表の行数と列数を指定しておくことです。指定せずとも作成は可能ですが、<a href="#figure2">図２</a> の例では約 1.5 秒かかりました <span class="emoji">😅</span></p>
+
+<p>また <a href="#figure2">図２</a> のトグルスイッチは <a href="https://docs.lvgl.io/master/details/widgets/switch.html" title="Switch (lv_switch) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_switch</code></a> を使っているワケではなく、長方形と正方形に角丸を指定した長円と真円をレンダリングしています。そのコードを改修し、チェックボックスに置き換えてみたのが <a href="#figure3">図３</a> です。</p>
+
+<figure class="flex">
+  <a id="figure2" href="/images/2025/08-16/lv_table1.png" title="図２ lv_table の例題" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_table1.png" alt="図２ lv_table の例題" width="240" height="320" />
+    <figcaption>図２ lv_table の例題</figcaption>
+  </a>
+  <a id="figure3" href="/images/2025/08-16/lv_table2.png" title="図３ lv_table の応用例" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_table2.png" alt="図３ lv_table の応用例" width="240" height="320" />
+    <figcaption>図３ lv_table の応用例</figcaption>
+  </a>
+  <a id="figure4" href="/images/2025/08-16/lv_table3.png" title="図４ 折り畳めない！" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_table3.png" alt="図４ 折り畳めない！" width="240" height="320" />
+    <figcaption>図４ 折り畳めない！</figcaption>
+  </a>
+</figure>
+
+<p>さらに無理矢理、目標とするイメージに近付けたのが <a href="#figure4">図４</a> です。この段階で分かったことは、<code class="language-plaintext highlighter-rouge">lv_table</code> の内部には <a href="https://docs.lvgl.io/master/details/main-modules/animation.html" title="Animation (lv_anim) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_anim</code></a> が適用できるウィジェットが存在せず、アニメーションによる折り畳み機能の実現は無理っポイということでした <span class="emoji">🥺</span></p>
+
+<p>裏を返せば、このシンプルさが <code class="language-plaintext highlighter-rouge">lv_table</code> が軽量な理由です <span class="emoji">💪</span></p>
+
+<h3 id="第２候補の-list-lv_list-で作ってみる">第２候補の List (lv_list) で作ってみる</h3>
+
+<figure class="float-left">
+  <a id="figure5" href="/images/2025/08-16/WidgetTree1.jpg" title="図５ lv_list のウィジェットツリー" data-lightbox="image">
+    <img src="/images/2025/08-16/WidgetTree1-small.jpg" alt="図５ lv_list のウィジェットツリー" width="600" height="325" />
+    <figcaption>図５ lv_list のウィジェットツリー</figcaption>
+  </a>
+</figure>
+
+<p>超シンプルな <a href="https://docs.lvgl.io/master/details/widgets/table.html" title="Table (lv_table) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_table</code></a> とは異なり、<a href="https://docs.lvgl.io/master/details/widgets/list.html" title="List (lv_list) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_list</code></a> は３つのウィジェット <a href="https://docs.lvgl.io/master/details/widgets/label.html" title="Label (lv_label) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_label</code></a>、<a href="https://docs.lvgl.io/master/details/widgets/button.html" title="Button (lv_button) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_button</code></a>、<a href="https://docs.lvgl.io/master/details/widgets/image.html" title="Image (lv_image) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_image</code></a> を内包するコンテナウィジェットです（<a href="#figure5">図５</a>）。</p>
+
+<div class="clear-both"></div>
+
+<p>例題の <a href="https://docs.lvgl.io/master/details/widgets/list.html#simple-list" title="List (lv_list) - LVGL 9.4 documentation">Simple List</a>（<a href="#figure6">図６</a>）を元に、少しずつスタイルを調整しながら目的の UI を作成してみました（<a href="#figure7">図７</a>、<a href="#figure8">図８</a>）。各行の <code class="language-plaintext highlighter-rouge">lv_button</code> にアニメーションが適用できるので、フォルダ単位の折り畳みもバッチリです <span class="emoji">👍</span></p>
+
+<figure class="flex">
+  <a id="figure6" href="/images/2025/08-16/lv_list1.png" title="図６ lv_list の例題" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list1.png" alt="図６ lv_list の例題" width="240" height="320" />
+    <figcaption>図６ lv_list の例題</figcaption>
+  </a>
+  <a id="figure7" href="/images/2025/08-16/lv_list2.png" title="図７ lv_list の応用例" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list2.png" alt="図７ lv_list の応用例" width="240" height="320" />
+    <figcaption>図７ lv_list の応用例</figcaption>
+  </a>
+  <a id="figure8" href="/images/2025/08-16/lv_list3.png" title="図８ checkbox の追加例" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list3.png" alt="図８ checkbox の追加例" width="240" height="320" />
+    <figcaption>図８ checkbox の追加例</figcaption>
+  </a>
+</figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>ウィジェットツリーの確認方法</summary>
+<a href="https://docs.lvgl.io/master/details/auxiliary-modules/obj_id.html#dumping-a-widget-tree" title="Widget ID - LVGL 9.4 documentation"><code>lv_obj_dump_tree(lv_obj_t *start_obj)</code></a> で <code>start_obj</code>（<code>NULL</code> の場合は、表示中のスクリーン）を親とするツリーを LVGL のログ（通常はシリアルモニタ）に出力することができます。この関数を使うには、<code>lv_conf.h</code> の下記シンボルを有効にします。
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** Enable log module */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_LOG</span> <span class="mi">1</span>
+<span class="err">#</span><span class="k">if</span> <span class="no">LV_USE_LOG</span>
+    <span class="cm">/** Set value to one of the following levels of logging detail:
+     *  - LV_LOG_LEVEL_TRACE    Log detailed information.
+     *  - LV_LOG_LEVEL_INFO     Log important events.
+     *  - LV_LOG_LEVEL_WARN     Log if something unwanted happened but didn't cause a problem.
+     *  - LV_LOG_LEVEL_ERROR    Log only critical issues, when system may fail.
+     *  - LV_LOG_LEVEL_USER     Log only custom log messages added by the user.
+     *  - LV_LOG_LEVEL_NONE     Do not log anything. */</span>
+    <span class="err">#</span><span class="n">define</span> <span class="no">LV_LOG_LEVEL</span> <span class="no">LV_LOG_LEVEL_WARN</span>  <span class="c1">// または LV_LOG_LEVEL_USER</span>
+
+<span class="cm">/** Add `id` field to `lv_obj_t` */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_OBJ_ID</span>           <span class="mi">1</span> <span class="c1">// 0 の場合、オブジェクトを識別する ID が全て 0 になる</span>
+
+<span class="cm">/** Use builtin obj ID handler functions:
+* - lv_obj_assign_id:       Called when a widget is created. Use a separate counter for each widget class as an ID.
+* - lv_obj_id_compare:      Compare the ID to decide if it matches with a requested value.
+* - lv_obj_stringify_id:    Return string-ified identifier, e.g. "button3".
+* - lv_obj_free_id:         Does nothing, as there is no memory allocation for the ID.
+* When disabled these functions needs to be implemented by the user.*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_OBJ_ID_BUILTIN</span>   <span class="mi">1</span></code></pre></figure>
+
+<p>詳しくは「<a href="https://docs.lvgl.io/master/details/auxiliary-modules/obj_id.html#dumping-a-widget-tree" title="Widget ID - LVGL 9.4 documentation">Dumping a Widget Tree</a>」を参照してください。</p>
+
+</details>
+
+</div>
+
+<p>ちょっとした問題点としては、SD ライブラリではフォルダやファイルのリスティング順が制御できないことです（<a href="#figure9">図９</a>）。そこで前回記事「<a href="/2025/07/16/" title="ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装｜Embedded Kiddie">ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装</a>」で作成したコードを利用し、アルファベット順に表示するプログラムも作成しました（<a href="#figure10">図１０</a>）。</p>
+
+<figure class="flex">
+  <a id="figure9" href="/images/2025/08-16/lv_list_SD.png" title="図９ SD カード直読み版" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list_SD.png" alt="図９ SD カード直読み版" width="240" height="320" />
+    <figcaption>図９ SD カード直読み版</figcaption>
+  </a>
+  <a id="figure10" href="/images/2025/08-16/lv_list_Tree.png" title="図１０ ファイルツリー構築版" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list_Tree.png" alt="図１０ ファイルツリー構築版" width="240" height="320" />
+    <figcaption>図１０ ファイルツリー構築版</figcaption>
+  </a>
+  <a id="figure11" href="/images/2025/08-16/lv_list4.png" title="図１１ メモリ消費量がヤバい" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list4.png" alt="図１１ メモリ消費量がヤバい" width="240" height="320" />
+    <figcaption>図１１ メモリ消費量がヤバい</figcaption>
+  </a>
+</figure>
+
+<p>最も大きな問題点としては、メモリ消費量が多いということです（<a href="#figure11">図１１</a>）。今回は楽曲単位ではなくアルバム単位で選択できる UI の作成が目標ですが、このままでは実質 320KB の SRAM で数十枚程度のアルバムしか管理できない見通しになります <span class="emoji">😣</span></p>
+
+<h3 id="メモリ削減案">メモリ削減案</h3>
+
+<p>そこで「折り畳み」と「メモリ消費量の削減」を両立させる案として、第２候補に第１候補のテクニックを適用することを考えました。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">lv_list</code> をベースに、メモリを喰う <code class="language-plaintext highlighter-rouge">lv_button</code> + <code class="language-plaintext highlighter-rouge">lv_label</code> + <code class="language-plaintext highlighter-rouge">lv_image</code> は使わない</li>
+  <li>代わりにセルの追加は、<code class="language-plaintext highlighter-rouge">lv_anim</code> でアニメーションも適用できる <code class="language-plaintext highlighter-rouge">lv_label</code> で代行する</li>
+  <li>チェックボックスなどのアイコン画像は、<code class="language-plaintext highlighter-rouge">lv_table</code> と同様のテクニックでレンダリング</li>
+  <li><a href="https://docs.lvgl.io/master/details/widgets/label.html#long-modes" title="Label (lv_label) - LVGL 9.4 documentation">Long modes</a> は、<code class="language-plaintext highlighter-rouge">LV_LABEL_LONG_SCROLL_CIRCULAR</code> → <code class="language-plaintext highlighter-rouge">LV_LABEL_LONG_CLIP</code> に変更</li>
+</ul>
+
+<p>この方針を元に作成したのが <a href="#figure12">図１２</a> です。<a href="#figure4">図４</a> の <code class="language-plaintext highlighter-rouge">lv_table</code> ほどではありませんが、<a href="#figure8">図８</a> に比べてメモリ消費量を半減できました <span class="emoji">👍</span></p>
+
+<figure class="flex">
+  <a id="figure12" href="/images/2025/08-16/lv_list5.png" title="図１２ メモリ削減案" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list5.png" alt="図１２ メモリ削減案" width="240" height="320" />
+    <figcaption>図１２ メモリ削減案</figcaption>
+  </a>
+  <div>
+    <video id="demo1" controls="" muted="" width="240" height="320" style="margin-top:0.5em; padding-bottom:0">
+      <source src="http://localhost:4000/images/2025/08-16/demo1.mp4" type="video/mp4" />
+    </video>
+    <figcaption>メモリ削減案のデモ１</figcaption>
+  </div>
+  <div>
+    <video id="demo2" controls="" muted="" width="240" height="320" style="margin-top:0.5em; padding-bottom:0">
+      <source src="http://localhost:4000/images/2025/08-16/demo2.mp4" type="video/mp4" />
+    </video>
+    <figcaption>メモリ削減案のデモ２</figcaption>
+  </div>
+</figure>
+<script type="text/javascript">
+  var vid1 = document.getElementById("demo1"); vid1.playbackRate = 0.5;
+  var vid2 = document.getElementById("demo2"); vid2.playbackRate = 0.5;
+</script>
+
+<h3 id="折り畳みの仕組み">折り畳みの仕組み</h3>
+
+<p><code class="language-plaintext highlighter-rouge">lv_list</code> にセルを追加する際、「ディレクトリ階層の深さ」に加え、「折り畳み」と「選択」の状態を表す情報をセルに付加しています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 各セルに付加する情報</span>
+<span class="n">typedef</span> <span class="n">union</span> <span class="o">{</span>
+  <span class="kt">void</span> <span class="o">*</span><span class="n">user_data</span><span class="o">;</span>  <span class="c1">// lv_obj_{set|get}_user_data() への引数</span>
+  <span class="n">struct</span> <span class="o">{</span>
+    <span class="n">uint8_t</span> <span class="n">key</span><span class="o">;</span>    <span class="c1">// 識別用のキー</span>
+    <span class="n">uint8_t</span> <span class="n">depth</span><span class="o">;</span>  <span class="c1">// 階層の深さ（ルートは深さゼロ）</span>
+    <span class="n">uint8_t</span> <span class="n">type</span><span class="o">;</span>   <span class="c1">// 0: フォルダ、1: 末端のフォルダ／ファイル</span>
+    <span class="n">bool</span>    <span class="n">status</span><span class="o">;</span> <span class="c1">// true: 折り畳み状態（フォルダの場合）、選択済み状態（末端の場合）</span>
+  <span class="o">};</span>
+<span class="o">}</span> <span class="n">CellData_t</span><span class="o">;</span></code></pre></figure>
+
+<figure class="float-left">
+  <a href="/images/2025/08-16/tree_depth.jpg" title="図１３ ファイル階層の辿り方" data-lightbox="image">
+    <img src="/images/2025/08-16/tree_depth-small.jpg" alt="図１３ ファイル階層の辿り方" width="600" height="330" />
+    <figcaption>図１３ ファイル階層の辿り方</figcaption>
+  </a>
+</figure>
+
+<p>あるセルがクリックされた時にこの情報を参照し、自身より「階層の深さ」が大きいセルを折り畳みの対象とします。</p>
+
+<p><code class="language-plaintext highlighter-rouge">lv_list</code> 中のウィジェットは関数 <a href="https://docs.lvgl.io/master/API/core/lv_obj_tree_h.html" title="lv_obj_tree.h - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_get_sibling()</code></a> で辿れるので（<a href="#figure13">図１３</a>）、高さを変えるアニメーションを設定することで「折り畳み」を実現しています。</p>
+
+<div class="clear-both"></div>
+
+<p>この方法のイケてない点は、折り畳み対象のセル数に比例してアニメーションに必要なメモリが増大することです。</p>
+
+<figure class="float-left">
+  <a id="figure14" href="/images/2025/08-16/WidgetTree2.jpg" title="図１４ lv_list の階層化は失敗！" data-lightbox="image">
+    <img src="/images/2025/08-16/WidgetTree2-small.jpg" alt="図１４ lv_list の階層化は失敗！" width="600" height="325" />
+    <figcaption>図１４ lv_list の階層化は失敗！</figcaption>
+  </a>
+</figure>
+
+<p>そこで、折り畳み対象のセルを一まとめにするため、乱暴にも <code class="language-plaintext highlighter-rouge">lv_list</code> や <code class="language-plaintext highlighter-rouge">lv_label</code> でラップしてみました（<a href="#figure14">図１４</a>）。が、３階層目以降のセルが正しく表示されないという残念な結果となりました <span class="emoji">💩</span></p>
+
+<h2 id="メモリ削減案のプログラムについて">メモリ削減案のプログラムについて</h2>
+
+<p>プログラムは <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/tree/main/LVGL/LVGL_Arduino_FileList" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FileList at main · embedded-kiddie/Arduino-CYD-2432S028R">CYD + LVGL のガラクタ置き場</a> に上げてあります。</p>
+
+<figure class="highlight"><pre><code class="language-tree" data-lang="tree">LVGL_Arduino_FileList
+├── LVGL_Arduino_FileList.ino
+├── list.cpp                    // リスト構築用のコード
+├── list.h                      // 〃
+├── sdspi.h                     // SDカードの設定
+├── src                         // 日本語フォント、アイコン画像など
+├── tree.cpp                    // Ｎ分木構築用のコード
+└── tree.hpp                    // 〃</code></pre></figure>
+
+<p><a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/blob/main/LVGL/LVGL_Arduino_FileList/LVGL_Arduino_FileList.ino" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FileList/LVGL_Arduino_FileList.ino at main · embedded-kiddie/Arduino-CYD-2432S028R"><code class="language-plaintext highlighter-rouge">LVGL_Arduino_FileList.ino</code></a> の前半は LovyanGFX と LVGL の設定です。「SD カード直読み版」と「ファイルツリー構築版」を切り替えは、<code class="language-plaintext highlighter-rouge">setup()</code> の最後で行います。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="k">if</span>   <span class="mi">0</span>
+  <span class="cm">/* SD カード直読み版 */</span>
+  <span class="n">add_list</span><span class="o">(</span><span class="n">dir</span><span class="o">,</span> <span class="n">list</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>   <span class="c1">// 2: 2階層まで or 3: 3階層まで（"ROOT_FOLDER"を除く）</span>
+<span class="err">#</span><span class="k">else</span>
+  <span class="cm">/* ファイルツリー構築版 */</span>
+  <span class="nc">Node</span> <span class="o">*</span><span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Node</span><span class="o">(</span><span class="no">ROOT_FOLDER</span><span class="o">);</span>
+  <span class="n">root</span><span class="o">-&gt;</span><span class="n">scan_dir</span><span class="o">(</span><span class="n">dir</span><span class="o">);</span>      <span class="c1">// 末端のディレクトリを選択対象とする</span>
+<span class="c1">//root-&gt;scan_file(dir);     // 末端のファイルを選択対象とする</span>
+
+  <span class="n">add_list</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">list</span><span class="o">);</span>
+
+  <span class="n">delete</span> <span class="n">root</span><span class="o">;</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<p>また ESP32 標準の SD ライブラリと SdFat の切り替えは、<a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/blob/main/LVGL/LVGL_Arduino_FileList/sdspi.h" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FileList/sdspi.h at main · embedded-kiddie/Arduino-CYD-2432S028R"><code class="language-plaintext highlighter-rouge">spdi.h</code></a> で行います。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// #define USE_SDFAT</span>
+
+<span class="err">#</span><span class="n">ifdef</span>  <span class="no">USE_SDFAT</span>
+<span class="c1">//--------------------------------------------------------------------</span>
+<span class="c1">// SdFat library</span>
+<span class="c1">// https://github.com/greiman/SdFat</span>
+<span class="c1">//--------------------------------------------------------------------</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"SdFat.h"</span></code></pre></figure>
+
+<div class="clear-both"></div>
+
+<h3 id="制限事項">制限事項</h3>
+
+<p>メモリ消費を削減したとは言え、アプリケーションにとっては相変わらず厳しい状況です。</p>
+
+<p>LVGL では、<code class="language-plaintext highlighter-rouge">lv_conf.h</code> で設定された <a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L72" title="lvgl/lv_conf_template.h at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">LV_MEM_SIZE</code></a> が足りなくなるとアサーションが実行され（<code class="language-plaintext highlighter-rouge">V_USE_ASSERT_*</code> の設定次第）、また <code class="language-plaintext highlighter-rouge">try - catch</code> ステートメントも効かないため、アプリケーション側でサイズを超えないように管理する必要があります。</p>
+
+<p>このため生成するセル数を <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/blob/main/LVGL/LVGL_Arduino_FileList/list.h#L58" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FileList/list.h at main · embedded-kiddie/Arduino-CYD-2432S028R"><code class="language-plaintext highlighter-rouge">list.h</code></a> の設定で制限しています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">MAX_CELLS</span>   <span class="mi">100</span> <span class="c1">// LV_MEM_SIZE = (64 * 1024U)</span></code></pre></figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>Arduino の ESP32 で <code>try() - catch</code> が効かない理由</summary>
+
+
+<p><a href="https://www.google.com/search?q=Why+can%27t+I+use+%60try-catch%60+statements+on+the+Arduino+ESP32%3F">Google にその理由を聞いたところ</a>、AI から次の回答が得られました。</p>
+
+<blockquote>
+  <p>ESP32開発において、Arduino IDEでtry-catch文を直接使用できない主な理由は、コードサイズとリソース消費を抑えるため、Arduinoビルド環境ではC++例外処理がデフォルトで無効になっていることが多いためです。
+ESP32マイクロコントローラ自体はC++例外処理が可能ですが、標準のArduinoフレームワークと、ESP32を含む様々なボード用の関連ツールチェーンでは、多くの場合、-fno-exceptionsフラグを使用してコードをコンパイルします。このフラグは、try-catchメカニズムを含む例外処理を明示的に無効にします。</p>
+</blockquote>
+
+<p>出典は不明ですが、コア系の再コンパイルが必要なようです。</p>
+
+</details>
+
+</div>
+
+<h2 id="さて">さて…</h2>
+
+<p>16GB のμSD カードに、理想は1500曲程度、目標は1000曲以上が管理出来ることが目標です。</p>
+
+<p>何度か心が折れそうになりながらも目標に到達できそうな気配が感じられるまで、あと一歩というところまで来ました。</p>
+
+<p>もうひと頑張りします <span class="emoji">🥳</span></p>
+
+<div class="clear-both"></div>
+
+<hr />
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1" role="doc-endnote">
+      <p>「<a href="https://github.com/arduino/arduino-ide/issues/2704">After exiting sleep mode, IDE reloads and changes are lost #2704</a>」が未解決のため、2.3.4 に留まっています。 <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/07/16/" title="前の記事：ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装">← ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/08/16/",this.page.identifier="/2025/08/16/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/08/16/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/08/16/";this.page.identifier="/2025/08/16/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>

@@ -8,6 +8,25 @@
     
       
       <item>
+        <title>ESP32 2432S028RでLVGL - ExplorerやFinderの様にフォルダを折り畳める UI の実装</title>
+        
+          <description>&lt;figure class=&quot;float-left&quot;&gt;
+  &lt;a id=&quot;figure1&quot; href=&quot;/images/2025/08-16/finder.png&quot; title=&quot;図１ Macのファインダー&quot; data-lightbox=&quot;image&quot;&gt;
+    &lt;img src=&quot;/images/2025/08-16/finder.png&quot; alt=&quot;図１ Macのファインダー&quot; width=&quot;400&quot; height=&quot;480&quot; /&gt;
+    &lt;figcaption&gt;図１ Macのファインダー&lt;/figcaption&gt;
+  &lt;/a&gt;
+&lt;/figure&gt;
+</description>
+        
+        <pubDate>Sat, 16 Aug 2025 11:33:36 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2025/08/16/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2025/08/16/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>ESP32 2432S028RとLVGLでMP3 Player - N分木(N-ary Tree)によるプレイリストの実装</title>
         
           <description>&lt;h2 id=&quot;はじめに&quot;&gt;はじめに&lt;/h2&gt;
