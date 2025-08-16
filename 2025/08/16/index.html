@@ -416,15 +416,24 @@
 
 <div class="clear-both"></div>
 
-<h3 id="制限事項">制限事項</h3>
+<h3 id="メモリ消費量について">メモリ消費量について</h3>
 
-<p>メモリ消費を削減したとは言え、アプリケーションにとっては相変わらず厳しい状況です。</p>
+<p>削減したとは言え、アプリケーションにとっては相変わらず厳しい状況です。</p>
 
 <p>LVGL では、<code class="language-plaintext highlighter-rouge">lv_conf.h</code> で設定された <a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L72" title="lvgl/lv_conf_template.h at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">LV_MEM_SIZE</code></a> が足りなくなるとアサーションが実行され（<code class="language-plaintext highlighter-rouge">V_USE_ASSERT_*</code> の設定次第）、また <code class="language-plaintext highlighter-rouge">try - catch</code> ステートメントも効かないため、アプリケーション側でサイズを超えないように管理する必要があります。</p>
 
 <p>このため生成するセル数を <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/blob/main/LVGL/LVGL_Arduino_FileList/list.h#L58" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FileList/list.h at main · embedded-kiddie/Arduino-CYD-2432S028R"><code class="language-plaintext highlighter-rouge">list.h</code></a> の設定で制限しています。</p>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">MAX_CELLS</span>   <span class="mi">100</span> <span class="c1">// LV_MEM_SIZE = (64 * 1024U)</span></code></pre></figure>
+
+<figure class="float-left">
+  <a href="/images/2025/08-16/DataStructure.png" title="表現形式の変換" data-lightbox="image">
+    <img src="/images/2025/08-16/DataStructure-small.png" alt="表現形式の変換" width="710" height="225" />
+    <figcaption>表現形式の変換</figcaption>
+  </a>
+</figure>
+
+<p>また今回の実装は、言ってみればトポロジー的には同じツリー構造の表現形式を変換したに過ぎず、中身のテキストデータが重複しているという無駄があります。イザとなれば、この辺も要改善項目かな？と思っています。</p>
 
 <div class="quote clear-both">
 
