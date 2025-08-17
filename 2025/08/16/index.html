@@ -299,7 +299,7 @@
 
 <p>最も大きな問題点としては、メモリ消費量が多いということです（<a href="#figure11">図１１</a>）。今回は楽曲単位ではなくアルバム単位で選択できる UI の作成が目標ですが、このままでは実質 320KB の SRAM で数十枚程度のアルバムしか管理できない見通しになります <span class="emoji">😣</span></p>
 
-<h3 id="メモリ消費量の削減案">メモリ消費量の削減案</h3>
+<h3 id="省メモリ版の検討">省メモリ版の検討</h3>
 
 <p>そこで「折り畳み」と「メモリ消費量の削減」を両立させる案として、第２候補に第１候補のテクニックを適用することを考えました。</p>
 
@@ -313,9 +313,9 @@
 <p>この方針を元に作成したのが <a href="#figure12">図１２</a> です。<a href="#figure4">図４</a> の <code class="language-plaintext highlighter-rouge">lv_table</code> ほどではありませんが、<a href="#figure8">図８</a> に比べてメモリ消費量を半減できました <span class="emoji">👍</span></p>
 
 <figure class="flex">
-  <a id="figure12" href="/images/2025/08-16/lv_list5.png" title="図１２ メモリ削減案" data-lightbox="image">
-    <img src="/images/2025/08-16/lv_list5.png" alt="図１２ メモリ削減案" width="240" height="320" />
-    <figcaption>図１２ メモリ削減案</figcaption>
+  <a id="figure12" href="/images/2025/08-16/lv_list5.png" title="図１２ 省メモリ版" data-lightbox="image">
+    <img src="/images/2025/08-16/lv_list5.png" alt="図１２ 省メモリ版" width="240" height="320" />
+    <figcaption>図１２ 省メモリ版</figcaption>
   </a>
   <div>
     <video id="demo1" controls="" muted="" width="240" height="320" style="margin-top:0.5em; padding-bottom:0">
@@ -374,7 +374,7 @@
 
 <p>そこで、折り畳み対象のセルを一まとめにするため、乱暴にも <code class="language-plaintext highlighter-rouge">lv_list</code> や <code class="language-plaintext highlighter-rouge">lv_label</code> でラップしてみました（<a href="#figure14">図１４</a>）。が、残念ながら３階層目以降のセルが正しく表示されませんでした。やはり乱暴はイケマセンね <span class="emoji">💩</span></p>
 
-<h2 id="メモリ削減案のプログラムについて">メモリ削減案のプログラムについて</h2>
+<h2 id="省メモリ版のプログラムについて">省メモリ版のプログラムについて</h2>
 
 <p>プログラムは <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/tree/main/LVGL/LVGL_Arduino_FileList" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FileList at main · embedded-kiddie/Arduino-CYD-2432S028R">CYD + LVGL のガラクタ置き場</a> に上げてあります。</p>
 
