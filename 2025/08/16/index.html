@@ -193,7 +193,7 @@
 
 <p><a href="https://docs.lvgl.io/master/details/widgets/table.html" title="Table (lv_table) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_table</code></a> の特徴は、テーブルのセル中にテキストを表示するだけの機能に特化していて、とても「軽量」なことです。200 行の表の作成に数十 ms しかかかりません。注意すべきは、予め作成する表の行数と列数を指定しておくことです。指定せずとも作成は可能ですが、<a href="#figure2">図２</a> の例では約 1.5 秒かかりました <span class="emoji">😅</span></p>
 
-<p>また <a href="#figure2">図２</a> のトグルスイッチは、<a href="https://docs.lvgl.io/master/details/widgets/switch.html" title="Switch (lv_switch) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_switch</code></a> のインスタンスを 200 個生成する代わりに、長方形と正方形に角丸を指定した長円と真円を各セルに直接描画しています。そのコードを改修し、チェックボックスに置き換えてみたのが <a href="#figure3">図３</a> です。</p>
+<p>また <a href="#figure2">図２</a> のトグルスイッチは、<a href="https://docs.lvgl.io/master/details/widgets/switch.html" title="Switch (lv_switch) - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_switch</code></a> のインスタンスを 200 個生成する代わりに、長円と真円を各セルに直接描画しています。そのコードを改修し、チェックボックスに置き換えてみたのが <a href="#figure3">図３</a> です。</p>
 
 <figure class="flex">
   <a id="figure2" href="/images/2025/08-16/lv_table1.png" title="図２ lv_table の例題" data-lightbox="image">
@@ -297,7 +297,7 @@
   </a>
 </figure>
 
-<p>最も大きな問題点としては、メモリ消費量が多いということです（<a href="#figure11">図１１</a>）。今回は楽曲単位ではなくアルバム単位で選択できる UI の作成が目標ですが、このままでは実質 320KB の SRAM で数十枚程度のアルバムしか管理できない見通しになります <span class="emoji">😣</span></p>
+<p>一方最大の問題点は、メモリ消費量が多いということです（<a href="#figure11">図１１</a>）。今回は楽曲単位ではなくアルバム単位で選択できる UI の作成が目標ですが、このままでは実質 320KB の SRAM で数十枚程度のアルバムしか管理できない見通しになります <span class="emoji">😣</span></p>
 
 <h3 id="省メモリ版の検討">省メモリ版の検討</h3>
 
@@ -305,7 +305,7 @@
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">lv_list</code> をベースに、メモリを喰う <code class="language-plaintext highlighter-rouge">lv_button</code> + <code class="language-plaintext highlighter-rouge">lv_label</code> + <code class="language-plaintext highlighter-rouge">lv_image</code> は使わない</li>
-  <li>代わりにセルの追加は、<code class="language-plaintext highlighter-rouge">lv_anim</code> でアニメーションも適用できる <code class="language-plaintext highlighter-rouge">lv_label</code> で代行する</li>
+  <li>代わりに行の追加は、<code class="language-plaintext highlighter-rouge">lv_anim</code> でアニメーションも適用できる <code class="language-plaintext highlighter-rouge">lv_label</code> で代行する</li>
   <li>チェックボックスなどのアイコン画像は、<code class="language-plaintext highlighter-rouge">lv_table</code> と同様のテクニックでレンダリング</li>
   <li><a href="https://docs.lvgl.io/master/details/widgets/label.html#long-modes" title="Label (lv_label) - LVGL 9.4 documentation">Long modes</a> は、<code class="language-plaintext highlighter-rouge">LV_LABEL_LONG_SCROLL_CIRCULAR</code> → <code class="language-plaintext highlighter-rouge">LV_LABEL_LONG_CLIP</code> に変更</li>
 </ul>
@@ -337,9 +337,9 @@
 
 <h3 id="折り畳みの仕組み">折り畳みの仕組み</h3>
 
-<p><code class="language-plaintext highlighter-rouge">lv_list</code> にセルを追加する際、「ディレクトリ階層の深さ」に加え、「折り畳み」と「選択」の状態を表す情報を付加しています。</p>
+<p><code class="language-plaintext highlighter-rouge">lv_list</code> に行を追加する際、「ディレクトリ階層の深さ」に加え、「折り畳み」と「選択」の状態を表す情報を付加しています。</p>
 
-<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 各セルに付加する情報</span>
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 各行に付加する情報</span>
 <span class="n">typedef</span> <span class="n">union</span> <span class="o">{</span>
   <span class="kt">void</span> <span class="o">*</span><span class="n">user_data</span><span class="o">;</span>  <span class="c1">// lv_obj_{set|get}_user_data() への引数</span>
   <span class="n">struct</span> <span class="o">{</span>
@@ -357,13 +357,13 @@
   </a>
 </figure>
 
-<p>あるセルがクリックされた時にこの情報を参照し、自身より「階層の深さ」が大きいセルを折り畳みの対象とします。</p>
+<p>ある行がクリックされた時にこの情報を参照し、自身より「階層の深さ」が大きい行を折り畳みの対象とします。</p>
 
 <p><code class="language-plaintext highlighter-rouge">lv_list</code> 中のウィジェットは関数 <a href="https://docs.lvgl.io/master/API/core/lv_obj_tree_h.html" title="lv_obj_tree.h - LVGL 9.4 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_get_sibling()</code></a> で辿れるので（<a href="#figure13">図１３</a>）、高さを変えるアニメーションを設定することで「折り畳み」を実現しています。</p>
 
 <div class="clear-both"></div>
 
-<p>この方法のイケてない点は、折り畳み対象のセル数に比例してアニメーションに必要なメモリが増大することです。</p>
+<p>この方法のイケてない点は、折り畳み対象の行数に比例してアニメーションに必要なメモリが増大することです。</p>
 
 <figure class="float-left">
   <a id="figure14" href="/images/2025/08-16/WidgetTree2.jpg" title="図１４ lv_list の階層化は失敗！" data-lightbox="image">
@@ -372,7 +372,7 @@
   </a>
 </figure>
 
-<p>そこで、折り畳み対象のセルを一まとめにするため、乱暴にも <code class="language-plaintext highlighter-rouge">lv_list</code> や <code class="language-plaintext highlighter-rouge">lv_label</code> でラップしてみました（<a href="#figure14">図１４</a>）。が、残念ながら３階層目以降のセルが正しく表示されませんでした。やはり乱暴はイケマセンね <span class="emoji">💩</span></p>
+<p>そこで、折り畳み対象の行を一まとめにするため、乱暴にも <code class="language-plaintext highlighter-rouge">lv_list</code> や <code class="language-plaintext highlighter-rouge">lv_label</code> でラップしてみました（<a href="#figure14">図１４</a>）。が、残念ながら３階層目以降の行が正しく表示されませんでした。やはり乱暴はイケマセンね <span class="emoji">💩</span></p>
 
 <h2 id="省メモリ版のプログラムについて">省メモリ版のプログラムについて</h2>
 
@@ -422,7 +422,7 @@
 
 <p>LVGL では、<code class="language-plaintext highlighter-rouge">lv_conf.h</code> で設定された <a href="https://github.com/lvgl/lvgl/blob/master/lv_conf_template.h#L72" title="lvgl/lv_conf_template.h at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">LV_MEM_SIZE</code></a> が足りなくなるとアサーションが実行され（<code class="language-plaintext highlighter-rouge">V_USE_ASSERT_*</code> の設定次第）、また <code class="language-plaintext highlighter-rouge">try - catch</code> ステートメントも効かないため、アプリケーション側でサイズを超えないように管理する必要があります。</p>
 
-<p>このため生成するセル数を <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/blob/main/LVGL/LVGL_Arduino_FileList/list.h#L58" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FileList/list.h at main · embedded-kiddie/Arduino-CYD-2432S028R"><code class="language-plaintext highlighter-rouge">list.h</code></a> の設定で制限しています。</p>
+<p>このため生成する行数を <a href="https://github.com/embedded-kiddie/Arduino-CYD-2432S028R/blob/main/LVGL/LVGL_Arduino_FileList/list.h#L58" title="Arduino-CYD-2432S028R/LVGL/LVGL_Arduino_FileList/list.h at main · embedded-kiddie/Arduino-CYD-2432S028R"><code class="language-plaintext highlighter-rouge">list.h</code></a> の設定で制限しています。</p>
 
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">MAX_CELLS</span>   <span class="mi">100</span> <span class="c1">// LV_MEM_SIZE = (64 * 1024U)</span></code></pre></figure>
 
