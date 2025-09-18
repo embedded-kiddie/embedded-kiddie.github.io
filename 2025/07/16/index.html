@@ -223,8 +223,6 @@
 
 <div class="clear-both"></div>
 
-<p>次のサンプルコードは、ファイル名とクラス名が合ってませんし、<code class="language-plaintext highlighter-rouge">assert()</code> でお茶を濁している箇所がありますが、ご勘弁を…</p>
-
 <details>
 <summary>tree.hpp</summary>
 
@@ -376,7 +374,7 @@
   </a>
 </figure>
 
-<p>ただこのままだと、末端の葉ノードが木に埋め込まれるため、別途プレイリストとの紐付けが必要です。さらに曲のファイルパスを得るには、<code class="language-plaintext highlighter-rouge">Node* parent</code> を辿りながら文字列を逆順に繋げるか、一旦ルートまで辿った後に戻りながら文字列を連結する必要があり、あまり効率が良くありません。</p>
+<p>ただこのままだと、末端の葉ノードに振られた番号が飛び飛びになり、扱いが厄介です。またプレイリストに載せた曲名からファイルパスを得るには、親ノード <code class="language-plaintext highlighter-rouge">Node* parent</code> を辿りながら文字列を逆順に繋げるか、一旦ルートまで辿った後に戻りながら文字列を連結する必要があり、効率が良くありません。</p>
 
 <h2 id="改良版のコード">改良版のコード</h2>
 
@@ -411,7 +409,7 @@
   </a>
 </figure>
 
-<p>前章の基本形に対するこの方法のメリットは、葉ノードとプレイリストの間が整数値の「キー」で紐付けられるだけなので、疎結合<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> となることです。</p>
+<p>前章の基本形に対するこの方法のメリットは、葉ノードとプレイリストの間が、配列の添字のように整数値の「キー」で紐付けられるだけなので、疎結合<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> となることです。</p>
 
 <p>また探索のアルゴリズムは、前述のＮ分木に対して <a href="https://ja.wikipedia.org/wiki/%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%88%86%E6%8E%A2%E7%B4%A2%E6%9C%A8" title="平衡二分探索木 - Wikipedia">平衡二分探索木</a> の一種である <a href="https://ja.wikipedia.org/wiki/B%E6%9C%A8" title="B木 - Wikipedia">Ｂ木</a> や <a href="https://ja.wikipedia.org/wiki/%E8%B5%A4%E9%BB%92%E6%9C%A8" title="赤黒木 - Wikipedia">赤黒木</a> の探索の考え方に近いです。探索にかかる計算量は、枝ノードの探索中は <em>O(log n)</em>、葉ノードに辿り着いてからは <em>O(n)</em> となります。</p>
 
@@ -421,9 +419,9 @@
 
 <p>次の２つは、このアルゴリズムを実現するコードです。</p>
 
-<p><code class="language-plaintext highlighter-rouge">tree.cpp</code> に定義された静的変数は、探索中に発見したフォルダ名を順に繋いてファイルパスを保持するためのグローバル変数です。<a href="https://ja.wikipedia.org/wiki/%E3%83%AA%E3%82%A8%E3%83%B3%E3%83%88%E3%83%A9%E3%83%B3%E3%83%88" title="リエントラント - Wikipedia">リエントラント</a> なコードじゃなくなるのででイケてませんが、発見したパスを再帰関数の引数と戻り値で引き回すのがイヤだったので…。</p>
+<p><code class="language-plaintext highlighter-rouge">tree.cpp</code> に定義された静的変数は、探索中に発見したフォルダ名を順に繋いてファイルパスを保持するためのグローバル変数です。<a href="https://ja.wikipedia.org/wiki/%E3%83%AA%E3%82%A8%E3%83%B3%E3%83%88%E3%83%A9%E3%83%B3%E3%83%88" title="リエントラント - Wikipedia">リエントラント</a> なコードじゃなくなるのでイケてませんが…</p>
 
-<p>今回の場合、プレイリストのオブジェクトは高々１つしか存在しないので、問題ナシとしています（言い訳です、ハイ <span class="emoji">😅</span>）</p>
+<p>まぁ今回の場合、プレイリストは高々１つしか存在しないので、リエントラントじゃなくても問題ナシとしています（言い訳です、ハイ <span class="emoji">😅</span>）</p>
 
 <details>
 <summary>tree.hpp</summary>
