@@ -196,16 +196,16 @@
   <span class="n">lv_fs_drv_init</span><span class="o">(&amp;</span><span class="n">fs_drv</span><span class="o">);</span>
 
   <span class="n">fs_drv</span><span class="o">.</span><span class="na">letter</span> <span class="o">=</span> <span class="no">LV_FS_ARDUINO_SD_LETTER</span><span class="o">;</span>
-  <span class="n">fs_drv</span><span class="o">.</span><span class="na">open_cb</span> <span class="o">=</span> <span class="n">fs_open</span><span class="o">;</span>
+  <span class="n">fs_drv</span><span class="o">.</span><span class="na">open_cb</span>  <span class="o">=</span> <span class="n">fs_open</span><span class="o">;</span>
   <span class="n">fs_drv</span><span class="o">.</span><span class="na">close_cb</span> <span class="o">=</span> <span class="n">fs_close</span><span class="o">;</span>
-  <span class="n">fs_drv</span><span class="o">.</span><span class="na">read_cb</span> <span class="o">=</span> <span class="n">fs_read</span><span class="o">;</span>
+  <span class="n">fs_drv</span><span class="o">.</span><span class="na">read_cb</span>  <span class="o">=</span> <span class="n">fs_read</span><span class="o">;</span>
   <span class="n">fs_drv</span><span class="o">.</span><span class="na">write_cb</span> <span class="o">=</span> <span class="n">fs_write</span><span class="o">;</span>
-  <span class="n">fs_drv</span><span class="o">.</span><span class="na">seek_cb</span> <span class="o">=</span> <span class="n">fs_seek</span><span class="o">;</span>
-  <span class="n">fs_drv</span><span class="o">.</span><span class="na">tell_cb</span> <span class="o">=</span> <span class="n">fs_tell</span><span class="o">;</span>
+  <span class="n">fs_drv</span><span class="o">.</span><span class="na">seek_cb</span>  <span class="o">=</span> <span class="n">fs_seek</span><span class="o">;</span>
+  <span class="n">fs_drv</span><span class="o">.</span><span class="na">tell_cb</span>  <span class="o">=</span> <span class="n">fs_tell</span><span class="o">;</span>
 
   <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_close_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
-  <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_open_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
-  <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_read_cb</span> <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
+  <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_open_cb</span>  <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
+  <span class="n">fs_drv</span><span class="o">.</span><span class="na">dir_read_cb</span>  <span class="o">=</span> <span class="no">NULL</span><span class="o">;</span>
 
   <span class="n">lv_fs_drv_register</span><span class="o">(&amp;</span><span class="n">fs_drv</span><span class="o">);</span>
 <span class="o">}</span>
@@ -623,6 +623,18 @@
 </details>
 
 <p>使い方は前章と同じです <span class="emoji">👍</span></p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>LVGL のキャッシュシステムについて</summary>
+
+
+<p><code class="language-plaintext highlighter-rouge">lv_fs_memfs.c</code> もファイルをメモリ上にマッピングするドライバで、<a href="https://docs.lvgl.io/master/details/main-modules/fs.html#optional-file-buffering-caching" title="File System (lv_fs_drv) - LVGL 9.4 documentation">LVGL のキャッシュシステム</a> を使用しています。これをそのまま利用しない理由は、最初からファイル全体をキャッシュせずに途中で不足分を追加で読み込んだりするので、再生中の SD 読み込みと競合する可能性があるからです。</p>
+
+</details>
+
+</div>
 
 <h2 id="サンプルコード">サンプルコード</h2>
 
