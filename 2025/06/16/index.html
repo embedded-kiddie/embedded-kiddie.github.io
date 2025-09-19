@@ -123,12 +123,11 @@
 
 <p>ただし移植に際し一番困ったのは、<a href="https://github.com/lvgl/lvgl/blob/master/src/libs/fsdrv/lv_fs_arduino_sd.cpp#L53-L83" title="lvgl/src/libs/fsdrv/lv_fs_arduino_sd.cpp at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">fs_open()</code></a> の次のコードです。</p>
 
-<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">fs_open</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">path</span><span class="o">,</span> <span class="n">lv_fs_mode_t</span> <span class="n">mode</span><span class="o">)</span>
-<span class="o">{</span>
-<span class="o">...</span>
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">fs_open</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">path</span><span class="o">,</span> <span class="n">lv_fs_mode_t</span> <span class="n">mode</span><span class="o">)</span> <span class="o">{</span>
+  <span class="o">...</span>
   <span class="nc">File</span> <span class="n">file</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">flags</span><span class="o">);</span> <span class="c1">// ローカル変数に指定ファイルのディスクリプタを設定する</span>
   <span class="k">if</span><span class="o">(!</span><span class="n">file</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">return</span> <span class="no">NULL</span><span class="o">;</span>
+    <span class="k">return</span> <span class="no">NULL</span><span class="o">;</span>
   <span class="o">}</span>
 
   <span class="nc">SdFile</span> <span class="o">*</span> <span class="n">lf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SdFile</span><span class="o">{</span><span class="n">file</span><span class="o">};</span> <span class="c1">// ローカル変数をグローバルに生成した構造体内に閉じ込める</span>
