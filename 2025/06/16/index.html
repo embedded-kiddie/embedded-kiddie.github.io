@@ -126,14 +126,14 @@
 <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kt">void</span> <span class="o">*</span> <span class="n">fs_open</span><span class="o">(</span><span class="n">lv_fs_drv_t</span> <span class="o">*</span> <span class="n">drv</span><span class="o">,</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">path</span><span class="o">,</span> <span class="n">lv_fs_mode_t</span> <span class="n">mode</span><span class="o">)</span>
 <span class="o">{</span>
 <span class="o">...</span>
-    <span class="nc">File</span> <span class="n">file</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">flags</span><span class="o">);</span> <span class="c1">// ローカル変数に指定ファイルのディスクリプタを設定する</span>
-    <span class="k">if</span><span class="o">(!</span><span class="n">file</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="no">NULL</span><span class="o">;</span>
-    <span class="o">}</span>
+  <span class="nc">File</span> <span class="n">file</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">flags</span><span class="o">);</span> <span class="c1">// ローカル変数に指定ファイルのディスクリプタを設定する</span>
+  <span class="k">if</span><span class="o">(!</span><span class="n">file</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="no">NULL</span><span class="o">;</span>
+  <span class="o">}</span>
 
-    <span class="nc">SdFile</span> <span class="o">*</span> <span class="n">lf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SdFile</span><span class="o">{</span><span class="n">file</span><span class="o">};</span> <span class="c1">// ローカル変数をグローバルに生成した構造体内に閉じ込める</span>
+  <span class="nc">SdFile</span> <span class="o">*</span> <span class="n">lf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SdFile</span><span class="o">{</span><span class="n">file</span><span class="o">};</span> <span class="c1">// ローカル変数をグローバルに生成した構造体内に閉じ込める</span>
 
-    <span class="k">return</span> <span class="o">(</span><span class="kt">void</span> <span class="o">*)</span><span class="n">lf</span><span class="o">;</span> <span class="c1">// 生成した構造体を呼び出し元に返す</span>
+  <span class="k">return</span> <span class="o">(</span><span class="kt">void</span> <span class="o">*)</span><span class="n">lf</span><span class="o">;</span> <span class="c1">// 生成した構造体を呼び出し元に返す</span>
 <span class="o">}</span></code></pre></figure>
 
 <p>自動変数の <code class="language-plaintext highlighter-rouge">file</code> をグローバルに割り当てた <a href="https://github.com/lvgl/lvgl/blob/master/src/libs/fsdrv/lv_fs_arduino_sd.cpp#L12-L14" title="lvgl/src/libs/fsdrv/lv_fs_arduino_sd.cpp at master · lvgl/lvgl">構造体 <code class="language-plaintext highlighter-rouge">SdFile</code></a> 内に閉じ込めることで、スコープが外れても保持されるようにしていますが、SdFat では次のコンパイルエラーが発生します（実際にはもっと大量のエラーが出力されますが、省略しています）。</p>
@@ -331,7 +331,7 @@
   <span class="k">return</span> <span class="o">(</span><span class="n">int32_t</span><span class="o">)(*</span><span class="n">pos_p</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="no">LV_FS_RES_UNKNOWN</span> <span class="o">:</span> <span class="no">LV_FS_RES_OK</span><span class="o">;</span>
 <span class="o">}</span>
 
-<span class="err">#</span><span class="n">endif</span>  <span class="c1">// LV_USE_FS_ARDUINO_SD</span></code></pre></figure>
+<span class="err">#</span><span class="n">endif</span> <span class="c1">// LV_USE_FS_ARDUINO_SD</span></code></pre></figure>
 
 
 </details>
