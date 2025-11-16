@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>JSONデータの走査 - Arduino用JSONライブラリの比較 - Arduino_JSON vs ArduinoJson | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="JSONデータの走査 - Arduino用JSONライブラリの比較 - Arduino_JSON vs ArduinoJson" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="今回のお題" />
+<meta property="og:description" content="今回のお題" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2025/11/16/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2025/11/16/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-11-16T12:16:14+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="JSONデータの走査 - Arduino用JSONライブラリの比較 - Arduino_JSON vs ArduinoJson" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2025-11-16T12:16:14+09:00","datePublished":"2025-11-16T12:16:14+09:00","description":"今回のお題","headline":"JSONデータの走査 - Arduino用JSONライブラリの比較 - Arduino_JSON vs ArduinoJson","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2025/11/16/"},"url":"https://embedded-kiddie.github.io/2025/11/16/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">JSONデータの走査 - Arduino用JSONライブラリの比較 - Arduino_JSON vs ArduinoJson</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-11-16T12:16:14+09:00" itemprop="datePublished">Nov 16, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="今回のお題">今回のお題</h2>
+
+<p>相変わらずチマチマと製作中の MP3 プレイヤーで、アーティスト別に SD カードに保存された全アルバムから、「JPOP」や「ROCK」などのカテゴリでお気に入りを選択し、プレイリストとして JSON データを SD カードに保存する機能を実装しようとしています。</p>
+
+<p>例えば、JSON データはこんな感じです。</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"JPOP"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"BoA"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"BEST OF SOUL"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"Superfly"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"Amazing"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"ROCK"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"path"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"サザンオールスターズ"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"2018"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"海のOh, Yeah!!"</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nl">"2014"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"KAMAKURA"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"SOUTHERN ALL STARS"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"バラッド3 ～the album of LOVE～"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"RADWIMPS"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"FOREVER DAZE"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"余命10年 〜Original Soundtrack〜"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"ONE OK ROCK"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"35xxxv"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"DETOX"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"人生 x 僕="</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">"path"</code> としているのは、ディレクトリ名を表す「キー」や「値」を <code class="language-plaintext highlighter-rouge">/</code> で繋げてアルバムへのパスとするためです。</p>
+
+<p>ということで、SD カードに保存された JSON データを走査し、お気に入りのアルバムへのパスを抽出することが、今回のお題です。</p>
+
+<h2 id="試した-json-ライブラリの概要">試した JSON ライブラリの概要</h2>
+
+<p>Arduino IDE のライブラリマネージャで <code class="language-plaintext highlighter-rouge">json</code> を検索すると、様々なライブラリがヒットしますが、今回は次の２つをピックアップしました。</p>
+
+<h3 id="arduino_json"><a href="https://github.com/arduino-libraries/Arduino_JSON" title="arduino-libraries/Arduino_JSON: Official JSON Library for Arduino">Arduino_JSON</a></h3>
+
+<figure class="float-left">
+  <a href="/images/2025/11-16/Arduino_JSON.png" title="Arduino_JSON" data-lightbox="image">
+    <img src="/images/2025/11-16/Arduino_JSON.png" alt="Arduino_JSON" width="440" height="350" />
+    <figcaption>Arduino_JSON</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://github.com/arduino-libraries" title="Arduino Libraries">Arduino Libraries</a> に収められた Arduino 謹製のライブラリです。<a href="https://github.com/DaveGamble/cJSON" title="DaveGamble/cJSON: Ultralightweight JSON parser in ANSI C">DaveGamble/cJSON</a> のバージョン 1.7.14 を元に Arduino での使用を容易にする、Javascript ライクな（というか意図的に寄せた）ラッパーとして作られています。AVR 系用に独自に追加されたコードが含まれているので、8ビット系の CPU でもそれなりに動作すると思われます。</p>
+
+<p>ただし、元の cJSON に存在した <a href="https://github.com/search?q=repo%3ADaveGamble%2FcJSON+CVE&amp;type=pullrequests" title="Pull request search results">セキュリティ問題への対策</a> に追従できていません。現バージョン（0.2.0）はセキュリティが問題となるアプリケーションには使わないか、<a href="https://github.com/DaveGamble/cJSON/releases/tag/v1.7.19" title="Release 1.7.19 · DaveGamble/cJSON">最新版</a> へのパッチを当てるのが吉です。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>cJSON 1.7.19 へのパッチについて</summary>
+
+
+<p><a href="https://github.com/embedded-kiddie/Arduino_JSON/tree/patch" title="embedded-kiddie/Arduino_JSON at patch">https://github.com/embedded-kiddie/Arduino_JSON/tree/patch</a> にパッチを当てたバージョンを作成しました。拡張された AVR 系のコードを含めて本家のテストコードを実機で検証したいのですが、何せ AVR 系は手持ちがないので PR できていません。ご参考まで。</p>
+
+</details>
+
+</div>
+
+<p>最もよく使う <a href="https://github.com/arduino-libraries/Arduino_JSON/blob/master/src/JSONVar.h" title="Arduino_JSON/src/JSONVar.h at master · arduino-libraries/Arduino_JSON">JSONVar クラス</a> は、「オブジェクト」、「配列」、「数値や文字列など」の３つのタイプで構成されていると考えれば理解し易いと思います。まずはよく使うメソッドです。</p>
+
+<ul>
+  <li>
+    <p><strong>JSONVar parse(str)</strong><br />
+<code class="language-plaintext highlighter-rouge">str</code> (<code class="language-plaintext highlighter-rouge">const char*</code> または <code class="language-plaintext highlighter-rouge">const String&amp;</code>) から JSON オブジェクトを生成します。</p>
+  </li>
+  <li>
+    <p><strong>String stringify(const JSONVar&amp; value)</strong><br />
+JSON オブジェクトを文字列化します。</p>
+  </li>
+  <li>
+    <p><strong>String typeof(const JSONVar&amp; value)</strong><br />
+<code class="language-plaintext highlighter-rouge">"object"</code>、<code class="language-plaintext highlighter-rouge">"array"</code>、<code class="language-plaintext highlighter-rouge">"boolean"</code>、<code class="language-plaintext highlighter-rouge">"number"</code>、<code class="language-plaintext highlighter-rouge">"string"</code>、<code class="language-plaintext highlighter-rouge">"null"</code> など、JSON オブジェクトのタイプを返します。</p>
+  </li>
+  <li>
+    <p><strong>int length(void)</strong><br />
+オブジェクト <code class="language-plaintext highlighter-rouge">{"key1" : value1, ...}</code> や 配列 <code class="language-plaintext highlighter-rouge">[...]</code> の要素数を返します。</p>
+  </li>
+  <li>
+    <p><strong>JSONVar keys(void)</strong><br />
+オブジェクト中のキーの集合を配列として返します。</p>
+  </li>
+  <li>
+    <p><strong>size_t printTo(Print&amp; output)</strong><br />
+<a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/Printable.h" title="ArduinoCore-API/api/Printable.h at master · arduino/ArduinoCore-API">Printable クラス</a> を継承するデバイスに JSON オブジェクトを文字列化して出力します。</p>
+  </li>
+  <li>
+    <p><strong>オーバライドされた “<code class="language-plaintext highlighter-rouge">=</code>” 演算子とキャスト演算子</strong><br />
+<code class="language-plaintext highlighter-rouge">JSONVar</code> の中身は <a href="https://github.com/DaveGamble/cJSON?tab=readme-ov-file#data-structure" title="DaveGamble/cJSON: Ultralightweight JSON parser in ANSI C">cJSON 構造体</a> で管理されており、JSON オブジェクトの「キー」は文字列、「値」は文字列か数値（整数または浮動小数点）を取り得ます。特に <strong>キャスト演算子</strong> は、「値」を <code class="language-plaintext highlighter-rouge">char*</code> や <code class="language-plaintext highlighter-rouge">int</code>、<code class="language-plaintext highlighter-rouge">double</code> など適切な型に変換するため使います。</p>
+  </li>
+</ul>
+
+<p>また次のメソッドはβ版のためか、機能する条件がかなり限られているようです。</p>
+
+<ul>
+  <li>
+    <p><strong>bool hasOwnProperty(key)</strong><br />
+<code class="language-plaintext highlighter-rouge">key</code> (<code class="language-plaintext highlighter-rouge">const char*</code> または <code class="language-plaintext highlighter-rouge">const String&amp;</code>) が含まれているか否かを返します。</p>
+  </li>
+  <li>
+    <p><strong>bool hasPropertyEqual(key, value)</strong><br />
+<code class="language-plaintext highlighter-rouge">key</code> (<code class="language-plaintext highlighter-rouge">const char*</code> または <code class="language-plaintext highlighter-rouge">const String&amp;</code>) に <code class="language-plaintext highlighter-rouge">value</code> (<code class="language-plaintext highlighter-rouge">const char*</code>、<code class="language-plaintext highlighter-rouge">const String&amp;</code> または <code class="language-plaintext highlighter-rouge">const JSONVar&amp;</code>) と一致する値が設定されているかを返します。</p>
+  </li>
+  <li>
+    <p><strong>JSONVar filter(key, value)</strong><br />
+<code class="language-plaintext highlighter-rouge">key</code> (<code class="language-plaintext highlighter-rouge">const char*</code> または <code class="language-plaintext highlighter-rouge">const String&amp;</code>) と <code class="language-plaintext highlighter-rouge">value</code> (<code class="language-plaintext highlighter-rouge">const char*</code>、<code class="language-plaintext highlighter-rouge">const String&amp;</code> または <code class="language-plaintext highlighter-rouge">const JSONVar&amp;</code>) が含まれる JSON データを部分的に抽出します。</p>
+  </li>
+</ul>
+
+<p>ドキュメントが存在せず、また <a href="https://github.com/arduino-libraries/Arduino_JSON/tree/master/examples" title="Arduino_JSON/examples at master · arduino-libraries/Arduino_JSON">例題</a> が全メソッドを網羅していないので不完全にはなりますが、上記をテストするスケッチを添付しておきます。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>Arduino_JSON の各メソッドをテストするスケッチ</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">Arduino_JSON</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="no">SD</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">input</span> <span class="o">=</span> <span class="no">R</span><span class="s">"(
+{
+  "</span><span class="n">code</span><span class="s">": "</span><span class="mi">200</span><span class="s">",
+  "</span><span class="n">message</span><span class="s">": 0,
+  "</span><span class="n">list</span><span class="s">": [
+    {
+      "</span><span class="n">main</span><span class="s">": {
+        "</span><span class="n">temp</span><span class="s">": 3.23,
+        "</span><span class="n">pressure</span><span class="s">": 1014,
+        "</span><span class="n">humidity</span><span class="s">": 58
+      },
+      "</span><span class="n">weather</span><span class="s">": {
+        "</span><span class="n">main</span><span class="s">": "</span><span class="nc">Clear</span><span class="s">",
+        "</span><span class="n">description</span><span class="s">": "</span><span class="n">clear</span> <span class="n">sky</span><span class="s">"
+      },
+      "</span><span class="n">dt</span><span class="s">": "</span><span class="mi">2020</span><span class="o">-</span><span class="mo">02</span><span class="o">-</span><span class="mi">12</span> <span class="mi">09</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"
+    },
+    {
+      "</span><span class="n">main</span><span class="s">": {
+        "</span><span class="n">temp</span><span class="s">": 6.09,
+        "</span><span class="n">pressure</span><span class="s">": 1015,
+        "</span><span class="n">humidity</span><span class="s">": 48
+      },
+      "</span><span class="n">weather</span><span class="s">": {
+        "</span><span class="n">main</span><span class="s">": "</span><span class="nc">Clear</span><span class="s">",
+        "</span><span class="n">description</span><span class="s">": "</span><span class="n">clear</span> <span class="n">sky</span><span class="s">"
+      },
+      "</span><span class="n">dt</span><span class="s">": "</span><span class="mi">2020</span><span class="o">-</span><span class="mo">02</span><span class="o">-</span><span class="mi">12</span> <span class="mi">12</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"
+    }
+  ],
+  "</span><span class="n">city</span><span class="s">": {
+    "</span><span class="n">name</span><span class="s">": "</span><span class="nc">London</span><span class="s">",
+    "</span><span class="n">coord</span><span class="s">": {
+      "</span><span class="n">lat</span><span class="s">": 51.5085,
+      "</span><span class="n">lon</span><span class="s">": -0.1257
+    }
+  }
+}
+)"</span><span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">Test_hasOwnProperty</span><span class="o">(</span><span class="nc">JSONVar</span> <span class="o">&amp;</span><span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"===== Test_hasOwnProperty ====="</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">hasOwnProperty</span><span class="o">(</span><span class="s">"code"</span><span class="o">));</span>             <span class="c1">// 1</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">hasOwnProperty</span><span class="o">(</span><span class="s">"main"</span><span class="o">));</span>             <span class="c1">// 0</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="s">"list"</span><span class="o">][</span><span class="mi">0</span><span class="o">].</span><span class="na">hasOwnProperty</span><span class="o">(</span><span class="s">"main"</span><span class="o">));</span>  <span class="c1">// 1</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">Test_hasPropertyEqual</span><span class="o">(</span><span class="nc">JSONVar</span> <span class="o">&amp;</span><span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">JSONVar</span> <span class="kt">var</span> <span class="o">=</span> <span class="s">"London"</span><span class="o">;</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"===== Test_hasPropertyEqual ====="</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">hasPropertyEqual</span><span class="o">(</span><span class="s">"code"</span><span class="o">,</span> <span class="s">"200"</span><span class="o">));</span>            <span class="c1">// 1</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="s">"city"</span><span class="o">].</span><span class="na">hasPropertyEqual</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"London"</span><span class="o">));</span> <span class="c1">// 1</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="s">"city"</span><span class="o">].</span><span class="na">hasPropertyEqual</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="kt">var</span><span class="o">));</span>      <span class="c1">// 1</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">Test_filter</span><span class="o">(</span><span class="nc">JSONVar</span> <span class="o">&amp;</span><span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">JSONVar</span> <span class="kt">var</span><span class="o">;</span>
+  <span class="kt">var</span><span class="o">[</span><span class="s">"name"</span><span class="o">]</span> <span class="o">=</span> <span class="s">"London"</span><span class="o">;</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"===== Test_filter ====="</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="no">JSON</span><span class="o">.</span><span class="na">stringify</span><span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="s">"code"</span><span class="o">,</span> <span class="s">"200"</span><span class="o">)));</span>            <span class="c1">// OK</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="no">JSON</span><span class="o">.</span><span class="na">stringify</span><span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="s">"city"</span><span class="o">,</span> <span class="kt">var</span><span class="o">)));</span>              <span class="c1">// null</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="no">JSON</span><span class="o">.</span><span class="na">stringify</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="s">"city"</span><span class="o">].</span><span class="na">filter</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"London"</span><span class="o">)));</span> <span class="c1">// OK</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">Test_printTo</span><span class="o">(</span><span class="nc">JSONVar</span> <span class="o">&amp;</span><span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"===== Test_printTo ====="</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="no">SD</span><span class="o">.</span><span class="na">begin</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"SD initialization failed."</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nc">File</span> <span class="n">myFile</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="s">"/test.txt"</span><span class="o">,</span> <span class="no">FILE_WRITE</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">myFile</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Error opening test.txt"</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="n">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">printTo</span><span class="o">(</span><span class="n">myFile</span><span class="o">);</span>
+  <span class="n">myFile</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+
+  <span class="kt">char</span><span class="o">*</span> <span class="n">buf</span> <span class="o">=</span> <span class="o">(</span><span class="kt">char</span><span class="o">*)</span><span class="n">malloc</span><span class="o">(</span><span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">buf</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"malloc failed."</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="n">myFile</span> <span class="o">=</span> <span class="no">SD</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="s">"/test.txt"</span><span class="o">,</span> <span class="no">FILE_READ</span><span class="o">);</span>
+  <span class="n">len</span> <span class="o">=</span> <span class="n">myFile</span><span class="o">.</span><span class="na">read</span><span class="o">((</span><span class="n">uint8_t</span><span class="o">*)</span><span class="n">buf</span><span class="o">,</span> <span class="n">len</span><span class="o">);</span>
+  <span class="n">myFile</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+  <span class="n">buf</span><span class="o">[</span><span class="n">len</span><span class="o">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="o">;</span>
+
+  <span class="nc">JSONVar</span> <span class="n">tmp</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">buf</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="no">JSON</span><span class="o">.</span><span class="na">stringify</span><span class="o">(</span><span class="n">tmp</span><span class="o">));</span>
+  <span class="n">free</span><span class="o">((</span><span class="kt">void</span><span class="o">*)</span><span class="n">buf</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1500</span><span class="o">);</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"\nStart."</span><span class="o">);</span>
+
+  <span class="nc">JSONVar</span> <span class="n">myObject</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
+  <span class="nc">String</span> <span class="n">type</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="na">typeof</span><span class="o">(</span><span class="n">myObject</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">"undefined"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Parsing input failed."</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="n">Test_hasOwnProperty</span>   <span class="o">(</span><span class="n">myObject</span><span class="o">);</span>
+  <span class="n">Test_hasPropertyEqual</span> <span class="o">(</span><span class="n">myObject</span><span class="o">);</span>
+  <span class="n">Test_filter</span>           <span class="o">(</span><span class="n">myObject</span><span class="o">);</span>
+  <span class="n">Test_printTo</span>          <span class="o">(</span><span class="n">myObject</span><span class="o">);</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Done."</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<h3 id="arduinojson"><a href="https://arduinojson.org/" title="ArduinoJson: Efficient JSON serialization for embedded C++">ArduinoJson</a></h3>
+
+<figure class="float-left">
+  <a href="/images/2025/11-16/ArduinoJson.png" title="ArduinoJson" data-lightbox="image">
+    <img src="/images/2025/11-16/ArduinoJson.png" alt="ArduinoJson" width="440" height="390" />
+    <figcaption>ArduinoJson</figcaption>
+  </a>
+</figure>
+
+<p>Arduino 用 JSON ライブラリでは最もよく使われていると思われます。</p>
+
+<p>まずセキュリティについてですが、<a href="https://www.cve.org/" title="Common vulnerabilities and Exposures (CVE)">cve.org</a> で検索すると、バージョン 4.5 以前の <a href="https://www.cve.org/CVERecord?id=CVE-2015-4590" title="Common vulnerabilities and Exposures (CVE)">CVE-2015-4590</a> がヒットしますが、現在は 6 または 7 が主要なバージョンなので、現時点で心配する必要はなさそうです <span class="emoji">😉</span></p>
+
+<p>そのバージョンについては、6 は省メモリに特化、7 は使い勝手を改善した版に位置付けられています。特に 7 は 6 に比べて <a href="https://arduinojson.org/v7/how-to/upgrade-from-v6/#arduinojson-7-is-significantly-bigger-%EF%B8%8F" title="How to upgrade from ArduinoJson 6 to 7">相当にデカくなった</a> ので、8 ビット系のマイコンでは 6 がお薦めとのことです。</p>
+
+<p>本記事では 7 を取り上げますが、<a href="https://qiita.com/BB-KING777/items/a4c0d0116ef8a0faa806" title="ArduinoでJsonを生成、解析する #C++ - Qiita">ArduinoでJsonを生成、解析する</a> に 6 の詳しい解説があり、7 を使う場合にも一読すると概要が掴み易いと思います。また <a href="https://arduinojson.org/v7/" title="Documentation｜ArduinoJson 7">API や例題のドキュメント</a> が完備しているためココでの解説は割愛しますが、以下は知っておくと良いでしょう <span class="emoji">🤟</span></p>
+
+<ul>
+  <li>
+    <p>大元のクラスである <a href="https://arduinojson.org/v7/api/jsondocument/" title="JsonDocument｜ArduinoJson 7">JsonDocument</a> と、その構成要素として３つのクラス <a href="https://arduinojson.org/v7/api/jsonarray/" title="JsonArray｜ArduinoJson 7">JsonArray</a>、<a href="https://arduinojson.org/v7/api/jsonobject/" title="JsonObject｜ArduinoJson 7">JsonObject</a>、<a href="https://arduinojson.org/v7/api/jsonvariant/" title="JsonVariant｜ArduinoJson 7">JsonVariant</a> がある。</p>
+  </li>
+  <li>
+    <p>上記３クラスには、メモリの消費量を半分程度に抑えられる read-only の派生クラス <a href="https://arduinojson.org/v7/api/jsonarrayconst/" title="JsonArrayConst｜ArduinoJson 7">JsonArrayConst</a>、<a href="https://arduinojson.org/v7/api/jsonobjectconst/" title="JsonObjectConst｜ArduinoJson 7">JsonObjectConst</a>、<a href="https://arduinojson.org/v7/api/jsonvariantconst/" title="JsonVariantConst｜ArduinoJson 7">JsonVariantConst</a> がある。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">JsonArray</code> と <code class="language-plaintext highlighter-rouge">JsonObject</code> にはイテレータ <code class="language-plaintext highlighter-rouge">begin() / end()</code> が、また <code class="language-plaintext highlighter-rouge">JsonObject</code> では <a href="https://arduinojson.org/v7/api/jsonobject/begin_end/" title="JsonObject::begin() / JsonObject::end()｜ArduinoJson 7"><code class="language-plaintext highlighter-rouge">JsonPair</code></a> が使える。</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">JsonDocument</code> と <code class="language-plaintext highlighter-rouge">JsonVariant</code> には、型を調べるテンプレート <code class="language-plaintext highlighter-rouge">is&lt;T&gt;()</code> と、適切な型にキャストするための <code class="language-plaintext highlighter-rouge">as&lt;T&gt;()</code> がある。</p>
+  </li>
+</ul>
+
+<h4 id="arduinojson-assistant"><a href="https://arduinojson.org/v7/assistant/" title="ArduinoJson Assistant 7">ArduinoJson Assistant</a></h4>
+
+<figure class="flex">
+  <a href="/images/2025/11-16/ArduinoJsonAssistant1.jpg" title="ArduinoJson Assistant STEP1" data-lightbox="image">
+    <img src="/images/2025/11-16/ArduinoJsonAssistant1-small.jpg" alt="ArduinoJson Assistant STEP1" width="800" height="640" />
+    <figcaption>ArduinoJson Assistant STEP1</figcaption>
+  </a>
+  <a href="/images/2025/11-16/ArduinoJsonAssistant2.jpg" title="ArduinoJson Assistant STEP2" data-lightbox="image">
+    <img src="/images/2025/11-16/ArduinoJsonAssistant2-small.jpg" alt="ArduinoJson Assistant STEP2" width="800" height="640" />
+    <figcaption>ArduinoJson Assistant STEP2</figcaption>
+  </a>
+  <a href="/images/2025/11-16/ArduinoJsonAssistant3.jpg" title="ArduinoJson Assistant STEP3" data-lightbox="image">
+    <img src="/images/2025/11-16/ArduinoJsonAssistant3-small.jpg" alt="ArduinoJson Assistant STEP3" width="800" height="640" />
+    <figcaption>ArduinoJson Assistant STEP3</figcaption>
+  </a>
+</figure>
+
+<p>ターゲットボードと JSON データを入力すると、予想されるメモリ量や各要素にアクセスする C++ コードを生成してくれるツールです。<a href="https://arduinojson.org/v7/example/filter/" title="JsonFilterExample.ino｜ArduinoJson 7">filter</a> を試したり、<a href="https://arduinojson.org/v7/api/jsondocument/as/" title="JsonDocument::as&lt;T&gt;()｜ArduinoJson 7"><code class="language-plaintext highlighter-rouge">as&lt;T&gt;()</code></a> の使い方が分かるので、一度試してみると良いと思います <span class="emoji">👍</span></p>
+
+<h2 id="json-データの走査">JSON データの走査</h2>
+
+<p>今回のお題では JSON データを頭からお尻まで走査する必要があるため、前章で紹介した２つのライブラリでそのようなスケッチを作成しました。本来「キー」や「値」を処理するところはシリアルモニタへの出力としています。</p>
+
+<p>本来は処理時間も計測すべきですが…、ターゲットはバカっ速な ESP32 なので問題とならないと踏んで省略です <span class="emoji">😅</span></p>
+
+<p>また再帰呼び出しで実装しているため、スタックの消費量は多めです。</p>
+
+<h3 id="arduino_json-版">Arduino_JSON 版</h3>
+
+<p>再帰的関数の引数を参照型にしたかったのですが、上手くいかず、コピーで引き回してます。そのため <a href="#arduinojson-版">ArduinoJson 版</a> に比べ、ヒープメモリの消費量が２倍ほどになっちゃいました <span class="emoji">😅</span></p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">Arduino_JSON</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="c1">// JSON サンプルデータ</span>
+<span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">input</span> <span class="o">=</span> <span class="no">R</span><span class="s">"(
+  // ここに JSON データを貼り付けてください
+)"</span><span class="o">;</span>
+
+<span class="c1">// 整形用インデントの出力</span>
+<span class="n">inline</span> <span class="kt">void</span> <span class="nf">Indent</span><span class="o">(</span><span class="kt">int</span> <span class="n">depth</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">depth</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"  "</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// JSON データの走査</span>
+<span class="kt">void</span> <span class="nf">Traverse</span><span class="o">(</span><span class="nc">JSONVar</span> <span class="n">obj</span><span class="o">,</span> <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">String</span> <span class="n">type</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="na">typeof</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">"array"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+      <span class="nc">Traverse</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">depth</span><span class="o">);</span> <span class="c1">// 配列の各要素を走査</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">"object"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj</span><span class="o">.</span><span class="na">keys</span><span class="o">().</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+      <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>
+      <span class="n">obj</span><span class="o">.</span><span class="na">keys</span><span class="o">()[</span><span class="n">i</span><span class="o">].</span><span class="na">printTo</span><span class="o">(</span><span class="nc">Serial</span><span class="o">);</span>  <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+      <span class="nc">Traverse</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="n">obj</span><span class="o">.</span><span class="na">keys</span><span class="o">()[</span><span class="n">i</span><span class="o">]],</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>  <span class="c1">// 次のオブジェクトを走査</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">!=</span> <span class="s">"undefined"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>
+    <span class="n">obj</span><span class="o">.</span><span class="na">printTo</span><span class="o">(</span><span class="nc">Serial</span><span class="o">);</span>              <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1500</span><span class="o">);</span>
+
+  <span class="nc">JSONVar</span> <span class="n">obj</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
+
+  <span class="nc">String</span> <span class="n">type</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="na">typeof</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">"undefined"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Parsing input failed!"</span><span class="o">);</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nc">Traverse</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>                       <span class="c1">// JSON データの走査</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="no">JSON</span><span class="o">.</span><span class="na">stringify</span><span class="o">(</span><span class="n">obj</span><span class="o">));</span> <span class="c1">// ライブラリによるシリアライズ</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
+
+<h3 id="arduinojson-版">ArduinoJson 版</h3>
+
+<p>再帰呼び出しする関数への引数を <code class="language-plaintext highlighter-rouge">JsonVariant</code> ではなく <code class="language-plaintext highlighter-rouge">JsonVariantConst</code> とすることで、ヒープメモリの消費量が <a href="#arduino_json-版">Arduino_JSON 版</a> の半分程度になっています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">ArduinoJson</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="c1">// JSON サンプルデータ</span>
+<span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">input</span> <span class="o">=</span> <span class="no">R</span><span class="s">"(
+  // ここに JSON データを貼り付けてください
+)"</span><span class="o">;</span>
+
+<span class="c1">// JSON オブジェクトの型</span>
+<span class="n">typedef</span> <span class="kd">enum</span> <span class="o">{</span>
+  <span class="no">JSON_ARRAY</span><span class="o">,</span>
+  <span class="no">JSON_OBJECT</span><span class="o">,</span>
+  <span class="no">JSON_VARIANT</span><span class="o">,</span>
+<span class="o">}</span> <span class="n">JsonType_t</span><span class="o">;</span>
+
+<span class="c1">// JSON オブジェクトの型判定</span>
+<span class="n">JsonType_t</span> <span class="nf">TypeOf</span><span class="o">(</span><span class="nc">JsonVariantConst</span> <span class="n">doc</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">doc</span><span class="o">.</span><span class="na">is</span><span class="o">&lt;</span><span class="nc">JsonArrayConst</span><span class="o">&gt;())</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="no">JSON_ARRAY</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">doc</span><span class="o">.</span><span class="na">is</span><span class="o">&lt;</span><span class="nc">JsonObjectConst</span><span class="o">&gt;())</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="no">JSON_OBJECT</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="k">return</span> <span class="no">JSON_VARIANT</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 整形用インデントの出力</span>
+<span class="n">inline</span> <span class="kt">void</span> <span class="nf">Indent</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">n</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"  "</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// JSON データの走査</span>
+<span class="kt">void</span> <span class="nf">Traverse</span><span class="o">(</span><span class="nc">JsonVariantConst</span> <span class="n">doc</span><span class="o">,</span> <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">switch</span> <span class="o">(</span><span class="nc">TypeOf</span><span class="o">(</span><span class="n">doc</span><span class="o">))</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nl">JSON_ARRAY:</span>
+      <span class="k">for</span> <span class="o">(</span><span class="nc">JsonVariantConst</span> <span class="n">value</span> <span class="o">:</span> <span class="n">doc</span><span class="o">.</span><span class="na">as</span><span class="o">&lt;</span><span class="nc">JsonArrayConst</span><span class="o">&gt;())</span> <span class="o">{</span>
+        <span class="nc">Traverse</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">depth</span><span class="o">);</span> <span class="c1">// 配列の各要素を走査</span>
+      <span class="o">}</span>
+      <span class="k">break</span><span class="o">;</span>
+
+    <span class="k">case</span> <span class="nl">JSON_OBJECT:</span>
+      <span class="k">for</span> <span class="o">(</span><span class="nc">JsonPairConst</span> <span class="n">kv</span> <span class="o">:</span> <span class="n">doc</span><span class="o">.</span><span class="na">as</span><span class="o">&lt;</span><span class="nc">JsonObjectConst</span><span class="o">&gt;())</span> <span class="o">{</span>
+        <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>                    <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
+        <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">kv</span><span class="o">.</span><span class="na">key</span><span class="o">().</span><span class="na">c_str</span><span class="o">());</span> <span class="c1">// 「キー」は JsonString 型</span>
+        <span class="nc">Traverse</span><span class="o">(</span><span class="n">kv</span><span class="o">.</span><span class="na">value</span><span class="o">(),</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>  <span class="c1">// 次のオブジェクトを走査</span>
+      <span class="o">}</span>
+      <span class="k">break</span><span class="o">;</span>
+
+    <span class="k">case</span> <span class="nl">JSON_VARIANT:</span>
+    <span class="k">default</span><span class="o">:</span>
+      <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>                      <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
+      <span class="n">serializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">Serial</span><span class="o">);</span>         <span class="c1">// 「値」は JsonVariant::as&lt;T&gt;() で取得</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+      <span class="k">break</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="c1">// Initialize serial port</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1500</span><span class="o">);</span>
+
+  <span class="nc">JsonDocument</span> <span class="n">doc</span><span class="o">;</span>
+  <span class="nc">DeserializationError</span> <span class="n">error</span> <span class="o">=</span> <span class="n">deserializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="n">input</span><span class="o">);</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"deserializeJson() failed: "</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">error</span><span class="o">.</span><span class="na">c_str</span><span class="o">());</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nc">Traverse</span><span class="o">(</span><span class="n">doc</span><span class="o">);</span>                    <span class="c1">// JSON データの走査</span>
+  <span class="n">serializeJsonPretty</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">Serial</span><span class="o">);</span> <span class="c1">// ライブラリによるシリアライズ</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
+
+<h2 id="今回の比較結果-まとめ">今回の比較結果 まとめ</h2>
+
+<p>Arduino 本家のライブラリには、そのシンプルな API 故に期待を寄せていたのですが、β版に止まっていることもあり、ArduinoJson に軍配が挙がると思います。Arduino 本家にも頑張って欲しいところですが、人気の程からしても順当というところでしょう。</p>
+
+<figure class="flex">
+  <div data-lightbox="image">
+    <img src="/images/2025/11-16/Comparison.png" alt="Arduino 用 JSON ライブラリの比較" width="1196" height="180" />
+    <figcaption>Arduino 用 JSON ライブラリの比較</figcaption>
+  </div>
+</figure>
+
+<h2 id="おまけ">おまけ</h2>
+
+<ul>
+  <li>JSON 関連
+    <ul>
+      <li>
+        <p><a href="https://jsoneditoronline.org/" title="JSON Editor Online: edit JSON, format JSON, query JSON">JSON Editor Online</a><br />
+元は Google Chrome の拡張機能だったようですが、現在はオンラインツールとなっています。JSON データの誤りを修正する手助けをしてくれたり、Javascript の filter を試せたりと、とっても便利なツールです。</p>
+      </li>
+      <li>
+        <p><a href="https://qiita.com/_meki/items/53db5976a041546eb8c4" title="C++ でも PHP のヒアドキュメント的なことができる (raw string literal) #C++ - Qiita">C++ でも PHP のヒアドキュメント的なことができる (raw string literal)</a><br />
+C++ でも出来るって事、知りませんでした…</p>
+      </li>
+    </ul>
+  </li>
+  <li>セキュリティ関連
+    <ul>
+      <li>
+        <p><a href="https://jvndb.jvn.jp/ja/contents/2025/JVNDB-2025-013381.html" title="JVNDB-2025-013381 - JVN iPedia - 脆弱性対策情報データベース">JVNDB-2025-013381 Dave Gamble の cJSON における境界外読み取りに関する脆弱性</a>（<a href="https://www.cve.org/CVERecord?id=CVE-2025-57052" title="Common vulnerabilities and Exposures (CVE)">CVE-2025-57052</a>）<br />
+2025年9月に公表された cJSON の深刻な脆弱性です。幸い Arduino_JSON には含まれていないソースコードが対象です。</p>
+      </li>
+      <li>
+        <p><a href="https://github.com/search?q=repo%3ADaveGamble%2FcJSON+CVE&amp;type=pullrequests" title="Pull request search results">cJSON の CVE 関連プルリク</a><br />
+全てではありませんが、Arduino_JSON にも関連する脆弱性を修正するプルリクのリストです。</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/08/16/" title="前の記事：ESP32 2432S028RでLVGL - ExplorerやFinderの様にフォルダを折り畳める UI の実装">← ESP32 2432S028RでLVGL - ExplorerやFinderの様にフォルダを折り畳める UI の実装</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/11/16/",this.page.identifier="/2025/11/16/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2025/11/16/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2025/11/16/";this.page.identifier="/2025/11/16/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
