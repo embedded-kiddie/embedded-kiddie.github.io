@@ -403,14 +403,14 @@ JSON オブジェクトを文字列化します。</p>
 
   <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">"array"</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-      <span class="nc">Traverse</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">depth</span><span class="o">);</span> <span class="c1">// 配列の各要素を走査</span>
+      <span class="nc">Traverse</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">depth</span><span class="o">);</span>                  <span class="c1">// 配列の各要素を走査</span>
     <span class="o">}</span>
   <span class="o">}</span>
 
   <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">"object"</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">obj</span><span class="o">.</span><span class="na">keys</span><span class="o">().</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
       <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>
-      <span class="n">obj</span><span class="o">.</span><span class="na">keys</span><span class="o">()[</span><span class="n">i</span><span class="o">].</span><span class="na">printTo</span><span class="o">(</span><span class="nc">Serial</span><span class="o">);</span>  <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
+      <span class="n">obj</span><span class="o">.</span><span class="na">keys</span><span class="o">()[</span><span class="n">i</span><span class="o">].</span><span class="na">printTo</span><span class="o">(</span><span class="nc">Serial</span><span class="o">);</span>            <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
       <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
       <span class="nc">Traverse</span><span class="o">(</span><span class="n">obj</span><span class="o">[</span><span class="n">obj</span><span class="o">.</span><span class="na">keys</span><span class="o">()[</span><span class="n">i</span><span class="o">]],</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>  <span class="c1">// 次のオブジェクトを走査</span>
     <span class="o">}</span>
@@ -418,7 +418,7 @@ JSON オブジェクトを文字列化します。</p>
 
   <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">!=</span> <span class="s">"undefined"</span><span class="o">)</span> <span class="o">{</span>
     <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>
-    <span class="n">obj</span><span class="o">.</span><span class="na">printTo</span><span class="o">(</span><span class="nc">Serial</span><span class="o">);</span>              <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
+    <span class="n">obj</span><span class="o">.</span><span class="na">printTo</span><span class="o">(</span><span class="nc">Serial</span><span class="o">);</span>                        <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
     <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
   <span class="o">}</span>
 <span class="o">}</span>
@@ -428,15 +428,14 @@ JSON オブジェクトを文字列化します。</p>
   <span class="k">while</span> <span class="o">(</span><span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1500</span><span class="o">);</span>
 
   <span class="nc">JSONVar</span> <span class="n">obj</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
-
   <span class="nc">String</span> <span class="n">type</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="na">typeof</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
   <span class="k">if</span> <span class="o">(</span><span class="n">type</span> <span class="o">==</span> <span class="s">"undefined"</span><span class="o">)</span> <span class="o">{</span>
     <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Parsing input failed!"</span><span class="o">);</span>
     <span class="k">return</span><span class="o">;</span>
   <span class="o">}</span>
 
-  <span class="nc">Traverse</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>                       <span class="c1">// JSON データの走査</span>
-  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="no">JSON</span><span class="o">.</span><span class="na">stringify</span><span class="o">(</span><span class="n">obj</span><span class="o">));</span> <span class="c1">// ライブラリによるシリアライズ</span>
+  <span class="nc">Traverse</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>                                <span class="c1">// JSON データの走査</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="no">JSON</span><span class="o">.</span><span class="na">stringify</span><span class="o">(</span><span class="n">obj</span><span class="o">));</span>          <span class="c1">// ライブラリによるシリアライズ</span>
 <span class="o">}</span>
 
 <span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
@@ -452,26 +451,6 @@ JSON オブジェクトを文字列化します。</p>
   // ここに JSON データを貼り付けてください
 )"</span><span class="o">;</span>
 
-<span class="c1">// JSON オブジェクトの型</span>
-<span class="n">typedef</span> <span class="kd">enum</span> <span class="o">{</span>
-  <span class="no">JSON_ARRAY</span><span class="o">,</span>
-  <span class="no">JSON_OBJECT</span><span class="o">,</span>
-  <span class="no">JSON_VARIANT</span><span class="o">,</span>
-<span class="o">}</span> <span class="n">JsonType_t</span><span class="o">;</span>
-
-<span class="c1">// JSON オブジェクトの型判定</span>
-<span class="n">JsonType_t</span> <span class="nf">TypeOf</span><span class="o">(</span><span class="nc">JsonVariantConst</span> <span class="n">doc</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">if</span> <span class="o">(</span><span class="n">doc</span><span class="o">.</span><span class="na">is</span><span class="o">&lt;</span><span class="nc">JsonArrayConst</span><span class="o">&gt;())</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="no">JSON_ARRAY</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">doc</span><span class="o">.</span><span class="na">is</span><span class="o">&lt;</span><span class="nc">JsonObjectConst</span><span class="o">&gt;())</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="no">JSON_OBJECT</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="k">return</span> <span class="no">JSON_VARIANT</span><span class="o">;</span>
-<span class="o">}</span>
-
 <span class="c1">// 整形用インデントの出力</span>
 <span class="n">inline</span> <span class="kt">void</span> <span class="nf">Indent</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
   <span class="k">while</span> <span class="o">(</span><span class="n">n</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
@@ -481,27 +460,24 @@ JSON オブジェクトを文字列化します。</p>
 
 <span class="c1">// JSON データの走査</span>
 <span class="kt">void</span> <span class="nf">Traverse</span><span class="o">(</span><span class="nc">JsonVariantConst</span> <span class="n">doc</span><span class="o">,</span> <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">switch</span> <span class="o">(</span><span class="nc">TypeOf</span><span class="o">(</span><span class="n">doc</span><span class="o">))</span> <span class="o">{</span>
-    <span class="k">case</span> <span class="nl">JSON_ARRAY:</span>
-      <span class="k">for</span> <span class="o">(</span><span class="nc">JsonVariantConst</span> <span class="n">value</span> <span class="o">:</span> <span class="n">doc</span><span class="o">.</span><span class="na">as</span><span class="o">&lt;</span><span class="nc">JsonArrayConst</span><span class="o">&gt;())</span> <span class="o">{</span>
-        <span class="nc">Traverse</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">depth</span><span class="o">);</span> <span class="c1">// 配列の各要素を走査</span>
-      <span class="o">}</span>
-      <span class="k">break</span><span class="o">;</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">doc</span><span class="o">.</span><span class="na">is</span><span class="o">&lt;</span><span class="nc">JsonArrayConst</span><span class="o">&gt;())</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="nc">JsonVariantConst</span> <span class="n">value</span> <span class="o">:</span> <span class="n">doc</span><span class="o">.</span><span class="na">as</span><span class="o">&lt;</span><span class="nc">JsonArrayConst</span><span class="o">&gt;())</span> <span class="o">{</span>
+      <span class="nc">Traverse</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">depth</span><span class="o">);</span>           <span class="c1">// 配列の各要素を走査</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-    <span class="k">case</span> <span class="nl">JSON_OBJECT:</span>
-      <span class="k">for</span> <span class="o">(</span><span class="nc">JsonPairConst</span> <span class="n">kv</span> <span class="o">:</span> <span class="n">doc</span><span class="o">.</span><span class="na">as</span><span class="o">&lt;</span><span class="nc">JsonObjectConst</span><span class="o">&gt;())</span> <span class="o">{</span>
-        <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>                    <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
-        <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">kv</span><span class="o">.</span><span class="na">key</span><span class="o">().</span><span class="na">c_str</span><span class="o">());</span> <span class="c1">// 「キー」は JsonString 型</span>
-        <span class="nc">Traverse</span><span class="o">(</span><span class="n">kv</span><span class="o">.</span><span class="na">value</span><span class="o">(),</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>  <span class="c1">// 次のオブジェクトを走査</span>
-      <span class="o">}</span>
-      <span class="k">break</span><span class="o">;</span>
+  <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">doc</span><span class="o">.</span><span class="na">is</span><span class="o">&lt;</span><span class="nc">JsonObjectConst</span><span class="o">&gt;())</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="nc">JsonPairConst</span> <span class="n">kv</span> <span class="o">:</span> <span class="n">doc</span><span class="o">.</span><span class="na">as</span><span class="o">&lt;</span><span class="nc">JsonObjectConst</span><span class="o">&gt;())</span> <span class="o">{</span>
+      <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>                    <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">kv</span><span class="o">.</span><span class="na">key</span><span class="o">().</span><span class="na">c_str</span><span class="o">());</span> <span class="c1">// 「キー」は JsonString 型</span>
+      <span class="nc">Traverse</span><span class="o">(</span><span class="n">kv</span><span class="o">.</span><span class="na">value</span><span class="o">(),</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>  <span class="c1">// 次のオブジェクトを走査</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 
-    <span class="k">case</span> <span class="nl">JSON_VARIANT:</span>
-    <span class="k">default</span><span class="o">:</span>
-      <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>                      <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
-      <span class="n">serializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">Serial</span><span class="o">);</span>         <span class="c1">// 「値」は JsonVariant::as&lt;T&gt;() で取得</span>
-      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
-      <span class="k">break</span><span class="o">;</span>
+  <span class="k">else</span> <span class="cm">/* JsonVariantConst */</span> <span class="o">{</span>
+    <span class="nc">Indent</span><span class="o">(</span><span class="n">depth</span><span class="o">);</span>                      <span class="c1">// 何か処理する代わりにシリアルモニタに出力</span>
+    <span class="n">serializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">Serial</span><span class="o">);</span>         <span class="c1">// 「値」は JsonVariant::as&lt;T&gt;() で取得</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
   <span class="o">}</span>
 <span class="o">}</span>
 
@@ -518,8 +494,8 @@ JSON オブジェクトを文字列化します。</p>
     <span class="k">return</span><span class="o">;</span>
   <span class="o">}</span>
 
-  <span class="nc">Traverse</span><span class="o">(</span><span class="n">doc</span><span class="o">);</span>                    <span class="c1">// JSON データの走査</span>
-  <span class="n">serializeJsonPretty</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">Serial</span><span class="o">);</span> <span class="c1">// ライブラリによるシリアライズ</span>
+  <span class="nc">Traverse</span><span class="o">(</span><span class="n">doc</span><span class="o">);</span>                        <span class="c1">// JSON データの走査</span>
+  <span class="n">serializeJsonPretty</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">Serial</span><span class="o">);</span>     <span class="c1">// ライブラリによるシリアライズ</span>
 <span class="o">}</span>
 
 <span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
