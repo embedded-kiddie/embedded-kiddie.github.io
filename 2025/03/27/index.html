@@ -220,14 +220,14 @@
 
 <h5 id="なぜ使われるのか">なぜ使われるのか</h5>
 <ul>
-  <li>バスの共有: 1本の信号線（バス）に複数のデバイスを接続する際、同時に複数のデバイスが出力しようとすると短絡（ショート）してしまいます。トライステートを使えば、必要な時だけ出力し、それ以外はHi-Zにして他のデバイスにパスを譲れます。</li>
+  <li>バスの共有: 1本の信号線（バス）に複数のデバイスを接続する際、同時に複数のデバイスが出力しようとすると短絡（ショート）してしまいます。トライステートを使えば、必要な時だけ出力し、それ以外は Hi-Z にして他のデバイスにパスを譲れます。</li>
   <li>双方向通信: 1つのピンで入出力（入出力切り替え）を実現するために使われます。</li>
-  <li>省電力: 制御信号で出力をHi-Zにすることで、消費電力を削減できます（例：サーボモーターの制御解除時）。</li>
+  <li>省電力: 制御信号で出力を Hi-Z にすることで、消費電力を削減できます（例：サーボモーターの制御解除時）。</li>
 </ul>
 
 <h5 id="どのように実現するか">どのように実現するか</h5>
 <ul>
-  <li>トライステートバッファ: 入力信号と制御入力（イネーブル信号）を持つバッファ回路で実現されます。制御信号がアクティブな（例えば「0」）間は入力信号がそのまま出力され、制御信号が非アクティブな（例えば「1」）時にHi-Z状態になります。</li>
+  <li>トライステートバッファ: 入力信号と制御入力（イネーブル信号）を持つバッファ回路で実現されます。制御信号がアクティブな（例えば「0」）間は入力信号がそのまま出力され、制御信号が非アクティブな（例えば「1」）時に Hi-Z 状態になります。</li>
 </ul>
 
 </details>
@@ -245,7 +245,7 @@
 
 <div class="clear-both"></div>
 
-<p>実際には、<code class="language-plaintext highlighter-rouge">User_Setup.h</code> で <code class="language-plaintext highlighter-rouge">TFT_MISO</code> の定義をコメントアウトするだけです。こーすると <code class="language-plaintext highlighter-rouge">MISO</code> はハイインピーダンス状態になり、LCD には <code class="language-plaintext highlighter-rouge">MOSI</code> を介して出力するだけ、タッチパネルからは <code class="language-plaintext highlighter-rouge">MISO</code>を介して読み込むだけになり、それぞれが競合せず、機能します <span class="emoji">🥳</span></p>
+<p>実際には、<code class="language-plaintext highlighter-rouge">User_Setup.h</code> で <code class="language-plaintext highlighter-rouge">TFT_MISO</code> の定義をコメントアウト（または <code class="language-plaintext highlighter-rouge">-1</code> に設定）するだけです。こーすると <code class="language-plaintext highlighter-rouge">MISO</code> はハイインピーダンス状態になり、LCD には <code class="language-plaintext highlighter-rouge">MOSI</code> を介して出力するだけ、タッチパネルからは <code class="language-plaintext highlighter-rouge">MISO</code>を介して読み込むだけになり、それぞれが競合せず、機能します <span class="emoji">🥳</span></p>
 
 <p>即ち完全な双方向にはなりません。この点が回路でトライステートバッファを構成するのとは異なります。「LCD から画素値を読み出してスクリーンショットを保存する」なんてことが出来ないので要注意です。</p>
 
