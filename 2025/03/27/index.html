@@ -247,7 +247,9 @@
 
 <p>実際には、<code class="language-plaintext highlighter-rouge">User_Setup.h</code> で <code class="language-plaintext highlighter-rouge">TFT_MISO</code> の定義をコメントアウトするだけです。こーすると <code class="language-plaintext highlighter-rouge">MISO</code> はハイインピーダンス状態になり、LCD には <code class="language-plaintext highlighter-rouge">MOSI</code> を介して出力するだけ、タッチパネルからは <code class="language-plaintext highlighter-rouge">MISO</code>を介して読み込むだけになり、それぞれが競合せず、機能します <span class="emoji">🥳</span></p>
 
-<p>この場合、<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">Espressif 標準の SD ライブラリ</a> はデフォルトの SPI バスである <code class="language-plaintext highlighter-rouge">VSPI</code> に接続されるので、ディスプレイもタッチパネルも <code class="language-plaintext highlighter-rouge">HSPI</code> に接続するのが良いと思います。</p>
+<p>即ち完全な双方向にはなりません。この点が回路でトライステートバッファを構成するのとは異なります。「LCD から画素値を読み出してスクリーンショットを保存する」なんてことが出来ないので要注意です。</p>
+
+<p>また <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SD" title="arduino-esp32/libraries/SD at master · espressif/arduino-esp32">Espressif 標準の SD ライブラリ</a> は、デフォルトで <code class="language-plaintext highlighter-rouge">VSPI</code> バスに接続するので、LCD とタッチパネルは <code class="language-plaintext highlighter-rouge">HSPI</code> に接続するのが良いと思います。</p>
 
 <ul>
   <li>TFT_eSPI の <code class="language-plaintext highlighter-rouge">User_Setup.h</code></li>
