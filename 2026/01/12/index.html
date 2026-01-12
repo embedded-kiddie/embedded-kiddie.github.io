@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32 2432S028R (CYD)でLVGL - MP3 Music Playerをリリースします | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32 2432S028R (CYD)でLVGL - MP3 Music Playerをリリースします" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="LCD・タッチパネル・SD カード・アンプ IC の全機能を活用した MP3 音楽プレイヤーの制作記事です。" />
+<meta property="og:description" content="LCD・タッチパネル・SD カード・アンプ IC の全機能を活用した MP3 音楽プレイヤーの制作記事です。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2026/01/12/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2026/01/12/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-01-12T10:28:40+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32 2432S028R (CYD)でLVGL - MP3 Music Playerをリリースします" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2026-01-12T10:28:40+09:00","datePublished":"2026-01-12T10:28:40+09:00","description":"LCD・タッチパネル・SD カード・アンプ IC の全機能を活用した MP3 音楽プレイヤーの制作記事です。","headline":"ESP32 2432S028R (CYD)でLVGL - MP3 Music Playerをリリースします","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2026/01/12/"},"url":"https://embedded-kiddie.github.io/2026/01/12/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32 2432S028R (CYD)でLVGL - MP3 Music Playerをリリースします</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2026-01-12T10:28:40+09:00" itemprop="datePublished">Jan 12, 2026
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>新年、明けましておめでとうございます <span class="emoji">🐎</span></p>
+
+<p>昨年２月の「<a href="/2025/02/05/" title="ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました｜Embedded Kiddie">ESP32 2432S028R (CYD)にサーモグラフィカメラを移植しました</a>」以来、１年に１本しかマトモなソフトをリリース出来ず、情けない限りです。しかも投稿した記事のほぼ全てが CYD 関連でした。</p>
+
+<p>まぁ、本年もユルユルとやっていきますので、よろしくお願い致します <span class="emoji">🥱</span></p>
+
+<p>さて新年の一発目も CYD ネタで恐縮ですが、LVGL の習熟を目標とし、LCD・タッチパネル・SD カード・アンプ IC の全機能を活かすことに拘って制作を進めて来た表題の件です。</p>
+
+<figure class="flex">
+  <a href="/images/2026/01-12/CYD-MP3Player.gif" title="CYD MP3 Music Player" data-lightbox="image">
+    <img src="/images/2026/01-12/CYD-MP3Player.gif" alt="CYD MP3 Music Player" width="240" height="320" />
+    <figcaption>CYD MP3 Music Player</figcaption>
+  </a>
+</figure>
+
+<p>まずはハードウェアから…</p>
+
+<h2 id="未登録の技適マーク付き-cyd-を引いた件">未登録の技適マーク付き CYD を引いた件</h2>
+
+<figure class="float-left">
+  <a href="/images/2026/01-12/CYD-FakeGiteki.jpg" title="詐称された技適マーク付き CYD" data-lightbox="image">
+    <img src="/images/2026/01-12/CYD-FakeGiteki-small.jpg" alt="詐称された技適マーク付き CYD" width="600" height="450" />
+    <figcaption>詐称された技適マーク付き CYD</figcaption>
+  </a>
+</figure>
+
+<p>「<a href="/2025/04/24/" title="ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編｜Embedded Kiddie">ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編</a>」で CYD の音質改善について報告しました。これをやり直すべく、昨年ちゃんとした技適マーク付きが購入できた AliExpress のショップから再購入したところ、写真のようなモノが届きました。</p>
+
+<p><a href="https://www.tele.soumu.go.jp/giteki/SearchServlet?pageID=js01" title="総務省 電波利用ポータル｜技術基準適合証明等を受けた機器の検索">総務省のサイトで検索</a> すると「検索条件に該当するデータが存在しません」でした。さすが中国、やってくれます。生産元が色々と変わる様なので、もう正規の技適マーク付きは入手が難しいのかもしれませんネ。</p>
+
+<h2 id="音質改善再び">音質改善、再び</h2>
+<p>さて気を取り直し、昨年購入のストック品を引っ張り出し、アンプ IC（SC8002B）周りの回路定数を決め直しました。</p>
+
+<figure class="float-left">
+  <a href="/images/2026/01-12/CYD-ILI9341-ST7789.jpg" title="ILI9341版とST7789版" data-lightbox="image">
+    <img src="/images/2026/01-12/CYD-ILI9341-ST7789-small.jpg" alt="ILI9341版とST7789版" width="600" height="495" />
+    <figcaption>ILI9341版とST7789版</figcaption>
+  </a>
+</figure>
+
+<p>まずは回路図と R7、R8、R9 のおさらいです。</p>
+
+<p>出回っている２種類の 2.8インチ CYD のうち、ILI9341版は回路図と同じモノが付いている一方、ST7789版は R7 と R8 に 0Ω が付けられ、全く酷い音質でした。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2026/01-12/CYD-SC8002B-2K.jpg" title="音量端子の調整" data-lightbox="image">
+    <img src="/images/2026/01-12/CYD-SC8002B-2K-small.jpg" alt="音量端子の調整" width="600" height="210" />
+    <figcaption>音量端子の調整</figcaption>
+  </a>
+</figure>
+
+<p>この問題を改善するため、<a href="https://github.com/hexeguitar/ESP32_TFT_PIO?tab=readme-ov-file#audio-amp-gain-mod" title="hexeguitar/ESP32_TFT_PIO: Example project for the ESP32-2432S028 &quot;Cheap Yellow Display&quot; board.">hexeguitar/ESP32_TFT_PIO</a> では R7、R8 を回路図通りに、R9 は並列に接続した 47K〜100KΩ で調整し音質改善を図っています。</p>
+
+<p>一方私は、依然ゲインが高く、高域が潰れた様に感じたので、JPOP 系を何曲か試聴し、R9 に並列な抵抗は 2KΩ を選びました。これ以上低いと音量が物足りず、高いとザラつき始めるギリギリの値です（個人の感想デス）。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left flex">
+  <a href="/images/2026/01-12/CYD-SineWave-440Hz.jpg" title="440Hz サイン波のテスト" data-lightbox="image">
+    <img src="/images/2026/01-12/CYD-SineWave-440Hz-small.jpg" alt="440Hz サイン波のテスト" width="600" height="330" />
+    <figcaption>440Hz サイン波のテスト</figcaption>
+  </a>
+</figure>
+
+<p>さて今回、CYD 由来の派生品や類似品の回路図を調査し、また試行錯誤した結果、R7 は 0Ωのまま、R8 を回路図通りの 22kΩに、R9 を 10KΩにすることで、ほぼ前回同様の試聴感が得られました。付け替える 0603 抵抗が１つ減ったワケです。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left flex">
+  <a href="/images/2026/01-12/CYD-SineWave-All.jpg" title="高い周波数の再現性" data-lightbox="image">
+    <img src="/images/2026/01-12/CYD-SineWave-All-small.jpg" alt="高い周波数の再現性" width="600" height="218" />
+    <figcaption>高い周波数の再現性</figcaption>
+  </a>
+</figure>
+
+<p>ただ再生する周波数を上げていくと改修版でも再現性は悪く、ゲインが下がった分、目立たなくなっただけの様で、そもそも楽曲の再生には適さない IC であることが分かりました。</p>
+
+<div class="clear-both"></div>
+
+<p>ということで、やはり音質にこだわるなら <a href="https://github.com/hexeguitar/ESP32_TFT_PIO?tab=readme-ov-file#pcm5102a-dac" title="hexeguitar/ESP32_TFT_PIO: Example project for the ESP32-2432S028 &quot;Cheap Yellow Display&quot; board.">PCM5102A DAC</a> や <a href="https://macsbug.wordpress.com/2025/04/18/cyds-note-2025/" title="CYD&#8217;s Note 2025｜macsbug">macsbug さんの記事</a> のように、DAC とアンプは外付けが良さそうなので、そのうちトライしてみたいと思います。</p>
+
+<h2 id="ソフトウェアの解説">ソフトウェアの解説</h2>
+
+<h3 id="リポジトリの紹介">リポジトリの紹介</h3>
+
+<p>Github リポジトリ <a href="https://github.com/embedded-kiddie/CYD_MP3Player" title="embedded-kiddie/CYD_MP3Player: MP3 music player with internal DAC for Cheap Yellow Display">embedded-kiddie/CYD_MP3Player</a> には以下を収載しました。</p>
+
+<ul>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/CYD_MP3Player/tree/main/CYD_Audio" title="CYD_MP3Player/CYD_Audio at main · embedded-kiddie/CYD_MP3Player">CYD_Audio</a></strong><br />
+PlatformIO 用に作られたオリジナルの <a href="https://github.com/hexeguitar/ESP32_TFT_PIO/tree/main/Examples/CYD28_BaseProject/lib/CYD_Audio" title="ESP32_TFT_PIO/Examples/CYD28_BaseProject/lib/CYD_Audio at main · hexeguitar/ESP32_TFT_PIO">ESP32 I2S audio library</a> を <a href="https://github.com/embedded-kiddie/ESP32_TFT_PIO" title="embedded-kiddie/ESP32_TFT_PIO: Example project for the ESP32-2432S028 &quot;Cheap Yellow Display&quot; board.">フォーク</a> し、コンパイル時の警告やエラーを修正、スケッチブックフォルダの <code class="language-plaintext highlighter-rouge">libraries</code> にインストール可能な Arduino IDE 用ライブラリとしたバージョンです。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/CYD_MP3Player/tree/main/CYD_MP3Player_Basic" title="CYD_MP3Player/CYD_MP3Player_Basic at main · embedded-kiddie/CYD_MP3Player">CYD_MP3Player_Basic</a></strong><br />
+CYD_Audio ライブラリを簡単に扱えるようにしたヘルパー関数の使用例です。詳しくは <a href="/2025/04/24/" title="ESP32 2432S028R (CYD)でLVGL - I2SとInternal DACでMP3 Player - 基本動作編｜Embedded Kiddie">前回記事</a> を参照ください。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/CYD_MP3Player/tree/main/CYD_MP3Player_Simple" title="CYD_MP3Player/CYD_MP3Player_Simple at main · embedded-kiddie/CYD_MP3Player">CYD_MP3Player_Simple</a></strong><br />
+<code class="language-plaintext highlighter-rouge">MP3Player</code> という <code class="language-plaintext highlighter-rouge">CYD_Audio</code> ラッパークラスで、SD カード上のオーディオファイルをスキャンし、プレイリストを作成し、設定された順序で連続再生を制御する例です。</p>
+  </li>
+  <li>
+    <p><strong><a href="https://github.com/embedded-kiddie/CYD_MP3Player/tree/main/CYD_MP3Player_LVGL" title="CYD_MP3Player/CYD_MP3Player_LVGL at main · embedded-kiddie/CYD_MP3Player">CYD_MP3Player_LVGL</a></strong><br />
+本記事で紹介する LVGL 版です。WiFi 機能を無効にし、<a href="https://github.com/greiman/SdFat" title="greiman/SdFat: Arduino FAT16/FAT32 exFAT Library">SdFat</a> 専用にカスタマイズした <code class="language-plaintext highlighter-rouge">CYD_Audio</code> を内包しています。</p>
+  </li>
+</ul>
+
+<h3 id="lvgl-版の構築方法">LVGL 版の構築方法</h3>
+
+<h4 id="プラットフォームパッケージ">プラットフォームパッケージ</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>バージョン</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>esp32 by Espressif Systems</td>
+      <td>2.0.17</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>バージョン 3.x では内蔵の I2S DAC が非推奨となり、耳障りなクリック音が出るため、2.0.17 が必須です。</p>
+
+<p>またコンパイル時の設定は以下の通りです。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>設定</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Partition Scheme</td>
+      <td><strong>“Huge App (3MB No OTA/1MB SPIFFS)”</strong></td>
+    </tr>
+    <tr>
+      <td>Upload Speed</td>
+      <td><strong>“460800”</strong> (Mac), <strong>“921600”</strong> (Win)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="ライブラリ">ライブラリ</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>バージョン</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://github.com/lvgl/lvgl" title="lvgl/lvgl: Embedded graphics library to create beautiful UIs for any MCU, MPU and display type.">LVGL</a> by kisvegabor</td>
+      <td>9.2.2 以降</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">LovyanGFX</a> by lovyan03</td>
+      <td>1.2.7</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/greiman/SdFat" title="greiman/SdFat: Arduino FAT16/FAT32 exFAT Library">SdFat</a> by Bill Greiman</td>
+      <td>2.3.0</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/bblanchon/ArduinoJson" title="bblanchon/ArduinoJson: 📟 JSON library for Arduino and embedded C++. Simple and efficient.">ArduinoJson</a> by Benoit Blanchon</td>
+      <td>7.4.2</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>
+    <p><strong>LVGL の設定</strong><br />
+まず、公式資料の <a href="https://docs.lvgl.io/master/integration/frameworks/arduino.html#configure-lvgl" title="Arduino - LVGL 9.5 documentation">Configure LVGL</a> を参考に、スケッチブックフォルダの <code class="language-plaintext highlighter-rouge">libraries</code> に <code class="language-plaintext highlighter-rouge">lv_conf.h</code> を 配置します。同ファイルの設定については <a href="https://github.com/embedded-kiddie/CYD_MP3Player/tree/main/CYD_MP3Player_LVGL/assets/lv_conf#readme" title="CYD_MP3Player/CYD_MP3Player_LVGL/assets/lv_conf at main · embedded-kiddie/CYD_MP3Player"><code class="language-plaintext highlighter-rouge">README.md</code></a> と各バージョンのサンプルを参考にして下さい。</p>
+  </li>
+  <li>
+    <p><strong>SdFat の設定</strong><br />
+長いファイル名と日本語ファイル名を有効化するため、SdFat のインストールフォルダから <a href="https://github.com/greiman/SdFat/blob/master/src/SdFatConfig.h#L34-L35" title="SdFat/src/SdFatConfig.h at master · greiman/SdFat"><code class="language-plaintext highlighter-rouge">SdFatConfig.h</code></a> を開き、コメントアウトされているシンボル <code class="language-plaintext highlighter-rouge">USE_UTF8_LONG_NAMES</code> の定義を有効にして下さい。</p>
+  </li>
+</ul>
+
+<h4 id="アプリケーションの設定">アプリケーションの設定</h4>
+
+<p>IDE で <a href="https://github.com/embedded-kiddie/CYD_MP3Player/blob/main/CYD_MP3Player_LVGL/config.h" title="CYD_MP3Player/CYD_MP3Player_LVGL/config.h at main · embedded-kiddie/CYD_MP3Player"><code class="language-plaintext highlighter-rouge">config.h</code></a> を開き、1. 〜 8. のコメントに沿って設定を編集して下さい。</p>
+
+<ol>
+  <li>
+    <p><strong>TFT Screen configuration</strong><br />
+  残念ながら UI 画面はレスポンシブではなく、240x320 の設定は変更不可です <span class="emoji">😞</span></p>
+  </li>
+  <li>
+    <p><strong>Graphic library configuration</strong><br />
+  新し目の CYD 派生モデルでは、LovyanGFX の自動設定機能が働かないモノがあるようです。その場合は <code class="language-plaintext highlighter-rouge">USE_AUTODETECT</code> を <code class="language-plaintext highlighter-rouge">false</code> に設定し、お持ちの LCD を設定して下さい。</p>
+  </li>
+  <li>
+    <p><strong>Touch panel calibration</strong><br />
+  タッチ位置にズレがある場合は、一旦 <code class="language-plaintext highlighter-rouge">USE_CALIBRATED</code> を <code class="language-plaintext highlighter-rouge">false</code> を設定し、再コンパイル後に LovyanGFX のキャリブレーションを実行し、シリアルモニタに表示されるコードを [<code class="language-plaintext highlighter-rouge">CYD_MP3Player_LVGL.ino</code>][] にコピペして下さい。その後 <code class="language-plaintext highlighter-rouge">USE_CALIBRATED</code> に戻すことを忘れずにネ。</p>
+  </li>
+  <li>
+    <p><strong>Custom fonts configuration</strong><br />
+  既に色々な記号や JIS 第１水準と第２水準が入ってます。変更の必要がないことを祈ります。</p>
+  </li>
+  <li>
+    <p><strong>Path to the folder where MP3 audio files are saved</strong><br />
+  <code class="language-plaintext highlighter-rouge">MP3_ROOT_PATH</code> に楽曲ファイルを格納する SD カードのルートパスを設定します。またよく使う楽曲ファイルの拡張子を <code class="language-plaintext highlighter-rouge">MP3_FILE_EXT</code> の先頭に移して下さい。SD カードの検索が少し早くなります。</p>
+  </li>
+  <li>
+    <p><strong>File that stores settings related to the operation of this player</strong><br />
+  アプリケーションの設定を保存するファイル名を設定します。変更する場合は、ファイル名には <code class="language-plaintext highlighter-rouge">@</code> から始まる文字列を設定して下さい。</p>
+  </li>
+  <li>
+    <p><strong>Partitions under “MP3_ROOT_PATH”</strong><br />
+  SRAM 容量の制限により、１つのプレイリストに入る曲数を 600 程度に制限していますが、複数のサブフォルダに分けることで全体の収容数を増やせる仕様としています。本アプリではこのサブフォルダのことを「パーティション」と呼び、<code class="language-plaintext highlighter-rouge">PARTITION_PATH</code> にサブフォルダ名のテンプレートを設定します。デフォルトは単なる「数字」です。</p>
+  </li>
+  <li>
+    <p><strong>Album list configuration under “PARTITION_PATH”</strong><br />
+  後述するアルバムリストの保存用設定です。特に変更する必要はないと思います。</p>
+  </li>
+</ol>
+
+<h2 id="使い方">使い方</h2>
+
+<h3 id="sd-カード内のファイル構成">SD カード内のファイル構成</h3>
+
+<p>本アプリは、CD をリッピングしたイメージ（アーティスト名／アルバム名／曲名で構成される階層構造）がそのまま SD に保存されることを想定しています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">[</span><span class="n">パーティションなし</span><span class="o">]</span>              <span class="o">[</span><span class="n">パーティションあり</span><span class="o">]</span>
+<span class="no">MP3_ROOT_PATH</span><span class="o">/</span>                 <span class="no">MP3_ROOT_PATH</span><span class="o">/</span>
+<span class="err">├──</span> <span class="nc">Artist1</span><span class="o">/</span>                   <span class="err">├──</span> <span class="mi">1</span><span class="o">/</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="nc">Arbum1</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span>              <span class="err">│</span>   <span class="err">├──</span> <span class="nc">Artist1</span><span class="o">/</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="mo">01</span> <span class="n">title01</span><span class="o">.</span><span class="na">mp3</span>     <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="nc">Arbum1</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="mo">02</span> <span class="n">title02</span><span class="o">.</span><span class="na">mp3</span>     <span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="mo">01</span> <span class="n">title01</span><span class="o">.</span><span class="na">mp3</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="o">...</span>                <span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="mo">02</span> <span class="n">title02</span><span class="o">.</span><span class="na">mp3</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="o">...</span>                <span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="o">...</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="nc">Arbum1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span>              <span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="o">...</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="o">...</span>                <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="nc">Arbum1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="o">...</span>                    <span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="o">...</span>
+<span class="err">├──</span> <span class="nc">Artist2</span><span class="o">/</span>                   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="o">...</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="nc">Arbum2</span><span class="o">.</span><span class="mi">1</span>               <span class="err">│</span>   <span class="err">├──</span> <span class="nc">Artist2</span><span class="o">/</span>
+<span class="err">│</span>   <span class="err">└──</span><span class="o">...</span>                     <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="nc">Arbum2</span><span class="o">.</span><span class="mi">1</span><span class="o">/</span>
+<span class="err">└──</span> <span class="o">...</span>                        <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="o">...</span>
+<span class="err">└──</span> <span class="o">...</span>                        <span class="err">│</span>   <span class="err">└──</span> <span class="o">...</span>
+                               <span class="err">├──</span> <span class="mi">2</span><span class="o">/</span>
+                               <span class="err">│</span>   <span class="err">├──</span> <span class="nc">Artist3</span><span class="o">/</span>
+                               <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="o">...</span></code></pre></figure>
+
+<h3 id="画面構成">画面構成</h3>
+
+<p>全部で４つの画面からなり、それぞれスワイプ（または矢印ボタン）で遷移します。</p>
+
+<details>
+<summary>全体の画面構成</summary>
+
+
+<figure class="flex">
+  <a href="/images/2026/01-12/CYD-Screens.jpg" title="全体の画面構成" data-lightbox="image">
+    <img class="simple" src="/images/2026/01-12/CYD-Screens.jpg" alt="全体の画面構成" width="1200" height="1040" />
+    <figcaption>全体の画面構成</figcaption>
+  </a>
+</figure>
+
+</details>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li>
+    <p><strong>メイン画面</strong><br />
+デザインセンスがゼロの MP3 プレイヤー画面です。Bluetooth ボタンは現在機能しません <span class="emoji">😊</span></p>
+  </li>
+  <li>
+    <p><strong>プレイリスト</strong><br />
+楽曲の一覧で、再生する曲を選択します。<span class="emoji">❤️</span>ボタンで「お気に入り」の登録ができます。また演奏時間は最初「0:00」ですが、再生終了時に更新され SD カードに保存されます。</p>
+  </li>
+  <li>
+    <p><strong>アルバムリスト</strong><br />
+プレイリストに入れるアルバムを選択します。ドロップダウンリストには “All” 以外に任意のリストが登録／編集／削除ができます。リスト名に日本語を使いたい場合は、前章 8. の <code class="language-plaintext highlighter-rouge">ALBUM_LIST_FILE</code> で設定した <code class="language-plaintext highlighter-rouge">.txt</code> ファイルを編集して下さい。</p>
+    <figure class="float-left">
+  <a href="/images/2026/01-12/CYD-MP3Player-AlbumList.gif" title="アルバムリスト" data-lightbox="image">
+    <img src="/images/2026/01-12/CYD-MP3Player-AlbumList.gif" alt="アルバムリスト" width="240" height="320" />
+    <figcaption>アルバムリスト</figcaption>
+  </a>
+</figure>
+  </li>
+</ul>
+
+<div class="clear-both"></div>
+
+<ul>
+  <li><strong>設定画面</strong><br />
+パーティションの切り替え、LCD 消灯までの時間、及びスリープタイマーを設定します。</li>
+</ul>
+
+<h3 id="アルバムのカバー写真について">アルバムのカバー写真について</h3>
+
+<p>本アプリでは、予め埋め込まれた10枚の画像のうち1枚をランダムに選び、楽曲の再生中にメイン画面に表示します。この埋め込み画像を変えるには、各アルバムフォルダにお好みの画像を <code class="language-plaintext highlighter-rouge">@photo.jpg</code> として保存して下さい。</p>
+
+<p>ただしスワイプのアニメーション中も オンザフライで JPEG 画像をデコードするので、サイズは 96x96 程度に、サイズは 6KB 以下に抑えて下さい。圧縮率は 50 〜 75% がお勧めです。</p>
+
+<h2 id="既知の問題点">既知の問題点</h2>
+
+<h3 id="コンパイル時の警告">コンパイル時の警告</h3>
+
+<p>ESP32 のコア 2.0.17 でコンパイルすると、次の警告が出ます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="n">xxxx</span><span class="o">/</span><span class="nc">Documents</span><span class="o">/</span><span class="nc">Arduino</span><span class="o">/</span><span class="n">libraries</span><span class="o">/</span><span class="nc">SdFat</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="nc">FsLib</span><span class="o">/</span><span class="nc">FsNew</span><span class="o">.</span><span class="na">h</span><span class="o">:</span><span class="mi">44</span><span class="o">:</span><span class="mi">48</span><span class="o">:</span> <span class="nl">warning:</span> <span class="n">optimization</span> <span class="n">attribute</span> <span class="n">on</span> <span class="err">'</span><span class="kt">void</span><span class="o">*</span> <span class="n">operator</span> <span class="nf">new</span><span class="o">(</span><span class="n">size_t</span><span class="o">,</span> <span class="n">newalign_t</span><span class="o">*)</span><span class="err">'</span> <span class="n">follows</span> <span class="n">definition</span> <span class="n">but</span> <span class="n">the</span> <span class="n">attribute</span> <span class="n">doesn</span><span class="err">'</span><span class="n">t</span> <span class="n">match</span> <span class="o">[-</span><span class="nc">Wattributes</span><span class="o">]</span>
+ <span class="kt">void</span><span class="o">*</span> <span class="n">operator</span> <span class="nf">new</span><span class="o">(</span><span class="n">size_t</span> <span class="n">size</span><span class="o">,</span> <span class="n">newalign_t</span><span class="o">*</span> <span class="n">ptr</span><span class="o">);</span>
+                                                <span class="o">^</span>
+<span class="o">/</span><span class="nc">Users</span><span class="o">/</span><span class="n">xxxx</span><span class="o">/</span><span class="nc">Library</span><span class="o">/</span><span class="nc">Arduino15</span><span class="o">/</span><span class="n">packages</span><span class="o">/</span><span class="n">esp32</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">xtensa</span><span class="o">-</span><span class="n">esp32</span><span class="o">-</span><span class="n">elf</span><span class="o">-</span><span class="n">gcc</span><span class="o">/</span><span class="n">esp</span><span class="o">-</span><span class="mi">2021</span><span class="n">r2</span><span class="o">-</span><span class="n">patch5</span><span class="o">-</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">xtensa</span><span class="o">-</span><span class="n">esp32</span><span class="o">-</span><span class="n">elf</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">c</span><span class="o">++/</span><span class="mf">8.4</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="k">new</span><span class="o">:</span><span class="mi">168</span><span class="o">:</span><span class="mi">14</span><span class="o">:</span> <span class="nl">note:</span> <span class="n">previous</span> <span class="n">definition</span> <span class="n">of</span> <span class="err">'</span><span class="kt">void</span><span class="o">*</span> <span class="n">operator</span> <span class="nf">new</span><span class="o">(</span><span class="nl">std:</span><span class="o">:</span><span class="n">size_t</span><span class="o">,</span> <span class="kt">void</span><span class="o">*)</span><span class="err">'</span> <span class="n">was</span> <span class="n">here</span>
+ <span class="n">inline</span> <span class="kt">void</span><span class="o">*</span> <span class="n">operator</span> <span class="nf">new</span><span class="o">(</span><span class="nl">std:</span><span class="o">:</span><span class="n">size_t</span><span class="o">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">__p</span><span class="o">)</span> <span class="n">_GLIBCXX_USE_NOEXCEPT</span>
+              <span class="o">^~~~~~~~</span></code></pre></figure>
+
+<p>これは、<code class="language-plaintext highlighter-rouge">new</code> 演算子の例外に関する取り扱い方が SdFat と Espressif の C++ 標準ライブラリとで異なることが原因ですが、アプリケーション側でトラップしており、通常動作には影響ないので無視しておいて大丈夫です。</p>
+
+<h3 id="コンパイル時のリセット問題">コンパイル時のリセット問題</h3>
+
+<p>私の環境は Mac なので、Win ユーザーには当てはまらないかもしれませんが… ESP32 のコア 2.0.17 でコンパイル中にリセットが掛かる事象を経験しています。そのまま再コンパイルしてもリンク時点でハングし、IDE を終了させることも出来なくなります。ターミナル APP で次のコマンドを実行し、IDE の全タスクを <code class="language-plaintext highlighter-rouge">kill</code> した後、IDE を再起動してみて下さい。</p>
+
+<figure class="highlight"><pre><code class="language-csh" data-lang="csh">% ps -axc｜grep -i arduino｜awk '{print $1}'｜xargs -I@ kill -9 @</code></pre></figure>
+
+<h3 id="演奏時間について">演奏時間について</h3>
+
+<p>I2S オーディオライブラリによる推定値で、実際の演奏時間とはズレます。UI 演出上のギミックとお考え下さい。</p>
+
+<h3 id="アルバムのカバー写真が表示されない">アルバムのカバー写真が表示されない</h3>
+
+<p>JPEG 画像のデコードには LVGL に添付された <a href="https://docs.lvgl.io/master/libs/image_support/tjpgd.html" title="Tiny JPEG Decoder - LVGL 9.5 documentation">Tiny JPEG Decoder</a> をカスタマイズして使っています。画像の圧縮ツールによっては、まれに表示されない事象が発生しているので、画像の編集ソフトは <a href="https://www.gimp.org/" title="GIMP - GNU Image Manipulation Program">GIMP</a> を使うことをお勧めします。</p>
+
+<h3 id="sd-カード内のドットファイル">SD カード内のドットファイル</h3>
+
+<p>Mac ユーザー特有の問題ですが、SD カードにドラッグ＆ドロップでファイルをコピーすると <code class="language-plaintext highlighter-rouge">.</code> で始まるファイルが作成されます。特に大量の楽曲ファイルをコピーし続けると、<code class="language-plaintext highlighter-rouge">.</code> ファイルも同数生成されることになり、本アプリが SD カードをスキャンするときに余計な時間がかかることになります。</p>
+
+<p><code class="language-plaintext highlighter-rouge">.</code> で始まるファイルを一気に削除するには、ターミナル APP から SD カードの該当フォルダに移動し、以下を参考に <code class="language-plaintext highlighter-rouge">find</code> コマンドを実行して下さい。</p>
+
+<figure class="highlight"><pre><code class="language-csh" data-lang="csh">% cd /Volumes/NO\ NAME/MP3/
+% find . -name ".???*" -print -exec /bin/rm -rf {} \;</code></pre></figure>
+
+<h2 id="雑記">雑記</h2>
+
+<h3 id="メモリ消費量と収容曲数について">メモリ消費量と収容曲数について</h3>
+
+<p>曲の再生はコア０に生成した <code class="language-plaintext highlighter-rouge">audioplay</code> タスクの役割ですが、再生中にコア１の UI ループ中で SD カードを読み書きすると例外エラーが発生します。この競合問題の解消は難しいため、プレイリストに表示するデータは全てメモリ上に保持する仕様で逃げています。</p>
+
+<p>またアルバムのカバー写真用に JPEG 画像のデコード用バッファ（4KB）とキャッシュ（6KB）も必要でした。</p>
+
+<p>このため、あちらこちらから少しずつメモリをかき集めています。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>コンポーネント</th>
+      <th style="text-align: right">元のサイズ</th>
+      <th style="text-align: right">縮小後のサイズ</th>
+      <th style="text-align: right">稼いだサイズ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>I2S 用オーディオタスクのスタック</td>
+      <td style="text-align: right">約 10K</td>
+      <td style="text-align: right">4K</td>
+      <td style="text-align: right">約 6K</td>
+    </tr>
+    <tr>
+      <td>I2S 用 WiFi 機能</td>
+      <td style="text-align: right">約 22K</td>
+      <td style="text-align: right">0K</td>
+      <td style="text-align: right">22K</td>
+    </tr>
+    <tr>
+      <td>LVGL 用描画バッファ</td>
+      <td style="text-align: right">15KB</td>
+      <td style="text-align: right">10KB</td>
+      <td style="text-align: right">5K</td>
+    </tr>
+    <tr>
+      <td>LVGL ウィジェット用メモリ</td>
+      <td style="text-align: right">48KB</td>
+      <td style="text-align: right">40KB</td>
+      <td style="text-align: right">8KB</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>他にも LVGL プログラミングの工夫により（「習熟」の目標はかなり達成できた気がします）、計算上はプレイリストに 750 曲余りを収容可能ですが、今後の Bluetooth 化に備え、今回は 600 曲程に抑えることとしました。</p>
+
+<p>LVGL のプログラミング上の工夫については、別途まとめて報告したいと思います <span class="emoji">😉</span></p>
+
+<h3 id="シャッフルモードについて">シャッフルモードについて</h3>
+
+<p>アルバムリストの画面で “All” を選んだ時の動作は次の通りです。</p>
+
+<ul>
+  <li>
+    <p><strong>シャッフルが OFF の時</strong><br />
+ランダムに１つアルバムを選び、全曲をプレイリストに加えます。これをプレイリストの曲数が 600 を超えるまで繰り返します。アルバムをランダムに選ぶ理由は、プレイリストの偏りをなくす為です。</p>
+  </li>
+  <li>
+    <p><strong>シャッフルが ON の時</strong><br />
+OFF と同じロジックでプレイリストを作成し、最後にプレイリスト全体をランダムに並べ替えます。１曲ずつランダムに選んでいるとプレイリストの作成に 10 倍の時間がかかるため、この様な仕様にしています。</p>
+  </li>
+</ul>
+
+<h2 id="最後にお願い">最後に、お願い</h2>
+
+<p>試してみよう！という奇特な方、問題を見つけたり、改善点やご要望があれば、是非 Github やココに書き込みをお願いします <span class="emoji">🙇‍♂️</span></p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2025/11/16/" title="前の記事：JSONデータの走査 - Arduino用JSONライブラリの比較 - Arduino_JSON vs ArduinoJson">← JSONデータの走査 - Arduino用JSONライブラリの比較 - Arduino_JSON vs ArduinoJson</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/01/12/",this.page.identifier="/2026/01/12/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2026/01/12/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/01/12/";this.page.identifier="/2026/01/12/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
