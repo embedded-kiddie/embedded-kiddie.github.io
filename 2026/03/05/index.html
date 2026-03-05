@@ -62,7 +62,7 @@
 
 <p>本稿では、LVGL の習熟用に作成した <a href="https://github.com/embedded-kiddie/CYD_MP3Player" title="embedded-kiddie/CYD_MP3Player: MP3 music player using internal DAC for Cheap Yellow Display">CYD_MP3Player</a> のメモリマネジメントで苦労した経験と得られた知見を元に、主に LVGL のメモリ消費削減策をまとめました。対象とする LVGL のバージョンは <strong>v9.2.2</strong> から <strong>v9.5.0</strong> までです。</p>
 
-<p>まずはそれぞれのメモリ事情、次に LVGL のメモリ消費削減策の具体例、最後にまとめの順で書き連ねたいと思います。</p>
+<p>まずはそれぞれのメモリ事情を外観し、次に LVGL のメモリ消費削減策の具体例を示します。最後に LVGL ヒープメモリ消費量の削減戦略をまとめたいと思います。</p>
 
 <h2 id="esp32-のメモリ事情">ESP32 のメモリ事情</h2>
 
