@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ESP32とLVGLでアプリ開発 - ヒープメモリ消費量削減のためにやったことのまとめ | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="ESP32とLVGLでアプリ開発 - ヒープメモリ消費量削減のためにやったことのまとめ" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="LVGLが消費するウィジェット用ヒープメモリ（LV_MEM_SIZE）の削減策についてのノウハウを共有します。" />
+<meta property="og:description" content="LVGLが消費するウィジェット用ヒープメモリ（LV_MEM_SIZE）の削減策についてのノウハウを共有します。" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2026/03/05/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2026/03/05/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-03-05T10:16:22+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ESP32とLVGLでアプリ開発 - ヒープメモリ消費量削減のためにやったことのまとめ" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2026-03-05T10:16:22+09:00","datePublished":"2026-03-05T10:16:22+09:00","description":"LVGLが消費するウィジェット用ヒープメモリ（LV_MEM_SIZE）の削減策についてのノウハウを共有します。","headline":"ESP32とLVGLでアプリ開発 - ヒープメモリ消費量削減のためにやったことのまとめ","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2026/03/05/"},"url":"https://embedded-kiddie.github.io/2026/03/05/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">ESP32とLVGLでアプリ開発 - ヒープメモリ消費量削減のためにやったことのまとめ</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2026-03-05T10:16:22+09:00" itemprop="datePublished">Mar 5, 2026
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="はじめに">はじめに</h2>
+
+<p>バグ Fix はもちろん機能・性能が向上するのはありがたいことですが、プラットフォームのコアやライブラリがバージョンアップすると、大抵の場合はそれらが占有するメモリが増えます。</p>
+
+<p>一方アプリケーションが使えるメモリは減り続ける事になり、バージョンアップに追従するにはそれなりの苦労が伴います。</p>
+
+<p>本稿では、LVGL の習熟用に作成した <a href="https://github.com/embedded-kiddie/CYD_MP3Player" title="embedded-kiddie/CYD_MP3Player: MP3 music player using internal DAC for Cheap Yellow Display">CYD_MP3Player</a> のメモリマネジメントで苦労した経験と得られた知見を元に、主に LVGL のメモリ消費削減策をまとめました。対象とする LVGL のバージョンは <strong>v9.2.2</strong> から <strong>v9.5.0</strong> までです。</p>
+
+<p>まずはそれぞれのメモリ事情、次に LVGL のメモリ消費削減策の具体例、最後にまとめの順で書き連ねたいと思います。</p>
+
+<h2 id="esp32-のメモリ事情">ESP32 のメモリ事情</h2>
+
+<p>スペック上 520KB の SRAM が載っている ESP32 ですが、<a href="https://docs.espressif.com/projects/esp-idf/en/v5.5.1/esp32/api-guides/memory-types.html#dram-data-ram" title="Memory Types - ESP32 -  &mdash; ESP-IDF Programming Guide v5.5.1 documentation">DRAM (Data RAM)</a> によれば、ユーザーに開放されているのは <strong>高々 320KB</strong> です。</p>
+
+<blockquote>
+  <p>There is 520 KB of available SRAM (320 KB of DRAM and 200 KB of IRAM) on the ESP32. However, due to a technical limitation, the maximum statically allocated DRAM usage is 160 KB. The remaining 160 KB (for a total of 320 KB of DRAM) can only be allocated at runtime as heap.</p>
+</blockquote>
+
+<blockquote>
+  <p>ESP32には520KBのSRAM（DRAM 320KBとIRAM 200KB）が利用可能です。ただし、技術的な制限により、静的に割り当てられるDRAMの最大使用量は160KBです。残りの160KB（合計320KBのDRAM）は、実行時にヒープ領域としてのみ割り当てられます。</p>
+</blockquote>
+
+<figure class="float-left">
+  <a href="/images/2026/03-05/ESP32-DRAM.png" title="ESP32 のメモリマップ" data-lightbox="image">
+    <img src="/images/2026/03-05/ESP32-DRAM-small.png" alt="ESP32 のメモリマップ" width="600" height="460" />
+    <figcaption>ESP32 のメモリマップ</figcaption>
+  </a>
+</figure>
+
+<p>また <a href="https://developer.espressif.com/blog/esp32-programmers-memory-model/" title="ESP32 Programmers’ Memory Model &#183; Developer Portal">ESP32 Programmers’ Memory Model</a> および <a href="https://developer.espressif.com/blog/2024/08/esp32-memory-map-101/" title="ESP32's family Memory Map 101 &#183; Developer Portal">ESP32’s family Memory Map 101</a> には、もう少し詳しいメモリマップが載っています。</p>
+
+<p>それらによると、IRAM（Instruction RAM、CPU が命令を高速実行するために使われる RAM）は通常、ユーザーがヒープ領域として使う事ができません。</p>
+
+<div class="clear-both"></div>
+
+<p>ただし次のドキュメントを参考に、ESP32 のコアを ESP-IDF で再構築できれば、LVGL の描画用バッファを IRAM に追いやれそうです（ムズイので、今回は対象外です… <span class="emoji">🙄</span>）。</p>
+
+<ul>
+  <li><a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/mem_alloc.html" title="Heap Memory Allocation - ESP32 -  &mdash; ESP-IDF Programming Guide v5.5.3 documentation">Heap Memory Allocation</a></li>
+  <li><a href="https://docs.lvgl.io/master/integration/chip_vendors/espressif/tips_and_tricks.html" title="Tips and tricks - LVGL 9.5 documentatio">Tips and tricks - LVGL 9.5 documentatio</a></li>
+  <li><a href="https://github.com/espressif/esp-bsp/blob/master/components/esp_lvgl_port/docs/performance.md" title="esp-bsp/components/esp_lvgl_port/docs/performance.md at master · espressif/esp-bsp">LCD &amp; LVGL Performance - espressif/esp-bsp</a></li>
+</ul>
+
+<p>次の表は、ESP32 コアのバージョンとヒープサイズを調べた結果です（PSRASM 無しの場合）。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>バージョン／ヒープメモリのサイズ</th>
+      <th style="text-align: right"><a href="https://github.com/espressif/arduino-esp32/releases/tag/2.0.17" title="Release Arduino Release v2.0.17 based on ESP-IDF v4.4.7 · espressif/arduino-esp32">2.0.17</a></th>
+      <th style="text-align: right"><a href="https://github.com/espressif/arduino-esp32/releases/tag/3.3.5" title="Release Arduino Release v3.3.5 based on ESP-IDF v5.5.1+ · espressif/arduino-esp32">3.3.5</a></th>
+      <th style="text-align: right"><a href="https://github.com/espressif/arduino-esp32/releases/tag/3.3.6" title="Release Arduino Release v3.3.6 based on ESP-IDF v5.5.2 · espressif/arduino-esp32">3.3.6</a></th>
+      <th style="text-align: right"><a href="https://github.com/espressif/arduino-esp32/releases/tag/3.3.7" title="Release Arduino Release v3.3.7 based on ESP-IDF v5.5.2 · espressif/arduino-esp32">3.3.7</a></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ヒープとして使えるメモリサイズの合計</td>
+      <td style="text-align: right">310496</td>
+      <td style="text-align: right">311096</td>
+      <td style="text-align: right">272736</td>
+      <td style="text-align: right">309824</td>
+    </tr>
+    <tr>
+      <td>ユーザーが使えるヒープメモリのサイズ</td>
+      <td style="text-align: right">278380</td>
+      <td style="text-align: right">268188</td>
+      <td style="text-align: right">231580</td>
+      <td style="text-align: right">266992</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a href="https://github.com/espressif/arduino-esp32/issues/12284" title="36.596 bytes less heap 3.3.5-&gt;3.3.6 · Issue #12284 · espressif/arduino-esp32">3.3.6 が前バージョンに比べてユーザーが使えるヒープが約 36KB も少なくなったのは問題外</a> としても、3.3.7 は 2.0.17 に比べて 11KB 程度少なくなっています。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>ヒープ残量の観測に ESP.getFreeHeap() を使うべきでない理由</summary>
+
+
+<p><a href="https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/Esp.cpp#L163-L165" title="arduino-esp32/cores/esp32/Esp.cpp at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">ESP.getFreeHeap()</code></a> は、名前からするとヒープ残量を返してくれそうですが、指定されている <a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/mem_alloc.html#c.MALLOC_CAP_INTERNAL" title="Heap Memory Allocation - ESP32 -  &mdash; ESP-IDF Programming Guide v5.5.3 documentation"><code class="language-plaintext highlighter-rouge">MALLOC_CAP_INTERNAL</code></a> は内部 RAM である IRAM + DRAM（PSRAM を除く）の残量が返ります。通常 IRAM はユーザーに解放されていないので、知らずに頼ると痛い目に遭います（「<a href="https://github.com/espressif/arduino-esp32/issues/5346" title="why does small malloc fail when freeheap =76k+? · Issue #5346 · espressif/arduino-esp32">why does small malloc fail when freeheap =76k+? #5346</a>」に、このような紛らわしいネーミングになった経緯が書かれています）。</p>
+
+<p>一方、<a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/mem_alloc.html#_CPPv423heap_caps_get_free_size8uint32_t" title="Heap Memory Allocation - ESP32 -  &mdash; ESP-IDF Programming Guide v5.5.3 documentation"><code class="language-plaintext highlighter-rouge">heap_caps_get_free_size()</code></a> に <a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/mem_alloc.html#c.MALLOC_CAP_DEFAULT" title="Heap Memory Allocation - ESP32 -  &mdash; ESP-IDF Programming Guide v5.5.3 documentation"><code class="language-plaintext highlighter-rouge">MALLOC_CAP_DEFAULT</code></a> を指定すれば、<code class="language-plaintext highlighter-rouge">malloc()</code> や <code class="language-plaintext highlighter-rouge">calloc()</code> で確保できる DRAM（PSRAM を含む）残量が得られます。</p>
+
+<p>また <a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/mem_alloc.html#_CPPv419multi_heap_get_info19multi_heap_handle_tP17multi_heap_info_t" title="Heap Memory Allocation - ESP32 -  &mdash; ESP-IDF Programming Guide v5.5.3 documentation"><code class="language-plaintext highlighter-rouge">multi_heap_get_info()</code></a> を使えば、それまでの最小値やブロックとして確保可能な最大値など、より詳しい情報が得られるのでオススメです。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">Arduino</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">esp_arduino_version</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="kt">void</span> <span class="nf">print_heap_size</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"\nESP32 core version  : %d.%d.%d\n"</span><span class="o">,</span> <span class="no">ESP_ARDUINO_VERSION_MAJOR</span><span class="o">,</span> <span class="no">ESP_ARDUINO_VERSION_MINOR</span><span class="o">,</span> <span class="no">ESP_ARDUINO_VERSION_PATCH</span><span class="o">);</span>
+
+  <span class="c1">// https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/heap_debug.html</span>
+  <span class="kd">const</span> <span class="n">uint32_t</span> <span class="n">caps</span> <span class="o">=</span> <span class="no">MALLOC_CAP_DEFAULT</span><span class="o">;</span>
+
+  <span class="n">multi_heap_info_t</span> <span class="n">info</span><span class="o">;</span>
+  <span class="n">heap_caps_get_info</span><span class="o">(&amp;</span><span class="n">info</span><span class="o">,</span> <span class="n">caps</span><span class="o">);</span>
+
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap total size     :%7d\n"</span><span class="o">,</span> <span class="n">heap_caps_get_total_size</span><span class="o">(</span><span class="n">caps</span><span class="o">));</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap free  size     :%7d\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">total_free_bytes</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap allocated size :%7d\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">total_allocated_bytes</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap minimum free   :%7d\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">minimum_free_bytes</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap largest free   :%7d\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">largest_free_block</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<h2 id="lvgl-のメモリ事情">LVGL のメモリ事情</h2>
+
+<p>LVGL が使うメモリは「描画用バッファ」と「ウィジェット用ヒープ」の２つに大別され、これらはデフォルトで 静的領域の <a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss セグメント</a> に配置されます。</p>
+
+<p>描画用バッファは <a href="https://github.com/lvgl/lvgl/blob/master/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino#L23-L25" title="lvgl/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino at master · lvgl/lvgl">スケッチで宣言され</a>、色深度が16ビットの場合 15KB を占有します。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DRAW_BUF_SIZE</span> <span class="o">(</span><span class="no">TFT_HOR_RES</span> <span class="o">*</span> <span class="no">TFT_VER_RES</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">*</span> <span class="o">(</span><span class="no">LV_COLOR_DEPTH</span> <span class="o">/</span> <span class="mi">8</span><span class="o">))</span>
+<span class="n">uint32_t</span> <span class="n">draw_buf</span><span class="o">[</span><span class="no">DRAW_BUF_SIZE</span> <span class="o">/</span> <span class="mi">4</span><span class="o">];</span></code></pre></figure>
+
+<p>またウィジェット用ヒープは <code class="language-plaintext highlighter-rouge">lv_conf.h</code> で設定され、<a href="https://github.com/lvgl/lvgl/blob/master/src/stdlib/builtin/lv_mem_core_builtin.c#L77-L87" title="lvgl/src/stdlib/builtin/lv_mem_core_builtin.c at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">lv_mem_init()</code></a> で初期化されます。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">バージョン／サイズ</th>
+      <th style="text-align: center"><a href="https://github.com/lvgl/lvgl/blob/release/v8.1/lv_conf_template.h#L51-L52" title="lvgl/lv_conf_template.h at release/v8.1 · lvgl/lvgl">v8.1</a></th>
+      <th style="text-align: center"><a href="https://github.com/lvgl/lvgl/blob/release/v8.2/lv_conf_template.h#L51-L52" title="lvgl/lv_conf_template.h at release/v8.2 · lvgl/lvgl">v8.2</a></th>
+      <th style="text-align: center"><a href="https://github.com/lvgl/lvgl/blob/release/v9.0/lv_conf_template.h#L44-L45" title="lvgl/lv_conf_template.h at release/v9.0 · lvgl/lvgl">v9.0</a></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">LV_MEM_SIZE</code></td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">(32U * 1024U)</code></td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">(48U * 1024U)</code></td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">(64 * 1024U)</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>v9.x は v8.1 の倍ですね <span class="emoji">😓</span>。LVGL のフォーラムを見ていると、より軽量な <a href="https://forum.lvgl.io/tag/v8" title="Topics tagged v8">v8 のユーザー</a> も依然として相当数いるのも頷けます。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>ウィジェット用ヒープメモリの観測方法</summary>
+
+
+<p><a href="https://docs.lvgl.io/master/API/stdlib/lv_mem_h.html#_CPPv414lv_mem_monitorP16lv_mem_monitor_t" title="lv_mem.h - LVGL 9.6 documentation">lv_mem_monitor()</a> で得られる情報から、私は次のようなコードで観測しています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="k">if</span> <span class="n">__has_include</span><span class="o">(&lt;</span><span class="n">lvgl</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;)</span>
+<span class="kt">void</span> <span class="nf">print_lvgl_heap</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// LVGL memory usage</span>
+  <span class="n">lv_mem_monitor_t</span> <span class="n">mon</span><span class="o">;</span>
+  <span class="n">lv_mem_monitor</span><span class="o">(&amp;</span><span class="n">mon</span><span class="o">);</span>
+
+  <span class="n">size_t</span> <span class="n">used</span> <span class="o">=</span> <span class="n">mon</span><span class="o">.</span><span class="na">total_size</span> <span class="o">-</span> <span class="n">mon</span><span class="o">.</span><span class="na">free_size</span><span class="o">;</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"LVGL heap total size   :%7lu (fragmentation: %d%%)\n"</span><span class="o">,</span> <span class="n">mon</span><span class="o">.</span><span class="na">total_size</span><span class="o">,</span> <span class="n">mon</span><span class="o">.</span><span class="na">frag_pct</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"LVGL heap free  size   :%7lu (largest block: %lu)\n"</span><span class="o">,</span> <span class="n">mon</span><span class="o">.</span><span class="na">free_size</span><span class="o">,</span> <span class="n">mon</span><span class="o">.</span><span class="na">free_biggest_size</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"LVGL heap allocated    :%7lu (%d%%, maximum: %lu)\n"</span><span class="o">,</span> <span class="n">used</span><span class="o">,</span> <span class="n">mon</span><span class="o">.</span><span class="na">used_pct</span><span class="o">,</span> <span class="n">mon</span><span class="o">.</span><span class="na">max_used</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="err">#</span><span class="n">endif</span> <span class="c1">// lv_mem.h</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<h2 id="lvgl-のメモリ消費量削減策">LVGL のメモリ消費量削減策</h2>
+
+<p>ESP32 コアから要らない機能を外して再構築できれば良いのですが…、私にはムズ過ぎて手には負えないので、ここからは LVGL 側の工夫用により、アプリで使用可能なヒープ領域を増やすために実施した削減策を共有します。</p>
+
+<h3 id="描画用バッファの削減">描画用バッファの削減</h3>
+<p>以前の記事（<a href="/2025/04/03/" title="ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（１）｜Embedded Kiddie">コレ</a> や <a href="/2025/04/10/" title="ESP32 2432S028R (CYD)でLVGL - ダブルバッファとマルチコアで応答性を高める（２）｜Embedded Kiddie">アレ</a>）で解析したように、LVGL の描画用バッファは Arduino 用サンプルで <a href="https://github.com/lvgl/lvgl/blob/master/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino#L23-L25" title="lvgl/examples/arduino/LVGL_Arduino/LVGL_Arduino.ino at master · lvgl/lvgl">次のように宣言</a> されています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DRAW_BUF_SIZE</span> <span class="o">(</span><span class="no">TFT_HOR_RES</span> <span class="o">*</span> <span class="no">TFT_VER_RES</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">*</span> <span class="o">(</span><span class="no">LV_COLOR_DEPTH</span> <span class="o">/</span> <span class="mi">8</span><span class="o">))</span>
+<span class="n">uint32_t</span> <span class="n">draw_buf</span><span class="o">[</span><span class="no">DRAW_BUF_SIZE</span> <span class="o">/</span> <span class="mi">4</span><span class="o">];</span></code></pre></figure>
+
+<p>ここでのマジックナンバー <code class="language-plaintext highlighter-rouge">10</code> は、次の画像のように１つの画面を区切る矩形領域の数です。</p>
+
+<figure class="flex">
+  <video controls="" muted="" width="640" height="360">
+    <source src="https://embedded-kiddie.github.io/images/2025/04-03/demo-rendering.mp4" type="video/mp4" />
+  </video>
+</figure>
+
+<p>このマジックナンバーを増やせば矩形領域１つあたりのサイズ <code class="language-plaintext highlighter-rouge">DRAW_BUF_SIZE</code> が小さくなりますが、LCD パネルへの転送回数が増えるのでフレームレートが下がることになります。</p>
+
+<p>今回このマジックナンバーを「コレぐらいなら我慢できるよネ!?」という程度の <code class="language-plaintext highlighter-rouge">15</code> に設定し、15KB から 10KB に減量しました（<code class="language-plaintext highlighter-rouge">LV_COLOR_DEPTH</code> が16ビットの CYD 場合）。</p>
+
+<h3 id="ウィジェット用ヒープの削減策">ウィジェット用ヒープの削減策</h3>
+<p>LVGL のウィジェット用ヒープ管理には <a href="https://ja.wikipedia.org/wiki/%E5%8B%95%E7%9A%84%E3%83%A1%E3%83%A2%E3%83%AA%E7%A2%BA%E4%BF%9D#TLSFアロケータ" title="動的メモリ確保 - Wikipedia">TLSF (Two-Level Segregated Fit) アロケータ</a> が採用されているようで、次のように <a href="https://github.com/lvgl/lvgl/blob/master/src/stdlib/builtin/lv_mem_core_builtin.c#L77-L87" title="lvgl/src/stdlib/builtin/lv_mem_core_builtin.c at master · lvgl/lvgl"><code class="language-plaintext highlighter-rouge">lv_mem_init()</code></a> で静的に確保されます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*Allocate a large array to store the dynamically allocated data*/</span>
+<span class="kd">static</span> <span class="no">MEM_UNIT</span> <span class="n">work_mem_int</span><span class="o">[</span><span class="no">LV_MEM_SIZE</span> <span class="o">/</span> <span class="n">sizeof</span><span class="o">(</span><span class="no">MEM_UNIT</span><span class="o">)]</span> <span class="no">LV_ATTRIBUTE_LARGE_RAM_ARRAY</span><span class="o">;</span>
+<span class="n">state</span><span class="o">.</span><span class="na">tlsf</span> <span class="o">=</span> <span class="n">lv_tlsf_create_with_pool</span><span class="o">((</span><span class="kt">void</span> <span class="o">*)</span><span class="n">work_mem_int</span><span class="o">,</span> <span class="no">LV_MEM_SIZE</span><span class="o">);</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">LV_MEM_SIZE</code> は、LVGL の設定ファイル <code class="language-plaintext highlighter-rouge">lv_conf.h</code> で定義されるシンボルです。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** Size of memory available for `lv_malloc()` in bytes (&gt;= 2kB) */</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">LV_MEM_SIZE</span> <span class="o">(</span><span class="mi">64</span> <span class="o">*</span> <span class="mi">1024</span><span class="no">U</span><span class="o">)</span>          <span class="cm">/**&lt; [bytes] */</span></code></pre></figure>
+
+<p>この 64KB をダイエットするためにとった戦略は次の通りです。</p>
+
+<ol>
+  <li><a href="#1-使用しないウィジェットはlv_use_-を-0-に設定する">使用しないウィジェットは、<code class="language-plaintext highlighter-rouge">LV_USE_*</code> を 0 に設定する</a></li>
+  <li><a href="#2-スタイル設定は最小限かつ-lv_style_const_-を使う">スタイル設定は最小限、かつ <code class="language-plaintext highlighter-rouge">LV_STYLE_CONST_*</code> を使う</a></li>
+  <li><a href="#3-表示されていないウィジェットはメモリ上から削除する">表示されていないウィジェットは、メモリ上から削除する</a></li>
+  <li><a href="#4-メモリの断片化を減らすためウィジェットを再利用する">メモリの断片化を減らすため、ウィジェットを再利用する</a></li>
+  <li><a href="#5-見た目を変えることなくより軽量なウィジェットを使う">見た目を変えることなく、より軽量なウィジェットを使う</a></li>
+</ol>
+
+<p>これらにより、<a href="https://github.com/embedded-kiddie/CYD_MP3Player" title="embedded-kiddie/CYD_MP3Player: MP3 music player using internal DAC for Cheap Yellow Display">CYD_MP3Player</a> では 40KB に削減することができました <span class="emoji">🥳</span></p>
+
+<h4 id="1-使用しないウィジェットはlv_use_-を-0-に設定する">1. 使用しないウィジェットは、LV_USE_* を 0 に設定する</h4>
+<p>実はコレ、作るアプリ毎に <code class="language-plaintext highlighter-rouge">lv_conf.h</code> を再編集する事になるので、個人的にはあまりお勧めしません。特に GitHub などで公開する場合は、ユーザーに面倒を強いる事になりかねません（とは言え、<a href="https://github.com/embedded-kiddie/CYD_MP3Player/blob/main/CYD_MP3Player_LVGL/assets/lv_conf/README.md" title="CYD_MP3Player/CYD_MP3Player_LVGL/assets/lv_conf/README.md at main · embedded-kiddie/CYD_MP3Player">CYD_MP3Player では、デフォルトから２項目の変更をお願いしています</a>）。</p>
+
+<p>ただしウィジェット用ヒープの残りマージンを最大で数 KB 程度増やす効果は確かにあります。</p>
+
+<p>また <code class="language-plaintext highlighter-rouge">THEMES</code> セクションの以下の２つのシンボルを 0 に変更すると、bss セグメントのサイズが 87172 → 83068 に、約 4KB 増える結果となりました（LVGL v9.5.0）。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/** A very simple theme that is a good starting point for a custom theme */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_THEME_SIMPLE</span> <span class="mi">0</span>
+
+<span class="cm">/** A theme designed for monochrome displays */</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">LV_USE_THEME_MONO</span> <span class="mi">0</span></code></pre></figure>
+
+<h5 id="変更前のコンパイル結果">変更前のコンパイル結果</h5>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Sketch</span> <span class="n">uses</span> <span class="mi">2972317</span> <span class="n">bytes</span> <span class="o">(</span><span class="mi">94</span><span class="o">%)</span> <span class="n">of</span> <span class="n">program</span> <span class="n">storage</span> <span class="n">space</span><span class="o">.</span> <span class="nc">Maximum</span> <span class="n">is</span> <span class="mi">3145728</span> <span class="n">bytes</span><span class="o">.</span>
+<span class="nc">Global</span> <span class="n">variables</span> <span class="n">use</span> <span class="mi">87172</span> <span class="n">bytes</span> <span class="o">(</span><span class="mi">26</span><span class="o">%)</span> <span class="n">of</span> <span class="n">dynamic</span> <span class="n">memory</span><span class="o">,</span> <span class="n">leaving</span> <span class="mi">240508</span> <span class="n">bytes</span> <span class="k">for</span> <span class="n">local</span> <span class="n">variables</span><span class="o">.</span> <span class="nc">Maximum</span> <span class="n">is</span> <span class="mi">327680</span> <span class="n">bytes</span><span class="o">.</span></code></pre></figure>
+
+<h5 id="変更後のコンパイル結果">変更後のコンパイル結果</h5>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Sketch</span> <span class="n">uses</span> <span class="mi">2972317</span> <span class="n">bytes</span> <span class="o">(</span><span class="mi">94</span><span class="o">%)</span> <span class="n">of</span> <span class="n">program</span> <span class="n">storage</span> <span class="n">space</span><span class="o">.</span> <span class="nc">Maximum</span> <span class="n">is</span> <span class="mi">3145728</span> <span class="n">bytes</span><span class="o">.</span>
+<span class="nc">Global</span> <span class="n">variables</span> <span class="n">use</span> <span class="mi">83068</span> <span class="n">bytes</span> <span class="o">(</span><span class="mi">25</span><span class="o">%)</span> <span class="n">of</span> <span class="n">dynamic</span> <span class="n">memory</span><span class="o">,</span> <span class="n">leaving</span> <span class="mi">244612</span> <span class="n">bytes</span> <span class="k">for</span> <span class="n">local</span> <span class="n">variables</span><span class="o">.</span> <span class="nc">Maximum</span> <span class="n">is</span> <span class="mi">327680</span> <span class="n">bytes</span><span class="o">.</span></code></pre></figure>
+
+<h4 id="2-スタイル設定は最小限かつ-lv_style_const_-を使う">2. スタイル設定は最小限、かつ LV_STYLE_CONST_* を使う</h4>
+<p>LVGL のウィジェットはデフォルトのスタイルを持っています（<a href="https://docs.lvgl.io/master/API/lv_conf_h.html#c.LV_USE_THEME_DEFAULT" title="lv_conf.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">LV_USE_THEME_DEFAULT</code></a> が <code class="language-plaintext highlighter-rouge">1</code> の場合）。このデフォルトの変更を出来るだけ少なくする事が省メモリにつながりますが、まぁ、そうもいかないでしょう <span class="emoji">😉</span></p>
+
+<p>具体例は公式ドキュメントの <a href="https://docs.lvgl.io/master/common-widget-features/styles/style_sheets.html" title="Style Sheets - LVGL 9.6 documentation">Initializing Styles</a> に譲りますが、次の３つの変更方法をうまく使い分ける事が省メモリのカギとなります。</p>
+
+<ul>
+  <li><strong><a href="https://docs.lvgl.io/master/common-widget-features/styles/local_styles.html" title="Local Styles - LVGL 9.6 documentation">ローカルスタイル型</a></strong><br />
+個々のウィジェットのスタイルを <a href="https://docs.lvgl.io/master/search.html?q=lv_obj_set_style_" title="Search - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_set_style_*()</code></a> で変更します。設定値を保持するためにメモリを消費するので、出来るだけ少ない変更に留めるのが吉です。</li>
+</ul>
+
+<ul>
+  <li><strong><a href="https://docs.lvgl.io/master/common-widget-features/styles/style_sheets.html" title="Style Sheets - LVGL 9.6 documentation">スタイルシート型</a></strong><br />
+HTML における <a href="https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Selectors/Class_selectors" title="クラスセレクター - CSS｜MDN">CSS クラスセレクター</a> と同様の考え方で、複数のウィジェットに同一のスタイルを設定できます。
+<code class="language-plaintext highlighter-rouge">static</code> 宣言したスタイル変数を <a href="https://docs.lvgl.io/master/API/misc/lv_style_h.html#_CPPv413lv_style_initP10lv_style_t" title="lv_style.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_style_init()</code></a> で初期化し、<a href="https://docs.lvgl.io/master/search.html?q=lv_obj_set_style_&amp;check_keywords=yes&amp;area=default" title="Search - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_set_style_*()</code></a> でプロパティを設定、<a href="https://docs.lvgl.io/master/API/core/lv_obj_style_h.html#_CPPv416lv_obj_add_styleP8lv_obj_tPK10lv_style_t19lv_style_selector_t" title="lv_obj_style.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_add_style()</code></a> でウィジェットに反映します。
+設定したプロパティの数に応じてメモリ消費が増え、また不要になったスタイル変数は <a href="https://docs.lvgl.io/master/API/misc/lv_style_h.html#_CPPv414lv_style_resetP10lv_style_t" title="lv_style.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_style_reset()</code></a> によるメモリの解放が必要です。</li>
+</ul>
+
+<ul>
+  <li><strong><a href="https://docs.lvgl.io/master/common-widget-features/styles/style_sheets.html#codecell4" title="Style Sheets - LVGL 9.6 documentation">スタイルプロパティの Flash 配置型</a></strong><br />
+スタイルの各プロパティ値をヒープに置く代わりに、<a href="https://docs.lvgl.io/master/search.html?q=LV_STYLE_CONST_&amp;check_keywords=yes&amp;area=default" title="Search - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">LV_STYLE_CONST_*</code></a> で Flash に配置し、それを <a href="https://docs.lvgl.io/master/API/misc/lv_style_h.html#c.LV_STYLE_CONST_INIT" title="lv_style.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">LV_STYLE_CONST_INIT</code></a> でウィジェットに適用する方法です。</li>
+</ul>
+
+<p>基本的には、少数のスタイルを特定のウィジェットに適用する場合は「ローカルスタイル型」が、適用するプロパティが多数の場合や複数のウィジェットに共通のスタイルを適用する場合は「Flash 配置型」が良いでしょう。<a href="https://github.com/embedded-kiddie/CYD_MP3Player/blob/main/CYD_MP3Player_LVGL/assets/CYD-MP3Player-Screens.jpg" title="CYD_MP3Player/CYD_MP3Player_LVGL/assets/CYD-MP3Player-Screens.jpg at main · embedded-kiddie/CYD_MP3Player">４画面構成の CYD_MP3Player</a> では、「スタイルシート型」に比べて約 3KB ほどの削減効果が得られました。</p>
+
+<h4 id="3-表示されていないウィジェットはメモリ上から削除する">3. 表示されていないウィジェットは、メモリ上から削除する</h4>
+<p>複数のタブやページを構成する場合、非表示のタブやスクリーンをメモリ上に残しておくのは無駄です。よほど複雑なことをしない限り、タブやページの切り替え時に高速な ESP32 がアッと言う間にレンダリングしてくれます。</p>
+
+<p>タブやページの削除は、<a href="https://docs.lvgl.io/master/API/core/lv_obj_tree_h.html#_CPPv413lv_obj_deleteP8lv_obj_t" title="lv_obj_tree.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_delete()</code></a> で親ウィジェットを削除すれば子ウィジェットも自動的に削除されます。<a href="https://docs.lvgl.io/master/common-widget-features/tree.html" title="Widget Tree - LVGL 9.6 documentation">ウィジェットのツリー構造</a> のおかげです。</p>
+
+<p>特にスクリーンの切り替えを <a href="https://docs.lvgl.io/master/API/display/lv_display_h.html#_CPPv414lv_screen_loadP9_lv_obj_t" title="lv_display.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_screen_load()</code></a> で行う際は、最後の引数に <code class="language-plaintext highlighter-rouge">true</code> を設定すれば、新しいスクリーンの表示後に古いスクリーンを自動で削除してくれので便利です。</p>
+
+<figure class="float-left">
+  <a href="/images/2026/01-12/CYD-MP3Player.gif" title="アニメーションによる画面遷移" data-lightbox="image">
+    <img src="/images/2026/01-12/CYD-MP3Player.gif" alt="アニメーションによる画面遷移" width="240" height="320" />
+    <figcaption>アニメーションによる画面遷移</figcaption>
+  </a>
+</figure>
+
+<p>ただし <a href="https://docs.lvgl.io/master/API/display/lv_display_h.html#_CPPv419lv_screen_load_animP8lv_obj_t21lv_screen_load_anim_t8uint32_t8uint32_tb" title="Screens - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_screen_load_anim()</code></a> でアニメーションを適用する場合は、遷移が完了するまでは２つのスクリーンがメモリ上に存在しなければなりません。</p>
+
+<p>この場合、<a href="https://docs.lvgl.io/master/API/misc/lv_event_h.html#_CPPv412lv_event_addP15lv_event_list_t13lv_event_cb_t15lv_event_code_tPv" title="lv_event.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_event_add()</code></a> で遷移完了を通知するイベント <a href="https://docs.lvgl.io/master/API/misc/lv_event_h.html#_CPPv4N15lv_event_code_t24LV_EVENT_SCREEN_UNLOADEDE" title="lv_event.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">LV_EVENT_SCREEN_UNLOADED</code></a> とコールバック関数を登録して後始末します。</p>
+
+<p>また <a href="https://docs.lvgl.io/master/API/core/lv_obj_tree_h.html#_CPPv419lv_obj_delete_asyncP8lv_obj_t" title="lv_async.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_delete_async()</code></a> や <a href="https://docs.lvgl.io/master/API/misc/lv_async_h.html#_CPPv413lv_async_call13lv_async_cb_tPv" title="lv_async.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_async_call()</code></a> など、「次の <a href="https://docs.lvgl.io/master/API/misc/lv_timer_h.html#_CPPv416lv_timer_handlerv" title="lv_event.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_timer_handler()</code></a> まで実行を遅延する」系の関数を活用するのもテクニックの１つです。</p>
+
+<h4 id="4-メモリの断片化を減らすためウィジェットを再利用する">4. メモリの断片化を減らすため、ウィジェットを再利用する</h4>
+<p>ウィジェットの生成や削除を繰り返すとメモリの断片化が起き、空きメモリが小さなブロックに分断され、結果として連続した大きな領域が確保できなくなります。</p>
+
+<p>断片化の防止には、各タブやスクリーンに共通なウィジェットを再利用することが有効です。ここでは２つの例を紹介します。</p>
+
+<h5 id="例１">例１</h5>
+
+<figure class="float-left">
+  <a href="/images/2026/03-05/lv_example_tabview_1.png" title="lv_example_tabview_1" data-lightbox="image">
+    <img src="/images/2026/03-05/lv_example_tabview_1.png" alt="lv_example_tabview_1" width="320" height="240" />
+    <figcaption>lv_example_tabview_1</figcaption>
+  </a>
+</figure>
+
+<p><a href="https://docs.lvgl.io/master/widgets/tabview.html#simple-tabview" title="Tab View (lv_tabview) - LVGL 9.6 documentation">シンプルなタブの例題</a> では、３つの各タブそれぞれに個別のラベルを割り当てていますが、ラベルを１つだけ生成し、<a href="https://docs.lvgl.io/master/API/core/lv_obj_tree_h.html#_CPPv417lv_obj_set_parentP8lv_obj_tP8lv_obj_t" title="lv_obj_tree.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_set_parent()</code></a> を使ってアクティブなタブにコンテンツに差し替えれば、ヒープメモリを節約できます。</p>
+
+<p>具体的なコードは以下の「代替例」を参照してください。</p>
+
+<details class="clear-both">
+<summary>lv_example_tabview_1.c の代替例</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// lv_example_tabview_1.c の代替例</span>
+<span class="c1">//</span>
+<span class="c1">// オリジナルのコード</span>
+<span class="c1">// https://github.com/lvgl/lvgl/blob/master/examples/widgets/tabview/lv_example_tabview_1.c</span>
+<span class="kd">static</span> <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">label</span><span class="o">;</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">text</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="c1">// タブ１のコンテンツ</span>
+  <span class="s">"This the first tab\n\n"</span>
+  <span class="s">"If the content\n"</span>
+  <span class="s">"of a tab\n"</span>
+  <span class="s">"becomes too\n"</span>
+  <span class="s">"longer\n"</span>
+  <span class="s">"than the\n"</span>
+  <span class="s">"container\n"</span>
+  <span class="s">"then it\n"</span>
+  <span class="s">"automatically\n"</span>
+  <span class="s">"becomes\n"</span>
+  <span class="s">"scrollable.\n"</span>
+  <span class="s">"\n"</span>
+  <span class="s">"\n"</span>
+  <span class="s">"\n"</span>
+  <span class="s">"Can you see it?"</span><span class="o">,</span>
+
+  <span class="c1">// タブ２のコンテンツ</span>
+  <span class="s">"Second tab"</span><span class="o">,</span>
+
+  <span class="c1">// タブ３のコンテンツ</span>
+  <span class="s">"Third tab"</span>
+<span class="o">};</span>
+
+<span class="c1">// タブ切り替え時のコールバック関数</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">event_handler</span><span class="o">(</span><span class="n">lv_event_t</span> <span class="o">*</span><span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">tabview</span> <span class="o">=</span> <span class="n">lv_event_get_target_obj</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+  <span class="n">uint32_t</span> <span class="n">index</span> <span class="o">=</span> <span class="n">lv_tabview_get_tab_active</span><span class="o">(</span><span class="n">tabview</span><span class="o">);</span>
+
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="n">lv_tabview_get_content</span><span class="o">(</span><span class="n">tabview</span><span class="o">);</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">tab</span> <span class="o">=</span> <span class="n">lv_obj_get_child</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+
+  <span class="n">lv_label_set_text_static</span><span class="o">(</span><span class="n">label</span><span class="o">,</span> <span class="n">text</span><span class="o">[</span><span class="n">index</span><span class="o">]);</span>
+  <span class="n">lv_obj_set_parent</span><span class="o">(</span><span class="n">label</span><span class="o">,</span> <span class="n">tab</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * シンプルなタブの例題
+ */</span>
+<span class="kt">void</span> <span class="nf">lv_example_tabview_1</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// lv_tabview オブジェクトを作成する</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">tabview</span><span class="o">;</span>
+  <span class="n">tabview</span> <span class="o">=</span> <span class="n">lv_tabview_create</span><span class="o">(</span><span class="n">lv_screen_active</span><span class="o">());</span>
+  
+  <span class="c1">// タブ切り替え時のコールバック関数を登録する</span>
+  <span class="n">lv_obj_add_event_cb</span><span class="o">(</span><span class="n">tabview</span><span class="o">,</span> <span class="n">event_handler</span><span class="o">,</span> <span class="no">LV_EVENT_VALUE_CHANGED</span><span class="o">,</span> <span class="no">NULL</span><span class="o">);</span>
+
+  <span class="c1">// 3つのタブを追加（各タブはスクロール可能）</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">tab</span><span class="o">[</span><span class="mi">3</span><span class="o">];</span>
+  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="n">tab</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">lv_tabview_add_tab</span><span class="o">(</span><span class="n">tabview</span><span class="o">,</span> <span class="o">(</span><span class="s">"Tab "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)).</span><span class="na">c_str</span><span class="o">());</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 最初に表示するタブにコンテンツを設定し、アクティベートする</span>
+  <span class="n">label</span> <span class="o">=</span> <span class="n">lv_label_create</span><span class="o">(</span><span class="n">tab</span><span class="o">[</span><span class="mi">2</span><span class="o">]);</span>
+  <span class="n">lv_label_set_text_static</span><span class="o">(</span><span class="n">label</span><span class="o">,</span> <span class="n">text</span><span class="o">[</span><span class="mi">2</span><span class="o">]);</span>
+  <span class="n">lv_tabview_set_active</span><span class="o">(</span><span class="n">tabview</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="no">LV_ANIM_OFF</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<div class="quote clear-both">
+
+<h5 id="-tipsラベル用文字列のヒープ節約策">📌 Tips：ラベル用文字列のヒープ節約策</h5>
+<p><a href="https://docs.lvgl.io/master/API/widgets/label/lv_label_h.html#_CPPv417lv_label_set_textP8lv_obj_tPKc" title="lv_label.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_label_set_text()</code></a> は、指定された文字列をヒープメモリにコピーします。長い文字列を <code class="language-plaintext highlighter-rouge">…</code> で切り詰める <a href="https://docs.lvgl.io/master/API/widgets/label/lv_label_h.html#_CPPv4N20lv_label_long_mode_t23LV_LABEL_LONG_MODE_DOTSE" title="lv_label.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">LV_LABEL_LONG_MODE_DOTS</code></a> などの効果を必要としない場合には、直接アドレスを参照する <a href="https://docs.lvgl.io/master/API/widgets/label/lv_label_h.html#_CPPv424lv_label_set_text_staticP8lv_obj_tPKc" title="lv_label.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_label_set_text_static()</code></a> を使うべきです。</p>
+
+<p>同種の関数（<a href="https://docs.lvgl.io/master/search.html?q=text_static" title="Search - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_&lt;widget&gt;_set_text_static()</code></a>）は他のウィジェットでも使用可能です。また幾つかの使用上の注意事項があるので、<a href="https://docs.lvgl.io/master/widgets/label.html#set-text" title="Label (lv_label) - LVGL 9.6 documentation">Set text</a> の章を参照して下さい。</p>
+
+
+</div>
+
+<h5 id="例２">例２</h5>
+
+<p><a href="https://docs.lvgl.io/master/common-widget-features/scrolling.html#infinite-scrolling" title="Scrolling - LVGL 9.6 documentation">例題：無限スクロール</a> では、スクロールの度に <code class="language-plaintext highlighter-rouge">lv_obj_create()</code>（ボックスセルが可視領域に入った時）と <code class="language-plaintext highlighter-rouge">lv_obj_delete()</code>（可視領域から出た時）を繰り返すため、ヒープメモリの断片化が起きがちです。</p>
+
+<figure class="float-left">
+  <a href="/images/2026/03-05/lv_example_scroll_7.png" title="lv_example_scroll_7" data-lightbox="image">
+    <img src="/images/2026/03-05/lv_example_scroll_7.png" alt="lv_example_scroll_7" width="320" height="240" />
+    <figcaption>lv_example_scroll_7</figcaption>
+  </a>
+</figure>
+
+<p>この断片化を無くすには、コンテナ内に予め必要個数のセルを作成、スクロールの上下に合わせてトコロテン式にセルの順番をシフトすれば OK です <span class="emoji">👍</span></p>
+
+<p>ウィジェットの順番は、<a href="https://docs.lvgl.io/master/API/core/lv_obj_tree_h.html#_CPPv420lv_obj_move_to_indexP8lv_obj_t7int32_t" title="lv_obj_tree.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_obj_move_to_index()</code></a> 一発でシフトできるので、可視領域に新たなセルが入る時と出る時のスクロールバー位置を判定するコードを追加するだけです。</p>
+
+<details class="clear-both">
+<summary>lv_example_scroll_7.c の代替例</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// lv_example_scroll_7.c の代替例</span>
+<span class="c1">//</span>
+<span class="c1">// オリジナルのコード</span>
+<span class="c1">// https://github.com/lvgl/lvgl/blob/master/examples/scroll/lv_example_scroll_7.c</span>
+<span class="kd">static</span> <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">high_label</span><span class="o">;</span>
+<span class="kd">static</span> <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">low_label</span><span class="o">;</span>
+<span class="kd">static</span> <span class="n">int32_t</span> <span class="n">top_num</span><span class="o">;</span>
+<span class="kd">static</span> <span class="n">int32_t</span> <span class="n">bottom_num</span><span class="o">;</span>
+<span class="kd">static</span> <span class="n">bool</span> <span class="n">update_scroll_running</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="no">TOTAL_COUNT_CELLS</span> <span class="mi">60</span>  <span class="c1">// セルの最大数（0 〜 59）</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">MAX_VISIBLE_CELLS</span> <span class="mi">5</span>   <span class="c1">// 可視領域内のセルの最大数</span>
+
+<span class="c1">// 空のセルを作成する</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">create_cells</span><span class="o">(</span><span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">parent</span><span class="o">,</span> <span class="n">int32_t</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="o">(</span><span class="n">lv_obj_t</span> <span class="o">*)</span><span class="n">lv_obj_create</span><span class="o">(</span><span class="n">parent</span><span class="o">);</span>
+    <span class="n">lv_obj_set_size</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="no">LV_PCT</span><span class="o">(</span><span class="mi">100</span><span class="o">),</span> <span class="no">LV_SIZE_CONTENT</span><span class="o">);</span>
+    <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">label</span> <span class="o">=</span> <span class="n">lv_label_create</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// 指定セルのコンテンツを変更する</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">update_cell</span><span class="o">(</span><span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">obj</span><span class="o">,</span> <span class="n">int32_t</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">label</span> <span class="o">=</span> <span class="n">lv_obj_get_child</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+  <span class="n">lv_label_set_text_fmt</span><span class="o">(</span><span class="n">label</span><span class="o">,</span> <span class="s">"%"</span> <span class="nc">PRId32</span><span class="o">,</span> <span class="n">num</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// スクロール時の処理</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">update_scroll</span><span class="o">(</span><span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+  <span class="cm">/* do not re-enter this function when `lv_obj_scroll_by`
+   * triggers this callback again.
+   */</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">update_scroll_running</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
+  <span class="n">update_scroll_running</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+
+  <span class="c1">// スクロールバーを更新する際の相対移動量</span>
+  <span class="c1">//     ┌───────────────────┐</span>
+  <span class="c1">//     │ ┌───────────────┐ │ ──┬── y0</span>
+  <span class="c1">//     │ │     cell 0    │ │   │</span>
+  <span class="c1">// gap │ │               │ │   │ dy = y1 - y0</span>
+  <span class="c1">// ─↓─ │ └───────────────┘ │   │</span>
+  <span class="c1">// ─↑─ │ ┌───────────────┐ │ ──┴── y1</span>
+  <span class="c1">//     │ │     cell 1    │ │</span>
+  <span class="c1">//     │ │               │ │</span>
+  <span class="c1">//     │ └───────────────┘ │</span>
+  <span class="c1">//     └───────────────────┘</span>
+  <span class="kd">const</span> <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">i</span> <span class="o">=</span> <span class="n">lv_obj_get_child</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span> <span class="c1">// cell 0</span>
+  <span class="kd">const</span> <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">j</span> <span class="o">=</span> <span class="n">lv_obj_get_child</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span> <span class="c1">// cell 1</span>
+  <span class="kd">const</span> <span class="n">int32_t</span>  <span class="n">dy</span> <span class="o">=</span> <span class="n">lv_obj_get_y</span><span class="o">(</span><span class="n">j</span><span class="o">)</span> <span class="o">-</span> <span class="n">lv_obj_get_y</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>  <span class="c1">// dy = 54</span>
+  <span class="kd">const</span> <span class="n">int32_t</span> <span class="n">gap</span> <span class="o">=</span> <span class="n">dy</span> <span class="o">-</span> <span class="n">lv_obj_get_height</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>          <span class="c1">// gap = 8</span>
+
+  <span class="c1">// 下にスクロール（上にスワイプ）した場合の処理</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">bottom_num</span> <span class="o">&lt;</span> <span class="no">TOTAL_COUNT_CELLS</span> <span class="o">-</span> <span class="mi">1</span> <span class="cm">/* or 30 */</span> <span class="o">&amp;&amp;</span> <span class="n">lv_obj_get_scroll_bottom</span><span class="o">(</span><span class="n">obj</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">gap</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">++</span><span class="n">bottom_num</span><span class="o">;</span>
+    <span class="o">++</span><span class="n">top_num</span><span class="o">;</span>
+    <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">top</span> <span class="o">=</span> <span class="n">lv_obj_get_child</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="n">lv_obj_move_to_index</span><span class="o">(</span><span class="n">top</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+    <span class="n">update_cell</span><span class="o">(</span><span class="n">top</span><span class="o">,</span> <span class="n">bottom_num</span><span class="o">);</span>
+    <span class="n">lv_obj_scroll_by</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">dy</span><span class="o">,</span> <span class="no">LV_ANIM_OFF</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 上にスクロール（下にスワイプ）した場合の処理</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">top_num</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="cm">/* or -30 */</span> <span class="o">&amp;&amp;</span> <span class="n">lv_obj_get_scroll_top</span><span class="o">(</span><span class="n">obj</span><span class="o">)</span> <span class="o">&lt;</span> <span class="n">gap</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">--</span><span class="n">top_num</span><span class="o">;</span>
+    <span class="o">--</span><span class="n">bottom_num</span><span class="o">;</span>
+    <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">end</span> <span class="o">=</span> <span class="n">lv_obj_get_child</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+    <span class="n">lv_obj_move_to_index</span><span class="o">(</span><span class="n">end</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="n">update_cell</span><span class="o">(</span><span class="n">end</span><span class="o">,</span> <span class="n">top_num</span><span class="o">);</span>
+    <span class="n">lv_obj_scroll_by</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">-</span><span class="n">dy</span><span class="o">,</span> <span class="no">LV_ANIM_OFF</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">lv_label_set_text_fmt</span><span class="o">(</span><span class="n">high_label</span><span class="o">,</span> <span class="s">"current top\nloaded value:\n%"</span> <span class="nc">PRId32</span><span class="o">,</span> <span class="n">top_num</span><span class="o">);</span>
+  <span class="n">lv_label_set_text_fmt</span><span class="o">(</span><span class="n">low_label</span><span class="o">,</span> <span class="s">"current bottom\nloaded value:\n%"</span> <span class="nc">PRId32</span><span class="o">,</span> <span class="n">bottom_num</span><span class="o">);</span>
+
+  <span class="n">update_scroll_running</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">scroll_cb</span><span class="o">(</span><span class="n">lv_event_t</span> <span class="o">*</span><span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="n">lv_event_get_target_obj</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+  <span class="n">update_scroll</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">checkbox_cb</span><span class="o">(</span><span class="n">lv_event_t</span> <span class="o">*</span><span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">checkbox</span> <span class="o">=</span> <span class="n">lv_event_get_target_obj</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="o">(</span><span class="n">lv_obj_t</span> <span class="o">*)</span><span class="n">lv_event_get_user_data</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+  <span class="n">bool</span> <span class="n">checked</span> <span class="o">=</span> <span class="n">lv_obj_has_state</span><span class="o">(</span><span class="n">checkbox</span><span class="o">,</span> <span class="no">LV_STATE_CHECKED</span><span class="o">);</span>
+  <span class="n">lv_obj_set_style_opa</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">checked</span> <span class="o">?</span> <span class="no">LV_OPA_COVER</span> <span class="o">:</span> <span class="no">LV_OPA_TRANSP</span><span class="o">,</span> <span class="no">LV_PART_SCROLLBAR</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * スクロールしながらウィジェットを動的に更新する例題
+ */</span>
+<span class="kt">void</span> <span class="nf">lv_example_scroll_7</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">scr</span> <span class="o">=</span> <span class="n">lv_screen_active</span><span class="o">();</span> <span class="c1">// スクリーン</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="n">lv_obj_create</span><span class="o">(</span><span class="n">scr</span><span class="o">);</span> <span class="c1">// セルを格納するコンテナ</span>
+  <span class="n">lv_obj_set_size</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="mi">160</span><span class="o">,</span> <span class="mi">220</span><span class="o">);</span>
+  <span class="n">lv_obj_align</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="no">LV_ALIGN_RIGHT_MID</span><span class="o">,</span> <span class="o">-</span><span class="mi">10</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+  <span class="n">lv_obj_set_flex_flow</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="no">LV_FLEX_FLOW_COLUMN</span><span class="o">);</span>
+  <span class="n">lv_obj_set_style_opa</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="no">LV_OPA_TRANSP</span><span class="o">,</span> <span class="no">LV_PART_SCROLLBAR</span><span class="o">);</span>
+
+  <span class="n">high_label</span> <span class="o">=</span> <span class="n">lv_label_create</span><span class="o">(</span><span class="n">scr</span><span class="o">);</span>
+  <span class="n">lv_obj_align</span><span class="o">(</span><span class="n">high_label</span><span class="o">,</span> <span class="no">LV_ALIGN_TOP_LEFT</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>
+
+  <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">checkbox</span> <span class="o">=</span> <span class="n">lv_checkbox_create</span><span class="o">(</span><span class="n">scr</span><span class="o">);</span>
+  <span class="n">lv_checkbox_set_text_static</span><span class="o">(</span><span class="n">checkbox</span><span class="o">,</span> <span class="s">"show\nscrollbar"</span><span class="o">);</span>
+  <span class="n">lv_obj_align</span><span class="o">(</span><span class="n">checkbox</span><span class="o">,</span> <span class="no">LV_ALIGN_LEFT_MID</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+  <span class="n">lv_obj_add_event_cb</span><span class="o">(</span><span class="n">checkbox</span><span class="o">,</span> <span class="n">checkbox_cb</span><span class="o">,</span> <span class="no">LV_EVENT_VALUE_CHANGED</span><span class="o">,</span> <span class="n">obj</span><span class="o">);</span>
+
+  <span class="n">low_label</span> <span class="o">=</span> <span class="n">lv_label_create</span><span class="o">(</span><span class="n">scr</span><span class="o">);</span>
+  <span class="n">lv_obj_align</span><span class="o">(</span><span class="n">low_label</span><span class="o">,</span> <span class="no">LV_ALIGN_BOTTOM_LEFT</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="o">-</span><span class="mi">10</span><span class="o">);</span>
+
+  <span class="c1">// 事前に空のセルを作成する</span>
+  <span class="n">create_cells</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="no">MAX_VISIBLE_CELLS</span><span class="o">);</span>
+
+  <span class="c1">// 可視領域内のセルIDを設定する</span>
+  <span class="n">top_num</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+  <span class="n">bottom_num</span> <span class="o">=</span> <span class="n">top_num</span> <span class="o">+</span> <span class="o">(</span><span class="no">MAX_VISIBLE_CELLS</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+
+  <span class="c1">// 可視領域内の空のセルにコンテンツを設定する</span>
+  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">MAX_VISIBLE_CELLS</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="n">lv_obj_t</span> <span class="o">*</span><span class="n">cell</span> <span class="o">=</span> <span class="n">lv_obj_get_child</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+    <span class="n">update_cell</span><span class="o">(</span><span class="n">cell</span><span class="o">,</span> <span class="n">top_num</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">lv_obj_update_layout</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+  <span class="n">update_scroll</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+  <span class="n">lv_obj_add_event_cb</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">scroll_cb</span><span class="o">,</span> <span class="no">LV_EVENT_SCROLL</span><span class="o">,</span> <span class="no">NULL</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<p>オリジナルのコードに比べ <code class="language-plaintext highlighter-rouge">update_scroll()</code> が軽くなり（４つの <code class="language-plaintext highlighter-rouge">while()</code> 文が２つに減る）、より滑らかにスクロールするようになりました <span class="emoji">💮</span></p>
+
+<h4 id="5-見た目を変えることなくより軽量なウィジェットを使う">5. 見た目を変えることなく、より軽量なウィジェットを使う</h4>
+
+<h5 id="例３">例３</h5>
+
+<p><a href="https://docs.lvgl.io/master/widgets/button.html" title="Button (lv_button) - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_button</code></a> は大抵の場合、ラベルウィジェットを追加します。つまり複数のボタンが整列した UI では、その数分だけヒープメモリを消費します。</p>
+
+<p>これに対し <a href="https://docs.lvgl.io/master/widgets/buttonmatrix.html" title="Button Matrix (lv_buttonmatrix) - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_buttonmatrix</code></a> は、複数の <code class="language-plaintext highlighter-rouge">lv_button</code> を生成する代わりに、単にボタンとテキストを描画するコンテナとして実装されていて、かなりの軽量化が可能です。</p>
+
+<p>以下はそのドキュメントの日本語訳です。</p>
+
+<blockquote>
+  <p>ボタンマトリックスウィジェットは、複数のボタンを行と列に表示するための軽量な方法です。
+ボタンは実際には作成されず、仮想的に描画されるだけなので、軽量です。ボタンマトリックスでは、
+ボタン1つあたり8バイトの追加メモリしか使用しません。通常のボタンウィジェットでは約100～150バイト、
+ラベルウィジェットでは約100バイトのメモリが使用されますが、ボタンマトリックスではわずか8バイトの
+追加メモリしか使用しません。</p>
+</blockquote>
+
+<p>コードの実例は、<a href="https://docs.lvgl.io/master/widgets/buttonmatrix.html#simple-button-matrix" title="Button Matrix (lv_buttonmatrix) - LVGL 9.6 documentation">例題：単純なボタンマトリックス</a> を参照してください。</p>
+
+<h5 id="例４">例４</h5>
+
+<p>ボタンマトリックスの <a href="https://docs.lvgl.io/master/widgets/buttonmatrix.html#custom-buttons" title="Button Matrix (lv_buttonmatrix) - LVGL 9.6 documentation">例題：カスタムなボタン</a> では、次のコードによりデフォルトのボタン描画ルーチンをユーザー定義の関数に差し替えています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/**
+ * Add custom drawer to the button matrix to customize buttons one by one
+ */</span>
+<span class="kt">void</span> <span class="nf">lv_example_buttonmatrix_2</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span>
+<span class="o">{</span>
+  <span class="n">lv_obj_t</span> <span class="o">*</span> <span class="n">btnm</span> <span class="o">=</span> <span class="n">lv_buttonmatrix_create</span><span class="o">(</span><span class="n">lv_screen_active</span><span class="o">());</span>
+  <span class="n">lv_obj_add_event_cb</span><span class="o">(</span><span class="n">btnm</span><span class="o">,</span> <span class="n">event_cb</span><span class="o">,</span> <span class="no">LV_EVENT_DRAW_TASK_ADDED</span><span class="o">,</span> <span class="no">NULL</span><span class="o">);</span>
+  <span class="n">lv_obj_add_flag</span><span class="o">(</span><span class="n">btnm</span><span class="o">,</span> <span class="no">LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS</span><span class="o">);</span>
+  <span class="n">lv_obj_center</span><span class="o">(</span><span class="n">btnm</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<figure class="float-left flex">
+  <a href="/images/2026/03-05/AlbumList.gif" title="カスタムなボタン画像の例" data-lightbox="image">
+    <img src="/images/2026/03-05/AlbumList.gif" alt="カスタムなボタン画像の例" width="320" height="240" />
+    <figcaption>カスタムなボタン画像の例</figcaption>
+  </a>
+</figure>
+
+<p>この仕組みは他の <code class="language-plaintext highlighter-rouge">lv_obj_t</code> オブジェクトにも適用が可能で、CYD_MP3Player の <a href="https://github.com/embedded-kiddie/CYD_MP3Player/blob/main/CYD_MP3Player_LVGL/ui_ScreenAlbumList.cpp#L197-L198" title="CYD_MP3Player/CYD_MP3Player_LVGL/ui_ScreenAlbumList.cpp at main · embedded-kiddie/CYD_MP3Player">アルバムリスト</a> では、<a href="#例２">例題２</a> の各セルにこれを設定し、チェックボックスの画像とテキストを描画する実装としています。</p>
+
+<p>これにより、各セルに <a href="https://docs.lvgl.io/master/widgets/checkbox.html" title="Checkbox (lv_checkbox) - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_checkbox</code></a> を持たせる事なく省メモリを実現しました。</p>
+
+<div class="quote clear-both">
+
+<h5 id="-tipsウィジェットのデフォルト描画ルーチンを差し替える例題">📌 Tips：ウィジェットのデフォルト描画ルーチンを差し替える例題</h5>
+<p>ウィジェットの <a href="https://docs.lvgl.io/master/main-modules/draw/draw_api.html" title="Draw API - LVGL 9.6 documentation">Draw API</a> とデータ構造 <a href="https://docs.lvgl.io/master/main-modules/draw/draw_descriptors.html" title="Draw Descriptors - LVGL 9.6 documentation">Draw Descriptors</a> を習得すると、多彩な表現が可能になります。</p>
+
+<p><a href="https://docs.lvgl.io/master/API/misc/lv_event_h.html#_CPPv4N15lv_event_code_t24LV_EVENT_DRAW_TASK_ADDEDE" title="lv_event.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">LV_EVENT_DRAW_TASK_ADDED</code></a> と <a href="https://docs.lvgl.io/master/API/core/lv_obj_h.html#_CPPv4N13lv_obj_flag_t33LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTSE" title="lv_obj.h - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS</code></a> を使った例題をピックアップしたので、既存の UI に満足できない方はチャレンジしてみて下さい。</p>
+
+<ul>
+  <li><a href="https://docs.lvgl.io/master/common-widget-features/events.html#draw-event" title="Events - LVGL 9.6 documentation">Draw event</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/buttonmatrix.html#custom-buttons" title="Button Matrix (lv_buttonmatrix) - LVGL 9.6 documentation">Custom buttons</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/chart.html#recolor-bars-based-on-their-value" title="Chart (lv_chart) - LVGL 9.6 documentation">Recolor bars based on their value</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/chart.html#faded-area-line-chart-with-custom-division-lines" title="Chart (lv_chart) - LVGL 9.6 documentation">Faded area line chart with custom division lines</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/chart.html#scatter-chart" title="Chart (lv_chart) - LVGL 9.6 documentation">Scatter chart</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/keyboard.html#keyboard-with-drawing" title="Keyboard (lv_keyboard) - LVGL 9.6 documentation">Keyboard with drawing</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/scale.html#customizing-scale-major-tick-label-color-with-lv-event-draw-task-added-event" title="Scale (lv_scale) - LVGL 9.6 documentation">Customizing scale major tick label color with LV_EVENT_DRAW_TASK_ADDED event</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/scale.html#a-round-scale-style-simulating-a-sunset-sunrise-widget" title="Scale (lv_scale) - LVGL 9.6 documentation">A round scale style simulating a sunset/sunrise widget</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/scale.html#a-round-scale-style-simulating-a-compass" title="Scale (lv_scale) - LVGL 9.6 documentation">A round scale style simulating a compass</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/table.html#simple-table" title="Table (lv_table) - LVGL 9.6 documentation">Simple table</a></li>
+  <li><a href="https://docs.lvgl.io/master/widgets/table.html#lightweighted-list-from-table" title="Table (lv_table) - LVGL 9.6 documentation">Lightweighted list from table</a></li>
+</ul>
+
+
+</div>
+
+<h4 id="おまけこりゃ無いだろ--な削減例">おまけ：こりゃ無いだろ 😳 な削減例</h4>
+
+<figure class="float-left flex">
+  <a href="/images/2026/03-05/PlayList.jpg" title="境界線で立体感を出す例" data-lightbox="image">
+    <img src="/images/2026/03-05/PlayList-small.jpg" alt="境界線で立体感を出す例" width="480" height="640" />
+    <figcaption>境界線で立体感を出す例</figcaption>
+  </a>
+</figure>
+
+<p>CYD_MP3Player のプレイリストのデザインは <a href="https://github.com/lvgl/lvgl/tree/master/demos/music#music-player-demo" title="lvgl/demos/music at master · lvgl/lvgl">music デモ</a> のパクリなのですが、何と！ <a href="https://github.com/lvgl/lvgl/blob/master/demos/music/assets/img_lv_demo_music_list_border.c" title="lvgl/demos/music/assets/img_lv_demo_music_list_border.c at master · lvgl/lvgl">境界線で立体感を出す画像</a> 用に無駄に <a href="https://docs.lvgl.io/master/widgets/image.html" title="Image (lv_image) - LVGL 9.6 documentation"><code class="language-plaintext highlighter-rouge">lv_image</code></a> オブジェクトを挿入しています。</p>
+
+<p>角マルを画像で実現していた CSS 2.x の時代じゃあるまいし、今時こりゃ無いでしょ！ってことで、CYD_MP3Player では、境界線の上下の色を変えて同じ効果を出しています。</p>
+
+<p>まぁ、大声で「削減した」とは言えませんネ  <span class="emoji">🥱</span></p>
+
+<h2 id="lvgl-メモリ消費量の削減戦略まとめ">LVGL メモリ消費量の削減戦略まとめ</h2>
+
+<p>さて最後は、<a href="https://www.google.com/search?q=lvgl%E3%81%AE%E3%83%92%E3%83%BC%E3%83%97%E3%83%A1%E3%83%A2%E3%83%AA%E4%BD%BF%E7%94%A8%E9%87%8F%E3%82%92%E5%89%8A%E6%B8%9B%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95">日本語</a> と <a href="https://www.google.com/search?q=lvgl+how+to+reduce+heap+memory+consumption" title="lvgl how to reduce memory consumption">英語</a> による検索語をベースに、Google AI との対話を通じて得られた回答をまとめ、締めたいと思います。</p>
+
+<hr />
+
+<p>LVGL でのメモリ消費を最小限に抑えるには、ディスプレイバッファサイズの最適化、オブジェクトに割り当てられるメモリ量の削減、そしてグラフィック要素を新規作成するのではなく再利用することに重点を置きます。スタイルを効率的に管理し、LVGL の組み込みデータ構造を活用することも役立ちます。</p>
+
+<p>戦略の詳細は以下の通りです。</p>
+
+<ol>
+  <li><strong>lv_conf.h で不要な機能を無効化する</strong><br />
+  LVGLは多機能なため、使用しない機能を無効にするだけで大きなメモリ削減になります。
+    <ul>
+      <li><strong>LV_USE_* の無効化</strong><br />
+ 使わないオブジェクト（例えば、チャート、ゲージ、テーブル、アニメーションなど）を 0 に設定します。</li>
+      <li><strong>フォントの制限</strong><br />
+ LV_FONT_* を制限し、必要なフォントのみを有効にします。デフォルトのフォントを小さいものに変更することも検討してください。</li>
+      <li><strong>ファイルシステム (LV_USE_FS_*)</strong><br />
+ 不要なら無効化します。</li>
+      <li><strong>テーマ</strong><br />
+ テーマを無効化、または軽量なもの（<code class="language-plaintext highlighter-rouge">LV_USE_THEME_MONO</code>など）に変更します。</li>
+    </ul>
+  </li>
+  <li><strong>ディスプレイバッファの最適化</strong>
+    <ul>
+      <li><strong>ディスプレイバッファサイズの縮小</strong><br />
+ ディスプレイバッファは、画面に表示されるピクセルデータを保存するために使用されます。特に大画面を使用している場合は、ディスプレイバッファのサイズを縮小することで、メモリ使用量を大幅に削減できます。</li>
+      <li><strong>色深度を低くする</strong><br />
+ アプリケーションで高い色深度を必要としない場合は、ピクセルあたりのビット数が低い形式（例：24ビットではなく16ビット）を使用して、ディスプレイバッファに必要なメモリを削減することを検討してください。</li>
+    </ul>
+  </li>
+  <li><strong>メモリ割り当ての最適化</strong>
+    <ul>
+      <li><strong>LV_MEM_SIZE の縮小</strong><br />
+ この設定は、LVGL オブジェクトの作成に使用できるメモリの総量を定義します。これを減らすことは有効ですが、オブジェクトの作成と削除の戦略を調整する必要があるかもしれません。</li>
+      <li><strong>LVGLのメモリ管理</strong><br />
+ LVGLの組み込みメモリ管理関数とデータ構造（リンクリストやツリーなど）は、ライブラリ用に最適化されているため、活用してください。</li>
+      <li><strong>非表示スクリーンの削除</strong><br />
+ 複数のスクリーンを構成する場合、表示されているスクリーンに必要なオブジェクトのみを残し、非表示のオブジェクトやスタイルを削除します。この場合、親のオブジェクトを削除すれば、その子であるオブジェクトは自動的に削除されます。</li>
+      <li><strong>オブジェクトの再利用</strong><br />
+ ボタンやラベルなどの新しいオブジェクトを必要なたびに作成するのではなく、既存のオブジェクトを再利用するようにします。例えば、タブを切り替える際に、非アクティブなタブではオブジェクトを非表示にし、タブがアクティブになったときに再表示するようにすることで、オブジェクトを削除して再作成する手間と断片化を省くことができます。</li>
+      <li><strong>オブジェクトプーリング</strong><br />
+ 頻繁に使用するオブジェクトについては、一定数のオブジェクトを事前に割り当て、必要に応じて再利用するオブジェクトプーリング手法の使用を検討してください。</li>
+    </ul>
+  </li>
+  <li><strong>スタイルの最適化</strong>
+    <ul>
+      <li><strong>スタイルの最小化</strong><br />
+ 使用する個々のスタイルの数を減らし、複数のオブジェクトに適用できる、より汎用的なスタイルを作成するようにしてください。</li>
+      <li><strong>ローカル スタイルを使用する</strong><br />
+ オブジェクト固有のスタイルの場合、<a href="https://forum.lvgl.io/t/low-ram-usage-strategies/3867" title="Low RAM usage strategies - How-to - LVGL Forum">LVGL フォーラムで提案されている</a>ように、メモリを節約するために、オブジェクトごとに新しい <code class="language-plaintext highlighter-rouge">lv_style_t</code> を作成する代わりに、ローカル スタイルでオーバーライドしてください。</li>
+      <li><strong>スタイルのリセット</strong><br />
+ スタイルを頻繁に変更する場合は、新しいスタイルを適用する前に、<code class="language-plaintext highlighter-rouge">lv_style_reset()</code> を使用して古いスタイルで使用されていたメモリを解放することを検討してください。ただし、スタイルの変更を再適用するか、LVGLに変更を通知するようにしてください。</li>
+      <li><strong>静的スタイル変数の利用</strong><br />
+ スタイル用変数に <code class="language-plaintext highlighter-rouge">lv_style_init()</code> を適用する代わりに、<code class="language-plaintext highlighter-rouge">lv_style_const_prop_t</code> と <code class="language-plaintext highlighter-rouge">LV_STYLE_CONST_INIT</code> でスタイル用変数を Flash 上に割り当ててください。</li>
+    </ul>
+  </li>
+  <li><strong>その他の最適化手法</strong>
+    <ul>
+      <li><strong>画像の最適化</strong><br />
+ より小さな画像を使用するか、画像形式を最適化ます（例：透過性のためにフルRGBAではなくインデックス付きPNGを使用する）。また生データ全体をRAMにロードすることは避け、<a href="https://lvgl.io/tools/imageconverter" title="Image Converter — LVGL">Image Converter</a>で非圧縮データとしてフラッシュメモリに保存してください。SVGやGIFなどの圧縮形式は、表示前にRAMへの完全な解凍が必要になる場合があることにご注意ください。</li>
+      <li><strong>画像キャッシュの無効化</strong><br />
+ パフォーマンスは低下しますが、毎回再描画する設定にすることでRAMを節約できます。</li>
+      <li><strong>コンポーネントの可視性</strong><br />
+ 画面に表示されていないオブジェクトは非表示にするか、親子関係を解除してレンダリングの負荷を軽減します。</li>
+      <li><strong>オブジェクト作成の制限</strong><br />
+ 不要なオブジェクト、特に大量のオブジェクトを作成しないようにしてください。</li>
+      <li><strong>複雑さの軽減</strong><br />
+ ユーザーインターフェースを簡素化して、グラフィカル要素の数と複雑さを軽減します。</li>
+      <li><strong>イベント処理</strong><br />
+ イベント処理に注意し、不要な処理は避けてください。変更を常にポーリングするのではなく、イベント駆動型の更新を使用することを検討してください。</li>
+      <li><strong>コードの最適化</strong><br />
+ コードがターゲットプラットフォームに適した最適化設定でコンパイルされていることを確認してください。たとえば、最適化レベルを「最小コード」に設定すると、コードサイズを削減できます。</li>
+      <li><strong>スタックの使用</strong><br />
+ 小さなデータはヒープではなくスタックに置くようにします。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>これらの手法を適用することで、特にリソースが限られた組み込みシステムで作業する場合、LVGLプロジェクトのメモリ消費量を大幅に削減できます。</p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2026/02/15/" title="前の記事：NFJ曰く「クラス最強低音！」逆ロールエッジ アルミコーン フルレンジ 3インチを試す">← NFJ曰く「クラス最強低音！」逆ロールエッジ アルミコーン フルレンジ 3インチを試す</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/03/05/",this.page.identifier="/2026/03/05/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2026/03/05/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/03/05/";this.page.identifier="/2026/03/05/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
