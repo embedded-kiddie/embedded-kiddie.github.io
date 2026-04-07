@@ -715,7 +715,7 @@ LittleFS の元々の開発者？ <code class="language-plaintext highlighter-ro
   </li>
 </ul>
 
-<p>僕は１番目の <a href="https://github.com/earlephilhower/arduino-littlefs-upload/releases/tag/1.5.4" title="Release Release 1.5.4 - ESP32 comment and OTA fix · earlephilhower/arduino-littlefs-upload">arduino-littlefs-upload</a> をチョイスしました。以下そのインストール方法と使い方です。</p>
+<p>僕は１番目の <a href="https://github.com/earlephilhower/arduino-littlefs-upload" title="earlephilhower/arduino-littlefs-upload: Build and uploads LittleFS filesystems for the Arduino-Pico RP2040, RP2350, ESP8266, and ESP32 cores under Arduino IDE 2.2.1 or higher">arduino-littlefs-upload</a> をチョイスしました。以下そのインストール方法と使い方です。</p>
 
 <ol>
   <li>
@@ -751,7 +751,7 @@ Warning: Deprecated: Command 'write_flash' is deprecated. Use 'write-flash' inst
 esptool v5.1.0
 </code></pre></div></div>
 
-<p>また私の古い Mac（macOS Big Sur, 11.7.10）では次のエラーによりアップロードができなくなったので、プラグイン使用時は、ESP32 プラットフォームパッケージを 3.2.1 に戻すようにしています。</p>
+<p>また私の古い Mac（macOS Big Sur, 11.7.10）では次のエラーによりアップロードができなくなったので、プラグイン使用時は、<strong>ESP32 プラットフォームパッケージを 3.2.1 に戻す</strong>ようにしています。</p>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dyld: Symbol not found: __ZNSt3__115basic_stringbufIcNS_11char_traitsIcEENS_9allocatorIcEEE3strERKNS_12basic_stringIcS2_S4_EE
   Referenced from: /Users/kiyo/Library/Arduino15/packages/esp32/tools/mklittlefs/4.0.2-db0513a/mklittlefs (which was built for Mac OS X 13.0)
