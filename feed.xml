@@ -8,6 +8,25 @@
     
       
       <item>
+        <title>UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題</title>
+        
+          <description>&lt;figure class=&quot;flex&quot;&gt;
+  &lt;div&gt;
+    &lt;img src=&quot;/images/2026/05-08/OpenWeather_UNO_R4.jpg&quot; alt=&quot;OpenWatherMap for UNO R4 WiFi&quot; width=&quot;1200&quot; height=&quot;600&quot; /&gt;
+    &lt;figcaption&gt;OpenWatherMap for UNO R4 WiFi&lt;/figcaption&gt;
+  &lt;/div&gt;
+&lt;/figure&gt;
+</description>
+        
+        <pubDate>Fri, 08 May 2026 08:32:21 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2026/05/08/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2026/05/08/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>技適付きCYDの入手は絶望的!? - ならばELECROW ESP32 CrowPanel 2.8インチがお勧め</title>
         
           <description>&lt;p&gt;&lt;img src=&quot;/images/2026/03-15/FactoryFirmware.jpg&quot; alt=&quot;オープニング&quot; style=&quot;margin: auto; display: block&quot; width=&quot;768&quot; height=&quot;551&quot; /&gt;&lt;/p&gt;

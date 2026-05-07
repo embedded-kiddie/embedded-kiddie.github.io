@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="セキュアなHTTPリクエストを実装するArduino用クラスライブラリとそのリスクについて" />
+<meta property="og:description" content="セキュアなHTTPリクエストを実装するArduino用クラスライブラリとそのリスクについて" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2026/05/08/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2026/05/08/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-05-08T08:32:21+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2026-05-08T08:32:21+09:00","datePublished":"2026-05-08T08:32:21+09:00","description":"セキュアなHTTPリクエストを実装するArduino用クラスライブラリとそのリスクについて","headline":"UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2026/05/08/"},"url":"https://embedded-kiddie.github.io/2026/05/08/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:1em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2026-05-08T08:32:21+09:00" itemprop="datePublished">May 8, 2026
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <figure class="flex">
+  <div>
+    <img src="/images/2026/05-08/OpenWeather_UNO_R4.jpg" alt="OpenWatherMap for UNO R4 WiFi" width="1200" height="600" />
+    <figcaption>OpenWatherMap for UNO R4 WiFi</figcaption>
+  </div>
+</figure>
+
+<h2 id="はじめに">はじめに</h2>
+
+<figure class="float-left flex">
+  <a href="/images/2026/05-08/OpenWeather_Bodmer.png" title="Bodmer さんの OpenWeather" data-lightbox="image">
+    <img src="/images/2026/05-08/OpenWeather_Bodmer.png" alt="Bodmer さんの OpenWeather" width="250" height="330" />
+    <figcaption>Bodmer さんの OpenWeather</figcaption>
+  </a>
+</figure>
+
+<p>今回、個人的には初めての WiFi アプリを作ろうと思い立ち、お題を「Arduino で REST API」に選んでみました。</p>
+
+<p><a href="https://github.com/Bodmer/TFT_espi" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">TFT_eSPI</a> の作者 Bodmer さんの、カッコいいグラフィックデザインが特徴の <a href="https://github.com/Bodmer/OpenWeather" title="Bodmer/OpenWeather: Arduino library to fetch weather information from OpenWeather">OpenWeather</a> に刺激を受け、これを UNO R4 WiFi で動かしたい！と思ったからです。</p>
+
+<p>メモリの豊富な ESP32 で動作するソフトを UNO R4 WiFi 用にマイグレーションするにはそれなりの工夫が必要でしたので、その過程で得た知見を３回に分けて共有する予定です。</p>
+
+<div class="clear-both"></div>
+
+<ol>
+  <li><span class="strong">RTC、NTP、HTTP、TLS、ルートCA認証の REST API 用サンプルコード</span>（今回）</li>
+  <li><span class="strong">ArduinoJson で大きな JSON データを少ない RAM で解析する方法</span></li>
+  <li><span class="strong">アイコン画像のデータを UNO R4 の Flash 容量内に収める方法</span></li>
+</ol>
+
+<p>１回目の今回は、TLS のセキュリティレベルを診断してくれる <a href="https://www.howsmyssl.com/" title="How's My SSL?">How’s My SSL?</a> の <a href="https://www.howsmyssl.com/s/api.html" title="API &middot; How's My SSL?">REST API エントリ</a> を叩くサンプルコードを紹介します。</p>
+
+<p>特に WiFi 関連や RTC、NTP 関連の情報は巷にも溢れているので、他のサイト様ではあまり紹介されていない、より実践的なコードを提示したいと思います <span class="emoji">🤘</span></p>
+
+<p>本稿で提示するプログラムの動作環境は以下の通りです。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>バージョン</th>
+      <th>UNO R4 WiFi</th>
+      <th>ESP32</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Arduino IDE</td>
+      <td>2.3.4</td>
+      <td>2.3.4</td>
+    </tr>
+    <tr>
+      <td>プラットフォーム</td>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino UNO R4 Boards by Arduino</a> 1.5.3</td>
+      <td><a href="https://github.com/espressif/arduino-esp32" title="espressif/arduino-esp32: Arduino core for the ESP32">esp32 by Espressif Systems</a> 3.3.8</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ボードタイプ別に §1 〜 $4 のサンプルコードを順に１つのスケッチファイルコピペしていけば動作する構成にしています。ご利用の際は、出典のご確認も合わせてお願い致します <span class="emoji">🙇‍♂️</span></p>
+
+<h2 id="1-メインのスケッチ">§1. メインのスケッチ</h2>
+
+<p>まずは全体像です。<a href="http://localhost:4000/2024/07/22/" title="Arduinoでノンプリエンプティブな周期的タスクを起動するちょっと変わったマクロ｜Embedded Kiddie">以前紹介した</a> <code class="language-plaintext highlighter-rouge">DO_EVERY()</code> マクロで２つのタスクを駆動します。１つは１秒毎に内臓 RTC の時刻を表示し、もう１つは２分毎に JSON データを取得します。コードは UNO R4 WiFi と ESP32 で共通です。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">Arduino</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">time</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="c1">// プロトタイプ宣言</span>
+<span class="kt">void</span> <span class="nf">wifiInit</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>        <span class="c1">// WiFiの初期化</span>
+<span class="kt">void</span> <span class="nf">rtcInit</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>         <span class="c1">// RTC／NTPの初期化</span>
+<span class="kt">void</span> <span class="nf">httpInit</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>        <span class="c1">// TLSの初期化</span>
+
+<span class="n">bool</span> <span class="nf">rtcSyncNTP</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>      <span class="c1">// 一定周期毎にRTCを更新する関数</span>
+<span class="n">bool</span> <span class="nf">httpRequest</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>     <span class="c1">// HTTPリクエストを送信する関数</span>
+<span class="n">bool</span> <span class="nf">readResponse</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>    <span class="c1">// レスポンスボディを読み込む関数</span>
+<span class="n">uint32_t</span> <span class="nf">rtcGetTime</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>  <span class="c1">// RTCからUNIX時刻を取得する関数</span>
+
+<span class="c1">// 周期的にタスクを駆動するマクロ</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DO_EVERY</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">lastTime</span><span class="o">)</span>  <span class="kd">static</span> <span class="n">uint32_t</span> <span class="n">lastTime</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="k">for</span> <span class="o">(</span><span class="n">uint32_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">millis</span><span class="o">();</span> <span class="n">lastTime</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">now</span> <span class="o">-</span> <span class="n">lastTime</span> <span class="o">&gt;=</span> <span class="n">period</span><span class="o">;</span> <span class="n">lastTime</span> <span class="o">=</span> <span class="n">now</span><span class="o">)</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(!</span><span class="nc">Serial</span> <span class="o">||</span> <span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">);</span>
+
+  <span class="n">wifiInit</span><span class="o">();</span> <span class="c1">// WiFiを初期化</span>
+  <span class="n">rtcInit</span><span class="o">();</span>  <span class="c1">// RTC／NTPを初期化</span>
+  <span class="n">httpInit</span><span class="o">();</span> <span class="c1">// TLSを初期化</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{</span>
+  <span class="n">rtcSyncNTP</span><span class="o">();</span>
+
+  <span class="no">DO_EVERY</span><span class="o">(</span><span class="mi">1000</span><span class="o">,</span> <span class="n">lastTime1</span><span class="o">)</span> <span class="o">{</span>   <span class="c1">// 1秒毎に実行</span>
+    <span class="n">struct</span> <span class="n">tm</span> <span class="n">tm</span><span class="o">;</span>
+    <span class="n">time_t</span> <span class="n">time</span> <span class="o">=</span> <span class="n">rtcGetTime</span><span class="o">();</span> <span class="c1">// RTCからUNIX時刻を取得</span>
+    <span class="n">localtime_r</span><span class="o">(&amp;</span><span class="n">time</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">tm</span><span class="o">);</span>    <span class="c1">// 現地時刻に変換</span>
+    <span class="n">printf</span><span class="o">(</span><span class="s">"%02d:%02d:%02d\n"</span><span class="o">,</span> <span class="n">tm</span><span class="o">.</span><span class="na">tm_hour</span><span class="o">,</span> <span class="n">tm</span><span class="o">.</span><span class="na">tm_min</span><span class="o">,</span> <span class="n">tm</span><span class="o">.</span><span class="na">tm_sec</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="no">DO_EVERY</span><span class="o">(</span><span class="mi">120000</span><span class="o">,</span> <span class="n">lastTime2</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 2分毎に実行</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">httpRequest</span><span class="o">())</span> <span class="o">{</span>        <span class="c1">// HTTPリクエストを送信</span>
+      <span class="n">readResponse</span><span class="o">();</span>           <span class="c1">// レスポンスを取得</span>
+    <span class="o">}</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Waiting for next session..."</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="2-wifi-の初期化">§2. WiFi の初期化</h2>
+
+<p>ここからは UNO R4 WiFi 版と ESP32 版を分けたコードを示します。プロジェクトを GitHub などに上げる際、WiFi の SSID やパスワードは <code class="language-plaintext highlighter-rouge">arduino_secrets.h</code> に分離し、<code class="language-plaintext highlighter-rouge">.gitignore</code> で除外するように設定しましょう。</p>
+
+<details style="margin-bottom:0">
+<summary>arduino_secrets.h</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">SECRET_SSID</span> <span class="s">""</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">SECRET_PASS</span> <span class="s">""</span></code></pre></figure>
+
+
+</details>
+
+<h3 id="21-uno-r4-wifi-版">§2.1 UNO R4 WiFi 版</h3>
+
+<p>UNO R4 WiFi に不要な部分を除き、ほぼ公式の例題通りのコードです。</p>
+
+<h5 id="サンプルコード">サンプルコード</h5>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFiS3</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"arduino_secrets.h"</span>
+
+<span class="kt">void</span> <span class="nf">wifiInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"Connecting to WiFi network..."</span><span class="o">);</span>
+
+  <span class="c1">// WiFi のファームウェアバージョンを確認する</span>
+  <span class="nc">String</span> <span class="n">fv</span> <span class="o">=</span> <span class="nc">WiFi</span><span class="o">.</span><span class="na">firmwareVersion</span><span class="o">();</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">fv</span> <span class="o">&lt;</span> <span class="no">WIFI_FIRMWARE_LATEST_VERSION</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Please upgrade the firmware."</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="k">while</span> <span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">status</span><span class="o">()</span> <span class="o">!=</span> <span class="no">WL_CONNECTED</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">WiFi</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">SECRET_SSID</span><span class="o">,</span> <span class="no">SECRET_PASS</span><span class="o">);</span>
+    <span class="n">delay</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span> <span class="c1">// 接続の待ち時間</span>
+  <span class="o">}</span>
+
+  <span class="c1">// print your board's IP address:</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"done."</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"IP address: "</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">localIP</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+
+  <span class="c1">// print the received signal strength:</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"signal strength (RSSI):"</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">RSSI</span><span class="o">());</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" dBm"</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">while()</code> 内の「接続待ち時間」は 1 秒に縮めちゃってますが（オリジナルは 10 秒）、アクセスポイントとの関連もあるかと思うので、お使いの環境に合わせて調整してください。</p>
+
+<p>また <code class="language-plaintext highlighter-rouge">WiFi.status()</code> と <code class="language-plaintext highlighter-rouge">WiFi.begin()</code> ですが、UNO R4 WiFi ではこの順番に実行しないと接続までの時間が伸びちゃいます（理由は追跡していません、悪しからず…<span class="emoji">😅</span>）</p>
+
+<h5 id="出典">出典</h5>
+<ul>
+  <li><a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/libraries/WiFiS3/examples/ConnectWithWPA" title="ArduinoCore-renesas/libraries/WiFiS3/examples/ConnectWithWPA at main · arduino/ArduinoCore-renesas">ArduinoCore-renesas/libraries/WiFiS3/examples/ConnectWithWPA</a></li>
+</ul>
+
+<h3 id="22-esp32-版">§2.2 ESP32 版</h3>
+
+<p>WiFi を司るチップが分かれていない分、UNO R4 WiFi 版に比べて少しだけシンプルです。</p>
+
+<h5 id="サンプルコード-1">サンプルコード</h5>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"arduino_secrets.h"</span>
+
+<span class="kt">void</span> <span class="nf">wifiInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"Connecting to WiFi network..."</span><span class="o">);</span>
+
+  <span class="nc">WiFi</span><span class="o">.</span><span class="na">mode</span><span class="o">(</span><span class="no">WIFI_STA</span><span class="o">);</span> <span class="c1">// ステーションモードに設定（デフォルト）</span>
+  <span class="nc">WiFi</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">SECRET_SSID</span><span class="o">,</span> <span class="no">SECRET_PASS</span><span class="o">);</span>
+
+  <span class="k">while</span> <span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">status</span><span class="o">()</span> <span class="o">!=</span> <span class="no">WL_CONNECTED</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">delay</span><span class="o">(</span><span class="mi">500</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"."</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="c1">// print your board's IP address:</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"done."</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"IP address: "</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">localIP</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+
+  <span class="c1">// print the received signal strength:</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"signal strength (RSSI):"</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">RSSI</span><span class="o">());</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" dBm"</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<h5 id="出典-1">出典</h5>
+<ul>
+  <li><a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/WiFi/examples/WiFiClient" title="arduino-esp32/libraries/WiFi/examples/WiFiClient at master · espressif/arduino-esp32">arduino-esp32/libraries/WiFi/examples/WiFiClient</a></li>
+</ul>
+
+<h2 id="3-rtc-と-ntp-サーバーの設定">§3. RTC と NTP サーバーの設定</h2>
+
+<p>特に <a href="http://radiopench.blog96.fc2.com/blog-entry-1279.html" title="ラジオペンチ Arduino UNO R4のRTC、クロックソース切替と精度測定">UNO R4 の RTC は精度が悪い</a> ことで有名ですが、両ボードとも内蔵の RTC を使うことにします。</p>
+
+<h3 id="31-uno-r4-wifi-版">§3.1 UNO R4 WiFi 版</h3>
+
+<p>まずは追加のハードウェアなしに時計として使えるリソースを洗い出してみました。</p>
+
+<ul>
+  <li><a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/libraries/RTC" title="ArduinoCore-renesas/libraries/RTC at main · arduino/ArduinoCore-renesas">RTC ライブラリ</a><br />
+LOCO（低速オンチップオシレータ）または SOSC（サブクロック発振器）をクロックソースとする RA4M1 の RTC モジュールを I/F したクラスライブラリです。アラーム機能に加え、年月日を取得するカレンダー機能を備えています。</li>
+  <li><a href="https://github.com/arduino-libraries/NTPClient" title="arduino-libraries/NTPClient: Connect to a NTP server">NTPClient ライブラリ</a><br />
+<abbr title="Network Time Protocol">NTP</abbr> サーバーから取得した時刻と、HOCO（高速オンチップオシレータ）をクロックソースとする GPT32（汎用 PWM タイマ）で刻まれる <code class="language-plaintext highlighter-rouge">millis()</code> で時間を管理します。</li>
+  <li><a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/libraries/WiFiS3/src/WiFi.h#L442-L447" title="ArduinoCore-renesas/libraries/WiFiS3/src/WiFi.h at main · arduino/ArduinoCore-renesas">WiFi.getTime()</a><br />
+（オンボードの ESP32-S3-MINI が）WiFi ルータから得た時刻を取得するメソッドです。精度はルータの仕様／性能に依存し、また ESP32-S3 での扱われ方も不明です。このメソッドは Arduino 系ボード専用で、Espressif 系にはありません。</li>
+</ul>
+
+<figure class="float-left">
+  <a href="/images/2026/05-08/NTPClient.jpg" title="NTPClient ライブラリ" data-lightbox="image">
+    <img src="/images/2026/05-08/NTPClient.jpg" alt="NTPClient ライブラリ" width="400" height="350" />
+    <figcaption>NTPClient ライブラリ</figcaption>
+  </a>
+</figure>
+
+<p>実際に実験してみると精度はどれも似たり寄ったりです。</p>
+
+<p>個人的には <a href="https://github.com/arduino-libraries/NTPClient" title="arduino-libraries/NTPClient: Connect to a NTP server"><code class="language-plaintext highlighter-rouge">NTPClient</code></a> で定期的に NTP サーバーから時刻を取得すれば、RTC は不要だと思いますが、NTP で RTC を補正するのが一般的な使い方でしょう。</p>
+
+<p><code class="language-plaintext highlighter-rouge">NTPClient</code> は、ライブラリのインストールが必要です。</p>
+
+<h5 id="サンプルコード-2">サンプルコード</h5>
+
+<p>NTP の更新周期を短くして RTC の精度の悪さを補いたいところですが、更新頻度が高いとアクセス遮断される可能性があります。例えば NICT では <a href="https://jjy.nict.go.jp/tsp/PubNtp/qa.html#q1-4" title="日本標準時(JST)グループ">1時間平均で20回を超えないよう</a> 注意喚起されています。</p>
+
+<p>そこで複数の NTP サーバーを順に変えるコードにしてみました。１分の更新周期でも３つ以上のサーバーを使えば１サーバー当たり３分の更新周期となります。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="no">RTC</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFiUdp</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">NTPClient</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="nf">TIMEZONE_OFFSET</span>   <span class="o">(</span><span class="mi">9</span> <span class="o">*</span> <span class="mi">3600</span><span class="o">)</span>        <span class="c1">// UTCに対する時差（日本は UTC+09:00）</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">NTP_SYNC_INTERVAL</span> <span class="o">(</span><span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000L</span><span class="no">U</span><span class="o">)</span> <span class="c1">// 1分毎に更新</span>
+
+<span class="c1">// NTP サーバーのリスト</span>
+<span class="kd">static</span> <span class="kt">int</span> <span class="n">serverID</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ntpServers</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="s">"ntp.nict.jp"</span><span class="o">,</span>
+  <span class="s">"ntp.jst.mfeed.ad.jp"</span><span class="o">,</span>
+  <span class="s">"pool.ntp.org"</span><span class="o">,</span>
+  <span class="s">"time.google.com"</span><span class="o">,</span>
+<span class="o">};</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">NTP_N_SERVERS</span> <span class="o">(</span><span class="n">sizeof</span><span class="o">(</span><span class="n">ntpServers</span><span class="o">)</span> <span class="o">/</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">ntpServers</span><span class="o">[</span><span class="mi">0</span><span class="o">]))</span>
+
+<span class="c1">// UDP経由でNTPサーバーとパケットの送受信を行うためのインスタンス</span>
+<span class="kd">static</span> <span class="nc">WiFiUDP</span> <span class="nc">Udp</span><span class="o">;</span>
+<span class="kd">static</span> <span class="nc">NTPClient</span> <span class="nf">timeClient</span><span class="o">(</span><span class="nc">Udp</span><span class="o">,</span> <span class="n">ntpServers</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="no">TIMEZONE_OFFSET</span><span class="o">,</span> <span class="no">NTP_SYNC_INTERVAL</span><span class="o">);</span>
+
+<span class="c1">// Connect to an NTP server and get the time</span>
+<span class="kt">void</span> <span class="nf">rtcInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"Initializing RTC..."</span><span class="o">);</span>
+
+  <span class="no">RTC</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+  <span class="n">timeClient</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"done."</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// 一定周期毎にNTPサーバーに接続し、時刻を取得する（loop()中で呼び出す）</span>
+<span class="n">bool</span> <span class="nf">rtcSyncNTP</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">timeClient</span><span class="o">.</span><span class="na">update</span><span class="o">())</span> <span class="o">{</span>
+    <span class="c1">// 取得した時刻をRTCに設定する</span>
+    <span class="n">auto</span> <span class="n">unixTime</span> <span class="o">=</span> <span class="n">timeClient</span><span class="o">.</span><span class="na">getEpochTime</span><span class="o">();</span>
+    <span class="nc">RTCTime</span> <span class="n">timeToSet</span> <span class="o">=</span> <span class="nc">RTCTime</span><span class="o">(</span><span class="n">unixTime</span><span class="o">);</span>
+    <span class="no">RTC</span><span class="o">.</span><span class="na">setTime</span><span class="o">(</span><span class="n">timeToSet</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"The RTC was just set to: "</span> <span class="o">+</span> <span class="n">timeToSet</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+
+    <span class="c1">// 次のサーバーを設定する</span>
+    <span class="n">serverID</span> <span class="o">=</span> <span class="o">(</span><span class="n">serverID</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">%</span> <span class="no">NTP_N_SERVERS</span><span class="o">;</span>
+    <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">server</span> <span class="o">=</span> <span class="n">ntpServers</span><span class="o">[</span><span class="n">serverID</span><span class="o">];</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Next NTP server: "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">server</span><span class="o">));</span>
+
+    <span class="n">timeClient</span><span class="o">.</span><span class="na">end</span><span class="o">();</span>
+    <span class="n">timeClient</span><span class="o">.</span><span class="na">setPoolServerName</span><span class="o">(</span><span class="n">server</span><span class="o">);</span>
+    <span class="n">timeClient</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="o">;</span> <span class="c1">// 更新周期に達していない、まはたタイムアウトで接続に失敗した場合</span>
+<span class="o">}</span>
+
+<span class="c1">// 現在時刻を取得する</span>
+<span class="n">uint32_t</span> <span class="nf">rtcGetTime</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">struct</span> <span class="n">timeval</span> <span class="n">tv</span><span class="o">;</span>          <span class="c1">// time_t tv_sec; suseconds_t tv_usec;</span>
+  <span class="n">gettimeofday</span><span class="o">(&amp;</span><span class="n">tv</span><span class="o">,</span> <span class="no">NULL</span><span class="o">);</span>    <span class="c1">// ArduinoCore-renesas では戻り値は常に 0</span>
+  <span class="k">return</span> <span class="o">(</span><span class="n">uint32_t</span><span class="o">)</span><span class="n">tv</span><span class="o">.</span><span class="na">tv_sec</span><span class="o">;</span> <span class="c1">// time_t (8バイト) --&gt; uint32_t (4バイト)</span>
+<span class="o">}</span></code></pre></figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>getEpochTime() メソッドについて</summary>
+
+
+<p><a href="https://github.com/arduino-libraries/NTPClient/blob/master/NTPClient.cpp#L133-L137" title="NTPClient/NTPClient.cpp at master · arduino-libraries/NTPClient">ソースコード</a> を見ると、NTP サーバーのデータ受信時刻に <code>millis()</code> で観測した経過時間とタイムゾーンのオフセット値を足しているだけです。</p>
+
+<p>また戻り値が符号無し32ビット整数なので、<a href="https://ja.wikipedia.org/wiki/2038%E5%B9%B4%E5%95%8F%E9%A1%8C#mwbQ" title="2038年問題 - Wikipedia">2038年問題ならぬ2106年問題</a> を内包していますが、まぁ、問題にはならないでしょう <span class="emoji">😌</span></p>
+
+</details>
+
+
+</div>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>夏時間（Daylight Saving Time, DST）の自動設定について</summary>
+
+
+<p><code class="language-plaintext highlighter-rouge">NTPClient</code> クラスの <a href="https://github.com/arduino-libraries/NTPClient/blob/master/NTPClient.cpp#L172-L174" title="NTPClient/NTPClient.cpp at master · arduino-libraries/NTPClient"><code class="language-plaintext highlighter-rouge">setTimeOffset()</code> メソッド</a> でタイムゾーンのオフセット値を変えられますが、そもそもシステムの系に「タイムゾーン」自体が実装されていないため、特定地域の夏時間を設定するには追加のライブラリが必要です。<a href="https://github.com/Bodmer/OpenWeather" title="Bodmer/OpenWeather: Arduino library to fetch weather information from OpenWeather">Bodmer さんの OpenWeather ライブラリ</a> では以下が採用されています。</p>
+
+<ul>
+  <li><a href="https://github.com/PaulStoffregen/Time" title="PaulStoffregen/Time: Time library for Arduino">Arduino Time Library</a> ＋ <a href="https://github.com/JChristensen/Timezone" title="JChristensen/Timezone: Arduino library to facilitate time zone conversions and automatic daylight saving (summer) time adjustments.">Arduino Timezone Library</a></li>
+</ul>
+
+<p>これらにより標準時間（STD）と夏時間（DST）の適用ルールが設定可能ですが、ルールが毎年変わる地域もあるなど、わりと面倒です。</p>
+
+<p>今回は <a href="https://openweathermap.org/" title="OpenWeather APIs for Weather, Energy, and Environment">OpenWeatherMap</a> の JSON データに埋め込まれたタイムゾーンのオフセット値を使うので、夏時間設定の掘り下げは致しません。悪しからず <span class="emoji">🙄</span></p>
+
+</details>
+
+</div>
+
+<h5 id="出典-2">出典</h5>
+<ul>
+  <li><a href="https://github.com/arduino-libraries/NTPClient/tree/master/examples/Basic" title="NTPClient/examples/Basic at master · arduino-libraries/NTPClient">arduino-libraries/NTPClient/examples/Basic</a><br />
+定期的に NTP サーバーから時刻を取得するだけの例題です。デフォルトのサーバーは <code class="language-plaintext highlighter-rouge">pool.ntp.org</code> で、更新周期は１分です。</li>
+  <li><a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/libraries/RTC/examples/RTC_NTPSync" title="ArduinoCore-renesas/libraries/RTC/examples/RTC_NTPSync at main · arduino/ArduinoCore-renesas">arduino/ArduinoCore-renesas/libraries/RTC/examples/RTC_NTPSync</a><br />
+<code class="language-plaintext highlighter-rouge">setup()</code> 中で一度だけ NTP サーバーから時刻を取得し、RTC に設定する例題です。</li>
+  <li><a href="https://docs.arduino.cc/tutorials/uno-r4-wifi/rtc/" title="Home / Hardware / UNO R4 WiFi / Arduino UNO R4 WiFi Real-Time Clock">Arduino UNO R4 WiFi Real-Time Clock - Arduino Documentation</a><br />
+上記２つの例題を１ページにまとめた UNO R4 WiFi のチュートリアルです。</li>
+</ul>
+
+<h3 id="32-esp32-版">§3.2 ESP32 版</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" title="List of tz database time zones - Wikipedia">地域別の標準時間と夏時間の適用ルール</a> はとても複雑です。ESP32 では NTP と RTC を同時に設定してくれる <a href="https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-time.c#L81-L113" title="arduino-esp32/cores/esp32/esp32-hal-time.c at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">configTzTime()</code></a> が用意されていて、<a href="https://www.google.com/search?q=POSIX%E3%82%BF%E3%82%A4%E3%83%A0%E3%82%BE%E3%83%BC%E3%83%B3%E5%BD%A2%E5%BC%8F%E3%81%A8%E3%81%AF%EF%BC%9F" title="POSIXタイムゾーン形式とは？ - Google検索">POSIX タイムゾーン形式の文字列</a> を指定すれば <a href="https://github.com/espressif/arduino-esp32/blob/master/libraries/ESP32/examples/Time/SimpleTime/SimpleTime.ino#L65-L67" title="arduino-esp32/libraries/ESP32/examples/Time/SimpleTime/SimpleTime.ino at master · espressif/arduino-esp32">良きに計らってくれる</a> ので、とっても便利です。</p>
+
+<h5 id="サンプルコード-3">サンプルコード</h5>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">esp_sntp</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">time</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="no">TIMEZONE_STRING</span>   <span class="s">"JST-9"</span>           <span class="c1">// UTCに対する時差（日本は UTC+09:00）</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">NTP_SYNC_INTERVAL</span> <span class="o">(</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000L</span><span class="no">U</span><span class="o">)</span> <span class="c1">// 3分毎に同期</span>
+
+<span class="c1">// NTP サーバーのリスト</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ntpServers</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="s">"ntp.nict.jp"</span><span class="o">,</span>
+  <span class="s">"ntp.jst.mfeed.ad.jp"</span><span class="o">,</span>
+  <span class="s">"pool.ntp.org"</span><span class="o">,</span>
+  <span class="s">"time.google.com"</span><span class="o">,</span>
+<span class="o">};</span>
+
+<span class="c1">// 更新完了フラグ、プロトタイプ宣言</span>
+<span class="kd">static</span> <span class="n">bool</span> <span class="kd">synchronized</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">syncNTP_cb</span><span class="o">(</span><span class="n">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">tv</span><span class="o">);</span>
+
+<span class="kt">void</span> <span class="nf">rtcInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// 更新周期と更新時のコールバック関数を登録</span>
+  <span class="n">sntp_set_sync_interval</span><span class="o">(</span><span class="no">NTP_SYNC_INTERVAL</span><span class="o">);</span>
+  <span class="n">sntp_set_time_sync_notification_cb</span><span class="o">(</span><span class="n">syncNTP_cb</span><span class="o">);</span>
+
+  <span class="c1">// 環境変数とNTPサーバーを設定</span>
+  <span class="n">configTzTime</span><span class="o">(</span><span class="no">TIMEZONE_STRING</span><span class="o">,</span> <span class="n">ntpServers</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">ntpServers</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">ntpServers</span><span class="o">[</span><span class="mi">2</span><span class="o">]);</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"Waiting for RTC to be synchronized with NTP server..."</span><span class="o">);</span>
+
+  <span class="c1">// RTCが更新されるまで待機</span>
+  <span class="n">struct</span> <span class="n">tm</span> <span class="n">timeInfo</span><span class="o">;</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">getLocalTime</span><span class="o">(&amp;</span><span class="n">timeInfo</span><span class="o">))</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Synchronization timeout."</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">static</span> <span class="kt">void</span> <span class="nf">syncNTP_cb</span><span class="o">(</span><span class="n">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">tv</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">sntp_get_sync_status</span><span class="o">()</span> <span class="o">!=</span> <span class="no">SNTP_SYNC_STATUS_RESET</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">struct</span> <span class="n">tm</span> <span class="n">timeInfo</span><span class="o">;</span>
+    <span class="n">localtime_r</span><span class="o">(&amp;</span><span class="n">tv</span><span class="o">-&gt;</span><span class="n">tv_sec</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">timeInfo</span><span class="o">);</span>
+
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"The RTC was just set to: "</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">timeInfo</span><span class="o">,</span> <span class="s">"%Y-%m-%d %H:%M:%S"</span><span class="o">);</span>
+    <span class="kd">synchronized</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// UNO R4 WiFi版との互換性のための関数</span>
+<span class="n">bool</span> <span class="nf">rtcSyncNTP</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">if</span> <span class="o">(</span><span class="kd">synchronized</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">synchronized</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 現在時刻を取得する</span>
+<span class="n">uint32_t</span> <span class="nf">rtcGetTime</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="nf">time</span><span class="o">(</span><span class="no">NULL</span><span class="o">);</span>  <span class="c1">// time_t (8バイト) --&gt; uint32_t (4バイト)</span>
+<span class="o">}</span></code></pre></figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>rtcSyncNTP() と syncNTP_cb() について</summary>
+
+
+<p>UNO R4 WiFi とは異なり、NTP サーバーとの同期は <code class="language-plaintext highlighter-rouge">loop()</code> とは異なるコンテキストで実行されます。以下は <a href="https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/freertos_stats.h#L21-L26" title="arduino-esp32/cores/esp32/freertos_stats.h at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">printRunningTasks(Serial);</code></a> の実行結果で、<a href="https://www.google.com/search?q=esp32%E3%81%AE%E3%82%BF%E3%82%B9%E3%82%AF%E5%90%8D%22tiT%22%E3%81%AF%E4%BD%95%E3%81%AE%E3%82%BF%E3%82%B9%E3%82%AF%EF%BC%9F" title="esp32のタスク名&quot;tiT&quot;は何のタスク？ - Google 検索">コア０のタスク <code class="language-plaintext highlighter-rouge">tiT</code> が関係している</a> ようです（残念ながらソースは発見できずでした）。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nl">Tasks:</span> <span class="mi">11</span><span class="o">,</span> <span class="nl">Runtime:</span> <span class="mi">600</span><span class="n">s</span><span class="o">,</span> <span class="nl">Period:</span> <span class="mi">600002711</span><span class="n">us</span>
+<span class="nc">Num</span>	            <span class="nc">Name</span>	<span class="nc">Load</span>	<span class="nc">Prio</span>	 <span class="nc">Free</span>	<span class="nc">Core</span>	<span class="nc">State</span>
+  <span class="mi">8</span>	        <span class="n">loopTask</span>	  <span class="mi">4</span><span class="o">%</span>	   <span class="mi">1</span>	 <span class="mi">6396</span>	   <span class="mi">1</span>	<span class="nc">Running</span>
+  <span class="mi">5</span>	           <span class="no">IDLE0</span>	  <span class="mi">5</span><span class="o">%</span>	   <span class="mi">0</span>	  <span class="mi">464</span>	   <span class="mi">0</span>	<span class="nc">Ready</span>
+  <span class="mi">6</span>	           <span class="no">IDLE1</span>	  <span class="mi">0</span><span class="o">%</span>	   <span class="mi">0</span>	  <span class="mi">568</span>	   <span class="mi">1</span>	<span class="nc">Ready</span>
+ <span class="mi">10</span>	             <span class="n">tiT</span>	  <span class="mi">0</span><span class="o">%</span>	  <span class="mi">18</span>	 <span class="mi">2828</span>	   <span class="mi">0</span>	<span class="nc">Blocked</span>
+  <span class="mi">7</span>	         <span class="nc">Tmr</span> <span class="nc">Svc</span>	  <span class="mi">0</span><span class="o">%</span>	   <span class="mi">1</span>	 <span class="mi">3596</span>	   <span class="o">*</span>	<span class="nc">Blocked</span>
+  <span class="mi">2</span>	            <span class="n">ipc1</span>	  <span class="mi">0</span><span class="o">%</span>	  <span class="mi">24</span>	  <span class="mi">480</span>	   <span class="mi">1</span>	<span class="nc">Suspended</span>
+ <span class="mi">11</span>	         <span class="n">sys_evt</span>	  <span class="mi">0</span><span class="o">%</span>	  <span class="mi">20</span>	 <span class="mi">2900</span>	   <span class="mi">0</span>	<span class="nc">Blocked</span>
+ <span class="mi">12</span>	  <span class="n">arduino_events</span>	  <span class="mi">0</span><span class="o">%</span>	  <span class="mi">19</span>	 <span class="mi">3152</span>	   <span class="mi">1</span>	<span class="nc">Blocked</span>
+  <span class="mi">3</span>	       <span class="n">esp_timer</span>	  <span class="mi">0</span><span class="o">%</span>	  <span class="mi">22</span>	 <span class="mi">7908</span>	   <span class="mi">0</span>	<span class="nc">Suspended</span>
+ <span class="mi">13</span>	            <span class="n">wifi</span>	  <span class="mi">1</span><span class="o">%</span>	  <span class="mi">23</span>	 <span class="mi">4292</span>	   <span class="mi">0</span>	<span class="nc">Blocked</span>
+  <span class="mi">1</span>	            <span class="n">ipc0</span>	  <span class="mi">0</span><span class="o">%</span>	  <span class="mi">24</span>	  <span class="mi">484</span>	   <span class="mi">0</span>	<span class="nc">Suspended</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<h5 id="出典-3">出典</h5>
+<ul>
+  <li><a href="https://github.com/espressif/arduino-esp32/blob/master/cores/esp32/esp32-hal-time.c#L81-L113" title="arduino-esp32/cores/esp32/esp32-hal-time.c at master · espressif/arduino-esp32">espressif/arduino-esp32/cores/esp32/esp32-hal-time.c</a><br />
+<code class="language-plaintext highlighter-rouge">configTime()</code>、<code class="language-plaintext highlighter-rouge">configTzTime()</code>、<code class="language-plaintext highlighter-rouge">getLocalTime()</code> が定義されています。</li>
+  <li><a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Time/SimpleTime" title="arduino-esp32/libraries/ESP32/examples/Time/SimpleTime at master · espressif/arduino-esp32">espressif/arduino-esp32/libraries/ESP32/examples/Time/SimpleTime</a><br />
+<code class="language-plaintext highlighter-rouge">configTime()</code> および <code class="language-plaintext highlighter-rouge">configTzTime()</code> を使った例題です。</li>
+  <li><a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/system_time.html" title="System Time - ESP32 -  &mdash; ESP-IDF Programming Guide latest documentation">System Time - ESP-IDF Programming Guide</a><br />
+RTC や SNTP（Simple Network Time Protocol）に関するドキュメントです。</li>
+  <li><a href="https://github.com/nayarsystems/posix_tz_db" title="nayarsystems/posix_tz_db: Generates POSIX timezones strings">POSIX Timezone Database Generator</a><br />
+Linux 系のシステム情報から POSIX タイムゾーン形式の文字列を抽出する python スクリプトと実行結果の csv ファイルがホストされています。</li>
+</ul>
+
+<h2 id="4-http-over-ssltls-とルートca証明書">§4. HTTP over SSL/TLS とルートCA証明書</h2>
+
+<p>いよいよ REST API の本体です。まずは UNO R4 WiFi と ESP32 で使えるライブラリです。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>UNO R4 WiFi</th>
+      <th>ESP32</th>
+      <th>機能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://github.com/arduino-libraries/ArduinoHttpClient" title="arduino-libraries/ArduinoHttpClient: Arduino HTTP Client library"><code class="language-plaintext highlighter-rouge">ArduinoHttpClient</code></a></td>
+      <td><a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/HTTPClient" title="arduino-esp32/libraries/HTTPClient at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">HTTPClient</code></a></td>
+      <td>- 下記ライブラリのラッパーとして機能<br />- 応答のヘッダとボディを分けてくれる</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/libraries/WiFiS3/src/WiFiSSLClient.h" title="ArduinoCore-renesas/libraries/WiFiS3/src/WiFiSSLClient.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">WiFiSSLClient</code></a></td>
+      <td><a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/NetworkClientSecure" title="arduino-esp32/libraries/NetworkClientSecure at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">NetworkClientSecure</code></a></td>
+      <td>HTTPS 用ライブラリ</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/libraries/WiFiS3/src/WiFiClient.h" title="ArduinoCore-renesas/libraries/WiFiS3/src/WiFiClient.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">WiFiClient</code></a></td>
+      <td><a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/Network" title="arduino-esp32/libraries/Network at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">NetworkClient</code></a></td>
+      <td>HTTP 用ライブラリ</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>HTTP はヘッダーファイルとポート番号を変えるだけですし、今日日使わないので省略します。</p>
+
+<p>サンプルコードには TLS による暗号化に加え、ルート CA 証明書（<strong>ここではサーバー証明書の検証のためにクライアントが保有する証明書を指します</strong>）を導入します。市販品の <a href="https://www.google.com/search?q=WiFi+%E3%82%AB%E3%83%A1%E3%83%A9+%E8%84%86%E5%BC%B1%E6%80%A7" title="Google 検索">WiFi カメラ脆弱性</a> と違い、趣味レベルの Arduino アプリを狙うハッカーが居るとは思えませんが、意識が大事ということで… <span class="emoji">😅</span></p>
+
+<p>（あくまで可能性のおハナシですが… <a href="https://github.com/arduino-libraries/Arduino_JSON/pull/74" title="Update to cJSON 1.7.19 by embedded-kiddie · Pull Request #74 · arduino-libraries/Arduino_JSON">Arduino_JSON に含まれる cJson の脆弱性</a> が狙われ、<a href="https://ja.wikipedia.org/wiki/%E4%B8%AD%E9%96%93%E8%80%85%E6%94%BB%E6%92%83" title="中間者攻撃 - Wikipedia">中間者攻撃</a> で踏み台にされるシナリオも!? <span class="emoji">😜</span>）。</p>
+
+<h3 id="41-ラッパークラスを使用しないバージョン">§4.1 ラッパークラスを使用しないバージョン</h3>
+
+<p><code class="language-plaintext highlighter-rouge">readResponse()</code> は、次回で JSON データの解析処理に置き換え予定ですが、今回はシリアルモニターに出力するだけです。</p>
+
+<p><code class="language-plaintext highlighter-rouge">howsmyssl_root_ca.h</code> は <code class="language-plaintext highlighter-rouge">www.howsmyssl.com</code> のルート CA 証明書です。</p>
+
+<details>
+<summary>howsmyssl_root_ca.h</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// ISRG Root X1 (Downloaded by Safari, Firefox)</span>
+<span class="c1">// openssl x509 -inform der -in ISRG\ Root\ X1.cer -out ISRG\ Root\ X1.pem</span>
+<span class="c1">// NotBefore: Jun  4 11:04:38 2015 GMT; NotAfter: Jun  4 11:04:38 2035 GMT</span>
+<span class="no">R</span><span class="s">"literal(
+-----BEGIN CERTIFICATE-----
+MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw
+TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMTUwNjA0MTEwNDM4
+WhcNMzUwNjA0MTEwNDM4WjBPMQswCQYDVQQGEwJVUzEpMCcGA1UEChMgSW50ZXJu
+ZXQgU2VjdXJpdHkgUmVzZWFyY2ggR3JvdXAxFTATBgNVBAMTDElTUkcgUm9vdCBY
+MTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAK3oJHP0FDfzm54rVygc
+h77ct984kIxuPOZXoHj3dcKi/vVqbvYATyjb3miGbESTtrFj/RQSa78f0uoxmyF+
+0TM8ukj13Xnfs7j/EvEhmkvBioZxaUpmZmyPfjxwv60pIgbz5MDmgK7iS4+3mX6U
+A5/TR5d8mUgjU+g4rk8Kb4Mu0UlXjIB0ttov0DiNewNwIRt18jA8+o+u3dpjq+sW
+T8KOEUt+zwvo/7V3LvSye0rgTBIlDHCNAymg4VMk7BPZ7hm/ELNKjD+Jo2FR3qyH
+B5T0Y3HsLuJvW5iB4YlcNHlsdu87kGJ55tukmi8mxdAQ4Q7e2RCOFvu396j3x+UC
+B5iPNgiV5+I3lg02dZ77DnKxHZu8A/lJBdiB3QW0KtZB6awBdpUKD9jf1b0SHzUv
+KBds0pjBqAlkd25HN7rOrFleaJ1/ctaJxQZBKT5ZPt0m9STJEadao0xAH0ahmbWn
+OlFuhjuefXKnEgV4We0+UXgVCwOPjdAvBbI+e0ocS3MFEvzG6uBQE3xDk3SzynTn
+jh8BCNAw1FtxNrQHusEwMFxIt4I7mKZ9YIqioymCzLq9gwQbooMDQaHWBfEbwrbw
+qHyGO0aoSCqI3Haadr8faqU9GY/rOPNk3sgrDQoo//fb4hVC1CLQJ13hef4Y53CI
+rU7m2Ys6xt0nUW7/vGT1M0NPAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNV
+HRMBAf8EBTADAQH/MB0GA1UdDgQWBBR5tFnme7bl5AFzgAiIyBpY9umbbjANBgkq
+hkiG9w0BAQsFAAOCAgEAVR9YqbyyqFDQDLHYGmkgJykIrGF1XIpu+ILlaS/V9lZL
+ubhzEFnTIZd+50xx+7LSYK05qAvqFyFWhfFQDlnrzuBZ6brJFe+GnY+EgPbk6ZGQ
+3BebYhtF8GaV0nxvwuo77x/Py9auJ/GpsMiu/X1+mvoiBOv/2X/qkSsisRcOj/KK
+NFtY2PwByVS5uCbMiogziUwthDyC3+6WVwW6LLv3xLfHTjuCvjHIInNzktHCgKQ5
+ORAzI4JMPJ+GslWYHb4phowim57iaztXOoJwTdwJx4nLCgdNbOhdjsnvzqvHu7Ur
+TkXWStAmzOVyyghqpZXjFaH3pO3JLF+l+/+sKAIuvtd7u+Nxe5AW0wdeRlN8NwdC
+jNPElpzVmbUq4JUagEiuTDkHzsxHpFKVK7q4+63SM1N95R1NbdWhscdCb+ZAJzVc
+oyi3B43njTOQ5yOf+1CceWxG1bQVs5ZufpsMljq4Ui0/1lvh+wjChP4kqKOJ2qxq
+4RgqsahDYVvTH9w7jXbyLeiNdd8XM2w9U/t7y0Ff/9yi0GE44Za4rF2LN9d11TPA
+mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
+emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
+-----END CERTIFICATE-----
+)literal"</span><span class="o">;</span></code></pre></figure>
+
+
+</details>
+
+<p>サンプルコードは、ヘッダーファイルと変数を差し替えるだけで、残りは UNO R4 WiFi 版と ESP32 版とで同じコードが動きます（サーバー証明書の検証を行わない場合を除く）。</p>
+
+<h5 id="uno-r4-wifiesp32-共通のサンプルコード">UNO R4 WiFi、ESP32 共通のサンプルコード</h5>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="k">if</span> <span class="n">defined</span><span class="o">(</span><span class="no">ARDUINO_UNOR4_WIFI</span><span class="o">)</span>
+  <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFiSSLClient</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+  <span class="nc">WiFiSSLClient</span> <span class="n">client</span><span class="o">;</span>
+<span class="err">#</span><span class="n">elif</span> <span class="nf">defined</span><span class="o">(</span><span class="no">ESP32</span><span class="o">)</span>
+  <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">NetworkClientSecure</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+  <span class="nc">NetworkClientSecure</span> <span class="n">client</span><span class="o">;</span>
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="no">PORT</span>  <span class="mi">443</span> <span class="c1">// HTTPS用TCPポート</span>
+
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">host</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"www.howsmyssl.com"</span><span class="o">;</span> <span class="c1">// サーバーのホスト／ドメイン</span>
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">path</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"/a/check"</span><span class="o">;</span>          <span class="c1">// サーバーのパス</span>
+
+<span class="c1">// www.howsmyssl.com のルートCA証明書</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">root_ca</span> <span class="o">=</span> 
+<span class="err">#</span><span class="n">include</span> <span class="s">"howsmyssl_root_ca.h"</span>
+<span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">httpInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// ルートCA証明書の設定</span>
+  <span class="c1">// サーバー証明書の検証を行わない場合は次の通り</span>
+  <span class="c1">// UNO R4 WiFi: root_ca を nullptr にする、またはコメントアウト</span>
+  <span class="c1">// ESP32: setInsecure() に差し替え</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">setCACert</span><span class="o">(</span><span class="n">root_ca</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="n">bool</span> <span class="nf">httpRequest</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"\nConnecting to "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">host</span><span class="o">)</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="no">PORT</span><span class="o">)</span> <span class="o">+</span> <span class="s">"..."</span><span class="o">);</span>
+
+  <span class="c1">// サーバーに接続</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">client</span><span class="o">.</span><span class="na">connect</span><span class="o">(</span><span class="n">host</span><span class="o">,</span> <span class="no">PORT</span><span class="o">))</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Connection failed!"</span><span class="o">);</span>
+    <span class="n">client</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"connected.\nSend HTTP request..."</span><span class="o">);</span>
+
+  <span class="c1">// HTTP リクエストを送信（行末に "\r\n" が付加される）</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">String</span><span class="o">(</span><span class="s">"GET "</span><span class="o">)</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s">" HTTP/1.1"</span><span class="o">);</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">String</span><span class="o">(</span><span class="s">"Host: "</span><span class="o">)</span> <span class="o">+</span> <span class="n">host</span><span class="o">);</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Connection: close"</span><span class="o">);</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+
+  <span class="c1">// レスポンスヘッダを受信</span>
+  <span class="n">bool</span> <span class="n">detected</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">connected</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">header</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">readStringUntil</span><span class="o">(</span><span class="sc">'\n'</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">header</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">header</span> <span class="o">==</span> <span class="s">"\r"</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 空の "\r\n" を受信した？</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"End of headers"</span><span class="o">);</span>
+      <span class="n">detected</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+      <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="c1">// ヘッダが受信出来なかった？</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">detected</span> <span class="o">||</span> <span class="o">!</span><span class="n">client</span><span class="o">.</span><span class="na">available</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">client</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Invalid response."</span><span class="o">);</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="k">return</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// レスポンスボディの受信へ</span>
+<span class="o">}</span>
+
+<span class="c1">// HTTP レスポンスボディを受信する</span>
+<span class="n">bool</span> <span class="nf">readResponse</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">available</span><span class="o">())</span> <span class="o">{</span>
+    <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">read</span><span class="o">();</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">client</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"\ndone."</span><span class="o">);</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>JSON データの末尾に含まれる診断結果からは、対応している暗号化スイート（暗号技術の詰め合わせ）こそ違いますが、両ボードとも TLS 1.2 に対応していることが分かります。</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+  </span><span class="nl">"tls_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TLS 1.2"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"rating"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Probably Okay"</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>ルート CA 証明書の取得方法</summary>
+
+
+<h5 id="openssl-コマンドを使う方法推奨">openssl コマンドを使う方法（推奨）</h5>
+
+<p>環境に合わせた openssl のインストール方法は、各自調べてください。コンソールで下記コマンドを打ち込み、保存したファイルをテキストエディタで開きます。</p>
+
+<ul>
+  <li><strong>Linux、MacOS</strong></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">openssl s_client <span class="nt">-connect</span> target-server.com:443 <span class="nt">-showcerts</span> &lt; /dev/null <span class="o">&gt;</span> cert_chain.txt</code></pre></figure>
+
+<ul>
+  <li><strong>Windows</strong></li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">openssl s_client <span class="nt">-connect</span> target-server.com:443 <span class="nt">-showcerts</span> &lt; nul <span class="o">&gt;</span> cert_chain.txt</code></pre></figure>
+
+<figure class="float-left">
+  <a href="/images/2026/05-08/cert_chain.jpg" title="openweathermap.org の例" data-lightbox="image">
+    <img src="/images/2026/05-08/cert_chain-small.jpg" alt="openweathermap.org の例" width="600" height="350" />
+    <figcaption>openweathermap.org の例</figcaption>
+  </a>
+</figure>
+
+<p>上から順に <code class="language-plaintext highlighter-rouge">-----BEGIN CERTIFICATE-----</code>〜 <code class="language-plaintext highlighter-rouge">-----END CERTIFICATE-----</code> で囲まれ Base64 でエンコーディングされたブロックがチェーンされているので、一番最後のルートCA証明書のブロックをコピーして使います。また <span class="strong">有効期限もちゃんと管理しましょう！</span></p>
+
+<h5 id="ブラウザからダウンロードする方法">ブラウザからダウンロードする方法</h5>
+<p>証明書を取得するサイトを開き、URL の先頭についた「設定」や「鍵」、「セキュリティ」のアイコンから証明書をダウンロードすることができます。</p>
+
+<figure class="float-left">
+  <a href="/images/2026/05-08/cert-safari.jpg" title="Safari の例" data-lightbox="image">
+    <img src="/images/2026/05-08/cert-safari-small.jpg" alt="Safari の例" width="575" height="360" />
+    <figcaption>Safari の例</figcaption>
+  </a>
+</figure>
+
+<p>Safari の場合は、証明書のアイコンをドラッグ＆ドロップでデスクトップなどに保存したのち、次のコマンドで DER（Distinguished Encoding Rules）形式の <code class="language-plaintext highlighter-rouge">.cer</code> ファイルをプレーンなテキストの PEM 形式に変換します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">openssl x509 <span class="nt">-inform</span> der <span class="nt">-in</span> certificate.cer <span class="nt">-out</span> certificate.pem</code></pre></figure>
+
+<p>また Google Chrome でダウンロードした証明書では認証されない場合があったので要注意です。Google では独自のルート認証局（Google Trust Services）を運用していて、それが原因かと思われます。</p>
+
+</details>
+
+</div>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>Base64 でエンコード済みのデータから有効期限を抽出する方法</summary>
+
+
+<p><code class="language-plaintext highlighter-rouge">-----BEGIN CERTIFICATE-----</code> 〜 <code class="language-plaintext highlighter-rouge">-----END CERTIFICATE-----</code> のブロックから有効期限を抽出するには、次のコマンドで標準入力から同ブロックを貼り付けます。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">openssl x509 <span class="nt">-noout</span> <span class="nt">-dates</span>
+<span class="nt">-----BEGIN</span> CERTIFICATE-----
+<span class="o">(</span>ここに Base64 データを貼り付け<span class="o">)</span>
+<span class="nt">-----END</span> CERTIFICATE-----
+<span class="o">(</span>最後にリターンキーまたは Ctrl+D で入力終了<span class="o">)</span></code></pre></figure>
+
+<p>あるいは、ヒアドキュメントを使った方が分かりやすいでしょうか。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">openssl x509 <span class="nt">-text</span> <span class="nt">-noout</span> <span class="o">&lt;&lt;</span> <span class="sh">'</span><span class="no">EOF</span><span class="sh">'
+-----BEGIN CERTIFICATE-----
+(ここにBase64データ)
+-----END CERTIFICATE-----
+EOF</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<h5 id="出典-4">出典</h5>
+<ul>
+  <li><a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/libraries/WiFiS3/examples/WiFiWebClientSSL" title="ArduinoCore-renesas/libraries/WiFiS3/examples/WiFiWebClientSSL at main · arduino/ArduinoCore-renesas">WiFiWebClientSSL</a><br />
+Arduino 系ボード用の例題です。証明書の類は使われていません。</li>
+  <li><a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/NetworkClientSecure/examples/WiFiClientSecure" title="arduino-esp32/libraries/NetworkClientSecure/examples/WiFiClientSecure at master · espressif/arduino-esp32">WiFiClientSecure</a><br />
+ESP32 用の例題ですが、埋め込まれた証明書が有効期限（2027年3月12日）内であるにもかかわらず、なぜか接続に失敗します。また証明書を使わない <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/NetworkClientSecure/examples/WiFiClientInsecure" title="arduino-esp32/libraries/NetworkClientSecure/examples/WiFiClientInsecure at master · espressif/arduino-esp32">WiFiClientInsecure</a>（不安全な WiFi クライアント）もありますが、趣味レベルを超える場合は <a href="https://github.com/espressif/arduino-esp32/blob/master/libraries/NetworkClientSecure/examples/WiFiClientInsecure/WiFiClientInsecure.ino#L5-L11" title="arduino-esp32/libraries/NetworkClientSecure/examples/WiFiClientInsecure/WiFiClientInsecure.ino at master · espressif/arduino-esp32">注意喚起のコメント</a> を一読すべきでしょう。</li>
+</ul>
+
+<h3 id="42-ラッパークラスを使用するバージョン">§4.2 ラッパークラスを使用するバージョン</h3>
+
+<p>こちらは UNO R4 WiFi 版と ESP32 版とで、クラスライブラリの実装が結構異なります。</p>
+
+<h4 id="arduinohttpclient-uno-r4-wifi-版">ArduinoHttpClient (UNO R4 Wifi) 版</h4>
+
+<figure class="float-left">
+  <a href="/images/2026/05-08/ArduinoHttpClient.jpg" title="ArduinoHttpClient ライブラリ" data-lightbox="image">
+    <img src="/images/2026/05-08/ArduinoHttpClient.jpg" alt="ArduinoHttpClient ライブラリ" width="400" height="350" />
+    <figcaption>ArduinoHttpClient ライブラリ</figcaption>
+  </a>
+</figure>
+
+<p>IDE のライブラリマネージャーから <a href="https://github.com/arduino-libraries/ArduinoHttpClient" title="arduino-libraries/ArduinoHttpClient: Arduino HTTP Client library"><code class="language-plaintext highlighter-rouge">ArduinoHttpClient</code></a> をインストールし、<a href="#41-ラッパークラスを使用しないバージョン">§4.1 ラッパークラスを使用しないバージョン</a> を置き換えます。</p>
+
+<p>ライブラリマネージャのアイコンには「<span class="strong">EXPERIMENTAL</span>」の表記が残っていて、放置されている感がありますが、Arduino 謹製のボードに対応しているため、Arduino Cloud との連携など、ソコソコの需要があるのだと思います。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>サンプルコード</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFiSSLClient</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="nc">WiFiSSLClient</span> <span class="n">client</span><span class="o">;</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="no">PORT</span>  <span class="mi">443</span> <span class="c1">// HTTPS用TCPポート</span>
+
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">host</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"www.howsmyssl.com"</span><span class="o">;</span> <span class="c1">// サーバーのホスト／ドメイン</span>
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">path</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"/a/check"</span><span class="o">;</span>          <span class="c1">// サーバーのパス</span>
+
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">HttpClient</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="nc">HttpClient</span> <span class="nf">http</span><span class="o">(</span><span class="n">client</span><span class="o">,</span> <span class="n">host</span><span class="o">,</span> <span class="no">PORT</span><span class="o">);</span>
+
+<span class="c1">// www.howsmyssl.com のルートCA証明書</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">root_ca</span> <span class="o">=</span> 
+<span class="err">#</span><span class="n">include</span> <span class="s">"howsmyssl_root_ca.h"</span>
+<span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">httpInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// ルートCA証明書をセット</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">setCACert</span><span class="o">(</span><span class="n">root_ca</span><span class="o">);</span> <span class="c1">// スキップするには nullptr を渡すかコメントアウトする</span>
+<span class="o">}</span>
+
+<span class="n">bool</span> <span class="nf">httpRequest</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Send HTTP request to "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">host</span><span class="o">)</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="no">PORT</span><span class="o">)</span> <span class="o">+</span> <span class="s">"..."</span><span class="o">);</span>
+
+  <span class="c1">// HTTP リクエストを送信</span>
+  <span class="kt">int</span> <span class="n">status</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+
+  <span class="c1">// https://github.com/arduino-libraries/ArduinoHttpClient/blob/master/src/HttpClient.h#L12-L24</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"GET status: "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">status</span><span class="o">));</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="n">status</span> <span class="o">==</span> <span class="no">HTTP_SUCCESS</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// HTTP ステータスコードを取得する</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="na">responseStatusCode</span><span class="o">();</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"HTTP status: "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">status</span><span class="o">));</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="mi">200</span> <span class="o">&lt;=</span> <span class="n">status</span> <span class="o">&amp;&amp;</span> <span class="n">status</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// レスポンスヘッダを受信</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">http</span><span class="o">.</span><span class="na">skipResponseHeaders</span><span class="o">()</span> <span class="o">==</span> <span class="no">HTTP_SUCCESS</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// レスポンスボディの受信へ</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="n">http</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Invalid response."</span><span class="o">);</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// HTTP レスポンスボディを受信する</span>
+<span class="n">bool</span> <span class="nf">readResponse</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">available</span><span class="o">())</span> <span class="o">{</span>
+    <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">read</span><span class="o">();</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">http</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"\ndone."</span><span class="o">);</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<h5 id="出典-5">出典</h5>
+<ul>
+  <li><a href="https://github.com/arduino-libraries/ArduinoHttpClient/tree/master/examples/SimpleGet" title="ArduinoHttpClient/examples/SimpleGet at master · arduino-libraries/ArduinoHttpClient">SimpleGet</a><br />
+シンプル過ぎる例題です。そもそも <a href="https://github.com/arduino-libraries/ArduinoHttpClient/tree/master/examples" title="ArduinoHttpClient/examples at master · arduino-libraries/ArduinoHttpClient">examples</a> には TLS を使った例題がありません。</li>
+</ul>
+
+<h4 id="httpclient-esp32-版">HTTPClient (ESP32) 版</h4>
+
+<p>レスポンスのヘッダセクションを気にする必要がなく、UNO R4 WiFi 版よりもシンプルです。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>サンプルコード</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">NetworkClientSecure</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="nc">NetworkClientSecure</span> <span class="n">client</span><span class="o">;</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="no">PORT</span>  <span class="mi">443</span> <span class="c1">// HTTPS用TCPポート</span>
+
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">host</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"www.howsmyssl.com"</span><span class="o">;</span> <span class="c1">// サーバーのホスト／ドメイン</span>
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">path</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"/a/check"</span><span class="o">;</span>          <span class="c1">// サーバーのパス</span>
+
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">HTTPClient</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="nc">HTTPClient</span> <span class="n">http</span><span class="o">;</span>
+
+<span class="c1">// www.howsmyssl.com のルートCA証明書</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">root_ca</span> <span class="o">=</span> 
+<span class="err">#</span><span class="n">include</span> <span class="s">"howsmyssl_root_ca.h"</span>
+<span class="o">;</span>
+
+<span class="kt">void</span> <span class="nf">httpInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// ルートCA証明書をセット</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">setCACert</span><span class="o">(</span><span class="n">root_ca</span><span class="o">);</span> <span class="c1">// スキップするには setInsecure() に差し替える</span>
+<span class="o">}</span>
+
+<span class="n">bool</span> <span class="nf">httpRequest</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Send HTTP request to "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">host</span><span class="o">)</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="no">PORT</span><span class="o">)</span> <span class="o">+</span> <span class="s">"..."</span><span class="o">);</span>
+
+  <span class="c1">// HTTP リクエストを送信</span>
+  <span class="nc">String</span> <span class="n">scheme</span> <span class="o">=</span> <span class="s">"https://"</span><span class="o">;</span>
+  <span class="n">http</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="n">client</span><span class="o">,</span> <span class="n">scheme</span> <span class="o">+</span> <span class="n">host</span> <span class="o">+</span> <span class="n">path</span><span class="o">);</span>
+  <span class="kt">int</span> <span class="n">status</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="na">GET</span><span class="o">();</span>
+
+  <span class="c1">// https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h#L46-L123</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"HTTP status: %d %s\n"</span><span class="o">,</span> <span class="n">status</span><span class="o">,</span> <span class="n">http</span><span class="o">.</span><span class="na">errorToString</span><span class="o">(</span><span class="n">status</span><span class="o">).</span><span class="na">c_str</span><span class="o">());</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="mi">200</span> <span class="o">&lt;=</span> <span class="n">status</span> <span class="o">&amp;&amp;</span> <span class="n">status</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// レスポンスボディの受信へ</span>
+  <span class="o">}</span>
+
+  <span class="n">http</span><span class="o">.</span><span class="na">end</span><span class="o">();</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Invalid response."</span><span class="o">);</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// HTTP レスポンスボディを受信する</span>
+<span class="n">bool</span> <span class="nf">readResponse</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">available</span><span class="o">())</span> <span class="o">{</span>
+    <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">read</span><span class="o">();</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="n">http</span><span class="o">.</span><span class="na">end</span><span class="o">();</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"\ndone."</span><span class="o">);</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<h5 id="出典-6">出典</h5>
+<ul>
+  <li><a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/HTTPClient/examples/BasicHttpsClient" title="arduino-esp32/libraries/HTTPClient/examples/BasicHttpsClient at master · espressif/arduino-esp32">BasicHttpsClient</a><br />
+<a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/NetworkClientSecure" title="arduino-esp32/libraries/NetworkClientSecure at master · espressif/arduino-esp32"><code class="language-plaintext highlighter-rouge">NetworkClientSecure</code></a> を使った例題です。ヘッダのセクションからステータスコードや特定のヘッダを抽出する機能があるので、アプリによっては便利かもです。</li>
+</ul>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>今回は、まずメモリの豊富な ESP32 で基本動作を確認し、その後 UNO R4 の RAM と Flash に収まるようマイグレーションしてきました。本記事でも欲張って両プラットフォームのコードを紹介したので分かり難かったと思いますが、どうぞ、ご勘弁を…。</p>
+
+<p>今回提示したコードには <code class="language-plaintext highlighter-rouge">Serial.print()</code> に <code class="language-plaintext highlighter-rouge">String</code> を多用していますが、RAM の厳しい UNO R4 では避ける方が無難です。</p>
+
+<p>という事で、次回は RAM の、第３回は Flash の省メモリ対策を紹介したいと思います。</p>
+
+<p>まだ途中ですが、<a href="https://github.com/embedded-kiddie/ArduinoOpenWeather" title="embedded-kiddie/ArduinoOpenWeather: Yet another OpenWeatherMap app for UNO R4 WiFi and ESP32">アプリは GitHub にも上げた</a> ので、興味があれば覗いてみてください。</p>
+
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2026/03/15/" title="前の記事：技適付きCYDの入手は絶望的!? - ならばELECROW ESP32 CrowPanel 2.8インチがお勧め">← 技適付きCYDの入手は絶望的!? - ならばELECROW ESP32 CrowPanel 2.8インチがお勧め</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2026/05/08/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2026/05/08/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/05/08/";this.page.identifier="/2026/05/08/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
