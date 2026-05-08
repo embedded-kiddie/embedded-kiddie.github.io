@@ -606,7 +606,7 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 <span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">path</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"/a/check"</span><span class="o">;</span>          <span class="c1">// サーバーのパス</span>
 
 <span class="c1">// www.howsmyssl.com のルートCA証明書</span>
-<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">root_ca</span> <span class="o">=</span> 
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">root_ca</span><span class="o">[]</span> <span class="o">=</span> 
 <span class="err">#</span><span class="n">include</span> <span class="s">"howsmyssl_root_ca.h"</span>
 <span class="o">;</span>
 
@@ -952,9 +952,7 @@ ESP32 用の例題ですが、埋め込まれた証明書が有効期限（2027�
       <a href="/" title="Home に戻る">Home に戻る</a>
     </p>    
   </div>
-<div id="disqus_thread"></div>
-  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/05/08/",this.page.identifier="/2026/05/08/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
-  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2026/05/08/" hidden></a>
+<div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2026/05/08/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2026/05/08/" hidden></a>
 </article>
 
       </div>
