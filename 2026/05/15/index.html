@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="OpenWather for ESP32" />
+<meta property="og:description" content="OpenWather for ESP32" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2026/05/15/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2026/05/15/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-05-15T11:00:56+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2026-05-15T11:00:56+09:00","datePublished":"2026-05-15T11:00:56+09:00","description":"OpenWather for ESP32","headline":"UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2026/05/15/"},"url":"https://embedded-kiddie.github.io/2026/05/15/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:0.25em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2026-05-15T11:00:56+09:00" itemprop="datePublished">May 15, 2026
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <figure class="flex">
+  <div>
+    <img src="/images/2026/05-15/OpenWeather_ESP32.jpg" alt="OpenWather for ESP32" width="1200" height="900" />
+    <figcaption>OpenWather for ESP32</figcaption>
+  </div>
+</figure>
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>Arduino UNO R4 WiFi でも動作する <a href="https://github.com/embedded-kiddie/ArduinoOpenWeather" title="embedded-kiddie/ArduinoOpenWeather: Yet another OpenWeather App for UNO R4 WiFi and ESP32">ArduinoOpenWeather</a> の制作過程で得られた知見を共有する３部作の第２回目です。</p>
+
+<ol>
+  <li><a href="/2026/05/08/" title="UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題｜Embedded Kiddie"><span class="strong">RTC、NTP、HTTP、TLS、ルートCA認証の REST API 用サンプルコード</span></a></li>
+  <li><span class="strong">ArduinoJson で大きな JSON データを少ない RAM で解析する方法</span>（今回）</li>
+  <li><span class="strong">アイコン画像のデータを UNO R4 の Flash 容量内に収める方法</span></li>
+</ol>
+
+<p>UNO R4 WiFi といった RAM が限られた環境では、<a href="https://openweathermap.org/api/forecast5?collection=current_forecast" title="5 day weather forecast">５日間の天気予報 API</a> のような大きな JSON を解析（＝Deserialize、逆シリアライズ）する際、メモリ不足の問題に直面します。</p>
+
+<p>本記事では <a href="https://arduinojson.org/" title="ArduinoJson: Efficient JSON serialization for embedded C++">ArduinoJson 公式ページ</a> にホストされた次の３つを元に、「設計」と「実装」の側面からポイントと具体例を示し、大きな JSON を効率的に扱う方法の解説を試みます。</p>
+
+<ul>
+  <li><a href="https://arduinojson.org/v7/assistant/" title="ArduinoJson Assistant 7">ArduinoJson Assistant</a><br />
+実行時に必要なメモリ量とその余裕の度合いを見積もるツールです。</li>
+  <li><a href="https://arduinojson.org/v7/how-to/deserialize-a-very-large-document/" title="How to deserialize a very large document?｜ArduinoJson 7">How to deserialize a very large document?</a><br />
+不要なデータを読み飛ばすフィルタとバッファリングが不要な <a href="https://docs.arduino.cc/language-reference/en/functions/communication/stream/" title="Stream｜Arduino documentation">Stream</a> の使い方です。</li>
+  <li><a href="https://arduinojson.org/v7/how-to/reduce-memory-usage/" title="How to reduce memory usage?｜ArduinoJson 7">How to reduce memory usage?</a><br />
+省メモリに役立つ幾つかのテクニックが解説されています。</li>
+</ul>
+
+<p>本記事が前提とするプラットフォームとバージョンは次の通りです。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>バージョン</th>
+      <th>RA4M1</th>
+      <th>ESP32</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>プラットフォーム</td>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">Arduino UNO R4 Boards by Arduino</a> 1.5.3</td>
+      <td><a href="https://github.com/espressif/arduino-esp32" title="espressif/arduino-esp32: Arduino core for the ESP32 family of SoCs">esp32 by Espressif Systems</a> 3.3.8</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="arduinojson-のバージョンについて">ArduinoJson のバージョンについて</h3>
+
+<p>本記事では ArduinoJson 7 を対象としています。</p>
+
+<p>“<a href="https://arduinojson.org/v7/how-to/upgrade-from-v6/" title="How to upgrade from ArduinoJson 6 to 7">How to upgrade from ArduinoJson 6 to 7</a>” に書かれたバージョン 6 からの変化点の１つに、<a href="https://arduinojson.org/v6/api/staticjsondocument/" title="StaticJsonDocument｜ArduinoJson 6"><code class="language-plaintext highlighter-rouge">StaticJsonDocument</code></a> と <a href="https://arduinojson.org/v6/api/dynamicjsondocument/" title="DynamicJsonDocument｜ArduinoJson 6"><code class="language-plaintext highlighter-rouge">DynamicJsonDocument</code></a> の <a href="https://arduinojson.org/v7/api/jsondocument/" title="JsonDocument｜ArduinoJson 7"><code class="language-plaintext highlighter-rouge">JsonDocument</code></a> への統合があります。即ち バージョン 7 では、予めメモリプールを指定する必要がなく（あるいは指定することができず）、必要なメモリは常にヒープ領域から割り当てられます。</p>
+
+<p>さらにこの統合により、<code class="language-plaintext highlighter-rouge">JsonDocument</code> のサイズを測定するメソッド <a href="https://arduinojson.org/v6/api/jsondocument/memoryusage/" title="JsonDocument::memoryUsage()｜ArduinoJson 6"><code class="language-plaintext highlighter-rouge">memoryUsage()</code></a> が非推奨となり、常に 0 が返されるようになりました。</p>
+
+<p>これらはメモリ配置の設計とデバッグに <a href="https://arduinojson.org/news/2024/01/03/arduinojson-7/#arduinojson-assistant" title="ArduinoJson 7">少なからず影響を与えます</a>。そのため本記事では、コンパイル時に生成されるマップファイルを活用したメモリ容量の確認方法を解説します。</p>
+
+<h2 id="大きな-json-データの扱い方-設計上のポイント">大きな JSON データの扱い方 〜設計上のポイント〜</h2>
+
+<p>設計時に考慮すべき事項は次の３つに集約されると思います。</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">deserializeJson()</code> に必要なメモリサイズを見積もる</li>
+  <li><code class="language-plaintext highlighter-rouge">deserializeJson()</code> への入力はバッファリングしない</li>
+  <li><code class="language-plaintext highlighter-rouge">deserializeJson()</code> が使えるヒープメモリを確保する</li>
+</ol>
+
+<h3 id="1-deserializejson-に必要なメモリサイズを見積もる">1. deserializeJson() に必要なメモリサイズを見積もる</h3>
+
+<p>ArduinoJson のページにには、バージョン 7.4 用に実行時に必要なメモリ量を見積もってくれる便利なツール <a href="https://arduinojson.org/v7/assistant/" title="ArduinoJson Assistant 7">ArduinoJson Assistant</a> が提供されています。</p>
+
+<figure class="flex" id="Assistant">
+  <a href="/images/2026/05-15/Assistant1.jpg" title="図１.「入力」に「Stream」を選択" data-lightbox="image">
+    <img src="/images/2026/05-15/Assistant1-small.jpg" alt="図１.「入力」に「Stream」を選択" width="600" height="520" />
+    <figcaption>図１.「入力」に「Stream」を選択</figcaption>
+  </a>
+  <a href="/images/2026/05-15/Assistant2.jpg" title="図２.「フィルタ」を設定する" data-lightbox="image">
+    <img src="/images/2026/05-15/Assistant2-small.jpg" alt="図２.「フィルタ」を設定する" width="600" height="520" />
+    <figcaption>図２.「フィルタ」を設定する</figcaption>
+  </a>
+  <a href="/images/2026/05-15/Assistant3.jpg" title="図３.「フィルタ」が未設定の場合" data-lightbox="image">
+    <img src="/images/2026/05-15/Assistant3-small.jpg" alt="図３.「フィルタ」が未設定の場合" width="600" height="520" />
+    <figcaption>図３.「フィルタ」が未設定の場合</figcaption>
+  </a>
+</figure>
+
+<p>図１に示すように、ステップ１でターゲットボード、逆シリアライズ、そして入力のデータ型を選択します。図２に示すステップ２では、予めブラウザ等で取得した JSON のペイロード、および <a href="https://arduinojson.org/v7/how-to/deserialize-a-very-large-document/" title="How to deserialize a very large document?｜ArduinoJson 7">アプリに必要なキーと値だけを抽出するフィルタ</a> を入力します。</p>
+
+<p>このステップ２で示される半円形の各メーターが示す意味は以下の通りです。</p>
+
+<ul>
+  <li><strong>RAM usage</strong><br />
+太字の値は、解析完了後に保持されるサイズです。一方、実際の逆シリアライズ実行に必要なメモリ量は <code class="language-plaintext highlighter-rouge">peak + Slot count + String length</code> で概算できます。</li>
+  <li><strong>Slot count</strong><br />
+「<a href="https://github.com/bblanchon/ArduinoJson/blob/7.x/src/ArduinoJson/Memory/MemoryPool.hpp#L17-L45" title="ArduinoJson/src/ArduinoJson/Memory/MemoryPool.hpp at 7.x · bblanchon/ArduinoJson">Slot</a>」は、様々な型のデータを格納するため <a href="https://arduinojson.org/news/2025/04/09/arduinojson-7-4/#tiny-string-optimization" title="ArduinoJson 7.4: tiny string optimization">内部に構築されるツリー構造</a> のコンテナで、そのサイズを示しています。</li>
+  <li><strong>String length</strong><br />
+内部的にどのバッファへ対応しているかは明確に確認できませんでしたが、少なくとも実測上は加算して見積もる必要があります。</li>
+</ul>
+
+<h3 id="2-deserializejson-への入力はバッファリングしない">2. deserializeJson() への入力はバッファリングしない</h3>
+
+<p><a href="https://docs.arduino.cc/language-reference/en/functions/communication/stream/" title="Stream｜Arduino documentation">Arduino の Stream クラス</a> は、<a href="https://www.google.com/search?q=arduino%E3%81%AEstream%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AF%E3%80%81unix%E3%81%AE%E6%A8%99%E6%BA%96%E5%85%A5%E5%87%BA%E5%8A%9B%E3%81%A8%E9%A1%9E%E4%BC%BC%E3%81%AE%E5%BD%B9%E5%89%B2%E3%82%92%E6%8C%81%E3%81%A3%E3%81%9F%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%A8%E8%80%83%E3%81%88%E3%81%A6%E8%89%AF%E3%81%84%E3%81%8B%EF%BC%9F" title="ArduinoのStreamクラスは、unixの標準入出力と類似の役割を持ったクラスと考えて良いか？">入出力のインターフェースを「連続したバイトデータの流れ」として抽象化したクラス</a> です。例えば <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/libraries/WiFiS3/src/WiFiSSLClient.h#L35" title="ArduinoCore-renesas/libraries/WiFiS3/src/WiFiSSLClient.h at main · arduino/ArduinoCore-renesas"><code class="language-plaintext highlighter-rouge">WiFiSSLClient</code></a> は、以下の継承関係から <code class="language-plaintext highlighter-rouge">read()</code> や <code class="language-plaintext highlighter-rouge">available()</code> など、<code class="language-plaintext highlighter-rouge">Serial</code> と同様のメソッドが使えます。</p>
+
+<p align="center">
+  <a href="https://github.com/arduino/ArduinoCore-renesas/blob/main/libraries/WiFiS3/src/WiFiClient.h#L44" title="ArduinoCore-renesas/libraries/WiFiS3/src/WiFiClient.h at main · arduino/ArduinoCore-renesas"><code>WiFiClient</code></a> → 
+  <a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/Client.h#L27" title="ArduinoCore-API/api/Client.h at master · arduino/ArduinoCore-API"><code>Client</code></a> → 
+  <a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/Stream.h#L50" title="ArduinoCore-API/api/Stream.h at master · arduino/ArduinoCore-API"><code>Stream</code></a> →
+  <a href="https://github.com/arduino/ArduinoCore-API/blob/master/api/Print.h#L35" title="ArduinoCore-API/api/Print.h at master · arduino/ArduinoCore-API"><code>Print</code></a>
+</p>
+
+<p>一方、逆シリアライズには <a href="https://arduinojson.org/v7/api/json/deserializejson/#signatures" title="deserializeJson()｜ArduinoJson 7"><code class="language-plaintext highlighter-rouge">deserializeJson(JsonDocument&amp; doc, Stream&amp; input);</code></a> というシグネチャがあり、<code class="language-plaintext highlighter-rouge">Stream</code> クラスを継承する <code class="language-plaintext highlighter-rouge">WiFiSSLClient</code> オブジェクトを入力とすることで、１バイトずつ読み進めながらの逆シリアライズが可能です。つまり JSON 一部または全体を RAM 上に保持する必要がありません。</p>
+
+<p>入力を <code class="language-plaintext highlighter-rouge">String</code> などにバッファリング（≒コピー）しながら逆シリアライズする方法に比べ、当然オーバーヘッドはありますが、遥かに省メモリで済むというワケです。</p>
+
+<h3 id="3-deserializejson-が使えるヒープメモリを確保する">3. deserializeJson() が使えるヒープメモリを確保する</h3>
+
+<p>私は小さなプロトタイピングとテストを繰り返し、設計にフィードバックしながら少しずつ大きくして行く作り方を好みます。ここではこの工程を「設計」としています。ちょっと苦しい説明ですが… <span class="emoji">🙄</span></p>
+
+<p>まぁ工程の分類論はともかく、アプリとして動かした時のヒープ残量の確認方法を早めに確立しておくことの必要性はご理解いただけると思います <span class="emoji">😎</span></p>
+
+<h4 id="ra4m1-の場合">【RA4M1 の場合】</h4>
+
+<p>UNO R4 では、コンパイル時に生成されるマップファイルを見ることで、アップロード前にヒープ容量を概算できます。</p>
+
+<p>図４は、<a href="https://www.renesas.com/ja/document/mah/renesas-ra4m1-group-users-manual-hardware">Renesas RA4M1グループユーザーズマニュアル ハードウェア編</a> からメモリマップを引用し、内蔵 SRAM にフォーカスを当てた図です。</p>
+
+<figure class="float-left flex">
+  <a href="/images/2026/05-15/UnoR4-MemoryMap.jpg" title="図４. UNO R4 のメモリマップ" data-lightbox="image">
+    <img src="/images/2026/05-15/UnoR4-MemoryMap-small.jpg" alt="図４. UNO R4 のメモリマップ" width="600" height="360" />
+    <figcaption>図４. UNO R4 のメモリマップ</figcaption>
+  </a>
+</figure>
+
+<p>図では、<a href="https://en-wikipedia-org.translate.goog/wiki/Data_segment?_x_tr_sl=en&amp;_x_tr_tl=ja&amp;_x_tr_hl=ja&amp;_x_tr_pto=wapp" title="Data segment - Wikipedia">data セグメント</a>や <a href="https://ja.wikipedia.org/wiki/.bss" title=".bss - Wikipedia">bss セグメント</a> に配置されるグローバル変数をスタックに移すことができれば、ヒープ領域を増やせることを示しています。</p>
+
+<p>即ち、特定の関数内にローカル変数として局所化できるかが設計上のポイントになるので、次章で「実装例」を示します。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2026/05-15/CompileCache.jpg" title="図５. キャッシュディレクトリ" data-lightbox="image">
+    <img src="/images/2026/05-15/CompileCache-small.jpg" alt="図５. キャッシュディレクトリ" width="600" height="244" />
+    <figcaption>図５. キャッシュディレクトリ</figcaption>
+  </a>
+</figure>
+
+<p>また同図右端「マップファイル中のシンボル」は、キャッシュディレクトリ中の <code class="language-plaintext highlighter-rouge">.map</code> ファイルをテキストエディタで開いて検索すれば拾えます。</p>
+
+<div class="clear-both"></div>
+
+<p>次の表は、グローバル変数の異なるスケッチ Ａ と Ｂ について、シンボルが示すアドレスを比べたものです。太字で示した data や bss のセグメントはそのアドレスが変動する一方、ヒープメモリとスタックとの境界は変わらないことが見て取れます。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>マップファイル中のシンボル</th>
+      <th style="text-align: center">スケッチ Ａ アドレス</th>
+      <th style="text-align: center">スケッチ Ｂ アドレス</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__data_start__</code></td>
+      <td style="text-align: center">0x20000000</td>
+      <td style="text-align: center">0x20000000</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__data_end__</code></td>
+      <td style="text-align: center"><strong>0x20000250</strong></td>
+      <td style="text-align: center"><strong>0x20000320</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__bss_start__</code></td>
+      <td style="text-align: center"><strong>0x20000268</strong></td>
+      <td style="text-align: center"><strong>0x20000338</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__bss_end__</code></td>
+      <td style="text-align: center"><strong>0x20001ab0</strong></td>
+      <td style="text-align: center"><strong>0x200028d8</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__HeapBase</code></td>
+      <td style="text-align: center"><strong>0x20001ab0</strong></td>
+      <td style="text-align: center"><strong>0x200028d8</strong></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__HeapLimit</code></td>
+      <td style="text-align: center">0x20007b00</td>
+      <td style="text-align: center">0x20007b00</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__StackLimit</code></td>
+      <td style="text-align: center">0x20007b00</td>
+      <td style="text-align: center">0x20007b00</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__StackTopAll</code></td>
+      <td style="text-align: center">0x20007f00</td>
+      <td style="text-align: center">0x20007f00</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">vector_table</code></td>
+      <td style="text-align: center">0x20008000</td>
+      <td style="text-align: center">0x20008000</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>この表は、アップロードせずにコンパイルするだけで得られるところがミソです。ヒープメモリの総サイズは <code class="language-plaintext highlighter-rouge">(__HeapLimit - __HeapBase)</code> で計算できるので、<a href="#Assistant">図１〜３で見積もった必要なヒープサイズ</a> が収まるか、またマージンは十分かを事前に判定することが出来ます。</p>
+
+<p>またプログラム実行中のヒープ状態を確認するには <code class="language-plaintext highlighter-rouge">mallinfo()</code> が使えます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">malloc</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="kt">void</span> <span class="nf">check_heap_size</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">struct</span> <span class="n">mallinfo</span> <span class="n">mi</span> <span class="o">=</span> <span class="n">mallinfo</span><span class="o">();</span>
+
+  <span class="n">printf</span><span class="o">(</span><span class="s">"total space allocated from system (arena): %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">arena</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"number of non-inuse chunks (ordblks):      %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">ordblks</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"unused -- always zero (smblks):            %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">smblks</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"number of mmapped regions (hblks):         %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">hblks</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"total space in mmapped regions (hblkhd):   %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">hblkhd</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"unused -- always zero (usmblks):           %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">usmblks</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"unused -- always zero (fsmblks):           %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">fsmblks</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"total allocated space (uordblks):          %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">uordblks</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"total non-inuse space (fordblks):          %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">fordblks</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"top-most, releasable space (keepcost):     %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">keepcost</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>RA4M1 で有効なのは次の３つで、<code class="language-plaintext highlighter-rouge">arena = uordblks + fordblks</code> が成り立ちます。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">arena</code> … 動的に割り当てられたヒープメモリの総サイズ</li>
+  <li><code class="language-plaintext highlighter-rouge">uordblks</code> … Used Ordinary Blocks、使用中の通常メモリブロックのバイト数</li>
+  <li><code class="language-plaintext highlighter-rouge">fordblks</code> … Free Ordinary BLocks、解放済み通常メモリブロックのバイト数</li>
+</ul>
+
+<p>つまりは「ヒープ全体のサイズ <code class="language-plaintext highlighter-rouge">(__HeapBase - __HeapLimit)</code> と <code class="language-plaintext highlighter-rouge">arena</code> の差をヒープメモリの最大残量と見なす」というワケです。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>malloc.h はどこにある？</summary>
+
+
+<figure class="float-left">
+  <a href="/images/2026/05-15/malloc.jpg" title="malloc.h を探す" data-lightbox="image">
+    <img src="/images/2026/05-15/malloc-small.jpg" alt="malloc.h を探す" width="600" height="480" />
+    <figcaption>malloc.h を探す</figcaption>
+  </a>
+</figure>
+
+<p><code class="language-plaintext highlighter-rouge">malloc.h</code> はプラットフォームパッケージがインストールされている <a href="https://support.arduino.cc/hc/en-us/articles/4415103213714-Find-sketches-libraries-board-cores-and-other-files-on-your-computer#board-platforms-and-cores" title="Find sketches, libraries, board cores, and other files on your computer &ndash; Arduino Help Center">Arduino15</a> フォルダ中にあります。</p>
+
+<p><code class="language-plaintext highlighter-rouge">#include &lt;malloc.h&gt;</code> の行にカーソルを合わせ、右クリックから「Go to Definition」で開くことが出来ます。</p>
+
+<p>簡易表示を行う <code class="language-plaintext highlighter-rouge">malloc_stats()</code> など、他にも使えそうな関数が見つかると思います。</p>
+
+</details>
+
+</div>
+
+<h4 id="esp32-の場合">【ESP32 の場合】</h4>
+
+<figure class="float-left">
+  <a href="/images/2026/05-15/ESP32-DRAM.png" title="図６. ESP32 DRAM メモリマップ" data-lightbox="image">
+    <img src="/images/2026/05-15/ESP32-DRAM-small.jpg" alt="図６. ESP32 DRAM メモリマップ" width="600" height="230" />
+    <figcaption>図６. ESP32 DRAM メモリマップ</figcaption>
+  </a>
+</figure>
+
+<p>図６は、<a href="https://developer.espressif.com/blog/esp32-programmers-memory-model/#dram-organisation" title="ESP32 Programmers’ Memory Model &#183; Developer Portal">ESP32 Programmers’ Memory Model</a> から引用した DRAM (Data RAM) のメモリマップです。図中のシンボルが示すアドレスはマップファイルに見つけることが出来ます。</p>
+
+<div class="clear-both"></div>
+
+<p>ただし FreeRTOS 環境下で動作する ESP32 では、スタックは各タスクごとにヒープ領域から割り当てられるため（出典：<a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/mem_alloc.html" title="Heap Memory Allocation - ESP32 -  &mdash; ESP-IDF Programming Guide v6.0.1 documentation">Heap Memory Allocation</a>）、マップファイルからヒープの使用状況を特定するのは困難ですし、<code class="language-plaintext highlighter-rouge">mallinfo()</code> も機能しません <span class="emoji">😒</span></p>
+
+<p>そこで DRAM の空きサイズを返す <a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/mem_alloc.html#memory-capabilities" title="Heap Memory Allocation - ESP32 -  &mdash; ESP-IDF Programming Guide v6.0.1 documentation"><code class="language-plaintext highlighter-rouge">heap_caps_get_free_size()</code></a> か、またはオススメの <a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/heap_debug.html" title="Heap Memory Debugging - ESP32 -  &mdash; ESP-IDF Programming Guide v6.0.1 documentation"><code class="language-plaintext highlighter-rouge">heap_caps_get_info()</code></a> を使います。「DRAM 自体の空きサイズ＝ヒープメモリの残量」とするワケです。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">esp_heap_caps</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="kt">void</span> <span class="nf">check_heap_size</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">const</span> <span class="n">uint32_t</span> <span class="n">caps</span> <span class="o">=</span> <span class="no">MALLOC_CAP_DEFAULT</span><span class="o">;</span>
+
+  <span class="n">multi_heap_info_t</span> <span class="n">info</span><span class="o">;</span>
+  <span class="n">heap_caps_get_info</span><span class="o">(&amp;</span><span class="n">info</span><span class="o">,</span> <span class="n">caps</span><span class="o">);</span>
+
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap total size     :%7d\n"</span><span class="o">,</span> <span class="n">heap_caps_get_total_size</span><span class="o">(</span><span class="n">caps</span><span class="o">));</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap free  size     :%7d\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">total_free_bytes</span><span class="o">);</span> <span class="c1">// heap_caps_get_free_size(caps) と同値</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap allocated size :%7d\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">total_allocated_bytes</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap minimum free   :%7d\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">minimum_free_bytes</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap largest free   :%7d\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">largest_free_block</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>デフォルトで起動されるタスクの確認方法</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="s">"freertos_stats.h"</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">2000</span><span class="o">);</span>
+
+  <span class="n">printRunningTasks</span><span class="o">(</span><span class="nc">Serial</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nl">Tasks:</span> <span class="mi">7</span><span class="o">,</span> <span class="nl">Runtime:</span> <span class="mi">2</span><span class="n">s</span><span class="o">,</span> <span class="nl">Period:</span> <span class="mi">2001405</span><span class="n">us</span>
+<span class="nc">Num</span>	            <span class="nc">Name</span>	<span class="nc">Load</span>	<span class="nc">Prio</span>	 <span class="nc">Free</span>	<span class="nc">Core</span>	<span class="nc">State</span>
+  <span class="mi">8</span>	        <span class="n">loopTask</span>	  <span class="mi">0</span><span class="o">%</span>	   <span class="mi">1</span>	 <span class="mi">7244</span>	   <span class="mi">1</span>	<span class="nc">Running</span>
+  <span class="mi">5</span>	           <span class="no">IDLE0</span>	 <span class="mi">97</span><span class="o">%</span>	   <span class="mi">0</span>	  <span class="mi">576</span>	   <span class="mi">0</span>	<span class="nc">Ready</span>
+  <span class="mi">6</span>	           <span class="no">IDLE1</span>	  <span class="mi">0</span><span class="o">%</span>	   <span class="mi">0</span>	  <span class="mi">568</span>	   <span class="mi">1</span>	<span class="nc">Ready</span>
+  <span class="mi">3</span>	       <span class="n">esp_timer</span>	  <span class="mi">0</span><span class="o">%</span>	  <span class="mi">22</span>	 <span class="mi">8160</span>	   <span class="mi">0</span>	<span class="nc">Suspended</span>
+  <span class="mi">7</span>	         <span class="nc">Tmr</span> <span class="nc">Svc</span>	  <span class="mi">0</span><span class="o">%</span>	   <span class="mi">1</span>	 <span class="mi">3596</span>	   <span class="o">*</span>	<span class="nc">Blocked</span>
+  <span class="mi">2</span>	            <span class="n">ipc1</span>	  <span class="mi">2</span><span class="o">%</span>	  <span class="mi">24</span>	  <span class="mi">480</span>	   <span class="mi">1</span>	<span class="nc">Suspended</span>
+  <span class="mi">1</span>	            <span class="n">ipc0</span>	  <span class="mi">1</span><span class="o">%</span>	  <span class="mi">24</span>	  <span class="mi">484</span>	   <span class="mi">0</span>	<span class="nc">Suspended</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>PSRAM を使う方法とその応用について</summary>
+
+
+<p>万が一（RA4M1 に比べて広大な）DRAM で足りない場合に、PSRAM を使う方法が <a href="https://arduinojson.org/v7/how-to/use-external-ram-on-esp32/" title="How to use external RAM on ESP32?｜ArduinoJson 7">How to use external RAM on ESP32?</a> に紹介されています。私は当初、この仕組みを使って逆シリアライズ時のメモリ使用量を観測していました。</p>
+
+<p><code class="language-plaintext highlighter-rouge">realloc()</code> による再割り当てを追跡していないので正確ではりませんが、目安にはなると思うので、一応、紹介しておきます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="n">size_t</span> <span class="n">allocSize</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">reallocSize</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="n">struct</span> <span class="nc">HeapAllocator</span> <span class="o">:</span> <span class="nl">ArduinoJson:</span><span class="o">:</span><span class="nc">Allocator</span> <span class="o">{</span>
+  <span class="kt">void</span><span class="o">*</span> <span class="n">allocate</span><span class="o">(</span><span class="n">size_t</span> <span class="n">size</span><span class="o">)</span> <span class="n">override</span> <span class="o">{</span>
+    <span class="n">allocSize</span> <span class="o">+=</span> <span class="n">size</span><span class="o">;</span>
+    <span class="k">return</span> <span class="nf">malloc</span><span class="o">(</span><span class="n">size</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="kt">void</span> <span class="nf">deallocate</span><span class="o">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">pointer</span><span class="o">)</span> <span class="n">override</span> <span class="o">{</span>
+    <span class="n">free</span><span class="o">(</span><span class="n">pointer</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="kt">void</span><span class="o">*</span> <span class="n">reallocate</span><span class="o">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">ptr</span><span class="o">,</span> <span class="n">size_t</span> <span class="n">new_size</span><span class="o">)</span> <span class="n">override</span> <span class="o">{</span>
+    <span class="n">reallocSize</span> <span class="o">+=</span> <span class="n">new_size</span><span class="o">;</span>
+    <span class="k">return</span> <span class="nf">realloc</span><span class="o">(</span><span class="n">ptr</span><span class="o">,</span> <span class="n">new_size</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">};</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">HeapAllocator</span> <span class="n">allocator</span><span class="o">;</span>
+<span class="nc">JsonDocument</span> <span class="nf">doc</span><span class="o">(&amp;</span><span class="n">allocator</span><span class="o">);</span>
+<span class="n">deserializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="n">input</span><span class="o">);</span></code></pre></figure>
+
+
+</details>
+
+</div>
+
+<h2 id="大きな-json-データの扱い方-実装例">大きな JSON データの扱い方 〜実装例〜</h2>
+
+<p>この章では、前章の内容を実際に試してみたい方向けに、私が試したコードを共有します。</p>
+
+<h3 id="-逆シリアライズ前後のヒープメモリ残量を確認する">§ 逆シリアライズ前後のヒープメモリ残量を確認する</h3>
+
+<h4 id="openweather-をローカル環境で試すスケッチ">OpenWeather をローカル環境で試すスケッチ</h4>
+
+<p><a href="https://openweathermap.org/api/forecast5?collection=current_forecast" title="5 day weather forecast">５日間の天気予報 API</a> の JSON データを Flash に配置した、ヒープメモリの残量を確認するスケッチを作ってみました。新規スケッチに <code class="language-plaintext highlighter-rouge">response.h</code> と <code class="language-plaintext highlighter-rouge">filter.h</code> を追加して下さい。</p>
+
+<p>スケッチでは、<code class="language-plaintext highlighter-rouge">#if 〜 #else 〜 #endif</code> で UNO R4 WiFi 用と ESP32 用を切り替えてます。特に UNO 用は使用可能なヒープメモリの総量をマップファイルから拾って埋め込んでいます。環境によっては値が異なるかも知れ無いので、念の為マップファイルで確認して下さい。</p>
+
+<details style="margin-left:1em">
+<summary>response.h</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="no">R</span><span class="s">"literal(
+{"</span><span class="n">cod</span><span class="s">":"</span><span class="mi">200</span><span class="s">","</span><span class="n">message</span><span class="s">":0,"</span><span class="n">cnt</span><span class="s">":40,"</span><span class="n">list</span><span class="s">":[{"</span><span class="n">dt</span><span class="s">":1775833200,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":15.25,"</span><span class="n">feels_like</span><span class="s">":15.29,"</span><span class="n">temp_min</span><span class="s">":14.3,"</span><span class="n">temp_max</span><span class="s">":15.25,"</span><span class="n">pressure</span><span class="s">":999,"</span><span class="n">sea_level</span><span class="s">":999,"</span><span class="n">grnd_level</span><span class="s">":989,"</span><span class="n">humidity</span><span class="s">":94,"</span><span class="n">temp_kf</span><span class="s">":0.95},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":88},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.21,"</span><span class="n">deg</span><span class="s">":22,"</span><span class="n">gust</span><span class="s">":1.02},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">10</span> <span class="mi">15</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775844000,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":14.27,"</span><span class="n">feels_like</span><span class="s">":14.26,"</span><span class="n">temp_min</span><span class="s">":13.54,"</span><span class="n">temp_max</span><span class="s">":14.27,"</span><span class="n">pressure</span><span class="s">":999,"</span><span class="n">sea_level</span><span class="s">":999,"</span><span class="n">grnd_level</span><span class="s">":989,"</span><span class="n">humidity</span><span class="s">":96,"</span><span class="n">temp_kf</span><span class="s">":0.73},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":803,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">曇りがち</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":55},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.78,"</span><span class="n">deg</span><span class="s">":12,"</span><span class="n">gust</span><span class="s">":3.15},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">10</span> <span class="mi">18</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775854800,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":13.44,"</span><span class="n">feels_like</span><span class="s">":13.29,"</span><span class="n">temp_min</span><span class="s">":13.44,"</span><span class="n">temp_max</span><span class="s">":13.44,"</span><span class="n">pressure</span><span class="s">":1000,"</span><span class="n">sea_level</span><span class="s">":1000,"</span><span class="n">grnd_level</span><span class="s">":990,"</span><span class="n">humidity</span><span class="s">":94,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":4},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.06,"</span><span class="n">deg</span><span class="s">":20,"</span><span class="n">gust</span><span class="s">":3.81},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">10</span> <span class="mi">21</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775865600,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":18.69,"</span><span class="n">feels_like</span><span class="s">":18.21,"</span><span class="n">temp_min</span><span class="s">":18.69,"</span><span class="n">temp_max</span><span class="s">":18.69,"</span><span class="n">pressure</span><span class="s">":1001,"</span><span class="n">sea_level</span><span class="s">":1001,"</span><span class="n">grnd_level</span><span class="s">":991,"</span><span class="n">humidity</span><span class="s">":61,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":1},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.71,"</span><span class="n">deg</span><span class="s">":63,"</span><span class="n">gust</span><span class="s">":0.72},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">11</span> <span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775876400,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":25.1,"</span><span class="n">feels_like</span><span class="s">":24.45,"</span><span class="n">temp_min</span><span class="s">":25.1,"</span><span class="n">temp_max</span><span class="s">":25.1,"</span><span class="n">pressure</span><span class="s">":999,"</span><span class="n">sea_level</span><span class="s">":999,"</span><span class="n">grnd_level</span><span class="s">":990,"</span><span class="n">humidity</span><span class="s">":30,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":1},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.84,"</span><span class="n">deg</span><span class="s">":208,"</span><span class="n">gust</span><span class="s">":6.58},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">11</span> <span class="mo">03</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775887200,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":26.71,"</span><span class="n">feels_like</span><span class="s">":25.82,"</span><span class="n">temp_min</span><span class="s">":26.71,"</span><span class="n">temp_max</span><span class="s">":26.71,"</span><span class="n">pressure</span><span class="s">":998,"</span><span class="n">sea_level</span><span class="s">":998,"</span><span class="n">grnd_level</span><span class="s">":989,"</span><span class="n">humidity</span><span class="s">":17,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":1},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":5.48,"</span><span class="n">deg</span><span class="s">":287,"</span><span class="n">gust</span><span class="s">":10.87},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">11</span> <span class="mo">06</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775898000,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":18.74,"</span><span class="n">feels_like</span><span class="s">":18,"</span><span class="n">temp_min</span><span class="s">":18.74,"</span><span class="n">temp_max</span><span class="s">":18.74,"</span><span class="n">pressure</span><span class="s">":1003,"</span><span class="n">sea_level</span><span class="s">":1003,"</span><span class="n">grnd_level</span><span class="s">":993,"</span><span class="n">humidity</span><span class="s">":51,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":0},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.98,"</span><span class="n">deg</span><span class="s">":74,"</span><span class="n">gust</span><span class="s">":6.19},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">11</span> <span class="mi">09</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775908800,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":15.6,"</span><span class="n">feels_like</span><span class="s">":14.76,"</span><span class="n">temp_min</span><span class="s">":15.6,"</span><span class="n">temp_max</span><span class="s">":15.6,"</span><span class="n">pressure</span><span class="s">":1006,"</span><span class="n">sea_level</span><span class="s">":1006,"</span><span class="n">grnd_level</span><span class="s">":996,"</span><span class="n">humidity</span><span class="s">":59,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":0},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":3.66,"</span><span class="n">deg</span><span class="s">":61,"</span><span class="n">gust</span><span class="s">":4.96},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">11</span> <span class="mi">12</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775919600,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":13.03,"</span><span class="n">feels_like</span><span class="s">":11.64,"</span><span class="n">temp_min</span><span class="s">":13.03,"</span><span class="n">temp_max</span><span class="s">":13.03,"</span><span class="n">pressure</span><span class="s">":1007,"</span><span class="n">sea_level</span><span class="s">":1007,"</span><span class="n">grnd_level</span><span class="s">":996,"</span><span class="n">humidity</span><span class="s">":48,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":1},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":3.52,"</span><span class="n">deg</span><span class="s">":35,"</span><span class="n">gust</span><span class="s">":4.86},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">11</span> <span class="mi">15</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775930400,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":11.15,"</span><span class="n">feels_like</span><span class="s">":9.23,"</span><span class="n">temp_min</span><span class="s">":11.15,"</span><span class="n">temp_max</span><span class="s">":11.15,"</span><span class="n">pressure</span><span class="s">":1010,"</span><span class="n">sea_level</span><span class="s">":1010,"</span><span class="n">grnd_level</span><span class="s">":1000,"</span><span class="n">humidity</span><span class="s">":35,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":1},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":3.74,"</span><span class="n">deg</span><span class="s">":360,"</span><span class="n">gust</span><span class="s">":7.34},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">11</span> <span class="mi">18</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775941200,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":10.57,"</span><span class="n">feels_like</span><span class="s">":8.389999,"</span><span class="n">temp_min</span><span class="s">":10.57,"</span><span class="n">temp_max</span><span class="s">":10.57,"</span><span class="n">pressure</span><span class="s">":1012,"</span><span class="n">sea_level</span><span class="s">":1012,"</span><span class="n">grnd_level</span><span class="s">":1002,"</span><span class="n">humidity</span><span class="s">":27,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":802,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">03</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":26},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.76,"</span><span class="n">deg</span><span class="s">":6,"</span><span class="n">gust</span><span class="s">":5.21},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">11</span> <span class="mi">21</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775952000,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":14.98,"</span><span class="n">feels_like</span><span class="s">":13,"</span><span class="n">temp_min</span><span class="s">":14.98,"</span><span class="n">temp_max</span><span class="s">":14.98,"</span><span class="n">pressure</span><span class="s">":1013,"</span><span class="n">sea_level</span><span class="s">":1013,"</span><span class="n">grnd_level</span><span class="s">":1003,"</span><span class="n">humidity</span><span class="s">":18,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":801,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">薄い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">02</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":14},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":0.37,"</span><span class="n">deg</span><span class="s">":188,"</span><span class="n">gust</span><span class="s">":1.07},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">12</span> <span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775962800,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":20.56,"</span><span class="n">feels_like</span><span class="s">":18.98,"</span><span class="n">temp_min</span><span class="s">":20.56,"</span><span class="n">temp_max</span><span class="s">":20.56,"</span><span class="n">pressure</span><span class="s">":1012,"</span><span class="n">sea_level</span><span class="s">":1012,"</span><span class="n">grnd_level</span><span class="s">":1002,"</span><span class="n">humidity</span><span class="s">":12,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":5},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.96,"</span><span class="n">deg</span><span class="s">":227,"</span><span class="n">gust</span><span class="s">":3.03},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">12</span> <span class="mo">03</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775973600,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":22.34,"</span><span class="n">feels_like</span><span class="s">":20.97,"</span><span class="n">temp_min</span><span class="s">":22.34,"</span><span class="n">temp_max</span><span class="s">":22.34,"</span><span class="n">pressure</span><span class="s">":1011,"</span><span class="n">sea_level</span><span class="s">":1011,"</span><span class="n">grnd_level</span><span class="s">":1001,"</span><span class="n">humidity</span><span class="s">":13,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":3},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.4,"</span><span class="n">deg</span><span class="s">":36,"</span><span class="n">gust</span><span class="s">":1.66},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">12</span> <span class="mo">06</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775984400,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":17.95,"</span><span class="n">feels_like</span><span class="s">":16.38,"</span><span class="n">temp_min</span><span class="s">":17.95,"</span><span class="n">temp_max</span><span class="s">":17.95,"</span><span class="n">pressure</span><span class="s">":1014,"</span><span class="n">sea_level</span><span class="s">":1014,"</span><span class="n">grnd_level</span><span class="s">":1004,"</span><span class="n">humidity</span><span class="s">":22,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":6},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":4.47,"</span><span class="n">deg</span><span class="s">":49,"</span><span class="n">gust</span><span class="s">":6.98},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">12</span> <span class="mi">09</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1775995200,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":15.32,"</span><span class="n">feels_like</span><span class="s">":14.08,"</span><span class="n">temp_min</span><span class="s">":15.32,"</span><span class="n">temp_max</span><span class="s">":15.32,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":45,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":801,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">薄い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">02</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":22},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.06,"</span><span class="n">deg</span><span class="s">":31,"</span><span class="n">gust</span><span class="s">":4.11},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">12</span> <span class="mi">12</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776006000,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":13.58,"</span><span class="n">feels_like</span><span class="s">":12.3,"</span><span class="n">temp_min</span><span class="s">":13.58,"</span><span class="n">temp_max</span><span class="s">":13.58,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":50,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":100},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.56,"</span><span class="n">deg</span><span class="s">":19,"</span><span class="n">gust</span><span class="s">":1.84},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">12</span> <span class="mi">15</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776016800,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":12.51,"</span><span class="n">feels_like</span><span class="s">":11.1,"</span><span class="n">temp_min</span><span class="s">":12.51,"</span><span class="n">temp_max</span><span class="s">":12.51,"</span><span class="n">pressure</span><span class="s">":1017,"</span><span class="n">sea_level</span><span class="s">":1017,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":49,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":100},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.73,"</span><span class="n">deg</span><span class="s">":13,"</span><span class="n">gust</span><span class="s">":2.19},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">12</span> <span class="mi">18</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776027600,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":11.82,"</span><span class="n">feels_like</span><span class="s">":10.44,"</span><span class="n">temp_min</span><span class="s">":11.82,"</span><span class="n">temp_max</span><span class="s">":11.82,"</span><span class="n">pressure</span><span class="s">":1018,"</span><span class="n">sea_level</span><span class="s">":1018,"</span><span class="n">grnd_level</span><span class="s">":1007,"</span><span class="n">humidity</span><span class="s">":53,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":100},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.63,"</span><span class="n">deg</span><span class="s">":12,"</span><span class="n">gust</span><span class="s">":2.03},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">12</span> <span class="mi">21</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776038400,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":17.25,"</span><span class="n">feels_like</span><span class="s">":16.28,"</span><span class="n">temp_min</span><span class="s">":17.25,"</span><span class="n">temp_max</span><span class="s">":17.25,"</span><span class="n">pressure</span><span class="s">":1017,"</span><span class="n">sea_level</span><span class="s">":1017,"</span><span class="n">grnd_level</span><span class="s">":1007,"</span><span class="n">humidity</span><span class="s">":48,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":803,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">曇りがち</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":67},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.65,"</span><span class="n">deg</span><span class="s">":207,"</span><span class="n">gust</span><span class="s">":2.66},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">13</span> <span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776049200,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":22.21,"</span><span class="n">feels_like</span><span class="s">":21.09,"</span><span class="n">temp_min</span><span class="s">":22.21,"</span><span class="n">temp_max</span><span class="s">":22.21,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1005,"</span><span class="n">humidity</span><span class="s">":23,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":2},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.74,"</span><span class="n">deg</span><span class="s">":200,"</span><span class="n">gust</span><span class="s">":2.93},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">13</span> <span class="mo">03</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776060000,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":24.41,"</span><span class="n">feels_like</span><span class="s">":23.59,"</span><span class="n">temp_min</span><span class="s">":24.41,"</span><span class="n">temp_max</span><span class="s">":24.41,"</span><span class="n">pressure</span><span class="s">":1013,"</span><span class="n">sea_level</span><span class="s">":1013,"</span><span class="n">grnd_level</span><span class="s">":1003,"</span><span class="n">humidity</span><span class="s">":26,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":800,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clear</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">晴天</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">01</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":2},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.18,"</span><span class="n">deg</span><span class="s">":202,"</span><span class="n">gust</span><span class="s">":2.46},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">13</span> <span class="mo">06</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776070800,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":21.77,"</span><span class="n">feels_like</span><span class="s">":20.92,"</span><span class="n">temp_min</span><span class="s">":21.77,"</span><span class="n">temp_max</span><span class="s">":21.77,"</span><span class="n">pressure</span><span class="s">":1014,"</span><span class="n">sea_level</span><span class="s">":1014,"</span><span class="n">grnd_level</span><span class="s">":1004,"</span><span class="n">humidity</span><span class="s">":35,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":802,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">03</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":34},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":3.5,"</span><span class="n">deg</span><span class="s">":168,"</span><span class="n">gust</span><span class="s">":6.03},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">13</span> <span class="mi">09</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776081600,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":19.07,"</span><span class="n">feels_like</span><span class="s">":18.39,"</span><span class="n">temp_min</span><span class="s">":19.07,"</span><span class="n">temp_max</span><span class="s">":19.07,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":52,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":803,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">曇りがち</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":67},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.71,"</span><span class="n">deg</span><span class="s">":194,"</span><span class="n">gust</span><span class="s">":6.36},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">13</span> <span class="mi">12</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776092400,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":17.62,"</span><span class="n">feels_like</span><span class="s">":17.08,"</span><span class="n">temp_min</span><span class="s">":17.62,"</span><span class="n">temp_max</span><span class="s">":17.62,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":63,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":100},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.33,"</span><span class="n">deg</span><span class="s">":203,"</span><span class="n">gust</span><span class="s">":3.18},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">13</span> <span class="mi">15</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776103200,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":16.22,"</span><span class="n">feels_like</span><span class="s">":15.7,"</span><span class="n">temp_min</span><span class="s">":16.22,"</span><span class="n">temp_max</span><span class="s">":16.22,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":69,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":100},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":0.85,"</span><span class="n">deg</span><span class="s">":78,"</span><span class="n">gust</span><span class="s">":1.21},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">13</span> <span class="mi">18</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776114000,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":14.89,"</span><span class="n">feels_like</span><span class="s">":14.16,"</span><span class="n">temp_min</span><span class="s">":14.89,"</span><span class="n">temp_max</span><span class="s">":14.89,"</span><span class="n">pressure</span><span class="s">":1017,"</span><span class="n">sea_level</span><span class="s">":1017,"</span><span class="n">grnd_level</span><span class="s">":1007,"</span><span class="n">humidity</span><span class="s">":66,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":98},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.7,"</span><span class="n">deg</span><span class="s">":57,"</span><span class="n">gust</span><span class="s">":2.92},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">13</span> <span class="mi">21</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776124800,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":18.44,"</span><span class="n">feels_like</span><span class="s">":17.67,"</span><span class="n">temp_min</span><span class="s">":18.44,"</span><span class="n">temp_max</span><span class="s">":18.44,"</span><span class="n">pressure</span><span class="s">":1017,"</span><span class="n">sea_level</span><span class="s">":1017,"</span><span class="n">grnd_level</span><span class="s">":1007,"</span><span class="n">humidity</span><span class="s">":51,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":92},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.75,"</span><span class="n">deg</span><span class="s">":99,"</span><span class="n">gust</span><span class="s">":1.94},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">14</span> <span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776135600,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":21.74,"</span><span class="n">feels_like</span><span class="s">":20.99,"</span><span class="n">temp_min</span><span class="s">":21.74,"</span><span class="n">temp_max</span><span class="s">":21.74,"</span><span class="n">pressure</span><span class="s">":1015,"</span><span class="n">sea_level</span><span class="s">":1015,"</span><span class="n">grnd_level</span><span class="s">":1005,"</span><span class="n">humidity</span><span class="s">":39,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":96},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.74,"</span><span class="n">deg</span><span class="s">":128,"</span><span class="n">gust</span><span class="s">":2.62},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">14</span> <span class="mo">03</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776146400,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":21.82,"</span><span class="n">feels_like</span><span class="s">":21.08,"</span><span class="n">temp_min</span><span class="s">":21.82,"</span><span class="n">temp_max</span><span class="s">":21.82,"</span><span class="n">pressure</span><span class="s">":1014,"</span><span class="n">sea_level</span><span class="s">":1014,"</span><span class="n">grnd_level</span><span class="s">":1004,"</span><span class="n">humidity</span><span class="s">":39,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":803,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">曇りがち</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":76},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":4.62,"</span><span class="n">deg</span><span class="s">":115,"</span><span class="n">gust</span><span class="s">":2.88},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">14</span> <span class="mo">06</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776157200,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":17.91,"</span><span class="n">feels_like</span><span class="s">":17.27,"</span><span class="n">temp_min</span><span class="s">":17.91,"</span><span class="n">temp_max</span><span class="s">":17.91,"</span><span class="n">pressure</span><span class="s">":1015,"</span><span class="n">sea_level</span><span class="s">":1015,"</span><span class="n">grnd_level</span><span class="s">":1005,"</span><span class="n">humidity</span><span class="s">":58,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":802,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">03</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":40},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":4.38,"</span><span class="n">deg</span><span class="s">":109,"</span><span class="n">gust</span><span class="s">":4.72},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">14</span> <span class="mi">09</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776168000,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":15.28,"</span><span class="n">feels_like</span><span class="s">":14.85,"</span><span class="n">temp_min</span><span class="s">":15.28,"</span><span class="n">temp_max</span><span class="s">":15.28,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":76,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":802,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">03</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":50},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.06,"</span><span class="n">deg</span><span class="s">":90,"</span><span class="n">gust</span><span class="s">":3.15},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">14</span> <span class="mi">12</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776178800,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":14.23,"</span><span class="n">feels_like</span><span class="s">":13.85,"</span><span class="n">temp_min</span><span class="s">":14.23,"</span><span class="n">temp_max</span><span class="s">":14.23,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":82,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":803,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">曇りがち</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":79},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.71,"</span><span class="n">deg</span><span class="s">":63,"</span><span class="n">gust</span><span class="s">":2.21},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">14</span> <span class="mi">15</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776189600,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":13.41,"</span><span class="n">feels_like</span><span class="s">":13.05,"</span><span class="n">temp_min</span><span class="s">":13.41,"</span><span class="n">temp_max</span><span class="s">":13.41,"</span><span class="n">pressure</span><span class="s">":1015,"</span><span class="n">sea_level</span><span class="s">":1015,"</span><span class="n">grnd_level</span><span class="s">":1005,"</span><span class="n">humidity</span><span class="s">":86,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":803,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">曇りがち</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":81},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.06,"</span><span class="n">deg</span><span class="s">":46,"</span><span class="n">gust</span><span class="s">":2.99},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">14</span> <span class="mi">18</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776200400,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":13.27,"</span><span class="n">feels_like</span><span class="s">":12.85,"</span><span class="n">temp_min</span><span class="s">":13.27,"</span><span class="n">temp_max</span><span class="s">":13.27,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":84,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":96},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.02,"</span><span class="n">deg</span><span class="s">":55,"</span><span class="n">gust</span><span class="s">":3.36},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">14</span> <span class="mi">21</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776211200,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":14.74,"</span><span class="n">feels_like</span><span class="s">":14.25,"</span><span class="n">temp_min</span><span class="s">":14.74,"</span><span class="n">temp_max</span><span class="s">":14.74,"</span><span class="n">pressure</span><span class="s">":1017,"</span><span class="n">sea_level</span><span class="s">":1017,"</span><span class="n">grnd_level</span><span class="s">":1007,"</span><span class="n">humidity</span><span class="s">":76,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":98},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.63,"</span><span class="n">deg</span><span class="s">":63,"</span><span class="n">gust</span><span class="s">":2.4},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">15</span> <span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776222000,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":18.25,"</span><span class="n">feels_like</span><span class="s">":17.7,"</span><span class="n">temp_min</span><span class="s">":18.25,"</span><span class="n">temp_max</span><span class="s">":18.25,"</span><span class="n">pressure</span><span class="s">":1015,"</span><span class="n">sea_level</span><span class="s">":1015,"</span><span class="n">grnd_level</span><span class="s">":1005,"</span><span class="n">humidity</span><span class="s">":60,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":98},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":1.33,"</span><span class="n">deg</span><span class="s">":70,"</span><span class="n">gust</span><span class="s">":1.7},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">15</span> <span class="mo">03</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776232800,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":17.27,"</span><span class="n">feels_like</span><span class="s">":16.62,"</span><span class="n">temp_min</span><span class="s">":17.27,"</span><span class="n">temp_max</span><span class="s">":17.27,"</span><span class="n">pressure</span><span class="s">":1015,"</span><span class="n">sea_level</span><span class="s">":1015,"</span><span class="n">grnd_level</span><span class="s">":1004,"</span><span class="n">humidity</span><span class="s">":60,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":99},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":3.6,"</span><span class="n">deg</span><span class="s">":102,"</span><span class="n">gust</span><span class="s">":3.34},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">15</span> <span class="mo">06</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776243600,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":15.25,"</span><span class="n">feels_like</span><span class="s">":14.48,"</span><span class="n">temp_min</span><span class="s">":15.25,"</span><span class="n">temp_max</span><span class="s">":15.25,"</span><span class="n">pressure</span><span class="s">":1016,"</span><span class="n">sea_level</span><span class="s">":1016,"</span><span class="n">grnd_level</span><span class="s">":1006,"</span><span class="n">humidity</span><span class="s">":63,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">d</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":100},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":3.42,"</span><span class="n">deg</span><span class="s">":109,"</span><span class="n">gust</span><span class="s">":4.19},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0.06,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">d</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">15</span> <span class="mi">09</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"},{"</span><span class="n">dt</span><span class="s">":1776254400,"</span><span class="n">main</span><span class="s">":{"</span><span class="n">temp</span><span class="s">":12.74,"</span><span class="n">feels_like</span><span class="s">":11.9,"</span><span class="n">temp_min</span><span class="s">":12.74,"</span><span class="n">temp_max</span><span class="s">":12.74,"</span><span class="n">pressure</span><span class="s">":1019,"</span><span class="n">sea_level</span><span class="s">":1019,"</span><span class="n">grnd_level</span><span class="s">":1008,"</span><span class="n">humidity</span><span class="s">":70,"</span><span class="n">temp_kf</span><span class="s">":0},"</span><span class="n">weather</span><span class="s">":[{"</span><span class="n">id</span><span class="s">":804,"</span><span class="n">main</span><span class="s">":"</span><span class="nc">Clouds</span><span class="s">","</span><span class="n">description</span><span class="s">":"</span><span class="n">厚い雲</span><span class="s">","</span><span class="n">icon</span><span class="s">":"</span><span class="mo">04</span><span class="n">n</span><span class="s">"}],"</span><span class="n">clouds</span><span class="s">":{"</span><span class="n">all</span><span class="s">":100},"</span><span class="n">wind</span><span class="s">":{"</span><span class="n">speed</span><span class="s">":2.89,"</span><span class="n">deg</span><span class="s">":105,"</span><span class="n">gust</span><span class="s">":4.18},"</span><span class="n">visibility</span><span class="s">":10000,"</span><span class="n">pop</span><span class="s">":0.02,"</span><span class="n">sys</span><span class="s">":{"</span><span class="n">pod</span><span class="s">":"</span><span class="n">n</span><span class="s">"},"</span><span class="n">dt_txt</span><span class="s">":"</span><span class="mi">2026</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">15</span> <span class="mi">12</span><span class="o">:</span><span class="mo">00</span><span class="o">:</span><span class="mo">00</span><span class="s">"}],"</span><span class="n">city</span><span class="s">":{"</span><span class="n">id</span><span class="s">":1863219,"</span><span class="n">name</span><span class="s">":"</span><span class="nc">Hanawadamachi</span><span class="s">","</span><span class="n">coord</span><span class="s">":{"</span><span class="n">lat</span><span class="s">":36.55,"</span><span class="n">lon</span><span class="s">":139.93},"</span><span class="n">country</span><span class="s">":"</span><span class="no">JP</span><span class="s">","</span><span class="n">population</span><span class="s">":0,"</span><span class="n">timezone</span><span class="s">":32400,"</span><span class="n">sunrise</span><span class="s">":1775765645,"</span><span class="n">sunset</span><span class="s">":1775812137}}
+)literal"</span><span class="o">;</span></code></pre></figure>
+
+
+</details>
+
+<details style="margin-left:1em">
+<summary>filter.h</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="no">R</span><span class="s">"literal(
+{
+  "</span><span class="n">cnt</span><span class="s">": true,
+  "</span><span class="n">list</span><span class="s">": [
+    {
+      "</span><span class="n">dt</span><span class="s">": true,
+      "</span><span class="n">main</span><span class="s">": {
+        "</span><span class="n">temp</span><span class="s">": true,
+        "</span><span class="n">humidity</span><span class="s">": true
+      },
+      "</span><span class="n">weather</span><span class="s">": [
+        {
+          "</span><span class="n">id</span><span class="s">": true
+        }
+      ],
+      "</span><span class="n">clouds</span><span class="s">": {
+        "</span><span class="n">all</span><span class="s">": true
+      },
+      "</span><span class="n">wind</span><span class="s">": {
+        "</span><span class="n">speed</span><span class="s">": true,
+        "</span><span class="n">deg</span><span class="s">": true
+      },
+      "</span><span class="n">pop</span><span class="s">": true
+    }
+  ],
+  "</span><span class="n">city</span><span class="s">": {
+    "</span><span class="n">timezone</span><span class="s">": true,
+    "</span><span class="n">sunrise</span><span class="s">": true,
+    "</span><span class="n">sunset</span><span class="s">": true
+  }
+}
+)literal"</span></code></pre></figure>
+
+
+</details>
+
+<details style="margin-left:1em">
+<summary>サンプルスケッチ.ino</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">Arduino</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">ArduinoJson</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="c1">// フィルタのあり／なし</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">USE_JSON_FILTER</span>  <span class="kc">false</span>
+
+<span class="err">#</span><span class="k">if</span> <span class="n">defined</span><span class="o">(</span><span class="no">ARDUINO_UNOR4_WIFI</span><span class="o">)</span>
+  <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">malloc</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+  <span class="c1">// マップファイルから取得したヒープ領域のアドレス</span>
+  <span class="err">#</span><span class="n">define</span> <span class="n">__HeapLimit</span> <span class="mh">0x0000000020007b00</span>
+  <span class="err">#</span><span class="n">define</span> <span class="n">__HeapBase</span>  <span class="mh">0x0000000020001ab0</span>
+  <span class="err">#</span><span class="n">define</span> <span class="nf">HEAP_TOTAL</span>  <span class="o">(</span><span class="n">__HeapLimit</span> <span class="o">-</span> <span class="n">__HeapBase</span><span class="o">)</span>
+
+<span class="err">#</span><span class="n">elif</span> <span class="nf">defined</span><span class="o">(</span><span class="no">ESP32</span><span class="o">)</span>
+  <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">esp_heap_caps</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+  <span class="c1">// チェックするヒープメモリのタイプ</span>
+  <span class="err">#</span><span class="n">define</span> <span class="no">HEAP_TYPE</span>   <span class="no">MALLOC_CAP_DEFAULT</span> <span class="c1">// or MALLOC_CAP_8BIT</span>
+<span class="err">#</span><span class="n">endif</span>
+
+<span class="c1">// レスポンスの JSON データ</span>
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">response</span><span class="o">[]</span> <span class="o">=</span>
+  <span class="err">#</span><span class="n">include</span> <span class="s">"response.h"</span>
+<span class="o">;</span>
+
+<span class="c1">// フィルタの JSON テンプレート</span>
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">filter_literal</span><span class="o">[]</span> <span class="o">=</span>
+  <span class="err">#</span><span class="n">include</span> <span class="s">"filter.h"</span>
+<span class="o">;</span>
+
+<span class="c1">// プロトタイプ宣言</span>
+<span class="kt">void</span> <span class="nf">check_heap_size</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(!</span><span class="nc">Serial</span> <span class="o">||</span> <span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">2000</span><span class="o">);</span>
+
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Input size: %d\n"</span><span class="o">,</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">response</span><span class="o">));</span>
+
+  <span class="c1">// 逆シリアライズ前のヒープメモリ量を観測</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"====== Before Deserialization ====="</span><span class="o">);</span>
+  <span class="n">check_heap_size</span><span class="o">();</span>
+
+<span class="err">#</span><span class="k">if</span> <span class="no">USE_JSON_FILTER</span>
+  <span class="c1">// 逆シリアライズ（フィルタあり）</span>
+  <span class="nc">JsonDocument</span> <span class="n">doc</span><span class="o">,</span> <span class="n">filter</span><span class="o">;</span>
+  <span class="n">deserializeJson</span><span class="o">(</span><span class="n">filter</span><span class="o">,</span> <span class="n">filter_literal</span><span class="o">);</span>
+  <span class="n">auto</span> <span class="n">error</span> <span class="o">=</span> <span class="n">deserializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="nl">DeserializationOption:</span><span class="o">:</span><span class="nc">Filter</span><span class="o">(</span><span class="n">filter</span><span class="o">));</span>
+<span class="err">#</span><span class="k">else</span>
+  <span class="c1">// 逆シリアライズ（フィルタなし）</span>
+  <span class="nc">JsonDocument</span> <span class="n">doc</span><span class="o">;</span>
+  <span class="n">auto</span> <span class="n">error</span> <span class="o">=</span> <span class="n">deserializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+<span class="err">#</span><span class="n">endif</span>
+
+  <span class="c1">// 逆シリアライズ後のヒープメモリ量を観測</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"====== After Deserialization ====="</span><span class="o">);</span>
+  <span class="n">check_heap_size</span><span class="o">();</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"deserializeJson() failed: "</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">error</span><span class="o">.</span><span class="na">c_str</span><span class="o">());</span>
+    <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="n">serializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">Serial</span><span class="o">);</span> <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+<span class="c1">//serializeJsonPretty(doc, Serial); Serial.println();</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">check_heap_size</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+<span class="err">#</span><span class="k">if</span> <span class="n">defined</span><span class="o">(</span><span class="no">ARDUINO_UNOR4_WIFI</span><span class="o">)</span>
+
+  <span class="n">struct</span> <span class="n">mallinfo</span> <span class="n">mi</span> <span class="o">=</span> <span class="n">mallinfo</span><span class="o">();</span>
+
+  <span class="c1">// ヒープメモリの最大残量</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Maximum free heap size: %7lu\n"</span><span class="o">,</span> <span class="no">HEAP_TOTAL</span> <span class="o">-</span> <span class="n">mi</span><span class="o">.</span><span class="na">arena</span><span class="o">);</span>
+
+  <span class="c1">// arena: ヒープメモリに割り当てた総メモリー量 (= uordblks + fordblks)</span>
+  <span class="c1">// uordblks: Used Ordinary Blocks 使用中の通常メモリブロックのバイト数</span>
+  <span class="c1">// fordblks: Free Ordinary BLocks 解放済み通常メモリブロックのバイト数</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"total space allocated from system (arena): %7lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">arena</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"total allocated space (uordblks):          %7lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">uordblks</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"total non-inuse space (fordblks):          %7lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">fordblks</span><span class="o">);</span>
+
+<span class="err">#</span><span class="k">else</span> <span class="c1">// ESP32</span>
+
+  <span class="n">multi_heap_info_t</span> <span class="n">info</span><span class="o">;</span>
+  <span class="n">heap_caps_get_info</span><span class="o">(&amp;</span><span class="n">info</span><span class="o">,</span> <span class="no">HEAP_TYPE</span><span class="o">);</span>
+
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap total size     :%7ul\n"</span><span class="o">,</span> <span class="n">heap_caps_get_total_size</span><span class="o">(</span><span class="no">HEAP_TYPE</span><span class="o">));</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap free  size     :%7ul\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">total_free_bytes</span><span class="o">);</span> <span class="c1">// heap_caps_get_free_size() と同値</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap allocated size :%7ul\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">total_allocated_bytes</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap minimum free   :%7ul\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">minimum_free_bytes</span><span class="o">);</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"Heap largest free   :%7ul\n"</span><span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">largest_free_block</span><span class="o">);</span>
+
+<span class="err">#</span><span class="n">endif</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{}</span></code></pre></figure>
+
+
+</details>
+
+<p>UNO R4 用を「フィルタなし」で実行すると、「ヒープメモリの最大残量」が 592 バイトになります。試しに次のグローバル変数を追加すると残量は 0 になりますが、正常に終了します。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="kt">char</span> <span class="n">tmp</span><span class="o">[</span><span class="mi">592</span><span class="o">];</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="o">...</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">tmp</span><span class="o">);</span> <span class="c1">// 最適化により tmp が削除されるのを防ぐ</span>
+  <span class="o">...</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>さらに <code class="language-plaintext highlighter-rouge">tmp</code> のサイズを１バイト増やすと、ヒープ不足でエラーとなるハズです。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">deserializeJson</span><span class="o">()</span> <span class="nl">failed:</span> <span class="nc">NoMemory</span></code></pre></figure>
+
+<h3 id="-グローバル変数を関数内のローカル変数に局所化する">§ グローバル変数を関数内のローカル変数に局所化する</h3>
+
+<p>Arduino の標準的な例題を参考にしていると、グローバル変数が増えがちです <span class="emoji">😬</span></p>
+
+<p><a href="/2026/05/08/" title="UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題｜Embedded Kiddie">前回</a> 紹介した UNO R4 WiFi 用のコードには、比較的サイズの大きなグローバル変数が３つ宣言されています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// NTPサーバーとUDPで通信を行うためのインスタンス</span>
+<span class="nc">WiFiUDP</span> <span class="nc">Udp</span><span class="o">;</span>
+<span class="nc">NTPClient</span> <span class="nf">timeClient</span><span class="o">(</span><span class="nc">Udp</span><span class="o">,</span> <span class="n">ntpServers</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="no">TIMEZONE_OFFSET</span><span class="o">,</span> <span class="no">NTP_SYNC_INTERVAL</span><span class="o">);</span>
+
+<span class="c1">// REST APIサーバーとの通信用HTTPクライアント</span>
+<span class="nc">WiFiSSLClient</span> <span class="n">client</span><span class="o">;</span></code></pre></figure>
+
+<p>これらのうち JSON データの解析時に必要な変数は最後の「REST APIサーバーとの通信用HTTPクライアント」だけです。一方「NTPサーバーとUDPで通信を行うためのインスタンス」は、少し工夫すると関数 <code class="language-plaintext highlighter-rouge">rtcSyncNTP()</code> 内のローカル変数に局所化することができ、data と bss のセグメントサイズを約 1.5KB 削減可能です <span class="emoji">👍</span></p>
+
+<h4 id="hows-my-ssl-を試すスケッチ">How’s my SSL を試すスケッチ</h4>
+
+<p>ちょっと長いですが、以下の動作をする UNO R4 WiFi 用サンプルスケッチを添付します。</p>
+
+<ul>
+  <li>１分ごとに NTP サーバーをローテーションさせながら RTC を更新する</li>
+  <li>１秒ごとに RTC の時刻をシリアルモニターに出力する（RTC の精度確認用）</li>
+  <li>２分ごとに <a href="https://www.howsmyssl.com/" title="How's My SSL?">howsmyssl.com</a> の REST_API を叩き、結果をシリアルモニターに出力する</li>
+</ul>
+
+<p>何かのお役に立てれば嬉しいです。</p>
+
+<details style="margin-left:1em">
+<summary>arduino_secrets.h</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">define</span> <span class="no">SECRET_SSID</span> <span class="s">""</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">SECRET_PASS</span> <span class="s">""</span></code></pre></figure>
+
+
+</details>
+
+<details style="margin-left:1em">
+<summary>howsmyssl_root_ca.h</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// ISRG Root X1 (Downloaded by Safari, Firefox)</span>
+<span class="c1">// openssl x509 -inform der -in ISRG\ Root\ X1.cer -out ISRG\ Root\ X1.pem</span>
+<span class="c1">// NotBefore: Jun  4 11:04:38 2015 GMT; NotAfter: Jun  4 11:04:38 2035 GMT</span>
+<span class="no">R</span><span class="s">"literal(
+-----BEGIN CERTIFICATE-----
+MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw
+TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMTUwNjA0MTEwNDM4
+WhcNMzUwNjA0MTEwNDM4WjBPMQswCQYDVQQGEwJVUzEpMCcGA1UEChMgSW50ZXJu
+ZXQgU2VjdXJpdHkgUmVzZWFyY2ggR3JvdXAxFTATBgNVBAMTDElTUkcgUm9vdCBY
+MTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAK3oJHP0FDfzm54rVygc
+h77ct984kIxuPOZXoHj3dcKi/vVqbvYATyjb3miGbESTtrFj/RQSa78f0uoxmyF+
+0TM8ukj13Xnfs7j/EvEhmkvBioZxaUpmZmyPfjxwv60pIgbz5MDmgK7iS4+3mX6U
+A5/TR5d8mUgjU+g4rk8Kb4Mu0UlXjIB0ttov0DiNewNwIRt18jA8+o+u3dpjq+sW
+T8KOEUt+zwvo/7V3LvSye0rgTBIlDHCNAymg4VMk7BPZ7hm/ELNKjD+Jo2FR3qyH
+B5T0Y3HsLuJvW5iB4YlcNHlsdu87kGJ55tukmi8mxdAQ4Q7e2RCOFvu396j3x+UC
+B5iPNgiV5+I3lg02dZ77DnKxHZu8A/lJBdiB3QW0KtZB6awBdpUKD9jf1b0SHzUv
+KBds0pjBqAlkd25HN7rOrFleaJ1/ctaJxQZBKT5ZPt0m9STJEadao0xAH0ahmbWn
+OlFuhjuefXKnEgV4We0+UXgVCwOPjdAvBbI+e0ocS3MFEvzG6uBQE3xDk3SzynTn
+jh8BCNAw1FtxNrQHusEwMFxIt4I7mKZ9YIqioymCzLq9gwQbooMDQaHWBfEbwrbw
+qHyGO0aoSCqI3Haadr8faqU9GY/rOPNk3sgrDQoo//fb4hVC1CLQJ13hef4Y53CI
+rU7m2Ys6xt0nUW7/vGT1M0NPAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNV
+HRMBAf8EBTADAQH/MB0GA1UdDgQWBBR5tFnme7bl5AFzgAiIyBpY9umbbjANBgkq
+hkiG9w0BAQsFAAOCAgEAVR9YqbyyqFDQDLHYGmkgJykIrGF1XIpu+ILlaS/V9lZL
+ubhzEFnTIZd+50xx+7LSYK05qAvqFyFWhfFQDlnrzuBZ6brJFe+GnY+EgPbk6ZGQ
+3BebYhtF8GaV0nxvwuo77x/Py9auJ/GpsMiu/X1+mvoiBOv/2X/qkSsisRcOj/KK
+NFtY2PwByVS5uCbMiogziUwthDyC3+6WVwW6LLv3xLfHTjuCvjHIInNzktHCgKQ5
+ORAzI4JMPJ+GslWYHb4phowim57iaztXOoJwTdwJx4nLCgdNbOhdjsnvzqvHu7Ur
+TkXWStAmzOVyyghqpZXjFaH3pO3JLF+l+/+sKAIuvtd7u+Nxe5AW0wdeRlN8NwdC
+jNPElpzVmbUq4JUagEiuTDkHzsxHpFKVK7q4+63SM1N95R1NbdWhscdCb+ZAJzVc
+oyi3B43njTOQ5yOf+1CceWxG1bQVs5ZufpsMljq4Ui0/1lvh+wjChP4kqKOJ2qxq
+4RgqsahDYVvTH9w7jXbyLeiNdd8XM2w9U/t7y0Ff/9yi0GE44Za4rF2LN9d11TPA
+mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
+emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
+-----END CERTIFICATE-----
+)literal"</span><span class="o">;</span></code></pre></figure>
+
+
+</details>
+
+<details style="margin-left:1em">
+<summary>filter.h</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="no">R</span><span class="s">"literal(
+{
+  "</span><span class="n">tls_version</span><span class="s">": true,
+  "</span><span class="n">rating</span><span class="s">": true
+}
+)literal"</span><span class="o">;</span></code></pre></figure>
+
+
+</details>
+
+<details style="margin-left:1em">
+<summary>サンプルスケッチ.ino</summary>
+
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">Arduino</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">time</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFiS3</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="no">RTC</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFiUdp</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">NTPClient</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFiSSLClient</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">ArduinoJson</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="c1">// WiFi 認証情報</span>
+<span class="err">#</span><span class="n">include</span> <span class="s">"arduino_secrets.h"</span>
+
+<span class="c1">// REST APIサーバーの設定</span>
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">host</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"www.howsmyssl.com"</span><span class="o">;</span> <span class="c1">// サーバーのホスト／ドメイン</span>
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">path</span><span class="o">[]</span> <span class="o">=</span> <span class="s">"/a/check"</span><span class="o">;</span>          <span class="c1">// サーバーのパス</span>
+
+<span class="c1">// www.howsmyssl.com のルートCA証明書</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">root_ca</span> <span class="o">=</span>
+  <span class="err">#</span><span class="n">include</span> <span class="s">"howsmyssl_root_ca.h"</span>
+<span class="o">;</span>
+
+<span class="c1">// JSON 解析用フィルタ</span>
+<span class="kd">static</span> <span class="n">constexpr</span> <span class="kt">char</span> <span class="n">filter_literal</span><span class="o">[]</span> <span class="o">=</span>
+  <span class="err">#</span><span class="n">include</span> <span class="s">"filter.h"</span>
+<span class="o">;</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="nf">TIMEZONE_OFFSET</span>   <span class="o">(</span><span class="mi">9</span> <span class="o">*</span> <span class="mi">3600</span><span class="o">)</span>          <span class="c1">// UTCに対する時差（日本は UTC+09:00）</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">NTP_SYNC_INTERVAL</span> <span class="o">(</span><span class="mi">1</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000L</span><span class="no">U</span><span class="o">)</span>   <span class="c1">// 1分毎にNTPサーバーに接続</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">NTP_N_SERVERS</span>     <span class="o">(</span><span class="n">sizeof</span><span class="o">(</span><span class="n">ntpServers</span><span class="o">)</span> <span class="o">/</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">ntpServers</span><span class="o">[</span><span class="mi">0</span><span class="o">]))</span>
+
+<span class="c1">// NTP サーバーのリスト</span>
+<span class="kd">static</span> <span class="kt">int</span> <span class="n">serverID</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ntpServers</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="s">"ntp.nict.jp"</span><span class="o">,</span>
+  <span class="s">"ntp.jst.mfeed.ad.jp"</span><span class="o">,</span>
+  <span class="s">"pool.ntp.org"</span><span class="o">,</span>
+  <span class="s">"time.google.com"</span><span class="o">,</span>
+<span class="o">};</span>
+
+<span class="c1">// HTTP over TLSで送受信を行うためのインスタンス</span>
+<span class="kd">static</span> <span class="nc">WiFiSSLClient</span> <span class="n">client</span><span class="o">;</span>
+
+<span class="c1">// プロトタイプ宣言</span>
+<span class="kt">void</span> <span class="nf">wifiInit</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>        <span class="c1">// WiFiの初期化</span>
+<span class="kt">void</span> <span class="nf">rtcInit</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>         <span class="c1">// RTC/NTPの初期化</span>
+<span class="kt">void</span> <span class="nf">httpInit</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>        <span class="c1">// HTTP/TLSの初期化</span>
+
+<span class="n">bool</span> <span class="nf">rtcSyncNTP</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>      <span class="c1">// NTPでRTCを更新する関数</span>
+<span class="n">bool</span> <span class="nf">httpRequest</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>     <span class="c1">// HTTPリクエストを送信する関数</span>
+<span class="n">bool</span> <span class="nf">readResponse</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>    <span class="c1">// レスポンスボディを受信する関数</span>
+<span class="n">uint32_t</span> <span class="nf">rtcGetTime</span><span class="o">(</span><span class="kt">void</span><span class="o">);</span>  <span class="c1">// RTCからUNIX時刻を取得する関数</span>
+
+<span class="c1">// 周期的にタスクを実行するマクロ</span>
+<span class="err">#</span><span class="n">define</span> <span class="nf">DO_EVERY</span><span class="o">(</span><span class="n">period</span><span class="o">,</span> <span class="n">lastTime</span><span class="o">)</span>  <span class="kd">static</span> <span class="n">uint32_t</span> <span class="n">lastTime</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="k">for</span> <span class="o">(</span><span class="n">uint32_t</span> <span class="n">now</span> <span class="o">=</span> <span class="n">millis</span><span class="o">();</span> <span class="n">lastTime</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">now</span> <span class="o">-</span> <span class="n">lastTime</span> <span class="o">&gt;=</span> <span class="n">period</span><span class="o">;</span> <span class="n">lastTime</span> <span class="o">=</span> <span class="n">now</span><span class="o">)</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="mi">115200</span><span class="o">);</span>
+  <span class="k">while</span> <span class="o">(!</span><span class="nc">Serial</span> <span class="o">||</span> <span class="n">millis</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="o">);</span>
+
+  <span class="n">wifiInit</span><span class="o">();</span> <span class="c1">// WiFiの初期化</span>
+  <span class="n">rtcInit</span><span class="o">();</span>  <span class="c1">// RTC/NTPの初期化</span>
+  <span class="n">httpInit</span><span class="o">();</span> <span class="c1">// HTTP/TLSの初期化</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="o">()</span> <span class="o">{</span>
+  <span class="no">DO_EVERY</span><span class="o">(</span><span class="no">NTP_SYNC_INTERVAL</span><span class="o">,</span> <span class="n">lastTime1</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 1分毎に実行</span>
+    <span class="n">rtcSyncNTP</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="no">DO_EVERY</span><span class="o">(</span><span class="mi">1000</span><span class="o">,</span> <span class="n">lastTime2</span><span class="o">)</span> <span class="o">{</span>   <span class="c1">// 1秒毎に実行</span>
+    <span class="n">struct</span> <span class="n">tm</span> <span class="n">tm</span><span class="o">;</span>
+    <span class="n">time_t</span> <span class="n">time</span> <span class="o">=</span> <span class="n">rtcGetTime</span><span class="o">();</span> <span class="c1">// RTCからUNIX時刻を取得</span>
+    <span class="n">localtime_r</span><span class="o">(&amp;</span><span class="n">time</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">tm</span><span class="o">);</span>    <span class="c1">// 現地の時刻情報に変換</span>
+    <span class="n">printf</span><span class="o">(</span><span class="s">"%02d:%02d:%02d\n"</span><span class="o">,</span> <span class="n">tm</span><span class="o">.</span><span class="na">tm_hour</span><span class="o">,</span> <span class="n">tm</span><span class="o">.</span><span class="na">tm_min</span><span class="o">,</span> <span class="n">tm</span><span class="o">.</span><span class="na">tm_sec</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="no">DO_EVERY</span><span class="o">(</span><span class="mi">120000</span><span class="o">,</span> <span class="n">lastTime3</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 2分毎に実行</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">httpRequest</span><span class="o">())</span> <span class="o">{</span>        <span class="c1">// HTTPリクエストを送信</span>
+      <span class="n">readResponse</span><span class="o">();</span>           <span class="c1">// レスポンスを取得</span>
+    <span class="o">}</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Waiting for next session..."</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">//-------------------------------------------------------------------------------------</span>
+<span class="c1">// WiFiの初期化</span>
+<span class="c1">//-------------------------------------------------------------------------------------</span>
+<span class="kt">void</span> <span class="nf">wifiInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"Connecting to WiFi network..."</span><span class="o">);</span>
+
+  <span class="c1">// WiFi のファームウェアバージョンを確認する</span>
+  <span class="nc">String</span> <span class="n">fv</span> <span class="o">=</span> <span class="nc">WiFi</span><span class="o">.</span><span class="na">firmwareVersion</span><span class="o">();</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">fv</span> <span class="o">&lt;</span> <span class="no">WIFI_FIRMWARE_LATEST_VERSION</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Please upgrade the firmware."</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="k">while</span> <span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">status</span><span class="o">()</span> <span class="o">!=</span> <span class="no">WL_CONNECTED</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">WiFi</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="no">SECRET_SSID</span><span class="o">,</span> <span class="no">SECRET_PASS</span><span class="o">);</span>
+    <span class="n">delay</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"done."</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"IP address: "</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">localIP</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"signal strength (RSSI):"</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">WiFi</span><span class="o">.</span><span class="na">RSSI</span><span class="o">());</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" dBm"</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">//-------------------------------------------------------------------------------------</span>
+<span class="c1">// RTC/NTPの初期化、NTPへの接続とRTCの更新、現在時刻の取得</span>
+<span class="c1">//-------------------------------------------------------------------------------------</span>
+<span class="kt">void</span> <span class="nf">rtcInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"Initializing RTC..."</span><span class="o">);</span>
+  <span class="no">RTC</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"done."</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// NTPサーバーに接続し、時刻を取得する（loop()中で呼び出す）</span>
+<span class="n">bool</span> <span class="nf">rtcSyncNTP</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Connecting to "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">ntpServers</span><span class="o">[</span><span class="n">serverID</span><span class="o">])</span> <span class="o">+</span> <span class="s">"..."</span><span class="o">);</span>
+
+  <span class="c1">// UDP経由でNTPサーバーとパケットの送受信を行うためのインスタンス</span>
+  <span class="nc">WiFiUDP</span> <span class="nc">Udp</span><span class="o">;</span>
+  <span class="nc">NTPClient</span> <span class="nf">timeClient</span><span class="o">(</span><span class="nc">Udp</span><span class="o">,</span> <span class="n">ntpServers</span><span class="o">[</span><span class="n">serverID</span><span class="o">],</span> <span class="no">TIMEZONE_OFFSET</span><span class="o">,</span> <span class="no">NTP_SYNC_INTERVAL</span><span class="o">);</span>
+
+  <span class="kt">int</span> <span class="n">ret</span><span class="o">;</span>
+  <span class="n">timeClient</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">timeClient</span><span class="o">.</span><span class="na">update</span><span class="o">())</span> <span class="o">{</span>
+    <span class="c1">// 取得した時刻をRTCに設定する</span>
+    <span class="n">auto</span> <span class="n">unixTime</span> <span class="o">=</span> <span class="n">timeClient</span><span class="o">.</span><span class="na">getEpochTime</span><span class="o">();</span>
+    <span class="nc">RTCTime</span> <span class="n">timeToSet</span> <span class="o">=</span> <span class="nc">RTCTime</span><span class="o">(</span><span class="n">unixTime</span><span class="o">);</span>
+    <span class="no">RTC</span><span class="o">.</span><span class="na">setTime</span><span class="o">(</span><span class="n">timeToSet</span><span class="o">);</span>
+
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"The RTC was set to "</span> <span class="o">+</span> <span class="n">timeToSet</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>   <span class="c1">// RTCの更新に成功</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"failed to connect."</span><span class="o">);</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// タイムアウトで更新に失敗</span>
+  <span class="o">}</span>
+
+  <span class="c1">// NTPClientと共にUDPを停止</span>
+  <span class="n">timeClient</span><span class="o">.</span><span class="na">end</span><span class="o">();</span>
+
+  <span class="c1">// 次のサーバーを設定する</span>
+  <span class="n">serverID</span> <span class="o">=</span> <span class="o">(</span><span class="n">serverID</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">%</span> <span class="no">NTP_N_SERVERS</span><span class="o">;</span>
+  <span class="kd">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">server</span> <span class="o">=</span> <span class="n">ntpServers</span><span class="o">[</span><span class="n">serverID</span><span class="o">];</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Next NTP server: "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">server</span><span class="o">));</span>
+  <span class="k">return</span> <span class="n">ret</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 現在時刻を取得する</span>
+<span class="n">uint32_t</span> <span class="nf">rtcGetTime</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">struct</span> <span class="n">timeval</span> <span class="n">tv</span><span class="o">;</span>          <span class="c1">// time_t tv_sec; suseconds_t tv_usec;</span>
+  <span class="n">gettimeofday</span><span class="o">(&amp;</span><span class="n">tv</span><span class="o">,</span> <span class="no">NULL</span><span class="o">);</span>    <span class="c1">// ArduinoCore-renesas では戻り値は常に 0</span>
+  <span class="k">return</span> <span class="o">(</span><span class="n">uint32_t</span><span class="o">)</span><span class="n">tv</span><span class="o">.</span><span class="na">tv_sec</span><span class="o">;</span> <span class="c1">// time_t (8バイト) --&gt; uint32_t (4バイト)</span>
+<span class="o">}</span>
+
+<span class="c1">//-------------------------------------------------------------------------------------</span>
+<span class="c1">// HTTP/TLSの初期化、HTTPリクエストの送信、レスポンスの受信</span>
+<span class="c1">//-------------------------------------------------------------------------------------</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">PORT</span>  <span class="mi">443</span> <span class="c1">// TCP port for HTTPS</span>
+
+<span class="kt">void</span> <span class="nf">httpInit</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// ルートCA証明書の設定</span>
+  <span class="c1">// サーバーの認証をスキップする場合は root_ca を nullptr、またはコメントアウト</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">setCACert</span><span class="o">(</span><span class="n">root_ca</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="n">bool</span> <span class="nf">httpRequest</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"\nConnecting to "</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="n">host</span><span class="o">)</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="nc">String</span><span class="o">(</span><span class="no">PORT</span><span class="o">)</span> <span class="o">+</span> <span class="s">"..."</span><span class="o">);</span>
+
+  <span class="c1">// サーバーに接続</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">client</span><span class="o">.</span><span class="na">connect</span><span class="o">(</span><span class="n">host</span><span class="o">,</span> <span class="no">PORT</span><span class="o">))</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Connection failed!"</span><span class="o">);</span>
+    <span class="n">client</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"connected.\nSend HTTP request..."</span><span class="o">);</span>
+
+  <span class="c1">// HTTP リクエストを送信（行末に "\r\n" が付加される）</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">String</span><span class="o">(</span><span class="s">"GET "</span><span class="o">)</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s">" HTTP/1.1"</span><span class="o">);</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">String</span><span class="o">(</span><span class="s">"Host: "</span><span class="o">)</span> <span class="o">+</span> <span class="n">host</span><span class="o">);</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Connection: close"</span><span class="o">);</span>
+  <span class="n">client</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+
+  <span class="c1">// レスポンスヘッダを受信</span>
+  <span class="n">bool</span> <span class="n">detected</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="k">while</span> <span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">connected</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">header</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">readStringUntil</span><span class="o">(</span><span class="sc">'\n'</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">header</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">header</span> <span class="o">==</span> <span class="s">"\r"</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 空の "\r\n" を受信した？</span>
+      <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"End of headers"</span><span class="o">);</span>
+      <span class="n">detected</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+      <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="c1">// ヘッダが受信出来なかった？</span>
+  <span class="k">if</span> <span class="o">(!</span><span class="n">detected</span> <span class="o">||</span> <span class="o">!</span><span class="n">client</span><span class="o">.</span><span class="na">available</span><span class="o">())</span> <span class="o">{</span>
+    <span class="n">client</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Invalid response."</span><span class="o">);</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="k">return</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// レスポンスボディの受信へ</span>
+<span class="o">}</span>
+
+<span class="c1">// HTTP レスポンスボディを受信する</span>
+<span class="n">bool</span> <span class="nf">readResponse</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nc">JsonDocument</span> <span class="n">doc</span><span class="o">,</span> <span class="n">filter</span><span class="o">;</span>
+  <span class="n">deserializeJson</span><span class="o">(</span><span class="n">filter</span><span class="o">,</span> <span class="n">filter_literal</span><span class="o">);</span> <span class="c1">// フィルタを生成</span>
+
+  <span class="c1">// Stream からデータを受信しながら JSON を解析</span>
+  <span class="n">auto</span> <span class="n">error</span> <span class="o">=</span> <span class="n">deserializeJson</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="n">client</span><span class="o">,</span> <span class="nl">DeserializationOption:</span><span class="o">:</span><span class="nc">Filter</span><span class="o">(</span><span class="n">filter</span><span class="o">));</span>
+
+  <span class="k">if</span> <span class="o">(</span><span class="n">error</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"deserializeJson() failed: "</span><span class="o">);</span>
+    <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">error</span><span class="o">.</span><span class="na">c_str</span><span class="o">());</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="n">serializeJsonPretty</span><span class="o">(</span><span class="n">doc</span><span class="o">,</span> <span class="nc">Serial</span><span class="o">);</span>
+  <span class="nc">Serial</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+
+</details>
+
+<h2 id="次回は">次回は…</h2>
+
+<p>REST API アプリをメモリの豊富な ESP32 で制作しながら、UNO R4 WiFi にマイグレーションするというステップを踏んだ関係で、今回は特に RAM 容量に焦点を当てました（ESP32 の件はオマケみたいなものです <span class="emoji">🙄</span>）。</p>
+
+<p>UNO R4 ではグラフィック画像を多用すると Flash 容量もキツくなるので、次回はその辺の策について書く予定です。</p>
+
+<p>次回もお付き合い頂ければ幸いです <span class="emoji">👺</span></p>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2026/05/08/" title="前の記事：UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題">← UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/05/15/",this.page.identifier="/2026/05/15/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2026/05/15/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/05/15/";this.page.identifier="/2026/05/15/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>

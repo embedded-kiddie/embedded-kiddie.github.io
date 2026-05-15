@@ -8,6 +8,25 @@
     
       
       <item>
+        <title>UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法</title>
+        
+          <description>&lt;figure class=&quot;flex&quot;&gt;
+  &lt;div&gt;
+    &lt;img src=&quot;/images/2026/05-15/OpenWeather_ESP32.jpg&quot; alt=&quot;OpenWather for ESP32&quot; width=&quot;1200&quot; height=&quot;900&quot; /&gt;
+    &lt;figcaption&gt;OpenWather for ESP32&lt;/figcaption&gt;
+  &lt;/div&gt;
+&lt;/figure&gt;
+</description>
+        
+        <pubDate>Fri, 15 May 2026 11:00:56 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2026/05/15/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2026/05/15/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題</title>
         
           <description>&lt;figure class=&quot;flex&quot;&gt;

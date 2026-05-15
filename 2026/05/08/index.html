@@ -308,7 +308,7 @@ LOCO（低速オンチップオシレータ）または SOSC（サブクロッ�
 <span class="o">};</span>
 <span class="err">#</span><span class="n">define</span> <span class="nf">NTP_N_SERVERS</span> <span class="o">(</span><span class="n">sizeof</span><span class="o">(</span><span class="n">ntpServers</span><span class="o">)</span> <span class="o">/</span> <span class="n">sizeof</span><span class="o">(</span><span class="n">ntpServers</span><span class="o">[</span><span class="mi">0</span><span class="o">]))</span>
 
-<span class="c1">// UDP経由でNTPサーバーとパケットの送受信を行うためのインスタンス</span>
+<span class="c1">// NTPサーバーとUDPで通信を行うためのインスタンス</span>
 <span class="kd">static</span> <span class="nc">WiFiUDP</span> <span class="nc">Udp</span><span class="o">;</span>
 <span class="kd">static</span> <span class="nc">NTPClient</span> <span class="nf">timeClient</span><span class="o">(</span><span class="nc">Udp</span><span class="o">,</span> <span class="n">ntpServers</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="no">TIMEZONE_OFFSET</span><span class="o">,</span> <span class="no">NTP_SYNC_INTERVAL</span><span class="o">);</span>
 
@@ -592,7 +592,8 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 
 <h5 id="uno-r4-wifiesp32-共通のサンプルコード">UNO R4 WiFi、ESP32 共通のサンプルコード</h5>
 
-<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="k">if</span> <span class="n">defined</span><span class="o">(</span><span class="no">ARDUINO_UNOR4_WIFI</span><span class="o">)</span>
+<figure class="highlight"><pre><code class="language-java" data-lang="java">  <span class="c1">// REST APIサーバーとの通信用HTTPクライアント</span>
+<span class="err">#</span><span class="k">if</span> <span class="n">defined</span><span class="o">(</span><span class="no">ARDUINO_UNOR4_WIFI</span><span class="o">)</span>
   <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="nc">WiFiSSLClient</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
   <span class="nc">WiFiSSLClient</span> <span class="n">client</span><span class="o">;</span>
 <span class="err">#</span><span class="n">elif</span> <span class="nf">defined</span><span class="o">(</span><span class="no">ESP32</span><span class="o">)</span>
@@ -955,7 +956,7 @@ ESP32 用の例題ですが、埋め込まれた証明書が有効期限（2027�
     </p>
 
     <p class="next">
-      <a href="/" title="Home に戻る">Home に戻る</a>
+      <a href="/2026/05/15/" title="次の記事：UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法">UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法 →</a>
     </p>    
   </div>
 <div id="disqus_thread"><span id="disqus-comment-count" class="disqus-comment-count" data-disqus-url="https://embedded-kiddie.github.io/2026/05/08/"></span><button id="open_disqus" class="simple" title="クリックするとコメントフォームが開きます"><img src="/images/comment-disqus.png" width="1536" height="866" alt="Disqus コメントフォーム" /></button></div><a class="u-url" href="/2026/05/08/" hidden></a>
