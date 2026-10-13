@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <script>'use strict';if("embedded-kiddie.github.io"===window.location.hostname){var s=document.createElement("script");s.src="https://www.googletagmanager.com/gtag/js?id=G-DLMCZ884M2";document.head.appendChild(s);window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-DLMCZ884M2")};</script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>UNO R4 WiFiとESP32でREST API (3) - アイコン画像をUNO R4のFlash容量内に収める方法 | Embedded Kiddie</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="UNO R4 WiFiとESP32でREST API (3) - アイコン画像をUNO R4のFlash容量内に収める方法" />
+<meta name="author" content="Kingsman" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="UNO R4 WiFi 版 OpenWeather" />
+<meta property="og:description" content="UNO R4 WiFi 版 OpenWeather" />
+<link rel="canonical" href="https://embedded-kiddie.github.io/2026/10/13/" />
+<meta property="og:url" content="https://embedded-kiddie.github.io/2026/10/13/" />
+<meta property="og:site_name" content="Embedded Kiddie" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-10-13T17:55:33+09:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="UNO R4 WiFiとESP32でREST API (3) - アイコン画像をUNO R4のFlash容量内に収める方法" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2026-10-13T17:55:33+09:00","datePublished":"2026-10-13T17:55:33+09:00","description":"UNO R4 WiFi 版 OpenWeather","headline":"UNO R4 WiFiとESP32でREST API (3) - アイコン画像をUNO R4のFlash容量内に収める方法","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2026/10/13/"},"url":"https://embedded-kiddie.github.io/2026/10/13/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:0.25em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" integrity="sha256-fl23kUuX5ZajbBq7Z8zH8XT4u3HTjJqIxVsmLtFzf5c=" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="icon" href="/assets/favicon.ico" />
+  <link type="application/atom+xml" rel="alternate" href="https://embedded-kiddie.github.io/feed.xml" title="Embedded Kiddie" />
+  
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Embedded Kiddie</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/privacy/">プライバシーポリシー</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">UNO R4 WiFiとESP32でREST API (3) - アイコン画像をUNO R4のFlash容量内に収める方法</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2026-10-13T17:55:33+09:00" itemprop="datePublished">Oct 13, 2026
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <figure class="flex">
+  <div>
+    <img src="/images/2026/10-13/OpenWeather_UNO_R4.jpg" alt="UNO R4 WiFi 版 OpenWeather" width="1200" height="600" />
+    <figcaption>UNO R4 WiFi 版 OpenWeather</figcaption>
+  </div>
+</figure>
+
+<h2 id="はじめに">はじめに</h2>
+
+<p><a href="https://github.com/Bodmer/OpenWeather" title="Bodmer/OpenWeather: Arduino library to fetch weather information from OpenWeather">Bodmer/OpenWeather</a> を Arduino UNO R4 WiFi でも動作するようにマイグレーションした <a href="https://github.com/embedded-kiddie/ArduinoOpenWeather" title="embedded-kiddie/ArduinoOpenWeather: Yet another OpenWeather App for UNO R4 WiFi and ESP32">ArduinoOpenWeather</a> を紹介する３部作の最終回です。</p>
+
+<ol>
+  <li><a href="/2026/05/08/" title="UNO R4 WiFiとESP32でREST API (1) - RTC、NTP、HTTP、TLS、ルートCA証明書の例題｜Embedded Kiddie"><span class="strong">RTC、NTP、HTTP、TLS、ルートCA証明書の例題</span></a></li>
+  <li><a href="/2026/05/15/" title="UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法｜Embedded Kiddie"><span class="strong">大きなJSONデータを解析するArduinoJson活用法</span></a></li>
+  <li><span class="strong">アイコン画像をUNO R4のFlash容量内に収める方法</span>（今回）</li>
+</ol>
+
+<figure class="float-left">
+  <a href="/images/2026/10-13/IconsByBodmer.jpg" title="Bodmer さんのお天気アイコン" data-lightbox="image">
+    <img src="/images/2026/10-13/IconsByBodmer.jpg" alt="Bodmer さんのお天気アイコン" width="256" height="253" />
+    <figcaption>Bodmer さんのお天気アイコン</figcaption>
+  </a>
+</figure>
+
+<p>オリジナル版のお天気アイコンは、Flash 上に構築されたファイルシステムにアップロードした１画素24ビットの <code class="language-plaintext highlighter-rouge">.bmp</code> ファイルを <a href="https://github.com/espressif/arduino-esp32/tree/master/libraries/SPIFFS" title="arduino-esp32/libraries/SPIFFS at master · espressif/arduino-esp32">SPIFFS</a>（現在は非推奨）で読み出し描画していますが、当然、UNO R4 では容量オーバーです。</p>
+
+<p>そこで今回は、如何にコンパクトな画像フォーマットで同等の機能を実現するかがお題となります。</p>
+
+<div class="clear-both"></div>
+
+<p><a href="https://ja.wikipedia.org/wiki/%E7%99%BD%E7%BE%BD%E3%81%AE%E7%9F%A2" title="白羽の矢 - Wikipedia">白羽の矢</a> を立てたのが、ESP32 だけでなく UNO R4 でも動作するグラフィックライブラリ <a href="https://github.com/moononournation/Arduino_GFX" title="moononournation/Arduino_GFX: Arduino GFX developing for various color displays and various data bus interfaces">moononournation/Arduino_GFX</a> です。ESP32 では描画速度こそ <a href="https://github.com/lovyan03/LovyanGFX" title="lovyan03/LovyanGFX: SPI LCD graphics library for ESP32 (ESP-IDF/ArduinoESP32) / ESP8266 (ArduinoESP8266) / SAMD51(Seeed ArduinoSAMD51)">lovyan03/LovyanGFX</a> や <a href="https://github.com/Bodmer/TFT_espi" title="Bodmer/TFT_eSPI: Arduino and PlatformIO IDE compatible TFT library optimised for the Raspberry Pi Pico (RP2040), STM32, ESP8266 and ESP32 that supports different driver chips">Bodmer/TFT_espi</a> に譲りますが、UNO R4 では <a href="https://github.com/adafruit/adafruit-gfx-library" title="adafruit/Adafruit-GFX-Library: Adafruit GFX graphics core Arduino library, this is the &#x27;core&#x27; class that all our other graphics libraries derive from">Adafruit-GFX-Library</a> よりずっと高速で、かつ少ないメモリのマイクロコントローラーでも動作するように作られた、私のお気に入りのライブラリの１つです。</p>
+
+<h2 id="arduino_gfx-で扱えるビットマップデータ">Arduino_GFX で扱えるビットマップデータ</h2>
+
+<p>Arduino_GFX における「ビットマップ」とは、いわゆる <a href="https://ja.wikipedia.org/wiki/Windows_bitmap" title="Windows bitmap - Wikipedia">Windows の <code class="language-plaintext highlighter-rouge">.bmp</code> 形式</a> ではなく、画素の情報が配列として並んだ単純なデータ列を指します。<a href="https://ja.wikipedia.org/wiki/%E8%89%B2%E6%B7%B1%E5%BA%A6" title="色深度 - Wikipedia">色深度</a> に応じた描画メソッドのうち、主なものを以下に紹介します。</p>
+
+<ul>
+  <li>
+    <p><strong>RGB888 カラー</strong><br />
+<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1725-L1860"><code class="language-plaintext highlighter-rouge">draw24bitRGBBitmap()</code></a> は、RGB888 のビットマップデータを RGB565 に変換して描画します。</p>
+  </li>
+  <li>
+    <p><strong>RGB565 カラー</strong><br />
+<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1501-L1549"><code class="language-plaintext highlighter-rouge">draw16bitRGBBitmap()</code></a> は、RGB565 のビットマップデータを描画します。またその派生として、透過色が指定可能な <a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1551-L1581"><code class="language-plaintext highlighter-rouge">draw16bitRGBBitmapWithTranColor‎()</code></a>、１画素１ビットの切り抜き用マスク画像が指定可能な <a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1641-L1723"><code class="language-plaintext highlighter-rouge">draw16bitRGBBitmapWithMask‎()</code></a> があります。<a href="https://www.google.com/search?q=%E7%94%BB%E5%83%8F%E5%BD%A2%E5%BC%8F%E3%81%94%E3%81%A8%E3%81%AE%E3%82%A8%E3%83%B3%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E9%81%95%E3%81%84" title="画像形式ごとのエンディアンの違い - Google 検索">画像形式ごとのエンディアンの違い</a> に対応するため、名前に <code class="language-plaintext highlighter-rouge">Be</code> の入った <a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1583-L1639">ビッグエンディアン用メソッド</a> もあります。</p>
+  </li>
+  <li>
+    <p><strong>インデックスカラー</strong><br />
+<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1396-L1458"><code class="language-plaintext highlighter-rouge">drawIndexedBitmap‎()</code></a> は、RGB565 のカラーパレットを参照するビットマップデータを描画します。データサイズは RGB565 カラーの
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>
+＋ カラーパレット（最大 512 バイト）になります。</p>
+  </li>
+  <li>
+    <p><strong>グレースケール</strong><br />
+<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1259-L1394"><code class="language-plaintext highlighter-rouge">drawGrayscaleBitmap()</code></a> は、１画素１バイトのグレースケール画像を描画します。データサイズは RGB565 カラーのちょうど
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>
+になります。RGB565 に丸められるため 256 階調分の濃淡は再現できません。</p>
+  </li>
+  <li>
+    <p><strong>モノクローム</strong><br />
+<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1061-L1212"><code class="language-plaintext highlighter-rouge">drawBitmap()</code></a> は、１画素１ビットのビットマップデータを描画します。データサイズは RGB565 のおよそ
+<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>16</mn></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{16}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>
+です。描画色や背景色の指定も可能です。<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1214-L1257"><code class="language-plaintext highlighter-rouge">drawXBitmap()</code></a> では、<a href="https://www.gimp.org/" title="GIMP - GNU Image Manipulation Program">GIMP</a> で <a href="https://ja.wikipedia.org/wiki/XBM" title="XBM - Wikipedia"><code class="language-plaintext highlighter-rouge">.xbm</code> ファイル</a> にエクスポートした C ソースコードの利用が可能です。</p>
+  </li>
+  <li>
+    <p><strong>GFXfont</strong><br />
+<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L2027-L2308"><code class="language-plaintext highlighter-rouge">drawChar()</code></a> は、<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/gfxfont.h" title="Arduino_GFX/src/gfxfont.h at master · moononournation/Arduino_GFX"><code class="language-plaintext highlighter-rouge">GFXfont</code></a> で定義される１画素１ビットのビットマップデータを描画します。アイコンフォントを組み込めば、画像の代わりになります。</p>
+  </li>
+</ul>
+
+<h2 id="実例">実例</h2>
+
+<h3 id="スプラッシュ画像インデックスカラー画像">スプラッシュ画像（インデックスカラー画像）</h3>
+
+<figure class="float-left">
+  <a href="/images/2026/10-13/OpenWeather-Master-Logo RGB.jpg" title="インデックスカラー化に適した例" data-lightbox="image">
+    <img src="/images/2026/10-13/OpenWeather-Master-Logo RGB.jpg" alt="インデックスカラー化に適した例" width="600" height="340" />
+    <figcaption>インデックスカラー化に適した例</figcaption>
+  </a>
+</figure>
+
+<p>今回のアプリでは、起動時の初期化中に <a href="https://openweather.co.uk/brand_guidelines" title="OpenWeather Brand Guidelines – Logos, Fonts &amp; Usage">OpenWeather のロゴ画像</a> を表示しています。ご覧の通り色数が少なく、RG565 カラーや JPEG よりインデックスカラーが適しています。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>JPEG の利用について</summary>
+
+
+<p>画像サイズが大きい場合、JPEG の利用も考えられます。以下の２つのライブラリが有名どころでしょう。</p>
+
+<ul>
+  <li><a href="https://github.com/bitbank2/JPEGDEC" title="bitbank2/JPEGDEC: An optimized JPEG decoder suitable for microcontrollers and PCs.">bitbank2/JPEGDEC</a></li>
+  <li><a href="https://github.com/Bodmer/TJpg_Decoder" title="Bodmer/TJpg_Decoder: Jpeg decoder library based on Tiny JPEG Decompressor">Bodmer/TJpg_Decoder</a>
+    <ul>
+      <li><a href="https://elm-chan.org/fsw/tjpgd/" title="TJpgDec - Tiny JPEG Decompressor">TJpgDec - Tiny JPEG Decompressor</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>前者はおよそ 20KB の RAM を要求し、シンプルな <a href="https://github.com/bitbank2/JPEGDEC/tree/master/examples/adafruit_gfx_demo" title="JPEGDEC/examples/adafruit_gfx_demo at master · bitbank2/JPEGDEC">adafruit_gfx_demo</a> ですら UNO R4 ではメモリ不足でコンパイルが通りません。</p>
+
+<p>また後者は <a href="https://github.com/Bodmer/TJpg_Decoder/tree/master/examples/FLash_array/Flash_Jpg_GFX" title="TJpg_Decoder/examples/FLash_array/Flash_Jpg_GFX at master · Bodmer/TJpg_Decoder">Flash_Jpg_GFX</a> を参考にしましたが、グローバル変数 <a href="https://github.com/Bodmer/TJpg_Decoder/blob/master/src/TJpg_Decoder.cpp#L12-L13" title="TJpg_Decoder/src/TJpg_Decoder.cpp at master · Bodmer/TJpg_Decoder"><code class="language-plaintext highlighter-rouge">TJpgDec</code></a> が常に <a href="https://github.com/Bodmer/TJpg_Decoder/blob/master/src/TJpg_Decoder.h#L111-L112" title="TJpg_Decoder/src/TJpg_Decoder.h at master · Bodmer/TJpg_Decoder">3.5KB の作業用メモリをキープし</a>、もれなく <a href="https://github.com/arduino-libraries/SD" title="arduino-libraries/SD: SD Library for Arduino">SD</a> もリンクされるため、今回のアプリでは JSON データの解析時にメモリ不足に陥ってしまいました。</p>
+
+<p>今回のように一時的に表示するだけの場合は、変数はローカル化し、不要になった作業用メモリは解放されるよう <a href="https://elm-chan.org/fsw/tjpgd/" title="TJpgDec - Tiny JPEG Decompressor">TJpgDec</a> を直接組み込むのが良いと思います。</p>
+
+<div class="clear-both"></div>
+
+<p>ちなみに JPEG 画像の Flash 埋め込み用データを作成するには、ファイルの中身を 16 進数でダンプしてくれる <a href="https://tomeko.net/online_tools/file_to_hex.php?lang=en" title="File to hex converter">File to hexadecimal converter</a> が便利です。</p>
+
+
+</details>
+
+</div>
+
+<p>組み込み向けに LCD 用の画像変換ツールは幾つもありますが、インデックスカラーは見つからず、Arduino_GFX と親和性の良い、独自の変換プロセスを作らざるを得ませんでした <span class="emoji">😉</span></p>
+
+<h4 id="インデックスカラー化したビットマップデータの作成方法">インデックスカラー化したビットマップデータの作成方法</h4>
+
+<figure class="float-left">
+  <a href="/images/2026/10-13/GIMP_IndexedColor.jpg" title="GIMP：インデックスカラー変換" data-lightbox="image">
+    <img src="/images/2026/10-13/GIMP_IndexedColor-small.jpg" alt="GIMP：インデックスカラー変換" width="360" height="440" />
+    <figcaption>GIMP：インデックスカラー変換</figcaption>
+  </a>
+</figure>
+
+<p>画像のインデックスカラー化には <a href="https://www.gimp.org/" title="GIMP - GNU Image Manipulation Program">GIMP</a> を使います。</p>
+
+<p>まずはメニューから「<code class="language-plaintext highlighter-rouge">画像</code> → <code class="language-plaintext highlighter-rouge">モード</code> → <code class="language-plaintext highlighter-rouge">インデックス…</code>」を選択します。</p>
+
+<p>色数が多い場合には、ディザリングに誤差拡散系を指定した方が良いようです。詳しくは GIMP のマニュアル <a href="https://docs.gimp.org/3.2/ja/gimp-image-convert-indexed.html" title="6.6. インデックス...">「インデックスカラーに変換」ダイアログ</a> を参照して下さい。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left">
+  <a href="/images/2026/10-13/GIMP_Export.jpg" title="GIMP：ヘッダーファイルとして出力" data-lightbox="image">
+    <img src="/images/2026/10-13/GIMP_Export-small.jpg" alt="GIMP：ヘッダーファイルとして出力" width="600" height="440" />
+    <figcaption>GIMP：拡張子を <code>.h</code> にして出力</figcaption>
+  </a>
+</figure>
+
+<p>次に「<code class="language-plaintext highlighter-rouge">ファイル</code> → <code class="language-plaintext highlighter-rouge">名前を付けてエクスポート…</code>」を選択し、「画像のエクスポート」ダイアログで「ファイル形式の選択」に「C ソースコードヘッダー」（拡張子は <code class="language-plaintext highlighter-rouge">.h</code>）を選択します。</p>
+
+<p>さらにエクスポートした <code class="language-plaintext highlighter-rouge">.h</code> ファイルのカラーパレットを <a href="https://gist.github.com/embedded-kiddie/89883627e0be6ce2b529bf9b8f1fe072" title="GIMP がエクスポートしたインデックス画像のヘッダーファイルを RGB565 に変換する Python スクリプト">rgbconvert.py</a> で RGB888 から RGB565 に書き換えます。</p>
+
+<h5 id="rgbconvertpy-の使用方法">rgbconvert.py の使用方法</h5>
+
+<p>バージョン 2.7.16 以上の Python で、コマンドラインから以下を実行します。</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">% python rgbconvert.py input.h <span class="o">&gt;</span> output.h</code></pre></figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom:0">
+<summary>Windows な人向けの PowerShell スクリプト</summary>
+
+
+<p><a href="https://gist.github.com/embedded-kiddie/89883627e0be6ce2b529bf9b8f1fe072" title="GIMP がエクスポートしたインデックス画像のヘッダーファイルを RGB565 に変換する Python スクリプト">rgbconvert.py</a> は Mac/Linux を想定し、以下を要件に ChatGPT に作らせました。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>対象</th>
+      <th>変換内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>入力ファイル</td>
+      <td>GIMP でエクスポートした C ソースコードのヘッダーファイル</td>
+    </tr>
+    <tr>
+      <td>変換結果</td>
+      <td>標準出力に表示</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">width</code> / <code class="language-plaintext highlighter-rouge">height</code></td>
+      <td>変数宣言を <code class="language-plaintext highlighter-rouge">#define</code> 文に変換</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">HEADER_PIXEL</code> マクロ</td>
+      <td>マクロ定義のブロックを削除</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">header_data_cmap</code></td>
+      <td>RGB888の各色をRGB565に変換し、<code class="language-plaintext highlighter-rouge">uint16_t</code> 配列に変更</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">header_data</code></td>
+      <td>画素データを16進数表記に変換し、<code class="language-plaintext highlighter-rouge">uint8_t</code> 配列に変更</td>
+    </tr>
+    <tr>
+      <td>変数名</td>
+      <td>入力ファイル名から拡張子を除き、変数名に使用可能な文字列に置換</td>
+    </tr>
+    <tr>
+      <td>ヘッダー全体</td>
+      <td>入力ファイル名に基づくインクルードガードを追加</td>
+    </tr>
+    <tr>
+      <td>エラー処理</td>
+      <td>標準エラー出力に適切なエラーメッセージを表示</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Windows 10/11 用に PowerShell で実行可能な <a href="https://gist.github.com/embedded-kiddie/65c58cc8306f3b754ca205f8c4d61296" title="A PowerShell script to  convert the RGB888 header file of an indexed color image exported by GIMP into RGB565.">rgbconvert.ps1</a> も作らせましたが、私の Win 環境は Mac 上の Win 7 と古いので、動作は未検証です。</p>
+
+<p>実行は、以下のように <a href="https://www.google.com/search?q=powershell+NoProfile+%E3%81%A8%E3%81%AF" title="powershell NoProfile とは - Google 検索">プロファイルは読み込まず</a>、<a href="https://www.google.com/search?q=powershell+executionpolicy+bypass+%E3%81%A8%E3%81%AF" title="powershell executionpolicy bypass とは - Google 検索"><code class="language-plaintext highlighter-rouge">ExecutionPolicy</code> を一時的に無視せよ</a> とのことですが、組織のグループポリシーによってはエラーになるそうです。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">powershell</span><span class="o">.</span><span class="na">exe</span> <span class="o">-</span><span class="nc">NoProfile</span> <span class="o">-</span><span class="nc">ExecutionPolicy</span> <span class="nc">Bypass</span> <span class="o">-</span><span class="nc">File</span> <span class="s">".\rgbconvert.ps1"</span> <span class="s">".\input.h"</span> <span class="s">".\output.h"</span></code></pre></figure>
+
+<p>実行は自己責任でお願いします <span class="emoji">🙇‍♂️</span></p>
+
+</details>
+
+</div>
+
+<h5 id="変換前-inputh">変換前 (input.h)</h5>
+
+<p>GIMP でエクスポートした <code class="language-plaintext highlighter-rouge">.h</code> の中身はおよそ次のようになっています。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/*  GIMP header image file format (INDEXED): input.h  */</span>
+
+<span class="kd">static</span> <span class="n">unsigned</span> <span class="kt">int</span> <span class="n">width</span> <span class="o">=</span> <span class="mi">180</span><span class="o">;</span>
+<span class="kd">static</span> <span class="n">unsigned</span> <span class="kt">int</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">80</span><span class="o">;</span>
+
+<span class="cm">/*  Call this macro repeatedly.  After each use, the pixel data can be extracted  */</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="nf">HEADER_PIXEL</span><span class="o">(</span><span class="n">data</span><span class="o">,</span><span class="n">pixel</span><span class="o">)</span> <span class="o">{</span><span class="err">\</span>
+<span class="n">pixel</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">header_data_cmap</span><span class="o">[(</span><span class="n">unsigned</span> <span class="kt">char</span><span class="o">)</span><span class="n">data</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="mi">0</span><span class="o">];</span> <span class="err">\</span>
+<span class="n">pixel</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">header_data_cmap</span><span class="o">[(</span><span class="n">unsigned</span> <span class="kt">char</span><span class="o">)</span><span class="n">data</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="mi">1</span><span class="o">];</span> <span class="err">\</span>
+<span class="n">pixel</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="n">header_data_cmap</span><span class="o">[(</span><span class="n">unsigned</span> <span class="kt">char</span><span class="o">)</span><span class="n">data</span><span class="o">[</span><span class="mi">0</span><span class="o">]][</span><span class="mi">2</span><span class="o">];</span> <span class="err">\</span>
+<span class="n">data</span> <span class="o">++;</span> <span class="o">}</span>
+
+<span class="kd">static</span> <span class="n">unsigned</span> <span class="kt">char</span> <span class="n">header_data_cmap</span><span class="o">[</span><span class="mi">256</span><span class="o">][</span><span class="mi">3</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="o">{</span> <span class="mi">58</span><span class="o">,</span> <span class="mi">57</span><span class="o">,</span> <span class="mi">60</span><span class="o">},</span>
+  <span class="o">...</span>
+  <span class="o">{</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">,</span><span class="mi">255</span><span class="o">}</span>
+  <span class="o">};</span>
+<span class="kd">static</span> <span class="n">unsigned</span> <span class="kt">char</span> <span class="n">header_data</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span>
+  <span class="o">...</span>
+  <span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span><span class="o">,</span><span class="mi">254</span>
+  <span class="o">};</span></code></pre></figure>
+
+<h5 id="変換後-outputh">変換後 (output.h)</h5>
+
+<p>変換後は、RGB888 のカラーパレットが RGB565 に変換され、変数名も入力ファイル名を基に置換されます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">ifndef</span> <span class="n">_INPUT_H_</span>
+<span class="err">#</span><span class="n">define</span> <span class="n">_INPUT_H_</span>
+
+<span class="cm">/*  GIMP header image file format (INDEXED): input.h  */</span>
+
+<span class="err">#</span><span class="n">define</span> <span class="no">INPUT_WIDTH</span> <span class="mi">180</span>
+<span class="err">#</span><span class="n">define</span> <span class="no">INPUT_HEIGHT</span> <span class="mi">80</span>
+
+<span class="kd">static</span> <span class="kd">const</span> <span class="n">uint16_t</span> <span class="n">input_cmap</span><span class="o">[</span><span class="mi">256</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="mh">0x2966</span><span class="o">,</span> <span class="mh">0x31A6</span><span class="o">,</span> <span class="mh">0x39C7</span><span class="o">,</span> <span class="mh">0x39C7</span><span class="o">,</span> <span class="mh">0x39C7</span><span class="o">,</span> <span class="mh">0x39E7</span><span class="o">,</span> <span class="mh">0x39E7</span><span class="o">,</span> <span class="mh">0x39E8</span><span class="o">,</span>
+  <span class="o">...</span>
+  <span class="mh">0xFFFF</span><span class="o">,</span> <span class="mh">0xFFFF</span><span class="o">,</span> <span class="mh">0xFFFF</span><span class="o">,</span> <span class="mh">0xFFFF</span><span class="o">,</span> <span class="mh">0xFFFF</span><span class="o">,</span> <span class="mh">0xFFFF</span><span class="o">,</span> <span class="mh">0xFFFF</span><span class="o">,</span> <span class="mh">0xFFFF</span>
+<span class="o">};</span>
+<span class="kd">static</span> <span class="kd">const</span> <span class="n">uint8_t</span> <span class="n">input</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span>
+  <span class="o">...</span>
+  <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span><span class="o">,</span> <span class="mh">0xFE</span>
+<span class="o">};</span>
+<span class="err">#</span><span class="n">endif</span></code></pre></figure>
+
+<h5 id="描画方法">描画方法</h5>
+
+<p>変換後の <code class="language-plaintext highlighter-rouge">.h</code> をインクルードし、<a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/Arduino_GFX.cpp#L1396-L1458"><code class="language-plaintext highlighter-rouge">drawIndexedBitmap‎()</code></a> に変換結果を与えます。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">gfx</span><span class="o">-&gt;</span><span class="n">drawIndexedBitmap</span><span class="o">(</span>
+    <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span>                               <span class="c1">// 描画開始位置</span>
+    <span class="n">const_cast</span><span class="o">&lt;</span><span class="n">uint8_t</span>  <span class="o">*&gt;(</span><span class="n">input</span><span class="o">),</span>      <span class="c1">// ビットマップデータ</span>
+    <span class="n">const_cast</span><span class="o">&lt;</span><span class="n">uint16_t</span> <span class="o">*&gt;(</span><span class="n">input_map</span><span class="o">),</span>  <span class="c1">// カラーパレット</span>
+    <span class="no">INPUT_WIDTH</span><span class="o">,</span> <span class="no">INPUT_HEIGHT</span>           <span class="c1">// 画像のサイズ</span>
+<span class="o">);</span></code></pre></figure>
+
+<h3 id="月齢画像グレースケール画像">月齢画像（グレースケール画像）</h3>
+
+<figure class="float-left">
+  <a href="/images/2026/10-13/NASA_MoonPhase.jpg" title="グレイスケール化に適した例" data-lightbox="image">
+    <img src="/images/2026/10-13/NASA_MoonPhase-small.jpg" alt="グレイスケール化に適した例" width="600" height="344" />
+    <figcaption>グレイスケール化に適した例</figcaption>
+  </a>
+</figure>
+
+<p>皆さんは、月の満ち欠けって興味ありますか？ 私は大いにアリなので是非とも移植したい項目でした <span class="emoji" style="font-size: 2em">🎑</span></p>
+
+<p>ということで、月齢画像は NASA の <a href="https://svs.gsfc.nasa.gov/4310/" title="NASA SVS｜Moon Phases Loop">Moon Phases Loop</a> から切り出しました。</p>
+
+<div class="clear-both"></div>
+
+<figure class="float-left flex">
+  <a href="/images/2026/10-13/FileToCArray.jpg" title="File to C style array converter" data-lightbox="image">
+    <img src="/images/2026/10-13/FileToCArray-small.jpg" alt="File to C style array converter" width="600" height="575" />
+    <figcaption>File to C style array converter</figcaption>
+  </a>
+</figure>
+
+<p>Flash 埋め込み用ビットマップデータの作成には、ブラウザ上で動作する軽量な <a href="https://notisrac.github.io/FileToCArray/" title="File to C style array converter">File to C style array converter</a> が私のお気に入りです。</p>
+
+<p>ほぼそのまま使える C ソースコードが生成できます。</p>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>月齢の計算アルゴリズムについて</summary>
+
+
+<p>Google で <a href="https://www.google.com/search?q=%E6%9C%88%E9%BD%A2%E3%81%AE%E8%A8%88%E7%AE%97%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0" title="月齢の計算アルゴリズム - Google 検索">月齢の計算アルゴリズム</a> を検索すると AI の解説を含めて様々出てきます。そこで Bodmer 氏が採用した <a href="https://github.com/Bodmer/OpenWeather/blob/main/examples/TFT_eSPI_OpenWeather_LittleFS/MoonPhase.ino" title="OpenWeather/examples/TFT_eSPI_OpenWeather_LittleFS/MoonPhase.ino at main · Bodmer/OpenWeather">月齢計算プログラム</a> との精度を比較してみました。「正解」としたのは以下の２つです。</p>
+
+<ul>
+  <li><a href="https://starwalk.space/ja/moon-calendar" title="今日の月｜今日の月齢｜月 満ち欠け｜月齢カレンダー｜今日の月の形｜今夜の月｜月の満ち欠け カレンダー">月齢カレンダー</a></li>
+  <li><a href="https://weathernews.jp/s/star/moon_calendar.html" title="月カレンダー｜こよみ 月の満ち欠けや月齢 ウェザーニュース">月カレンダー - ウェザーニュース</a></li>
+</ul>
+
+<p>結果、簡易計算や近似計算では数日のズレが出るのに対し、Bodmer 氏のプログラムでは大体 ±0.5 日未満のズレに収まっていました。このプログラムの出展を見つけるのに苦労しましたが、<a href="https://web.archive.org/web/20251011075404/http://www.voidware.com/moon_phase.htm" title="moon phase calculation">インターネットアーカイブに残っていました</a>。詳しいロジックは分かりませんが、ざっと眺めてみると、地球から見た太陽と月との位置関係を元に幾何学的に計算しているように思います（定かではありませんが… <span class="emoji">🙄</span>）。</p>
+
+<p>ということで、これをそのまま使わせてもらうことにしました。</p>
+
+<p>ちなみに後日 Auduino ライブラリの <a href="https://github.com/signetica/MoonPhase" title="signetica/MoonPhase: C++ class for calculating the phase and position of the moon for Unix, Linux, Arduino">signetica/MoonPhase</a> を見つけましたが、「正解」とのズレは未検証です。</p>
+
+
+</details>
+
+</div>
+
+<h3 id="お天気アイコンgfx-フォント画像">お天気アイコン（GFX フォント画像）</h3>
+
+<p>Arduino_GFX のフォント <a href="https://github.com/moononournation/ArduinoFreeFontFile" title="moononournation/ArduinoFreeFontFile">ArduinoFreeFontFile</a> は、<a href="https://learn.adafruit.com/adafruit-gfx-graphics-library/using-fonts" title="Using Fonts｜Adafruit GFX Graphics Library｜Adafruit Learning System">Adafruit の GFX フォント</a> を踏襲しています。</p>
+
+<p>カスタムなフォントを作るには、TrueType フォントを変換するプログラム <a href="https://github.com/adafruit/Adafruit-GFX-Library/tree/master/fontconvert" title="Adafruit-GFX-Library/fontconvert at master · adafruit/Adafruit-GFX-Library">fontconvert</a> か、オンラインツールの <a href="https://rop.nl/truetype2gfx/" title="truetype2gfx - Converting fonts from TrueType to Adafruit GFX">truetype2gfx</a> が利用できます。前者は生成するアスキーコードの範囲が指定でき、後者は 0x20 〜 0x7E までのフォントが定義された <code class="language-plaintext highlighter-rouge">.h</code> ファイルをゲット出来ます。</p>
+
+<figure class="flex">
+  <a href="/images/2026/10-13/TrueTypeIcons.jpg" title="FontForge でアイコンを定義" data-lightbox="image">
+    <img src="/images/2026/10-13/TrueTypeIcons-small.jpg" alt="FontForge でアイコンを定義" width="600" height="285" />
+    <figcaption>FontForge でアイコンを定義</figcaption>
+  </a>
+  <a href="/images/2026/10-13/truetype2gfx.jpg" title="truetype2gfx で変換" data-lightbox="image">
+    <img src="/images/2026/10-13/truetype2gfx-small.jpg" alt="truetype2gfx で変換" width="500" height="285" />
+    <figcaption>truetype2gfx で変換</figcaption>
+  </a>
+</figure>
+
+<div class="quote clear-both">
+
+<details style="margin-bottom: 0">
+<summary>fontconvert のコンパイル方法</summary>
+
+
+<p><code class="language-plaintext highlighter-rouge">fontconvert.c</code> のコンパイルには <a href="https://freetype.org/" title="The FreeType Project">FreeType</a> が必要です。</p>
+
+<p>基本的には、<a href="https://freetype.org/download.html" title="FreeType Downloads">Download</a> から最新版のパッケージをダウンロード＆展開し、<code class="language-plaintext highlighter-rouge">docs/INSTALL</code> から各 OS 環境ごとのコンパイル＆インストール方法に従いますが、私は Google に聞いた「<a href="https://www.google.com/search?q=%E5%90%84OS%E7%92%B0%E5%A2%83%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8Bfreetype%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%96%B9%E6%B3%95">各OS環境におけるfreetypeのインストール方法</a>」が簡単で上手くいきました <span class="emoji">😁</span></p>
+
+</details>
+
+</div>
+
+<figure class="float-left flex">
+  <a href="/images/2026/10-13/OutlineWindow.jpg" title="FontForge のアウトライン編集" data-lightbox="image">
+    <img src="/images/2026/10-13/OutlineWindow.jpg" alt="FontForge のアウトライン編集" width="600" height="525" />
+    <figcaption>FontForge のアウトライン編集</figcaption>
+  </a>
+</figure>
+
+<p>私は SVG は全くのシロウトなので、<a href="https://github.com/kickstandapps/WeatherIcons" title="kickstandapps/WeatherIcons: Open-sourced weather icons and font for UI design.">ベースの TrueType フォント</a> を <a href="https://fontforge.org/" title="FontForge Open Source Font Editor">FontForge</a> に読み込み、「アウトラインウィンドウ」の GUI 上で編集を行いました。</p>
+
+<p><a href="https://fonts.google.com/icons" title="Material Symbols and Icons - Google Fonts">Google font のアイコンフォント</a> から SVG ファイルをダウンロードし、同ウィンドウから「<code class="language-plaintext highlighter-rouge">ファイル(F)</code> → <code class="language-plaintext highlighter-rouge">取り込み(I)…</code>」も可能です（位置の合わせ込みが必要ですが…）。</p>
+
+<div class="clear-both"></div>
+
+<p><a href="http://designwithfontforge.com/ja-JP/" title="Design With FontForge">FontForge の日本語ドキュメント</a> が有志により整備されているので、一読推奨です <span class="emoji">😅</span></p>
+
+<h4 id="アイコンのカラー化">アイコンのカラー化</h4>
+
+<figure class="float-left">
+  <a href="/images/2026/10-13/IconList.png" title="アイコンフォントの多色刷り" data-lightbox="image">
+    <img src="/images/2026/10-13/IconList-small.png" alt="アイコンフォントの多色刷り" width="600" height="360" />
+    <figcaption>アイコンフォントの多色刷り</figcaption>
+  </a>
+</figure>
+
+<p>フォントの描画は基本的に単色ですが、オリジナルのカラー化された GUI に近づけるため、複数のパーツに分けたフォントを同じ位置に異なる色で重ね打ちする「多色刷り」を実装してみました。</p>
+
+<div class="clear-both"></div>
+
+<p>興味があれば <code class="language-plaintext highlighter-rouge">gfx.h</code> の <a href="https://github.com/embedded-kiddie/ArduinoOpenWeather/blob/main/gfx.h#L30-L44" title="ArduinoOpenWeather/gfx.h at main · embedded-kiddie/ArduinoOpenWeather">ココ</a> と <code class="language-plaintext highlighter-rouge">gfx.cpp</code> の <a href="https://github.com/embedded-kiddie/ArduinoOpenWeather/blob/main/gfx.cpp#L544-L659" title="ArduinoOpenWeather/gfx.cpp at main · embedded-kiddie/ArduinoOpenWeather">ココ</a> や <a href="https://github.com/embedded-kiddie/ArduinoOpenWeather/blob/main/gfx.cpp#L297-L309" title="ArduinoOpenWeather/gfx.cpp at main · embedded-kiddie/ArduinoOpenWeather">ココ</a> を読み解いてみて下さい <span class="emoji">😎</span></p>
+
+<h4 id="参考情報">参考情報</h4>
+
+<h5 id="フォント関連">フォント関連</h5>
+
+<ul>
+  <li><a href="https://bitbanksoftware-blogspot-com.translate.goog/2025/07/building-better-bitmap-font-system.html?_x_tr_sl=en&amp;_x_tr_tl=ja&amp;_x_tr_hl=ja&amp;_x_tr_pto=wapp" title="Building a Better Bitmap (font system)">より良いビットマップ（フォントシステム）の構築</a></li>
+  <li><a href="https://qiita.com/tama326/items/c255bd6a58e4092f5508" title="Adafruit GFX Libraryにフォントを追加 #Arduino - Qiita">Adafruit GFX Libraryにフォントを追加</a></li>
+</ul>
+
+<h5 id="お天気アイコンの例">お天気アイコンの例</h5>
+
+<ul>
+  <li><a href="https://fonts.google.com/icons?icon.query=weather" title="Material Symbols and Icons - Google Fonts">Google fonts のお天気アイコン</a></li>
+  <li><a href="https://github.com/kickstandapps/WeatherIcons" title="kickstandapps/WeatherIcons: Open-sourced weather icons and font for UI design.">kickstandapps/WeatherIcons</a></li>
+  <li><a href="https://github.com/erikflowers/weather-icons" title="erikflowers/weather-icons: 215 Weather Themed Icons and CSS">erikflowers/weather-icons</a></li>
+  <li><a href="https://github.com/boxbot6/easy-weather-icons-font" title="boxbot6/easy-weather-icons-font: A weather icons font designed to be easily compatible across a large variety of uses (Apps, Windows, KWGT, OpenweatherMap, meteo etc.).">boxbot6/easy-weather-icons-font</a></li>
+</ul>
+
+<h2 id="おわりに--ヒープメモリ残量の見積もり">おわりに − ヒープメモリ残量の見積もり</h2>
+
+<p>本記事のメインテーマは Flash サイズでしたが、今後「お天気アイコンをタッチすると、時刻ごとの天候や気温のグラフを表示する機能」が追加できそうか、UNO R4 WiFi でヒープメモリの残量を見積もってみました。</p>
+
+<p>見積もり方法は前回記事「<a href="/2026/05/15/#3-deserializejson-が使えるヒープメモリを確保する" title="UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法｜Embedded Kiddie">3. deserializeJson() が使えるヒープメモリを確保する</a>」の通りです。前提となるソフトウェアのバージョンは以下となります。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>パッケージ／ライブラリ</th>
+      <th>バージョン</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas" title="arduino/ArduinoCore-renesas">ArduinoCore-renesas</a></td>
+      <td>1.6.0</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/bblanchon/ArduinoJson" title="bblanchon/ArduinoJson: 📟 JSON library for Arduino and embedded C++. Simple and efficient.">ArduinoJson</a></td>
+      <td>7.4.3</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/moononournation/Arduino_GFX" title="moononournation/Arduino_GFX: Arduino GFX developing for various color displays and various data bus interfaces">GFX Library for Arduino</a></td>
+      <td>1.6.9</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/arduino-libraries/NTPClient" title="arduino-libraries/NTPClient: Connect to a NTP server">NTPClient</a></td>
+      <td>3.2.1</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/libraries/RTC" title="ArduinoCore-renesas/libraries/RTC at main · arduino/ArduinoCore-renesas">RTC</a></td>
+      <td>ArduinoCore-renesas 1.6.0</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/libraries/SPI" title="ArduinoCore-renesas/libraries/SPI at main · arduino/ArduinoCore-renesas">SPI</a></td>
+      <td>ArduinoCore-renesas 1.6.0</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/libraries/WiFiS3" title="ArduinoCore-renesas/libraries/WiFiS3 at main · arduino/ArduinoCore-renesas">WiFiS3</a></td>
+      <td>ArduinoCore-renesas 1.6.0</td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/arduino/ArduinoCore-renesas/tree/main/libraries/Wire" title="ArduinoCore-renesas/libraries/Wire at main · arduino/ArduinoCore-renesas">Wire</a></td>
+      <td>ArduinoCore-renesas 1.6.0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>まずはコンパイル結果ですが、静的状態では RAM 容量にまだまだ余裕があります。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sketch uses 209684 bytes (79%) of program storage space. Maximum is 262144 bytes.
+Global variables use 10408 bytes (31%) of dynamic memory, leaving 22360 bytes for local variables. Maximum is 32768 bytes.
+</code></pre></div></div>
+
+<p>マップファイルから求めたヒープの残りサイズもコンパイル結果に近い値です。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>アドレス／サイズ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__HeapLimit</code></td>
+      <td>0x0000000020007b00</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__HeapBase</code></td>
+      <td>0x00000000200028c0</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">__HeapLimit</code> - <code class="language-plaintext highlighter-rouge">__HeapBase</code></td>
+      <td>0x5240 (<strong>21056</strong>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>次に動的状態で調べるため、<code class="language-plaintext highlighter-rouge">setup()</code> の初期化終了時点と <code class="language-plaintext highlighter-rouge">loop()</code> の末尾に次のコードを仕掛け、ヒープメモリの使用状況を表示させました。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">stdio</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+<span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">malloc</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+
+<span class="kt">void</span> <span class="nf">check_heap_size</span><span class="o">(</span><span class="kt">void</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">struct</span> <span class="n">mallinfo</span> <span class="n">mi</span> <span class="o">=</span> <span class="n">mallinfo</span><span class="o">();</span>
+  <span class="n">printf</span><span class="o">(</span><span class="s">"total space allocated from system (arena): %lu\n"</span><span class="o">,</span> <span class="n">mi</span><span class="o">.</span><span class="na">arena</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>ということで、ヒープメモリ残量の見積もり結果は以下の通りとなりました。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>計測ポイント</th>
+      <th style="text-align: center"><code class="language-plaintext highlighter-rouge">arena</code> のサイズ</th>
+      <th style="text-align: center">(<code class="language-plaintext highlighter-rouge">__HeapLimit</code> - <code class="language-plaintext highlighter-rouge">__HeapBase</code>) - <code class="language-plaintext highlighter-rouge">arena</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">setup()</code> の初期化終了時点</td>
+      <td style="text-align: center">1484</td>
+      <td style="text-align: center">21056 - 1484 = 19572 (19.0KB)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">loop()</code> の末尾</td>
+      <td style="text-align: center">17588</td>
+      <td style="text-align: center">21056 - 17588 = 3468 (3.0KB)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>う〜ん、残り 3KB でどれだけできるか分かりませんが、そのうちチャレンジしてみます <span class="emoji">🍁</span></p>
+
+  </div>
+  <div class="wrapper pager">
+    <p class="prev">
+      <a href="/2026/05/15/" title="前の記事：UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法">← UNO R4 WiFiとESP32でREST API (2) - 大きなJSONデータを解析するArduinoJson活用法</a>
+    </p>
+
+    <p class="next">
+      <a href="/" title="Home に戻る">Home に戻る</a>
+    </p>    
+  </div>
+<div id="disqus_thread"></div>
+  <script>var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/10/13/",this.page.identifier="/2026/10/13/index"};!function(){var e=document,t=e.createElement("script");t.src="https://embedded-kiddie.disqus.com/embed.js",t.setAttribute("data-timestamp",+new Date),(e.head||e.body).appendChild(t)}();</script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2026/10/13/" hidden></a>
+</article>
+
+      </div>
+    </main>
+<footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Embedded Kiddie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Kingsman</li><li><a class="u-email" href="https://mailhide.io/e/DpUPhw9C" onclick="popup=window.open('https://mailhide.io/e/DpUPhw9C','mailhidepopup','width=580,height=635'); return false;">e......@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/embedded-kiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">embedded-kiddie</span></a></li><li><a href="https://www.twitter.com/EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">EmbeddedKiddie</span></a></li><li><a href="https://youtube.com/@EmbeddedKiddie"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg> <span class="username">EmbeddedKiddie</span></a></li></ul></div>
+
+      <div class="footer-col footer-col-3">
+        <p>組み込みエンジニア。かつては趣味でWordPressプラグインなどリリース。 興味をロボットや電子工作に転じ、ハードとソフトを再勉強する日々。</p>
+      </div>
+    </div>
+
+  </div>
+  <button id="js-pagetop" class="pagetop"><span class="pagetop_arrow"></span></button>
+</footer>
+
+<script async src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.4.0/dist/luminous.min.js" integrity="sha256-4vMnmzhFzuXVxRHRFNwJzPnT923+MfWHWU4deBjd/vQ=" crossorigin="anonymous"></script>
+<script async src="/assets/luminous-config.min.js"></script>
+<script>'use strict';(function(){const h=document.querySelector("#js-pagetop");h.addEventListener("click",a=>{function d(g){null==k&&(k=g);g-=k;var n=g/500;window.scrollTo(0,p-p*(1===n?1:-Math.pow(2,-10*n)+1));500>g?requestAnimationFrame(d):window.scroll(f)}a.stopPropagation();const f={top:0,left:0},p=window.scrollY;let k=null;window.scroll(f);requestAnimationFrame(d)});window.addEventListener("scroll",a=>{1<window.scrollY?h.classList.add("fadeIn"):h.classList.remove("fadeIn");"undefined"===typeof commentCount||commentCount.done||commentCount.show(a)});let l=document.createElement("button");l.className="code-copy";l.setAttribute("title","\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u306b\u30b3\u30d4\u30fc");let e=document.createElement("span");e.className="code-copy-notice";e.textContent="";let b=document.getElementsByTagName("pre"),c=Array(b.length),m=Array(b.length);for(let a=0;a<b.length;a++)b[a].parentNode.classList.contains("highlight")&&(c[a]=l.cloneNode(!0),c[a].addEventListener("click",()=>{let d=window.getSelection(),f=c[a].parentNode;d.selectAllChildren(f);d.extend(f,f.childNodes.length-1);navigator.clipboard?navigator.clipboard.writeText(d).then(()=>{d.removeAllRanges();e.textContent="\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f";e.classList.add("code-copy-notice-after");setTimeout(()=>{e.classList.remove("code-copy-notice-after");e.textContent=""},1300)}).catch(()=>{alert("\u30b3\u30d4\u30fc\u5931\u6557\uff01")}):document.execCommand("copy")}),b[a].addEventListener("mouseenter",()=>{b[a].appendChild(c[a]);c[a].appendChild(e)}),b[a].addEventListener("mouseleave",()=>{c[a].remove()}),b[a].addEventListener("scroll",()=>{c[a].style.visibility="hidden";null!=m[a]&&clearTimeout(m[a]);m[a]=setTimeout(()=>{c[a].style.visibility="visible"},500);c[a].style.right=-b[a].scrollLeft+"px"}));const T=document.querySelector('#disqus-comment-count');const commentCount={done:!1,show:function(e){const r=T.getBoundingClientRect();if(r.top<=window.innerHeight&&r.bottom>=0){this.done=!0;const s=document.createElement('script');s.id="dsq-count-scr";s.src="https://embedded-kiddie.disqus.com/count.js";T.appendChild(s)}}};if("embedded-kiddie.github.io"===window.location.hostname){const o=new MutationObserver(records=>{let t=parseInt(T.textContent);if(t!==NaN&&t){let e=new Event('click');document.querySelector('#open_disqus').dispatchEvent(e)}});o.observe(T,{childList:!0});document.querySelector('#open_disqus').addEventListener('click',(e)=>{var disqus_config=function(){this.page.url="https://embedded-kiddie.github.io/2026/10/13/";this.page.identifier="/2026/10/13/"};const d=document,s=d.createElement('script');s.src="https://embedded-kiddie.disqus.com/embed.js";s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);o.disconnect()})}})();</script>
+</body>
+</html>
