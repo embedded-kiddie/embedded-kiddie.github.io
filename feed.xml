@@ -8,6 +8,25 @@
     
       
       <item>
+        <title>UNO R4＋ILI9341/ST7789（SPI、8bitパラレル）Arduino_GFXの注意点とベンチマーク</title>
+        
+          <description>&lt;figure class=&quot;flex&quot;&gt;
+  &lt;div&gt;
+    &lt;img src=&quot;/images/2026/10-24/ArduinoOpenWeather.jpg&quot; alt=&quot;UNO R3／Mega 2560 用シールドを UNO R4 WiFi で使う&quot; width=&quot;3520&quot; height=&quot;2160&quot; /&gt;
+    &lt;figcaption style=&quot;min-width: 100%&quot;&gt;UNO R3／Mega 2560 用シールドを UNO R4 WiFi で使う&lt;/figcaption&gt;
+  &lt;/div&gt;
+&lt;/figure&gt;
+</description>
+        
+        <pubDate>Sat, 24 Oct 2026 11:42:21 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2026/10/24/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2026/10/24/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>UNO R4 WiFiとESP32でREST API (3) - アイコン画像をUNO R4のFlash容量内に収める方法</title>
         
           <description>&lt;figure class=&quot;flex&quot;&gt;
