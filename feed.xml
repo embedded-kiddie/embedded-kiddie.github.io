@@ -8,6 +8,22 @@
     
       
       <item>
+        <title>UNO R4＋ILI9341（SPI版）タッチとキャリブレーションのアルゴリズムと精度の検証</title>
+        
+          <description>&lt;h2 id=&quot;はじめに&quot;&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;「&lt;a href=&quot;https://github.com/PaulStoffregen/XPT2046_Touchscreen&quot; title=&quot;PaulStoffregen/XPT2046_Touchscreen: Touchscreen Arduino Library for XPT2046 Touch Controller Chip&quot;&gt;XPT2046_Touchscreen ライブラリ&lt;/a&gt; で問題ないだろう」と高を括ってましたが、甘かったです。&lt;a href=&quot;/2026/10/24/&quot; title=&quot;UNO R4＋ILI9341/ST7789（SPI、8bitパラレル）Arduino_GFXの注意点とベンチマーク｜Embedded Kiddie&quot;&gt;前回&lt;/a&gt; 試した以下のパネルのうち、特に 2.4 インチ版で問題が出まくりでした &lt;span class=&quot;emoji&quot;&gt;😩&lt;/span&gt;&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Thu, 12 Nov 2026 15:01:15 +0900</pubDate>
+        <link>
+        https://embedded-kiddie.github.io/2026/11/12/index.html</link>
+        <guid isPermaLink="true">https://embedded-kiddie.github.io/2026/11/12/index.html</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>UNO R4＋ILI9341/ST7789（SPI、8bitパラレル）Arduino_GFXの注意点とベンチマーク</title>
         
           <description>&lt;figure class=&quot;flex&quot;&gt;
