@@ -10,8 +10,8 @@
 <meta property="og:title" content="UNO R4＋ILI9341/ST7789（SPI、8bitパラレル）Arduino_GFXの注意点とベンチマーク" />
 <meta name="author" content="Kingsman" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="UNO R4 で動作する SPI 版と 8bit パラレル版の LCD 仕様と消費電流の測定結果、およびグラフィックライブラリ Arduino_GFX の設定上の注意点と Adafruit GFX と比較したベンチマーク結果を共有します。" />
-<meta property="og:description" content="UNO R4 で動作する SPI 版と 8bit パラレル版の LCD 仕様と消費電流の測定結果、およびグラフィックライブラリ Arduino_GFX の設定上の注意点と Adafruit GFX と比較したベンチマーク結果を共有します。" />
+<meta name="description" content="UNO R4 で動作する SPI 版と 8bit パラレル版の LCD 仕様と消費電流の測定結果、およびグラフィックライブラリ Arduino_GFX の設定上の注意点と Adafruit-GFX-Library と比較したベンチマーク結果を共有します。" />
+<meta property="og:description" content="UNO R4 で動作する SPI 版と 8bit パラレル版の LCD 仕様と消費電流の測定結果、およびグラフィックライブラリ Arduino_GFX の設定上の注意点と Adafruit-GFX-Library と比較したベンチマーク結果を共有します。" />
 <link rel="canonical" href="https://embedded-kiddie.github.io/2026/10/24/" />
 <meta property="og:url" content="https://embedded-kiddie.github.io/2026/10/24/" />
 <meta property="og:site_name" content="Embedded Kiddie" />
@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="UNO R4＋ILI9341/ST7789（SPI、8bitパラレル）Arduino_GFXの注意点とベンチマーク" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2026-10-24T11:42:21+09:00","datePublished":"2026-10-24T11:42:21+09:00","description":"UNO R4 で動作する SPI 版と 8bit パラレル版の LCD 仕様と消費電流の測定結果、およびグラフィックライブラリ Arduino_GFX の設定上の注意点と Adafruit GFX と比較したベンチマーク結果を共有します。","headline":"UNO R4＋ILI9341/ST7789（SPI、8bitパラレル）Arduino_GFXの注意点とベンチマーク","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2026/10/24/"},"url":"https://embedded-kiddie.github.io/2026/10/24/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kingsman"},"dateModified":"2026-11-12T15:42:27+09:00","datePublished":"2026-10-24T11:42:21+09:00","description":"UNO R4 で動作する SPI 版と 8bit パラレル版の LCD 仕様と消費電流の測定結果、およびグラフィックライブラリ Arduino_GFX の設定上の注意点と Adafruit-GFX-Library と比較したベンチマーク結果を共有します。","headline":"UNO R4＋ILI9341/ST7789（SPI、8bitパラレル）Arduino_GFXの注意点とベンチマーク","mainEntityOfPage":{"@type":"WebPage","@id":"https://embedded-kiddie.github.io/2026/10/24/"},"url":"https://embedded-kiddie.github.io/2026/10/24/"}</script>
 <!-- End Jekyll SEO tag -->
 
   <style type="text/css">body,h1,h2,h3,h4,h5,h6,p,blockquote,pre,hr,dl,dd,ol,ul,figure{margin:0;padding:0}body{font:400 16px/2 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";color:#111;background-color:#fdfdfd;-webkit-text-size-adjust:100%;-webkit-font-feature-settings:"kern" 1;-moz-font-feature-settings:"kern" 1;-o-font-feature-settings:"kern" 1;font-feature-settings:"kern" 1;font-kerning:normal;display:flex;min-height:100vh;flex-direction:column}p,blockquote,pre,ul,ol,dl,figure{margin-bottom:1em}h1,h2,h3,h4,h5,h6{padding-top:1em;margin-bottom:0.25em;clear:both}main{display:block}img{max-width:100%;vertical-align:middle;height:auto}figure>img{display:block}figcaption{font-size:14px;max-width:230px;width:fit-content;margin-right:auto;margin-left:auto;text-align:center}ul,ol{margin-left:1em}li>ul,li>ol{margin-bottom:0}h1,h2,h3,h4,h5,h6{font-weight:400}.e-content h1,.e-content h2,.e-content h3,.e-content h4,.e-content h5,.e-content h6{font-weight:600}h2+h3,h3+h4,h4+h5{padding-top:0}a{color:#2a7ae2;text-decoration:none}a:visited{color:#1756a9}a:hover{color:#111;text-decoration:underline}.social-media-list a:hover{text-decoration:none}.social-media-list a:hover .username{text-decoration:underline}blockquote{color:#707070;border-left:4px solid #d6d6d6;padding-left:.5em;font-size:18px;letter-spacing:-1px;font-style:italic}blockquote>:last-child{margin-bottom:0}pre,code{font-size:15px;border:1px solid #d6d6d6;border-radius:3px;background-color:#eef}code{padding:1px 5px}pre{position:relative;padding:8px 12px;overflow-x:auto}pre>code{border:0;padding-right:0;padding-left:0}.wrapper{max-width:-webkit-calc(800px - (1em * 2));max-width:calc(800px - 1em*2);margin-right:auto;margin-left:auto;padding-right:1em;padding-left:1em}@media screen and (max-width: 800px){.wrapper{max-width:-webkit-calc(800px - (1em));max-width:calc(800px - (1em));padding-right:.5em;padding-left:.5em}}.footer-col-wrapper:after,.wrapper:after{content:"";display:table;clear:both}.svg-icon{width:16px;height:16px;display:inline-block;fill:#707070;padding-right:5px;vertical-align:text-top}.social-media-list li+li{padding-top:5px}table{margin-bottom:1em;width:100%;text-align:left;font-size:85%;color:#1e1e1e;border-collapse:collapse;border:1px solid #d6d6d6}table tr:nth-child(even){background-color:#f7f7f7}table th,table td{padding:.3333333333em .5em}table th{background-color:#e5e5e5;border:1px solid #c2c2c2;border-bottom-color:#b7b7b7}table td{border:1px solid #d6d6d6}h5{font-size:1em}.post-content{font-size:1.125rem}.center{text-align:center}.float-left{float:left;margin:0 .75em 0 0;padding:0 .75em 0 0;width:30%}.clear-both{clear:both}video{max-width:100%;padding:0 0 1em 0;margin:auto}a[href^=http]:not(.simple):after{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAQElEQVR42qXKwQkAIAxDUUdxtO6/RBQkQZvSi8I/pL4BoGw/XPkh4XigPmsUgh0626AjRsgxHTkUThsG2T/sIlzdTsp52kSS1wAAAABJRU5ErkJggg==);margin:0 3px 0 5px}figure.flex{display:flex;text-align:center;justify-content:space-around}figure.flex a{margin:0 .25em}img{margin:.5em 0 1em 0;box-shadow:0 5px 10px 0 rgba(0,0,0,.1)}img.emoji{height:1.5em;width:1.5em;margin:0 0 .25em 0;box-shadow:none}span.emoji{font-size:1.5em;line-height:1em}span.inline img{height:1.5em;margin:0;box-shadow:none}td img{margin-bottom:0}img.simple{box-shadow:none;width:100%}.twitter-tweet{padding-bottom:.5em}.quote,.notice{padding:.5em 1em;margin:1em 0 2em 0;color:#505050;background:#fff;border-radius:10px}.quote h3,.quote h4,.quote h5,.quote p:last-child,.notice h3,.notice h4,.notice h5,.notice p:last-child{margin:0;padding:0}.quote{border:solid 3px #5c81e6}.notice{border:solid 3px #e01b7e}figcaption{margin-bottom:1em}footer.site-footer div{font-size:16px !important}header h1,footer div{line-height:1.5}.pagetop{height:50px;width:50px;position:fixed;right:30px;bottom:50px;background:#fff;border:solid 2px #000;border-radius:50%;display:flex;justify-content:center;align-items:center;z-index:2;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden}.pagetop_arrow{display:block;height:10px;width:10px;border-top:3px solid #000;border-right:3px solid #000;transform:translateY(20%) rotate(-45deg)}.pagetop.fadeIn{opacity:.5;visibility:inherit}.pagetop:hover{opacity:1}.pager{clear:both;margin:2em 0;border-top:1px solid #c8c8c8;border-bottom:1px solid #c8c8c8}.pager p{line-height:1.5em;margin:.5em 0}.pager p.next{float:right}.pager p.prev{float:left}details{margin-bottom:1em}details:hover{cursor:pointer}details summary{font-weight:bold}details summary h3,details summary h4,details summary h5,details summary h6{padding:0;display:inline}.lum-open .lum-img{margin:0 !important}button.simple{background-color:rgba(0,0,0,0);border:none;cursor:pointer;outline:none;padding:0;appearance:none}button.simple img{box-shadow:none;width:100%;height:auto}#disqus_thread{clear:both;position:relative}#disqus_thread span{position:absolute;font-weight:bold}.items-list :is(ul,ol) li{list-style:none;padding:.5rem 1rem}.items-list :is(ul,ol) li:nth-child(even){background:#f4f4f5}.items-list :is(ul,ol) time{padding:0 .25rem;color:#707070;white-space:nowrap}.strong{color:#003cb9 !important;font-weight:bold}table{caption-side:bottom}table caption{margin:.5em}pre.mermaid{border:none;background-color:inherit}.code-copy{position:absolute;top:6px;right:0px;padding:0px 6px 0px;border:none;opacity:.7;transition:.3s;background-color:rgba(0,0,0,0)}.code-copy:hover{cursor:pointer;opacity:1}.code-copy::before{content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAA51BMVEUALlw8VGulqa6/xsu/xMoCLlg3Um+ut73EyM7CxsvAxsuwt7yhp61+hYtlbHJob3VrcndqcHZnbnOFjJH2+//////y9/uNlJre5Om8wse/w8i7wMa7v8Tj6O6fpqxka3Dr8Pb0+f5cY2hhaG57gYaFjJCEi5CIj5OMk5jp7/T3+/9fZWu5v8Separd4ed5gIWBiI2Ahox7gojn7PLKz9VgZ2zs8vfL0dZjam/u8/n6/v/HzdJyeX6bo6dlbnJsc3nV2uBvdnt3foTW3OGutLmhpqywtbuutLuwtbyWnKI7VGsALlgLMVV3qM2OAAAA4UlEQVR4Ac3T02LFQBCA4diZiY5tu3Zqvf/r1M6ibr/r/2Z3ZgRBlGSFQpZEVdB0w7QoTMMWBclwXCrHkATZcgEpwLVkQbFc9CjQtZRvDBD9RwESAgyj1KN0BpMBZFO5fK5wq1gqV/xEEFRr9UYzbN1otzvdJiaCXn8wTD0bQTKopMaT6Z3ZPLUgBJBaWsZ7g5VeQApW17x7jfV/GcBiI2AGlc3UFjPw59se8x88f2c3tRfv34uj6tvgRnCQenYIycCPj45P7p2e+aSV86HyCL5zabmHwz29c5tzvBfs87+8Bgn4SREbQzrqAAAAAElFTkSuQmCC)}.code-copy-notice{position:absolute;visibility:hidden;pointer-events:none;z-index:1;top:5px;right:calc(100% + 4px);padding:2px 6px 0px;border-radius:3px;font-weight:bold;font-size:13px;color:#000;background:#fff}.code-copy-notice-after{visibility:visible}.site-header{border-top:5px solid #303030;border-bottom:1px solid #d6d6d6;min-height:1.865em;position:relative}.site-title{font-size:26px;font-weight:300;line-height:72px;margin-bottom:0;float:left}.site-title,.site-title:visited{color:#303030}.site-nav{float:right;line-height:72px}.site-nav .nav-trigger{display:none}.site-nav .menu-icon{display:none}.site-nav .page-link{color:#111;line-height:2}.site-nav .page-link:not(:last-child){margin-right:20px}@media screen and (max-width: 600px){.site-nav{position:absolute;top:9px;right:.5em;background-color:#fdfdfd;border:1px solid #d6d6d6;border-radius:5px;text-align:right}.site-nav label[for=nav-trigger]{display:block;float:right;width:36px;height:36px;z-index:2;cursor:pointer}.site-nav .menu-icon{display:block;float:right;width:36px;height:26px;line-height:0;padding-top:10px;text-align:center}.site-nav .menu-icon>svg{fill:#303030}.site-nav input~.trigger{clear:both;display:none}.site-nav input:checked~.trigger{display:block;padding-bottom:5px}.site-nav .page-link{display:block;padding:5px 10px;margin-left:20px}.site-nav .page-link:not(:last-child){margin-right:0}}.site-footer{border-top:1px solid #d6d6d6;padding:1em 0}.footer-heading{font-size:18px;margin-bottom:.5em}.contact-list,.social-media-list{list-style:none;margin-left:0}.footer-col-wrapper{font-size:15px;color:#707070;margin-left:-0.5em}.footer-col{float:left;margin-bottom:.5em;padding-left:.5em}.footer-col-1{width:-webkit-calc(27% - (1em / 2));width:calc(27% - 1em/2)}.footer-col-2{width:-webkit-calc(26% - (1em / 2));width:calc(26% - 1em/2)}.footer-col-3{width:-webkit-calc(47% - (1em / 2));width:calc(47% - 1em/2)}@media screen and (max-width: 800px){.footer-col-1,.footer-col-2{width:-webkit-calc(50% - (1em / 2));width:calc(50% - 1em/2)}.footer-col-3{width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}@media screen and (max-width: 600px){.footer-col{float:none;width:-webkit-calc(100% - (1em / 2));width:calc(100% - 1em/2)}}.page-content{padding:1em 0;flex:1}.page-heading{font-size:32px}.post-list-heading{font-size:28px}.post-list{margin-left:0;list-style:none}.post-list>li{margin-bottom:1em}.post-meta{font-size:14px;color:#707070}.post-link{display:block;font-size:24px}.post-header{margin-bottom:1em}.post-title{font-size:36px}@media screen and (max-width: 800px){.post-title{line-height:1}}.post-content{margin-bottom:1em}.post-content h2{font-size:32px}@media screen and (max-width: 800px){.post-content h2{font-size:28px}}.post-content h3{font-size:26px}@media screen and (max-width: 800px){.post-content h3{font-size:22px}}.post-content h4{font-size:22px}@media screen and (max-width: 800px){.post-content h4{font-size:18px}}code{font-size:16px !important;font-family:Consolas,Menlo,Monaco,-apple-system,BlinkMacSystemFont,"Segoe UI",Meiryo,monospace !important}.highlight{clear:both}.highlight pre,.highlight code{line-height:1.5;background-color:#002346}figure.highlight,div.highlight,.highlight pre{border-radius:9px}.highlight table td{padding:5px}.highlight table pre{margin:0}.highlight,.highlight .w{color:#c9d1d9;background-color:#161b22}.highlight .k,.highlight .kd,.highlight .kn,.highlight .kp,.highlight .kr,.highlight .kt,.highlight .kv{color:#ff7b72}.highlight .gr{color:#f0f6fc}.highlight .gd{color:#ffdcd7;background-color:#67060c}.highlight .nb{color:#ffa657}.highlight .nc{color:#ffa657}.highlight .no{color:#ffa657}.highlight .nn{color:#ffa657}.highlight .sr{color:#7ee787}.highlight .na{color:#7ee787}.highlight .nt{color:#7ee787}.highlight .gi{color:#aff5b4;background-color:#033a16}.highlight .kc{color:#79c0ff}.highlight .l,.highlight .ld,.highlight .m,.highlight .mb,.highlight .mf,.highlight .mh,.highlight .mi,.highlight .il,.highlight .mo,.highlight .mx{color:#79c0ff}.highlight .sb{color:#79c0ff}.highlight .bp{color:#79c0ff}.highlight .ne{color:#79c0ff}.highlight .nl{color:#79c0ff}.highlight .py{color:#79c0ff}.highlight .nv,.highlight .vc,.highlight .vg,.highlight .vi,.highlight .vm{color:#79c0ff}.highlight .o,.highlight .ow{color:#79c0ff}.highlight .gh{color:#1f6feb;font-weight:bold}.highlight .gu{color:#1f6feb;font-weight:bold}.highlight .s,.highlight .sa,.highlight .sc,.highlight .dl,.highlight .sd,.highlight .s2,.highlight .se,.highlight .sh,.highlight .sx,.highlight .s1,.highlight .ss{color:#a5d6ff}.highlight .nd{color:#d2a8ff}.highlight .nf,.highlight .fm{color:#d2a8ff}.highlight .err{color:#f0f6fc}.highlight .c,.highlight .ch,.highlight .cd,.highlight .cm,.highlight .cp,.highlight .cpf,.highlight .c1,.highlight .cs{color:#acb4bd}.highlight .gl{color:#acb4bd}.highlight .gt{color:#acb4bd}.highlight .ni{color:#c9d1d9}.highlight .si{color:#c9d1d9}.highlight .ge{color:#c9d1d9;font-style:italic}.highlight .gs{color:#c9d1d9;font-weight:bold}/*# sourceMappingURL=/assets/main.css.map */</style>
@@ -68,25 +68,24 @@
 
 <h2 id="はじめに">はじめに</h2>
 
-<p>ESP32 と UNO R4 WiFi で動作する <a href="https://github.com/embedded-kiddie/ArduinoOpenWeather" title="embedded-kiddie/ArduinoOpenWeather: Yet another OpenWeather App for UNO R4 WiFi and ESP32">ArduinoOpenWeather</a> の制作で <a href="https://github.com/moononournation/Arduino_GFX" title="moononournation/Arduino_GFX: Arduino GFX developing for various color displays and various data bus interfaces">Arduino GFX</a>（IDE ライブラリ マネージャ上は <a href="https://docs.arduino.cc/libraries/gfx-library-for-arduino/">GFX Library for Arduino</a>）を使ってみました。</p>
+<p>ESP32 と UNO R4 WiFi で動作する <a href="https://github.com/embedded-kiddie/ArduinoOpenWeather" title="embedded-kiddie/ArduinoOpenWeather: Yet another OpenWeather App for UNO R4 WiFi and ESP32">ArduinoOpenWeather</a> の制作で <a href="https://github.com/moononournation/Arduino_GFX" title="moononournation/Arduino_GFX: Arduino GFX developing for various color displays and various data bus interfaces">Arduino_GFX</a>（IDE ライブラリ マネージャ上は <a href="https://docs.arduino.cc/libraries/gfx-library-for-arduino/">GFX Library for Arduino</a>）を使ってみました。</p>
 
-<p>UNO R4 とカラー TFT LCD の組み合わせでは、<a href="https://github.com/adafruit/adafruit-gfx-library" title="adafruit/Adafruit-GFX-Library: Adafruit GFX graphics core Arduino library, this is the &#x27;core&#x27; class that all our other graphics libraries derive from">Adafruit GFX</a> がよく使われていますし、稀に UNO R3／Mega 2560 用 LCD シールドを <a href="https://github.com/prenticedavid/mcufriend_kbv" title="prenticedavid/MCUFRIEND_kbv: MCUFRIEND_kbv Library for Uno 2.4, 2.8, 3.5, 3.6, 3.95 inch mcufriend  Shields">MCUFRIEND_kbv</a> で <a href="https://forum.arduino.cc/t/uno-r4-wifi-with-lcd-display/1204348/" title="Uno r4 wifi with LCD Display - van_der_decken の #6 - UNO R4 WiFi - Arduino Forum">動かした例</a> を見つける事ができます。</p>
+<p>UNO R4 とカラー TFT LCD の組み合わせでは、<a href="https://github.com/adafruit/adafruit-gfx-library" title="adafruit/Adafruit-GFX-Library: Adafruit GFX graphics core Arduino library, this is the &#x27;core&#x27; class that all our other graphics libraries derive from">Adafruit-GFX-Library</a> がよく使われていますし、稀に UNO R3／Mega 2560 用 LCD シールドを <a href="https://github.com/prenticedavid/mcufriend_kbv" title="prenticedavid/MCUFRIEND_kbv: MCUFRIEND_kbv Library for Uno 2.4, 2.8, 3.5, 3.6, 3.95 inch mcufriend  Shields">MCUFRIEND_kbv</a> で <a href="https://forum.arduino.cc/t/uno-r4-wifi-with-lcd-display/1204348/" title="Uno r4 wifi with LCD Display - van_der_decken の #6 - UNO R4 WiFi - Arduino Forum">動かした例</a> を見つける事ができます。</p>
 
-<p>Arduino GFX はこれらのライブラリに比べて適用範囲の広さと速さがウリですが、正しく動作させるには設定に注意が必要な事が分かりました。ソレさえ分かれば他の LCD にも応用できると期待しています。</p>
+<p>Arduino_GFX はこれらのライブラリに比べて適用範囲の広さと速さがウリですが、正しく動作させるには設定に注意が必要な事が分かりました。ソレさえ分かれば他の LCD にも応用できると期待しています。</p>
 
 <p>ということで、本記事では <a href="https://github.com/moononournation/Arduino_GFX" title="moononournation/Arduino_GFX: Arduino GFX developing for various color displays and various data bus interfaces">Arduino_GFX</a> に関して以下を共有したいと思います。</p>
 
 <ul>
   <li><a href="#ハードウェア仕様の確認と消費電流の測定">ハードウェア仕様の確認と消費電流の測定</a></li>
-  <li><a href="#arduino-gfx-設定の注意点">Arduino GFX 設定の注意点</a></li>
-  <li><a href="#adafruit-gfx-を含むベンチマークの結果">Adafruit GFX を含むベンチマークの結果</a></li>
+  <li><a href="#arduino-gfx-設定の注意点">Arduino_GFX 設定の注意点</a></li>
+  <li><a href="#adafruit-gfx-library-を含むベンチマークの結果">Adafruit-GFX-Library を含むベンチマークの結果</a></li>
 </ul>
 
 <p>と、その前に今回購入した LCD の紹介です。</p>
 
 <div class="quote clear-both">
 
-<h5 id="おことわり">おことわり</h5>
 <p>本記事では、「見た目が似ていても、中身がどこか違う製品がある」ことを、「クローン」や「派生」ではなく「変異体（Variant）」と表現しています。コロナウィルスの「変異株」に近いニュアンスです。ご了解ください。</p>
 
 </div>
@@ -115,9 +114,9 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
 
 <h3 id="8-bit-パラレル系シールドタイプ">8-bit パラレル系シールドタイプ</h3>
 
-<p>「Arduino UNO／Mega2560 用」として販売されているシールドです。LCD wiki からデモを落とすか、<a href="https://github.com/prenticedavid/mcufriend_kbv" title="prenticedavid/MCUFRIEND_kbv: MCUFRIEND_kbv Library for Uno 2.4, 2.8, 3.5, 3.6, 3.95 inch mcufriend  Shields">MCUFRIEND_kbv</a> を <a href="https://github.com/adafruit/adafruit-gfx-library" title="adafruit/Adafruit-GFX-Library: Adafruit GFX graphics core Arduino library, this is the &#x27;core&#x27; class that all our other graphics libraries derive from">Adafruit GFX</a> と組み合わせるのが一般的のようです。</p>
+<p>「Arduino UNO／Mega2560 用」として販売されているシールドです。LCD wiki からデモを落とすか、<a href="https://github.com/prenticedavid/mcufriend_kbv" title="prenticedavid/MCUFRIEND_kbv: MCUFRIEND_kbv Library for Uno 2.4, 2.8, 3.5, 3.6, 3.95 inch mcufriend  Shields">MCUFRIEND_kbv</a> の <a href="https://github.com/adafruit/adafruit-gfx-library" title="adafruit/Adafruit-GFX-Library: Adafruit GFX graphics core Arduino library, this is the &#x27;core&#x27; class that all our other graphics libraries derive from">Adafruit-GFX-Library</a> の組み合わせが一般的のようです。</p>
 
-<p>一方 <a href="https://github.com/moononournation/Arduino_GFX" title="moononournation/Arduino_GFX: Arduino GFX developing for various color displays and various data bus interfaces">Arduino GFX</a> では、<a href="https://github.com/moononournation/Arduino_GFX/pull/347" title="Support MCUFriend kind of shields on Arduino UNO and Arduino UNO R4 WiFi or Minima by ZinggJM · Pull Request #347 · moononournation/Arduino_GFX">このプルリク</a> で UNO R4 系でも動作するようになりました。</p>
+<p>一方 <a href="https://github.com/moononournation/Arduino_GFX" title="moononournation/Arduino_GFX: Arduino GFX developing for various color displays and various data bus interfaces">Arduino_GFX</a> では、<a href="https://github.com/moononournation/Arduino_GFX/pull/347" title="Support MCUFriend kind of shields on Arduino UNO and Arduino UNO R4 WiFi or Minima by ZinggJM · Pull Request #347 · moononournation/Arduino_GFX">このプルリク</a> で UNO R4 系でも動作するようになりました。</p>
 
 <figure class="float-left">
   <a href="/images/2026/10-24/UNO_Module_24.jpg" title="2.4インチ 8-bit パラレル" data-lightbox="image">
@@ -272,11 +271,11 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
   </a>
 </figure>
 
-<h2 id="arduino-gfx-設定の注意点">Arduino GFX 設定の注意点</h2>
+<h2 id="arduino_gfx-設定の注意点">Arduino_GFX 設定の注意点</h2>
 
-<p>Arduino GFX では MCU ⇔ LCD 間の通信を、経路である「データバス」クラスとディスプレイ ドライバ IC に送るデータを扱う「ディスプレイ」クラスに分けることで、様々なデバイス間で動作するように設計されています。</p>
+<p>Arduino_GFX では MCU ⇔ LCD 間の通信を、経路である「データバス」クラスとディスプレイ ドライバ IC に送るデータを扱う「ディスプレイ」クラスに分けることで、様々なデバイス間で動作するように設計されています。</p>
 
-<p>これを踏まえ、特に本章では Adafruit GFX との違いについて、次の二点を掘り下げます。</p>
+<p>これを踏まえ、本章では Adafruit-GFX-Library との違いについて、次の二点を掘り下げます。</p>
 
 <ul>
   <li><strong>データバスのクロック周波数</strong></li>
@@ -285,9 +284,9 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
 
 <h3 id="データバスのクロック周波数">データバスのクロック周波数</h3>
 
-<p>ここでの「データバス」は SPI バスとします。<a href="https://www.google.com/search?q=arduino+uno+r4%E3%81%AESPI%E3%83%90%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%83%E3%82%AF%E6%9C%80%E5%A4%A7%E5%80%A4%E3%81%AF%EF%BC%9F" title="Arduino UNO R4のSPIバスクロック最大値は？ - Google 検索">Arduino の SPI クラスにおけるクロック周波数の最大値は 12MHz とされています</a>。事実、Adafruit GFX では ILI9341 用クラスの <a href="https://github.com/adafruit/Adafruit_ILI9341/blob/master/Adafruit_ILI9341.h#L146" title="Adafruit_ILI9341/Adafruit_ILI9341.h at master · adafruit/Adafruit_ILI9341"><code class="language-plaintext highlighter-rouge">begin()</code></a> にクロック周波数を指定できますが、12MHz より大きな値を指定してもベンチマークの結果（後述）は変わりませんでした。</p>
+<p>ここでの「データバス」は SPI バスとします。<a href="https://www.google.com/search?q=arduino+uno+r4%E3%81%AESPI%E3%83%90%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%83%E3%82%AF%E6%9C%80%E5%A4%A7%E5%80%A4%E3%81%AF%EF%BC%9F" title="Arduino UNO R4のSPIバスクロック最大値は？ - Google 検索">Arduino の SPI クラスにおけるクロック周波数の最大値は 12MHz とされています</a>。事実、Adafruit-GFX-Library では ILI9341 用クラスの <a href="https://github.com/adafruit/Adafruit_ILI9341/blob/master/Adafruit_ILI9341.h#L146" title="Adafruit_ILI9341/Adafruit_ILI9341.h at master · adafruit/Adafruit_ILI9341"><code class="language-plaintext highlighter-rouge">begin()</code></a> にクロック周波数を指定できますが、12MHz より大きな値を指定してもベンチマークの結果（後述）は変わりませんでした。</p>
 
-<p>一方 Arduino GFX の ILI9341 用 <a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/databus/Arduino_HWSPI.h#L32" title="Arduino_GFX/src/databus/Arduino_HWSPI.h at master · moononournation/Arduino_GFX"><code class="language-plaintext highlighter-rouge">begin()</code></a> には 24MHz（RA4M1 で設定可能な最大値）も指定可能で、（さすがに２倍とまではいきませんが…）ベンチマーク結果も向上します。</p>
+<p>一方 Arduino_GFX の ILI9341 用 <a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/databus/Arduino_HWSPI.h#L32" title="Arduino_GFX/src/databus/Arduino_HWSPI.h at master · moononournation/Arduino_GFX"><code class="language-plaintext highlighter-rouge">begin()</code></a> には 24MHz（RA4M1 で設定可能な最大値）も指定可能で、（さすがに２倍とまではいきませんが…）ベンチマーク結果も向上します。</p>
 
 <div class="notice clear-both">
 
@@ -298,7 +297,7 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
 
 <h3 id="ディプレイ変数のコンストラクタ">ディプレイ変数のコンストラクタ</h3>
 
-<p>Arduino GFX で特質すべきは、例えば同じ ILI9341 用ドライバでも変異体による動作の違いにもキッチリ対応している点です。</p>
+<p>Arduino_GFX で特質すべきは、例えば同じ ILI9341 用ドライバでも変異体による動作の違いにもキッチリ対応している点です。</p>
 
 <p>例えば <a href="https://github.com/moononournation/Arduino_GFX/blob/master/src/display/Arduino_ILI9341.h#L175-L179" title="Arduino_GFX/src/display/Arduino_ILI9341.h at master · moononournation/Arduino_GFX">ILI9341 用のコンストラクタ</a> は、次のように多くの引数が指定可能となっています。</p>
 
@@ -315,20 +314,20 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
 
 <h4 id="ili9341-の色ズレ問題">ILI9341 の色ズレ問題</h4>
 
-<p>次に挙げる例は、パンダの JPEG 元画像に対し Adafruit GFX と Arduino GFX の結果を比較したものです。LCD が同じならグラフィック ライブラリが異なっても見た目が同じになる事が期待されますが、<span class="strong">デフォルトの <code class="language-plaintext highlighter-rouge">type1</code> ではパンダの頭頂部と鼻の頭の部分で「色ズレ」が顕著となりました</span>。</p>
+<p>次に挙げる例は、パンダの JPEG 元画像に対し Adafruit-GFX-Library と Arduino_GFX の結果を比較したものです。LCD が同じならグラフィック ライブラリが異なっても見た目が同じになる事が期待されますが、<span class="strong">デフォルトの <code class="language-plaintext highlighter-rouge">type1</code> ではパンダの頭頂部と鼻の頭の部分で「色ズレ」が顕著となりました</span>。</p>
 
 <figure class="flex">
   <a href="/images/2026/10-24/Panda.jpg" title="パンダ（元画像）" data-lightbox="image">
     <img src="/images/2026/10-24/Panda-small.jpg" alt="パンダ（元画像）" width="240" height="320" />
     <figcaption>パンダ（元画像）</figcaption>
   </a>
-  <a href="/images/2026/10-24/ILI9341_Panda_Adafruit.jpg" title="Adafruit GFX" data-lightbox="image">
-    <img src="/images/2026/10-24/ILI9341_Panda_Adafruit-small.jpg" alt="Adafruit GFX" width="240" height="320" />
-    <figcaption>Adafruit GFX</figcaption>
+  <a href="/images/2026/10-24/ILI9341_Panda_Adafruit.jpg" title="Adafruit-GFX-Library" data-lightbox="image">
+    <img src="/images/2026/10-24/ILI9341_Panda_Adafruit-small.jpg" alt="Adafruit-GFX-Library" width="240" height="320" />
+    <figcaption>Adafruit-GFX-Library</figcaption>
   </a>
-  <a href="/images/2026/10-24/ILI9341_Panda_type2.jpg" title="Arduino GFX (type2)" data-lightbox="image">
-    <img src="/images/2026/10-24/ILI9341_Panda_type2-small.jpg" alt="Arduino GFX (type2)" width="240" height="320" />
-    <figcaption>Arduino GFX (type2)</figcaption>
+  <a href="/images/2026/10-24/ILI9341_Panda_type2.jpg" title="Arduino_GFX (type2)" data-lightbox="image">
+    <img src="/images/2026/10-24/ILI9341_Panda_type2-small.jpg" alt="Arduino_GFX (type2)" width="240" height="320" />
+    <figcaption>Arduino_GFX (type2)</figcaption>
   </a>
   <a href="/images/2026/10-24/ILI9341_Panda_type1.jpg" title="デフォルト（色ズレあり）" data-lightbox="image">
     <img src="/images/2026/10-24/ILI9341_Panda_type1-small.jpg" alt="デフォルト（色ズレあり）" width="240" height="320" />
@@ -345,13 +344,13 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
     <img src="/images/2026/10-24/Logo-small.jpg" alt="OpenWeather ロゴ" width="240" height="320" />
     <figcaption>OpenWeather（元画像）</figcaption>
   </a>
-  <a href="/images/2026/10-24/ILI9341_Logo_Adafruit.jpg" title="Adafruit GFX" data-lightbox="image">
-    <img src="/images/2026/10-24/ILI9341_Logo_Adafruit-small.jpg" alt="Adafruit GFX" width="240" height="320" />
-    <figcaption>Adafruit GFX</figcaption>
+  <a href="/images/2026/10-24/ILI9341_Logo_Adafruit.jpg" title="Adafruit-GFX-Library" data-lightbox="image">
+    <img src="/images/2026/10-24/ILI9341_Logo_Adafruit-small.jpg" alt="Adafruit-GFX-Library" width="240" height="320" />
+    <figcaption>Adafruit-GFX-Library</figcaption>
   </a>
-  <a href="/images/2026/10-24/ILI9341_Logo_type2.jpg" title="Arduino GFX (type2)" data-lightbox="image">
-    <img src="/images/2026/10-24/ILI9341_Logo_type2-small.jpg" alt="Arduino GFX (type2)" width="240" height="320" />
-    <figcaption>Arduino GFX (type2)</figcaption>
+  <a href="/images/2026/10-24/ILI9341_Logo_type2.jpg" title="Arduino_GFX (type2)" data-lightbox="image">
+    <img src="/images/2026/10-24/ILI9341_Logo_type2-small.jpg" alt="Arduino_GFX (type2)" width="240" height="320" />
+    <figcaption>Arduino_GFX (type2)</figcaption>
   </a>
   <a href="/images/2026/10-24/ILI9341_Logo_type1.jpg" title="デフォルト（色ズレあり）" data-lightbox="image">
     <img src="/images/2026/10-24/ILI9341_Logo_type1-small.jpg" alt="デフォルト（色ズレあり）" width="240" height="320" />
@@ -380,20 +379,20 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
 
 <h4 id="st7789-の色ズレ問題">ST7789 の色ズレ問題</h4>
 
-<p>同様の問題は ST7789 でも発生します。デフォルトの <code class="language-plaintext highlighter-rouge">type1</code> では、Adafruit GFX と比較しなければ気付けない程度に色合いが薄くなります。まぁ気付かなければソレまでですが…</p>
+<p>同様の問題は ST7789 でも発生します。デフォルトの <code class="language-plaintext highlighter-rouge">type1</code> では、Adafruit-GFX-Library と比較しなければ気付けない程度に色合いが薄くなります。まぁ気付かなければソレまでですが…</p>
 
 <figure class="flex">
   <a href="/images/2026/10-24/Panda.jpg" title="パンダ（元画像）" data-lightbox="image">
     <img src="/images/2026/10-24/Panda-small.jpg" alt="パンダ（元画像）" width="240" height="320" />
     <figcaption>パンダ（元画像）</figcaption>
   </a>
-  <a href="/images/2026/10-24/ST7789_Panda_Adafruit.jpg" title="Adafruit GFX" data-lightbox="image">
-    <img src="/images/2026/10-24/ST7789_Panda_Adafruit-small.jpg" alt="Adafruit GFX" width="240" height="320" />
-    <figcaption>Adafruit GFX</figcaption>
+  <a href="/images/2026/10-24/ST7789_Panda_Adafruit.jpg" title="Adafruit-GFX-Library" data-lightbox="image">
+    <img src="/images/2026/10-24/ST7789_Panda_Adafruit-small.jpg" alt="Adafruit-GFX-Library" width="240" height="320" />
+    <figcaption>Adafruit-GFX-Library</figcaption>
   </a>
-  <a href="/images/2026/10-24/ST7789_Panda_type2.jpg" title="Arduino GFX (type2)" data-lightbox="image">
-    <img src="/images/2026/10-24/ST7789_Panda_type2-small.jpg" alt="Arduino GFX (type2)" width="240" height="320" />
-    <figcaption>Arduino GFX (type2)</figcaption>
+  <a href="/images/2026/10-24/ST7789_Panda_type2.jpg" title="Arduino_GFX (type2)" data-lightbox="image">
+    <img src="/images/2026/10-24/ST7789_Panda_type2-small.jpg" alt="Arduino_GFX (type2)" width="240" height="320" />
+    <figcaption>Arduino_GFX (type2)</figcaption>
   </a>
   <a href="/images/2026/10-24/ST7789_Panda_type1.jpg" title="デフォルト（色ズレあり）" data-lightbox="image">
     <img src="/images/2026/10-24/ST7789_Panda_type1-small.jpg" alt="デフォルト（色ズレあり）" width="240" height="320" />
@@ -408,13 +407,13 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
     <img src="/images/2026/10-24/Logo-small.jpg" alt="OpenWeather ロゴ" width="240" height="320" />
     <figcaption>OpenWeather（元画像）</figcaption>
   </a>
-  <a href="/images/2026/10-24/ST7789_Logo_Adafruit.jpg" title="Adafruit GFX" data-lightbox="image">
-    <img src="/images/2026/10-24/ST7789_Logo_Adafruit-small.jpg" alt="Adafruit GFX" width="240" height="320" />
-    <figcaption>Adafruit GFX</figcaption>
+  <a href="/images/2026/10-24/ST7789_Logo_Adafruit.jpg" title="Adafruit-GFX-Library" data-lightbox="image">
+    <img src="/images/2026/10-24/ST7789_Logo_Adafruit-small.jpg" alt="Adafruit-GFX-Library" width="240" height="320" />
+    <figcaption>Adafruit-GFX-Library</figcaption>
   </a>
-  <a href="/images/2026/10-24/ST7789_Logo_type2.jpg" title="Arduino GFX (type2)" data-lightbox="image">
-    <img src="/images/2026/10-24/ST7789_Logo_type2-small.jpg" alt="Arduino GFX (type2)" width="240" height="320" />
-    <figcaption>Arduino GFX (type2)</figcaption>
+  <a href="/images/2026/10-24/ST7789_Logo_type2.jpg" title="Arduino_GFX (type2)" data-lightbox="image">
+    <img src="/images/2026/10-24/ST7789_Logo_type2-small.jpg" alt="Arduino_GFX (type2)" width="240" height="320" />
+    <figcaption>Arduino_GFX (type2)</figcaption>
   </a>
   <a href="/images/2026/10-24/ST7789_Logo_type1.jpg" title="デフォルト（色ズレあり）" data-lightbox="image">
     <img src="/images/2026/10-24/ST7789_Logo_type1-small.jpg" alt="デフォルト（色ズレあり）" width="240" height="320" />
@@ -438,28 +437,28 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
 
 <ul>
   <li><strong><a href="https://github.com/moononournation/Arduino_GFX/discussions/820" title="Arduino GFX vs. Adafruit GFX — Differences in Color Reproduction · moononournation/Arduino_GFX · Discussion #820">Arduino GFX vs. Adafruit GFX — Differences in Color Reproduction #820</a></strong><br />
-色ズレ問題を Arduino GFX の作者に質問したところ、すぐに回答が得られました。さすが、LCD パネルの変異体について熟知しているようです。</li>
+色ズレ問題を Arduino_GFX の作者に質問したところ、すぐに回答が得られました。さすが、LCD パネルの変異体について熟知しているようです。</li>
   <li><strong><a href="https://github.com/moononournation/Arduino_GFX/issues/744" title="Bad colors with ILI9341 display board · Issue #744 · moononournation/Arduino_GFX">Bad colors with ILI9341 display board #744</a></strong><br />
 同様の問題が issues で報告されていています。解決策として <code class="language-plaintext highlighter-rouge">type2</code> や <code class="language-plaintext highlighter-rouge">type3</code> の利用が提示されていますが、未解決のまます。変異体問題の根深さを示している気がします。</li>
   <li><strong><a href="https://github.com/moononournation/Arduino_GFX/issues/322" title="color accuracy issue with 16 bit (esp8266 , ILI9341) · Issue #322 · moononournation/Arduino_GFX">color accuracy issue with 16 bit (esp8266 , ILI9341) #322</a></strong><br />
 <code class="language-plaintext highlighter-rouge">Arduino_ILI9341::begin()</code> の後に <code class="language-plaintext highlighter-rouge">Adafruit_ILI9341::begin()</code> を呼び出すと色ズレが解消するとのことで、issues を追跡すると <code class="language-plaintext highlighter-rouge">type2</code> のバグ修正に落ち着いたようです。</li>
 </ul>
 
-<h2 id="adafruit-gfx-を含むベンチマークの結果">Adafruit GFX を含むベンチマークの結果</h2>
+<h2 id="adafruit-gfx-library-を含むベンチマークの結果">Adafruit-GFX-Library を含むベンチマークの結果</h2>
 
-<p>お待ちかねのベンチマークは、Arduino GFX の <a href="https://github.com/moononournation/Arduino_GFX/tree/master/examples/PDQgraphicstest" title="Arduino_GFX/examples/PDQgraphicstest at master · moononournation/Arduino_GFX">PDQgraphicstest</a> を Adafruit GFX でも動作するよう改修したプログラムで実施しました。</p>
+<p>お待ちかねのベンチマークは、Arduino_GFX の <a href="https://github.com/moononournation/Arduino_GFX/tree/master/examples/PDQgraphicstest" title="Arduino_GFX/examples/PDQgraphicstest at master · moononournation/Arduino_GFX">PDQgraphicstest</a> を Adafruit-GFX-Library でも動作するよう改修したプログラムで実施しました。</p>
 
 <h3 id="ili9341">ILI9341</h3>
 
-<p>Adafruit GFX vs Arduino GFX の結果です。<code class="language-plaintext highlighter-rouge">vs Adafruit</code> は <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>A</mi><mi>d</mi><mi>a</mi><mi>f</mi><mi>r</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>G</mi><mi>F</mi><mi>X</mi></mrow><mrow><mi>A</mi><mi>r</mi><mi>d</mi><mi>u</mi><mi>i</mi><mi>n</mi><mi>o</mi><mi>G</mi><mi>F</mi><mi>X</mi><mn>24</mn><mi>M</mi><mi>H</mi><mi>z</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{Adafruit GFX}{Arduino GFX 24MHz}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2772em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">in</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">GFX</span><span class="mord mtight">24</span><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span><span class="mord mathnormal mtight" style="margin-right:0.04398em;">Hz</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">tGFX</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> の値です。</p>
+<p>Adafruit-GFX-Library vs Arduino_GFX の結果です。<code class="language-plaintext highlighter-rouge">vs Adafruit</code> は <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>A</mi><mi>d</mi><mi>a</mi><mi>f</mi><mi>r</mi><mi>u</mi><mi>i</mi><mi>t</mi><mo>−</mo><mi>G</mi><mi>F</mi><mi>X</mi><mo>−</mo><mi>L</mi><mi>i</mi><mi>b</mi><mi>r</mi><mi>a</mi><mi>r</mi><mi>y</mi></mrow><mrow><mi>A</mi><mi>r</mi><mi>d</mi><mi>u</mi><mi>i</mi><mi>n</mi><msub><mi>o</mi><mi>G</mi></msub><mi>F</mi><mi>X</mi><mn>24</mn><mi>M</mi><mi>H</mi><mi>z</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{Adafruit-GFX-Library}{Arduino_GFX 24MHz}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.3775em;vertical-align:-0.4453em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">in</span><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3567em;margin-left:0em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">G</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1433em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">FX</span><span class="mord mtight">24</span><span class="mord mathnormal mtight" style="margin-right:0.10903em;">M</span><span class="mord mathnormal mtight" style="margin-right:0.04398em;">Hz</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">t</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">GFX</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">L</span><span class="mord mathnormal mtight">ib</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">ry</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4453em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> の値です。</p>
 
 <table>
   <thead>
     <tr>
       <th>Benchmark</th>
-      <th style="text-align: right">Adafruit GFX</th>
-      <th style="text-align: right">Arduino GFX 12MHz</th>
-      <th style="text-align: right">Arduino GFX 24MHz</th>
+      <th style="text-align: right">Adafruit-GFX</th>
+      <th style="text-align: right">Arduino_GFX 12MHz</th>
+      <th style="text-align: right">Arduino_GFX 24MHz</th>
       <th style="text-align: right">vs Adafruit</th>
     </tr>
   </thead>
@@ -574,17 +573,17 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
 
 <h3 id="st7789">ST7789</h3>
 
-<p>2.4 インチの SPI 版と 8-bit パラレル版の比較です。Adafruit GFX の結果が比較対象にならないくらい遅いのは、LCD が Adafruit の純正品ではないからでしょう。</p>
+<p>2.4 インチの SPI 版と 8-bit パラレル版の比較です。Adafruit-GFX-Library の結果が比較対象にならないくらい遅いのは、LCD が Adafruit の純正品ではないからでしょう。</p>
 
-<p>また Arduino GFX では、SPI 版の「データバス」クラスに <code class="language-plaintext highlighter-rouge">Arduino_SWSPI</code> を使わざるを得なかったため、ILI9341 版よりかなり遅めです。8-bit パラレル版もそれほど早くないので、UNO R4 では敢えて ST7789 版を購入する理由が見当たらないという結果になりました。</p>
+<p>また Arduino_GFX では、SPI 版の「データバス」クラスに <code class="language-plaintext highlighter-rouge">Arduino_SWSPI</code> を使わざるを得なかったため、ILI9341 版よりかなり遅めです。8-bit パラレル版もそれほど早くないので、UNO R4 では敢えて ST7789 版を購入する理由が見当たらないという結果になりました。</p>
 
 <table>
   <thead>
     <tr>
       <th>Benchmark</th>
-      <th style="text-align: right">Adafruit GFX</th>
-      <th style="text-align: right">Arduino GFX SPI 24MHz</th>
-      <th style="text-align: right">Arduino GFX 8-bit parallel</th>
+      <th style="text-align: right">Adafruit-GFX</th>
+      <th style="text-align: right">Arduino_GFX SPI 24MHz</th>
+      <th style="text-align: right">Arduino_GFX 8-bit parallel</th>
     </tr>
   </thead>
   <tbody>
@@ -688,11 +687,11 @@ Aliexpress で ILI9341 と ST7789 の両タイプを購入しました（Aliexpr
 <ul>
   <li>
     <p><a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/tree/main/ColorAlignment" title="Arduino_GFX_Lab/ColorAlignment at main · embedded-kiddie/Arduino_GFX_Lab">ColorAlignment</a><br />
-色ズレの有無を確認するスケッチです。<a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/blob/main/ColorAlignment/ColorAlignment.ino#L17-L30">ColorAlignment.ino</a> の冒頭でサンプルの画像を選択し、Adafruit GFX の利用の有無、ドライバの種類、初期化シーケンスを設定します。また <a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/blob/main/ColorAlignment/gfx_config.hpp#L21-L48" title="Arduino_GFX_Lab/ColorAlignment/gfx_config.hpp at main · embedded-kiddie/Arduino_GFX_Lab">gfx_config.hpp</a> で UNO R4 と <abbr title="ESP32-2432S028R Cheap Yellow Display">CYD</abbr> のピン配を定義しているので、実行環境に合わせて修正してください。</p>
+色ズレの有無を確認するスケッチです。<a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/blob/main/ColorAlignment/ColorAlignment.ino#L17-L30">ColorAlignment.ino</a> の冒頭でサンプルの画像を選択し、Adafruit-GFX-Library の利用の有無、ドライバの種類、初期化シーケンスを設定します。また <a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/blob/main/ColorAlignment/gfx_config.hpp#L21-L48" title="Arduino_GFX_Lab/ColorAlignment/gfx_config.hpp at main · embedded-kiddie/Arduino_GFX_Lab">gfx_config.hpp</a> で UNO R4 と <abbr title="ESP32-2432S028R Cheap Yellow Display">CYD</abbr> のピン配を定義しているので、実行環境に合わせて修正してください。</p>
   </li>
   <li>
     <p><a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/tree/main/PDQgraphicstest" title="Arduino_GFX_Lab/PDQgraphicstest at main · embedded-kiddie/Arduino_GFX_Lab">PDQgraphicstest</a><br />
-ベンチマークのスケッチです。<a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/blob/main/PDQgraphicstest/PDQgraphicstest.ino#L6-L62" title="Arduino_GFX_Lab/PDQgraphicstest/PDQgraphicstest.ino at main · embedded-kiddie/Arduino_GFX_Lab">PDQgraphicstest.ino</a> の冒頭にある元のデバイス定義を無効化し、Adafruit GFX の利用の有無、ドライバの種類、初期化シーケンスを設定します。また <a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/blob/main/PDQgraphicstest/gfx_config.hpp#L21-L48" title="Arduino_GFX_Lab/PDQgraphicstest/gfx_config.hpp at main · embedded-kiddie/Arduino_GFX_Lab">gfx_config.hpp</a> で LCD のピン配を定義しています。ちなみにこのベンチマークは UNO R3 でも動作します（Arduino GFX の ST7789 を除く）。</p>
+ベンチマークのスケッチです。<a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/blob/main/PDQgraphicstest/PDQgraphicstest.ino#L6-L62" title="Arduino_GFX_Lab/PDQgraphicstest/PDQgraphicstest.ino at main · embedded-kiddie/Arduino_GFX_Lab">PDQgraphicstest.ino</a> の冒頭にある元のデバイス定義を無効化し、Adafruit-GFX-Library の利用の有無、ドライバの種類、初期化シーケンスを設定します。また <a href="https://github.com/embedded-kiddie/Arduino_GFX_Lab/blob/main/PDQgraphicstest/gfx_config.hpp#L21-L48" title="Arduino_GFX_Lab/PDQgraphicstest/gfx_config.hpp at main · embedded-kiddie/Arduino_GFX_Lab">gfx_config.hpp</a> で LCD のピン配を定義しています。ちなみにこのベンチマークは UNO R3 でも動作します（Arduino_GFX の ST7789 を除く）。</p>
   </li>
 </ul>
 
